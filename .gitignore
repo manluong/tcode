@@ -10,3 +10,7 @@ Thumbs.db
 #Codeigniter files#
 system
 license.txt
+
+#CI config files#
+application/config/config.php
+index.php
