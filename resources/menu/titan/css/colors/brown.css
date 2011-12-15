@@ -1,0 +1,138 @@
+/* 
+	COLOR SETTINGS: BROWN
+*/
+
+.tm-brown > li{
+	background:#572c0d;/* fallback color */
+    background-image: -moz-linear-gradient(#7e3f13,#572c0d);/* Firefox 3.6+ */
+    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#7e3f13), to(#572c0d));/* Safari 4+, Chrome 1+ */
+	background-image: -webkit-linear-gradient(#7e3f13, #572c0d);/* Safari 5.1+, Chrome 10+ */
+    /*filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#7e3f13, endColorstr=#572c0d);/* IE6 & IE7 */
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient (GradientType=0, startColorstr=#7e3f13, endColorstr=#572c0d)";/* IE8 */
+	background-image: -o-linear-gradient(#7e3f13, #572c0d);/* Opera 11.10+ */
+}
+.tmbutton .tm-brown > li{
+	border:1px solid #391c07;
+}
+.tmbar .tm-brown > li{
+	border-right:1px solid #391c07;
+}
+.tmbar .tm-brown{
+	border:1px solid #391c07;
+	border-right:none;
+}
+.tmstack .tm-brown{
+	border:1px solid #391c07;
+}
+.tm-brown > li > a{
+	color:#ffd2b1;
+}
+.tmbar .tm-brown > li.nosplit > a,
+.tmbar .tm-brown > li.split > a{
+	border-right:none;
+}
+.tmbutton .tm-brown > li:hover{
+	-moz-box-shadow: 0 0 5px #333333;
+	-webkit-box-shadow: 0 0 5px #333333;
+	box-shadow: 0 0 5px #333333;
+	border:1px solid #000000;
+}
+.tm-brown > li > a:hover,
+.tm-brown > li.split > a:hover,
+.tm-brown > li.nosplit:hover > a{
+	color:#ffffff;
+}
+.tm-brown > li > div > span{
+	background:#5e300f;
+	border-left:1px solid #3d1f09;
+}
+.tmstack .tm-brown > li > div > span{
+	background:none;
+	border-left:none;
+}
+.tm-brown > li > div > span span{
+	border-top: 5px solid #3d1f09;
+}
+.tmstack .tm-brown > li > div > span span{
+	border-left: 5px solid #3d1f09;
+}
+.tm-brown > li.tmprofile > div:hover > span span,
+.tm-brown > li.split > div:hover > span span,
+.tm-brown > li.nosplit:hover > div > span span{
+	border-top: 5px solid #ffffff;
+}
+.tmstack .tm-brown > li.split > div:hover > span span,
+.tmstack .tm-brown > li.nosplit:hover > div > span span{
+	border-left: 5px solid #ffffff;
+}
+.tm-brown li ul{
+	border:1px solid #3c1b04;
+	-moz-box-shadow: 0 0px 4px #471e00;
+	-webkit-box-shadow: 0 0px 4px #471e00;
+	box-shadow: 0 0px 4px #471e00;
+}
+.tm-brown li ul li{
+	background-color:#7e451d;
+}
+.tm-brown li ul a{
+	color:#ffffff;
+	background:#532e15;
+	border-left:1px solid #ce966f;	
+}
+.tm-brown li ul li:hover > a,
+.tm-brown ul li.tmgodown > ul > li:hover > a{
+	background-color:#8f5730;
+	-moz-box-shadow: 0 0 0px;
+	-webkit-box-shadow: 0 0 0px;
+	box-shadow: 0 0 0px;
+	color:#ffffff;
+}
+.tm-brown li ul li:hover,
+.tm-brown ul li.tmgodown > ul > li:hover{
+	background-color:#ffffff;
+}
+.tm-brown li ul li.sep{
+	border-top:1px solid #3c210f;
+	border-bottom:1px solid #ce966f;
+}
+.tm-brown ul > li > a > span{
+	border-left: 5px solid #e8c3a9;
+}
+.tm-brown ul > li:hover > a > span{
+	border-left: 5px solid #ffffff;
+}
+.tm-brown ul li.tmgodown > ul > li{
+	background-color:#926444;	
+}
+.tm-brown ul li.tmgodown > ul > li > a{
+	color:#ffffff;
+	background:#4d2c15;
+	border-left:1px solid #ce966f;	
+}	
+.tm-brown li.tmgodown > a > span,
+.tm-brown li.tmgodown > a > span > span{
+	background:#e8c3a9;
+}	
+.tm-brown li.tmgodown:hover > a > span,
+.tm-brown li.tmgodown:hover > a > span > span{
+	background:#ffffff;
+}		
+.tm-brown li.tmgodown > ul > li.sep{
+	border-top:1px solid #3c210f;
+	border-bottom:1px solid #ce966f;
+}	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

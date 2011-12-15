@@ -1,0 +1,215 @@
+/*
+-------------------------------------------------------------------------------------------------
+	DEMO
+	
+	not needed
+-------------------------------------------------------------------------------------------------
+*/
+
+@import url('http://fonts.googleapis.com/css?family=Orbitron:regular,900');
+@import url('http://fonts.googleapis.com/css?family=Ubuntu');
+
+/*
+------------------------------------------------------------------------
+	RESET
+------------------------------------------------------------------------
+*/
+
+html, body, div, span, object, iframe,h1, h2, h3, h4, h5, h6, p, blockquote, pre, abbr, address, 
+cite, code,del, dfn, em, img, ins, kbd, q, samp,small, strong, sub, sup, var,b, i,dl, dt, dd, ol, ul,
+li,fieldset, form, label, legend,table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, 
+details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary,time, mark, audio, video {
+    margin:0;
+    padding:0;
+    border:0;
+    font-size:100%;
+    vertical-align:baseline;
+    background:transparent;
+}
+article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section {  
+	display: block;  
+}  
+nav ul {
+    list-style:none;
+}
+input, select {
+    vertical-align:middle;
+}
+
+/* remove dottedborder */
+button::-moz-focus-inner,
+input[type="reset"]::-moz-focus-inner,
+input[type="button"]::-moz-focus-inner,
+input[type="submit"]::-moz-focus-inner,
+input[type="file"] > input[type="button"]::-moz-focus-inner {
+    border: none;
+}
+
+a{
+	outline:none;
+}
+
+/*
+------------------------------------------------------------------------
+	CSS SELECTORS
+------------------------------------------------------------------------
+*/
+
+html{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:12px;
+	color:#333333;
+	line-height:20px;
+	height: 100%;
+	min-width:100%;
+}
+body{	
+	width:100%;
+    min-height:100%;
+	background:#efefef url(../images/bg.png) repeat;
+}
+#container{
+	width:960px;
+	margin:0px auto;
+}
+header{
+	width:100%;
+	height:30px;
+	margin:40px 0;
+	position:relative;
+}
+header span{
+	position:absolute;
+	top:34px;
+	left:180px;
+	text-shadow: 1px 1px 1px #ffffff;
+	color:#444;
+}
+h1{
+	font-size:40px;
+	color:#666666;
+	font-family: 'Orbitron', arial, serif; 
+	text-shadow: 1px 1px 1px #ffffff;
+	font-weight:bold;
+	height:40px;
+	line-height:40px
+}
+section{
+	width:938px;
+	margin-bottom:20px;
+	float:left;
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	border-radius:5px;
+	padding:10px;
+	height:auto;
+	position:relative;
+}
+article{
+	width:960px;
+	margin-bottom:60px;
+	float:left;
+}
+article p{
+	width:960px;
+	margin-bottom:10px;
+	float:left;
+	text-align:justify
+}
+section h2{
+	position:absolute;
+	top:-35px;
+	right:0;
+	width:auto;
+	font-size:20px;
+	color:#333333;
+	font-family:"Ubuntu";
+	margin:5px 0px 0 0
+}
+#black{
+	border:1px solid #222222;
+	background:#444;
+	-moz-box-shadow: 0 0px 4px #ffffff;
+	-webkit-box-shadow:0 0px 4px #ffffff;
+	box-shadow:0 0px 4px #ffffff;
+}
+#lightgrey{
+	border:1px solid #cccccc;
+	background:#e4e4e4;
+	-moz-box-shadow: 0 0px 4px #ffffff;
+	-webkit-box-shadow:0 0px 4px #ffffff;
+	box-shadow:0 0px 4px #ffffff;
+}
+#darkblue{
+	border:1px solid #17262f;
+	background:#263d4b;
+	-moz-box-shadow: 0 0px 4px #ffffff;
+	-webkit-box-shadow:0 0px 4px #ffffff;
+	box-shadow:0 0px 4px #ffffff;
+}
+#lightblue{
+	border:1px solid #327ba2;
+	background:#4da5d3;
+	-moz-box-shadow: 0 0px 4px #ffffff;
+	-webkit-box-shadow:0 0px 4px #ffffff;
+	box-shadow:0 0px 4px #ffffff;
+}
+#red{
+	border:1px solid #7f1616;
+	background:#931818;
+	-moz-box-shadow: 0 0px 4px #ffffff;
+	-webkit-box-shadow:0 0px 4px #ffffff;
+	box-shadow:0 0px 4px #ffffff;
+}
+#orange{
+	border:1px solid #ad2d00;
+	background:#ec5b28;
+	-moz-box-shadow: 0 0px 4px #ffffff;
+	-webkit-box-shadow:0 0px 4px #ffffff;
+	box-shadow:0 0px 4px #ffffff;
+}
+#green{
+	border:1px solid #496a34;
+	background:#638d47;
+	-moz-box-shadow: 0 0px 4px #ffffff;
+	-webkit-box-shadow:0 0px 4px #ffffff;
+	box-shadow:0 0px 4px #ffffff;
+}
+#darkgrey{
+	border:1px solid #444;
+	background:#666666;
+	-moz-box-shadow: 0 0px 4px #ffffff;
+	-webkit-box-shadow:0 0px 4px #ffffff;
+	box-shadow:0 0px 4px #ffffff;
+}
+#violet{
+	border:1px solid #921a65;
+	background:#ed41ad;
+	-moz-box-shadow: 0 0px 4px #ffffff;
+	-webkit-box-shadow:0 0px 4px #ffffff;
+	box-shadow:0 0px 4px #ffffff;
+}
+#purple{
+	border:1px solid #4f004f;
+	background:#8f008f;
+	-moz-box-shadow: 0 0px 4px #ffffff;
+	-webkit-box-shadow:0 0px 4px #ffffff;
+	box-shadow:0 0px 4px #ffffff;
+}
+#brown{
+	border:1px solid #4f004f;
+	background:#5e361a;
+	-moz-box-shadow: 0 0px 4px #ffffff;
+	-webkit-box-shadow:0 0px 4px #ffffff;
+	box-shadow:0 0px 4px #ffffff;
+}
+
+footer{
+	width:100%;
+	height:30px;
+	text-align:center;
+	margin-bottom:20px;
+}
+
+
+

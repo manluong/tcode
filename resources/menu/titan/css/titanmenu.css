@@ -1,0 +1,342 @@
+/*
+-------------------------------------------------------------------------------------------------
+	TITANMENU
+
+	CSS used for the Titan Menu
+	http://codecanyon.net/item/titan-menu-a-fresh-and-powerfull-dropdown-menu/258696
+-------------------------------------------------------------------------------------------------
+*/
+
+/*
+	Import all colors/skins/styles
+*/
+
+@import url('colors/black.css');
+@import url('colors/lightgrey.css');
+@import url('colors/darkblue.css');
+@import url('colors/lightblue.css');
+@import url('colors/red.css');
+@import url('colors/orange.css');
+@import url('colors/green.css');
+@import url('colors/darkgrey.css');
+@import url('colors/violet.css');
+@import url('colors/purple.css');
+@import url('colors/brown.css');
+
+/*
+	LAYOUT: BASIC(ONLOAD)
+*/
+
+appnav{
+	display:block;
+	float:left;
+	width:100%;
+}
+appnav > ul{
+	float:left;
+	list-style:none;
+	margin:0;
+}
+ul.titanmenu a{
+	text-decoration:none;
+	font-size:12px;
+	text-align:left;
+}
+appnav > ul> li{
+	float:left;
+	width:auto;
+	height:30px;
+	list-style:none;
+	margin:0 5px 0 0;
+	position:relative;
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	border-radius:5px;
+	-moz-background-clip: padding;
+	-webkit-background-clip: padding;
+	background-clip: padding-box;
+}
+
+/*
+	LAYOUT: BUTTON
+*/
+
+appnav.tmbutton ul.titanmenu{
+	height:32px;
+	float:left;
+	list-style:none;
+	margin:0;
+	width:100%;
+}
+appnav.tmbutton ul.titanmenu > li{
+	float:left;
+	width:auto;
+	height:30px;
+	list-style:none;
+	margin:0 5px 0 0;
+	position:relative;
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	border-radius:5px;
+	-moz-background-clip: padding;
+	-webkit-background-clip: padding;
+	background-clip: padding-box;
+}
+
+/*
+	LAYOUT: BAR
+*/
+
+appnav.tmbar ul.titanmenu{
+	height:30px;
+	float:left;
+	list-style:none;
+	margin:0;
+}
+appnav.tmbar ul.titanmenu > li{
+	float:left;
+	height:30px;
+	list-style:none;
+	margin:0 0px 0 0;
+	position:relative;
+	-moz-border-radius:0px;
+	-webkit-border-radius:0px;
+	border-radius:0px;
+}
+
+/*
+	LAYOUT: STACK
+*/
+
+appnav.tmstack ul.titanmenu{
+	float:left;
+	list-style:none;
+	margin:0;
+	width:160px;
+}
+appnav.tmstack ul.titanmenu > li{
+	float:left;
+	height:30px;
+	list-style:none;
+	margin:0 0px 0 0;
+	position:relative;
+	display:inline;
+	width:160px;
+	-moz-border-radius:0px;
+	-webkit-border-radius:0px;
+	border-radius:0px;
+}
+.tmstack ul.titanmenu > li > a{
+	width:110px;
+	float:left;
+	height:22px;
+	padding:4px 10px;
+}
+
+ul.titanmenu > li > a{
+	width:auto;
+	float:left;
+	height:22px;
+	padding:4px 10px;
+}
+ul.titanmenu > li > div{
+	float:left;
+	width:29px;
+	height:30px;
+	position:relative;
+}
+div.tmbridge{
+	position:absolute;
+	right:0;
+	display:block;
+}
+.tmbutton ul.titanmenu div > span{
+	float:left;
+	width:28px;
+	height:30px;
+	margin:0;
+	-moz-border-radius-bottomright:5px;
+	-moz-border-radius-topright:5px;
+	-webkit-border-bottom-right-radius:5px; 
+	-webkit-border-top-right-radius:5px;
+	border-top-right-radius:5px;
+    border-bottom-right-radius:5px;
+}
+.tmbar ul.titanmenu div > span{
+	float:left;
+	width:28px;
+	height:30px;
+	margin:0;
+}
+ul.titanmenu > li > div > span > span{
+	font-size: 0px; 
+	line-height: 0%; 
+	width: 0px;
+	margin:13px 9px 0 0px;
+	float:right;
+	border-bottom:none;
+	border-right: 5.5px solid transparent;
+	border-left: 5.5px solid transparent;
+}
+.tmstack ul.titanmenu > li > div > span > span{
+	margin:10px 9px 0 0px;
+	border-right:none;
+	border-top: 5.5px solid transparent;
+	border-bottom: 5.5px solid transparent;
+}
+.tmstack li.split > div:hover > span span,
+.tmstack li.nosplit:hover > div > span span{
+	margin:10px 9px 0 0px;
+	border-right:none;
+	border-top: 5.5px solid transparent;
+	border-bottom: 5.5px solid transparent;
+}
+
+/* second lvl and > */
+ul.titanmenu li ul{
+	height:auto;
+	width:160px;
+	position:absolute;
+	display:none;
+}
+ul.titanmenu li ul li{
+	width:160px;
+	float:left;
+	margin:0;
+	background-position:6px 7px;
+	background-repeat:no-repeat;
+	position:relative;
+}
+ul.titanmenu li ul a{
+	width:122px;
+	float:right;
+	height:100%;
+	padding:4px 0 0 10px;
+	height:26px;
+	position:relative
+}
+ul.titanmenu li ul li:hover > a,
+ul.titanmenu li ul ul li:hover > a,
+ul.titanmenu li ul ul ul li:hover > a{
+	border:none;
+}
+ul.titanmenu li ul li.sep{
+	height:0px;
+	line-height:0;
+}
+ul.titanmenu li ul li.sep:hover{
+	background:#none;
+} 
+ul.titanmenu li ul ul{
+	height:auto;
+	width:160px;
+	position:absolute;
+	right:-162px;
+	top:-1px;
+	display:none;
+}
+ul.titanmenu ul > li > a > span,
+ul.titanmenu ul > li:hover > a > span{
+	font-size: 0px; 
+	line-height: 0%; 
+	width: 0px;
+	border-right:none;
+	position:absolute;
+	right:10px;
+	top:12px;
+	border-top: 4px solid transparent;
+	border-bottom: 4px solid transparent;
+}
+
+/* 
+	INNER BOX(option)
+ */
+ 
+ul.titanmenu ul > li.tmgodown > a > span{
+	font-size: 0px; 
+	line-height: 0%; 
+	width: 8px;
+	height:2px;
+	margin:10px 10px 0 0px;
+	border:none;
+	top:4px;
+	right:0;
+	position:absolute;
+}
+ul.titanmenu ul > li.tmgodown > a > span > span{
+	font-size: 0px; 
+	line-height: 0%; 
+	width: 2px;
+	height:8px;
+	position:absolute;
+	top:-3px;
+	left:3px;
+	border:none;
+}
+ul.titanmenu li.tmgodown > ul{
+	height:auto;
+	width:160px;
+	float:left;
+	position:relative;
+	display:none;
+	border:none;
+	-moz-box-shadow: 0 0 0px #222;
+	-webkit-box-shadow: 0 0 0px #222;
+	box-shadow: 0 0 0px #222;
+	margin:1px 0 -1px -162px;
+	*margin:30px 0 -1px -162px;/*IE7 and below*/
+	clear:both;
+}
+
+/*
+	PROFILE (new in 1.2)
+*/
+
+appnav.tmbutton ul.titanmenu li.tmprofile{
+	float:right;
+	width:auto;
+	height:30px;
+	list-style:none;
+	margin:0 5px 0 0;
+	position:relative;
+	-moz-border-radius:0px;
+	-webkit-border-radius:0px;
+	border-radius:0px;
+	-moz-border-radius-bottomright:5px;
+	-moz-border-radius-topright:5px;
+	-webkit-border-bottom-right-radius:5px; 
+	-webkit-border-top-right-radius:5px;
+	border-top-right-radius:5px;
+    border-bottom-right-radius:5px;
+	-moz-background-clip: padding;
+	-webkit-background-clip: padding;
+	background-clip: padding-box;
+}
+appnav.tmbutton ul.titanmenu li.tmprofile img,
+appnav.tmbar ul.titanmenu li.tmprofile img{
+	width:30px;
+	height:30px;
+	float:left;
+}
+appnav.tmbutton ul.titanmenu li.tmprofile ul{
+	width:160px;
+	right:-1px!important;
+}
+appnav.tmbutton ul.titanmenu li.no-icons div ul li a {
+	width:150px;
+	border:none
+}
+
+appnav ul {
+    list-style:none;
+}
+
+appnav, appnav ul, appnav li {
+    margin:0;
+    padding:0;
+    border:0;
+    font-size:100%;
+    vertical-align:baseline;
+    background:transparent;
+    display: block;
+}

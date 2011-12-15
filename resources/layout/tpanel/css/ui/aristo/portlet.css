@@ -1,0 +1,165 @@
+/**
+ * Portlets
+ */
+.portlet, .ui-tabs, .dataTables_wrapper {
+  border: 0;
+  -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  -pie-box-shadow: none;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+.portlet > header, .ui-tabs .ui-tabs-nav {
+  border-color: rgba(0, 0, 0, 0.2);
+  -webkit-background-clip: padding-box;
+  -moz-background-clip: padding-box;
+  background-clip: padding-box;
+  position: relative;
+  zoom: 1;
+}
+.portlet.modal {
+  border-width: 0;
+  -webkit-box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+  -pie-box-shadow: none;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+.portlet[draggable=true] > header {
+  cursor: move;
+}
+.portlet > header .portlet-collapse {
+  height: 18px;
+  margin: -10px 0 0 0;
+  padding: 1px;
+  position: absolute;
+  right: .3em;
+  top: 50%;
+  visibility: hidden;
+  width: 19px;
+}
+.portlet > header .portlet-collapse span {
+  display: block;
+  margin: 1px;
+  position: relative;
+}
+.portlet > header .portlet-collapse.ui-state-hover {
+  background: none !important;
+  border-width: 0;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  -pie-box-shadow: none;
+  box-shadow: none;
+  filter: none;
+  padding: 1px;
+}
+.portlet > header:hover .portlet-collapse {
+  visibility: visible;
+}
+.portlet > section {
+  border: 1px solid #bbb;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-top-width: 0;
+  padding: 15px;
+}
+.portlet > section > .tabs, .portlet > section > .sidebar-tabs {
+  margin: -15px;
+  border-width: 0;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  -pie-box-shadow: none;
+  box-shadow: none;
+}
+.portlet > section > .tabs .ui-tabs-nav,
+.portlet > section > .tabs > section,
+.portlet > section > .sidebar-tabs .ui-tabs-nav,
+.portlet > section > .sidebar-tabs > section,
+.portlet > section > .sidebar-tabs.ui-tabs-vertical .ui-tabs-panel {
+  border-width: 0;
+}
+.portlet > section > .tabs .ui-tabs-nav {
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  border-bottom-width: 1px;
+}
+.portlet > section > .sidebar-tabs .ui-tabs-nav {
+  -webkit-border-radius: 0 0 0 2px;
+  -moz-border-radius: 0 0 0 2px;
+  border-radius: 0 0 0 2px;
+  border-right-width: 1px;
+}
+.portlet > section > .tabs:before,
+.portlet > section > .tabs:after,
+.portlet > section > .sidebar-tabs:before,
+.portlet > section > .sidebar-tabs:after {
+  display: none;
+}
+.portlet > section.no-padding > .dataTables_wrapper {
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  -pie-box-shadow: none;
+  box-shadow: none;
+}
+.portlet > section.no-padding > .dataTables_wrapper .fg-toolbar.ui-corner-tl.ui-corner-tr {
+  -webkit-border-top-left-radius: 0;
+  -moz-border-radius-topleft: 0;
+  border-top-left-radius: 0;
+  -webkit-border-top-right-radius: 0;
+  -moz-border-radius-topright: 0;
+  border-top-right-radius: 0;
+  border-width: 0;
+  border-bottom-width: 1px;
+}
+.portlet > section.no-padding > .dataTables_wrapper .fg-toolbar.ui-corner-bl.ui-corner-br {
+  -webkit-border-bottom-left-radius: 0;
+  -moz-border-radius-bottomleft: 0;
+  border-bottom-left-radius: 0;
+  -webkit-border-bottom-right-radius: 0;
+  -moz-border-radius-bottomright: 0;
+  border-bottom-right-radius: 0;
+  border-width: 0;
+  border-top-width: 1px;
+}
+.portlet > section.no-padding > .dataTables_wrapper table {
+  border-left-width: 0;
+  border-right-width: 0;
+}
+.portlet > section.no-padding table thead th:first-child {
+  border-left-width: 0;
+}
+.portlet > section.no-padding table thead th:last-child {
+  border-right-width: 0;
+}
+.portlet > section.no-padding table th, .portlet > section.no-padding table td {
+  padding: 5px 15px;
+}
+.portlet > section.no-padding table th.ui-state-default {
+  border-top-width: 0;
+}
+.portlet.collapsed > header {
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+}
+.portlet.collapsed > section {
+  display: none;
+}
+.portlet-placeholder {
+  background: #fafafa;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  position: relative;
+  z-index: 0;
+}
+.ui-widget-header li a,
+.ui-widget-header h2,
+.ui-accordion .ui-accordion-header a,
+.ui-accordion .ui-accordion-header h2,
+.ui-dialog .ui-widget-header {
+  font-family: 'PT Serif Caption', arial, serif;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 18px;
+}

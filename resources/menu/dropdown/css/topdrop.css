@@ -1,0 +1,134 @@
+#topmenu ul.dropdown .icon16 {
+ padding-left: 36px;
+ background-position: 10px 8px;
+ background-repeat: no-repeat;
+}
+
+#topmenu ul.dropdown .icon16r {
+ padding-right: 24px;
+ background-position: 96% center;
+ background-repeat: no-repeat;
+}
+
+#topmenu ul.dropdown {
+ top:2px;
+}
+
+#topmenu ul.dropdown,
+#topmenu ul.dropdown li,
+#topmenu ul.dropdown ul {
+ list-style: none;
+ margin: 0;
+ padding: 0;
+}
+
+#topmenu ul.dropdown {
+ position: relative;
+ z-index: 597;
+ float: left;
+}
+
+#topmenu ul.dropdown li {
+ float: left;
+ line-height: 1.3em;
+ vertical-align: middle;
+ zoom: 1;
+}
+
+#topmenu ul.dropdown li.hover,
+#topmenu ul.dropdown li:hover {
+ position: relative;
+ z-index: 599;
+ cursor: default;
+}
+
+#topmenu ul.dropdown ul {
+ visibility: hidden;
+ position: absolute;
+ top: 100%;
+ left: 0;
+ z-index: 598;
+ width: 100%;
+}
+
+#topmenu ul.dropdown ul li {
+ float: none;
+}
+
+#topmenu ul.dropdown ul ul {
+ top: -2px;
+ left: 181px;
+}
+
+#topmenu ul.dropdown li:hover > ul {
+ visibility: visible;
+}
+
+/**
+ * Default CSS Drop-Down Menu Theme
+ */
+
+
+#topmenu ul.dropdown {
+ font-weight: normal;
+ font-size: 11px;
+ color: #fff;
+ text-shadow: 0 1px 0 #000;
+}
+
+#topmenu ul.dropdown li.hover,
+#topmenu ul.dropdown li:hover {
+background-color: #aaa;
+background-color: rgba(0, 0, 0, 0.4);
+}
+
+#topmenu ul.dropdown li a {
+display: block;
+padding: 8px 12px 8px 12px;
+}
+
+#topmenu ul.dropdown a:link,
+#topmenu ul.dropdown a:visited,
+#topmenu ul.dropdown a:hover {
+color: #fff;
+text-decoration: none;
+text-shadow: 0 1px 0 #000;
+}
+
+#topmenu ul.dropdown li ul li a:link,
+#topmenu ul.dropdown li ul li a:visited,
+#topmenu ul.dropdown li ul li a:hover {
+color: #000;
+text-decoration: none;
+text-shadow: 0 1px 0 #fff;
+}
+
+#topmenu ul.dropdown ul {
+width: 140px;
+margin-top: 0px;
+border: 5px solid #aaa;
+border: 5px solid rgba(0, 0, 0, 0.4);
+}
+
+#topmenu ul.dropdown ul li {
+border-style: solid;
+border-width: 1px 1px 1px 0;
+border-color: #fff #d9d9d9 #d9d9d9;
+background-color: #f6f6f6;
+}
+
+#topmenu ul.dropdown li ul li.hover,
+#topmenu ul.dropdown li ul li:hover {
+background-color: #eee;
+}
+
+#topmenu ul.dropdown li ul li a {
+display: block;
+padding: 10px 7px 10px 7px;
+}
+
+#topmenu ul.dropdown ul *.dir {
+border-right: 5px solid #ccc;
+}
+
+

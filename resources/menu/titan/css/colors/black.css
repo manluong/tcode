@@ -1,0 +1,123 @@
+/* 
+	COLOR SETTINGS: BLACK
+*/
+
+.tm-black > li{
+	background:#222222;/* fallback color */
+    background-image: -moz-linear-gradient(#444444,#222222);/* Firefox 3.6+ */
+    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#444444), to(#222222));/* Safari 4+, Chrome 1+ */
+	background-image: -webkit-linear-gradient(#444444, #222222);/* Safari 5.1+, Chrome 10+ */
+    /*filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#FF0000FF, endColorstr=#FF0000FF);/* IE6 & IE7 */
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient (GradientType=0, startColorstr=#444444, endColorstr=#222222)";/* IE8 */
+	background-image: -o-linear-gradient(#444444, #222222);/* Opera 11.10+ */
+}
+.tmbutton .tm-black > li{
+	border:1px solid #111111;
+}
+.tmbar .tm-black > li{
+	border-right:1px solid #111111;
+}
+.tmbar .tm-black{
+	border:1px solid #111111;
+	border-right:none;
+}
+.tmstack .tm-black{
+	border:1px solid #111111;
+}
+.tm-black > li > a{
+	color:#bbbbbb;
+}
+.tmbar .tm-black > li.nosplit > a,
+.tmbar .tm-black > li.split > a{
+	border-right:none;
+}
+.tmbutton .tm-black > li:hover{
+	-moz-box-shadow: 0 0 5px #222222;
+	-webkit-box-shadow: 0 0 5px #222222;
+	box-shadow: 0 0 5px #222222;
+	border:1px solid #111;
+}
+.tm-black > li > a:hover,
+.tm-black > li.split > a:hover,
+.tm-black > li.nosplit:hover > a{
+	color:#ffffff;
+}
+.tm-black > li > div > span{
+	background:#333333;
+	border-left:1px solid #222222;
+}
+.tmstack .tm-black > li > div > span{
+	background:none;
+	border-left:none;
+}
+.tm-black > li > div > span span{
+	border-top: 5px solid #171717;
+}
+.tmstack .tm-black > li > div > span span{
+	border-left: 5px solid #171717;
+}
+.tm-black > li.tmprofile > div:hover > span span,
+.tm-black > li.split> div:hover > span span,
+.tm-black > li.nosplit:hover > div > span span{
+	border-top: 5px solid #ffffff;
+}
+.tmstack .tm-black > li.split > div:hover > span span,
+.tmstack .tm-black > li.nosplit:hover > div > span span{
+	border-left: 5px solid #ffffff;
+}
+.tm-black li ul{
+	border:1px solid #000000;
+	-moz-box-shadow: 0 0px 4px #666666;
+	-webkit-box-shadow: 0 0px 4px #666666;
+	box-shadow: 0 0px 4px #666666;
+}
+.tm-black li ul li{
+	background-color:#313130;
+}
+.tm-black li ul a{
+	color:#ffffff;
+	background:#222222;
+	border-left:1px solid #696969;
+}
+.tm-black li ul li:hover > a,
+.tm-black ul li.tmgodown > ul > li:hover > a{
+	background-color:#565656;
+	border-left:1px solid #cccccc;
+	-moz-box-shadow: 0 0 0px;
+	-webkit-box-shadow: 0 0 0px;
+	box-shadow: 0 0 0px;
+}
+.tm-black li ul li:hover,
+.tm-black  ul li.tmgodown > ul > li:hover{
+	background-color:#cccccc;
+}
+.tm-black li ul li.sep{
+	border-top:1px solid #000000;
+	border-bottom:1px solid #444;
+}
+.tm-black ul > li > a span{
+	border-left: 5px solid #565656;
+}
+.tm-black ul > li:hover > a span{
+	border-left: 5px solid #999999;
+}
+.tm-black ul li.tmgodown > ul > li{
+	background-color:#666666;	
+}
+.tm-black ul li.tmgodown > ul > li > a{
+	color:#ffffff;
+	background:#333333;
+	border-left:1px solid #999999;
+}	
+.tm-black li.tmgodown > a > span,
+.tm-black li.tmgodown > a > span > span{
+	background:#565656;
+}	
+.tm-black li.tmgodown:hover > a > span,
+.tm-black li.tmgodown:hover > a > span > span{
+	background:#999999;
+}		
+.tm-black li.tmgodown > ul > li.sep{
+	border-top:1px solid #222222;
+	border-bottom:1px solid #999999;
+}

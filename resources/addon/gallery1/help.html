@@ -1,0 +1,727 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Help Guide</title>
+<style type="text/css">
+body{
+font-family:Arial, Helvetica, sans-serif;
+background-color:#666;
+text-align:center;		
+}
+a, a:visited{
+color:#06F;
+}
+.container{
+width:900px;
+height:100%;
+color:#000;
+background-color:#FFF;
+padding:50px;
+margin:0 auto;
+text-align:left;
+}
+.section{
+clear:both;
+margin-bottom:35px;
+}
+pre{
+margin:5px;
+overflow:auto;
+padding:10px;
+color:#06F;
+line-height:1.5em;
+background-color:#EEE;
+border:1px solid #666;
+width:700px;
+}
+pre .attr{
+color:#F0F;
+}
+pre .str{
+color:#808;
+}
+pre .num{
+color:#00F;
+}
+pre .bool{
+color:#F00;
+}
+pre .txt{
+color:#000;
+}
+pre .cmt{
+color:#888;
+}
+table{
+border:1px solid #666;
+border-collapse:collapse;
+border-spacing:0;
+margin:5px;
+}
+th{
+background-color:#EEE;
+border:1px solid #666;
+padding: 6px 12px;
+text-align:left;
+vertical-align:top;	
+}
+tr.even td{
+background-color:#F0F5FE
+}
+tr.odd td{
+background-color:#FFF;
+}
+td{
+border:1px solid #666;
+padding: 6px 12px;
+text-align:left;
+vertical-align:top;
+}
+em{
+font-weight:bold;
+}
+h1, h2, h3{
+color:#000;
+margin-top:28px;
+margin-bottom:15px;
+}
+hr{
+color:#CCC;
+background-color:#CCC;
+height:1px;
+border:none;
+}
+.ver{
+font-weight:normal;
+}
+.back-top{
+font-size:12px;
+float:right;
+}
+.tag{
+font-style:italic;
+}
+.file{
+font-style:italic;
+font-weight:bold;
+}
+.param{
+font-weight:bold;
+}
+</style>
+</head>
+<body>
+<div class="container" id="top">    
+    <h1>jQuery Image Gallery <span class="ver">(v1.5)</span> - Help Guide</h1>
+   	<ul>
+        <li><a href="#overview">Overview</a></li>
+        <li><a href="#usage">Usage</a></li>
+        <li><a href="#content">Adding Content</a></li>
+        <li><a href="#params">Plugin Parameters</a></li>
+        <li><a href="#contact">Contact Info</a></li>
+    </ul>
+   	<br/>
+    <a name="overview"></a><hr/>
+	<div class="section">
+    	<h2>1. Overview:</h2>
+	    <p>
+    		This is a jQuery image gallery featuring a horizontal thumbnail layout and multiple image transitions. 
+            The sliding thumbnails and buttons allow for easy navigation of your images. 
+            The gallery is also re-sizable and fully configurable through the plugin's parameters
+            and stylesheet.
+	    </p>
+       	<p><b>Features:</b></p>
+        <ul>
+            <li>Multiple image transitions available. Can also set a different transition per image.</li>
+            <li>Able to turn auto image rotation on/off with configurable time delay. Rotation is paused when mouse is over gallery.</li>
+            <li>Changeable number of thumbnails visible per scroll.</li>
+            <li>Image and thumbnails' container size are re-sizable.</li> 
+            <li>Mouse over main image to access directional buttons for navigating previous/next image.</li>
+            <li>Directional and index buttons allow for navigating thumbnails.</li>
+            <li>Editable captions available for each thumbnail.</li>
+            <li>Links are assignable for each image.</li>
+            <li>Different text descriptions are assignable for each image.</li>
+            <li>Text description and captions can be aligned top or bottom.</li>
+        </ul>		
+        <a href="#top" class="back-top">back to top</a>
+	</div>
+    <a name="usage"></a><hr/>
+	<div class="section">
+		<h2>2. Usage:</h2>
+		<p>Installing the gallery in your html page requires the following steps.</p>
+    	<ol>
+        	<li>Including the gallery's css file.</li>
+        	<li>Including the javascript files.</li>	        
+    	    <li>Specifying the html tags of the gallery.</li>
+        	<li>Instantiating a javascript call with any optional parameters.</li>
+	    </ol>
+    	<p>Below describes the steps in more detail.</p>
+        <p>
+            In step 1, 
+            to include the gallery's css file <span class="file">wt-gallery.css</span>, simply specify the following line of code within your html's <span class="tag">&lt;head&gt;</span> tag:
+        </p>
+<pre>
+&lt;link <span class="attr">rel</span>=<span class="str">"stylesheet"</span> <span class="attr">type</span>=<span class="str">"text/css"</span> <span class="attr">href</span>=<span class="str">"wt-gallery.css"</span>/&gt;
+</pre><br/>
+	    <p>
+    		In step 2, 
+        	you will need to include the jquery's library file, <span class="file">jquery-1.6.1.min.js</span> to run jquery and 
+            the gallery's own <span class="file">jquery.wt-gallery.min.js</span> file. 
+    		Both files are located inside the <span class="file">js</span> directory. 
+   	 		Below shows the code needed to include the files in your html file:
+	  	</p>
+<pre>
+&lt;script <span class="attr">type</span>=<span class="str">"text/javascript"</span> <span class="attr">src</span>=<span class="str">"js/jquery-1.6.1.min.js"</span>&gt;&lt;/script&gt;
+&lt;script <span class="attr">type</span>=<span class="str">"text/javascript"</span> <span class="attr">src</span>=<span class="str">"js/jquery.wt-gallery.min.js"</span>&gt;&lt;/script&gt;
+</pre>
+        <p>
+            <b>note:</b>
+            The js files with min in its file names are the compressed production version of the file. 
+            If you intend to modify the gallery's source code, 
+            you will need to look at the non-min development version of the file and it is recommended that you minify the modified file afterwards.
+        </p>
+        <p>
+            In step 3, to specify the tags of the gallery itself, look at the the example in the 
+            <span class="file">index.html</span> file. In the file, you'll see a block of tags starting and ending with the following:
+        </p>
+<pre>
+&lt;div <span class="attr">class</span>=<span class="str">"container"</span>&gt;
+   &lt;div <span class="attr">class</span>=<span class="str">"wt-gallery"</span>&gt;
+   <span class="cmt">&lt;!-- all the tags in between, see index.html for the complete code --&gt;</span>
+   &lt;/div&gt;
+&lt;/div&gt;
+</pre>
+        <p>
+        	You can use this as a template and copy and paste it onto your own page, but
+            will have to modify it accordingly with your own image information. <a href="#content">Section 3</a> will describe this step in detail.<br/><br/>
+        </p>
+        <p>
+            Finally in step 4, 
+            you will need to instantiate a javascript function call to get the gallery running. 
+            The example code looks like the following:
+        </p>
+<pre>
+&lt;script <span class="attr">type</span>=<span class="str">"text/javascript"</span>&gt;<span class="txt">
+$(document).ready(	
+   function() {
+      $(<span class="str">".container"</span>).wtGallery();
+   }
+);</span>
+&lt;/script&gt;
+</pre>
+        <p>
+            This will instantiate the gallery using the default parameters.
+            <a href="#params">Section 4</a> will describe how to pass in custom parameters.
+        </p>
+        <a href="#top" class="back-top">back to top</a>
+    </div>
+<a name="content"></a><hr/>
+    <div class="section">
+        <h2>3. Adding Content:</h2>
+        <p>
+            In order to add or change content to the gallery, 
+            you will have to specify a set of html tags for each image within the gallery's html tags. 
+            The list of images is represented as a list tag <span class="tag">&lt;ul&gt;</span> and 
+            each image is represented by a list item tag <span class="tag">&lt;li&gt;</span>.
+        </p>
+        <p>
+            Below is an example of what the tags would look like for an image entry. 
+            You will have to repeat this for each image for your gallery.
+        </p>
+<pre>
+&lt;li <span class="attr">effect</span>=<span class="str">"fade"</span> <span class="attr">delay</span>=<span class="str">"8000"</span>&gt;
+    &lt;div&gt;
+        &lt;a <span class="attr">href</span>=<span class="str">"images/my_image.jpg"</span>&gt;
+            &lt;img <span class="attr">src</span>=<span class="str">"images/thumbs/my_thumbnail.jpg"</span>/&gt;            
+        &lt;/a&gt;
+        &lt;p&gt;<span class="txt">Image Caption</span>&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div <span class="attr">class</span>=<span class="str">"data"</span>&gt;
+        &lt;a <span class="attr">href</span>=<span class="str">"http://codecanyon.net"</span> <span class="attr">target</span>=<span class="str">"_blank"</span>&gt;&lt;/a&gt;    
+        &lt;div&gt;
+            <span class="txt">Lorem ipsum no vocibus accusamus dignissim et, 
+            eius erat an ius, quot zzril facilisi an no.</span> 
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/li&gt;
+</pre>
+        <p>
+            The tags show that each image entry begins with an opening and closing <span class="tag">&lt;li&gt;</span> tag.  
+            The <span class="tag">&lt;li&gt;</span> tag contains an optional attribute call <span class="param">effect</span> in which an individual transition effect can 
+            be assigned for the image. Refer to the <a href="#transitions">transitions table</a>
+            for a list of available image transitions.  If you do not specify an effect here, the global effect assigned to the plugin is used
+            instead.
+        </p>
+        <p>
+        	<b>note</b>: you can mix different effects except for the h.slide and v.slide effect.
+        </p>
+        <p>
+        	There is also a 2nd optional attribute named <span class="param">delay</span> for the <span class="tag">&lt;li&gt;</span> tag. This attribute is for specifying 
+            a timer delay for rotation. The delay time is specified in milliseconds.
+            Like the <span class="param">effect</span> attribute, if you do not specify a delay here, the global delay will be used instead.
+        </p>
+        <p style="margin-top:35px;">    
+            Within the <span class="tag">&lt;li&gt;</span> tag, there is a <span class="tag">&lt;div&gt;</span> tag representing the thumbnail container and inside, 
+            you will see an <span class="tag">&lt;a&gt;</span> tag specifying the image's url as its <span class="param">href</span> value.  
+            This is the url location for the image displayed when the thumbnail is clicked.
+       	</p>
+        <p>
+            Next, within the <span class="tag">&lt;a&gt;</span> tag, there is an <span class="tag">&lt;img&gt;</span> tag specifying the thumbnail image.
+        </p>
+        <p>    
+            After the <span class="tag">&lt;a&gt;</span> tag, there's a <span class="tag">&lt;p&gt;</span> tag specifying the caption associated with the thumbnail.  
+            If you do not want a caption for a thumbnail, you can omit this tag.
+        </p>
+        <p style="margin-top:35px;">
+            After the first <span class="tag">&lt;div&gt;</span> tag, you'll see a 2nd <span class="tag">&lt;div&gt;</span> tag with class name <span class="param">data</span>.
+            This <span class="tag">&lt;div&gt;</span> tag contains the data associated with the larger image.
+        </p>
+        <p>
+            First, the <span class="tag">&lt;a&gt;</span> tag's <span class="param">href</span> value is the link assigned to the main window when the thumbnail is 
+            selected. You can also specify the <span class="param">target</span> used for the link.  
+            If you do not want a link associated with the image, you can omit this tag.
+        </p>
+        <p>
+            Next, the <span class="tag">&lt;div&gt;</span> tag represents the description used for the main window's text panel when the thumbnail 
+            is selected.  You can specify html text within the <span class="tag">&lt;div&gt;</span> tags.  If you do not want a description, you can leave the text empty
+            or omit this tag.  
+        </p>
+        <a href="#top" class="back-top">back to top</a>
+	</div>
+    <a name="params"></a><hr/>
+    <div class="section">
+        <h2>4. Plugin Parameters:</h2>
+        <p>
+            You can change some common attributes of the gallery through the parameters of the plugin. 
+            Below is an example of the attributes being specified with corresponding values.
+        </p>
+<pre>
+&lt;script <span class="attr">type</span>=<span class="str">"text/javascript"</span>&gt;<span class="txt">
+$(document).ready(	
+    function() {
+        $(<span class="str">".container"</span>).wtGallery({
+            num_display:<span class="num">5</span>,
+            screen_width:<span class="num">720</span>,
+            screen_height:<span class="num">360</span>,
+            padding:<span class="num">10</span>,
+            thumb_width:<span class="num">125</span>,
+            thumb_height:<span class="num">70</span>,
+            thumb_margin:<span class="num">5</span>,
+            text_align:<span class="str">"top"</span>,
+            caption_align:<span class="str">"bottom"</span>,
+            auto_rotate:<span class="bool">true</span>,
+            delay:<span class="num">5000</span>,
+            rotate_once:<span class="bool">false</span>,
+            auto_center:<span class="bool">true</span>,			
+            cont_imgnav:<span class="bool">true</span>,
+            cont_thumbnav:<span class="bool">true</span>,
+            display_play:<span class="bool">true</span>,
+            display_imgnav:<span class="bool">true</span>,
+            display_imgnum:<span class="bool">true</span>,
+            display_thumbnav:<span class="bool">true</span>,
+            display_thumbnum:<span class="bool">false</span>,					
+            display_arrow:<span class="bool">true</span>,
+            display_tooltip:<span class="bool">false</span>,
+            display_timer:<span class="bool">true</span>,
+            display_indexes:<span class="bool">true</span>,
+            mouseover_pause:<span class="bool">false</span>,				
+            mouseover_text:<span class="bool">false</span>,
+            mouseover_info:<span class="bool">false</span>,
+            mouseover_caption:<span class="bool">true</span>,
+            mouseover_buttons:<span class="bool">true</span>,
+            transition:<span class="str">"h.slide"</span>,
+            transition_speed:<span class="num">800</span>,
+            scroll_speed:<span class="num">600</span>,
+            vert_size:<span class="num">45</span>,
+            horz_size:<span class="num">45</span>,					
+            vstripe_delay:<span class="num">100</span>,
+            hstripe_delay:<span class="num">100</span>,
+            move_one:<span class="bool">false</span>,            
+            shuffle:<span class="bool">false</span>
+        });
+    }
+);</span>
+&lt;/script&gt;
+</pre>
+        <p>
+            <b>note</b>: 
+            If you want to leave a parameter as is with its default value, you can omit that parameter in the javascript call.
+        </p>
+        <p>
+            The table below describes each attribute in more detail:
+        </p>
+    	<h3>Parameters Table:</h3>
+        <table border="0" cellpadding="3" cellspacing="3">
+        <tr>
+            <th>Attribute Name</th>
+            <th>Description</th>
+            <th>Default Value</th>
+            <th>Possible Values</th>
+        </tr>
+       	<tr class="odd">
+            <td>num_display</td>
+            <td>The number of thumbnails displayed at a time.</td>
+            <td>5</td>
+            <td>Any positive number.</td>
+        </tr>        
+        <tr class="even">
+            <td>screen_width</td>
+            <td>The width of the main image's window.</td>
+            <td>720</td>
+            <td>Any positive number.</td>
+        </tr>
+        <tr class="odd">
+            <td>screen_height</td>
+            <td>The height of the main image's window.</td>
+            <td>360</td>
+            <td>Any positive number.</td>
+        </tr>
+        <tr class="even">
+            <td>padding</td>
+            <td>The size of the gallery's surrounding padding.</td>
+            <td>10</td>
+            <td>Any number.</td>
+        </tr>        
+       	<tr class="odd">
+            <td>thumb_width</td>
+            <td>The width of the thumbnail's window.</td>
+            <td>125</td>
+            <td>Any positive number.</td>
+        </tr>
+        <tr class="even">
+            <td>thumb_height</td>
+            <td>The height of the thumbnail's window.</td>
+            <td>70</td>
+            <td>Any positive number.</td>
+        </tr>  
+     	<tr class="odd">
+            <td>thumb_margin</td>
+            <td>The margin between thumbnails.</td>
+            <td>5</td>
+            <td>Any number.</td>
+        </tr>
+     	<tr class="even">
+            <td>text_align</td>
+            <td>The vertical alignment of the text panel.</td>
+            <td>"top"</td>
+            <td>"top", "bottom".</td>
+        </tr>
+      	<tr class="odd">
+            <td>caption_align</td>
+            <td>The vertical alignment of the thumbnails' caption. Also use in tooltip alignment.</td>
+            <td>"bottom"</td>
+            <td>"top", "bottom".</td>
+        </tr>          
+        <tr class="even">
+            <td>auto_rotate</td>
+            <td>Specifies if auto image rotation is on or off.</td>
+            <td>true</td>
+            <td>true, false.</td>
+        </tr>
+        <tr class="odd">
+            <td>delay</td>
+            <td>The global time delay for image rotation in milliseconds.</td>
+            <td>5000</td>
+            <td>Any positive number.</td>
+        </tr>
+        <tr class="even">
+         	<td>rotate_once</td>
+            <td>Specifies if rotation plays only once through.</td>
+            <td>false</td>
+            <td>true, false.</td>
+      	</tr>
+        <tr class="odd">
+         	<td>auto_center</td>
+            <td>Specifies if images are automatically centered.</td>
+            <td>true</td>
+            <td>true, false.</td>
+      	</tr>
+       	<tr class="even">
+         	<td>cont_imgnav</td>
+            <td>Specifies if the main image directional buttons allow for continuous navigation.</td>
+            <td>true</td>
+            <td>true, false.</td>
+      	</tr>
+        <tr class="odd">
+         	<td>cont_thumbnav</td>
+            <td>Specifies if the thumbnails directional buttons allow for continuous navigation.</td>
+            <td>true</td>
+            <td>true, false.</td>
+      	</tr>
+        <tr class="even">
+         	<td>display_play</td>
+            <td>To specify if the play/pause button is visible.</td>
+            <td>true</td>
+            <td>true, false.</td>
+      	</tr>
+       	<tr class="odd">
+         	<td>display_imgnav</td>
+            <td>To specify if the main image directional buttons are visible.</td>
+            <td>true</td>
+            <td>true, false.</td>
+      	</tr>
+      	<tr class="even">
+         	<td>display_imgnum</td>
+            <td>To specify if the current image number info is visible.</td>
+            <td>true</td>
+            <td>true, false.</td>
+      	</tr>
+        <tr class="odd">
+         	<td>display_thumbnav</td>
+            <td>To specify if the thumbnails' directional buttons are visible.</td>
+            <td>true</td>
+            <td>true, false.</td>
+      	</tr>
+        <tr class="even">
+         	<td>display_thumbnum</td>
+            <td>To specify if the thumbnail current number info is visible.</td>
+            <td>false</td>
+            <td>true, false.</td>
+      	</tr>
+        <tr class="odd">
+         	<td>display_arrow</td>
+            <td>To specify if the selected thumbnail displays an arrow.</td>
+            <td>true</td>
+            <td>true, false.</td>
+      	</tr>
+        <tr class="even">
+         	<td>display_tooltip</td>
+            <td>To specify if the thumbnails display its caption as a tooltip.</td>
+            <td>false</td>
+            <td>true, false.</td>
+      	</tr>
+      	<tr class="odd">
+         	<td>display_timer</td>
+            <td>To specify if the timer bar is visible.</td>
+            <td>true</td>
+            <td>true, false.</td>
+      	</tr>
+        <tr class="even">
+         	<td>display_indexes</td>
+            <td>To specify if the pagination index buttons are visible.</td>
+            <td>true</td>
+            <td>true, false.</td>
+      	</tr>
+        <tr class="odd">
+         	<td>mouseover_pause</td>
+            <td>To specify if image rotation pauses on mouseover and resumes on mouseout.</td>
+            <td>false</td>
+            <td>true, false.</td>
+      	</tr>
+        <tr class="even">
+         	<td>mouseover_text</td>
+            <td>To specify if the text panel appears only on mouseover.</td>
+            <td>false</td>
+            <td>true, false.</td>
+      	</tr>
+       	<tr class="odd">
+         	<td>mouseover_info</td>
+            <td>To specify if the info panel appears only on mouseover.</td>
+            <td>false</td>
+            <td>true, false.</td>
+      	</tr>
+       	<tr class="even">
+         	<td>mouseover_caption</td>
+            <td>To specify if the thumbnails' caption appears only on mouseover.</td>
+            <td>true</td>
+            <td>true, false.</td>
+      	</tr>
+        <tr class="odd">
+         	<td>mouseover_buttons</td>
+            <td>To specify if the main image directional buttons appear only on mouseover.</td>
+            <td>true</td>
+            <td>true, false.</td>
+      	</tr>                
+        <tr class="even">
+            <td>transition</td>
+            <td>The global transition use for images.</td>
+            <td>"h.slide"</td>
+            <td>See the next <a href="#transitions">table</a> for more information 
+            on the available transitions.</td>
+        </tr>   
+       	<tr class="odd">
+            <td>transition_speed</td>
+            <td>The speed use for transition in milliseconds.</td>
+            <td>800</td>
+            <td>Any positive number.</td>
+        </tr>   
+      	<tr class="even">
+            <td>scroll_speed</td>
+            <td>The transition speed use for thumbnail scroll in milliseconds.</td>
+            <td>600</td>
+            <td>Any positive number.</td>
+        </tr>    
+        <tr class="odd">
+            <td>vert_size</td>
+            <td>The size of the vertical stripes use for vertical stripe transitions.</td>
+            <td>50</td>
+            <td>Any positive number.</td>
+        </tr>
+      	<tr class="even">
+            <td>horz_size</td>
+            <td>The size of the horizontal stripes use for horizontal stripe transitions.</td>
+            <td>50</td>
+            <td>Any positive number.</td>
+        </tr>      
+      	<tr class="odd">
+            <td>vstripe_delay</td>
+            <td>The delay when the next vertical stripe transition occurs in sequence. (in milliseconds)</td>
+            <td>100</td>
+            <td>Any positive number.</td>
+        </tr>
+        <tr class="even">
+            <td>hstripe_delay</td>
+            <td>The delay when the next horizontal stripe transition occurs in sequence. (in milliseconds)</td>
+            <td>100</td>
+            <td>Any positive number.</td>
+        </tr>
+        <tr class="odd">
+            <td>move_one</td>
+            <td>To specify if thumbnails scroll/move by one at a time.</td>
+            <td>false</td>
+            <td>true, false.</td>
+        </tr>        
+        <tr class="even">
+            <td>shuffle</td>
+            <td>To specify if images are displayed in random order.</td>
+            <td>false</td>
+            <td>true, false.</td>
+        </tr>
+    	</table>
+        <a name="transitions"></a><h3>Transitions Table:</h3>
+       	<table border="0" cellpadding="3" cellspacing="3">
+        <tr>
+            <th>Transition Value</th>
+            <th>Description</th>
+            <th>Category</th>
+        </tr>        
+        <tr class="odd">
+            <td>none</td>
+            <td>No transition</td>
+            <td rowspan="5" style="background-color:#FFF">N/A</td>
+        </tr>
+        <tr class="even">
+            <td>fade</td>
+            <td>Fade in transition</td>
+        </tr>
+        <tr class="odd">
+            <td>h.slide</td>
+            <td>Horizontal slide transition</td>
+        </tr>
+        <tr class="even">
+            <td>v.slide</td>
+            <td>Vertical slide transition</td>
+        </tr>
+        <tr class="odd">
+            <td>random</td>
+            <td>Random transition</td>
+        </tr>
+        <tr class="even">
+            <td>vert.tl</td>
+            <td>Vertical stripe transition starting top left.</td>
+            <td rowspan="11" style="background-color:#FFD">Vertical Stripe</td>
+        </tr>
+        <tr class="odd">
+            <td>vert.tr</td>
+            <td>Vertical stripe transition starting top right.</td>
+        </tr>
+        <tr class="even">
+            <td>vert.bl</td>
+            <td>Vertical stripe transition starting bottom left.</td>
+        </tr>
+        <tr class="odd">
+            <td>vert.br</td>
+            <td>Vertical stripe transition starting bottom right.</td>
+        </tr>
+        <tr class="even">
+            <td>fade.left</td>
+            <td>Vertical stripe transition fade starting from left.</td>
+        </tr>
+        <tr class="odd">
+            <td>fade.right</td>
+            <td>Vertical stripe transition fade starting from right.</td>
+        </tr>
+        <tr class="even">
+        	<td>alt.left</td>
+            <td>Alternating vertical stripe transition starting from left.</td>
+        </tr>
+        <tr class="odd">
+        	<td>alt.right</td>
+            <td>Alternating vertical stripe transition starting from right.</td>
+        </tr>
+        <tr class="even">
+        	<td>blinds.left</td>
+            <td>Vertical blinds transition starting from left.</td>
+        </tr>
+        <tr class="odd">
+        	<td>blinds.right</td>
+            <td>Vertical blinds transition starting from right.</td>
+        </tr>
+      	<tr class="even">
+        	<td>vert.random.fade</td>
+            <td>Vertical random fade.</td>
+        </tr>
+        <tr class="odd">
+            <td>horz.tl</td>
+            <td>Horizontal stripe transition starting top left.</td>
+            <td rowspan="11" style="background-color:#FFF">Horizontal Stripe</td>
+        </tr>
+        <tr class="even">
+            <td>horz.tr</td>
+            <td>Horizontal stripe transition starting top right.</td>
+        </tr>
+        <tr class="odd">
+            <td>horz.bl</td>
+            <td>Horizontal stripe transition starting bottom left.</td>
+        </tr>
+        <tr class="even">
+            <td>horz.br</td>
+            <td>Horizontal stripe transition starting bottom right.</td>
+        </tr>
+      	
+        <tr class="odd">
+        	<td>fade.top</td>
+            <td>Horizontal stripe transition fade starting from top.</td>
+        </tr>
+        <tr class="even">
+        	<td>fade.bottom</td>
+            <td>Horizontal stripe transition fade starting from bottom.</td>
+        </tr>
+        
+        <tr class="odd">
+        	<td>alt.top</td>
+            <td>Alternating horizontal stripe transition starting from top.</td>
+        </tr>        
+        <tr class="even">
+        	<td>alt.bottom</td>
+            <td>Alternating horizontal stripe transition starting from bottom.</td>
+        </tr>        
+        
+        <tr class="odd">
+        	<td>blinds.top</td>
+            <td>Horizontal blinds transition starting from top.</td>
+        </tr>          
+        <tr class="even">
+        	<td>blinds.bottom</td>
+            <td>Horizontal blinds transition starting from bottom.</td>
+        </tr>
+       	<tr class="odd">
+        	<td>horz.random.fade</td>
+            <td>Horizontal random fade.</td>
+        </tr>
+        </table>
+        <a href="#top" class="back-top">back to top</a>
+    </div>
+    <a name="contact"></a><hr/>
+    <div class="section">
+        <h2>Contact Information:</h2>
+        <p>
+            For help or questions regarding this file,
+            please contact me using the email form on my <a href="http://codecanyon.net/user/webtako" target="_blank">profile page</a>.         
+        </p>
+        <a href="#top" class="back-top">back to top</a>
+    </div>
+</div>
+</body>
+</html>

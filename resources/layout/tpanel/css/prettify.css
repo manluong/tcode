@@ -1,0 +1,89 @@
+/* Pretty printing styles. Used with prettify.js. */
+pre.prettyprint {
+  background: #fff;
+  border: 1px solid #888;
+  border-left: 5px solid #999;
+  padding: 10px 20px;
+  overflow-x: auto;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+pre.prettyprint .str {
+  color: #080;
+}
+pre.prettyprint .kwd {
+  color: #008;
+}
+pre.prettyprint .com {
+  color: #800;
+}
+pre.prettyprint .typ {
+  color: #606;
+}
+pre.prettyprint .lit {
+  color: #066;
+}
+pre.prettyprint .pun {
+  color: #660;
+}
+pre.prettyprint .pln {
+  color: #000;
+}
+pre.prettyprint .tag {
+  color: #008;
+}
+pre.prettyprint .atn {
+  color: #606;
+}
+pre.prettyprint .atv {
+  color: #080;
+}
+pre.prettyprint .dec {
+  color: #606;
+}
+pre.prettyprint:hover {
+  border-color: #5e9ae2;
+}
+pre.prettyprint ol.linenums {
+  /* Specify class=linenums on a pre to get line numbering */
+  margin-top: 0;
+  margin-bottom: 0;
+  /* IE indents via margin-left */
+}
+@media print {
+  .str {
+    color: #060;
+  }
+  .kwd {
+    color: #006;
+    font-weight: bold;
+  }
+  .com {
+    color: #600;
+    font-style: italic;
+  }
+  .typ {
+    color: #404;
+    font-weight: bold;
+  }
+  .lit {
+    color: #044;
+  }
+  .pun {
+    color: #440;
+  }
+  .pln {
+    color: #000;
+  }
+  .tag {
+    color: #006;
+    font-weight: bold;
+  }
+  .atn {
+    color: #404;
+  }
+  .atv {
+    color: #060;
+  }
+}

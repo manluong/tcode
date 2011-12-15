@@ -1,0 +1,123 @@
+/* 
+	COLOR SETTINGS: DARKBLUE
+*/
+
+.tm-darkblue > li{
+	background:#263d4b;/* fallback color */
+    background-image: -moz-linear-gradient(#2a4a5e,#263d4b);/* Firefox 3.6+ */
+    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#2a4a5e), to(#263d4b));/* Safari 4+, Chrome 1+ */
+	background-image: -webkit-linear-gradient(#2a4a5e, #263d4b);/* Safari 5.1+, Chrome 10+ */
+    /*filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#2a4a5e, endColorstr=#263d4b);/* IE6 & IE7 */
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient (GradientType=0, startColorstr=#2a4a5e, endColorstr=#263d4b)";/* IE8 */
+	background-image: -o-linear-gradient(#2a4a5e, #263d4b);/* Opera 11.10+ */
+}
+.tmbutton .tm-darkblue > li{
+	border:1px solid #14242f;
+}
+.tmbar .tm-darkblue > li{
+	border-right:1px solid #14242f;
+}
+.tmbar .tm-darkblue{
+	border:1px solid #14242f;
+	border-right:none;
+}
+.tmstack .tm-darkblue{
+	border:1px solid #14242f;
+}
+.tm-darkblue > li > a{
+	color:#92b3ca;
+}
+.tmbar .tm-darkblue > li.nosplit > a,
+.tmbar .tm-darkblue > li.split > a{
+	border-right:none;
+}
+.tmbutton .tm-darkblue > li:hover{
+	-moz-box-shadow: 0 0 5px #222222;
+	-webkit-box-shadow: 0 0 5px #222222;
+	box-shadow: 0 0 5px #222222;
+	border:1px solid #111;
+}
+.tm-darkblue > li > a:hover,
+.tm-darkblue > li.split > a:hover,
+.tm-darkblue > li.nosplit:hover > a{
+	color:#ffffff;
+}
+.tm-darkblue > li > div > span{
+	background:#2a485c;
+	border-left:1px solid #1c3341;
+}
+.tmstack .tm-darkblue > li > div > span{
+	background:none;
+	border-left:none;
+}
+.tm-darkblue > li > div > span span{
+	border-top: 5px solid #1c3544;
+}
+.tmstack .tm-darkblue > li > div > span span{
+	border-left: 5px solid #1c3544;
+}
+.tm-darkblue > li.tmprofile > div:hover > span span,
+.tm-darkblue > li.split > div:hover > span span,
+.tm-darkblue > li.nosplit:hover > div > span span{
+	border-top: 5px solid #ffffff;
+}
+.tmstack .tm-darkblue > li.split > div:hover > span span,
+.tmstack .tm-darkblue > li.nosplit:hover > div > span span{
+	border-left: 5px solid #ffffff;
+}
+.tm-darkblue li ul{
+	border:1px solid #17232a;
+	-moz-box-shadow: 0 0px 4px #666666;
+	-webkit-box-shadow: 0 0px 4px #666666;
+	box-shadow: 0 0px 4px #666666;
+}
+.tm-darkblue li ul li{
+	background-color:#325468;
+}
+.tm-darkblue li ul a{
+	color:#ffffff;
+	background:#233540;
+	border-left:1px solid #5387a6;	
+}
+.tm-darkblue li ul li:hover > a,
+.tm-darkblue ul li.tmgodown > ul > li:hover > a{
+	background-color:#3a5c71;
+	-moz-box-shadow: 0 0 0px;
+	-webkit-box-shadow: 0 0 0px;
+	box-shadow: 0 0 0px;
+	color:#ffffff;
+}
+.tm-darkblue li ul li:hover,
+.tm-darkblue ul li.tmgodown > ul > li:hover{
+	background-color:#ffffff;
+}
+.tm-darkblue li ul li.sep{
+	border-top:1px solid #131d23;
+	border-bottom:1px solid #5387a6;
+}
+.tm-darkblue ul > li > a > span{
+	border-left: 5px solid #557588;
+}
+.tm-darkblue ul > li:hover > a > span{
+	border-left: 5px solid #ffffff;
+}
+.tm-darkblue ul li.tmgodown > ul > li{
+	background-color:#bfd6e4;	
+}
+.tm-darkblue ul li.tmgodown > ul > li > a{
+	color:#233540;
+	background:#7fb1d0;
+	border-left:1px solid #ffffff;
+}	
+.tm-darkblue li.tmgodown > a > span,
+.tm-darkblue li.tmgodown > a > span > span{
+	background:#557588;
+}	
+.tm-darkblue li.tmgodown:hover > a > span,
+.tm-darkblue li.tmgodown:hover > a > span > span{
+	background:#ffffff;
+}		
+.tm-darkblue li.tmgodown > ul > li.sep{
+	border-top:1px solid #608296;
+	border-bottom:1px solid #e0f3ff;
+}

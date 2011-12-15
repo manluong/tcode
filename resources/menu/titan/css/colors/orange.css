@@ -1,0 +1,138 @@
+/* 
+	COLOR SETTINGS: ORANGE
+*/
+
+.tm-orange > li{
+	background:#f43f00;/* fallback color */
+    background-image: -moz-linear-gradient(#ff6028,#f43f00);/* Firefox 3.6+ */
+    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#ff6028), to(#f43f00));/* Safari 4+, Chrome 1+ */
+	background-image: -webkit-linear-gradient(#ff6028, #f43f00);/* Safari 5.1+, Chrome 10+ */
+    /*filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#ff6028, endColorstr=#f43f00);/* IE6 & IE7 */
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient (GradientType=0, startColorstr=#ff6028, endColorstr=#f43f00)";/* IE 8 */
+	background-image: -o-linear-gradient(#ff6028, #f43f00);/* Opera 11.10+ */
+}
+.tmbutton .tm-orange > li{
+	border:1px solid #ce3500;
+}
+.tmbar .tm-orange > li{
+	border-right:1px solid #ce3500;
+}
+.tmbar .tm-orange{
+	border:1px solid #ce3500;
+	border-right:none;
+}
+.tmstack .tm-orange{
+	border:1px solid #ce3500;
+}
+.tm-orange > li > a{
+	color:#ffcbb8;
+}
+.tmbar .tm-orange > li.nosplit > a,
+.tmbar .tm-orange > li.split > a{
+	border-right:none;
+}
+.tmbutton .tm-orange > li:hover{
+	-moz-box-shadow: 0 0 5px #b1360a;
+	-webkit-box-shadow: 0 0 5px #b1360a;
+	box-shadow: 0 0 5px #b1360a;
+	border:1px solid #b82f00;
+}
+.tm-orange > li > a:hover,
+.tm-orange > li.split > a:hover,
+.tm-orange > li.nosplit:hover > a{
+	color:#ffffff;
+}
+.tm-orange > li > div > span{
+	background:#f43f00;
+	border-left:1px solid #ce3500;
+}
+.tmstack .tm-orange > li > div > span{
+	background:none;
+	border-left:none;
+}
+.tm-orange > li > div > span span{
+	border-top: 5px solid #b32e00;
+}
+.tmstack .tm-orange > li > div > span span{
+	border-left: 5px solid #b32e00;
+}
+.tm-orange > li.tmprofile > div:hover > span span,
+.tm-orange > li.split > div:hover > span span,
+.tm-orange > li.nosplit:hover > div > span span{
+	border-top: 5px solid #ffffff;
+}
+.tmstack .tm-orange > li.split > div:hover > span span,
+.tmstack .tm-orange > li.nosplit:hover > div > span span{
+	border-left: 5px solid #ffffff;
+}
+.tm-orange li ul{
+	border:1px solid #a42a00;
+	-moz-box-shadow: 0 0px 4px #666666;
+	-webkit-box-shadow: 0 0px 4px #666666;
+	box-shadow: 0 0px 4px #666666;
+}
+.tm-orange li ul li{
+	background-color:#ff9e7c;
+}
+.tm-orange li ul a{
+	color:#ffffff;
+	background:#ff5a21;
+	border-left:1px solid #ffd2c2;	
+}
+.tm-orange li ul li:hover > a,
+.tm-orange ul li.tmgodown > ul > li:hover > a{
+	background-color:#db3a03;
+	-moz-box-shadow: 0 0 0px;
+	-webkit-box-shadow: 0 0 0px;
+	box-shadow: 0 0 0px;
+	color:#ffffff;
+}
+.tm-orange li ul li:hover,
+.tm-orange ul li.tmgodown > ul > li:hover{
+	background-color:#ffffff;
+}
+.tm-orange li ul li.sep{
+	border-top:1px solid #bf3100;
+	border-bottom:1px solid #ffd2c2;
+}
+.tm-orange ul > li > a > span{
+	border-left: 5px solid #ffc8b5;
+}
+.tm-orange ul > li:hover > a > span{
+	border-left: 5px solid #ffffff;
+}
+.tm-orange ul li.tmgodown > ul > li{
+	background-color:#ff7a4c;	
+}
+.tm-orange ul li.tmgodown > ul > li > a{
+	color:#ffffff;
+	background:#a62b00;
+	border-left:1px solid #ffd2c2;	
+}	
+.tm-orange li.tmgodown > a > span,
+.tm-orange li.tmgodown > a > span > span{
+	background:#ffc8b5;
+}	
+.tm-orange li.tmgodown:hover > a > span,
+.tm-orange li.tmgodown:hover > a > span > span{
+	background:#ffffff;
+}		
+.tm-orange li.tmgodown > ul > li.sep{
+	border-top:1px solid #bf3100;
+	border-bottom:1px solid #ffd2c2;
+}	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

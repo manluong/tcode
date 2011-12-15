@@ -1,0 +1,132 @@
+
+#divpo_imageupload_gallery
+{
+	position :relative ;
+	margin :0 auto;
+	width :100%;
+	height : auto;
+	background :#fff;
+	overflow :hidden ;
+}
+
+#divpo_imageupload_gallery .po_gallery_photo
+{
+    width: 200px;
+    height: 150px;
+    float: left;
+    text-align:center;
+    vertical-align:middle;
+    padding: 5px;
+}
+
+#divpo_imageupload_editdesp .bu-formview
+{
+    padding-left: 140px;
+}
+
+#po_main
+{
+    width: 800px;
+    border: 3px solid #ccc;
+    padding: 10px;
+}
+
+#po_main .po_defphoto
+{
+    width: 200px;
+    height: 150px;
+    border: 0px solid #ccc;
+    padding: 10px;
+    float: left;
+    -moz-box-shadow: inset 1px 3px 5px #fff, inset -2px -2px 1px rgba(0, 0, 0, 0.2), 5px 12px 12px #777;
+    -webkit-box-shadow: inset 1px 3px 5px #fff, inset -2px -2px 1px rgba(0, 0, 0, 0.2), 5px 12px 12px #777;
+    -khtml-box-shadow: inset 1px 3px 5px #fff, inset -2px -2px 1px rgba(0, 0, 0, 0.2), 5px 12px 12px #777;
+    box-shadow: inset 1px 3px 5px #fff, inset -2px -2px 1px rgba(0, 0, 0, 0.2), 5px 12px 12px #777;
+}
+
+#po_main .po_title
+{
+  font-family: Arial;
+  font-size: 24px;
+  font-smooth: always;
+  font-weight: bold;
+  line-height: 100%;
+}
+
+#po_main .po_tabs
+{
+  background :#fff;
+  border: 0px;
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
+  -khtml-box-shadow: none;
+  box-shadow: none;
+}
+
+#po_main .po_tabs_nav
+{
+  background :#fff;
+  border: 0px;
+
+}
+
+#po_main #divpo_photo
+{
+  width: 100%;
+  height: 300px;
+}
+
+#po_main #divpo_photo_view
+{
+  width: 400px;
+  height: 300px;
+  overflow: hidden;
+
+}
+
+#po_main #divpo_photo_viewall
+{
+  float: right;
+  width: 330px;
+  height: 240px;
+}
+
+ul.thumb {
+	float: left;
+	list-style: none;
+	margin: 0; padding: 0px;
+	width: 330px;
+}
+ul.thumb li {
+	margin: 0; padding: 0px;
+	float: left;
+	position: relative;
+	width: 110px;
+	height: 85px;
+}
+ul.thumb li img {
+	width: 100px; height: 75px;
+	border: 0px solid #ddd;
+	padding: 5px;
+	background: #f0f0f0;
+	position: absolute;
+	left: 0; top: 0;
+	-ms-interpolation-mode: bicubic;
+}
+ul.thumb li img.hover {
+	background:url(thumb_bg.png) no-repeat center center;
+	border: none;
+}
+#main_view {
+	float: left;
+	padding: 9px 0;
+	margin-left: -10px;
+}
+
+
+
+#po_main #div_viewpost_map
+{
+  width: 100%;
+  height: 300px;
+}

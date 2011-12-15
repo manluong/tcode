@@ -1,0 +1,149 @@
+#mainmenu ul.dropdown .icon32 {
+ padding-left: 50px;
+ background-position: 10px center;
+ background-repeat: no-repeat;
+}
+
+#mainmenu ul.dropdown,
+#mainmenu ul.dropdown li,
+#mainmenu ul.dropdown ul {
+ list-style: none;      
+ margin: 0;
+ padding: 0;
+}
+
+#mainmenu ul.dropdown {
+ position: relative;
+ z-index: 597;
+// float: left;
+}
+
+#mainmenu ul.dropdown li {
+ float: left;
+ line-height: 1.3em;
+ vertical-align: middle;
+ zoom: 1;
+}
+
+#mainmenu ul.dropdown li.hover,
+#mainmenu ul.dropdown li:hover {
+ position: relative;
+ z-index: 599;
+ cursor: default;
+}
+
+#mainmenu ul.dropdown ul {
+ visibility: hidden;
+ position: absolute;
+ top: 100%;
+ left: 0;
+ z-index: 598;
+ width: 100%;
+}
+
+#mainmenu ul.dropdown ul li {
+ float: none;
+}
+
+#mainmenu ul.dropdown ul ul {
+ top: 0px;
+ left: 180px;
+}
+
+#mainmenu ul.dropdown li:hover > ul {
+ visibility: visible;
+}
+
+#mainmenu ul.dropdown-vertical {
+ width: 145px;
+}
+
+#mainmenu ul.dropdown-vertical ul {
+ top: 0px;
+ left: 100%;
+}
+
+#mainmenu ul.dropdown-vertical li {
+ float: none;
+}
+
+
+/**
+ * Default CSS Drop-Down Menu Theme
+ */
+
+
+#mainmenu ul.dropdown {
+font-family: Arial, sans-serif;
+font-size: 12px;
+font-weight: bold;
+color: #fff;
+white-space:nowrap;
+}
+
+#mainmenu ul.dropdown li.hover,
+#mainmenu ul.dropdown li:hover {
+//background: #e8e8e8;
+//background: -webkit-gradient(linear, left top, left bottom, from(#fefefe), to(#dfdfdf));
+//background: -moz-linear-gradient(top, #fefefe, #dfdfdf);
+//background: linear-gradient(top, #fefefe, #dfdfdf);
+background-color: #aaa;
+background-color: rgba(0, 0, 0, 0.4);
+}
+
+#mainmenu ul.dropdown li a {
+display: block;
+height: 42px;
+line-height: 42px;
+//padding: 12px 12px 12px 12px;
+//padding: 12px 0px 12px 0px;
+//overflow: hidden;
+}
+
+#mainmenu ul.dropdown a:link,
+#mainmenu ul.dropdown a:visited,
+#mainmenu ul.dropdown a:hover	{
+color: #fff;
+text-decoration: none;
+text-shadow: 0 1px 0 #000;
+}
+#mainmenu ul.dropdown li ul li a:link,
+#mainmenu ul.dropdown li ul li a:visited,
+#mainmenu ul.dropdown li ul li a:hover	{
+color: #000;
+text-decoration: none;
+text-shadow: 0 1px 0 #fff;
+}
+
+#mainmenu ul.dropdown ul {
+width: 180px;
+margin-top: 0px;
+border: 5px solid #aaa;
+border: 5px solid rgba(0, 0, 0, 0.4);
+//box-shadow: 1px 1px 3px #888;
+//-moz-box-shadow: 2px 2px 2px #888;
+//-webkit-box-shadow: 1px 1px 3px #888;
+}
+
+#mainmenu ul.dropdown ul li {
+border-style: solid;
+border-width: 1px 1px 1px 0;
+border-color: #fff #d9d9d9 #d9d9d9;
+background-color: #f6f6f6;
+}
+
+#mainmenu ul.dropdown li ul li.hover,
+#mainmenu ul.dropdown li ul li:hover {
+background-color: #eee;
+}
+
+#mainmenu ul.dropdown li ul li a {
+display: block;
+padding-left: 10px;
+//padding: 12px 12px 12px 12px;
+}
+
+#mainmenu ul.dropdown ul *.dir {
+border-right: 5px solid #555;
+}
+

@@ -1,0 +1,957 @@
+/* file manager window */
+.el-finder {
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  width: 100%;
+  min-width: 400px;
+  border: 1px solid #ccc;
+  background-color: #eee;
+  font: 12px 'Trebuchet MS', 'Lucida Grande', verdana, sans-serif;
+}
+.el-finder .el-finder-droppable {
+  background-color: #99ccff;
+}
+.el-finder .ui-selected {
+  background-color: #ccc;
+}
+.el-finder input {
+  margin: 0;
+  padding: 0;
+  outline: none;
+  border: 1px solid #ccc;
+}
+.el-finder.el-finder-undocked {
+  position: absolute;
+  min-width: 400px;
+  border: 1px solid #ccc;
+  padding: 5px;
+}
+.el-finder-err {
+  /* error messages */
+
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  padding: 15px;
+  text-align: center;
+  background: #fee;
+  color: #cc0509;
+  border: 2px #844 solid;
+}
+.el-finder-disabled {
+  /* disabled */
+
+}
+.el-finder-disabled .el-finder-toolbar li, .el-finder-disabled .el-finder-nav, .el-finder-disabled .el-finder-cwd {
+  opacity: 0.35;
+}
+/************************************/
+/*             toolbar              */
+/************************************/.el-finder-toolbar ul {
+  padding: 5px 7px;
+  margin: 0;
+  list-style: none;
+}
+.el-finder-toolbar ul li {
+  background: url('../images/toolbar.png') no-repeat;
+  border: 1px solid transparent;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  cursor: pointer;
+  display: -moz-inline-stack;
+  display: inline-block;
+  *display: inline;
+  height: 22px;
+  margin: 0 2px;
+  padding: 0;
+  vertical-align: top;
+  width: 22px;
+  zoom: 1;
+}
+.el-finder-toolbar ul li.delim {
+  background-position: 1px -610px;
+  border: none;
+  width: 3px;
+}
+.el-finder-toolbar ul li.el-finder-tb-hover {
+  background-color: #eee;
+  border: 1px solid #bbb;
+  -webkit-box-shadow: inset 0 2px 4px #ffffff;
+  -moz-box-shadow: inset 0 2px 4px #ffffff;
+  box-shadow: inset 0 2px 4px #ffffff;
+}
+.el-finder-toolbar ul li.el-finder-tb-hover:active {
+  background-color: #ccc;
+  border: 1px solid #777;
+  -webkit-box-shadow: inset 0 0px 3px #999999;
+  -moz-box-shadow: inset 0 0px 3px #999999;
+  box-shadow: inset 0 0px 3px #999999;
+}
+.el-finder-toolbar ul li.disabled {
+  opacity: 0.35;
+}
+.el-finder-toolbar ul li.back {
+  background-position: 3px -171px;
+}
+.el-finder-toolbar ul li.reload {
+  background-position: 3px -192px;
+}
+.el-finder-toolbar ul li.select {
+  background-position: 3px -214px;
+}
+.el-finder-toolbar ul li.open {
+  background-position: 3px -235px;
+}
+.el-finder-toolbar ul li.mkdir {
+  background-position: 3px -258px;
+}
+.el-finder-toolbar ul li.mkfile {
+  background-position: 3px -280px;
+}
+.el-finder-toolbar ul li.upload {
+  background-position: 3px -305px;
+}
+.el-finder-toolbar ul li.rm {
+  background-position: 3px -330px;
+}
+.el-finder-toolbar ul li.copy {
+  background-position: 3px -356px;
+}
+.el-finder-toolbar ul li.paste {
+  background-position: 3px -381px;
+}
+.el-finder-toolbar ul li.rename {
+  background-position: 3px -407px;
+}
+.el-finder-toolbar ul li.edit {
+  background-position: 3px -435px;
+}
+.el-finder-toolbar ul li.info {
+  background-position: 3px -462px;
+}
+.el-finder-toolbar ul li.help {
+  background-position: 3px -487px;
+}
+.el-finder-toolbar ul li.icons {
+  background-position: 3px -537px;
+}
+.el-finder-toolbar ul li.list {
+  background-position: 3px -557px;
+}
+.el-finder-toolbar ul li.uncompress {
+  background-position: 3px -583px;
+}
+.el-finder-toolbar ul li.resize {
+  background-position: 3px -647px;
+}
+.el-finder-toolbar ul li.quicklook {
+  background-position: 3px -726px;
+}
+.el-finder-dock-button {
+  background: url('../images/toolbar.png') 2px -705px no-repeat;
+  border: 1px solid #ccc;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  float: right;
+  height: 19px;
+  margin: 2px;
+  width: 19px;
+}
+.ui-dialog .el-finder-dock-button {
+  background-position: 2px -681px;
+}
+.el-finder-dock-button-hover {
+  background-color: #ccc;
+  border: 1px solid #fff;
+}
+/**********************************************************/
+/*  workzone, container for navigation and current folder */
+/**********************************************************/
+.el-finder-workzone {
+  background-color: #fff;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  position: relative;
+  /* error in workzone */
+
+}
+.el-finder-workzone p.el-finder-err {
+  display: none;
+  left: 37%;
+  position: absolute;
+  top: 20px;
+}
+.el-finder-workzone .el-finder-spinner {
+  background: transparent url(../images/ajax-loader.gif) 50% 50% no-repeat;
+  display: none;
+  height: 50px;
+  left: 37%;
+  position: absolute;
+  top: 37%;
+  width: 250px;
+}
+.el-finder-workzone .el-finder-nav, .el-finder-workzone .el-finder-cwd {
+  /* navigation and current directory */
+
+  height: 350px;
+  overflow: auto;
+  padding: 3px 1px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+/************************************/
+/*             navigation           */
+/************************************/
+.el-finder-nav {
+  background: #656565 url(../images/patterns/grains-10percent_black.png) repeat 0 0;
+  -webkit-box-shadow: inset -20px 0 20px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: inset -20px 0 20px rgba(0, 0, 0, 0.2);
+  box-shadow: inset -20px 0 20px rgba(0, 0, 0, 0.2);
+  float: left;
+  width: 200px;
+  /* folders tree */
+
+}
+.el-finder-nav .el-finder-places {
+  margin-top: .5em;
+}
+.el-finder-nav .ui-resizable-e {
+  right: 0;
+}
+.el-finder-nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.el-finder-nav ul li {
+  clear: both;
+}
+.el-finder-nav ul li ul {
+  margin-left: 12px;
+}
+.el-finder-nav ul div {
+  float: left;
+  height: 20px;
+  margin-right: 23px;
+  width: 12px;
+}
+.el-finder-nav ul.el-finder-tree, .el-finder-nav ul.el-finder-places {
+  margin-bottom: 1em;
+}
+.el-finder-nav ul.el-finder-tree .el-finder-droppable {
+  background-position: 15px -237px;
+}
+.el-finder-nav a, .el-finder-nav div.collapsed {
+  background-image: url(../images/toolbar.png);
+  background-repeat: no-repeat;
+}
+.el-finder-nav div.collapsed {
+  background-position: -1px 7px;
+}
+.el-finder-nav div.expanded {
+  background-position: -1px -9px;
+}
+.el-finder-nav a {
+  background-position: 15px -56px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  color: #ccc;
+  cursor: default;
+  display: block;
+  line-height: 20px;
+  outline: none;
+  text-decoration: none;
+  text-shadow: 1px 1px 1px #000;
+  white-space: nowrap;
+}
+.el-finder-nav a.dropbox {
+  background-position: 15px -80px;
+}
+.el-finder-nav a.readonly {
+  background-position: 15px -104px;
+}
+.el-finder-nav a.noaccess {
+  background-position: 15px -750px;
+}
+.el-finder-nav a.selected {
+  background-color: #0095cd;
+  background-position: 15px -128px;
+  color: #fafafa;
+}
+.el-finder-nav a.el-finder-tree-root {
+  background-position: 15px -30px;
+  font-weight: bold;
+}
+.el-finder-nav a.el-finder-places-root {
+  background-position: 15px -152px;
+  font-weight: bold;
+}
+/***********************************/
+/*     current working directory    */
+/************************************/
+.el-finder-cwd {
+  border-left: 1px solid #111;
+  padding: 0;
+  /********** view: icons  ************/
+
+  /********** view: list  ************/
+
+}
+.el-finder-cwd div {
+  background-color: transparent;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  color: #000;
+  display: -moz-inline-stack;
+  display: inline-block;
+  *display: inline;
+  margin: 15px;
+  padding: 10px;
+  text-align: center;
+  vertical-align: top;
+  width: 81px;
+  zoom: 1;
+}
+.el-finder-cwd div.el-finder-droppable p {
+  background-position: 0 -87px;
+}
+.el-finder-cwd div input {
+  background: #fff;
+  color: #000;
+  width: 81px;
+  margin-left: -2px;
+  outline: none;
+  border: 1px solid #ccc;
+  text-align: center;
+}
+.el-finder-cwd div em {
+  background: url(../images/icons-big.png) -17px -1290px no-repeat;
+  float: left;
+  height: 16px;
+  margin-top: -40px;
+  margin-left: 9px;
+  width: 15px;
+}
+.el-finder-cwd div em.dropbox {
+  float: right;
+  margin-right: 9px;
+  background-position: 0 -1290px;
+}
+.el-finder-cwd div em.noread {
+  float: right;
+  margin-right: 9px;
+  background-position: 0 -1415px;
+}
+.el-finder-cwd div em.readonly {
+  float: right;
+  margin-right: 9px;
+  background-position: -34px -1287px;
+}
+.el-finder-cwd div em.noaccess {
+  float: right;
+  margin-right: 9px;
+  background-position: 0 -1415px;
+}
+.el-finder-cwd label {
+  display: block;
+  font-size: 11px;
+  line-height: 13px;
+  padding: 0 1px;
+  margin: 0;
+  height: 26px;
+  overflow: hidden;
+  cursor: default;
+}
+.el-finder-cwd table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  border-bottom: 1px solid #ccc;
+  margin: 0;
+}
+.el-finder-cwd table tr {
+  background: transparent;
+  /* text */
+
+  /* application */
+
+  /* archives */
+
+}
+.el-finder-cwd table tr.el-finder-row-odd {
+  background-color: #eee;
+}
+.el-finder-cwd table tr.ui-selected {
+  background-color: #ccc;
+}
+.el-finder-cwd table tr th, .el-finder-cwd table tr td {
+  border-left: 1px solid #ccc;
+  color: #000;
+  cursor: default;
+  padding: 3px 5px;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+.el-finder-cwd table tr th:first-child, .el-finder-cwd table tr td:first-child {
+  border-left: none;
+}
+.el-finder-cwd table tr th {
+  background: #fbf9ee;
+  font-size: .86em;
+  text-align: left;
+}
+.el-finder-cwd table tr td.icon {
+  width: 24px;
+}
+.el-finder-cwd table tr td p em {
+  background: url(../images/icons-small.png) 0px -405px no-repeat;
+  float: left;
+  height: 12px;
+  margin-top: 5px;
+  width: 10px;
+}
+.el-finder-cwd table tr td p em.readonly {
+  background-position: 0px -433px;
+}
+.el-finder-cwd table tr td p em.dropbox {
+  background-position: 0px -418px;
+}
+.el-finder-cwd table tr td p em.noread, .el-finder-cwd table tr td p em.noaccess {
+  background-position: 0px -470px;
+}
+.el-finder-cwd table tr.directory p {
+  background-position: 4px -16px;
+}
+.el-finder-cwd table tr.text p {
+  background-position: 5px -34px;
+}
+.el-finder-cwd table tr.image p {
+  background-position: 4px -51px;
+}
+.el-finder-cwd table tr.audio p {
+  background-position: 4px -70px;
+}
+.el-finder-cwd table tr.video p {
+  background-position: 5px -89px;
+}
+.el-finder-cwd table tr.application p {
+  background-position: 4px -108px;
+}
+.el-finder-cwd table tr.html p {
+  background-position: 5px -188px;
+}
+.el-finder-cwd table tr.javascript p,
+.el-finder-cwd table tr.x-javascript p,
+.el-finder-cwd table tr.css p,
+.el-finder-cwd table tr.x-sql p,
+.el-finder-cwd table tr.xml p,
+.el-finder-cwd table tr.x-python p,
+.el-finder-cwd table tr.x-java-source p,
+.el-finder-cwd table tr.x-perl p,
+.el-finder-cwd table tr.x-ruby p {
+  background-position: 5px -228px;
+}
+.el-finder-cwd table tr.x-php p {
+  background-position: 5px -247px;
+}
+.el-finder-cwd table tr.x-c p {
+  background-position: 5px -208px;
+}
+.el-finder-cwd table tr.x-shellscript p, .el-finder-cwd table tr.x-sh p {
+  background-position: 5px -168px;
+}
+.el-finder-cwd table tr.rtf p, .el-finder-cwd table tr.rtfd p {
+  background-position: 5px -148px;
+}
+.el-finder-cwd table tr.x-shockwave-flash p {
+  background-position: 4px -266px;
+}
+.el-finder-cwd table tr.pdf p {
+  background-position: 4px -285px;
+}
+.el-finder-cwd table tr.vnd-ms-office p {
+  background-position: 4px -325px;
+}
+.el-finder-cwd table tr.msword p, .el-finder-cwd table tr.vnd-oasis-opendocument-text p, .el-finder-cwd table tr.vnd-ms-word p {
+  background-position: 4px -346px;
+}
+.el-finder-cwd table tr.vnd-ms-excel p, .el-finder-cwd table tr.ms-excel p, .el-finder-cwd table tr.vnd-oasis-opendocument-spreadsheet {
+  background-position: 4px -365px;
+}
+.el-finder-cwd table tr.vnd-ms-powerpoint p, .el-finder-cwd table tr.vnd-oasis-opendocument-presentation {
+  background-position: 4px -385px;
+}
+.el-finder-cwd table tr.x-tar p,
+.el-finder-cwd table tr.x-gzip p,
+.el-finder-cwd table tr.x-bzip p,
+.el-finder-cwd table tr.x-bzip2 p,
+.el-finder-cwd table tr.zip p,
+.el-finder-cwd table tr.x-rar p,
+.el-finder-cwd table tr.x-rar-compressed p,
+.el-finder-cwd table tr.x-7z-compressed p {
+  background-position: 4px -305px;
+}
+.el-finder-cwd table tr.el-finder-droppable td.icon p {
+  background-position: 5px -450px;
+}
+.el-finder-cwd table p {
+  background: url(../images/icons-small.png) 4px 0 no-repeat;
+  height: 16px;
+  margin: 0;
+  padding: 0;
+  width: 24px;
+}
+.el-finder-cwd table .size {
+  text-align: right;
+}
+.el-finder-cwd p, .el-finder-ql p {
+  background: #ffffff url('../images/icons-big.png') -1px 1px no-repeat;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  height: 48px;
+  margin: 1px auto;
+  padding: 0px;
+  width: 48px;
+}
+/* mimetypes */
+.directory p {
+  background-position: 0 -45px;
+}
+.application p {
+  background-position: -1px -134px;
+}
+.audio p {
+  background-position: -1px -1082px;
+}
+.image p {
+  background-position: -1px -1132px;
+}
+.text p, .x-empty p {
+  background-position: -1px -524px;
+}
+.video p {
+  background-position: -1px -1032px;
+}
+/* images */
+.gif p {
+  background-position: 0 -1183px;
+}
+.jpeg p {
+  background-position: 0 -1234px;
+}
+.vnd-adobe-photoshop p, .postscript p {
+  background-position: 0 -1132px;
+}
+/* video */
+.ogg p {
+  background-position: -1px -1032px;
+}
+/* audio */
+.ogm p {
+  background-position: -1px -1082px;
+}
+/* texts */
+.rtf p, .rtfd p {
+  background-position: 0 -573px;
+}
+.javascript p, .x-javascript p {
+  background-position: 0 -184px;
+}
+.x-c p,
+.css p,
+.x-sql p,
+.x-python p,
+.x-java-source p {
+  background-position: 0 -624px;
+}
+.html p {
+  background-position: 0 -777px;
+}
+.x-java p {
+  background-position: 0 -827px;
+}
+.x-php p {
+  background-position: 0 -726px;
+}
+.x-perl p {
+  background-position: 0 -675px;
+}
+.x-ruby p {
+  background-position: 0 -877px;
+}
+.x-shellscript p {
+  background-position: 0 -930px;
+}
+/* applications */
+.vnd-ms-office p,
+.msword p,
+.vnd-ms-word p,
+.vnd-oasis-opendocument-text p {
+  background-position: -1px -232px;
+}
+.ms-excel p, .vnd-ms-excel p, .vnd-oasis-opendocument-spreadsheet p {
+  background-position: -1px -330px;
+}
+.vnd-ms-powerpoint p, .vnd-oasis-opendocument-presentation p {
+  background-position: -1px -380px;
+}
+.pdf p {
+  background-position: -1px -282px;
+}
+.xml p {
+  background-position: 0 -980px;
+}
+.x-shockwave-flash p {
+  background-position: 0 -1032px;
+}
+.x-sh p {
+  background-position: 0 -930px;
+}
+/* archives */
+.x-bzip p,
+.x-bzip2 p,
+.zip p,
+.x-rar p,
+.x-rar-compressed p,
+.x-tar p,
+.x-7z-compressed p {
+  background-position: -1px -430px;
+}
+.x-gzip p {
+  background-position: -1px -477px;
+}
+/************************************/
+/*              statusbar           */
+/************************************/
+.el-finder-statusbar {
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  height: 20px;
+  text-shadow: 0 1px 0 #fff;
+  /* current directory path */
+
+  /* number folders/files in current directory and size */
+
+  /* info about selected files */
+
+}
+.el-finder-statusbar .el-finder-stat, .el-finder-statusbar .el-finder-path, .el-finder-statusbar .el-finder-sel {
+  color: #555;
+  font-size: 11px;
+  padding: 3px 9px 1px 9px;
+}
+.el-finder-statusbar .el-finder-path {
+  float: left;
+}
+.el-finder-statusbar .el-finder-stat {
+  float: right;
+}
+.el-finder-statusbar .el-finder-sel {
+  text-align: center;
+}
+/************************************/
+/*           dialog window          */
+/************************************/
+.el-finder-dialog {
+  font-size: .84em;
+}
+.el-finder-dialog form p, .el-finder-dialog .ui-tabs p {
+  margin: .5em;
+}
+.el-finder-dialog .ui-dialog-titlebar {
+  padding: .2em .1em .1em .8em;
+}
+.el-finder-dialog .ui-dialog-buttonpane {
+  font-size: .9em;
+  padding: .1em 1em .1em .4em;
+}
+.el-finder-dialog .ui-dialog-content {
+  padding: 5px;
+}
+.el-finder-dialog hr {
+  border: 0;
+  border-bottom: 1px #ccc solid;
+  clear: both;
+}
+.el-finder-dialog ul {
+  margin-top: 0;
+}
+.el-finder-dialog kbd {
+  font-size: 1.2em;
+}
+.el-finder-dialog a {
+  outline: none;
+}
+.el-finder-dialog textarea {
+  border: 1px solid #ccc;
+  font-family: "Monaco", "Andale Mono", "Lucida Console", monospace;
+  height: 400px;
+  outline: none;
+  width: 100%;
+}
+.el-finder-dialog .ui-state-error {
+  clear: both;
+  margin: 5px 0;
+  padding: .5em;
+}
+.el-finder-dialog .ui-state-error .ui-icon {
+  float: left;
+  margin-right: .3em;
+}
+.el-finder-dialog table {
+  width: 100%;
+}
+.el-finder-dialog table td {
+  padding: 2px 5px;
+}
+.el-finder-dialog .ui-tabs {
+  font-size: .98em;
+}
+.el-finder-dialog .ui-tabs div {
+  padding: 0 .5em;
+}
+.el-finder-dialog .ui-tabs .ui-tabs-nav li a {
+  padding: .2em 1em;
+}
+.el-finder-add-field {
+  cursor: pointer;
+}
+.el-finder-add-field span {
+  float: left;
+  margin-right: .7em;
+}
+/************************************/
+/*            contextmenu           */
+/************************************/
+.el-finder-contextmenu {
+  background: #fff;
+  border: 1px solid #ccc;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  color: #000;
+  cursor: default;
+  padding: 5px 0;
+  position: absolute;
+  width: 200px;
+}
+.el-finder-contextmenu div {
+  background: url('../images/toolbar.png') 0 0 no-repeat;
+  display: block;
+  font: 12px trebuchet ms, lucida grande, verdana, sans-serif;
+  margin: 0;
+  padding: 4px 29px 4px 29px;
+  position: relative;
+  white-space: nowrap;
+}
+.el-finder-contextmenu div.el-finder-contextmenu-sub {
+  background: #fff;
+  border: 1px solid #ccc;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  display: none;
+  margin: 0;
+  top: 0;
+  padding: 5px 0;
+  position: absolute;
+}
+.el-finder-contextmenu div.reload {
+  background-position: 5px -192px;
+}
+.el-finder-contextmenu div.select {
+  background-position: 5px -214px;
+}
+.el-finder-contextmenu div.open {
+  background-position: 6px -235px;
+}
+.el-finder-contextmenu div.mkdir {
+  background-position: 6px -258px;
+}
+.el-finder-contextmenu div.mkfile {
+  background-position: 6px -280px;
+}
+.el-finder-contextmenu div.upload {
+  background-position: 5px -305px;
+}
+.el-finder-contextmenu div.rm {
+  background-position: 5px -330px;
+}
+.el-finder-contextmenu div.copy {
+  background-position: 5px -356px;
+}
+.el-finder-contextmenu div.cut {
+  background-position: 5px -631px;
+}
+.el-finder-contextmenu div.duplicate {
+  background-position: 5px -356px;
+}
+.el-finder-contextmenu div.paste {
+  background-position: 5px -381px;
+}
+.el-finder-contextmenu div.rename {
+  background-position: 5px -407px;
+}
+.el-finder-contextmenu div.edit {
+  background-position: 6px -435px;
+}
+.el-finder-contextmenu div.info {
+  background-position: 5px -462px;
+}
+.el-finder-contextmenu div.help {
+  background-position: 5px -487px;
+}
+.el-finder-contextmenu div.icons {
+  background-position: 5px -537px;
+}
+.el-finder-contextmenu div.list {
+  background-position: 5px -557px;
+}
+.el-finder-contextmenu div.archive {
+  background-position: 5px -583px;
+}
+.el-finder-contextmenu div.extract {
+  background-position: 5px -583px;
+}
+.el-finder-contextmenu div.resize {
+  background-position: 5px -655px;
+}
+.el-finder-contextmenu div.quicklook {
+  background-position: 5px -727px;
+}
+.el-finder-contextmenu div.delim {
+  background: transparent;
+  border-top: 1px solid #eee;
+  display: block;
+  height: 1px;
+  margin: 0;
+  padding: 0;
+}
+.el-finder-contextmenu div.hover {
+  background-color: #99ccff;
+}
+.el-finder-contextmenu span {
+  background: url(../images/toolbar.png) -4px 5px no-repeat;
+  float: right;
+  height: 18px;
+  margin-right: -27px;
+  width: 9px;
+}
+.el-finder-drag-helper {
+  cursor: move;
+  padding: 0;
+  zoom: 1;
+}
+.el-finder-drag-helper div {
+  border: 0 solid;
+  margin-left: -57px;
+}
+.el-finder-drag-helper label {
+  background-color: #eee;
+  border: 1px solid #ccc;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+}
+.el-finder-drag-copy {
+  background: url('../images/toolbar.png') 0 -771px no-repeat;
+}
+/************************************/
+/*             QuickLook            */
+/************************************/
+.el-finder-ql {
+  background: url(../images/ql.png);
+  -webkit-border-radius: 9px;
+  -moz-border-radius: 9px;
+  border-radius: 9px;
+  height: auto;
+  overflow: inherit !important;
+  padding: 12px 9px;
+  position: absolute;
+  text-align: center;
+  width: 420px;
+  /* toolbar */
+
+  /* text files preview */
+
+  /* images preview */
+
+}
+.el-finder-ql div.el-finder-ql-drag-handle {
+  background-color: #777;
+  -webkit-border-top-left-radius: 9px;
+  -moz-border-radius-topleft: 9px;
+  border-top-left-radius: 9px;
+  -webkit-border-top-right-radius: 9px;
+  -moz-border-radius-topright: 9px;
+  border-top-right-radius: 9px;
+  font-size: 14px;
+  height: 18px;
+  margin: -12px -9px 12px -9px;
+  opacity: .8;
+  overflow: hidden;
+  padding: 3px 0 0 19px;
+  text-align: center;
+  white-space: nowrap;
+  /* close button */
+
+  /* title in tolbar */
+
+}
+.el-finder-ql div.el-finder-ql-drag-handle span {
+  float: left;
+  margin: 0 19px 0 -15px;
+}
+.el-finder-ql div.el-finder-ql-drag-handle strong {
+  color: #fff;
+  line-height: 18px;
+  margin-left: -17px;
+}
+.el-finder-ql div.el-finder-ql-media {
+  padding: 0;
+  width: 100%;
+}
+.el-finder-ql div.el-finder-ql-content {
+  font: 0.82em/1.3em trebuchet ms, lucida grande, verdana, sans-serif;
+  overflow: hidden;
+  padding: 5px 0;
+  width: 100%;
+}
+.el-finder-ql div.el-finder-ql-content span, .el-finder-ql div.el-finder-ql-content a {
+  display: block;
+  color: #fff;
+}
+.el-finder-ql iframe {
+  background: #fff;
+  border: none;
+  height: 315px;
+  margin: 0;
+  outline: none;
+  padding: 0;
+  width: 100%;
+}
+.el-finder-ql img {
+  border: 1px solid #fff;
+  margin: 0 auto;
+}
+/* button help */
+.el-finder-help-std {
+  background: url(../images/icons-big.png) 0 -1315px no-repeat;
+  float: right;
+  height: 48px;
+  width: 48px;
+}
+.el-finder-logo {
+  background: url(../images/icons-big.png) 0 -1365px no-repeat;
+  float: left;
+  height: 48px;
+  width: 48px;
+}

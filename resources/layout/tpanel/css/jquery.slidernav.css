@@ -1,0 +1,113 @@
+.slidernav, .slidernav .scrollable {
+  display: block;
+  min-height: 250px;
+  overflow: hidden;
+}
+.slidernav {
+  position: relative;
+}
+.slidernav ul {
+  list-style: none;
+  padding: 0;
+}
+.slidernav .scrollable {
+  width: 100%;
+}
+.slidernav .scrollable ul, .slidernav .scrollable ul li {
+  float: left;
+  width: 100%;
+}
+.slidernav .scrollable ul {
+  display: block;
+  padding: 0;
+  position: relative;
+}
+.slidernav .scrollable ul ul li a {
+  border-bottom: 1px solid #f3f3f3;
+  color: #667;
+  display: block;
+  font-weight: bold;
+  padding: 5px 10px;
+  text-transform: capitalize;
+  text-decoration: none;
+}
+.slidernav .scrollable ul ul li a:hover {
+  background: #f3faff;
+  border-color: #d5ebf9;
+  color: #000;
+}
+.slidernav .scrollable .title {
+  border-left-width: 0 !important;
+  border-right-width: 0 !important;
+  color: #667;
+  float: left;
+  font-weight: bold;
+  padding: 5px 0;
+  text-indent: 10px;
+  text-transform: uppercase;
+  text-decoration: none;
+  width: 100%;
+}
+.slidernav .scrollable .ui-state-active {
+  border-top-width: 0;
+  color: #000;
+}
+.slidernav .slider-nav {
+  background: #ddd;
+  border-left: 1px solid #aaa;
+  min-height: 250px;
+  position: absolute;
+  top: 21px;
+  right: 0;
+}
+.slidernav .slider-nav ul {
+  padding: 5px 0;
+}
+.slidernav .slider-nav ul li a {
+  color: #667;
+  cursor: pointer;
+  display: block;
+  font-weight: bold;
+  line-height: 13px;
+  padding: 3px 5px;
+  text-align: center;
+  text-decoration: none;
+  text-shadow: 0 1px 0 #fff;
+  text-transform: uppercase;
+}
+.slidernav .slider-nav ul li a:hover {
+  color: #000;
+}
+.slidernav .prev .arrow {
+  background: transparent url(../images/arrow-up.png) no-repeat center center;
+  display: block;
+  height: 100%;
+}
+.slidernav .next .arrow {
+  background: transparent url(../images/arrow-down.png) no-repeat center center;
+  display: block;
+  height: 100%;
+}
+.slidernav .prev, .slidernav .next {
+  border-width: 0;
+  cursor: pointer;
+  float: right;
+  height: 20px;
+  line-height: 0;
+  position: relative;
+  text-align: center;
+  width: 100%;
+}
+.slidernav .prev {
+  -webkit-border-radius: 2px 2px 0 0;
+  -moz-border-radius: 2px 2px 0 0;
+  border-radius: 2px 2px 0 0;
+  border-bottom-width: 1px;
+}
+.slidernav .next {
+  -webkit-border-radius: 0 0 2px 2px;
+  -moz-border-radius: 0 0 2px 2px;
+  border-radius: 0 0 2px 2px;
+  border-bottom-width: 0;
+  border-top-width: 1px;
+}
