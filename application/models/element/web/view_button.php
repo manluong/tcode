@@ -1,9 +1,14 @@
 <?php if (!defined('BASEPATH')) exit('No direct access allowed.');
 
 class View_button extends CI_Model {
+	var $url = array();
 
 	function __construct() {
 		parent::__construct();
+		
+		//temporary fix for missing ID
+		$CI = get_instance();
+		$this->url = $CI->url;
 	}
 	
 	function output_button_format($element_button,$dgroup_submit="",$button_save_nojs="",$button_savecancel_js="",$saveid=0){
@@ -76,7 +81,7 @@ class View_button extends CI_Model {
 		            //$result[$this_button['position']] .= '<button type="submit" class="button"'.$this_iconclass.''.$this_icon_only.' onclick="'.output_button_formatjs($this_button,$thisid_en,0,1,$this_element_id).'">'.$this_button['lang'].'</button>';
 		            } else {
 		          
-		            $result[$this_button['position']] .= '<button type="button" class="button"'.$this_iconclass.''.$this_icon_only.' onclick="'.$button_savecancel_js.''.$this->output_button_formatjs($this_button,$this->thisid['encode'],0,$listid).'">'.$this_button['lang'].'</button>';
+		            $result[$this_button['position']] .= '<button type="button" class="button"'.$this_iconclass.''.$this_icon_only.' onclick="'.$button_savecancel_js.''.$this->output_button_formatjs($this_button,$this->url['id_encrypted'],0,$listid).'">'.$this_button['lang'].'</button>';
 		            }
 					
 	            //$button[$countbutton]['targeturl']
