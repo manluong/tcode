@@ -73,7 +73,7 @@ class Log extends CI_Model {
 				->where('loguid', $this->User->get_loguid())
 				->limit(1)
 				->get();
-		return $query->row;
+		return $query->row();
 	}
 
 	private function _insert_log_session() {
