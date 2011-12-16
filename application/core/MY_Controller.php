@@ -1,9 +1,6 @@
 <?php
 
 class MY_Controller extends CI_Controller {
-	var $html = array();
-
-	var $thisid = array();
 	var $url = array(
 		'app' => '',
 		'action' => '',
