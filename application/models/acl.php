@@ -17,13 +17,47 @@ class ACL extends CI_Model {
 
 	}
 
-	function check_id_encryption($must_encrypt=false) {
-		$id = $this->uri->segment(3, 0);
-		if ($must_encrypt && !id_is_encrypted($id)) die('id must be encrypted');
+	function check_id_encryption() {
+		if (!id_is_encrypted($this->url['id'])) die('id must be encrypted');
 	}
 
+	function check_app_access() {
+		if (!$this->User->is_logged_in() && !$this->App->has_public_access()) {
+			header( 'Location: /main/login/'.set_return_url(TRUE));
+			exit;
+		} elseif ($this->User->is_logged_in() && !$this->User->is_admin() && !$this->App->has_public_access()) {
+			$app_access_rights_table = $this->get_rights();
+
+			if ($app_access_rights_table['allow'] == 3) {
+				//requestion aved is not allowed/set in AN
+				meg(999, 'AN Permission Not Allow. - '.$this->url['subaction']);
+			} elseif ($app_access_rights_table['allow'] == 2) {
+				//the access is denied by an entry in the access_rights table
+				meg(999, 'Access Rights Permission Not Allow. - '.$app_access_rights_table['typeid']);
+			} elseif ($app_access_rights_table['allow'] != 1) {
+				//not permission is set to allow access, minimum set a Allow all rule for a App for each master group (except Admin)
+				meg(999, 'Access Rights Permission Not Allow. - No Permission');
+			}
+		}
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	//function to get rights from access_rights table
-	function rights_table($apps_action){
+	function get_rights(){
+		$apps_action = $this->App->actions;
+
 		$result = array();
 
 		$action_denied = FALSE;
