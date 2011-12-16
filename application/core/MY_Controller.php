@@ -8,6 +8,14 @@ class MY_Controller extends CI_Controller {
 		'id_encrypted' => 0,
 		'subaction' => '',
 	);
+	var $re_url = array(
+		'app' => '',
+		'action' => '',
+		'id' => 0,
+		'subaction' => '',
+	);
+	var $has_return = FALSE;
+
 	var $data = array();
 	var $layout = array();
 
@@ -40,6 +48,13 @@ class MY_Controller extends CI_Controller {
 			$this->url['id_plain'] = $id;
 			$this->url['id_encrypted'] = encode_id($id);
 		}
+
+		$this->re_url['app'] = $this->input->get_post('re_app', TRUE);
+		$this->re_url['action'] = $this->input->get_post('re_action', TRUE);
+		$this->re_url['subaction'] = $this->input->get_post('re_subaction', TRUE);
+		$this->re_url['id'] = $this->input->get_post('re_id', TRUE);
+
+		if ($this->re_url['app'] !== FALSE && $this->re_url['action'] !== FALSE) $this->has_return = TRUE;
 	}
 
 	private function setup_language() {
@@ -793,7 +808,28 @@ class MY_Controller extends CI_Controller {
 
 
 
+	function _get_return_url($default_url='') {
+		if (!$this->has_return) return $default_url;
 
+		$seg = array('app','action','id','subaction');
+
+		$result = array();
+		foreach($seg AS $s) {
+			if ($this->re_url[$s] !== FALSE) $result[] = $s;
+		}
+
+		return implode('/', $result);
+	}
+
+	function _execute_return_url($link_only=FALSE) {
+		if (!$this->has_return) return NULL;
+
+		$return_url = $this->_get_return_url();
+
+		if ($link_only) return $return_url;
+
+		redirect($return_url);
+	}
 
 
 
