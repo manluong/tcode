@@ -32,8 +32,43 @@ class MY_Controller extends CI_Controller {
 		$this->setup_language();
 
 		$this->output->enable_profiler(true);
-
 	}
+
+	//remap every URI call
+	public function _remap($action, $params = array()){
+		//if the function exist in the Controller, use it
+		if (method_exists($this, $action)) return call_user_func_array(array($this, $action), $params=array());
+
+		//else, run default action
+		$this->default_action($params);
+	}
+
+	public function default_action($params) {
+		$this->load->model('Apps');
+
+		//check if APP is active
+		//if active, get matching APP AN from the database
+		if ($this->Apps->get_status($this->url['app'])) $get_actions = $this->Apps->get_actions($this->url['app'], $this->url['action']);
+
+		//if no matching APP AN is found in the DB, call to default index in the Controller file
+		if (!$get_actions) return call_user_func_array(array($this, 'index'), $params);
+
+		$this->ACL->check_id_encryption($get_actions['core_apps_action_disableplainid']);
+
+		//if matching APP AN is found, continue to call app_load in this Controller
+		$this->data = $this->app_load($get_actions);
+
+		$this->load->model('Html');
+		$this->layout = $this->Html->html_template($get_actions);
+
+		$this->app_output();
+	}
+
+
+
+
+
+
 
 	private function setup_url() {
 		$this->url['app'] = $this->router->fetch_class();
@@ -65,31 +100,12 @@ class MY_Controller extends CI_Controller {
 		$this->lang->loadarray($this->Langmodel->loadarray($this->url['app'], $this->lang->lang_use));
 	}
 
-	//remap every URI call
-	public function _remap($action, $params = array()){
-		//if the function exist in the Controller, use it
-		if (method_exists($this, $action)) return call_user_func_array(array($this, $action), $params=array());
 
 
-		$this->load->model('Apps');
 
-		//check if APP is active
-		//if active, get matching APP AN from the database
-		if ($this->Apps->get_status($this->url['app'])) $get_actions = $this->Apps->get_actions($this->url['app'], $this->url['action']);
 
-		//if no matching APP AN is found in the DB, call to default index in the Controller file
-		if (!$get_actions) return call_user_func_array(array($this, "index"), $params);
 
-		$this->ACL->check_id_encryption($get_actions['core_apps_action_disableplainid']);
 
-		//if matching APP AN is found, continue to call app_load in this Controller
-		$this->data = $this->app_load($get_actions);
-
-		$this->load->model('Html');
-		$this->layout = $this->Html->html_template($get_actions);
-
-		$this->app_output();
-	}
 
 
 	private function app_load($apps_action){
@@ -800,15 +816,6 @@ class MY_Controller extends CI_Controller {
 
 
 
-
-
-
-
-
-
-
-
-
 	function _get_return_url($default_url='') {
 		if (!$this->has_return) return $default_url;
 
@@ -831,6 +838,15 @@ class MY_Controller extends CI_Controller {
 
 		redirect($return_url);
 	}
+
+
+
+
+
+
+
+
+
 
 
 
