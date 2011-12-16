@@ -659,46 +659,7 @@ class MY_Controller extends CI_Controller {
 
 
 
-	function _get_return_url($default_url='') {
-		if (!$this->has_return) return $default_url;
 
-		$seg = array('app','action','id','subaction');
-
-		$result = array();
-		foreach($seg AS $s) {
-			if ($this->re_url[$s] !== FALSE) $result[] = $s;
-		}
-
-		return implode('/', $result);
-	}
-
-	function _set_return_url($querystring=FALSE) {
-		$seg = array('app','action','id','subaction');
-		$result = array();
-
-		if ($querystring) {
-			foreach($seg AS $s) {
-				$result[] = 're_'.$s.'='.$this->url[$s];
-			}
-			return '?'.implode('&', $result);
-		} else {
-			$this->load->helper('form');
-			foreach($seg AS $s) {
-				$result[] = form_input('re_'.$s, $this->url[$s]);
-			}
-			return implode('<br />', $result);
-		}
-	}
-
-	function _execute_return_url($link_only=FALSE) {
-		if (!$this->has_return) return NULL;
-
-		$return_url = $this->_get_return_url();
-
-		if ($link_only) return $return_url;
-
-		redirect($return_url);
-	}
 
 
 
