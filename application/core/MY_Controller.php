@@ -26,16 +26,18 @@ class MY_Controller extends CI_Controller {
 		$this->load->model('User');
 		$this->load->model('ACL');
 		$this->load->model('App_general');
+		$this->load->model('Html');
 		$this->load->model('App');
 
 		$this->setup_url();
 		$this->User->setup();
 		$this->setup_language();
 		$this->App->setup();
+
 		if ($this->App->must_disable_plain_id()) $this->ACL->check_id_encryption();
 		$this->ACL->check_app_access();
 
-		$this->output->enable_profiler(true);
+		//$this->output->enable_profiler(true);
 	}
 
 	//remap every URI call
@@ -51,8 +53,8 @@ class MY_Controller extends CI_Controller {
 		//if no matching APP AN is found in the DB, call to default index in the Controller file
 		if (!$this->App->has_actions()) return call_user_func_array(array($this, 'index'), $params);
 
-		$this->load->model('Html');
-		$this->layout = $this->Html->html_template($get_actions);
+		$this->data = $this->app_load();
+		$this->layout = $this->Html->html_template($this->App->actions());
 
 		$this->output();
 	}
@@ -668,6 +670,24 @@ class MY_Controller extends CI_Controller {
 		}
 
 		return implode('/', $result);
+	}
+
+	function _set_return_url($querystring=FALSE) {
+		$seg = array('app','action','id','subaction');
+		$result = array();
+
+		if ($querystring) {
+			foreach($seg AS $s) {
+				$result[] = 're_'.$s.'='.$this->url[$s];
+			}
+			return '?'.implode('&', $result);
+		} else {
+			$this->load->helper('form');
+			foreach($seg AS $s) {
+				$result[] = form_input('re_'.$s, $this->url[$s]);
+			}
+			return implode('<br />', $result);
+		}
 	}
 
 	function _execute_return_url($link_only=FALSE) {
