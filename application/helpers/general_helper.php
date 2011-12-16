@@ -36,12 +36,12 @@ function f_thisid_decode($thisid){
  */
 
 function encode_id($id) {
-	$CI = get_instance();
+	$CI =& get_instance();
 	return 'n'.$CI->encrypt->encode($id);
 }
 
 function decode_id($id) {
-	$CI = get_instance();
+	$CI =& get_instance();
 	return $CI->encrypt->decode(substr($id,1));
 }
 
