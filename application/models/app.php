@@ -1,32 +1,50 @@
 <?php if (!defined('BASEPATH')) exit('No direct access allowed.');
 
-class Apps extends CI_Model {
+class App extends CI_Model {
+	var $url = array();
+	var $actions = array();
 
 	function __construct() {
 		parent::__construct();
+
+		$CI =& get_instance();
+		$this->url = $CI->url;
 	}
-	
+
+	function setup_actions() {
+		if ($this->get_status($this->url['app'])) $this->actions = $this->get_actions($this->url['app'], $this->url['action']);
+	}
+
+	function has_actions() {
+		return (count($this->actions)>0);
+	}
+
+	function must_disable_plain_id() {
+		if (!$this->has_actions()) return false;
+		return $this->actions['core_apps_action_disableplainid'];
+	}
+
 	function get_status($app) {
 		$rs = $this->db->select('core_apps_status')
 				->where('core_apps_name', $app)
 				->where('core_apps_status', 1)
 				->get('core_apps', 1);
 		$result = $rs->row_array();
-		
+
 		return $result['core_apps_status'];
 	}
-	
+
 	function get_actions($app, $action) {
 		$rs = $this->db->select()
 				->where('core_apps_action_x_core_apps_name', $app)
 				->where('core_apps_action_name', $action)
 				->where('core_apps_action_active', 1)
 				->get('core_apps_action', 1);
-		
+
 		if ($rs->num_rows() == 0) return FALSE;
 		return $rs->row_array();
 	}
-	
+
 	function get_default_actions($app) {
 		$rs = $this->db->select()
 				->where('core_apps_action_x_core_apps_name', $app)
@@ -39,17 +57,17 @@ class Apps extends CI_Model {
 	}
 
 	function get_action_element($app, $action){
-		
+
 		$sql = "SELECT * FROM core_apps_action_element WHERE core_apps_action_element_x_core_apps_action_name = '$action' AND core_apps_action_element_active = '1' AND core_apps_action_element_x_core_apps_name = '$app' ORDER BY core_apps_action_element_sort ASC";
 		$rs = $this->db->query($sql);
-		
+
 		if ($rs->num_rows() == 0) return FALSE;
-		return $rs->result_array();	
-				
+		return $rs->result_array();
+
 	}
-	
+
 	function get_this_element($this_element, $mfunction, $apps_action){
-		
+
         $rs['ajax'] = $this_element['core_apps_action_element_ajax'];
         $rs['subaction'] = $this_element['core_apps_action_element_aved'];
 		if (!$rs['subaction']) $rs['subaction'] =  $this->url['subaction'];
@@ -64,7 +82,7 @@ class Apps extends CI_Model {
         $rs['colnum'] = $this_element['core_apps_action_element_colnum'];
 
         if (!$rs['ajax']){
-					
+
 			//if this is not a ajax call
 			//use the aved setting from the current AN
             $rs['target_an'] = $apps_action['core_apps_action_name'];
@@ -91,7 +109,7 @@ class Apps extends CI_Model {
 
 			$this_ajax_an = $this->get_actions($this->url['app'], $rs['target_an']);
 			if (isset($this_ajax_an[0])) $this_ajax_an = $this_ajax_an[0];
-			
+
 			//echo "<br>"; print_r($get_actions);
             $rs['add'] = $this_ajax_an['core_apps_action_add'];
             $rs['view'] = $this_ajax_an['core_apps_action_view'];
@@ -100,10 +118,10 @@ class Apps extends CI_Model {
             $rs['list'] = $this_ajax_an['core_apps_action_list'];
             $rs['search'] = $this_ajax_an['core_apps_action_search'];
             $rs['from'] = $this_ajax_an['core_apps_action_form'];
-			
+
 			$this_ajax_element = $this->get_action_element($this->url['app'], $rs['target_an']);
 			if (isset($this_ajax_element[0])) $this_ajax_element = $this_ajax_element[0];
-			
+
 			$rs['type'] = $this_ajax_element['core_apps_action_element_type'];
             $rs['name'] = $this_ajax_element['core_apps_action_element_name'];
             if (!$rs['langname']) $rs['langname'] = $this_ajax_element['core_apps_action_element_langname'];
@@ -117,13 +135,13 @@ class Apps extends CI_Model {
         }
 
 		return $rs;
-	}	
+	}
 
 	/*
 	function get_thisid($thisid, $disableplainid=0){
 
-		//returning 
-		//[0] = decoded/real plain id 
+		//returning
+		//[0] = decoded/real plain id
 		//[encode] = encoded id to be used in url
 		//some old code ported over still use $thisid_en for encoded thisid
 		if(substr($thisid, 0, 1) == "n"){

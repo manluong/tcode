@@ -26,10 +26,14 @@ class MY_Controller extends CI_Controller {
 		$this->load->model('User');
 		$this->load->model('ACL');
 		$this->load->model('App_general');
+		$this->load->model('App');
 
 		$this->setup_url();
 		$this->User->setup();
 		$this->setup_language();
+		$this->App->setup();
+		if ($this->App->must_disable_plain_id()) $this->ACL->check_id_encryption();
+		$this->ACL->check_app_access();
 
 		$this->output->enable_profiler(true);
 	}
@@ -44,19 +48,8 @@ class MY_Controller extends CI_Controller {
 	}
 
 	public function default_action($params) {
-		$this->load->model('Apps');
-
-		//check if APP is active
-		//if active, get matching APP AN from the database
-		if ($this->Apps->get_status($this->url['app'])) $get_actions = $this->Apps->get_actions($this->url['app'], $this->url['action']);
-
 		//if no matching APP AN is found in the DB, call to default index in the Controller file
-		if (!$get_actions) return call_user_func_array(array($this, 'index'), $params);
-
-		$this->ACL->check_id_encryption($get_actions['core_apps_action_disableplainid']);
-
-		//if matching APP AN is found, continue to call app_load in this Controller
-		$this->data = $this->app_load($get_actions);
+		if (!$this->App->has_actions()) return call_user_func_array(array($this, 'index'), $params);
 
 		$this->load->model('Html');
 		$this->layout = $this->Html->html_template($get_actions);
@@ -108,7 +101,9 @@ class MY_Controller extends CI_Controller {
 
 
 
-	private function app_load($apps_action){
+	private function app_load(){
+
+		$apps_action = $this->App->actions;
 		/*
 		 * thisid
 		 */
