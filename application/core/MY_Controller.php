@@ -294,7 +294,7 @@ class MY_Controller extends CI_Controller {
 
 
 
-
+	//beginning of output
 	private function app_output(){
 
 		//
@@ -323,14 +323,14 @@ class MY_Controller extends CI_Controller {
 				//load the template page.inc file to output the full page with template layout
 				//include_once DOCUMENT_ROOT.'/'.$layout['folderinc'].'/page.inc';
 				//output_fullpage($output,$layout);
-				$loyout = $this->output_fullpage();
+				$this->output_fullpage();
 
 				break;
 
 			case '2':
 				header('Content-Type:text/html');
 				//just print content in the array name "html"
-				if ($output){
+				if ($this->data){
 					foreach ($this->data as $this_output) {
 						if (isset($this_output['html'])) echo $this_output['html'];
 					}
@@ -344,7 +344,7 @@ class MY_Controller extends CI_Controller {
 				// if there is an array name "xml", just print, content alreay in xml format
 				// else if there is array name "data", convert to xml format
 				//echo $h_xml; << old value name
-				if ($output){
+				if ($this->data){
 					foreach ($this->data as $this_output) {
 						if ($this_output['xml']){
 							echo $this_output['xml'];
@@ -395,9 +395,7 @@ class MY_Controller extends CI_Controller {
 
 
 	private function output_fullpage(){
-		$app = $this->url['app'];
 		$layout = $this->layout;
-		$output = $this->data;
 
 		$pagedata = array(
 			'title' => '',
@@ -464,7 +462,7 @@ class MY_Controller extends CI_Controller {
 		//load the content in $output to $h_html
 		//makeup the DIV html
 		//put in the $output[]['html'] into the DIV if any
-		$output_content = $this->output_content($layout, $output);
+		$output_content = $this->output_content();
 		//$h_html = $output_page['html'];
 		//$h_js_onload = $output_page['jsonload'];
 
@@ -506,7 +504,7 @@ class MY_Controller extends CI_Controller {
 	}
 
 
-	private function output_content($layout, $output) {
+	private function output_content() {
 		$result = array();
 		//print_r($output);
 		if (isset($layout['boxformat'])) $boxformat_array = explode(',', $layout['boxformat']);
@@ -611,9 +609,9 @@ class MY_Controller extends CI_Controller {
 		/////////////////////////////////////////////////////////
 		//load content
 		/////////////////////////////////////////////////////////
-		$sql3 = (!$layout['content'])
+		$sql3 = (!$this->layout['content'])
 			? "SELECT * FROM core_layout_content WHERE core_layout_content_name  = 'full'"
-			: "SELECT * FROM core_layout_content WHERE core_layout_content_name  = '".$layout['content']."'";
+			: "SELECT * FROM core_layout_content WHERE core_layout_content_name  = '".$this->layout['content']."'";
 
 		$result3 = $this->db->query($sql3);
 		$result3 = $result3->row_array(0);
