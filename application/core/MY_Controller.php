@@ -31,6 +31,7 @@ class MY_Controller extends CI_Controller {
 		$this->User->setup();
 		$this->setup_language();
 
+		$this->output->enable_profiler(true);
 
 	}
 
