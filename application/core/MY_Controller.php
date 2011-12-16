@@ -61,7 +61,7 @@ class MY_Controller extends CI_Controller {
 		$this->load->model('Html');
 		$this->layout = $this->Html->html_template($get_actions);
 
-		$this->app_output();
+		$this->output();
 	}
 
 
@@ -295,7 +295,7 @@ class MY_Controller extends CI_Controller {
 
 
 	//beginning of output
-	private function app_output(){
+	private function output(){
 
 		//
 		// output_foreach
@@ -378,18 +378,6 @@ class MY_Controller extends CI_Controller {
 
 		}
 	}
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -506,23 +494,26 @@ class MY_Controller extends CI_Controller {
 
 	private function output_content() {
 		$result = array();
+		$content_div = array();
+
 		//print_r($output);
-		if (isset($layout['boxformat'])) $boxformat_array = explode(',', $layout['boxformat']);
+		if (isset($this->layout['boxformat'])) $boxformat_array = explode(',', $this->layout['boxformat']);
 
 		$boxformat_count = 0;
 		$this_boxformat = 0;
 		$count_output = 0;
-		$build_tab = array();
-		$h_js_onload = '';
+
 		$result['jsonload'] = '';
 		$result['html'] = '';
 
-		foreach ($output as $this_output) {
+		$view_data = array();
+		foreach ($this->data as $data) {
+			$view_data['data'] = $data;
 
-			if ($this_output['isdiv']) {
+			if ($data['isdiv']) {
 
-				if (isset($this_output['div']['divwh'])) {
-					$this_boxformat = $this_output['div']['divwh'];
+				if (isset($data['div']['divwh'])) {
+					$this_boxformat = $data['div']['divwh'];
 					$boxformat_count++;
 				} elseif (isset($boxformat_array[$boxformat_count])) {
 					$this_boxformat = $boxformat_array[$boxformat_count];
@@ -531,33 +522,34 @@ class MY_Controller extends CI_Controller {
 					$this_boxformat = 1;
 				}
 
-				//print_r($this_output);
+				//print_r($data);
 
-				$this_divstyle = ($this_output['div']['divstyle'] != '')
-					? $this_output['div']['divstyle']
-					: $this_divstyle = 'default';
+				$active_style = ($data['div']['divstyle'] != '')
+					? $data['div']['divstyle']
+					: 'default';
+				$view_data['active_style'] = $active_style;
 
-				if (!isset($divstyle[$this_divstyle])) $divstyle[$this_divstyle] = $this->output_page_divstyle($this_divstyle);
+				if (!isset($view_data['divstyle'][$active_style])) $view_data['divstyle'][$active_style] = $this->get_divstyle($active_style);
 
-				if (!isset($this_output['colnum'])) $this_output['colnum'] = 1;
-				if (!isset($content_div[$this_output['colnum']])) $content_div[$this_output['colnum']] = '';
+				if (!isset($data['colnum'])) $data['colnum'] = 1;
+				if (!isset($content_div[$data['colnum']])) $content_div[$data['colnum']] = '';
 
 				//$this_apps_html['colnum']
 				//$this_apps_html['actlayout']
 				//echo $this_boxformat;
 
-				switch ($divstyle[$this_divstyle]['style']) {
+				switch ($view_data['divstyle'][$active_style]['style']) {
 					case 'tgrid':
 						switch($this_boxformat){
-							case '1': $gridnum = 'grid_6'; break;
-							case '2': $gridnum = 'grid_4'; break;
-							case '3': $gridnum = 'grid_3'; break;
-							case '6': $gridnum = 'grid_1'; break;
-							default: $gridnum = 'grid_6'; break;
+							case '1': $view_data['gridnum'] = 'grid_6'; break;
+							case '2': $view_data['gridnum'] = 'grid_4'; break;
+							case '3': $view_data['gridnum'] = 'grid_3'; break;
+							case '6': $view_data['gridnum'] = 'grid_1'; break;
+							default: $view_data['gridnum'] = 'grid_6'; break;
 						}
 
-						if ($this_output['div']['tab'] == 1) {
-							$build_tab = $this->output_page_format_tgrid_tab($this_output, $build_tab, $gridnum);
+						if ($data['div']['tab'] == 1) {
+							//$view_data['build_tab'] = $this->output_page_format_tgrid_tab($view_data['build_tab']);
 
 							//check if next div is also a tab, close the tab html if next div is not a tab
 							//add in logic to check if next div is a outputdiv, if it's not, skip to check the next one.
@@ -565,40 +557,40 @@ class MY_Controller extends CI_Controller {
 							$chktab_cont = 1;
 
 							while ($chktab_cont == 1){
-								if (isset($output[$chktab_count]['isdiv'])){
+								if (isset($this->data[$chktab_count]['isdiv'])){
 									//next div that is for output
-									if (!$output[$chktab_count]['div']['tab']) {
+									if (!$this->data[$chktab_count]['div']['tab']) {
 										//is not a tab, so warp up the tab
-										$content_div[$this_output['colnum']] .= $this->output_page_format_tgrid_tabwarpup($build_tab);
+										$content_div[$data['colnum']] .= $this->load->view('default/web/component_grid_tab_wrap', $view_data, TRUE);
 										//$build_tab = array("li" => array(), "section" => array());
 									}
 									$chktab_cont = 0;
-								} elseif (!isset($output[$chktab_count])) {
+								} elseif (!isset($this->data[$chktab_count])) {
 									//end of $output array
 									//warp up the tab
 									$chktab_cont = 0;
-									$content_div[$this_output['colnum']] .= $this->output_page_format_tgrid_tabwarpup($build_tab);
+									$content_div[$data['colnum']] .= $this->load->view('default/web/component_grid_tab_wrap', $view_data, TRUE);
 								}
 							}
 						} else {
-							$content_div[$this_output['colnum']] .= $this->output_page_format_tgrid($this_output, $gridnum, $divstyle[$this_divstyle]);
+							$content_div[$data['colnum']] .= $this->load->view('default/web/component_grid', $view_data, TRUE);
 						}
 						break;
 
 					case 'simple':
-						$content_div[$this_output['colnum']] .= $this->output_page_format_simple($this_output, $gridnum, $divstyle[$this_divstyle]);
+						$content_div[$data['colnum']] .= $this->load->view('default/web/component_simple', $view_data, TRUE);
 						break;
 				}
 
 			}
 
-			if (isset($this_output['ajax']) && $this_output['ajax']) {
+			if (isset($data['ajax']) && $data['ajax']) {
 				$result['jsonload'] .= 'apps_action_ajax("';
-				$result['jsonload'] .= $this_output['ajax']['app'].'","';
-				$result['jsonload'] .= $this_output['ajax']['an'].'","';
-				$result['jsonload'] .= $this_output['ajax']['subaction'].'","';
-				$result['jsonload'] .= $this_output['ajax']['elementid'].'","';
-				$result['jsonload'] .= $this_output['ajax']['id'].'");';
+				$result['jsonload'] .= $data['ajax']['app'].'","';
+				$result['jsonload'] .= $data['ajax']['an'].'","';
+				$result['jsonload'] .= $data['ajax']['subaction'].'","';
+				$result['jsonload'] .= $data['ajax']['elementid'].'","';
+				$result['jsonload'] .= $data['ajax']['id'].'");';
 			}
 
 			$count_output++;
@@ -642,7 +634,8 @@ class MY_Controller extends CI_Controller {
 		return $result;
 	}
 
-	private function output_page_divstyle($action_layout_name) {
+	//TODO: Move this to layout model
+	private function get_divstyle($action_layout_name) {
 		$rs = $this->db->select()
 				->where('core_apps_action_layout_name', $action_layout_name)
 				->get('core_apps_action_layout', 1);
@@ -663,151 +656,6 @@ class MY_Controller extends CI_Controller {
 	    $this_array['viewcss'] = $result['core_apps_action_layout_viewcss'];
 
 		return $this_array;
-	}
-
-	private function output_page_format_tgrid($this_output, $gridnum, $this_divstyle) {
-		/*
-			$this_divstyle['style']
-			$this_divstyle['title']
-			$this_divstyle['drag']
-			$this_divstyle['collaps']
-			$this_divstyle['boxless'];
-			$this_divstyle['css']
-			$this_divstyle['formtype']
-			$this_divstyle['listtype']
-			$this_divstyle['viewtype']
-			$this_divstyle['formcss']
-			$this_divstyle['tablecss']
-			$this_divstyle['viewcss']
-			//draggable="true"
-		*/
-
-		if ($this_divstyle['collaps']) $this_divstyle['collaps'] = ' collapsible';
-		if ($this_divstyle['drag']) $this_divstyle['drag'] = ' draggable="true"';
-		if ($this_divstyle['css']) $this_divstyle['css'] = ' class="'.$this_divstyle['css'].'"';
-
-
-		if ($this_divstyle['boxless'] != 1) {
-		    $html = '
-				<div class="'.$gridnum.' portlet'.$this_divstyle['collaps'].'" id="'.$this_output['div']['element_id'].'_parent"'.$this_divstyle['drag'].'>
-			';
-
-	        if ($this_divstyle['title']) {
-				$html .= '
-					<header>
-						<h2>'.$this_output['div']['title'] .'</h2>
-					</header>
-				';
-			}
-
-			$html .= '
-					<section class="no-padding">
-					<div id="'.$this_output['div']['element_id'].'"'.$this_divstyle['css'].'>
-			';
-
-			if (isset($this_output['html'])) $html .= $this_output['html'];
-
-			$html .= '
-					</div>
-					</section>
-				</div>
-			';
-		} else {
-			$html = '
-				<div class="'.$gridnum.' portlet-boxless portlet" id="'.$this_output['div']['element_id'].'_parent">
-					<section class="no-padding">
-					<div id="'.$this_output['div']['element_id'].'"'.$this_divstyle['css'].'>
-			';
-
-			if (isset($this_output['html'])) $html .= $this_output['html'];
-
-			$html .= '
-					</div>
-					</section>
-				</div>
-			';
-		}
-
-		return $html;
-	}
-
-
-
-	private function output_page_format_tgrid_tab($this_output, $build_tab, $gridnum) {
-
-		if (!isset($build_tab['li'])) $build_tab['li'] = $build_tab['section'] = '';
-
-		$build_tab['gridnum'] = $gridnum;
-		$build_tab['li'] .= '
-			<li><a href="#pane-'.$this_output['div']['element_id'].'" id="tablink-'.$this_output['div']['element_id'].'">'.$this_output['div']['title'].'</a></li>
-		';
-		$build_tab['section'] .= '
-			<div class="portlet">
-				<section id="pane-'.$this_output['div']['element_id'].'" class="no-padding">
-					<div id="'.$this_output['div']['element_id'].'">
-		';
-
-		if (isset($this_output['html'])) $build_tab['section'] .= $this_output['html'];
-
-		$build_tab['section'] .= '
-					</div>
-				</section>
-			</div>
-		';
-
-		return $build_tab;
-	}
-
-
-	private function output_page_format_tgrid_tabwarpup($build_tab) {
-		$html = '
-			<!-- Tabs Section -->
-			<div class="'.$build_tab['gridnum'].'">
-				<div class="tabs">
-					<ul>
-						'.$build_tab['li'].'
-					</ul>
-				<!-- tab "panes" -->
-				'.$build_tab['section'].'
-				</div>
-			</div>
-			<!-- End Tabs Section -->
-		';
-
-		return $html;
-	}
-
-
-
-	private function output_page_format_simple($this_output, $gridnum, $this_divstyle) {
-	    //if ($this_divstyle['collaps']) $collapsible = ' collapsible';
-	    //if ($this_divstyle['drag']) $draggable = ' draggable="true"';
-	    //if ($this_divstyle['css']) $cssadd = ' class="'.$this_divstyle['css'].'"';
-
-	    if ($this_divstyle['boxless']) return '';
-
-		$html .= '
-			<div class="" id="'.$this_output['div']['element_id'].'_parent"'.$draggable.'>
-		';
-		/*
-		if ($this_divstyle['title']){
-		$h_html .= '
-		<header>
-		<h2>'.$lang['core'][$this_output['title']] .'</h2>
-		</header>
-		';
-		}
-		*/
-		$html .= '
-				<section class="no-padding">
-					<div id="'.$this_output['div']['element_id'].'"'.$cssadd.'>
-						'.$this_output['html'].'
-					</div>
-				</section>
-			</div>
-		';
-
-		return $html;
 	}
 
 
