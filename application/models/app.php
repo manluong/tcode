@@ -4,6 +4,8 @@ class App extends CI_Model {
 	var $url = array();
 	var $actions = array();
 
+	var $public_apps = array('main', 'dashboard');
+
 	function __construct() {
 		parent::__construct();
 
@@ -11,7 +13,7 @@ class App extends CI_Model {
 		$this->url = $CI->url;
 	}
 
-	function setup_actions() {
+	function setup() {
 		if ($this->get_status($this->url['app'])) $this->actions = $this->get_actions($this->url['app'], $this->url['action']);
 	}
 
@@ -20,8 +22,14 @@ class App extends CI_Model {
 	}
 
 	function must_disable_plain_id() {
-		if (!$this->has_actions()) return false;
-		return $this->actions['core_apps_action_disableplainid'];
+		if (!$this->has_actions()) return FALSE;
+		return ($this->actions['core_apps_action_disableplainid'] == 1);
+	}
+
+	function has_public_access() {
+		if (in_array($this->url['app'], $this->public_apps)) return TRUE;
+		
+		return ($this->actions['core_apps_action_public'] == 1);
 	}
 
 	function get_status($app) {
@@ -29,8 +37,10 @@ class App extends CI_Model {
 				->where('core_apps_name', $app)
 				->where('core_apps_status', 1)
 				->get('core_apps', 1);
-		$result = $rs->row_array();
 
+		if ($rs->num_rows()==0) return 0;
+
+		$result = $rs->row_array();
 		return $result['core_apps_status'];
 	}
 

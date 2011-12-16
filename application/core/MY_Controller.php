@@ -6,6 +6,7 @@ class MY_Controller extends CI_Controller {
 		'action' => '',
 		'id_plain' => 0,
 		'id_encrypted' => 0,
+		'id' => 0,	//original ID passed in by request
 		'subaction' => '',
 	);
 	var $re_url = array(
@@ -23,13 +24,15 @@ class MY_Controller extends CI_Controller {
 	function __construct() {
 		parent::__construct();
 
+		$this->setup_url();
+
 		$this->load->model('User');
 		$this->load->model('ACL');
 		$this->load->model('App_general');
 		$this->load->model('Html');
 		$this->load->model('App');
 
-		$this->setup_url();
+
 		$this->User->setup();
 		$this->setup_language();
 		$this->App->setup();
@@ -54,7 +57,7 @@ class MY_Controller extends CI_Controller {
 		if (!$this->App->has_actions()) return call_user_func_array(array($this, 'index'), $params);
 
 		$this->data = $this->app_load();
-		$this->layout = $this->Html->html_template($this->App->actions());
+		$this->layout = $this->Html->html_template($this->App->actions);
 
 		$this->output();
 	}
@@ -70,7 +73,7 @@ class MY_Controller extends CI_Controller {
 		$this->url['action'] = $this->router->fetch_method();
 		$this->url['subaction'] = $this->uri->segment(4, '');
 
-		$id = $this->uri->segment(3, 0);
+		$this->url['id'] = $id = $this->uri->segment(3, 0);
 
 		if (id_is_encrypted($id)) {
 			$this->url['id_plain'] = decode_id($id);
@@ -91,7 +94,7 @@ class MY_Controller extends CI_Controller {
 	private function setup_language() {
 		$this->load->model('Langmodel');
 		$this->lang->initialise($this->Langmodel->initialise());
-		$this->lang->loadarray($this->Langmodel->loadarray("core", $this->lang->lang_use));
+		$this->lang->loadarray($this->Langmodel->loadarray('core', $this->lang->lang_use));
 		$this->lang->loadarray($this->Langmodel->loadarray($this->url['app'], $this->lang->lang_use));
 	}
 
@@ -110,35 +113,6 @@ class MY_Controller extends CI_Controller {
 		 * thisid
 		 */
 		$thisid = $this->url['id_plain'];
-
-		/*
-		 * access right
-
-		if (!$this->User->info && !$apps_action['core_apps_action_public']) {
-
-		    header( 'Location: '.base_url().'access/login/?re_app='.$app.'&re_an='.$an.'&re_aved='.$aved.'&re_thisid='.$re_thisid);
-		    exit;
-
-		} elseif (isset($this->User->id['accessgp']) && $this->User->id['accessgp'] != 1 && !$apps_action['core_apps_action_public']) {
-
-		    $app_access_rights_table = $this->Access_model->core_access_rights_table($app,$an,$aved,$this->User->id,$apps_action);
-
-		    if ($app_access_rights_table['allow'] == 3) {
-		    //requestion aved is not allowed/set in AN
-		    meg(999,"AN Permission Not Allow. - ".$aved);
-		    }elseif ($app_access_rights_table['allow'] == 2) {
-		    //the access is denied by an entry in the access_rights table
-		    meg(999,"Access Rights Permission Not Allow. - ".$app_access_rights_table['typeid']);
-		    }elseif($app_access_rights_table['allow'] != 1){
-		    //not permission is set to allow access, minimum set a Allow all rule for a App for each master group (except Admin)
-		    meg(999,"Access Rights Permission Not Allow. - No Permission");
-		    }
-
-		}
-		*/
-		//getthisid
-
-
 
 
 
@@ -292,7 +266,7 @@ class MY_Controller extends CI_Controller {
 
 
 	//beginning of output
-	private function output(){
+	function output(){
 
 		//
 		// output_foreach
