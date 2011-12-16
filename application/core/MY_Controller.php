@@ -21,11 +21,12 @@ class MY_Controller extends CI_Controller {
 		$this->load->model('User');
 		$this->load->model('ACL');
 		$this->load->model('App_general');
+		$this->load->model('Log');
 
 		$this->setup_url();
 		$this->User->setup();
 		$this->setup_language();
-
+		$this->Log->start_log();
 
 	}
 
