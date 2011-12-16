@@ -1,56 +1,47 @@
 <?php
 
 class MY_Controller extends CI_Controller {
-	var $html = array();
-
-	var $thisid = array();
 	var $url = array(
 		'app' => '',
 		'action' => '',
 		'id_plain' => 0,
 		'id_encrypted' => 0,
+		'id' => 0,	//original ID passed in by request
 		'subaction' => '',
 	);
+	var $re_url = array(
+		'app' => '',
+		'action' => '',
+		'id' => 0,
+		'subaction' => '',
+	);
+	var $has_return = FALSE;
+
 	var $data = array();
 	var $layout = array();
 
 
 	function __construct() {
 		parent::__construct();
+		$this->setup_url();
 
 		$this->load->model('User');
 		$this->load->model('ACL');
 		$this->load->model('App_general');
-		$this->load->model('Log');
+		$this->load->model('Html');
+		$this->load->model('App');
 
-		$this->setup_url();
+		$this->load->model('Log');
 		$this->User->setup();
 		$this->setup_language();
 		$this->Log->start_log();
 
-	}
+		$this->App->setup();
 
-	private function setup_url() {
-		$this->url['app'] = $this->router->fetch_class();
-		$this->url['action'] = $this->router->fetch_method();
-		$this->url['subaction'] = $this->uri->segment(4, '');
+		if ($this->App->must_disable_plain_id()) $this->ACL->check_id_encryption();
+		$this->ACL->check_app_access();
 
-		$id = $this->uri->segment(3, 0);
-
-		if (id_is_encrypted($id)) {
-			$this->url['id_plain'] = decode_id($id);
-			$this->url['id_encrypted'] = $id;
-		} else {
-			$this->url['id_plain'] = $id;
-			$this->url['id_encrypted'] = encode_id($id);
-		}
-	}
-
-	private function setup_language() {
-		$this->load->model('Langmodel');
-		$this->lang->initialise($this->Langmodel->initialise());
-		$this->lang->loadarray($this->Langmodel->loadarray("core", $this->lang->lang_use));
-		$this->lang->loadarray($this->Langmodel->loadarray($this->url['app'], $this->lang->lang_use));
+		//$this->output->enable_profiler(true);
 	}
 
 	//remap every URI call
@@ -59,61 +50,71 @@ class MY_Controller extends CI_Controller {
 		if (method_exists($this, $action)) return call_user_func_array(array($this, $action), $params=array());
 
 
-		$this->load->model('Apps');
+		//else, run default action
+		$this->default_action($params);
+	}
 
-		//check if APP is active
-		//if active, get matching APP AN from the database
-		if ($this->Apps->get_status($this->url['app'])) $get_actions = $this->Apps->get_actions($this->url['app'], $this->url['action']);
-
+	public function default_action($params) {
 		//if no matching APP AN is found in the DB, call to default index in the Controller file
-		if (!$get_actions) return call_user_func_array(array($this, "index"), $params);
+		if (!$this->App->has_actions()) return call_user_func_array(array($this, 'index'), $params);
 
-		$this->ACL->check_id_encryption($get_actions['core_apps_action_disableplainid']);
+		$this->data = $this->app_load();
+		$this->layout = $this->Html->html_template($this->App->actions);
 
-		//if matching APP AN is found, continue to call app_load in this Controller
-		$this->data = $this->app_load($get_actions);
-
-		$this->load->model('Html');
-		$this->layout = $this->Html->html_template($get_actions);
-
-		$this->app_output();
+		$this->output();
 	}
 
 
-	private function app_load($apps_action){
+
+
+
+
+
+	private function setup_url() {
+		$this->url['app'] = $this->router->fetch_class();
+		$this->url['action'] = $this->router->fetch_method();
+		$this->url['subaction'] = $this->uri->segment(4, '');
+
+		$this->url['id'] = $id = $this->uri->segment(3, 0);
+
+		if (id_is_encrypted($id)) {
+			$this->url['id_plain'] = decode_id($id);
+			$this->url['id_encrypted'] = $id;
+		} else {
+			$this->url['id_plain'] = $id;
+			$this->url['id_encrypted'] = encode_id($id);
+		}
+
+		$this->re_url['app'] = $this->input->get_post('re_app', TRUE);
+		$this->re_url['action'] = $this->input->get_post('re_action', TRUE);
+		$this->re_url['subaction'] = $this->input->get_post('re_subaction', TRUE);
+		$this->re_url['id'] = $this->input->get_post('re_id', TRUE);
+
+		if ($this->re_url['app'] !== FALSE && $this->re_url['action'] !== FALSE) $this->has_return = TRUE;
+	}
+
+	private function setup_language() {
+		$this->load->model('Langmodel');
+		$this->lang->initialise($this->Langmodel->initialise());
+		$this->lang->loadarray($this->Langmodel->loadarray('core', $this->lang->lang_use));
+		$this->lang->loadarray($this->Langmodel->loadarray($this->url['app'], $this->lang->lang_use));
+	}
+
+
+
+
+
+
+
+
+
+	private function app_load(){
+
+		$apps_action = $this->App->actions;
 		/*
 		 * thisid
 		 */
 		$thisid = $this->url['id_plain'];
-
-		/*
-		 * access right
-
-		if (!$this->User->info && !$apps_action['core_apps_action_public']) {
-
-		    header( 'Location: '.base_url().'access/login/?re_app='.$app.'&re_an='.$an.'&re_aved='.$aved.'&re_thisid='.$re_thisid);
-		    exit;
-
-		} elseif (isset($this->User->id['accessgp']) && $this->User->id['accessgp'] != 1 && !$apps_action['core_apps_action_public']) {
-
-		    $app_access_rights_table = $this->Access_model->core_access_rights_table($app,$an,$aved,$this->User->id,$apps_action);
-
-		    if ($app_access_rights_table['allow'] == 3) {
-		    //requestion aved is not allowed/set in AN
-		    meg(999,"AN Permission Not Allow. - ".$aved);
-		    }elseif ($app_access_rights_table['allow'] == 2) {
-		    //the access is denied by an entry in the access_rights table
-		    meg(999,"Access Rights Permission Not Allow. - ".$app_access_rights_table['typeid']);
-		    }elseif($app_access_rights_table['allow'] != 1){
-		    //not permission is set to allow access, minimum set a Allow all rule for a App for each master group (except Admin)
-		    meg(999,"Access Rights Permission Not Allow. - No Permission");
-		    }
-
-		}
-		*/
-		//getthisid
-
-
 
 
 
@@ -266,8 +267,8 @@ class MY_Controller extends CI_Controller {
 
 
 
-
-	private function app_output(){
+	//beginning of output
+	function output(){
 
 		//
 		// output_foreach
@@ -295,14 +296,14 @@ class MY_Controller extends CI_Controller {
 				//load the template page.inc file to output the full page with template layout
 				//include_once DOCUMENT_ROOT.'/'.$layout['folderinc'].'/page.inc';
 				//output_fullpage($output,$layout);
-				$loyout = $this->output_fullpage();
+				$this->output_fullpage();
 
 				break;
 
 			case '2':
 				header('Content-Type:text/html');
 				//just print content in the array name "html"
-				if ($output){
+				if ($this->data){
 					foreach ($this->data as $this_output) {
 						if (isset($this_output['html'])) echo $this_output['html'];
 					}
@@ -316,7 +317,7 @@ class MY_Controller extends CI_Controller {
 				// if there is an array name "xml", just print, content alreay in xml format
 				// else if there is array name "data", convert to xml format
 				//echo $h_xml; << old value name
-				if ($output){
+				if ($this->data){
 					foreach ($this->data as $this_output) {
 						if ($this_output['xml']){
 							echo $this_output['xml'];
@@ -354,22 +355,8 @@ class MY_Controller extends CI_Controller {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 	private function output_fullpage(){
-		$app = $this->url['app'];
 		$layout = $this->layout;
-		$output = $this->data;
 
 		$pagedata = array(
 			'title' => '',
@@ -436,7 +423,7 @@ class MY_Controller extends CI_Controller {
 		//load the content in $output to $h_html
 		//makeup the DIV html
 		//put in the $output[]['html'] into the DIV if any
-		$output_content = $this->output_content($layout, $output);
+		$output_content = $this->output_content();
 		//$h_html = $output_page['html'];
 		//$h_js_onload = $output_page['jsonload'];
 
@@ -478,25 +465,28 @@ class MY_Controller extends CI_Controller {
 	}
 
 
-	private function output_content($layout, $output) {
+	private function output_content() {
 		$result = array();
+		$content_div = array();
+
 		//print_r($output);
-		if (isset($layout['boxformat'])) $boxformat_array = explode(',', $layout['boxformat']);
+		if (isset($this->layout['boxformat'])) $boxformat_array = explode(',', $this->layout['boxformat']);
 
 		$boxformat_count = 0;
 		$this_boxformat = 0;
 		$count_output = 0;
-		$build_tab = array();
-		$h_js_onload = '';
+
 		$result['jsonload'] = '';
 		$result['html'] = '';
 
-		foreach ($output as $this_output) {
+		$view_data = array();
+		foreach ($this->data as $data) {
+			$view_data['data'] = $data;
 
-			if ($this_output['isdiv']) {
+			if ($data['isdiv']) {
 
-				if (isset($this_output['div']['divwh'])) {
-					$this_boxformat = $this_output['div']['divwh'];
+				if (isset($data['div']['divwh'])) {
+					$this_boxformat = $data['div']['divwh'];
 					$boxformat_count++;
 				} elseif (isset($boxformat_array[$boxformat_count])) {
 					$this_boxformat = $boxformat_array[$boxformat_count];
@@ -505,33 +495,34 @@ class MY_Controller extends CI_Controller {
 					$this_boxformat = 1;
 				}
 
-				//print_r($this_output);
+				//print_r($data);
 
-				$this_divstyle = ($this_output['div']['divstyle'] != '')
-					? $this_output['div']['divstyle']
-					: $this_divstyle = 'default';
+				$active_style = ($data['div']['divstyle'] != '')
+					? $data['div']['divstyle']
+					: 'default';
+				$view_data['active_style'] = $active_style;
 
-				if (!isset($divstyle[$this_divstyle])) $divstyle[$this_divstyle] = $this->output_page_divstyle($this_divstyle);
+				if (!isset($view_data['divstyle'][$active_style])) $view_data['divstyle'][$active_style] = $this->get_divstyle($active_style);
 
-				if (!isset($this_output['colnum'])) $this_output['colnum'] = 1;
-				if (!isset($content_div[$this_output['colnum']])) $content_div[$this_output['colnum']] = '';
+				if (!isset($data['colnum'])) $data['colnum'] = 1;
+				if (!isset($content_div[$data['colnum']])) $content_div[$data['colnum']] = '';
 
 				//$this_apps_html['colnum']
 				//$this_apps_html['actlayout']
 				//echo $this_boxformat;
 
-				switch ($divstyle[$this_divstyle]['style']) {
+				switch ($view_data['divstyle'][$active_style]['style']) {
 					case 'tgrid':
 						switch($this_boxformat){
-							case '1': $gridnum = 'grid_6'; break;
-							case '2': $gridnum = 'grid_4'; break;
-							case '3': $gridnum = 'grid_3'; break;
-							case '6': $gridnum = 'grid_1'; break;
-							default: $gridnum = 'grid_6'; break;
+							case '1': $view_data['gridnum'] = 'grid_6'; break;
+							case '2': $view_data['gridnum'] = 'grid_4'; break;
+							case '3': $view_data['gridnum'] = 'grid_3'; break;
+							case '6': $view_data['gridnum'] = 'grid_1'; break;
+							default: $view_data['gridnum'] = 'grid_6'; break;
 						}
 
-						if ($this_output['div']['tab'] == 1) {
-							$build_tab = $this->output_page_format_tgrid_tab($this_output, $build_tab, $gridnum);
+						if ($data['div']['tab'] == 1) {
+							//$view_data['build_tab'] = $this->output_page_format_tgrid_tab($view_data['build_tab']);
 
 							//check if next div is also a tab, close the tab html if next div is not a tab
 							//add in logic to check if next div is a outputdiv, if it's not, skip to check the next one.
@@ -539,40 +530,40 @@ class MY_Controller extends CI_Controller {
 							$chktab_cont = 1;
 
 							while ($chktab_cont == 1){
-								if (isset($output[$chktab_count]['isdiv'])){
+								if (isset($this->data[$chktab_count]['isdiv'])){
 									//next div that is for output
-									if (!$output[$chktab_count]['div']['tab']) {
+									if (!$this->data[$chktab_count]['div']['tab']) {
 										//is not a tab, so warp up the tab
-										$content_div[$this_output['colnum']] .= $this->output_page_format_tgrid_tabwarpup($build_tab);
+										$content_div[$data['colnum']] .= $this->load->view('default/web/component_grid_tab_wrap', $view_data, TRUE);
 										//$build_tab = array("li" => array(), "section" => array());
 									}
 									$chktab_cont = 0;
-								} elseif (!isset($output[$chktab_count])) {
+								} elseif (!isset($this->data[$chktab_count])) {
 									//end of $output array
 									//warp up the tab
 									$chktab_cont = 0;
-									$content_div[$this_output['colnum']] .= $this->output_page_format_tgrid_tabwarpup($build_tab);
+									$content_div[$data['colnum']] .= $this->load->view('default/web/component_grid_tab_wrap', $view_data, TRUE);
 								}
 							}
 						} else {
-							$content_div[$this_output['colnum']] .= $this->output_page_format_tgrid($this_output, $gridnum, $divstyle[$this_divstyle]);
+							$content_div[$data['colnum']] .= $this->load->view('default/web/component_grid', $view_data, TRUE);
 						}
 						break;
 
 					case 'simple':
-						$content_div[$this_output['colnum']] .= $this->output_page_format_simple($this_output, $gridnum, $divstyle[$this_divstyle]);
+						$content_div[$data['colnum']] .= $this->load->view('default/web/component_simple', $view_data, TRUE);
 						break;
 				}
 
 			}
 
-			if (isset($this_output['ajax']) && $this_output['ajax']) {
+			if (isset($data['ajax']) && $data['ajax']) {
 				$result['jsonload'] .= 'apps_action_ajax("';
-				$result['jsonload'] .= $this_output['ajax']['app'].'","';
-				$result['jsonload'] .= $this_output['ajax']['an'].'","';
-				$result['jsonload'] .= $this_output['ajax']['subaction'].'","';
-				$result['jsonload'] .= $this_output['ajax']['elementid'].'","';
-				$result['jsonload'] .= $this_output['ajax']['id'].'");';
+				$result['jsonload'] .= $data['ajax']['app'].'","';
+				$result['jsonload'] .= $data['ajax']['an'].'","';
+				$result['jsonload'] .= $data['ajax']['subaction'].'","';
+				$result['jsonload'] .= $data['ajax']['elementid'].'","';
+				$result['jsonload'] .= $data['ajax']['id'].'");';
 			}
 
 			$count_output++;
@@ -583,9 +574,9 @@ class MY_Controller extends CI_Controller {
 		/////////////////////////////////////////////////////////
 		//load content
 		/////////////////////////////////////////////////////////
-		$sql3 = (!$layout['content'])
+		$sql3 = (!$this->layout['content'])
 			? "SELECT * FROM core_layout_content WHERE core_layout_content_name  = 'full'"
-			: "SELECT * FROM core_layout_content WHERE core_layout_content_name  = '".$layout['content']."'";
+			: "SELECT * FROM core_layout_content WHERE core_layout_content_name  = '".$this->layout['content']."'";
 
 		$result3 = $this->db->query($sql3);
 		$result3 = $result3->row_array(0);
@@ -616,7 +607,8 @@ class MY_Controller extends CI_Controller {
 		return $result;
 	}
 
-	private function output_page_divstyle($action_layout_name) {
+	//TODO: Move this to layout model
+	private function get_divstyle($action_layout_name) {
 		$rs = $this->db->select()
 				->where('core_apps_action_layout_name', $action_layout_name)
 				->get('core_apps_action_layout', 1);
@@ -637,151 +629,6 @@ class MY_Controller extends CI_Controller {
 	    $this_array['viewcss'] = $result['core_apps_action_layout_viewcss'];
 
 		return $this_array;
-	}
-
-	private function output_page_format_tgrid($this_output, $gridnum, $this_divstyle) {
-		/*
-			$this_divstyle['style']
-			$this_divstyle['title']
-			$this_divstyle['drag']
-			$this_divstyle['collaps']
-			$this_divstyle['boxless'];
-			$this_divstyle['css']
-			$this_divstyle['formtype']
-			$this_divstyle['listtype']
-			$this_divstyle['viewtype']
-			$this_divstyle['formcss']
-			$this_divstyle['tablecss']
-			$this_divstyle['viewcss']
-			//draggable="true"
-		*/
-
-		if ($this_divstyle['collaps']) $this_divstyle['collaps'] = ' collapsible';
-		if ($this_divstyle['drag']) $this_divstyle['drag'] = ' draggable="true"';
-		if ($this_divstyle['css']) $this_divstyle['css'] = ' class="'.$this_divstyle['css'].'"';
-
-
-		if ($this_divstyle['boxless'] != 1) {
-		    $html = '
-				<div class="'.$gridnum.' portlet'.$this_divstyle['collaps'].'" id="'.$this_output['div']['element_id'].'_parent"'.$this_divstyle['drag'].'>
-			';
-
-	        if ($this_divstyle['title']) {
-				$html .= '
-					<header>
-						<h2>'.$this_output['div']['title'] .'</h2>
-					</header>
-				';
-			}
-
-			$html .= '
-					<section class="no-padding">
-					<div id="'.$this_output['div']['element_id'].'"'.$this_divstyle['css'].'>
-			';
-
-			if (isset($this_output['html'])) $html .= $this_output['html'];
-
-			$html .= '
-					</div>
-					</section>
-				</div>
-			';
-		} else {
-			$html = '
-				<div class="'.$gridnum.' portlet-boxless portlet" id="'.$this_output['div']['element_id'].'_parent">
-					<section class="no-padding">
-					<div id="'.$this_output['div']['element_id'].'"'.$this_divstyle['css'].'>
-			';
-
-			if (isset($this_output['html'])) $html .= $this_output['html'];
-
-			$html .= '
-					</div>
-					</section>
-				</div>
-			';
-		}
-
-		return $html;
-	}
-
-
-
-	private function output_page_format_tgrid_tab($this_output, $build_tab, $gridnum) {
-
-		if (!isset($build_tab['li'])) $build_tab['li'] = $build_tab['section'] = '';
-
-		$build_tab['gridnum'] = $gridnum;
-		$build_tab['li'] .= '
-			<li><a href="#pane-'.$this_output['div']['element_id'].'" id="tablink-'.$this_output['div']['element_id'].'">'.$this_output['div']['title'].'</a></li>
-		';
-		$build_tab['section'] .= '
-			<div class="portlet">
-				<section id="pane-'.$this_output['div']['element_id'].'" class="no-padding">
-					<div id="'.$this_output['div']['element_id'].'">
-		';
-
-		if (isset($this_output['html'])) $build_tab['section'] .= $this_output['html'];
-
-		$build_tab['section'] .= '
-					</div>
-				</section>
-			</div>
-		';
-
-		return $build_tab;
-	}
-
-
-	private function output_page_format_tgrid_tabwarpup($build_tab) {
-		$html = '
-			<!-- Tabs Section -->
-			<div class="'.$build_tab['gridnum'].'">
-				<div class="tabs">
-					<ul>
-						'.$build_tab['li'].'
-					</ul>
-				<!-- tab "panes" -->
-				'.$build_tab['section'].'
-				</div>
-			</div>
-			<!-- End Tabs Section -->
-		';
-
-		return $html;
-	}
-
-
-
-	private function output_page_format_simple($this_output, $gridnum, $this_divstyle) {
-	    //if ($this_divstyle['collaps']) $collapsible = ' collapsible';
-	    //if ($this_divstyle['drag']) $draggable = ' draggable="true"';
-	    //if ($this_divstyle['css']) $cssadd = ' class="'.$this_divstyle['css'].'"';
-
-	    if ($this_divstyle['boxless']) return '';
-
-		$html .= '
-			<div class="" id="'.$this_output['div']['element_id'].'_parent"'.$draggable.'>
-		';
-		/*
-		if ($this_divstyle['title']){
-		$h_html .= '
-		<header>
-		<h2>'.$lang['core'][$this_output['title']] .'</h2>
-		</header>
-		';
-		}
-		*/
-		$html .= '
-				<section class="no-padding">
-					<div id="'.$this_output['div']['element_id'].'"'.$cssadd.'>
-						'.$this_output['html'].'
-					</div>
-				</section>
-			</div>
-		';
-
-		return $html;
 	}
 
 

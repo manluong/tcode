@@ -16,20 +16,20 @@ class User extends CI_Model {
 		// 7=login and failed user not active
 
 	var $info = array();
-		
+
 	//var $info = array();
 
-	var $admin = 0;
-	var $logged_in = false;
-	
+	var $admin = FALSE;
+	var $logged_in = FALSE;
+
 	var $loguid = 0;
 
 	function __construct() {
 		parent::__construct();
-		
+
 		$this->setup_loguid();
 	}
-	
+
 	public function debug() {
 		echo '<p>';
 		echo 'username: ',$this->username,'<br />';
@@ -38,19 +38,19 @@ class User extends CI_Model {
 		echo 'info: <pre>',print_r($this->info, true),'</pre>';
 		echo '</p>';
 	}
-	
+
 	public function is_logged_in() {
 		return $this->logged_in;
 	}
-	
+
 	public function is_admin() {
-		return ($this->admin == 1);
+		return $this->admin;
 	}
-	
+
 	public function get_loguid() {
 		return $this->loguid;
 	}
-	
+
 	public function is_valid_password($username, $password) {
 		$rs = $this->db->select()
 				->where('access_user_username', $username)
@@ -69,13 +69,13 @@ class User extends CI_Model {
 			$this->status = 7;
 			return FALSE;
 		}
-			
+
 		$password = f_password_encrypt($password);
 		$rs = $this->db->select()
 				->where('access_p_uid', $access_user['access_user_id'])
 				->where('access_p_p', $password)
 				->get('access_p', 1);
-		
+
 		if ($rs->num_rows()==0) {
 			$this->status = 3;
 			return FALSE;
@@ -83,20 +83,20 @@ class User extends CI_Model {
 
 		return TRUE;
 	}
-	
+
 	public function login($username) {
 		$rs = $this->db->select()
 				->where('access_user_username', $username)
 				->get('access_user', 1);
 		$access_user = $rs->row_array();
-		
+
 		$this->id = $access_user['access_user_id'];
 		$this->username = $access_user['access_user_username'];
 		$this->status = 2;
 		$this->logged_in = TRUE;
 
 		$core_app_userinfo = $this->core_app_userinfo($username);
-		
+
 		//echo 'startt<pre>',print_r($core_app_userinfo,true),'</pre>endd';
 		//die();
 
@@ -108,27 +108,29 @@ class User extends CI_Model {
 		$this->info['vendorid'] = $core_app_userinfo['vendorid'];
 		$this->info['memberid'] = $core_app_userinfo['memberid'];
 		$this->info['subgp'] = $core_app_userinfo['subgp'];
-		
+
+		$this->admin = ($this->info['accessgp']==1);
 		/*
 		//platform
 		if ($this->platform == "1" || $this->platform == "2" || $this->platform == "3") {
-			$this->platform = $platform;	
+			$this->platform = $platform;
 		} else {
 			//go detect platform
 			$sess_userdata['platform'] = $this->platform;
 		}
 		*/
 
+		$this->session->set_userdata('id', $this->id);
 		$this->session->set_userdata('username', $this->username);
 		$this->session->set_userdata('user_info', $this->info);
 	}
-	
+
 	public function logout() {
 		$this->session->sess_destroy();
 		$this->status = 4;
 	}
 
-	
+
 	private function setup_loguid() {
 		$this->loguid = $this->session->userdata('loguid');
 		if ($this->loguid==0) {
@@ -136,7 +138,7 @@ class User extends CI_Model {
 			$this->session->set_userdata('loguid', $this->loguid);
 		}
 	}
-	
+
 	public function setup() {
 		// Already Login
 		$this->id = $this->session->userdata('id');
@@ -146,6 +148,7 @@ class User extends CI_Model {
 			$this->status = 1;
 			$this->info = $this->session->userdata('user_info');
 			$this->logged_in = TRUE;
+			$this->admin = ($this->info['accessgp']==1);
 		}
 	}
 
@@ -189,7 +192,7 @@ class User extends CI_Model {
 
 		return $result;
 	}
-	
+
 	private function core_app_getaccessgp($cardid){
 		$rs = $this->db->select('access_link_gpmaster')
 				->where('access_link_cardid', $cardid)
@@ -199,27 +202,27 @@ class User extends CI_Model {
 		$result['accessgp'] = $rs->row_array();
 
 		switch($result['accessgp']){
-			case "1":  break;
-			case "2":
+			case '1':  break;
+			case '2':
 				//staff
 				$rs = $this->db->select('staff_id')
 						->where('staff_cardid', $cardid)
 						->get('staff', 1);
 				if ($rs->num_rows()>0) {
 					$temp = $rs->row_array();
-					$result["staffid"] = $temp['staff_id'];
-					$result["en"]["staffid"] = f_thisid_encode($temp['staff_id']);
+					$result['staffid'] = $temp['staff_id'];
+					$result['en']['staffid'] = f_thisid_encode($temp['staff_id']);
 				}
 				break;
-			case "3":
+			case '3':
 				//client
 				$rs = $this->db->select('client_id')
 						->where('client_cardid', $cardid)
 						->get('client', 1);
 				if ($rs->num_rows()>0) {
 					$temp = $rs->row_array();
-					$result["clientid"] = $temp['client_id'];
-					$result["en"]["clientid"] = f_thisid_encode($temp['client_id']);
+					$result['clientid'] = $temp['client_id'];
+					$result['en']['clientid'] = f_thisid_encode($temp['client_id']);
 				}
 				break;
 			case "4":  break;
@@ -230,8 +233,8 @@ class User extends CI_Model {
 						->get('vendor', 1);
 				if ($rs->num_rows()>0) {
 					$temp = $rs->row_array();
-					$result["vendorid"] = $temp['vendor_id'];
-					$result["en"]["vendorid"] = f_thisid_encode($temp['vendor_id']);
+					$result['vendorid'] = $temp['vendor_id'];
+					$result['en']['vendorid'] = f_thisid_encode($temp['vendor_id']);
 				}
 				break;
 			case "6":  break;
@@ -242,8 +245,8 @@ class User extends CI_Model {
 						->get('spu', 1);
 				if ($rs->num_rows()>0) {
 					$temp = $rs->row_array();
-					$result["spuid"] = $temp['spu_id'];
-					$result["en"]["spuid"] = f_thisid_encode($temp['spu_id']);
+					$result['spuid'] = $temp['spu_id'];
+					$result['en']['spuid'] = f_thisid_encode($temp['spu_id']);
 				}
 				break;
 		}
