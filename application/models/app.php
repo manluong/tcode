@@ -4,7 +4,7 @@ class App extends CI_Model {
 	var $url = array();
 	var $actions = array();
 
-	var $public_apps = array('main', 'dashboard');
+	var $public_apps = array('access', 'dashboard');
 
 	function __construct() {
 		parent::__construct();
@@ -28,7 +28,7 @@ class App extends CI_Model {
 
 	function has_public_access() {
 		if (in_array($this->url['app'], $this->public_apps)) return TRUE;
-		
+
 		return ($this->actions['core_apps_action_public'] == 1);
 	}
 
@@ -77,6 +77,7 @@ class App extends CI_Model {
 	}
 
 	function get_this_element($this_element, $mfunction, $apps_action){
+		$rs = array();
 
         $rs['ajax'] = $this_element['core_apps_action_element_ajax'];
         $rs['subaction'] = $this_element['core_apps_action_element_aved'];

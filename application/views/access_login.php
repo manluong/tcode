@@ -13,7 +13,7 @@ echo '
 ';
 }
 ?>
-<form class="form" id="formid_divaccess_login" name="formid_divaccess_login" style="margin: -2px;" method="post" action="<?php echo base_url("main/login");?>">
+<form class="form" id="formid_divaccess_login" name="formid_divaccess_login" style="margin: -2px;" method="post" action="<?php echo base_url('access/login');?>">
 <div style="padding: 5px;"></div>
 <div class="clearfix">
 	<label for="form_access_user_username" class="form-label"><?=lang('accessaccess_user_username')?></label>
