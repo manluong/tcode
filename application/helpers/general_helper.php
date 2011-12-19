@@ -65,14 +65,15 @@ function f_password_encrypt($password, $method=1){
 
 
 function get_return_url($default_url='') {
-	if (!$this->has_return) return $default_url;
+	$CI =& get_instance();
+
+	if (!$CI->has_return) return $default_url;
 
 	$seg = array('app','action','id','subaction');
-	$CI =& get_instance();
 
 	$result = array();
 	foreach($seg AS $s) {
-		if ($CI->re_url[$s] !== FALSE) $result[] = $s;
+		if ($CI->re_url[$s] !== FALSE) $result[] = $CI->re_url[$s];
 	}
 
 	return implode('/', $result);
@@ -99,8 +100,25 @@ function set_return_url($querystring=FALSE) {
 	}
 }
 
+function reset_return_url_form() {
+	$seg = array('app','action','id','subaction');
+	$result = array();
+	$CI =& get_instance();
+
+	$CI->load->helper('form');
+	foreach($seg AS $s) {
+		if ($CI->re_url[$s] === FALSE && $CI->re_url[$s] != '') continue;
+		$result[] = form_hidden('re_'.$s, $CI->re_url[$s]);
+	}
+
+	if (count($result)==0) return '';
+	return implode('<br />', $result);
+}
+
 function execute_return_url($link_only=FALSE) {
-	if (!$this->has_return) return NULL;
+	$CI =& get_instance();
+
+	if (!$CI->has_return) return NULL;
 	if ($link_only) return get_return_url();
 
 	redirect(get_return_url());
@@ -148,4 +166,12 @@ function megshow(){
 	if (count($CI->system_messages) > 0) $message = '<div id="message">' . implode('', $CI->system_messages) . '</div>';
 
 	return $message;
+}
+
+
+
+
+function get_template() {
+	$CI =& get_instance();
+	return $CI->layout['name'];
 }
