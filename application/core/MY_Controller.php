@@ -38,6 +38,7 @@ class MY_Controller extends CI_Controller {
 		$this->Log->start_log();
 
 		$this->App->setup();
+		$this->Html->setup();
 
 		if ($this->App->must_disable_plain_id()) $this->ACL->check_id_encryption();
 		$this->ACL->check_app_access();
@@ -64,7 +65,7 @@ class MY_Controller extends CI_Controller {
 		if (!$this->App->has_actions()) return call_user_func_array(array($this, 'index'), $params);
 
 		$this->data = $this->app_load();
-		$this->layout = $this->Html->html_template($this->App->actions);
+		$this->Html->load_template();
 
 		$this->output();
 	}

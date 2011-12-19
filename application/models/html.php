@@ -1,17 +1,60 @@
 <?php if (!defined('BASEPATH')) exit('No direct access allowed.');
 
 class Html extends CI_Model {
+	var $platform = 1;
+
 	function __construct() {
 		parent::__construct();
+	}
+
+
+	function setup() {
+		$apps_action = $this->App->actions;
+		$CI =& get_instance();
+
+		//LOAD TEMPLATE
+		if (isset($apps_action['core_apps_action_template']) && $apps_action['core_apps_action_template']!='') {
+			$rs = $this->db->select()
+					->from('core_layout_template')
+					->where('core_layout_template_name', $apps_action['core_apps_action_template'])
+					->where('core_layout_template_platform', $this->platform)
+					->limit(1)
+					->get();
+			$layout_template_theme = 0;
+		} else {
+			$rs = $this->db->select()
+					->from('core_layout_template')
+					->where('core_layout_template_platform', $this->platform)
+					->where('core_layout_template_default', 1)
+					->limit(1)
+					->get();
+			$layout_template_theme = 0;
+		}
+
+		if ($rs->num_rows()>0) {
+			$result = $rs->row_array();
+
+			$CI->layout['name'] = $result['core_layout_template_name'];
+		    $CI->layout['pagefile'] = DOCUMENT_ROOT.'/'.$result['core_layout_template_folder'].'/'.$result['core_layout_template_pagefile'];
+		    $CI->layout['pageplain'] = DOCUMENT_ROOT.'/'.$result['core_layout_template_folder'].'/'.$result['core_layout_template_pageplain'];
+		    $CI->layout['folder'] = $result['core_layout_template_folder'];
+		    $CI->layout['folderinc'] = $result['core_layout_template_folderinc'];
+		    $CI->layout['formtype'] = $result['core_layout_template_formtype'];
+		    $CI->layout['listtype'] = $result['core_layout_template_listtype'];
+		    if ($result['core_layout_template_addons']) $CI->layout['addons'] = $result['core_layout_template_addons'].',';
+
+		} else {
+		    meg(999, 'No Template Found.');
+		}
 	}
 
 	/////////////////////////////////////////////////////////
 	//load template
 	/////////////////////////////////////////////////////////
 
-	function html_template($apps_action){
-		$id['platform'] = 1;
-		$layout = array();
+	function load_template(){
+		$apps_action = $this->App->actions;
+		$CI =& get_instance();
 		//this function is possible to make CACHE entry
 		//save the result as app-an name
 		//load the saved data as $layout
@@ -23,40 +66,7 @@ class Html extends CI_Model {
 		//$id['platform']<< this give you the platform, a hidden field when user login
 		//however, if the user yet to login, a function is called to check the platform and store in PHP session
 
-		//LOAD TEMPLATE
-		if (isset($apps_action['core_apps_action_template']) && $apps_action['core_apps_action_template']!='') {
-			$rs = $this->db->select()
-					->from('core_layout_template')
-					->where('core_layout_template_name', $apps_action['core_apps_action_template'])
-					->where('core_layout_template_platform', $id['platform'])
-					->limit(1)
-					->get();
-			$layout_template_theme = 0;
-		} else {
-			$rs = $this->db->select()
-					->from('core_layout_template')
-					->where('core_layout_template_platform', $id['platform'])
-					->where('core_layout_template_default', 1)
-					->limit(1)
-					->get();
-			$layout_template_theme = 0;
-		}
 
-		if ($rs->num_rows()>0) {
-			$result = $rs->row_array();
-
-			$layout['name'] = $result['core_layout_template_name'];
-		    $layout['pagefile'] = DOCUMENT_ROOT.'/'.$result['core_layout_template_folder'].'/'.$result['core_layout_template_pagefile'];
-		    $layout['pageplain'] = DOCUMENT_ROOT.'/'.$result['core_layout_template_folder'].'/'.$result['core_layout_template_pageplain'];
-		    $layout['folder'] = $result['core_layout_template_folder'];
-		    $layout['folderinc'] = $result['core_layout_template_folderinc'];
-		    $layout['formtype'] = $result['core_layout_template_formtype'];
-		    $layout['listtype'] = $result['core_layout_template_listtype'];
-		    if ($result['core_layout_template_addons']) $layout['addons'] = $result['core_layout_template_addons'].',';
-
-		} else {
-		    meg(999, 'No Template Found.');
-		}
 
 		//LOAD FORMAT
 	    //What is the page output?
@@ -79,31 +89,29 @@ class Html extends CI_Model {
 		if ($rs->num_rows()>0) {
 			$result = $rs->row_array();
 
-		    $layout['type'] = $result['core_layout_format_type'];
-		    $layout['logo'] = $result['core_layout_format_logo'];
-		    $layout['menu'] = $result['core_layout_format_menu'];
-		    $layout['footer'] = $result['core_layout_format_footer'];
-			$layout['boxformat'] = $result['core_layout_format_boxformat'];
-			if ($result['core_layout_format_addons']) $layout['addons'] .= $result['core_layout_format_addons'].',';
+		    $CI->layout['type'] = $result['core_layout_format_type'];
+		    $CI->layout['logo'] = $result['core_layout_format_logo'];
+		    $CI->layout['menu'] = $result['core_layout_format_menu'];
+		    $CI->layout['footer'] = $result['core_layout_format_footer'];
+			$CI->layout['boxformat'] = $result['core_layout_format_boxformat'];
+			if ($result['core_layout_format_addons']) $CI->layout['addons'] .= $result['core_layout_format_addons'].',';
 	    } else {
 	    	meg(999, 'No Layout Format Specified Found.');
 	    }
 
 		//OTHER
-		$layout['format'] = $apps_action['core_apps_action_x_core_layout_format_name'];
-		$layout['content'] = $apps_action['core_apps_action_content_layout'];
-		$layout['breadcrumb'] = $apps_action['core_apps_action_breadcrumb'];
-		if ($apps_action['core_apps_action_addons']) $layout['addons'] .= $apps_action['core_apps_action_addons'].',';
+		$CI->layout['format'] = $apps_action['core_apps_action_x_core_layout_format_name'];
+		$CI->layout['content'] = $apps_action['core_apps_action_content_layout'];
+		$CI->layout['breadcrumb'] = $apps_action['core_apps_action_breadcrumb'];
+		if ($apps_action['core_apps_action_addons']) $CI->layout['addons'] .= $apps_action['core_apps_action_addons'].',';
 
 		//MENU
 		if ($apps_action['core_apps_action_appmenu']) {
-			$layout['appmenu'] = 1;
+			$CI->layout['appmenu'] = 1;
 			if ($apps_action['core_apps_action_appmenu_gp']) {
-				$layout['appmenu_gp'] = $apps_action['core_apps_action_appmenu_gp'];
+				$CI->layout['appmenu_gp'] = $apps_action['core_apps_action_appmenu_gp'];
 			}
 		}
-
-		return $layout;
 	}
 
 	function html_addons($addonnames) {
