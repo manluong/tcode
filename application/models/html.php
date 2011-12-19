@@ -52,7 +52,7 @@ class Html extends CI_Model {
 	//load template
 	/////////////////////////////////////////////////////////
 
-	function load_template(){
+	function load_format(){
 		$apps_action = $this->App->actions;
 		$CI =& get_instance();
 		//this function is possible to make CACHE entry

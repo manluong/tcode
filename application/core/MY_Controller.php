@@ -65,7 +65,7 @@ class MY_Controller extends CI_Controller {
 		if (!$this->App->has_actions()) return call_user_func_array(array($this, 'index'), $params);
 
 		$this->data = $this->app_load();
-		$this->Html->load_template();
+		$this->Html->load_format();
 
 		$this->output();
 	}

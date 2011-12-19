@@ -29,7 +29,7 @@ class Access extends MY_Controller {
 
 		$this->data[] = $data;
 
-		$this->Html->load_template();
+		$this->Html->load_format();
 
 		$this->output();
 	}
