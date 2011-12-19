@@ -19,11 +19,13 @@ class Log extends CI_Model {
 	}
 
 	public function start_log() {
-		$log_id = $this->_insert_log();
+		$this->_insert_log();
 		$this->_start_timer();
 		$this->_log_type = $this->_get_log_type();
-		if ( ! $this->log_type['nolog']) {
-			$this->_do_log();
+		if ($this->_log_type) {
+			if (! $this->_log_type['nolog']) {
+				$this->_do_log();
+			}
 		}
 	}
 
@@ -38,8 +40,8 @@ class Log extends CI_Model {
 	private function _insert_log() {
         $data = array(
             'stamp' => mdate("%Y-%n-%j %H:%i:%s"),
-            'cardid' => $this->User->info['cardid'],
-            'gpmid' => $this->User->info['gpmid'],
+            'cardid' => isset($this->User->info['cardid'])? $this->User->info['cardid'] : NULL,
+            'gpmid' => isset($this->User->info['gpmid'])? $this->User->info['gpmid'] : NULL,
             'app' => $this->_url['app'],
             'an' => $this->_url['action'],
             'aved' => $this->_url['subaction'],
