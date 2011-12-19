@@ -58,7 +58,7 @@ $(window).load(function(){
 
             document.write("<div id='container'><p id='content'>" +
 
-                           "<img id='loadinggraphic' width='16' height='16' src='html/layout/tpanel/images/ajax-loader-eeeeee.gif' /> " +
+                           "<img id='loadinggraphic' width='16' height='16' src='/resources/layout/tpanel/images/ajax-loader-eeeeee.gif' /> " +
 
                            "Loading...</p></div>");
 

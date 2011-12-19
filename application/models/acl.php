@@ -23,7 +23,7 @@ class ACL extends CI_Model {
 
 	function check_app_access() {
 		if (!$this->User->is_logged_in() && !$this->App->has_public_access()) {
-			header( 'Location: /main/login/'.set_return_url(TRUE));
+			header( 'Location: /access/login/'.set_return_url(TRUE));
 			exit;
 		} elseif ($this->User->is_logged_in() && !$this->User->is_admin() && !$this->App->has_public_access()) {
 			$app_access_rights_table = $this->get_rights();

@@ -499,7 +499,7 @@ class MY_Controller extends CI_Controller {
 
 				//print_r($data);
 
-				$active_style = ($data['div']['divstyle'] != '')
+				$active_style = (isset($data['div']['divstyle']) && $data['div']['divstyle'] != '')
 					? $data['div']['divstyle']
 					: 'default';
 				$view_data['active_style'] = $active_style;
@@ -523,7 +523,7 @@ class MY_Controller extends CI_Controller {
 							default: $view_data['gridnum'] = 'grid_6'; break;
 						}
 
-						if ($data['div']['tab'] == 1) {
+						if (isset($data['div']['tab']) && $data['div']['tab'] == 1) {
 							//$view_data['build_tab'] = $this->output_page_format_tgrid_tab($view_data['build_tab']);
 
 							//check if next div is also a tab, close the tab html if next div is not a tab
@@ -576,9 +576,9 @@ class MY_Controller extends CI_Controller {
 		/////////////////////////////////////////////////////////
 		//load content
 		/////////////////////////////////////////////////////////
-		$sql3 = (!$this->layout['content'])
-			? "SELECT * FROM core_layout_content WHERE core_layout_content_name  = 'full'"
-			: "SELECT * FROM core_layout_content WHERE core_layout_content_name  = '".$this->layout['content']."'";
+		$sql3 = ($this->layout['content'])
+			? "SELECT * FROM core_layout_content WHERE core_layout_content_name  = '".$this->layout['content']."'"
+			: "SELECT * FROM core_layout_content WHERE core_layout_content_name  = 'full'";
 
 		$result3 = $this->db->query($sql3);
 		$result3 = $result3->row_array(0);

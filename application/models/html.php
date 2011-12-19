@@ -24,7 +24,7 @@ class Html extends CI_Model {
 		//however, if the user yet to login, a function is called to check the platform and store in PHP session
 
 		//LOAD TEMPLATE
-		if (isset($apps_action['core_apps_action_template'])) {
+		if (isset($apps_action['core_apps_action_template']) && $apps_action['core_apps_action_template']!='') {
 			$rs = $this->db->select()
 					->from('core_layout_template')
 					->where('core_layout_template_name', $apps_action['core_apps_action_template'])

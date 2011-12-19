@@ -19,9 +19,9 @@ class Access extends MY_Controller {
 		$html['status'] = $this->User->status;
 
 		$data = array();
-		$data['html'] = $this->load->view('access_login', $html, true);
+		$data['html'] = $this->load->view('access_login', $html, TRUE);
 		$data['outputdiv'] = 1;
-		$data['isdiv'] = true;
+		$data['isdiv'] = TRUE;
 		$this->data[] = $data;
 
 		$this->layout = $this->Html->html_template($this->App->actions);

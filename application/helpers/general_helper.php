@@ -93,7 +93,7 @@ function set_return_url($querystring=FALSE) {
 		$CI->load->helper('form');
 		foreach($seg AS $s) {
 			if ($CI->url[$s] === FALSE && $CI->url[$s] != '') continue;
-			$result[] = form_input('re_'.$s, $CI->url[$s]);
+			$result[] = form_hidden('re_'.$s, $CI->url[$s]);
 		}
 		return implode('<br />', $result);
 	}
