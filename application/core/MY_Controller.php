@@ -78,9 +78,7 @@ class MY_Controller extends CI_Controller {
 
 	private function setup_url() {
 		$this->url['app'] = $this->router->fetch_class();
-
-		//$this->url['action'] = $this->router->fetch_method();
-		$this->url['action'] = $this->uri->segment(2, '');
+		$this->url['action'] = $this->router->fetch_method();
 
 		$this->url['subaction'] = $this->uri->segment(4, '');
 
@@ -420,7 +418,7 @@ class MY_Controller extends CI_Controller {
 				//$lang['core']['welcome'].' '.$id['name']
 				$pagetopdata['companyname'] = 'Telcoson';
 				$pagetopdata['welcome'] = 'Welcome to CI';
-				$pagedata['top'] = $this->load->view('web/top.php', $pagetopdata, true);
+				$pagedata['top'] = $this->load->view('/'.get_template().'/top', $pagetopdata, true);
 			}
 
 			//no action for $layout_format_footer
@@ -462,7 +460,7 @@ class MY_Controller extends CI_Controller {
 		$pagedata['head'] = $pagedata['css'].$pagedata['js'].$output_content['jsonload'];
 		//$pagedata['head'] = $pagedata['css'].$pagedata['js'];
 		$pagedata['content'] = $output_content['html'].$pagedata['js_bodyend'];
-		$this->load->view('web/page_full', $pagedata);
+		$this->load->view('/'.get_template().'/page_full', $pagedata);
 
 		//$layout_page = preg_replace("/#title#/", "T Business", $layout_page);
 		//$layout_page = preg_replace("/#head#/", $h_css.''.$h_head.''.$h_js.''.$h_js_onload, $layout_page);
@@ -543,7 +541,7 @@ class MY_Controller extends CI_Controller {
 									//next div that is for output
 									if (!$this->data[$chktab_count]['div']['tab']) {
 										//is not a tab, so warp up the tab
-										$content_div[$data['colnum']] .= $this->load->view('default/web/component_grid_tab_wrap', $view_data, TRUE);
+										$content_div[$data['colnum']] .= $this->load->view('/'.get_template().'/component_grid_tab_wrap', $view_data, TRUE);
 										//$build_tab = array("li" => array(), "section" => array());
 									}
 									$chktab_cont = 0;
@@ -551,16 +549,16 @@ class MY_Controller extends CI_Controller {
 									//end of $output array
 									//warp up the tab
 									$chktab_cont = 0;
-									$content_div[$data['colnum']] .= $this->load->view('default/web/component_grid_tab_wrap', $view_data, TRUE);
+									$content_div[$data['colnum']] .= $this->load->view('/'.get_template().'/component_grid_tab_wrap', $view_data, TRUE);
 								}
 							}
 						} else {
-							$content_div[$data['colnum']] .= $this->load->view('default/web/component_grid', $view_data, TRUE);
+							$content_div[$data['colnum']] .= $this->load->view('/'.get_template().'/component_grid', $view_data, TRUE);
 						}
 						break;
 
 					case 'simple':
-						$content_div[$data['colnum']] .= $this->load->view('default/web/component_simple', $view_data, TRUE);
+						$content_div[$data['colnum']] .= $this->load->view('/'.get_template().'component_simple', $view_data, TRUE);
 						break;
 				}
 
