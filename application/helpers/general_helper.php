@@ -105,3 +105,47 @@ function execute_return_url($link_only=FALSE) {
 
 	redirect(get_return_url());
 }
+
+
+
+
+
+function meg($mescode=0, $details=''){
+	$CI =& get_instance();
+//process pass in message code
+//go database get message in user's language and message type
+//save in megshow
+//type
+//1=notice
+//2=wanning
+
+//meg(999,"data_form.inc: Form with more then one table but no field on child table selected.");
+
+	$messages = array(
+		100 => 'No such App exist in this installation:',
+		101 => 'No such Action in App:',
+		102 => 'ID inconsistency.:',
+		999 => 'Exit:',
+	);
+
+	$message = '<div id="messageinner">'.$messages[$mescode];
+	if ($details != '') $message .= '['.$details.']';
+	$message .= '</div>';
+	$CI->system_messages[] = $message;
+
+	// if code 999, show message and exit the application
+	if ($mescode == '999'){
+		echo megshow();
+		exit;
+	}
+}
+
+
+function megshow(){
+	$CI =& get_instance();
+	$message = '';
+
+	if (count($CI->system_messages) > 0) $message = '<div id="message">' . implode('', $CI->system_messages) . '</div>';
+
+	return $message;
+}

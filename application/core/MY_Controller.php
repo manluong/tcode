@@ -20,6 +20,8 @@ class MY_Controller extends CI_Controller {
 	var $data = array();
 	var $layout = array();
 
+	var $system_messages = array();
+
 
 	function __construct() {
 		parent::__construct();
