@@ -14,7 +14,7 @@ class App extends CI_Model {
 	}
 
 	function setup() {
-		if ($this->get_status($this->url['app'])) $this->actions = $this->get_actions($this->url['app'], $this->url['action']);
+		if ($this->get_status($this->url['app'])) $this->load_actions();
 	}
 
 	function has_actions() {
@@ -44,6 +44,10 @@ class App extends CI_Model {
 		return $result['core_apps_status'];
 	}
 
+	function load_actions() {
+		$this->actions = $this->get_actions($this->url['app'], $this->url['action']);
+	}
+
 	function get_actions($app, $action) {
 		$rs = $this->db->select()
 				->where('core_apps_action_x_core_apps_name', $app)
@@ -55,6 +59,10 @@ class App extends CI_Model {
 		return $rs->row_array();
 	}
 
+	function load_default_actions() {
+		$this->actions = $this->get_default_actions($this->url['app']);
+	}
+
 	function get_default_actions($app) {
 		$rs = $this->db->select()
 				->where('core_apps_action_x_core_apps_name', $app)
@@ -63,7 +71,7 @@ class App extends CI_Model {
 				->get('core_apps_action');
 
 		if ($rs->num_rows() == 0) return FALSE;
-		return $rs->result_array();
+		return $rs->row_array();
 	}
 
 	function get_action_element($app, $action){

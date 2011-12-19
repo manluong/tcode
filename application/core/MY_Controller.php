@@ -22,7 +22,6 @@ class MY_Controller extends CI_Controller {
 
 	var $system_messages = array();
 
-
 	function __construct() {
 		parent::__construct();
 		$this->setup_url();
@@ -47,9 +46,13 @@ class MY_Controller extends CI_Controller {
 	}
 
 	//remap every URI call
-	public function _remap($action, $params = array()){
+	function _remap($action, $params = array()) {
 		//if the function exist in the Controller, use it
-		if (method_exists($this, $action)) return call_user_func_array(array($this, $action), $params=array());
+		if (method_exists($this, $action) && $this->url['action']!='') {
+			return call_user_func_array(array($this, $action), $params=array());
+		} else {
+			$this->App->load_default_actions();
+		}
 
 
 		//else, run default action
@@ -74,7 +77,10 @@ class MY_Controller extends CI_Controller {
 
 	private function setup_url() {
 		$this->url['app'] = $this->router->fetch_class();
-		$this->url['action'] = $this->router->fetch_method();
+
+		//$this->url['action'] = $this->router->fetch_method();
+		$this->url['action'] = $this->uri->segment(2, '');
+
 		$this->url['subaction'] = $this->uri->segment(4, '');
 
 		$this->url['id'] = $id = $this->uri->segment(3, 0);
