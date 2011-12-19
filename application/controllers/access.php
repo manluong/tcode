@@ -34,8 +34,8 @@ class Access extends MY_Controller {
 	}
 
 	public function login() {
-		$username = $this->input->post('username');
-		$password = $this->input->post('password');
+		$username = $this->input->post('access_user_username');
+		$password = $this->input->post('access_user_pw');
 
 		if ($this->User->is_valid_password($username, $password)) {
 			$this->User->login($username);
