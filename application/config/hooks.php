@@ -10,7 +10,13 @@
 |
 */
 
-
+$hook['post_controller'] = array(
+                                'class'    => 'Log',
+                                'function' => 'stop_log',
+                                'filename' => 'log.php',
+                                'filepath' => 'models',
+                                'params'   => array('')
+                                );
 
 /* End of file hooks.php */
 /* Location: ./application/config/hooks.php */

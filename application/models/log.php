@@ -30,11 +30,13 @@ class Log extends CI_Model {
 	}
 
 	public function stop_log() {
-		$total_time = $this->_end_timer();
-		$this->_update_log($total_time);
-		$this->_insert_log_eventsub();
-		$this->_insert_log_history();
-		$this->_remove_extra_history();
+		if ($this->_log_type) {
+			$total_time = $this->_end_timer();
+			$this->_update_log($total_time);
+			$this->_insert_log_eventsub();
+			$this->_insert_log_history();
+			$this->_remove_extra_history();
+		}
 	}
 
 	private function _insert_log() {
@@ -92,13 +94,13 @@ class Log extends CI_Model {
 	private function _update_log($total_time) {
 		$data = array(
 			'tid' => $this->_url['id_plain'],
-			'saveid' => $this->_log_type['saveid'],
+			'saveid' => isset($this->_log_type['saveid'])? $this->_log_type['saveid'] : NULL,
 			'ms' => $total_time,
 			'load' => 0,
 			'xmsgid' => 0
 		);
-		$this->db->update('log', $data)
-				->where('id',$this->_curr_log_id);
+		$this->db->where('id',$this->_curr_log_id)
+				->update('log', $data);
 	}
 
 	private function _insert_log_eventsub() {
@@ -217,7 +219,7 @@ class Log extends CI_Model {
 		$time = explode(' ', $time);
 		$time = $time[1] + $time[0];
 		$finish = $time;
-		$total_time = round(($finish - $this->start), 4);
+		$total_time = round(($finish - $this->_start_time), 4);
 		return($total_time);
 	}
 	//	private function _get_request_uri() {
