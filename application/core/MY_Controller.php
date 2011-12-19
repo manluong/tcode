@@ -377,8 +377,8 @@ class MY_Controller extends CI_Controller {
 		//load addon
 		if (isset($layout['addons'])) $addons = $this->Html->Html_addons($layout['addons']);
 
-	    $pagedata['css'] .= preg_replace("/href=\"/", "href=\"".base_url(), $addons['css']);
-	    $pagedata['js'] .= preg_replace("/src=\"/", "src=\"".base_url(), $addons['js']);
+		$pagedata['css'] .= $addons['css'];
+		$pagedata['js'] .= $addons['js'];
 	    $pagedata['js_bodyend'] .= $addons['js_bodyend'];
 
 
