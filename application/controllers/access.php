@@ -22,6 +22,11 @@ class Access extends MY_Controller {
 		$data['html'] = $this->load->view('access_login', $html, TRUE);
 		$data['outputdiv'] = 1;
 		$data['isdiv'] = TRUE;
+
+		$data['div']['title'] = "Login";
+		$data['div']['element_name'] = "loginwin";
+		$data['div']['element_id'] = "divlogin";
+					
 		$this->data[] = $data;
 
 		$this->layout = $this->Html->html_template($this->App->actions);
