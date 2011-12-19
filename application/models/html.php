@@ -62,7 +62,7 @@ class Html extends CI_Model {
 	    //What is the page output?
 	    //format_type
 		//if type=1 (noraml), with logo,menu?
-	    if (isset($apps_action['core_apps_action_x_core_layout_format_name'])) {
+	    if (isset($apps_action['core_apps_action_x_core_layout_format_name']) && $apps_action['core_apps_action_x_core_layout_format_name']!='') {
 			$rs = $this->db->select()
 					->from('core_layout_format')
 					->where('core_layout_format_name', $apps_action['core_apps_action_x_core_layout_format_name'])

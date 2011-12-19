@@ -175,7 +175,7 @@ class User extends CI_Model {
 
 		$thisresult = array_merge($thisresult, $core_app_getaccessgp);
 
-		return($thisresult);
+		return $thisresult;
 	}
 
 	private function core_app_getsubgp($cardid){
@@ -199,7 +199,8 @@ class User extends CI_Model {
 				->get('access_link', 1);
 
 		$result = array();
-		$result['accessgp'] = $rs->row_array();
+		$temp = $rs->row_array();
+		$result['accessgp'] = $temp['access_link_gpmaster'];
 
 		switch($result['accessgp']){
 			case '1':  break;

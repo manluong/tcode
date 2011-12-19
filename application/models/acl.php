@@ -115,19 +115,18 @@ class ACL extends CI_Model {
 		$where['actiongp_empty'] = " AND access_rights_actiongp = ''";
 		$where['subgp_empty'] = " AND access_rights_gpsub = ''";
 
-
 		//sql check sqeunce
 		$sql = array();
 
 		//with acccessgp,app,actiongp,cardid + subgp
-		$sql[0] .= $where['accessgp'];
+		$sql[0] = $where['accessgp'];
 		$sql[0] .= $where['subgp'];
 		$sql[0] .= $where['app'];
 		$sql[0] .= $where['cardid'];
 		$sql[0] .= $where['actiongp'];
 
 		//with acccessgp,app,actiongp,cardid
-		$sql[1] .= $where['accessgp'];
+		$sql[1] = $where['accessgp'];
 		$sql[1] .= $where['subgp_empty'];
 		$sql[1] .= $where['app'];
 		$sql[1] .= $where['cardid'];
@@ -135,42 +134,42 @@ class ACL extends CI_Model {
 
 
 		//with acccessgp,app,actiongp + subgp
-		$sql[2] .= $where['accessgp'];
+		$sql[2] = $where['accessgp'];
 		$sql[2] .= $where['subgp'];
 		$sql[2] .= $where['app'];
 		$sql[2] .= $where['cardid_empty'];
 		$sql[2] .= $where['actiongp'];
 
 		//with acccessgp,app,actiongp
-		$sql[3] .= $where['accessgp'];
+		$sql[3] = $where['accessgp'];
 		$sql[3] .= $where['subgp_empty'];
 		$sql[3] .= $where['app'];
 		$sql[3] .= $where['cardid_empty'];
 		$sql[3] .= $where['actiongp'];
 
 		//with acccessgp,app,cardid + subgp
-		$sql[4] .= $where['accessgp'];
+		$sql[4] = $where['accessgp'];
 		$sql[4] .= $where['subgp'];
 		$sql[4] .= $where['app'];
 		$sql[4] .= $where['cardid'];
 		$sql[4] .= $where['actiongp_empty'];
 
 		//with acccessgp,app,cardid
-		$sql[5] .= $where['accessgp'];
+		$sql[5] = $where['accessgp'];
 		$sql[5] .= $where['subgp_empty'];
 		$sql[5] .= $where['app'];
 		$sql[5] .= $where['cardid'];
 		$sql[5] .= $where['actiongp_empty'];
 
 		//with acccessgp,app + subgp
-		$sql[6] .= $where['accessgp'];
+		$sql[6] = $where['accessgp'];
 		$sql[6] .= $where['subgp'];
 		$sql[6] .= $where['app'];
 		$sql[6] .= $where['cardid_empty'];
 		$sql[6] .= $where['actiongp_empty'];
 
 		//with acccessgp,app
-		$sql[7] .= $where['accessgp'];
+		$sql[7] = $where['accessgp'];
 		$sql[7] .= $where['subgp_empty'];
 		$sql[7] .= $where['app'];
 		$sql[7] .= $where['cardid_empty'];

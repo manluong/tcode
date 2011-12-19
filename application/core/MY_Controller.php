@@ -123,7 +123,7 @@ class MY_Controller extends CI_Controller {
 
 		//looping the elements, and switch the element_type
 
-		$all_action_elements = $this->Apps->get_action_element($this->url['app'], $this->url['action']);
+		$all_action_elements = $this->App->get_action_element($this->url['app'], $this->url['action']);
 		if (!$all_action_elements) return array();
 
 		$output = array();
@@ -137,7 +137,7 @@ class MY_Controller extends CI_Controller {
 
 			//confirm we have the right $this_element to work with
 			//if it's a ajax, load the target action and it's element values
-			$this_element = $this->Apps->get_this_element($this_element, $mfunction, $apps_action);
+			$this_element = $this->App->get_this_element($this_element, $mfunction, $apps_action);
 
 			// if it's NOT ajax, pass to model to process, else pass the value to format [ajax] ajax
 			if (!$this_element['ajax'] || $this->url['subaction'] == 'ss') {
