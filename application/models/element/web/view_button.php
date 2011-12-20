@@ -215,17 +215,17 @@ class View_button extends CI_Model {
 	            }
 
 	        }elseif ($this_button['div'] == "page"){
-	            $thisjsline = '?app='.$this_button['targetapp'];
-	            if ($this_button['targetan']) $thisjsline .= '&an='.$this_button['targetan'];
-	            if ($this_button['targetaved']) $thisjsline .= '&aved='.$this_button['targetaved'];
+	            $thisjsline = '/'.$this_button['targetapp'];
+	            if ($this_button['targetan']) {
+	            	$thisjsline .= '/'.$this_button['targetan'];
+					if ($thisid_format) {
+						 $thisjsline .= '/'.$thisid_format;
+						if ($this_button['targetaved']) $thisjsline .= '/'.$this_button['targetaved'];
+					}
+				}
+				
+	            if ($this_button['targetvalue']) $thisjsline .= '/'.$this_button['targetvalue'];
 
-	            if ($this_button['targetvalue']) $thisjsline .= '&'.$this_button['targetvalue'];
-
-	            //if ($thisid_isjs) {
-	                $thisjsline .= '&thisid='.$thisid_format;
-	            //}elseif($thisid_format){
-	            //    $thisjsline .= '&thisid='.$thisid_format;
-	            //}
 	            $result = "apps_action_pageload('".$thisjsline."');";
 
 	        }else{

@@ -90,7 +90,7 @@ class AppmenuM extends CI_Model {
 		
 		        foreach ($result_menu as $field_menu) {
 		
-		          if (!$field_menu['core_apps_menu_thisidtype'] || $field_menu['core_apps_menu_thisidtype'] != "thisid" || ($field_menu['core_apps_menu_thisidtype'] == "thisid" && $thisid[0])){
+		          if (!$field_menu['core_apps_menu_thisidtype'] || $field_menu['core_apps_menu_thisidtype'] != "thisid" || ($field_menu['core_apps_menu_thisidtype'] == "thisid" && $this->url['id_plain'])){
 		
 		            if (($field_menu['core_apps_menu_parent'] != '')&&($field_menu['core_apps_menu_parent'] != $thisparent)) {
 		                $thisparent = $field_menu['core_apps_menu_parent'];
@@ -109,13 +109,14 @@ class AppmenuM extends CI_Model {
 		                }elseif ($field_menu['core_apps_menu_thisidtype']) {
 		                    $button[$thisparent][$button_count]['link'] .= '/'.$this->App_generalM->moreid["en"][$field_menu['core_apps_menu_thisidtype']];
 		                }
-
+						
 		                if ($field_menu['core_apps_menu_aved']) $button[$thisparent][$button_count]['link'] .= '/'.$field_menu['core_apps_menu_aved'];
 		
 		                if ($field_menu['core_apps_menu_extra']) $button[$thisparent][$button_count]['link'] .= '/'.$field_menu['core_apps_menu_extra'];
 		
 		            } else {
 		               $button[$thisparent][$button_count]['nolink'] = 1;
+					   $button[$thisparent][$button_count]['link'] = "";
 		            }
 		
 		            $button[$thisparent][$button_count]['name'] = $field_menu['core_apps_menu_name'];
@@ -139,7 +140,7 @@ class AppmenuM extends CI_Model {
 		                if ($field_menu['core_apps_menu_replace_thisidtype']) {
 		                    $this_replace_thisid = $this->App_generalM->moreid[$field_menu['core_apps_menu_replace_thisidtype']];
 		                }else{
-		                    $this_replace_thisid = $thisid;
+		                    $this_replace_thisid = $this->url['id_plain'];
 		                }
 						$this->load->model('element/Element_dgroup');
 		                $button[$thisparent][$button_count]['lang'] = $this->Element_dgroup->element_fdata_from_dgroup($field_menu['core_apps_menu_dgroupname'],$field_menu['core_apps_menu_fdataname'],$this_replace_thisid,$field_menu['core_apps_menu_dgroupapp']);

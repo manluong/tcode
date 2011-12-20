@@ -102,6 +102,7 @@ class Element_dgroup extends CI_Model {
 	        $count=0;
 	        foreach ($arrayone_value as $this_value) {
 	            if ($count == 0) { $result = $arrayone_seprator[$count]; $count++; }
+	            if (!isset($dataarray[$this_value])) $dataarray[$this_value] = "";
 	            $result .= $dataarray[$this_value].$arrayone_seprator[$count];
 	            $count++;
 	        }
@@ -1290,7 +1291,7 @@ function core_element_dgroup_select_show($sellist,$value,$icon=0){
 
 //echo $result; exit;
 
-return($result);
+if (isset($result)) return($result);
 }
 
 function core_element_dgroup_chkbox_show($opt0,$opt1,$value,$icon=0,$opt0icon=0,$opt1icon=0){

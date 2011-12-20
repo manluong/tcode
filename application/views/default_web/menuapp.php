@@ -13,8 +13,8 @@
 	<?php if ($breadcrumb): $count_breadcrumb = 0; ?>
 		<ul class="apphead_title">
 						
-		<?php foreach ($breadcrumb as $this_breadcrumb_li): ?>
-			<?php if (!$appmenu["breadcrumb"][$count_breadcrumb+1]) $this_lasttitle = " lasttitle"; ?>
+		<?php $this_lasttitle = ""; foreach ($breadcrumb as $this_breadcrumb_li): ?>
+			<?php if (!isset($breadcrumb[$count_breadcrumb+1])) $this_lasttitle = " lasttitle"; ?>
 			<li><a href="<?=$this_breadcrumb_li['link']?>" title="<?=$this_breadcrumb_li['title']?>" class="appname<?=$this_lasttitle?>"><?=$this_breadcrumb_li['title']?></a></li>
 		<?php $count_breadcrumb++; endforeach; ?>
 		
@@ -62,7 +62,7 @@
 
                 $menuapp .= '<li'.$thisclass.'><a href="'.$thisbutton['link'].'"'.$thisicon.'>'.$thisbutton['lang'].'</a><ul>';
 
-                foreach ($appmenu["button"][$thisbutton['name']] as $thisbuttonchild) {
+                foreach ($button[$thisbutton['name']] as $thisbuttonchild) {
 
                     if ($thisbuttonchild['class']) {
                     $thisclass = ' class="'.$thisbuttonchild['class'].'"';
