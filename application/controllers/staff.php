@@ -8,9 +8,9 @@ class Staff extends MY_Controller {
 	}
 
 
-	public function index()	{
-
-	}
+	//public function index()	{
+	//echo "controller index called";
+	//}
 
 
 

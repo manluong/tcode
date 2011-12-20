@@ -14,7 +14,14 @@ class AppM extends CI_Model {
 	}
 
 	function setup() {
-		if ($this->get_status($this->url['app'])) $this->load_actions();
+		if ($this->get_status($this->url['app'])) {
+			if ($this->url['action']=='index') {
+				//if no action is passed in, use default (action is set as index if no action passed in)
+				$this->AppM->load_default_actions();
+			} else {
+				$this->load_actions();
+			}		
+		}
 	}
 
 	function has_actions() {

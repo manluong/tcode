@@ -9,7 +9,7 @@ class Element_dgroup_save extends Element_dgroup {
 
 function dgroup_save($dgroup_structure,$dgroup_value,$aved){	
 	
-    global $_POST,$id;
+    global $_POST;
 	
 	$listid = "";
 	
@@ -102,7 +102,7 @@ function dgroup_save($dgroup_structure,$dgroup_value,$aved){
 	        if ($this_table['isparent']) {
 				$req_table = $this_table['table'];
 				$req_index = $this_table['index'];
-				$req_id = $this->thisid[0];
+				$req_id = $this->url['id_plain'];
 		
 	        } else {
 				$req_table = $this_table['table'];
@@ -154,7 +154,7 @@ function dgroup_save($dgroup_structure,$dgroup_value,$aved){
 	                }
 	            }
 	
-	            $saveid = $this->thisid[0];
+	            $saveid = $this->url['id_plain'];
 	
 	        }elseif ($aved == "as" && $fieldarray){
 	        	
@@ -162,9 +162,8 @@ function dgroup_save($dgroup_structure,$dgroup_value,$aved){
 	            //ADDSAVE sql
 	            if (isset($dgroup_structure['extend_add'])){
 	            foreach ($dgroup_structure['extend_add'] as $extend_add){
-	                if($extend_add['value'] == "thisid") $extend_add['value'] = $this->thisid[0];
+	                if($extend_add['value'] == "thisid") $extend_add['value'] = $this->url['id_plain'];
 	                if($extend_add['value'] == "cardid") $extend_add['value'] = $id['cardid'];
-	                if($extend_add['value'] == "spuid") $extend_add['value'] = $id['spuid'];
 	                if($extend_add['table'] == $this_table['table']) $fieldarray[$extend_add['field']] = $extend_add['value'];
 	            }
 				}
@@ -173,10 +172,10 @@ function dgroup_save($dgroup_structure,$dgroup_value,$aved){
 	            //if the default base type is a list
 	            //the id submited is suppose to be for the field of listid instead of formid
 	
-	                if ($dgroup_structure['basetype'] == "list" && $this->thisid[0]){
+	                if ($dgroup_structure['basetype'] == "list" && $this->url['id_plain']){
 	                        $thislistidfield = explode(".", $dgroup_structure['thisidlist'][1]);
 	                        if ($req_table == $thislistidfield[0]){
-	                        $fieldarray[$thislistidfield[1]] = $this->thisid[0];
+	                        $fieldarray[$thislistidfield[1]] = $this->url['id_plain'];
 	                        }
 	                    $req_id="";
 	                }
@@ -208,7 +207,7 @@ function dgroup_save($dgroup_structure,$dgroup_value,$aved){
 				//get listid before delete
 				if ($dgroup_structure['basetype'] == "list" && $dgroup_structure['thisidlist'][1]){
 				$list_key = explode(".", $dgroup_structure['thisidlist'][1],2);
-				$listid_sql = "SELECT ".$list_key[1]." FROM ".$dgroup_structure['table'][0]['table']." WHERE ".$dgroup_structure['table'][0]['index']." = '".$this->thisid[0]."' LIMIT 1";
+				$listid_sql = "SELECT ".$list_key[1]." FROM ".$dgroup_structure['table'][0]['table']." WHERE ".$dgroup_structure['table'][0]['index']." = '".$this->url['id_plain']."' LIMIT 1";
 				$listid = $this->db->query($listid_sql);
 				$listid = $listid->row_array(0);	
 				$listid = $listid[$list_key[1]]; 
@@ -245,7 +244,7 @@ function dgroup_save($dgroup_structure,$dgroup_value,$aved){
         }elseif ($this_table['e_xtra']) {
 
             $req_table = "core_e_xtra_value";
-            if (!$saveid) $saveid = $this->thisid[0];
+            if (!$saveid) $saveid = $this->url['id_plain'];
             foreach ($this_table['fields'] as $this_field) {
 
                 $where=array();
@@ -391,7 +390,7 @@ function dgroup_save($dgroup_structure,$dgroup_value,$aved){
  	}elseif ($aved == "ds"){
 		$form['save_success'] = 1;
 		$form['list_id'] = $listid;
-		$form['save_id'] = $this->thisid['encode'];
+		$form['save_id'] = $this->url['id_encrypted'];
 
   	}else{
 

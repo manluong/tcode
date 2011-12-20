@@ -37,6 +37,7 @@ function f_thisid_decode($thisid){
 
 function encode_id($id) {
 	$CI =& get_instance();
+	return $id;
 	return urlencode('n'.$CI->encrypt->encode($id));
 }
 

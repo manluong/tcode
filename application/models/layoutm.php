@@ -106,14 +106,19 @@ class LayoutM extends CI_Model {
 		if ($apps_action['core_apps_action_addons']) $CI->layout['addons'] .= $apps_action['core_apps_action_addons'].',';
 
 		//MENU
+		if ($result['core_layout_format_menu']){
+			$CI->layout['menu_array'] = $this->get_mainmenu();
+		}
+		
 		if ($apps_action['core_apps_action_appmenu']) {
 			$CI->layout['appmenu'] = 1;
 			if ($apps_action['core_apps_action_appmenu_gp']) {
 				$CI->layout['appmenu_gp'] = $apps_action['core_apps_action_appmenu_gp'];
 			}
 		}
-	}
 
+	}
+	
 	function html_addons($addonnames) {
 		$addons = array(
 			'css' => '',
@@ -133,6 +138,17 @@ class LayoutM extends CI_Model {
 		}
 
 		return $addons;
+	}
+
+
+	function get_mainmenu() {
+		
+		$sql = "SELECT core_apps_name,core_apps_icon FROM core_apps WHERE core_apps_status = '1' AND core_apps_showmenu = '1' ORDER BY core_apps_menusort";
+		$rs = $this->db->query($sql);
+
+		if ($rs->num_rows() == 0) return FALSE;
+		return $rs->result_array();		
+		
 	}
 
 }

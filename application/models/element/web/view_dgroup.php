@@ -62,16 +62,14 @@ class View_dgroup extends CI_model {
 				$dgroup_submit = 1;
 				$button_save_nojs = 1;
 				
-				global $thisid_en;
-				
 				foreach ($this_output['data']['element_button']['buttons'] as $this_button) { 
 					if ($this_button['type'] == "as" || $this_button['type'] == "es"){
 						$this_addon['json']['dgroup_savejs']['app'] = $this_button['targetapp'];
 						$this_addon['json']['dgroup_savejs']['an'] = $this_button['targetan'];
 						$this_addon['json']['dgroup_savejs']['aved'] = $this_button['targetaved'];
-						$this_addon['json']['dgroup_savejs']['thisid'] = $this->thisid['encode'];
+						$this_addon['json']['dgroup_savejs']['thisid'] = $this->url['id_encrypted'];
 						$this_addon['json']['dgroup_savejs']['div'] = $this_button['div'];
-						$this_addon['json']['dgroup_savejs']['element_id'] = $this_output['element_id'];
+						$this_addon['json']['dgroup_savejs']['element_id'] = $this_element['element_id'];
 						$this_addon['json']['dgroup_savejs']['base_url'] = base_url();
 					}	
 				}

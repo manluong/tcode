@@ -25,7 +25,6 @@ class MY_Controller extends CI_Controller {
 	function __construct() {
 		parent::__construct();
 		$this->setup_url();
-
 		$this->load->model('UserM');
 		$this->load->model('ACLM');
 		$this->load->model('App_general');
@@ -49,22 +48,23 @@ class MY_Controller extends CI_Controller {
 
 	//remap every URI call
 	function _remap($action, $params = array()) {
-		//if a function has been specified and exists in the Controller, use it
-		if ($this->url['action']!='' && method_exists($this, $action)) {
+		
+		//controller file always override settings in DB
+		//if $this->url['action'] match a method in controller file, use it (including "index")
+		//"index" method will override default set in database
+		if (method_exists($this, $action)) {
 			return call_user_func_array(array($this, $action), $params=array());
 		}
-
-		//if no action was specified, load default actions from DB
-		if ($this->url['action']=='') $this->AppM->load_default_actions();
-
+		
+		//if the action is not in DB, show a 404 page
+		if (!$this->AppM->has_actions()) echo "404";// show 404 page, erik, this function somehow doesn't work
+		
 		//run actions
 		$this->run_action($params);
+		
 	}
 
 	public function run_action($params) {
-		//if no matching APP AN is found in the DB, call to default index in the Controller file
-		if (!$this->AppM->has_actions()) return call_user_func_array(array($this, 'index'), $params);
-
 		$this->data = $this->app_load();
 		$this->LayoutM->load_format();
 
@@ -79,6 +79,7 @@ class MY_Controller extends CI_Controller {
 
 	private function setup_url() {
 		$this->url['app'] = $this->router->fetch_class();
+		//if method is not pass in, action is set to "index" by CI	
 		$this->url['action'] = $this->router->fetch_method();
 
 		$this->url['subaction'] = $this->uri->segment(4, '');
@@ -338,7 +339,6 @@ class MY_Controller extends CI_Controller {
 				break;
 
 			case '4':
-				
 				header('Content-type: text/json');
 				header('Content-type: application/json');
 				// if there is an array name "json", just print, content alreay in json format
@@ -402,12 +402,8 @@ class MY_Controller extends CI_Controller {
 	        //$layout_page = file_get_contents($layout['pagefile']);
 
 			if ($layout['menu']) {
-				//$this->load->view('web/mainmenu');
-				//include_once DOCUMENT_ROOT.'/'.$layout['folderinc'].'/menumain.inc';
-				//$layout_page = preg_replace("/#menu#/", menu_main(), $layout_page);
-				$pagedata['menumain'] = '';
+				$pagedata['menumain'] = $this->load->view('/'.get_template().'/menumain', $layout, true);
 			} else {
-				//$layout_page = preg_replace("/#menu#/", "", $layout_page);
 				$pagedata['menumain'] = '';
 			}
 

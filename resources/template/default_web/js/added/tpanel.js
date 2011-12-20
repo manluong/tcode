@@ -1,7 +1,7 @@
 
 function apps_action_ajax(app,an,aved,div,thisid,morevalue,replacefn) {
 
-    if (thisid==undefined) {thisid = "";}
+    if (thisid==undefined || thisid == '') {thisid = "0";}
     if (morevalue==undefined) {morevalue = "";}
 
     //if (thisid) {moreid = "&thisid="+thisid;} else { moreid = "&thisid="; }

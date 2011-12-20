@@ -56,7 +56,7 @@ function dgroup_form($dgroup_structure,$dgroup_value,$element_button,$aved){
 	$listid = "";
 	if ($aved == "e" && $dgroup_structure['basetype'] == "list" && $dgroup_structure['thisidlist'][1]){
 	$list_key = explode(".", $dgroup_structure['thisidlist'][1],2);
-	$listid_sql = "SELECT ".$list_key[1]." FROM ".$dgroup_structure['table'][0]['table']." WHERE ".$dgroup_structure['table'][0]['index']." = '".$this->thisid[0]."' LIMIT 1";
+	$listid_sql = "SELECT ".$list_key[1]." FROM ".$dgroup_structure['table'][0]['table']." WHERE ".$dgroup_structure['table'][0]['index']." = '".$this->url['id_plain']."' LIMIT 1";
 	$listid = $this->db->query($listid_sql);
 	$listid = $listid->row_array(0);
 	$listid = $listid[$list_key[1]];
@@ -288,7 +288,7 @@ function dgroup_view($dgroup_structure,$dgroup_value,$element_button,$aved){
 	$listid = "";
 	if ($aved == "d" && $dgroup_structure['basetype'] == "list" && $dgroup_structure['thisidlist'][1]){
 	$list_key = explode(".", $dgroup_structure['thisidlist'][1],2);
-	$listid_sql = "SELECT ".$list_key[1]." FROM ".$dgroup_structure['table'][0]['table']." WHERE ".$dgroup_structure['table'][0]['index']." = '".$this->thisid[0]."' LIMIT 1";
+	$listid_sql = "SELECT ".$list_key[1]." FROM ".$dgroup_structure['table'][0]['table']." WHERE ".$dgroup_structure['table'][0]['index']." = '".$this->url['id_plain']."' LIMIT 1";
 	$listid = $this->db->query($listid_sql);
 	$listid = $listid->row_array(0);
 	$listid = $listid[$list_key[1]];
