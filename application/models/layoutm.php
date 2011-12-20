@@ -35,10 +35,10 @@ class LayoutM extends CI_Model {
 			$result = $rs->row_array();
 
 			$CI->layout['name'] = $result['core_layout_template_name'];
-		    $CI->layout['pagefile'] = DOCUMENT_ROOT.'/'.$result['core_layout_template_folder'].'/'.$result['core_layout_template_pagefile'];
-		    $CI->layout['pageplain'] = DOCUMENT_ROOT.'/'.$result['core_layout_template_folder'].'/'.$result['core_layout_template_pageplain'];
-		    $CI->layout['folder'] = $result['core_layout_template_folder'];
-		    $CI->layout['folderinc'] = $result['core_layout_template_folderinc'];
+		    //$CI->layout['pagefile'] = DOCUMENT_ROOT.'/'.$result['core_layout_template_folder'].'/'.$result['core_layout_template_pagefile'];
+		    //$CI->layout['pageplain'] = DOCUMENT_ROOT.'/'.$result['core_layout_template_folder'].'/'.$result['core_layout_template_pageplain'];
+		    //$CI->layout['folder'] = $result['core_layout_template_folder'];
+		    //$CI->layout['folderinc'] = $result['core_layout_template_folderinc'];
 		    $CI->layout['formtype'] = $result['core_layout_template_formtype'];
 		    $CI->layout['listtype'] = $result['core_layout_template_listtype'];
 		    if ($result['core_layout_template_addons']) $CI->layout['addons'] = $result['core_layout_template_addons'].',';
