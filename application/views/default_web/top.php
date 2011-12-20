@@ -1,6 +1,6 @@
 <div class="container_top">
-	<div class="company"><a href="index.php" class="companytext"><?=$companyname?></a></div>
-	<div class="user"><a href="index.php"><?=$welcome?></a></div>
+	<div class="company"><a href="/" class="companytext"><?=$companyname?></a></div>
+	<div class="user"><a href="/"><?=$welcome?></a></div>
 
 	<div class="container_menu">
 		<div id="topmenu">
@@ -22,4 +22,4 @@
 	</div>
 </div>
 
-<div id="telcoson_logo"><img src="html/images/telcoson-s.png" alt="Icon" width="55" height="20"></div>
+<div id="telcoson_logo"><img src="/resources/images/telcoson-s.png" alt="Icon" width="55" height="20"></div>

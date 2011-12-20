@@ -581,7 +581,7 @@ class MY_Controller extends CI_Controller {
 		/////////////////////////////////////////////////////////
 		//load content
 		/////////////////////////////////////////////////////////
-		$sql3 = ($this->layout['content'])
+		$sql3 = (isset($this->layout['content']) && $this->layout['content']!='')
 			? "SELECT * FROM core_layout_content WHERE core_layout_content_name  = '".$this->layout['content']."'"
 			: "SELECT * FROM core_layout_content WHERE core_layout_content_name  = 'full'";
 

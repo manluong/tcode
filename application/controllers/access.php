@@ -1,6 +1,8 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Access extends MY_Controller {
+	
+
 	public function index()	{
 		if ($this->User->is_logged_in()) redirect('/dashboard');
 
