@@ -12,18 +12,18 @@ function dgroup_list($dgroup_structure,$dgroup_value,$element_button,$searcharra
 	global $db,$langinfo,$aved,$thisid,$thisid_en;
 
     $thisidform = explode(".", $dgroup_structure['thisidform']);
-	
+
 
     //
     // button
-    //	
+    //
     //from element_button
-    //seprate them into 
-    //new $element_button and $element_button_row    
+    //seprate them into
+    //new $element_button and $element_button_row
 	$new_ele_bu = array();
 	$element_button_row = array();
-	
-	if ($element_button) { 
+
+	if ($element_button) {
 	foreach ($element_button['buttons'] as $this_button) {
 
 		//format the name of the button
@@ -36,8 +36,8 @@ function dgroup_list($dgroup_structure,$dgroup_value,$element_button,$searcharra
 			//if we are already at the top, we want to remove the "go to parent button
 			if ($this_button['type'] == "parent"){
 				$button_useit = 0;
-		    }		
-			
+		    }
+
 		}elseif($dgroup_structure['listparentstyle'] && $dgroup_structure['listparentnamefield']){
 	        //if there is a button type parent, and parentnamefield is defined in dgroup element setting
 	        //and there is XXparentname set in land or lang__d of the button
@@ -63,7 +63,7 @@ function dgroup_list($dgroup_structure,$dgroup_value,$element_button,$searcharra
 		//create a new array for $element_button_row
 		//do not add these buttons in new $element_button
 		if ($this_button['position'] == "rowend" || $this_button['position'] == "rowstart" || $this_button['position'] == "rowone"){
-			$element_button_row[] = $this_button;	
+			$element_button_row[] = $this_button;
 			$button_useit = 0;
 		}
 
@@ -72,23 +72,23 @@ function dgroup_list($dgroup_structure,$dgroup_value,$element_button,$searcharra
 		$count = 0;
 		$button_row_ridpos = array();
 		while (isset($element_button_row[$count])){
-			
+
 			if ($element_button_row[$count]['targetid'] == "rid"){
 				$button_row_ridpos[] = $count;
 			}elseif($element_button_row[$count]['targetid'] == "thisid"){
 				$fieldreplace_usethisid = 1;
 			}
 
-		$count++;		
+		$count++;
 		}
-						
-							
+
+
 		if ($button_useit) {
-			
+
           	//check button lang if FIELD is used, replace if so
 			if (isset($element_button['listtitle'])) {
 				if (preg_match("/FIELD/",$this_button['lang'])){
-				
+
 					$this_fieldname = explode("FIELD", $this_button['lang'],3);
 					if ($thisid[0]){
 						$this_fieldname2 = $db->fetchOne('SELECT '.$this_fieldname[1].' FROM '.$thisidform[0].' WHERE '.$thisidform[1].' = '.$thisid[0]);
@@ -96,13 +96,13 @@ function dgroup_list($dgroup_structure,$dgroup_value,$element_button,$searcharra
 					}else{
 						$this_button['lang'] = $this_fieldname[0].$this_fieldname[2];
 					}
-				  
+
 				}
-			}	
-			
+			}
+
 
 		    if ($this_button['targetid'] == "parentid") {
-				
+
 				if (!$parentid){
 			        $this_parentid = explode(".", $dgroup_structure['thisidform']);
 			        $parentid = $db->fetchOne('SELECT '.$dgroup_structure['thisidlist'][1].' FROM '.$this_parentid[0].' WHERE '.$this_parentid[1].' = '.$thisid[0]);
@@ -110,10 +110,10 @@ function dgroup_list($dgroup_structure,$dgroup_value,$element_button,$searcharra
 				}
 				$this_button['parentid'] = $parentid;
 		    }
-		
-		$new_ele_bu[] = $this_button;		
+
+		$new_ele_bu[] = $this_button;
 		}
-		  	  
+
 	}
 	$element_button['buttons'] = $new_ele_bu;
 	}
@@ -145,27 +145,27 @@ function dgroup_list($dgroup_structure,$dgroup_value,$element_button,$searcharra
 	$fieldreplace_thisid = "";
 	$fieldreplace_usethisid = "";
 	$fieldreplace_targetvalue = array();
-	
+
 	$fieldreplace = array();
 	while (isset($element_button_row[$count])){
-		
+
 		if (substr($element_button_row[$count]['targetid'],0,5) == "FIELD") {
-			$fieldreplace[] = $element_button_row[$count]['targetid_field'] = $fieldreplace_thisid = substr($element_button_row[$count]['targetid'],5);	
-			
+			$fieldreplace[] = $element_button_row[$count]['targetid_field'] = $fieldreplace_thisid = substr($element_button_row[$count]['targetid'],5);
+
 		}
-		
+
 		if (preg_match("/FIELD/",$element_button_row[$count]['targetvalue'])){
         	$this_targetvalue_array = explode("FIELD", $element_button_row[$count]['targetvalue']);
             foreach ($this_targetvalue_array as $this_targetvalue) {
             	$this_targetvalue_name = explode("XX", $this_targetvalue);
             	$fieldreplace[] = $element_button_row[$count]['targetvalue_field'][] = $fieldreplace_targetvalue[] = $this_targetvalue_name[0];
-            }	
-					
+            }
+
 		}
-		
-	$count++;		
+
+	$count++;
 	}
-	
+
 	//check for all fields inside $fieldreplace are in the fieldlist
 	//if no, add to the fieldlist, as fieldlist is used to generate the SQL statement
 	//if not in field list the value will not be loaded from DB
@@ -173,7 +173,7 @@ function dgroup_list($dgroup_structure,$dgroup_value,$element_button,$searcharra
             if (!preg_match("/".$this_fieldreplace.",/",$dgroup_structure['fieldlist']) && !preg_match("/.".$this_fieldreplace."/",$dgroup_structure['fieldlist'])) {
             $dgroup_structure['fieldlist'] = $dgroup_structure['fieldlist'].",".$this_valuereplace['field'];
             $dgroup_structure['fieldlist_short'] = $dgroup_structure['fieldlist_short'].",".$this_valuereplace['field'];
-            }			
+            }
 	}
 
 
@@ -181,10 +181,10 @@ function dgroup_list($dgroup_structure,$dgroup_value,$element_button,$searcharra
 
 	//
     // come up with sql to get the real data
-    // 
+    //
     if ($aved == "ss" || $aved == "sq" || $is_fdata){
-    	
-        if ($aved == "sq" || $is_fdata){ 
+
+        if ($aved == "sq" || $is_fdata){
 
             global $_POST;
             if ($_POST['searchquickvalue']){
@@ -198,11 +198,11 @@ function dgroup_list($dgroup_structure,$dgroup_value,$element_button,$searcharra
                 $searcharray[$this_sqfield] = $searchquickvalue;
             }
             $sqlwhereandor = " OR ";
-			
+
         } else {
- 	
+
             $sqlwhereandor = " AND ";
- 
+
         }
 
         $sqlwhere = "";
@@ -242,32 +242,32 @@ function dgroup_list($dgroup_structure,$dgroup_value,$element_button,$searcharra
 
 
 	/*
-	 * rows 
-	 */	
+	 * rows
+	 */
 	$this_row_button = array();
-	 
+
     if ($result1){
-    		
+
         foreach ($result1 as $field1) {
-        	
+
 			//$this_row_button = $element_button_row;
-			
+
 			//encode thisid, insert into the $element_button_row array
-            $this_rid = $this->Apps->thisid_encode($field1[$this_ridfield]);
+            $this_rid = encode_id($field1[$this_ridfield]);
 			if ($button_row_ridpos){
 				foreach ($button_row_ridpos as $this_pos){
 					$this_row_button[$this_pos]['targetid'] = $this_rid;
-					
-				}				
+
+				}
 			}
-					
+
 			/**
 			 * rowid
 			 */
 			$list['rowid'][$data_listcount] = $this_rid;
-			
-			
-			
+
+
+
             $thislist_count = 0;
 
             foreach (array_keys($dgroup_structure['listarray']) as $fieldname){
@@ -288,7 +288,7 @@ function dgroup_list($dgroup_structure,$dgroup_value,$element_button,$searcharra
                     $langcresult = $this->db->query($sqllangc);
 					$langcresult = $langcresult->row_array(0);
 					$langcresult = $langcresult['langc_value'];
-					
+
                     $data_list[$data_listcount][] = $langcresult;
 
                     } elseif ($dgroup_structure['listarray'][$fieldname]['list_formtype'] == 2){
@@ -304,13 +304,13 @@ function dgroup_list($dgroup_structure,$dgroup_value,$element_button,$searcharra
                             if ($this_row_result['icontype'] == '16'){
                                 //$data_list[$data_listcount][] = '';//'IMG:html/images/icons/16/'.$this_row_result['icon'].','.$this_row_result['name'].',16,16';
 								$data_list[$data_listcount][] = '<img src="html/images/icons/16/'.$this_row_result['icon'].'" width="16" height="16" alt="'.$this_row_result['name'].'"/>';
-                                
+
                             } else {
                                 //$data_list[$data_listcount][] = '';//'IMG:html/images/icons/32/'.$this_row_result['icon'].','.$this_row_result['name'].',32,32';
 								$data_list[$data_listcount][] = '<img src="html/images/icons/32/'.$this_row_result['icon'].'" width="32" height="32" alt="'.$this_row_result['name'].'"/>';
                             }
                         } else {
-                        	
+
                             $data_list[$data_listcount][] = $this_row_result['name'];
 
                         }
@@ -362,24 +362,24 @@ function dgroup_list($dgroup_structure,$dgroup_value,$element_button,$searcharra
 					$count = 0;
 					$fieldreplace = array();
 					while ($element_button_row[$count]){
-						
+
 						if ($element_button_row[$count]['targetid_field'] == $fieldname){
-							$this_row_button[$count]['targetid'] = f_thisid_encode($field1[$fieldname]);	
+							$this_row_button[$count]['targetid'] = f_thisid_encode($field1[$fieldname]);
 						}elseif($element_button_row[$count]['targetid'] == "thisid"){
 							$this_row_button[$count]['targetid'] = $thisid_en;
 						}
-						
+
 						if (in_array($fieldname,$fieldreplace_targetvalue)){
 							foreach($element_button_row[$count]['targetvalue_field'] as $this_value_field){
 								if ($this_value_field == $fieldname){
 									$this_row_button[$count]['targetvalue'] = preg_replace("/FIELD".$fieldname."/XX",$field1[$fieldname], $element_button_row[$count]['targetvalue']);
-								}	
-							}	
+								}
+							}
 						}
-						
-		
-					$count++;		
-					}					
+
+
+					$count++;
+					}
 				}
 
 
@@ -390,7 +390,7 @@ function dgroup_list($dgroup_structure,$dgroup_value,$element_button,$searcharra
 		$list['table_button'][$data_listcount] = $this_row_button;
 
 /*
- * 
+ *
     		foreach (array_keys($element_button_row) as $this_button_key){
 				if ($this_button['position'] == "rowend"){
 					$list['button_t'][$data_listcount][$this_button_key] = $this_button;
@@ -400,28 +400,28 @@ function dgroup_list($dgroup_structure,$dgroup_value,$element_button,$searcharra
 					$list['button_t'][$data_listcount]['rowone'][] = $this_button;
 				}
 			}
- * 
+ *
  */
 
             $data_listcount++;
 		}
     }
 
-    
-    
+
+
     /*
 	 * data
-	 * 
+	 *
 	 * returning result are
 	 * [title]
 	 * [rowid]$data_listcount]
 	 * [button][$data_listcount]
 	 * [data][$data_listcount]
-	 * 
+	 *
 	 */
 
 
-		
+
 	foreach (array_keys($element_button_row) as $this_button_key){
 		$element_button_row[$this_button_key]['key'] = $this_button_key;
 		if ($element_button_row[$this_button_key]['position'] == "rowend"){
@@ -432,14 +432,14 @@ function dgroup_list($dgroup_structure,$dgroup_value,$element_button,$searcharra
 			$result_button['rowone'][] = $element_button_row[$this_button_key];
 		}
 	}
-	
+
 	$result['data'] = $list;
     $result['data']['button'] = $result_button;
     $result['data']['table'] = $data_list;
     $result['data']['listnotitle'] = $dgroup_structure['listnotitle'];
 	$result['data']['listarray'] = $dgroup_structure['listarray'];
 	$result['element_button'] = $element_button;
-	
+
 	//$result['data']['button'] = $element_button_row;
 	//$list['list']['listtitle'] = $dgroup_structure['listarray'];
     //$list['list']['listfield'] = $dgroup_structure['fieldsort'];
@@ -462,11 +462,11 @@ return ($element_button);
 function dgroup_searcharray($dgroup_structure){
 
 	global $_POST,$_GET;
-	
+
 	foreach ($dgroup_structure['table'] as $this_table) {
-	
+
 	    if ($this_table['fields'] && !$this_table['e_xtra']) {
-	
+
 	        foreach ($this_table['fields'] as $this_field) {
 	            if (!$this_field['multilang']) {
 	            $fieldarray[$this_field['core_db_fields_name']] = $_POST[$this_field['core_db_fields_name']];
@@ -477,12 +477,12 @@ function dgroup_searcharray($dgroup_structure){
 	                if (!$_POST[$thismlfield] && $_GET[$thismlfield]) $fieldarray[$this_field['core_db_fields_name']] = $_GET[$thismlfield];
 	            }
 	        }
-	
+
 	    }
-	
+
 	}
 
-return ($searcharray);	
+return ($searcharray);
 }
 
 }
