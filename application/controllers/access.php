@@ -1,10 +1,10 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Access extends MY_Controller {
-	
+
 
 	public function index()	{
-		if ($this->User->is_logged_in()) redirect('/dashboard');
+		if ($this->UserM->is_logged_in()) redirect('/dashboard');
 
 		$statuses = array(
 			1 => 'return user',
@@ -17,8 +17,8 @@ class Access extends MY_Controller {
 		);
 
 		$html = array();
-		$html['status_message'] = $statuses[$this->User->status];
-		$html['status'] = $this->User->status;
+		$html['status_message'] = $statuses[$this->UserM->status];
+		$html['status'] = $this->UserM->status;
 
 		$data = array();
 		$data['html'] = $this->load->view('/'.get_template().'/access/login', $html, TRUE);
@@ -31,7 +31,7 @@ class Access extends MY_Controller {
 
 		$this->data[] = $data;
 
-		$this->Html->load_format();
+		$this->LayoutM->load_format();
 
 		$this->output();
 	}
@@ -44,8 +44,8 @@ class Access extends MY_Controller {
 		$username = $this->input->post('access_user_username');
 		$password = $this->input->post('access_user_pw');
 
-		if ($this->User->is_valid_password($username, $password)) {
-			$this->User->login($username);
+		if ($this->UserM->is_valid_password($username, $password)) {
+			$this->UserM->login($username);
 		} else {
 			$this->index();
 			return false;
@@ -56,13 +56,13 @@ class Access extends MY_Controller {
 	}
 
 	public function logout() {
-		$this->User->logout();
+		$this->UserM->logout();
 		redirect('/');
 	}
 
 	public function test($id='none') {
 		echo 'main test id:',$id,'<br />';
-		echo '<pre>',print_r($this->ACL->url,true),'</pre>';
+		echo '<pre>',print_r($this->ACLM->url,true),'</pre>';
 
 	}
 }

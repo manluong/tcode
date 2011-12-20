@@ -26,22 +26,22 @@ class MY_Controller extends CI_Controller {
 		parent::__construct();
 		$this->setup_url();
 
-		$this->load->model('User');
-		$this->load->model('ACL');
+		$this->load->model('UserM');
+		$this->load->model('ACLM');
 		$this->load->model('App_general');
-		$this->load->model('Html');
-		$this->load->model('App');
+		$this->load->model('LayoutM');
+		$this->load->model('AppM');
 
-		$this->load->model('Log');
-		$this->User->setup();
+		$this->load->model('LogM');
+		$this->UserM->setup();
 		$this->setup_language();
-		$this->Log->start_log();
+		$this->LogM->start_log();
 
-		$this->App->setup();
-		$this->Html->setup();
+		$this->AppM->setup();
+		$this->LayoutM->setup();
 
-		if ($this->App->must_disable_plain_id()) $this->ACL->check_id_encryption();
-		$this->ACL->check_app_access();
+		if ($this->AppM->must_disable_plain_id()) $this->ACLM->check_id_encryption();
+		$this->ACLM->check_app_access();
 
 		//$this->output->enable_profiler(true);
 	}
@@ -52,7 +52,7 @@ class MY_Controller extends CI_Controller {
 		if (method_exists($this, $action) && $this->url['action']!='') {
 			return call_user_func_array(array($this, $action), $params=array());
 		} else {
-			$this->App->load_default_actions();
+			$this->AppM->load_default_actions();
 		}
 
 
@@ -62,10 +62,10 @@ class MY_Controller extends CI_Controller {
 
 	public function default_action($params) {
 		//if no matching APP AN is found in the DB, call to default index in the Controller file
-		if (!$this->App->has_actions()) return call_user_func_array(array($this, 'index'), $params);
+		if (!$this->AppM->has_actions()) return call_user_func_array(array($this, 'index'), $params);
 
 		$this->data = $this->app_load();
-		$this->Html->load_format();
+		$this->LayoutM->load_format();
 
 		$this->output();
 	}
@@ -101,10 +101,10 @@ class MY_Controller extends CI_Controller {
 	}
 
 	private function setup_language() {
-		$this->load->model('Langmodel');
-		$this->lang->initialise($this->Langmodel->initialise());
-		$this->lang->loadarray($this->Langmodel->loadarray('core', $this->lang->lang_use));
-		$this->lang->loadarray($this->Langmodel->loadarray($this->url['app'], $this->lang->lang_use));
+		$this->load->model('LangM');
+		$this->lang->initialise($this->LangM->initialise());
+		$this->lang->loadarray($this->LangM->loadarray('core', $this->lang->lang_use));
+		$this->lang->loadarray($this->LangM->loadarray($this->url['app'], $this->lang->lang_use));
 	}
 
 
@@ -117,7 +117,7 @@ class MY_Controller extends CI_Controller {
 
 	private function app_load(){
 
-		$apps_action = $this->App->actions;
+		$apps_action = $this->AppM->actions;
 		/*
 		 * thisid
 		 */
@@ -128,7 +128,7 @@ class MY_Controller extends CI_Controller {
 
 		//looping the elements, and switch the element_type
 
-		$all_action_elements = $this->App->get_action_element($this->url['app'], $this->url['action']);
+		$all_action_elements = $this->AppM->get_action_element($this->url['app'], $this->url['action']);
 		if (!$all_action_elements) return array();
 
 		$output = array();
@@ -142,7 +142,7 @@ class MY_Controller extends CI_Controller {
 
 			//confirm we have the right $this_element to work with
 			//if it's a ajax, load the target action and it's element values
-			$this_element = $this->App->get_this_element($this_element, $mfunction, $apps_action);
+			$this_element = $this->AppM->get_this_element($this_element, $mfunction, $apps_action);
 
 			// if it's NOT ajax, pass to model to process, else pass the value to format [ajax] ajax
 			if (!$this_element['ajax'] || $this->url['subaction'] == 'ss') {
@@ -380,7 +380,7 @@ class MY_Controller extends CI_Controller {
 		);
 
 		//load addon
-		if (isset($layout['addons'])) $addons = $this->Html->Html_addons($layout['addons']);
+		if (isset($layout['addons'])) $addons = $this->LayoutM->Html_addons($layout['addons']);
 
 		$pagedata['css'] .= $addons['css'];
 		$pagedata['js'] .= $addons['js'];

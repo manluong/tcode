@@ -1,6 +1,6 @@
 <?php if (!defined('BASEPATH')) exit('No direct access allowed.');
 
-class Log extends CI_Model {
+class LogM extends CI_Model {
 	private $_start_time = 0;
 	private $_curr_log_id = 0;
 	private $_log_type = array();
@@ -42,14 +42,14 @@ class Log extends CI_Model {
 	private function _insert_log() {
         $data = array(
             'stamp' => mdate("%Y-%n-%j %H:%i:%s"),
-            'cardid' => isset($this->User->info['cardid'])? $this->User->info['cardid'] : NULL,
-            'gpmid' => isset($this->User->info['gpmid'])? $this->User->info['gpmid'] : NULL,
+            'cardid' => isset($this->UserM->info['cardid'])? $this->UserM->info['cardid'] : NULL,
+            'gpmid' => isset($this->UserM->info['gpmid'])? $this->UserM->info['gpmid'] : NULL,
             'app' => $this->_url['app'],
             'an' => $this->_url['action'],
             'aved' => $this->_url['subaction'],
             'tidorg' => $this->_url['id_plain'],
             'uri' => $_SERVER['REQUEST_URI'],
-            'loguid' => $this->User->get_loguid(),
+            'loguid' => $this->UserM->get_loguid(),
             'load' => 1
         );
         $this->db->insert('log', $data);
@@ -74,7 +74,7 @@ class Log extends CI_Model {
 	private function _get_log_session_id() {
 		$query = $this->db->select('id')
 				->from('log_session')
-				->where('loguid', $this->User->get_loguid())
+				->where('loguid', $this->UserM->get_loguid())
 				->limit(1)
 				->get();
 		return $query->row();
@@ -83,7 +83,7 @@ class Log extends CI_Model {
 	private function _insert_log_session() {
 		$data = array(
 			'stamp' => mdate("%Y-%n-%j %H:%i:%s"),
-			'loguid' => $this->User->get_loguid(),
+			'loguid' => $this->UserM->get_loguid(),
 			'agent' => $_SERVER['HTTP_USER_AGENT'],
 			'dev' => '0',
 			'ip' => inet_pton($_SERVER['REMOTE_ADDR'])
@@ -136,7 +136,7 @@ class Log extends CI_Model {
 			$data = array(
 				'stamp' => mdate("%Y-%n-%j %H:%i:%s"),
 				'typeid' => $this->_log_type['id'],
-				'cardid' => $this->User->info['cardid'],
+				'cardid' => $this->UserM->info['cardid'],
 				'text' => $text,
 				'furi' => $_SERVER['REQUEST_URI'],
 			);
@@ -169,7 +169,7 @@ class Log extends CI_Model {
 	private function _remove_extra_history() {
 		$query = $this->db->select()
 				->from('log_history')
-				->where('cardid', $this->User->info['cardid'])
+				->where('cardid', $this->UserM->info['cardid'])
 				->order_by('stamp', 'desc')
 				->limit(10,10)
 				->get();
@@ -198,7 +198,7 @@ class Log extends CI_Model {
 	private function _get_old_history() {
 		$query = $this->db->select('furi, text')
 				->from('log_history')
-				->where(array('id'=>$this->User->info['cardid'],
+				->where(array('id'=>$this->UserM->info['cardid'],
 						'furi'=>$_SERVER['REQUEST_URI'],
 					))
 				->order_by('stamp','desc')

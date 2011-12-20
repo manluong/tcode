@@ -1,6 +1,6 @@
 <?php if (!defined('BASEPATH')) exit('No direct access allowed.');
 
-class Langmodel extends CI_Model {
+class LangM extends CI_Model {
 	function __construct() {
 		parent::__construct();
 	}

@@ -1,6 +1,6 @@
 <?php if (!defined('BASEPATH')) exit('No direct access allowed.');
 
-class Html extends CI_Model {
+class LayoutM extends CI_Model {
 	var $platform = 1;
 
 	function __construct() {
@@ -9,7 +9,7 @@ class Html extends CI_Model {
 
 
 	function setup() {
-		$apps_action = $this->App->actions;
+		$apps_action = $this->AppM->actions;
 		$CI =& get_instance();
 
 		//LOAD TEMPLATE
@@ -53,7 +53,7 @@ class Html extends CI_Model {
 	/////////////////////////////////////////////////////////
 
 	function load_format(){
-		$apps_action = $this->App->actions;
+		$apps_action = $this->AppM->actions;
 		$CI =& get_instance();
 		//this function is possible to make CACHE entry
 		//save the result as app-an name

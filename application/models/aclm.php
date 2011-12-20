@@ -1,6 +1,6 @@
 <?php if (!defined('BASEPATH')) exit('No direct access allowed.');
 
-class ACL extends CI_Model {
+class ACLM extends CI_Model {
 	var $url = array();
 
 	function __construct() {
@@ -22,10 +22,10 @@ class ACL extends CI_Model {
 	}
 
 	function check_app_access() {
-		if (!$this->User->is_logged_in() && !$this->App->has_public_access()) {
+		if (!$this->UserM->is_logged_in() && !$this->AppM->has_public_access()) {
 			header( 'Location: /access/login/'.set_return_url(TRUE));
 			exit;
-		} elseif ($this->User->is_logged_in() && !$this->User->is_admin() && !$this->App->has_public_access()) {
+		} elseif ($this->UserM->is_logged_in() && !$this->UserM->is_admin() && !$this->AppM->has_public_access()) {
 			$app_access_rights_table = $this->get_rights();
 
 			if ($app_access_rights_table['allow'] == 3) {
@@ -56,7 +56,7 @@ class ACL extends CI_Model {
 
 	//function to get rights from access_rights table
 	function get_rights(){
-		$apps_action = $this->App->actions;
+		$apps_action = $this->AppM->actions;
 
 		$result = array();
 
@@ -101,13 +101,13 @@ class ACL extends CI_Model {
 		//get the table with exact mastergp+app+actiongp+cardid
 
 		$where = array();
-		$where['accessgp'] = "access_rights_gpmaster = '".$this->User->info['accessgp']."'";
+		$where['accessgp'] = "access_rights_gpmaster = '".$this->UserM->info['accessgp']."'";
 		$where['app'] = " AND access_rights_app = '".$this->url['app']."'";
-		$where['cardid'] = " AND access_rights_cardid = '".$this->User->info['cardid']."'";
+		$where['cardid'] = " AND access_rights_cardid = '".$this->UserM->info['cardid']."'";
 		$where['actiongp'] = " AND access_rights_actiongp = '".$apps_action['core_apps_action_gp']."'";
 
-		if ($this->User->info['subgp']) {
-			$subgp = join(',',$this->User->info['subgp']);
+		if ($this->UserM->info['subgp']) {
+			$subgp = join(',',$this->UserM->info['subgp']);
 			$where['subgp'] = " AND access_rights_gpsub IN ($subgp)";
 		}
 
@@ -217,7 +217,7 @@ class ACL extends CI_Model {
 		}
 
 		if ($result == 1 && $access['access_rights_matchthisid']) {
-			$result = ($this->url['id_plain']!=0 && $this->User->info[$access['access_rights_matchthisidtype']] == $this->url['plain_id'])
+			$result = ($this->url['id_plain']!=0 && $this->UserM->info[$access['access_rights_matchthisidtype']] == $this->url['plain_id'])
 				? 1
 				: 2;
 		}

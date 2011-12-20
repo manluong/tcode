@@ -1,6 +1,6 @@
 <?php if (!defined('BASEPATH')) exit('No direct access allowed.');
 
-class App extends CI_Model {
+class AppM extends CI_Model {
 	var $url = array();
 	var $actions = array();
 

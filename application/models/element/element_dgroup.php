@@ -1,18 +1,18 @@
 <?php if (!defined('BASEPATH')) exit('No direct access allowed.');
-	
+
 class Element_dgroup extends CI_Model {
 
 	function __construct() {
 		parent::__construct();
 	}
-	
+
 	function core_element_dgroup($this_element, $is_fdata=0){
-	
+
 		$app = $this->url['app'];
 		$an = $this->url['action'];
 		$thisid[0] = $this->url['id_plain'];
 		$thisid_en = $this->url['id_plain'];
-		
+
 		$this_element_name = $this_element['name'];
 		$this_element_aved = $this_element['subaction'];
 		$this_element_id = $this_element['element_id'];
@@ -23,11 +23,11 @@ class Element_dgroup extends CI_Model {
 		$this_element_list = $this_element['list'];
 		$this_element_search = $this_element['search'];
 		$this_element_dgroupextend = $this_element['dgroupextend'];
-		
+
 	    //
 	    //get the structure
 	    //
-	    
+
 	    //gethisid function
 	    //disabled for integration to CI
 	    /*
@@ -38,26 +38,26 @@ class Element_dgroup extends CI_Model {
 	    }
 		*/
 		$this_dgroupid = $thisid;
-		
+
 	    $dgroup_structure = $this->core_element_dgroup_structure($app,$this_element_aved,$this_element_name,$this_dgroupid,$this_element_dgroupextend);
-	  
-	
+
+
 	    //
 	    //get the structure for e_xtra
 	    //
 	    if (isset($dgroup_structure['e_xtra'])){
-	
+
 	        $xtra_structure = core_element_xtra_structure($dgroup_structure);
-	
+
 	        if ($xtra_structure){
 	            $button_e_xtra = 1;
 	            $dgroup_structure = $xtra_structure;
 	        }
-	
+
 	    } else {
 			$button_e_xtra = 0;
 		}
-	
+
 	    /////////////////////////////////
 	    //get the value
 	    //es is needed for logging purpose for current record
@@ -65,74 +65,74 @@ class Element_dgroup extends CI_Model {
 	    if ($this_element_aved == "v" || $this_element_aved == "e" || $this_element_aved == "d" || $this_element_aved == "es") {
 	    if ($dgroup_structure['sql']) $dgroup_value = $this->core_element_dgroup_value($dgroup_structure);
 	    }
-	
-		
+
+
 	    if (!isset($dgroup_value)) {
-	    	$dgourp_value_notfound = 1;	
+	    	$dgourp_value_notfound = 1;
 		} else {
 			$dgourp_value_notfound = 0;
 		}
-	
+
 	    //display error from dgroup_structure
 	    if (isset($dgroup_structure['error'])){
-	    	
+
 	        meg(999,"apps_action_dgroup.inc: ".$dgroup_structure['error']);
-	
+
 	    }else{
 	    //continue if no error
-	
+
 	       // if ($layout['format'] == "data") include_once $DOCUMENT_ROOT.'/includes/layout/layout_data.inc';
-	
+
 	        if (!$is_fdata) $element_button = $this->Element_button->core_element_button($app,$an,$this_element_aved,$this_element_id,$this_element_add,$this_element_view,$this_element_edit,$this_element_del,$this_element_list,$this_element_search,$dgourp_value_notfound,$dgroup_structure['basetype'],$dgroup_structure['formadd_allowforceid'],$button_e_xtra);
 
-	        
+
 	        $data['dgrouptype'] = $dgroup_structure['avedtype'];
-			
+
 	        switch($dgroup_structure['avedtype']){
-	
+
 				/*
 				 * FORM
 				 */
 	            case "form":
 	            //$h_apps_html[$count_element] = f_layout_form($app,$this_element_name,$this_element_aved,$thisid,$dgroup_structure,$dgroup_value,$this_element_id,$element_button,$this_element_target_an,$thisid_en);
 	            //print_r($h_apps_html[$count_element]);
-	            
+
 				if ($this_element_aved == "v" && !$dgroup_value) {
 				//} elseif ($aved == "v" && ($layout['format'] == "div")) {
-				$result['element_button'] = $element_button;	
-				$result['data']['dgrouptype'] = "empty";	
-					
-				}elseif (($this_element_aved == "v" && $dgroup_value) || $this_element_aved == "d") {
-				//view	
-				$this->load->Model('element/Element_dgroup_form');
-				$result['data'] = $this->Element_dgroup_form->dgroup_view($dgroup_structure,$dgroup_value,$element_button,$this_element_aved);	
 				$result['element_button'] = $element_button;
-				
+				$result['data']['dgrouptype'] = "empty";
+
+				}elseif (($this_element_aved == "v" && $dgroup_value) || $this_element_aved == "d") {
+				//view
+				$this->load->Model('element/Element_dgroup_form');
+				$result['data'] = $this->Element_dgroup_form->dgroup_view($dgroup_structure,$dgroup_value,$element_button,$this_element_aved);
+				$result['element_button'] = $element_button;
+
 				}elseif ($this_element_aved == "a" || $this_element_aved == "e" || $this_element_aved == "ed" || $this_element_aved == "ad" || $this_element_aved == "s" || $this_element_aved== "sd" || $this_element_aved == "f" || $this_element_aved == "fd") {
 				//form
 				$this->load->Model('element/Element_dgroup_form');
-				$result['data'] = $this->Element_dgroup_form->dgroup_form($dgroup_structure,$dgroup_value,$element_button,$this_element_aved);	
+				$result['data'] = $this->Element_dgroup_form->dgroup_form($dgroup_structure,$dgroup_value,$element_button,$this_element_aved);
 				$result['element_button'] = $element_button;
-	
+
 				}elseif ($this_element_aved == "as" || $this_element_aved == "es" || $this_element_aved == "ds" || $this_element_aved == "ss") {
 				//save
 				$this->load->Model('element/Element_dgroup_save');
-				$result['data'] = $this->Element_dgroup_save->dgroup_save($dgroup_structure,$dgroup_value,$this_element_aved);	
+				$result['data'] = $this->Element_dgroup_save->dgroup_save($dgroup_structure,$dgroup_value,$this_element_aved);
 				$result['element_button'] = $element_button;
-		
+
 				}
-				
+
 				; break;
-	
+
 				/*
 				 * LIST
 				 */
 	            case "list":
 					$this->load->Model('element/Element_dgroup_list');
-					$result = $this->Element_dgroup_list->dgroup_list($dgroup_structure,$dgroup_value,$element_button);		
-	
+					$result = $this->Element_dgroup_list->dgroup_list($dgroup_structure,$dgroup_value,$element_button);
+
 	            ; break;
-	
+
 				/*
 				 * SEARCH
 				 */
@@ -140,45 +140,45 @@ class Element_dgroup extends CI_Model {
 	            if ($this_element_aved == "s" || $this_element_aved == "sd"){
 	            	$this->load->Model('element/Element_dgroup_form');
 	            	$data['form'] = $this->Element_dgroup_form->dgroup_form($dgroup_structure,$dgroup_value,$element_button);
-	
+
 	            }elseif ($this_element_aved == "sq"){
 	            	$this->load->Model('element/Element_dgroup_list');
 		            $result = $this->Element_dgroup_list->dgroup_list($dgroup_structure,$dgroup_value,$element_button,"",$is_fdata);
-	
-						
+
+
 	            }elseif ($this_element_aved == "ss"){
 	            	$this->load->Model('element/Element_dgroup_list');
 	            	$searcharray = $this->Element_dgroup_list->dgroup_searcharray($dgroup_structure);
 					$result = $this->Element_dgroup_list->dgroup_list($dgroup_structure,$dgroup_value,$element_button,$searcharray);
-					
+
 	            }elseif ($this_element_aved == "so"){
-	
+
 	            }
-				
+
 	            ; break;
-	
-	
+
+
 	        }
-	
+
 	    }
 
 		//switch between platform
 		$platform = "web";
-		
+
 		switch ($platform){
 			case "web":
 			$this->load->model('element/web/View_dgroup');
 			$this->load->model('element/web/View_button');
 			break;
-			
+
 		}
 
 	    $output_add = $this->View_dgroup->output_dgroup($result,$this_element);
 		$result = array_merge($result,$output_add);
-								
+
 		//$result['data'] = $data;
 		//$result['element_button'] = $element_button;
-	
+
 	return($result);
 	}
 
@@ -216,7 +216,7 @@ function core_element_dgroup_structure($app,$aved,$dgroupname,$thisid,$this_elem
     $structure['formtype'] = $result1['core_e_dgroup_formtype'];
     $structure['listtype'] = $result1['core_e_dgroup_listtype'];
     $structure['searchtype'] = $result1['core_e_dgroup_searchtype'];
-	
+
 	$structure['fieldlist'] = "";
 	$structure['fieldlist_short'] = "";
 	$structure['list']['formtype'] = "";
@@ -235,8 +235,8 @@ function core_element_dgroup_structure($app,$aved,$dgroupname,$thisid,$this_elem
     if ($this_element_dgroupextend){
         $sql5 = "SELECT * FROM core_e_dgroup_extend WHERE core_e_dgroup_extend_app = '$app' AND core_e_dgroup_extend_name = '$this_element_dgroupextend'";
 		$result5 = $this->db->query($sql5);
-		$result5 = $result5->row_array(0);		
-		
+		$result5 = $result5->row_array(0);
+
         if (!$result5) {
             meg(0,"MISSING DGROUP EXTEND [core_element_dgroup]: ".$app."/".$dgroupname."/".$this_element_dgroupextend);
         } else {
@@ -256,7 +256,7 @@ function core_element_dgroup_structure($app,$aved,$dgroupname,$thisid,$this_elem
         }
     }
     */
-   
+
     //REPLACE XXuid, XXxid (cid,staffid,vendorid)
     if (isset($structure['extend_where']) && isset($extend_wheresql)) {
         $structure['extend_where'] = $structure['extend_where'].", ".$extend_wheresql;
@@ -327,7 +327,7 @@ function core_element_dgroup_structure($app,$aved,$dgroupname,$thisid,$this_elem
                     //echo $field2['core_e_dgroup_table_app'];
 
                     if ($field2['core_e_dgroup_table_app']) {
-                    $this->lang->loadarray($this->Langmodel->loadarray($field2['core_e_dgroup_table_app'], $this->lang->lang_use));
+                    $this->lang->loadarray($this->LangM->loadarray($field2['core_e_dgroup_table_app'], $this->lang->lang_use));
                     $app = $field2['core_e_dgroup_table_app'];
                     } else {
                     $app = $thisapp;
@@ -344,13 +344,13 @@ function core_element_dgroup_structure($app,$aved,$dgroupname,$thisid,$this_elem
                       case "search": $sortwhich = "core_e_dgroup_table_field_sortsearch"; break;
                       case "list": $sortwhich = "core_e_dgroup_table_field_sortlist"; break;
                     }
-					
+
 					$sql = "SELECT * FROM core_e_dgroup_table_field LEFT JOIN core_db_fields ON";
 					$sql .= " core_e_dgroup_table_field.core_e_dgroup_table_field_table = core_db_fields.core_db_fields_tablename";
 					$sql .= " WHERE core_e_dgroup_table_field_dgroupname = '".$dgroupname."'";
 					$sql .= " AND core_e_dgroup_table_field_table = '".$structure['table'][$this_count2]['table']."'";
 					$sql .= " AND core_e_dgroup_table_field.core_e_dgroup_table_field_field = core_db_fields.core_db_fields_name ORDER BY $sortwhich";
-					
+
 					$result3 = $this->db->query($sql);
 					$result3 = $result3->result_array();
                     $this_count3 = 0;
@@ -446,7 +446,7 @@ function core_element_dgroup_structure($app,$aved,$dgroupname,$thisid,$this_elem
                      $structure['table'][$this_count2]['fields'][$this_count3]['db_defaultvalue'] = $field3['core_db_fields_db_defaultvalue'];
 
 					$structure['table'][$this_count2]['fields'][$this_count3]['db_null'] = $field3['core_db_fields_db_null'];
-					
+
 
                      //if ($avedtype == "form" || $avedtype == "list" || $avedtype == "search"){
                      /////////////////////////////////////////////////////////////////////////////
@@ -854,16 +854,16 @@ function core_element_dgroup_structure($app,$aved,$dgroupname,$thisid,$this_elem
 				while (isset($structure['table'][$thislink_count])) {
 	                $structure['sql'] .= " LEFT JOIN ".$structure['table'][$thislink_count]['table']." ON ";
 	                        //echo $structure['table'][$this_count2]['linkchild'][0];
-	
+
 	                        $thisparentcount = 1;
 	                        while (isset($structure['table'][$thislink_count2]['linkchild'][$thisparentcount]) && isset($structure['table'][$thislink_count]['linkparent'][$thisparentcount])){
 	                        if ($thisparentcount > 1) $structure['sql'] .= " AND ";
 	                        $structure['sql'] .= $structure['table'][$thislink_count2]['linkchild'][$thisparentcount] ." = ". $structure['table'][$thislink_count]['linkparent'][$thisparentcount];
 	                        $thisparentcount++;
 	                        }
-	
+
 	                $thislink_count++;$thislink_count2++;
-	            }	
+	            }
 
 
                 if ($structure['thisidreq'] && !$thisid[0]) meg(999,"List: thisid missing. [dgroup:".$dgroupname."] [".$app."]");
@@ -967,7 +967,7 @@ function core_d_element_dgroup_select_getopt($this_field,$app){
         }
 
 		$result1 = $this->db->query($sql1);
-		$result1 = $result1->result_array();		
+		$result1 = $result1->result_array();
         foreach ($result1 as $field1) {
 
             //if there is a default field given and this field is != 0, set this field as default and return
@@ -1116,7 +1116,7 @@ AND core_e_xtra_value.core_e_xtra_value_lang = 'en'
 AND core_e_xtra_value.core_e_xtra_value_fieldid = '".$this_field['e_xtra_fieldid']."'";
 $result3 = $this->db->query($sql3);
 $result3 = $result3->row_array(0);
-			
+
                         $multilangresult[$this_field['core_db_fields_name']] = $result3[0];
                         }
                     }
@@ -1170,7 +1170,7 @@ function core_element_dgroup_select_show($sellist,$value,$icon=0){
                     }
                 }
              }
-         }     	
+         }
      }
 
      //}
