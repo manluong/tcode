@@ -50,7 +50,9 @@ class MY_Controller extends CI_Controller {
 		//if a function has been specified and exists in the Controller, use it
 		if ($this->url['action']!='' && method_exists($this, $action)) {
 			return call_user_func_array(array($this, $action), $params=array());
-		} else {
+		}
+
+		if ($this->url['action']=='') {
 			$this->AppM->load_default_actions();
 		}
 
