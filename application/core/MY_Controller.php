@@ -440,7 +440,7 @@ class MY_Controller extends CI_Controller {
 		//$h_js_onload = $output_page['jsonload'];
 
 	    //load appmenu + breadcrumb
-	    if (isset($layout['appmenu']) || isset($layout['breadcrumb'])){
+	    if ($layout['appmenu'] || $layout['breadcrumb']){
 			//include_once DOCUMENT_ROOT.'/'.$layout['folderinc'].'/appmenu.inc';
 			//$appmenu = core_appmenu($app,$layout['appmenu'],$layout['appmenu_gp'],$layout['breadcrumb']);
 			//$appmenu = f_layout_appmenu($appmenu,$layout['appmenu'],$layout['breadcrumb'],1);

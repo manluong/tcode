@@ -120,7 +120,7 @@ class View_button extends CI_Model {
 			    if ($this_langarray[2]) $this_iconclass .= ' data-icon-secondary="ui-icon-'.$this_langarray[2].'"';
 			}
 
-		    if (isset($buttonallicon) || $this_button['icononly'] || $this_button['lang'] == "xx") {
+		    if (isset($buttonallicon) || isset($this_button['icononly']) || $this_button['lang'] == "xx") {
 		        $this_icon_only = ' data-icon-only="true"';
 		        $this_button['lang'] = '';
 		    }else{

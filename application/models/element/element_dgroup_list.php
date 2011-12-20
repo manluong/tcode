@@ -154,7 +154,7 @@ function dgroup_list($dgroup_structure,$dgroup_value,$element_button,$searcharra
 
 		}
 
-		if (preg_match("/FIELD/",$element_button_row[$count]['targetvalue'])){
+		if (isset($element_button_row[$count]['targetvalue']) && preg_match("/FIELD/",$element_button_row[$count]['targetvalue'])){
         	$this_targetvalue_array = explode("FIELD", $element_button_row[$count]['targetvalue']);
             foreach ($this_targetvalue_array as $this_targetvalue) {
             	$this_targetvalue_name = explode("XX", $this_targetvalue);

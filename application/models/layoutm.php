@@ -115,6 +115,8 @@ class LayoutM extends CI_Model {
 			if ($apps_action['core_apps_action_appmenu_gp']) {
 				$CI->layout['appmenu_gp'] = $apps_action['core_apps_action_appmenu_gp'];
 			}
+		}else{
+			$CI->layout['appmenu'] = 0;
 		}
 
 	}
