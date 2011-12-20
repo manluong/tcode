@@ -98,7 +98,7 @@ class View_dgroup extends CI_model {
 		//html_show_array($this_addon['json']);exit;
 		
 		$this_addon['json'] = json_encode($this_addon['json']);
-			
+
 	return($this_addon);
 	}
 

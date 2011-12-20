@@ -153,11 +153,10 @@ class MY_Controller extends CI_Controller {
 						$this->load->model('element/Element_dgroup');
 						$this->load->model('element/Element_button');
 
-						$core_element_dgroup = $this->Element_dgroup->core_element_dgroup($this_element);
+						$output[$count_output] = $this->Element_dgroup->core_element_dgroup($this_element);
 						$output[$count_output]['isoutput'] = 1;
 						$output[$count_output]['isdiv'] = 0;
-						$output[$count_output]['data'] = $core_element_dgroup['data'];
-						$output[$count_output]['element_button'] = $core_element_dgroup['element_button'];
+						//$output[$count_output]['element_button'] = $core_element_dgroup['element_button'];
 
 						break;
 
@@ -339,6 +338,7 @@ class MY_Controller extends CI_Controller {
 				break;
 
 			case '4':
+				
 				header('Content-type: text/json');
 				header('Content-type: application/json');
 				// if there is an array name "json", just print, content alreay in json format
