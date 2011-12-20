@@ -607,7 +607,7 @@ class MY_Controller extends CI_Controller {
 
 		foreach ($layout_cf_sort as $this_cf) {
 			$result['html'] .= $layout_cf[$this_cf]['start'];
-			$result['html'] .= $content_div[$this_cf];
+			if (isset($content_div[$this_cf])) $result['html'] .= $content_div[$this_cf];
 			$result['html'] .= $layout_cf[$this_cf]['end'];
 		}
 
