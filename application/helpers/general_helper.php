@@ -37,12 +37,12 @@ function f_thisid_decode($thisid){
 
 function encode_id($id) {
 	$CI =& get_instance();
-	return 'n'.$CI->encrypt->encode($id);
+	return urlencode('n'.$CI->encrypt->encode($id));
 }
 
 function decode_id($id) {
 	$CI =& get_instance();
-	return $CI->encrypt->decode(substr($id,1));
+	return $CI->encrypt->decode(substr(urldecode($id),1));
 }
 
 function id_is_encrypted($id) {
