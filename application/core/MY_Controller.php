@@ -31,12 +31,11 @@ class MY_Controller extends CI_Controller {
 		$this->load->model('App_general');
 		$this->load->model('LayoutM');
 		$this->load->model('AppM');
-
 		$this->load->model('LogM');
+
 		$this->UserM->setup();
 		$this->setup_language();
 		$this->LogM->start_log();
-
 		$this->AppM->setup();
 		$this->LayoutM->setup();
 
@@ -48,8 +47,8 @@ class MY_Controller extends CI_Controller {
 
 	//remap every URI call
 	function _remap($action, $params = array()) {
-		//if the function exist in the Controller, use it
-		if (method_exists($this, $action) && $this->url['action']!='') {
+		//if a function has been specified and exists in the Controller, use it
+		if ($this->url['action']!='' && method_exists($this, $action)) {
 			return call_user_func_array(array($this, $action), $params=array());
 		} else {
 			$this->AppM->load_default_actions();
