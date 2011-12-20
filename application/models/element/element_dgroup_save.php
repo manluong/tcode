@@ -389,14 +389,14 @@ function dgroup_save($dgroup_structure,$dgroup_value,$aved){
 		
  	}elseif ($aved == "ds"){
 		$form['save_success'] = 1;
-		$form['list_id'] = $listid;
+		$form['list_id'] = encode_id($listid);
 		$form['save_id'] = $this->url['id_encrypted'];
 
   	}else{
 
 		if ($saveid < 10000000000){
 			$form['save_success'] = 1;
-			$form['save_id'] = $saveid;
+			$form['save_id'] = encode_id($saveid);
 			$form['list_id'] = $listid;
 		} else {
 			$form['save_success'] = 0;

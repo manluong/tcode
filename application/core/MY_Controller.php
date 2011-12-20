@@ -27,7 +27,7 @@ class MY_Controller extends CI_Controller {
 		$this->setup_url();
 		$this->load->model('UserM');
 		$this->load->model('ACLM');
-		$this->load->model('App_general');
+		$this->load->model('App_generalM');
 		$this->load->model('LayoutM');
 		$this->load->model('AppM');
 		$this->load->model('LogM');
@@ -56,9 +56,14 @@ class MY_Controller extends CI_Controller {
 			return call_user_func_array(array($this, $action), $params=array());
 		}
 		
-		//if the action is not in DB, show a 404 page
-		if (!$this->AppM->has_actions()) echo "404";// show 404 page, erik, this function somehow doesn't work
+		if ($this->url['action']=='index') {
+			$this->AppM->load_default_actions();
+			$this->url['action'] = $this->AppM->actions['core_apps_action_name'];
+		}
 		
+		//if the action is not in DB, load a 404 view
+		if (!$this->AppM->has_actions()) echo "404"; // erik, this function somehow doesn't work
+						
 		//run actions
 		$this->run_action($params);
 		
@@ -119,18 +124,21 @@ class MY_Controller extends CI_Controller {
 
 	private function app_load(){
 
-		$apps_action = $this->AppM->actions;
 		/*
-		 * thisid
+		 * getthisid model
+		 * 
+		 * use plain id only check
+		 * 
 		 */
-		$thisid = $this->url['id_plain'];
-
-
-
-
+		
+		
 		//looping the elements, and switch the element_type
 
 		$all_action_elements = $this->AppM->get_action_element($this->url['app'], $this->url['action']);
+		//print_r($this->url);print_r($this->AppM->actions);echo "123";
+		//print_r($all_action_elements);exit;
+		
+		
 		if (!$all_action_elements) return array();
 
 		$output = array();
@@ -144,7 +152,7 @@ class MY_Controller extends CI_Controller {
 
 			//confirm we have the right $this_element to work with
 			//if it's a ajax, load the target action and it's element values
-			$this_element = $this->AppM->get_this_element($this_element, $mfunction, $apps_action);
+			$this_element = $this->AppM->get_this_element($this_element, $mfunction, $this->AppM->actions);
 
 			// if it's NOT ajax, pass to model to process, else pass the value to format [ajax] ajax
 			if (!$this_element['ajax'] || $this->url['subaction'] == 'ss') {
@@ -213,7 +221,7 @@ class MY_Controller extends CI_Controller {
 				//other id is loaded by getthisid, this is yet to be ported to CI
 				$this_element_thisid_en = ($this_element['thisid'])
 					? $getthisid['en'][$this_element_thisid]
-					: $this->url['id_plain'];
+					: $this->url['id_encrypted'];
 
 				//format a AJAX to load on full page load
 				//in OUTPUT function, if this ['ajax'] exist, it will format a AJAX call
@@ -258,7 +266,7 @@ class MY_Controller extends CI_Controller {
 			}
 
 		}
-
+		
 		return $output;
 	}
 
@@ -436,7 +444,9 @@ class MY_Controller extends CI_Controller {
 			//include_once DOCUMENT_ROOT.'/'.$layout['folderinc'].'/appmenu.inc';
 			//$appmenu = core_appmenu($app,$layout['appmenu'],$layout['appmenu_gp'],$layout['breadcrumb']);
 			//$appmenu = f_layout_appmenu($appmenu,$layout['appmenu'],$layout['breadcrumb'],1);
-			$pagedata['menuapp'] = '';
+			$this->load->model('AppmenuM');
+			$get_appmenu = $this->AppmenuM->get_appmenu();
+			$pagedata['menuapp'] = $this->load->view('/'.get_template().'/menuapp', $get_appmenu, true);
 	    } else {
 	    	$pagedata['menuapp'] = '';
 	    }
