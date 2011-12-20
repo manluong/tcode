@@ -52,16 +52,14 @@ class MY_Controller extends CI_Controller {
 			return call_user_func_array(array($this, $action), $params=array());
 		}
 
-		if ($this->url['action']=='') {
-			$this->AppM->load_default_actions();
-		}
+		//if no action was specified, load default actions from DB
+		if ($this->url['action']=='') $this->AppM->load_default_actions();
 
-
-		//else, run default action
-		$this->default_action($params);
+		//run actions
+		$this->run_action($params);
 	}
 
-	public function default_action($params) {
+	public function run_action($params) {
 		//if no matching APP AN is found in the DB, call to default index in the Controller file
 		if (!$this->AppM->has_actions()) return call_user_func_array(array($this, 'index'), $params);
 
