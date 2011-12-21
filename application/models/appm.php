@@ -46,6 +46,20 @@ class AppM extends CI_Model {
 		return $result['core_apps_status'];
 	}
 
+	function get_id($app_name) {
+		$rs = $this->db->select('core_apps_id')
+				->from('core_apps')
+				->where('core_apps_name', $app_name)
+				->limit(1)
+				->get();
+
+		if ($rs->num_rows()==0) return FALSE;
+
+		$result = $rs->row_array();
+
+		return $result['core_apps_id'];
+	}
+
 	function load_actions() {
 		$this->actions = $this->get_actions($this->url['app'], $this->url['action']);
 	}
