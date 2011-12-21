@@ -38,24 +38,24 @@ function f_thisid_decode($thisid){
 function encode_id($id) {
 	$CI =& get_instance();
 	//return urlencode('n'.$CI->encrypt->encode($id));
-	
+
 	//$key = substr(base_url(), 1, 2);
 	//$CI->encrypt->set_cipher(MCRYPT_BLOWFISH);
 	//return 'n'.urlencode($CI->encrypt->encode($id, $key));
-	
-	return 'n'.encode_id2($id);	
+
+	return 'n'.encode_id2($id);
 }
 
 function decode_id($id) {
 	$CI =& get_instance();
 	//return $CI->encrypt->decode(substr(urldecode($id),1));
-	
+
 	//$key = substr(base_url(), 1, 2);
 	//$encrypt = urldecode(substr($id, 0, 1));
 	//$CI->encrypt->set_cipher(MCRYPT_BLOWFISH);
 	//return $CI->encrypt->decode($encrypt, $key);
-	
-	return decode_id2($id);	
+
+	return decode_id2($id);
 }
 
 function id_is_encrypted($id) {
@@ -83,15 +83,15 @@ function encode_id2($id){
 		$keychar = substr($key, ($i % strlen($key))-1, 1);
 		$char = chr(ord($char)+ord($keychar));
 		$result.=$char;
-	}	
+	}
 	return $key.urlencode(base64_encode($result));
 }
 
 function decode_id2($id){
 	$result="";
-	//$key = substr($id, 1, 4);	
+	//$key = substr($id, 1, 4);
 	$key = substr(base_url(), 1, 2);
-	
+
     $str = base64_decode(urldecode(substr($id, 3)));
     for($i=0; $i<strlen($str); $i++) {
       $char = substr($str, $i, 1);
@@ -102,7 +102,7 @@ function decode_id2($id){
 	return $result;
 }
 
-  
+
 
 
 
@@ -216,4 +216,18 @@ function megshow(){
 function get_template() {
 	$CI =& get_instance();
 	return $CI->layout['name'];
+}
+
+
+function get_current_stamp() {
+	return mdate("%Y-%n-%j %H:%i:%s");
+}
+
+
+function extract_distinct_values($data, $key) {
+	$result = array();
+	foreach($data AS $d) {
+		$result[$d[$key]] = '';
+	}
+	return array_keys($result);
 }
