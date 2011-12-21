@@ -25,6 +25,10 @@ class UserM extends CI_Model {
 	var $loguid = 0;
 
 	function __construct() {
+		$this->table = 'users';
+		$this->id_field = 'card_id';
+		$this->cache_enabled = TRUE;
+
 		parent::__construct();
 
 		$this->setup_loguid();
@@ -50,6 +54,7 @@ class UserM extends CI_Model {
 	public function get_loguid() {
 		return $this->loguid;
 	}
+
 
 	public function is_valid_password($username, $password) {
 		$rs = $this->db->select()
