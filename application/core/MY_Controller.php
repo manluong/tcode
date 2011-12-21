@@ -3,6 +3,7 @@
 class MY_Controller extends CI_Controller {
 	var $url = array(
 		'app' => '',
+		'app_id' => '',
 		'action' => '',
 		'id_plain' => 0,
 		'id_encrypted' => 0,
@@ -24,13 +25,17 @@ class MY_Controller extends CI_Controller {
 
 	function __construct() {
 		parent::__construct();
+
 		$this->setup_url();
+
 		$this->load->model('UserM');
 		$this->load->model('ACLM');
 		$this->load->model('App_generalM');
 		$this->load->model('LayoutM');
 		$this->load->model('AppM');
 		$this->load->model('LogM');
+
+		$this->url['app_id'] = $this->AppM->get_id($this->url['app']);
 
 		$this->UserM->setup();
 		$this->setup_language();
@@ -48,25 +53,25 @@ class MY_Controller extends CI_Controller {
 
 	//remap every URI call
 	function _remap($action, $params = array()) {
-		
+
 		//controller file always override settings in DB
 		//if $this->url['action'] match a method in controller file, use it (including "index")
 		//"index" method will override default set in database
 		if (method_exists($this, $action)) {
 			return call_user_func_array(array($this, $action), $params=array());
 		}
-		
+
 		if ($this->url['action']=='index') {
 			$this->AppM->load_default_actions();
 			$this->url['action'] = $this->AppM->actions['core_apps_action_name'];
 		}
-		
+
 		//if the action is not in DB, load a 404 view
 		if (!$this->AppM->has_actions()) echo "404"; // erik, this function somehow doesn't work
-						
+
 		//run actions
 		$this->run_action($params);
-		
+
 	}
 
 	public function run_action($params) {
@@ -84,7 +89,8 @@ class MY_Controller extends CI_Controller {
 
 	private function setup_url() {
 		$this->url['app'] = $this->router->fetch_class();
-		//if method is not pass in, action is set to "index" by CI	
+
+		//if method is not pass in, action is set to "index" by CI
 		$this->url['action'] = $this->router->fetch_method();
 
 		$this->url['subaction'] = $this->uri->segment(4, '');
@@ -126,19 +132,19 @@ class MY_Controller extends CI_Controller {
 
 		/*
 		 * getthisid model
-		 * 
+		 *
 		 * use plain id only check
-		 * 
+		 *
 		 */
-		
-		
+
+
 		//looping the elements, and switch the element_type
 
 		$all_action_elements = $this->AppM->get_action_element($this->url['app'], $this->url['action']);
 		//print_r($this->url);print_r($this->AppM->actions);echo "123";
 		//print_r($all_action_elements);exit;
-		
-		
+
+
 		if (!$all_action_elements) return array();
 
 		$output = array();
@@ -266,7 +272,7 @@ class MY_Controller extends CI_Controller {
 			}
 
 		}
-		
+
 		return $output;
 	}
 
