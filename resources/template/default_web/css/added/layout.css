@@ -98,20 +98,20 @@
 .container_top .navicon-search {
   margin-top: 3px;
   padding-left: 15px;
-  -background-image: url(../images/search.png);
+  -background-image: url('/resources/template/default_web/images/search.png');
   top: -30px;
 }
 
 .container_top .navicon-setting {
   margin-top: 3px;
   padding-left: 15px;
-//  background-image: url(../images/search.png);
+//  background-image: url('/resources/template/default_web/images/search.png');
 }
 
 .container_top .navicon-logout {
   margin-top: 3px;
   padding-left: 15px;
-  //background-image: url(../images/search.png);
+  //background-image: url('/resources/template/default_web/images/search.png');
 }
 
 .container_top .navicon {
@@ -227,7 +227,7 @@
 
 .dashboard {
   padding: 25px;
-  background: #555555 url(../images/backgrounds/06.png) repeat 0 0;
+  background: #555555 url('/resources/template/default_web/images/backgrounds/06.png') repeat 0 0;
   //background: #f0f0f0;
   //background: -moz-linear-gradient(top,  #aaa,  #eee);
   //background: -webkit-gradient(linear, left top, left bottom, from(#f0f0f0), to(#fff));
@@ -339,7 +339,7 @@
 }
 
 .cardviewinside .photo div {
-  background: transparent url(../images/navicons/111.png) no-repeat center center;
+  background: transparent url(/resources/template/default_web/images/navicons/111.png) no-repeat center center;
   height: 100%;
 }
 
@@ -392,7 +392,7 @@
 }
 
 .avatar div {
-  background: transparent url(../images/navicons/111.png) no-repeat center center;
+  background: transparent url(/resources/template/default_web/images/navicons/111.png) no-repeat center center;
   height: 100%;
 }
 
@@ -465,7 +465,7 @@
 
 #apphead .apphead_warp .apphead_title a {
 	display:inline-block;
-    background-image:url('../../../../html/images/bc_separator.gif');
+    background-image:url('/resources/template/default_web/images/breadcrumb/bc_separator.gif');
     background-repeat:no-repeat;
     background-position:right;
     padding-right: 15px;
@@ -516,7 +516,7 @@
 }
 
 #apphead #quick-search {
-  background: #eee url(../images/search.png) no-repeat right center;
+  background: #eee url('/resources/template/default_web/images/search.png') no-repeat right center;
   border: 1px solid #777;
   margin-top: 7px;
   padding-right: 20px;

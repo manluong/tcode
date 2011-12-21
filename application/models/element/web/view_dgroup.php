@@ -90,11 +90,11 @@ class View_dgroup extends CI_model {
 		if (isset($this_output['data']['element_button'])){
 		$this_addon['json']['element_button_format'] = $this->View_button->output_button_format($this_output['data']['element_button'],$dgroup_submit,$button_save_nojs);
 		}elseif ($this_output['element_button']){
-		$this_addon['json']['element_button_format'] = $this->View_button->output_button_format($this_output['element_button'],$dgroup_submit,$button_save_nojs);
+		//$this_addon['json']['element_button_format'] = $this->View_button->output_button_format($this_output['element_button'],$dgroup_submit,$button_save_nojs);
 		}
 		//print_r($this_addon['json']['element_button_format']);exit;
 		//html_show_array($this_addon['json']);exit;
-		
+		//print_r($this_addon['json']);exit;
 		$this_addon['json'] = json_encode($this_addon['json']);
 
 	return($this_addon);
@@ -294,6 +294,14 @@ class View_dgroup extends CI_model {
 			$forminput_class = "";
 			$lableextra = "";
 			$this_nolablefor = "";
+			$fieldformat = array(
+				'input' => '',
+				'label' => '',
+				'input' => '',
+				'input_end' => '',
+				'start' => '',
+				'end' => ''
+			);
 			
 	        if ($field['form_required']) { $lableextra .= " <em>*</em>"; $forminput .= ' required="required"'; }
 	        if ($field['form_name_lang__d']) $lableextra .= ' <small>'.$field['form_name_lang__d'].'</small>';
@@ -320,8 +328,6 @@ class View_dgroup extends CI_model {
 	        }elseif ($aved == "a" && $field['db_defaultvalue']){
 	            $forminput .=" value=\"".$field['db_defaultvalue']."\"";
 	            $fieldformat['value']=$field['db_defaultvalue'];
-	        }else{
-	        	$fieldformat['value']="";
 	        }
 	
 	        //add class
@@ -334,11 +340,11 @@ class View_dgroup extends CI_model {
 	
 	        if (!$field['fnolabel']) {
 	        	$fieldformat['label']='<label'.$this_nolablefor.' class="form-label">'.$field['form_name_lang'].'</label>';
-			} else {
-				$fieldformat['label']="";
 			}
 			
 	        if (!isset($field['fnobr_pre'])) $fieldformat['input'] = '<div class="form-input">';
+			if ($field['fnobrpre']) $fieldformat['input'] = $field['fnobrpre'];
+			
 	        $fieldformat['input'] .= '<input type="'.$inputtype.'" id="form_'.$field['core_db_fields_name'].'" name="'.$field['core_db_fields_name'].'"'.$forminput;
 	
 	        $fieldformat['input_end'] = ' />'.$lableextra;
@@ -406,7 +412,7 @@ class View_dgroup extends CI_model {
 	            '.$fieldformat['label'].'
 	            '.$fieldformat['input'].$fieldformat['input_end'].'
 	        '.$fieldformat['end'];
-	
+
 	return($thisline);
 	}
 	
@@ -618,7 +624,7 @@ class View_dgroup extends CI_model {
 	        //$this_value = f_layout_form_select_view($this_field['sellist'],$formvalue[$this_field['core_db_fields_name']]);
 	
 	        //<div class="form-input"><select id="form-timezone"><option>America/Los Angeles</option><option>America/New York</option><option>Asia/Manila</option></select></div>
-	
+			$thisline = "";
 	        if (!isset($field['selbutton'])){
 	
 	            $fieldformat = $this->f_layout_form_edit_fieldformat($field,$value,$aved,0,$inputwidth);

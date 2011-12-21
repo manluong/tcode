@@ -1,19 +1,23 @@
-<?php
-if (!isset($build_tab['li'])) $build_tab['li'] = $build_tab['section'] = '';
-
-$build_tab['li'] .= '
-	<li><a href="#pane-'.$data['div']['element_id'].'" id="tablink-'.$data['div']['element_id'].'">'.$data['div']['title'].'</a></li>
-';
-$build_tab['section'] .= '
-	<div class="portlet">
-		<section id="pane-'.$data['div']['element_id'].'" class="no-padding">
-			<div id="'.$data['div']['element_id'].'">
-';
-
-if (isset($data['html'])) $build_tab['section'] .= $data['html'];
-
-$build_tab['section'] .= '
-			</div>
-		</section>
+	<!-- Tabs Section -->
+	<div class="<?=$gridnum?>">
+		<div class="tabs">
+			<ul>
+				<?php foreach ($data as $this_row): ?>
+			<li><a href="#pane-<?=$this_row['div']['element_id']?>" id="tablink-'<?=$this_row['div']['element_id']?>"><?=$this_row['div']['title']?></a></li>
+				<?php endforeach; ?>				
+			</ul>
+		<!-- tab "panes" -->
+			
+				<?php foreach ($data as $this_row): ?>
+				<div class="portlet">
+				<section id="pane-<?=$this_row['div']['element_id']?>" class="no-padding">
+					<div id="<?=$this_row['div']['element_id']?>">
+						<?=$this_row['html']?>
+					</div>
+				</section>	
+				</div>			
+				<?php endforeach; ?>
+			
+		</div>
 	</div>
-';
+	<!-- End Tabs Section -->

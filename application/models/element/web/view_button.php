@@ -64,7 +64,7 @@ class View_button extends CI_Model {
 	                    if ($this_langarray[2]) $this_iconclass .= ' data-icon-secondary="ui-icon-'.$this_langarray[2].'"';
 	                }
 
-		            if (isset($buttonallicon) || isset($this_button['icononly']) || $this_button['lang'] == "xx") {
+		            if ((isset($this_button['icononly']) && $this_button['icononly']) || $this_button['lang'] == "xx") {
 		                $this_icon_only = ' data-icon-only="true"';
 		                $this_button['lang'] = '';
 		            }else{
@@ -120,7 +120,7 @@ class View_button extends CI_Model {
 			    if ($this_langarray[2]) $this_iconclass .= ' data-icon-secondary="ui-icon-'.$this_langarray[2].'"';
 			}
 
-		    if (isset($buttonallicon) || isset($this_button['icononly']) || $this_button['lang'] == "xx") {
+		    if ((isset($this_button['icononly']) && $this_button['icononly']) || $this_button['lang'] == "xx") {
 		        $this_icon_only = ' data-icon-only="true"';
 		        $this_button['lang'] = '';
 		    }else{
@@ -151,41 +151,20 @@ class View_button extends CI_Model {
 	            $this_button['div']
 	            $element_button['targeturl']
 	    */
-	    //set the correct JS line
-	    global $morevalue;
-	    //echo $morevalue."!!!";
-	    if (isset($this_button['thislang'])){
-	        if (!$morevalue) {
-	            $morevalue_new = "thislang=".$this_button['thislang'];
-	        } else {
-	            $array_morevalue= explode("&", $morevalue);
-	            foreach ($array_morevalue as $this_morevalue) {
-	                if(preg_match("/thislang=/i",$this_morevalue)){
-	                    $morevalue_new .= "thislang=".$this_button['thislang']."&";;
-	                } else {
-	                    $morevalue_new .= $this_morevalue."&";
-	                }
-
-	            }
-	            $morevalue_new = $morevalue_new;
-	        }
-	    }else{
-	        $morevalue_new = $morevalue;
-	    }
 
 
 	    if ($targetid){
 	        $thisid_format = $targetid;
 	    }elseif ($this_button['targetid'] == "thisid"){
-	        $thisid_format = $thisid_en;
+	        $thisid_format = $this->url['id_encrypted'];
 	    }elseif ($this_button['targetid'] == "listid"){
 	        $thisid_format = $listid;
 	    }elseif (substr($this_button['targetid'],0,5) == "value") {
 	        $thisid_format = "XX".$this_button['targetid']."XXvend";
 	        $thisid_isjs = 1;
 	    }elseif (substr($this_button['targetid'],0,5) == "FIELD") {
-	        //$CellIndex = substr($this_element_target_array[4],5);
-	        $thisid_format = $this_button['targetid']."XX";
+	        //$thisid_format = $this_button['targetid']."XX";
+			$thisid_format = $this_button['thisid'];
 	        $thisid_isjs = 0;
 	    }elseif ($this_button['targetid'] == "parentid") {
 	        $thisid_format = $this_button['parentid'];
@@ -204,48 +183,49 @@ class View_button extends CI_Model {
 	    }
 		*/
 
-	        if ($this_button['type'] == "js"){
-	            $result = $this_button['targeturl'];
+        if ($this_button['type'] == "js"){
+            $result = $this_button['targeturl'];
 
-	        }elseif ($this_button['type'] == "url"){
-	            if ($this_button['div'] == "page"){
-	            $result = "apps_action_pageload('".$this_button['targeturl']."',0);";
-	            }else{
-	            $result = "apps_action_pageload('".$this_button['targeturl']."','".$this_button['div']."');";
-	            }
+        }elseif ($this_button['type'] == "url"){
+            if ($this_button['div'] == "page"){
+            $result = "apps_action_pageload('".$this_button['targeturl']."',0);";
+            }else{
+            $result = "apps_action_pageload('".$this_button['targeturl']."','".$this_button['div']."');";
+            }
 
-	        }elseif ($this_button['div'] == "page"){
-	            $thisjsline = '/'.$this_button['targetapp'];
-	            if ($this_button['targetan']) {
-	            	$thisjsline .= '/'.$this_button['targetan'];
-					if ($thisid_format) {
-						 $thisjsline .= '/'.$thisid_format;
-						if ($this_button['targetaved']) $thisjsline .= '/'.$this_button['targetaved'];
-					}
+        }elseif ($this_button['div'] == "page"){
+            $thisjsline = '/'.$this_button['targetapp'];
+            if ($this_button['targetan']) {
+            	$thisjsline .= '/'.$this_button['targetan'];
+				if ($thisid_format) {
+					 $thisjsline .= '/'.$thisid_format;
+					if ($this_button['targetaved']) $thisjsline .= '/'.$this_button['targetaved'];
 				}
-				
-	            if ($this_button['targetvalue']) $thisjsline .= '/'.$this_button['targetvalue'];
+			}
+			
+            if ($this_button['targetvalue']) $thisjsline .= '/'.$this_button['targetvalue'];
 
-	            $result = "apps_action_pageload('".$thisjsline."');";
+            $result = "apps_action_pageload('".$thisjsline."');";
 
-	        }else{
+        }else{
 
-	            if (isset($this_button['targetvalue'])) {$this_targetvalue = ",'".$this_button['targetvalue']."'";}else{$this_targetvalue = "";}
+            if (isset($this_button['targetvalue'])) {$this_targetvalue = ",'".$this_button['targetvalue']."'";}else{$this_targetvalue = "";}
 
-				//if ($dgroup_submit){
-				//$result = "dgroup_submit('".$this_button['targetapp']."','".$this_button['targetan']."','".$this_button['targetaved']."','".$this_button['div']."','".$thisid_format."".$this_targetvalue."','".$morevalue_new."','".$this_element_id."');";
-	            //}else
-	            if (isset($thisid_isrid) || isset($thisid_saveid)) {
-	            $result = "apps_action_ajax('".$this_button['targetapp']."','".$this_button['targetan']."','".$this_button['targetaved']."','".$this_button['div']."','".$thisid_format."".$this_targetvalue."','".$morevalue_new."');";
-	            }elseif (isset($thisid_isjs)) {
-	            $result = "apps_action_ajax('".$this_button['targetapp']."','".$this_button['targetan']."','".$this_button['targetaved']."','".$this_button['div']."',".$thisid_format."".$this_targetvalue.",'".$morevalue_new."');";
-	            }elseif(isset($thisid_format)){
-	            $result = "apps_action_ajax('".$this_button['targetapp']."','".$this_button['targetan']."','".$this_button['targetaved']."','".$this_button['div']."','".$thisid_format."'".$this_targetvalue.",'".$morevalue_new."');";
-	            }else{
-	            $result = "apps_action_ajax('".$this_button['targetapp']."','".$this_button['targetan']."','".$this_button['targetaved']."','".$this_button['div']."',''".$this_targetvalue.",'".$morevalue_new."');";
-	            }
+			//if ($dgroup_submit){
+			//$result = "dgroup_submit('".$this_button['targetapp']."','".$this_button['targetan']."','".$this_button['targetaved']."','".$this_button['div']."','".$thisid_format."".$this_targetvalue."','".$morevalue_new."','".$this_element_id."');";
+            //}else
+            if (isset($thisid_isrid) || isset($thisid_saveid)) {
+            $result = "apps_action_ajax('".$this_button['targetapp']."','".$this_button['targetan']."','".$this_button['targetaved']."','".$this_button['div']."','".$thisid_format."".$this_targetvalue."','');";
+            }elseif (isset($thisid_isjs)) {
+            $result = "apps_action_ajax('".$this_button['targetapp']."','".$this_button['targetan']."','".$this_button['targetaved']."','".$this_button['div']."',".$thisid_format."".$this_targetvalue.",'');";
+            }elseif(isset($thisid_format)){
+            $result = "apps_action_ajax('".$this_button['targetapp']."','".$this_button['targetan']."','".$this_button['targetaved']."','".$this_button['div']."','".$thisid_format."'".$this_targetvalue.",'');";
+            }else{
+            $result = "apps_action_ajax('".$this_button['targetapp']."','".$this_button['targetan']."','".$this_button['targetaved']."','".$this_button['div']."',''".$this_targetvalue.",'');";
+            }
 
-	        }
+        }
+        
 	return($result);
 	}
 

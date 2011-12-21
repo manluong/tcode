@@ -29,14 +29,18 @@ $css = ($divstyle[$active_style]['css'])
 
 
 if ($divstyle[$active_style]['boxless'] != 1) {
-	echo '<div class="'.$gridnum.' portlet'.$collapse.'" id="'.$data['div']['element_id'].'_parent"'.$draggable.'>';
-	if ($divstyle[$active_style]['title']) echo '<header><h2>'.$data['div']['title'] .'</h2></header>';
+	echo '<div class="'.$gridnum.' portlet'.$collapse.'" id="'.$data['div']['element_id'].'_parent"'.$draggable.'>
+	';
+	if ($divstyle[$active_style]['title']) echo '<header><h2>'.$data['div']['title'] .'</h2></header>
+	';
 } else {
 	echo '<div class="'.$gridnum.' portlet-boxless portlet" id="'.$data['div']['element_id'].'_parent">';
 }
 
 echo '<section class="no-padding"><div id="'.$data['div']['element_id'].'"'.$css.'>';
 if (isset($data['html'])) echo $data['html'];
-echo '</div></section>';
+echo '</div></section>
+';
 
-echo '</div>';
+echo '</div>
+';

@@ -197,7 +197,11 @@ class AppmenuM extends CI_Model {
 			$appmenu['apphead'] = 1;
 		    }//end if breadcrumb
 		    
-		    if (isset($this->layout['appmenu'])) $appmenu['appmenu'] = $this->layout['appmenu'];
+		    if (isset($this->layout['appmenu'])) {
+		    	$appmenu['appmenu'] = $this->layout['appmenu'];
+			} else {
+				$appmenu['appmenu'] = 1;
+			}
 			$appmenu["appmenu_gp"] = $appmenu_gp;
 		    $appmenu["button"] = $button;
 			

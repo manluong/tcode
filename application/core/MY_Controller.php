@@ -141,9 +141,6 @@ class MY_Controller extends CI_Controller {
 		//looping the elements, and switch the element_type
 
 		$all_action_elements = $this->AppM->get_action_element($this->url['app'], $this->url['action']);
-		//print_r($this->url);print_r($this->AppM->actions);echo "123";
-		//print_r($all_action_elements);exit;
-
 
 		if (!$all_action_elements) return array();
 
@@ -167,25 +164,20 @@ class MY_Controller extends CI_Controller {
 					case 'dgroup':
 						$this->load->model('element/Element_dgroup');
 						$this->load->model('element/Element_button');
-
 						$output[$count_output] = $this->Element_dgroup->core_element_dgroup($this_element);
-						$output[$count_output]['isoutput'] = 1;
-						$output[$count_output]['isdiv'] = 0;
-						//$output[$count_output]['element_button'] = $core_element_dgroup['element_button'];
 						break;
 
 					case 'statpanel':
 						$this->load->model('element/Element_statpanel');
-						$output[$count_output] = $this->Element_statpanel->get_statpanel();
-
+						$output[$count_output] = $this->Element_statpanel->get_statpanel($this_element['name']);
 						break;
 
 					case 'menu':
 						$this->load->model('AppmenuM');
-						$output[$count_output]['data'] = $this->AppmenuM->get_appmenu($this_element['name']);
+						$get_appmenu = $this->AppmenuM->get_appmenu($this_element['name']);
+						$output[$count_output]['html']= $this->load->view('/'.get_template().'/menuapp', $get_appmenu, true);
 						$output[$count_output]['isoutput'] = 1;
 						$output[$count_output]['isdiv'] = 1;
-						//html_show_array($output[$count_output]);exit;
 						break;
 
 					case 'mfunction':
@@ -352,7 +344,7 @@ class MY_Controller extends CI_Controller {
 					foreach ($this->data as $this_output) {
 						if (isset($this_output['json'])) {
 							echo $this_output['json'];
-						} elseif ($this_output['data']) {
+						} elseif (isset($this_output['data'])) {
 							echo json_encode($this_output['data']);
 						}
 					}
@@ -487,6 +479,8 @@ class MY_Controller extends CI_Controller {
 		$boxformat_count = 0;
 		$this_boxformat = 0;
 		$count_output = 0;
+		$count_tab = 0;
+		$tabdata = array();
 
 		$result['jsonload'] = '';
 		$result['html'] = '';
@@ -538,25 +532,28 @@ class MY_Controller extends CI_Controller {
 
 							//check if next div is also a tab, close the tab html if next div is not a tab
 							//add in logic to check if next div is a outputdiv, if it's not, skip to check the next one.
-							$chktab_count = $count_output+1;
-							$chktab_cont = 1;
+							//$chktab_count = $count_output+1;
+							//$chktab_cont = 1;
 
-							while ($chktab_cont == 1){
-								if (isset($this->data[$chktab_count]['isdiv'])){
-									//next div that is for output
-									if (!$this->data[$chktab_count]['div']['tab']) {
-										//is not a tab, so warp up the tab
-										$content_div[$data['colnum']] .= $this->load->view('/'.get_template().'/component_grid_tab_wrap', $view_data, TRUE);
-										//$build_tab = array("li" => array(), "section" => array());
-									}
-									$chktab_cont = 0;
-								} elseif (!isset($this->data[$chktab_count])) {
-									//end of $output array
-									//warp up the tab
-									$chktab_cont = 0;
-									$content_div[$data['colnum']] .= $this->load->view('/'.get_template().'/component_grid_tab_wrap', $view_data, TRUE);
-								}
+							//while ($chktab_cont == 1){
+							
+							if (!isset($tabdata['gridnum'])) $tabdata['gridnum'] = $view_data['gridnum'];
+							
+							$tabdata['data'][$count_output]['div']['element_id'] = $view_data['data']['div']['element_id'];
+							$tabdata['data'][$count_output]['div']['title'] = $view_data['data']['div']['title'];
+							if (isset($view_data['data']['html'])) {
+								$tabdata['data'][$count_output]['html'] = $view_data['data']['html'];
+							} else {
+								$tabdata['data'][$count_output]['html'] = "";
 							}
+															
+							if (!isset($this->data[$count_output+1]) || isset($this->data[$count_output+1]) && $this->data[$count_output+1]['div']['tab'] == 0){
+									//next element is not a tab, so warp up the tab
+									$content_div[$data['colnum']] .= $this->load->view('/'.get_template().'/component_grid_tab', $tabdata, TRUE);
+									$tabdata = array();
+							} 
+								
+							//}
 						} else {
 							$content_div[$data['colnum']] .= $this->load->view('/'.get_template().'/component_grid', $view_data, TRUE);
 						}

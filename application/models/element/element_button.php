@@ -310,7 +310,7 @@ function core_element_button($app,$an,$this_element_aved,$this_element_id,$this_
         if ($this_element_aved == "v" && $this_element_view){
 
               foreach (array_keys($this->lang->langinfo['langlist']) as $thislangcode){
-                  if ($thislangcode != $this->lang->langinfo['thislang']) {
+                  if ($thislangcode != $this->lang->langinfo['use']) {
                   $button[$countbutton]['type']="v";$button[$countbutton]['targetaved']="v";$button[$countbutton]['position']=$buttonposition;
                   $button[$countbutton]['targetid']="thisid";$button[$countbutton]['lang']=$this->lang->langinfo['langlist'][$thislangcode];
                   $button[$countbutton]['position']=$buttonposition;$button[$countbutton]['div']=$this_element_id;$button[$countbutton]['targetapp']=$app;$button[$countbutton]['targetan']=$an;

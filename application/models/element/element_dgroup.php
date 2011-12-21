@@ -7,13 +7,12 @@ class Element_dgroup extends CI_Model {
 	}
 
 	function element_fdata_from_dgroup($dgroup_name,$fdata_name,$thisid,$thisapp=0,$thisaved=0){
-
-	    if (!$thisapp) $thisapp = $app;
+		
+	    if (!$thisapp) $thisapp = $this->url['app'];
 	    if (!$thisaved) $thisaved = "v";
 	
 	    $dgroup_structure = $this->core_element_dgroup_structure($thisapp,$thisaved,$dgroup_name,$thisid,0);
 		$dgroup_value = $this->core_element_dgroup_value($dgroup_structure);
-		
 	    $f_element_fdata = $this->element_fdata($fdata_name,$dgroup_value);
 	    //print_r($f_element_fdata);
 	
@@ -21,8 +20,6 @@ class Element_dgroup extends CI_Model {
 	}
 
 	function element_fdata($this_element_name,$dataarray=""){
-	
-	//global $db,$h_apps_html,$DOCUMENT_ROOT,$an,$app,$aved,$thisid,$h_json;
 	
 	$sql1 = "SELECT * FROM core_e_fdata WHERE core_e_fdata_name = '$this_element_name' LIMIT 1";
 	$result1 = $this->db->query($sql1);
@@ -124,8 +121,6 @@ class Element_dgroup extends CI_Model {
 
 		$app = $this->url['app'];
 		$an = $this->url['action'];
-		$thisid[0] = $this->url['id_plain'];
-		$thisid_en = $this->url['id_plain'];
 
 		$this_element_name = $this_element['name'];
 		$this_element_aved = $this_element['subaction'];
@@ -151,7 +146,7 @@ class Element_dgroup extends CI_Model {
 	    $this_dgroupid = $thisid;
 	    }
 		*/
-		$this_dgroupid = $thisid;
+		$this_dgroupid = $this->url['id_plain'];
 
 	    $dgroup_structure = $this->core_element_dgroup_structure($app,$this_element_aved,$this_element_name,$this_dgroupid,$this_element_dgroupextend);
 
@@ -161,7 +156,8 @@ class Element_dgroup extends CI_Model {
 	    //
 	    if (isset($dgroup_structure['e_xtra'])){
 
-	        $xtra_structure = core_element_xtra_structure($dgroup_structure);
+			$this->load->model('element/Element_dgroup_xtra');
+	        $xtra_structure = $this->Element_dgroup_xtra->core_element_xtra_structure($dgroup_structure);
 
 	        if ($xtra_structure){
 	            $button_e_xtra = 1;
@@ -181,10 +177,10 @@ class Element_dgroup extends CI_Model {
 	    }
 
 
-	    if (!isset($dgroup_value)) {
-	    	$dgourp_value_notfound = 1;
+	    if (isset($dgroup_value) && $dgroup_value) {
+	    	$dgourp_value_notfound = 0;
 		} else {
-			$dgourp_value_notfound = 0;
+			$dgourp_value_notfound = 1;
 		}
 
 	    //display error from dgroup_structure
@@ -289,7 +285,8 @@ class Element_dgroup extends CI_Model {
 
 	    $output_add = $this->View_dgroup->output_dgroup($result,$this_element);
 		$result = array_merge($result,$output_add);
-
+		$result['isoutput'] = 1;
+		$result['isdiv'] = 0;
 		//$result['data'] = $data;
 		//$result['element_button'] = $element_button;
 
@@ -313,9 +310,6 @@ function core_element_dgroup_structure($app,$aved,$dgroupname,$thisid,$this_elem
 
     $structure['icon'] = $result1['core_e_dgroup_icon'];
     $structure['thisidreq'] = $result1['core_e_dgroup_thisidreq'];
-    $structure['thisid2req'] = $result1['core_e_dgroup_thisid2req'];
-    $structure['thisid3req'] = $result1['core_e_dgroup_thisid3req'];
-    $structure['thisid4req'] = $result1['core_e_dgroup_thisid4req'];
     $structure['basetype'] = $result1['core_e_dgroup_basetype'];
     $structure['listpg'] = $result1['core_e_dgroup_listpg'];
     $structure['listnotitle'] = $result1['core_e_dgroup_listnotitle'];
@@ -942,7 +936,7 @@ function core_element_dgroup_structure($app,$aved,$dgroupname,$thisid,$this_elem
 
                 foreach ($resultml as $fieldml) {
                     $this_fieldname = $this_multilang['field']."_".$fieldml['lang_use_code'];
-                    if (!$structure['fieldsort'][$this_fieldname]){
+                    if (!isset($structure['fieldsort'][$this_fieldname])){
                       $structure['fieldsort'][$this_fieldname]['sort'] = $this_multilang['sort'];
                       $structure['fieldsort'][$this_fieldname]['table'] = $this_multilang['table'];
                       $structure['fieldsort'][$this_fieldname]['field'] = $this_multilang['field'];
@@ -983,10 +977,7 @@ function core_element_dgroup_structure($app,$aved,$dgroupname,$thisid,$this_elem
 	            }
 
 
-                if ($structure['thisidreq'] && !$thisid[0]) meg(999,"List: thisid missing. [dgroup:".$dgroupname."] [".$app."]");
-                if ($structure['thisid2req'] && !$thisid[1]) meg(999,"List: thisid2 missing. [dgroup:".$dgroupname."] [".$app."]");
-                if ($structure['thisid3req'] && !$thisid[2]) meg(999,"List: thisid3 missing. [dgroup:".$dgroupname."] [".$app."]");
-                if ($structure['thisid4req'] && !$thisid[3]) meg(999,"List: thisid4 missing. [dgroup:".$dgroupname."] [".$app."]");
+                if ($structure['thisidreq'] && !$thisid) meg(999,"List: thisid missing. [dgroup:".$dgroupname."] [".$app."]");
 
                 if ($aved == "ss" || $aved == "sq" || $aved == "so") $structure['searchsql'] = $structure['sql'];
 
@@ -1001,19 +992,16 @@ function core_element_dgroup_structure($app,$aved,$dgroupname,$thisid,$this_elem
                 $structure_sqlwhere = " WHERE ";
 
                 if ($structure['avedtype'] == "form"){
-                    if ($structure['thisidform'] && $thisid[0]) { $structure['sql'] .= $structure_sqlwhere.$structure['thisidform']." = ".$thisid[0]; }
+                    if ($structure['thisidform'] && $thisid) { $structure['sql'] .= $structure_sqlwhere.$structure['thisidform']." = ".$thisid; }
                 } elseif ($structure['avedtype'] == "list") {
-                    if ($structure['thisidlist'][1] && $thisid[0]) { $structure['sql'] .= $structure_sqlwhere.$structure['thisidlist'][1]." = ".$thisid[0]; $structure_sqlwhere = " AND "; }
-                    //if ($structure['thisidlist'][2] && $thisid[1]) { $structure['sql'] .= $structure_sqlwhere.$structure['thisidlist'][2]." = ".$thisid[1]; $structure_sqlwhere = " AND "; }
-                    //if ($structure['thisidlist'][3] && $thisid[2]) { $structure['sql'] .= $structure_sqlwhere.$structure['thisidlist'][3]." = ".$thisid[2]; $structure_sqlwhere = " AND "; }
-                    //if ($structure['thisidlist'][4] && $thisid[3]) {$structure['sql'] .= $structure_sqlwhere.$structure['thisidlist'][4]." = ".$thisid[3]; $structure_sqlwhere = " AND "; }
+                    if ($structure['thisidlist'][1] && $thisid) { $structure['sql'] .= $structure_sqlwhere.$structure['thisidlist'][1]." = ".$thisid; $structure_sqlwhere = " AND "; }
                 }
 
                 if (isset($structure['extend_where']) && $structure['extend_where'] != "") { $structure['sql'] .= $structure_sqlwhere.$structure['extend_where']; $structure_sqlwhere = " AND "; }
 
                 //list and it's type is set to parentstyle
                 //if the thisid is ZERO, then the WHERE statement must set to "=0" to prevent showing all field
-                if ($structure['listparentstyle'] && !$thisid[0]) { $structure['sql'] .= $structure_sqlwhere.$structure['thisidlist'][1]." = 0"; $structure_sqlwhere = " AND "; }
+                if ($structure['listparentstyle'] && !$thisid) { $structure['sql'] .= $structure_sqlwhere.$structure['thisidlist'][1]." = 0"; $structure_sqlwhere = " AND "; }
 
     } else {
         $error .= "<br>Missing DGROUP: ".$dgroupname;
@@ -1155,7 +1143,6 @@ function core_element_dgroup_value($dgroup_structure){
     // pass in the dgroupname (array of the tables in the form, the array of fields) generated by core_data_form
     // pass the thisid, id for the "isparent" table indexfield
 
-    global $db,$langinfo,$thisid,$aved;
         ///////////////////////////////////////////////////////////////////
         // Get the value for miltilang (langc = 1 or 2)
         // value stored in table: langc
@@ -1163,7 +1150,7 @@ function core_element_dgroup_value($dgroup_structure){
         if(isset($dgroup_structure['multilang'])){
         foreach ($dgroup_structure['multilang'] as $this_multilang) {
 
-            $sql2 = "SELECT langc_lang,langc_value FROM langc WHERE langc_tableid = '".$thisid[0]."' AND langc_table = '".$this_multilang['table']."' AND langc_field = '".$this_multilang['field']."'";
+            $sql2 = "SELECT langc_lang,langc_value FROM langc WHERE langc_tableid = '".$this->url['id_plain']."' AND langc_table = '".$this_multilang['table']."' AND langc_field = '".$this_multilang['field']."'";
             if ($this_multilang['show'] == 1) $sql2 .= " AND langc_lang = '".$this->lang->lang_use."'";
             $sql2 .= " ORDER BY langc_lang";
 
@@ -1194,11 +1181,11 @@ function core_element_dgroup_value($dgroup_structure){
         // value stored in table: core_e_xtra_value
         if (isset($dgroup_structure['e_xtra'])){
             foreach ($dgroup_structure['table'] as $this_table){
-                if ($this_table['e_xtra']){
+                if (isset($this_table['e_xtra'])){
 
 $sql3 = "SELECT core_e_xtra_value.core_e_xtra_value_value,core_e_xtra_field.core_e_xtra_field_id FROM core_e_xtra_value
 LEFT JOIN core_e_xtra_field ON core_e_xtra_value.core_e_xtra_value_fieldid = core_e_xtra_field.core_e_xtra_field_id
-WHERE core_e_xtra_value.core_e_xtra_value_linkid = '".$thisid[0]."'
+WHERE core_e_xtra_value.core_e_xtra_value_linkid = '".$this->url['id_plain']."'
 AND core_e_xtra_value.core_e_xtra_value_gpid = '".$this_table['e_xtra_gpid']."'
 AND core_e_xtra_value.core_e_xtra_value_lang = '".$this_table['e_xtra_lang']."'";
 $result3 = $this->db->query($sql3);
@@ -1207,7 +1194,7 @@ $result3 = $result3->result_array();
                     if (!$result3 && $aved == "v" && !$this->lang->langinfo['thislang_get']){
 $sql3 = "SELECT core_e_xtra_value.core_e_xtra_value_value,core_e_xtra_field.core_e_xtra_field_id FROM core_e_xtra_value
 LEFT JOIN core_e_xtra_field ON core_e_xtra_value.core_e_xtra_value_fieldid = core_e_xtra_field.core_e_xtra_field_id
-WHERE core_e_xtra_value.core_e_xtra_value_linkid = '".$thisid[0]."'
+WHERE core_e_xtra_value.core_e_xtra_value_linkid = '".$this->url['id_plain']."'
 AND core_e_xtra_value.core_e_xtra_value_gpid = '".$this_table['e_xtra_gpid']."'
 AND core_e_xtra_value.core_e_xtra_value_lang = '".$this->lang->langinfo['default']."'";
 $result3 = $this->db->query($sql3);
@@ -1225,7 +1212,7 @@ $result3 = $result3->result_array();
                         // echo  "hello";
 $sql3 = "SELECT core_e_xtra_value.core_e_xtra_value_value,core_e_xtra_field.core_e_xtra_field_id FROM core_e_xtra_value
 LEFT JOIN core_e_xtra_field ON core_e_xtra_value.core_e_xtra_value_fieldid = core_e_xtra_field.core_e_xtra_field_id
-WHERE core_e_xtra_value.core_e_xtra_value_linkid = '".$thisid[0]."'
+WHERE core_e_xtra_value.core_e_xtra_value_linkid = '".$this->url['id_plain']."'
 AND core_e_xtra_value.core_e_xtra_value_gpid = '".$this_table['e_xtra_gpid']."'
 AND core_e_xtra_value.core_e_xtra_value_lang = 'en'
 AND core_e_xtra_value.core_e_xtra_value_fieldid = '".$this_field['e_xtra_fieldid']."'";

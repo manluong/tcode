@@ -9,8 +9,6 @@ class Element_dgroup_list extends Element_dgroup {
 
 function dgroup_list($dgroup_structure,$dgroup_value,$element_button,$searcharray=array(),$is_fdata=0){
 
-	global $db,$langinfo,$aved,$thisid,$thisid_en;
-
     $thisidform = explode(".", $dgroup_structure['thisidform']);
 
 
@@ -30,7 +28,7 @@ function dgroup_list($dgroup_structure,$dgroup_value,$element_button,$searcharra
 		//use the field name in a button
 		//like "back to [parent field name]", example use in product app
 		$button_useit = 1;
-		if ($dgroup_structure['listparentstyle'] && !$thisid[0]) {
+		if ($dgroup_structure['listparentstyle'] && !$this->url['id_plain']) {
 			//if $dgroup_structure['listparentstyle']
 			//button type "parent"
 			//if we are already at the top, we want to remove the "go to parent button
@@ -44,17 +42,27 @@ function dgroup_list($dgroup_structure,$dgroup_value,$element_button,$searcharra
 	        //type to replace XXparentname with the real parent name
 	        if ($this_button['type'] == "parent"){
 	            if(preg_match("/XXparentname/",$this_button['lang']) || preg_match("/XXparentname/",$this_button['lang__d'])){
-	                if (!$this_parentname){
+	                if (!isset($this_parentname)){
 	                $this_parentid = explode(".", $dgroup_structure['thisidform']);
-	                $parentcatid = $db->fetchOne('SELECT '.$dgroup_structure['thisidlist'][1].' FROM '.$this_parentid[0].' WHERE '.$this_parentid[1].' = '.$thisid[0]);
-	                $this_parentname = $db->fetchOne('SELECT '.$dgroup_structure['listparentnamefield'].' FROM '.$this_parentid[0].' WHERE '.$this_parentid[1].' = '.$parentcatid);
-	                }
-	                if ($parentcatid == 0 && !$this_parentname){
+	                $this_field_thisidlist = explode(".", $dgroup_structure['thisidlist'][1]);
+	                
+	                $sql = 'SELECT '.$this_field_thisidlist[1].' FROM '.$this_parentid[0].' WHERE '.$this_parentid[1].' = '.$this->url['id_plain'];
+	                $result = $this->db->query($sql);
+					$result = $result->row_array(1);
+					$parentid = $result[$this_field_thisidlist[1]];
+	                
+	                $sql = 'SELECT '.$dgroup_structure['listparentnamefield'].' FROM '.$this_parentid[0].' WHERE '.$this_parentid[1].' = '.$parentid;
+	                $result = $this->db->query($sql); 
+					$result = $result->row_array(1);
+					if (isset($result[$dgroup_structure['listparentnamefield']])) $this_parentname = $result[$dgroup_structure['listparentnamefield']];
+					
+					}
+	                if ($parentid == 0 && !isset($this_parentname)){
 	                $this_button['lang'] = preg_replace("/XXparentname/",$dgroup_structure['listparenttop_lang'], $this_button['lang']);
-	                $this_button['lang__d'] = preg_replace("/XXparentname/",$dgroup_structure['listparenttop_lang'], $this_button['lang__d']);
+	                if (isset($this_button['lang__d'])) $this_button['lang__d'] = preg_replace("/XXparentname/",$dgroup_structure['listparenttop_lang'], $this_button['lang__d']);
 	                } elseif ($this_parentname){
 	                $this_button['lang'] = preg_replace("/XXparentname/",$this_parentname, $this_button['lang']);
-	                $this_button['lang__d'] = preg_replace("/XXparentname/",$this_parentname, $this_button['lang__d']);
+	                if (isset($this_button['lang__d'])) $this_button['lang__d'] = preg_replace("/XXparentname/",$this_parentname, $this_button['lang__d']);
 	                }
 	            }
 	        }
@@ -90,9 +98,13 @@ function dgroup_list($dgroup_structure,$dgroup_value,$element_button,$searcharra
 				if (preg_match("/FIELD/",$this_button['lang'])){
 
 					$this_fieldname = explode("FIELD", $this_button['lang'],3);
-					if ($thisid[0]){
-						$this_fieldname2 = $db->fetchOne('SELECT '.$this_fieldname[1].' FROM '.$thisidform[0].' WHERE '.$thisidform[1].' = '.$thisid[0]);
-						$this_button['lang'] = $this_fieldname[0].$this_fieldname2.$this_fieldname[2];
+					if ($this->url['id_plain']){
+						$sql = 'SELECT '.$this_fieldname[1].' FROM '.$thisidform[0].' WHERE '.$thisidform[1].' = '.$this->url['id_plain'];
+						$result = $this->db->query($sql);
+						$result = $result->row_array(1);
+						$result = $result[$this_fieldname[1]];
+
+						$this_button['lang'] = $this_fieldname[0].$result.$this_fieldname[2];
 					}else{
 						$this_button['lang'] = $this_fieldname[0].$this_fieldname[2];
 					}
@@ -102,11 +114,13 @@ function dgroup_list($dgroup_structure,$dgroup_value,$element_button,$searcharra
 
 
 		    if ($this_button['targetid'] == "parentid") {
-
-				if (!$parentid){
+				if (!isset($parentid)){
+					$this_field_thisidlist = explode(".", $dgroup_structure['thisidlist'][1]);
 			        $this_parentid = explode(".", $dgroup_structure['thisidform']);
-			        $parentid = $db->fetchOne('SELECT '.$dgroup_structure['thisidlist'][1].' FROM '.$this_parentid[0].' WHERE '.$this_parentid[1].' = '.$thisid[0]);
-			        $parentid = f_thisid_encode($parentid);
+			        $sql = 'SELECT '.$this_field_thisidlist[1].' FROM '.$this_parentid[0].' WHERE '.$this_parentid[1].' = '.$this->url['id_plain'];
+			        $parentid = $this->db->query($sql);
+					$parentid = $parentid->row_array(1);
+					$parentid = encode_id($parentid[$this_field_thisidlist[1]]);	
 				}
 				$this_button['parentid'] = $parentid;
 		    }
@@ -117,7 +131,7 @@ function dgroup_list($dgroup_structure,$dgroup_value,$element_button,$searcharra
 	}
 	$element_button['buttons'] = $new_ele_bu;
 	}
-
+	
 
 	//ROW BUTTON
 
@@ -182,9 +196,9 @@ function dgroup_list($dgroup_structure,$dgroup_value,$element_button,$searcharra
 	//
     // come up with sql to get the real data
     //
-    if ($aved == "ss" || $aved == "sq" || $is_fdata){
+    if ($this->url['subaction'] == "ss" || $this->url['subaction'] == "sq" || $is_fdata){
 
-        if ($aved == "sq" || $is_fdata){
+        if ($this->url['subaction'] == "sq" || $is_fdata){
 
             global $_POST;
             if ($_POST['searchquickvalue']){
@@ -281,10 +295,10 @@ function dgroup_list($dgroup_structure,$dgroup_value,$element_button,$searcharra
                     $this_field = $dgroup_structure['table'][$dgroup_structure['field'][$fieldname]['tablecount']]['fields'][$dgroup_structure['field'][$fieldname]['fieldcount']];
 
                     if ($dgroup_structure['listarray'][$fieldname]['list_langc']){
-                    $fieldname_thislang = $fieldname."_".$langinfo['use'];
+                    $fieldname_thislang = $fieldname."_".$this->lang->langinfo['use'];
 
                     $sqllangc = "SELECT langc_value FROM langc WHERE langc_tableid = '".$field1[$dgroup_structure['list']['listkey']]."' AND langc_table = '".$dgroup_structure['fieldsort'][$fieldname_thislang]['table']."' AND langc_field = '".$dgroup_structure['fieldsort'][$fieldname_thislang]['field']."'";
-                    $sqllangc .= " AND langc_lang = '".$langinfo['use']."' LIMIT 1";
+                    $sqllangc .= " AND langc_lang = '".$this->lang->langinfo['use']."' LIMIT 1";
                     $langcresult = $this->db->query($sqllangc);
 					$langcresult = $langcresult->row_array(0);
 					$langcresult = $langcresult['langc_value'];
@@ -303,11 +317,11 @@ function dgroup_list($dgroup_structure,$dgroup_value,$element_button,$searcharra
                         } elseif ($this_row_result['icon']){
                             if ($this_row_result['icontype'] == '16'){
                                 //$data_list[$data_listcount][] = '';//'IMG:html/images/icons/16/'.$this_row_result['icon'].','.$this_row_result['name'].',16,16';
-								$data_list[$data_listcount][] = '<img src="html/images/icons/16/'.$this_row_result['icon'].'" width="16" height="16" alt="'.$this_row_result['name'].'"/>';
+								$data_list[$data_listcount][] = '<img src="/resources/template/default_web/images/icons/16/'.$this_row_result['icon'].'" width="16" height="16" alt="'.$this_row_result['name'].'"/>';
 
                             } else {
                                 //$data_list[$data_listcount][] = '';//'IMG:html/images/icons/32/'.$this_row_result['icon'].','.$this_row_result['name'].',32,32';
-								$data_list[$data_listcount][] = '<img src="html/images/icons/32/'.$this_row_result['icon'].'" width="32" height="32" alt="'.$this_row_result['name'].'"/>';
+								$data_list[$data_listcount][] = '<img src="/resources/template/default_web/images/icons/32/'.$this_row_result['icon'].'" width="32" height="32" alt="'.$this_row_result['name'].'"/>';
                             }
                         } else {
 
@@ -333,7 +347,7 @@ function dgroup_list($dgroup_structure,$dgroup_value,$element_button,$searcharra
 
                         }elseif ($this_row_result['icon']) {
 							//$data_list[$data_listcount][] = 'IMG:html/images/icons/16/'.$this_row_result['icon'].','.$this_row_result['name'].',16,16';
-							$data_list[$data_listcount][] = '<img src="html/images/icons/16/'.$this_row_result['icon'].'" width="16" height="16" alt="'.$this_row_result['name'].'"/>';
+							$data_list[$data_listcount][] = '<img src="/resources/template/default_web/images/icons/16/'.$this_row_result['icon'].'" width="16" height="16" alt="'.$this_row_result['name'].'"/>';
                         }else {
                             $data_list[$data_listcount][] = '';
 
@@ -366,7 +380,7 @@ function dgroup_list($dgroup_structure,$dgroup_value,$element_button,$searcharra
 						if (isset($element_button_row[$count]['targetid_field']) && $element_button_row[$count]['targetid_field'] == $fieldname){
 							$this_row_button[$count]['targetid'] = encode_id($field1[$fieldname]);
 						}elseif(isset($element_button_row[$count]['targetid']) && $element_button_row[$count]['targetid'] == "thisid"){
-							$this_row_button[$count]['targetid'] = $thisid_en;
+							$this_row_button[$count]['targetid'] = $this->url['id_encrypted'];
 						}
 
 						if (in_array($fieldname,$fieldreplace_targetvalue)){
@@ -438,8 +452,7 @@ function dgroup_list($dgroup_structure,$dgroup_value,$element_button,$searcharra
     $result['data']['table'] = $data_list;
     $result['data']['listnotitle'] = $dgroup_structure['listnotitle'];
 	$result['data']['listarray'] = $dgroup_structure['listarray'];
-	$result['element_button'] = $element_button;
-
+	$result['data']['element_button'] = $element_button;
 	//$result['data']['button'] = $element_button_row;
 	//$list['list']['listtitle'] = $dgroup_structure['listarray'];
     //$list['list']['listfield'] = $dgroup_structure['fieldsort'];

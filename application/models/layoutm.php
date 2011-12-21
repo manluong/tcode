@@ -131,6 +131,7 @@ class LayoutM extends CI_Model {
 		$rs = $this->db->select()
 				->from('core_addons')
 				->where_in('core_addons_name', explode(',', $addonnames))
+				->order_by('core_addons_sort')
 				->get();
 
 		foreach($rs->result_array() as $field){

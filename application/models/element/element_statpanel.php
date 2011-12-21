@@ -6,7 +6,7 @@ class Element_statpanel extends CI_Model {
 		parent::__construct();
 	}
 	
-	function get_statpanel($this_element_name,$an,$app,$aved,$thisid){
+	function get_statpanel($this_element_name){
 	
 	$sql1 = "SELECT * FROM core_e_statpanel WHERE core_e_statpanel_gp = '$this_element_name' ORDER BY core_e_statpanel_sort";
 	$result1 = $this->db->query($sql1);
@@ -45,7 +45,7 @@ class Element_statpanel extends CI_Model {
 	              $statpanel['set'][$count_thisset][$count_thisrow]['desp'] = $field2['core_e_statpanel_item_desp'];
 	              $statpanel['set'][$count_thisset][$count_thisrow]['bg'] = $field2['core_e_statpanel_item_bg'];
 	              if (!$field2['core_e_statpanel_item_xapp']){
-	              $statpanel['set'][$count_thisset][$count_thisrow]['xapp'] = $app;
+	              $statpanel['set'][$count_thisset][$count_thisrow]['xapp'] = $this->url['app'];
 	              } else {
 	              $statpanel['set'][$count_thisset][$count_thisrow]['xapp'] = $field2['core_e_statpanel_item_xapp'];
 	              }
@@ -53,14 +53,16 @@ class Element_statpanel extends CI_Model {
 	              $statpanel['set'][$count_thisset][$count_thisrow]['xaved'] = $field2['core_e_statpanel_item_xaved'];
 	              $statpanel['set'][$count_thisset][$count_thisrow]['xthisid'] = $field2['core_e_statpanel_item_xthisid'];
 	              $statpanel['set'][$count_thisset][$count_thisrow]['xdiv'] = $field2['core_e_statpanel_item_xdiv'];
-	              $statpanel['set'][$count_thisset][$count_thisrow]['xlink'] = "?app=".$statpanel['set'][$count_thisset][$count_thisrow]['xapp']."&an=".$field2['core_e_statpanel_item_xan']."&aved=".$field2['core_e_statpanel_item_xaved']."&thisid=".$field2['core_e_statpanel_item_xthisid'];
+	              $statpanel['set'][$count_thisset][$count_thisrow]['xlink'] = "/".$statpanel['set'][$count_thisset][$count_thisrow]['xapp']."/".$field2['core_e_statpanel_item_xan']."/".$field2['core_e_statpanel_item_xthisid']."/".$field2['core_e_statpanel_item_xaved'];
 	
 	              //print_r($field2);
 	              //get the result
 	              if ($field2['core_e_statpanel_item_sql']){
 	
-	                  $sql_statpanel = $field2['core_e_statpanel_item_sql'];
-	                  $resultstat = $db->fetchAll($sql_statpanel, 2);
+					$sql_statpanel = $field2['core_e_statpanel_item_sql'];
+					$resultstat = $this->db->query($sql_statpanel);
+					$resultstat = $resultstat->result_array();
+					
 	                  if ($resultstat){
 	
 	                      switch ($field2['core_e_statpanel_item_sqlresult']){
@@ -122,9 +124,9 @@ class Element_statpanel extends CI_Model {
 	
 	}
 	
-	
-		$result['outputdiv'] = 1;
-		$result['data'] = $statpanel;
+		$result['html'] = $this->load->view('/'.get_template().'/element/statpanel', $statpanel, true);
+		$result['isoutput'] = 1;
+		$result['isdiv'] = 1;
 		
 	return($result);
 	}

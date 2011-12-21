@@ -78,7 +78,7 @@ function dgroup_save($dgroup_structure,$dgroup_value,$aved){
 
         $fieldarray = array();
 
-        if ($this_table['fields'] && !isset($this_table['e_xtra'])) {
+        if (isset($this_table['fields']) && !isset($this_table['e_xtra'])) {
 
 	        foreach ($this_table['fields'] as $this_field) {
 	            if (!isset($this_field['multilang'])) {
@@ -241,7 +241,7 @@ function dgroup_save($dgroup_structure,$dgroup_value,$aved){
 		//
 		// for e_xtra table
 		//
-        }elseif ($this_table['e_xtra']) {
+        }elseif (isset($this_table['e_xtra'])) {
 
             $req_table = "core_e_xtra_value";
             if (!$saveid) $saveid = $this->url['id_plain'];

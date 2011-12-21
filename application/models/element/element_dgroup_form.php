@@ -187,7 +187,7 @@ function dgroup_view($dgroup_structure,$dgroup_value,$element_button,$aved){
 
             //date
             case "6":
-            if ($dgroup_value[$this_fieldname]) $this_value = core_date_convert($this_field['date'],$this_field['date_showformat'],$dgroup_value[$this_fieldname]);
+            //if ($dgroup_value[$this_fieldname]) $this_value = core_date_convert($this_field['date'],$this_field['date_showformat'],$dgroup_value[$this_fieldname]);
             $form[$count]['title'] = $this_field['form_name_lang'];
 			$form[$count]['value'] = $this_value;
 			$form[$count]['name'] = $this_fieldname;
@@ -198,7 +198,7 @@ function dgroup_view($dgroup_structure,$dgroup_value,$element_button,$aved){
 
             //datetime
             case "18":
-            if ($dgroup_value[$this_fieldname]) $this_value = core_date_convert($this_field['date'],$this_field['date_showformat'],$dgroup_value[$this_fieldname]);
+            //if ($dgroup_value[$this_fieldname]) $this_value = core_date_convert($this_field['date'],$this_field['date_showformat'],$dgroup_value[$this_fieldname]);
             $form[$count]['title'] = $this_field['form_name_lang'];
 			$form[$count]['value'] = $this_value;
 			$form[$count]['name'] = $this_fieldname;
@@ -209,7 +209,7 @@ function dgroup_view($dgroup_structure,$dgroup_value,$element_button,$aved){
 
             //time
             case "12":
-            if ($dgroup_value[$this_fieldname]) $this_value = core_date_convert($this_field['date'],$this_field['date_showformat'],$dgroup_value[$this_fieldname]);
+            //if ($dgroup_value[$this_fieldname]) $this_value = core_date_convert($this_field['date'],$this_field['date_showformat'],$dgroup_value[$this_fieldname]);
             $form[$count]['title'] = $this_field['form_name_lang'];
 			$form[$count]['value'] = $this_value;
 			$form[$count]['name'] = $this_fieldname;
@@ -260,15 +260,15 @@ function dgroup_view($dgroup_structure,$dgroup_value,$element_button,$aved){
 
         //for button that is using a FIELDxx replace (use a field value in a button),
         //check if match this foreach fieldname value, change the button is so
-    /*
+    
     	$count = 0;
-		while ($element_button['buttons'][$count]){
+		while (isset($element_button['buttons'][$count])){
 
 			if (substr($element_button['buttons'][$count]['targetid'],0,5) == "FIELD") {
-				$element_button['buttons'][$count]['thisid'] = f_thisid_encode($dgroup_value[substr($element_button['buttons'][$count]['targetid'],5)]);
+				$element_button['buttons'][$count]['thisid'] = encode_id($dgroup_value[substr($element_button['buttons'][$count]['targetid'],5)]);
 			}
 			
-			if (preg_match("/FIELD/",$element_button['buttons'][$count]['targetvalue'])){
+			if (isset($element_button['buttons'][$count]['targetvalue']) && preg_match("/FIELD/",$element_button['buttons'][$count]['targetvalue'])){
 	        	$this_targetvalue_array = explode("FIELD", $element_button['buttons'][$count]['targetvalue']);
 	            foreach ($this_targetvalue_array as $this_targetvalue) {
 	            	$this_targetvalue_name = explode("XX", $this_targetvalue);
@@ -280,7 +280,7 @@ function dgroup_view($dgroup_structure,$dgroup_value,$element_button,$aved){
 
 		$count++;		
 		}
-	*/	
+			
 
         }//end if fieldsort
 
