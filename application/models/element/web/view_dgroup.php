@@ -293,6 +293,7 @@ class View_dgroup extends CI_model {
 			$forminput = "";
 			$forminput_class = "";
 			$lableextra = "";
+			$this_nolablefor = "";
 			
 	        if ($field['form_required']) { $lableextra .= " <em>*</em>"; $forminput .= ' required="required"'; }
 	        if ($field['form_name_lang__d']) $lableextra .= ' <small>'.$field['form_name_lang__d'].'</small>';
@@ -331,8 +332,12 @@ class View_dgroup extends CI_model {
 	
 	        if (!$nolablefor) $this_nolablefor = ' for="form_'.$field['core_db_fields_name'].'"';
 	
-	        if (!$field['fnolabel']) $fieldformat['label']='<label'.$this_nolablefor.' class="form-label">'.$field['form_name_lang'].'</label>';
-	
+	        if (!$field['fnolabel']) {
+	        	$fieldformat['label']='<label'.$this_nolablefor.' class="form-label">'.$field['form_name_lang'].'</label>';
+			} else {
+				$fieldformat['label']="";
+			}
+			
 	        if (!isset($field['fnobr_pre'])) $fieldformat['input'] = '<div class="form-input">';
 	        $fieldformat['input'] .= '<input type="'.$inputtype.'" id="form_'.$field['core_db_fields_name'].'" name="'.$field['core_db_fields_name'].'"'.$forminput;
 	
@@ -677,7 +682,7 @@ class View_dgroup extends CI_model {
 	            $fieldformat['input'] = '<div class="buttonset form-input">
 	            ';
 	             //echo $field['seldefault'];exit;
-	            if (!$value && $field['seldefault']) $value = $field['seldefault'];
+	            if (!$value && isset($field['seldefault'])) $value = $field['seldefault'];
 	
 	            if ($field['sellist']){
 	              $this_count = 0;

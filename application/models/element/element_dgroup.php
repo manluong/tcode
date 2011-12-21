@@ -304,8 +304,6 @@ function core_element_dgroup_structure($app,$aved,$dgroupname,$thisid,$this_elem
 //this function will get the structure of the from
 //tables used,tables index and the fileds used with a JOIN SQL which include the fields details from core_db_fields
 
-    //global $db,$lang,$langinfo,$layout;
-
     $sql1 = "SELECT * FROM core_e_dgroup WHERE core_e_dgroup_name = '$dgroupname' AND core_e_dgroup_app = '$app'";
 	$result1 = $this->db->query($sql1);
 	$result1 = $result1->row_array(0);
@@ -597,7 +595,7 @@ function core_element_dgroup_structure($app,$aved,$dgroupname,$thisid,$this_elem
                          }
                      }
 
-                     $structure['table'][$this_count2]['fields'][$this_count3]['form_name_lang'] = $this->lang->line($app.$field3['core_db_fields_name']);
+                     $structure['table'][$this_count2]['fields'][$this_count3]['form_name_lang'] = $this->lang->line($app.$field3['core_db_fields_name']);//echo $this->lang->line($app.$field3['core_db_fields_name']).$this->lang->language[$app.$field3['core_db_fields_name']];exit;
                      $name_lang__d = $field3['core_db_fields_name']."__d";
                      $structure['table'][$this_count2]['fields'][$this_count3]['form_name_lang__d'] = $this->lang->line($app.$name_lang__d);
 
@@ -671,7 +669,7 @@ function core_element_dgroup_structure($app,$aved,$dgroupname,$thisid,$this_elem
                             //password
                             case "7":
                             $structure['table'][$this_count2]['fields'][$this_count3]['pwformat'] = $field3['core_db_fields_form_pwformat'];
-                            $structure['table'][$this_count2]['fields'][$this_count3]['lang_confirm'] = $lang['core']['confirm'];
+                            $structure['table'][$this_count2]['fields'][$this_count3]['lang_confirm'] = $this->lang->line('coreconfirm');
                             ; break;
 
                             //date
@@ -704,9 +702,13 @@ function core_element_dgroup_structure($app,$aved,$dgroupname,$thisid,$this_elem
                             $structure['table'][$this_count2]['fields'][$this_count3]['chked'] = $field3['core_db_fields_chked'];
                             //get the lang
                             if ($field3['core_db_fields_chkname0'] && $field3['core_db_fields_chkname1']){
-                            $structure['table'][$this_count2]['fields'][$this_count3]['name_lang_chkname0'] = $lang[$app][$field3['core_db_fields_chkname0']];
-                            $structure['table'][$this_count2]['fields'][$this_count3]['name_lang_chkname1'] = $lang[$app][$field3['core_db_fields_chkname1']];
+                            $structure['table'][$this_count2]['fields'][$this_count3]['name_lang_chkname0'] = $this->lang->line($app.$field3['core_db_fields_chkname0']);
+                            $structure['table'][$this_count2]['fields'][$this_count3]['name_lang_chkname1'] = $this->lang->line($app.$field3['core_db_fields_chkname1']);
                             }else{
+                            	
+								$structure['table'][$this_count2]['fields'][$this_count3]['name_lang_chkname0_icon'] = "";
+								$structure['table'][$this_count2]['fields'][$this_count3]['name_lang_chkname1_icon'] = "";
+								
                                 switch($field3['core_db_fields_chknametype']){
                                 /*
                                 array("0","No/Yes"),
@@ -717,28 +719,29 @@ function core_element_dgroup_structure($app,$aved,$dgroupname,$thisid,$this_elem
                                 array("5","Nondefault/Default")
                                 */
                                 case "0":
-                                $structure['table'][$this_count2]['fields'][$this_count3]['name_lang_chkname0'] = $lang['core']['no'];
-                                $structure['table'][$this_count2]['fields'][$this_count3]['name_lang_chkname1'] = $lang['core']['yes'];
+                                $structure['table'][$this_count2]['fields'][$this_count3]['name_lang_chkname0'] = $this->lang->line('coreno');
+                                $structure['table'][$this_count2]['fields'][$this_count3]['name_lang_chkname1'] = $this->lang->line('coreyes');
                                 ; break;
                                 case "1":
-                                $structure['table'][$this_count2]['fields'][$this_count3]['name_lang_chkname0'] = $lang['core']['off'];
-                                $structure['table'][$this_count2]['fields'][$this_count3]['name_lang_chkname1'] = $lang['core']['on'];
+                                $structure['table'][$this_count2]['fields'][$this_count3]['name_lang_chkname0'] = $this->lang->line('coreoff');
+                                $structure['table'][$this_count2]['fields'][$this_count3]['name_lang_chkname1'] = $this->lang->line('coreon');
                                 ; break;
                                 case "2":
-                                $structure['table'][$this_count2]['fields'][$this_count3]['name_lang_chkname0'] = $lang['core']['disable'];
-                                $structure['table'][$this_count2]['fields'][$this_count3]['name_lang_chkname1'] = $lang['core']['enable'];
+                                $structure['table'][$this_count2]['fields'][$this_count3]['name_lang_chkname0'] = $this->lang->line('coredisable');
+                                $structure['table'][$this_count2]['fields'][$this_count3]['name_lang_chkname1'] = $this->lang->line('coreenable');
                                 ; break;
                                 case "3":
-                                $structure['table'][$this_count2]['fields'][$this_count3]['name_lang_chkname0'] = $lang['core']['inactive'];
-                                $structure['table'][$this_count2]['fields'][$this_count3]['name_lang_chkname1'] = $lang['core']['active'];
+                                $structure['table'][$this_count2]['fields'][$this_count3]['name_lang_chkname0'] = $this->lang->line('coreinactive');
+                                $structure['table'][$this_count2]['fields'][$this_count3]['name_lang_chkname1'] = $this->lang->line('coreactive');
                                 ; break;
                                 case "4":
-                                $structure['table'][$this_count2]['fields'][$this_count3]['name_lang_chkname0'] = $lang['core']['valid'];
-                                $structure['table'][$this_count2]['fields'][$this_count3]['name_lang_chkname1'] = $lang['core']['void'];
+                                $structure['table'][$this_count2]['fields'][$this_count3]['name_lang_chkname0'] = $this->lang->line('corevalid');
+                                $structure['table'][$this_count2]['fields'][$this_count3]['name_lang_chkname1'] = $this->lang->line('corevoid');
                                 ; break;
                                 case "5":
-                                $structure['table'][$this_count2]['fields'][$this_count3]['name_lang_chkname0'] = $lang['core']['nondefault'];
-                                $structure['table'][$this_count2]['fields'][$this_count3]['name_lang_chkname1'] = $lang['core']['default'];
+                                $structure['table'][$this_count2]['fields'][$this_count3]['name_lang_chkname0'] = $this->lang->line('corenondefault');
+                                $structure['table'][$this_count2]['fields'][$this_count3]['name_lang_chkname1'] = $this->lang->line('coredefault');
+                                $structure['table'][$this_count2]['fields'][$this_count3]['name_lang_chkname0_icon'] = "";
                                 $structure['table'][$this_count2]['fields'][$this_count3]['name_lang_chkname1_icon'] = "tick-small.png";
                                 ; break;
                                 }
@@ -1024,9 +1027,6 @@ return ($structure);
 
 function core_d_element_dgroup_select_getopt($this_field,$app){
 
-    global $db,$lang,$getthisid,$langinfo;
-
-
     //get the sql
     if ($this_field['core_db_fields_seldb']){
         $this_array = explode(",", $this_field['core_db_fields_seldb']);
@@ -1042,10 +1042,11 @@ function core_d_element_dgroup_select_getopt($this_field,$app){
         } else {
 
             //core select only
+            $sqlget_selectgp = "";
             if ($this_array[0] == "core_select") $sqlget_selectgp = ",core_select_group,core_select_app,core_select_icon16,core_select_icon32";
 
             $sql1 = "SELECT ".$this_array[1].",".$this_array[2].$sqlget_selectgp." FROM ".$this_array[0];
-            if ($this_array[3]) $sql1 .= " WHERE ".$this_array[3]." = '".$this_field['core_db_fields_selname']."'";
+            if (isset($this_array[3])) $sql1 .= " WHERE ".$this_array[3]." = '".$this_field['core_db_fields_selname']."'";
             if ($this_field['core_db_fields_selorderby']) { $sql1 .= " ORDER BY ".$this_field['core_db_fields_selorderby'];
             } else { $sql1 .= " ORDER BY ".$this_array[1]; }
             $this_name = $this_array[1];
@@ -1110,7 +1111,7 @@ function core_d_element_dgroup_select_getopt($this_field,$app){
                     }
                 }
                 //echo $this_lang_name.$app;
-                $this_show_lang_name = $lang[$app][$this_lang_name];
+                $this_show_lang_name = $this->lang->line($app.$this_lang_name);
                 $this_icon16 = $field1['core_select_icon16'];
                 $this_icon32 = $field1['core_select_icon32'];
 
@@ -1120,10 +1121,10 @@ function core_d_element_dgroup_select_getopt($this_field,$app){
 
             }elseif (isset($this_lang_prefix) && $this_lang_prefix) {
                 $this_lang_name = $this_lang_prefix.$field1[$this_name];
-                $this_show_lang_name = $lang[$app][$this_lang_name];
+                $this_show_lang_name = $this->lang->line($app.$this_lang_name);
             }else {
                 $this_lang_name = $this_field['core_db_fields_seltable']."_".$field1[$this_name];
-                $this_show_lang_name = $lang[$app][$this_lang_name];
+                $this_show_lang_name = $this->lang->line($app.$this_lang_name);
             }
 
             if (!isset($this_show_lang_name) && !$this_show_lang_name) {

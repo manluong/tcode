@@ -172,7 +172,6 @@ class MY_Controller extends CI_Controller {
 						$output[$count_output]['isoutput'] = 1;
 						$output[$count_output]['isdiv'] = 0;
 						//$output[$count_output]['element_button'] = $core_element_dgroup['element_button'];
-
 						break;
 
 					case 'statpanel':
@@ -182,19 +181,11 @@ class MY_Controller extends CI_Controller {
 						break;
 
 					case 'menu':
-						$output[$count_output]['data'] = core_appmenu($app,1,$this_element_name,0);
+						$this->load->model('AppmenuM');
+						$output[$count_output]['data'] = $this->AppmenuM->get_appmenu($this_element['name']);
 						$output[$count_output]['isoutput'] = 1;
 						$output[$count_output]['isdiv'] = 1;
 						//html_show_array($output[$count_output]);exit;
-						break;
-
-					case 'xfunction':
-						include_once DOCUMENT_ROOT.'/includes/core/element/element_button.inc';
-						include_once DOCUMENT_ROOT.'/includes/core/element/element_xfunction.inc';
-						$output[$count_output] = f_element_xfunction($this_element_name, $an, $app, $aved, $thisid, $thisid_en,
-							$this_element_aved, $this_element_id, $this_element_add, $this_element_view, $this_element_edit,
-							$this_element_del, $this_element_list, $this_element_search);
-
 						break;
 
 					case 'mfunction':
@@ -450,6 +441,7 @@ class MY_Controller extends CI_Controller {
 			//include_once DOCUMENT_ROOT.'/'.$layout['folderinc'].'/appmenu.inc';
 			//$appmenu = core_appmenu($app,$layout['appmenu'],$layout['appmenu_gp'],$layout['breadcrumb']);
 			//$appmenu = f_layout_appmenu($appmenu,$layout['appmenu'],$layout['breadcrumb'],1);
+			
 			$this->load->model('AppmenuM');
 			$get_appmenu = $this->AppmenuM->get_appmenu();
 			$pagedata['menuapp'] = $this->load->view('/'.get_template().'/menuapp', $get_appmenu, true);
@@ -571,7 +563,7 @@ class MY_Controller extends CI_Controller {
 						break;
 
 					case 'simple':
-						$content_div[$data['colnum']] .= $this->load->view('/'.get_template().'component_simple', $view_data, TRUE);
+						$content_div[$data['colnum']] .= $this->load->view('/'.get_template().'/component_simple', $view_data, TRUE);
 						break;
 				}
 

@@ -64,7 +64,7 @@ class AppmenuM extends CI_Model {
 			//go get the realmenugp
 		    if ($menugp_realmenufunction) {
 		    	//if $app is card, go get the access_group to see if it's client/vendor/staff
-		    	if ($app == "card" && $this->url['id_plain'] != 0) $get_accessgp = $this->App_generalM->get_accessgp($this->url['id_plain']);
+		    	if ($this->url['app'] == "card" && $this->url['id_plain'] != 0) $get_accessgp = $this->App_generalM->get_accessgp($this->url['id_plain']);
 		    	$menugp_realmenugp = $appmenu_gp = $this->get_realmenugp($menugp_realmenufunction,$get_accessgp['accessgp']);
 			}
 
@@ -157,7 +157,7 @@ class AppmenuM extends CI_Model {
 		        }
 		    }
 
-		    if ($this->layout['breadcrumb']){
+		    if (isset($this->layout['breadcrumb']) && $this->layout['breadcrumb']){
 				
 		        //format the breadcrumb
 		        $this_breadcrumb[0]['title'] = $this->lang->line('coreapptitle_'.$menugp_app);
@@ -197,7 +197,7 @@ class AppmenuM extends CI_Model {
 			$appmenu['apphead'] = 1;
 		    }//end if breadcrumb
 		    
-		    $appmenu['appmenu'] = $this->layout['appmenu'];
+		    if (isset($this->layout['appmenu'])) $appmenu['appmenu'] = $this->layout['appmenu'];
 			$appmenu["appmenu_gp"] = $appmenu_gp;
 		    $appmenu["button"] = $button;
 			

@@ -319,7 +319,7 @@ function dgroup_list($dgroup_structure,$dgroup_value,$element_button,$searcharra
 
                         $iconview = $dgroup_structure['table'][$dgroup_structure['list']['chkbox'][$fieldname]['tablecount']]['fields'][$dgroup_structure['list']['chkbox'][$fieldname]['fieldcount']]['seliconv'];
 
-                        $this_row_result = core_element_dgroup_chkbox_show(
+                        $this_row_result = $this->core_element_dgroup_chkbox_show(
                         $dgroup_structure['table'][$dgroup_structure['list']['chkbox'][$fieldname]['tablecount']]['fields'][$dgroup_structure['list']['chkbox'][$fieldname]['fieldcount']]['name_lang_chkname0'],
                         $dgroup_structure['table'][$dgroup_structure['list']['chkbox'][$fieldname]['tablecount']]['fields'][$dgroup_structure['list']['chkbox'][$fieldname]['fieldcount']]['name_lang_chkname1'],
                         $field1[$fieldname],
@@ -361,11 +361,11 @@ function dgroup_list($dgroup_structure,$dgroup_value,$element_button,$searcharra
 				if ($fieldreplace_thisid == $fieldname || $fieldreplace_usethisid || in_array($fieldname,$fieldreplace_targetvalue)) {
 					$count = 0;
 					$fieldreplace = array();
-					while ($element_button_row[$count]){
+					while (isset($element_button_row[$count])){
 
-						if ($element_button_row[$count]['targetid_field'] == $fieldname){
-							$this_row_button[$count]['targetid'] = f_thisid_encode($field1[$fieldname]);
-						}elseif($element_button_row[$count]['targetid'] == "thisid"){
+						if (isset($element_button_row[$count]['targetid_field']) && $element_button_row[$count]['targetid_field'] == $fieldname){
+							$this_row_button[$count]['targetid'] = encode_id($field1[$fieldname]);
+						}elseif(isset($element_button_row[$count]['targetid']) && $element_button_row[$count]['targetid'] == "thisid"){
 							$this_row_button[$count]['targetid'] = $thisid_en;
 						}
 
