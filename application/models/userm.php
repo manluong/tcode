@@ -1,6 +1,6 @@
 <?php if (!defined('BASEPATH')) exit('No direct access allowed.');
 
-class UserM extends CI_Model {
+class UserM extends MY_Model {
 	var $id = array();
 	var $username = '';
 
