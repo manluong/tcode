@@ -46,7 +46,7 @@ class MY_Controller extends CI_Controller {
 		if ($this->AppM->must_disable_plain_id()) $this->ACLM->check_id_encryption();
 		$this->ACLM->check_app_access();
 
-		$this->load->library('Comments');
+		$this->load->library('CommentsL');
 
 		//$this->output->enable_profiler(true);
 	}
