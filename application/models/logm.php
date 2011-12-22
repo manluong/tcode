@@ -11,7 +11,7 @@ class LogM extends CI_Model {
 
 	function __construct() {
 		parent::__construct();
-		$this->load->helper('date');
+		
 		$CI =& get_instance();
 		$this->_url =& $CI->url;
 		$this->_langinfo = $this->lang->langinfo;

@@ -64,7 +64,7 @@ $autoload['libraries'] = array('session','database','encrypt','lang');
 |	$autoload['helper'] = array('url', 'file');
 */
 
-$autoload['helper'] = array('general','url','language');
+$autoload['helper'] = array('general','url','language','date');
 
 
 /*
