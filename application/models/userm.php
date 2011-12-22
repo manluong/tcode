@@ -25,7 +25,7 @@ class UserM extends MY_Model {
 	var $loguid = 0;
 
 	function __construct() {
-		$this->table = 'users';
+		$this->table = 'card';
 		$this->id_field = 'card_id';
 		$this->cache_enabled = TRUE;
 
@@ -53,6 +53,10 @@ class UserM extends MY_Model {
 
 	public function get_loguid() {
 		return $this->loguid;
+	}
+
+	public function get_cardid() {
+		return $this->info['cardid'];
 	}
 
 
