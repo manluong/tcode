@@ -220,8 +220,54 @@ function get_template() {
 
 
 function get_current_stamp() {
-	return mdate("%Y-%n-%j %H:%i:%s");
+	$timestamp = time();
+	$timestamp = $timestamp - date('Z');
+	return mdate("%Y-%n-%j %H:%i:%s", $timestamp);
 }
+
+function parse_stamp($stamp, $format='ISO') {
+	$timestamp = strtotime($stamp);
+
+	return parse_timestamp($timestamp, $format);
+}
+
+function parse_stamp_user($stamp, $format='ISO') {
+	$timestamp = strtotime($stamp);
+
+	$CI =& get_instance();
+	$timezone = $CI->UserM->get_timezone();
+	$timestamp = $timestamp + ((int)$timezone*60*60);
+
+	return parse_timestamp($timestamp, $format);
+}
+
+function parse_timestamp($timestamp, $format='ISO') {
+	switch($format) {
+		case 'ISO':
+			$format_string = '%Y/%m/%d %H:%i:%s';
+			break;
+		case 'ISO_DATE':
+			$format_string = '%Y/%m/%d';
+			break;
+		case 'ISO_TIME':
+			$format_string = '%H:%i:%s';
+			break;
+		case 'ATOM':
+			return standard_date('DATE_ATOM', $timestamp);
+			break;
+		case 'ISO_8601':
+			//return standard_date('DATE_ISO8601', $timestamp);
+			return date('c', $timestamp);
+			break;
+		default:
+			$format_string = $format;
+			break;
+	}
+
+	return mdate($format_string, $timestamp);
+}
+
+
 
 
 function extract_distinct_values($data, $key) {
