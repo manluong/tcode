@@ -43,6 +43,8 @@ class MY_Model extends CI_Model {
 	}
 
 	function get_batch($ids, $id_as_key=FALSE) {
+		if (count($ids)==0) return array();
+
 		$results = array();
 
 		if ($this->cache_enabled) {
@@ -96,9 +98,7 @@ class MY_Model extends CI_Model {
 
 
 
-
 	function fill_card_info(&$data, $mode='single') {
-
 		if ($mode == 'single') {
 			$data['card_info'] = $this->UserM->get($data['created_cardid']);
 		} elseif ($mode == 'many') {
@@ -109,8 +109,8 @@ class MY_Model extends CI_Model {
 				$data[$k]['card_info'] = $cards[$v['created_cardid']];
 			}
 		}
-
 	}
+
 
 
 
