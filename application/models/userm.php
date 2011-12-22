@@ -59,6 +59,10 @@ class UserM extends MY_Model {
 		return $this->info['cardid'];
 	}
 
+	public function get_timezone() {
+		return $this->info['card_timezone'];
+	}
+
 
 	public function is_valid_password($username, $password) {
 		$rs = $this->db->select()
@@ -109,6 +113,7 @@ class UserM extends MY_Model {
 		//echo 'startt<pre>',print_r($core_app_userinfo,true),'</pre>endd';
 		//die();
 
+		/*
 		$this->info['name'] = $core_app_userinfo['name'];
 		$this->info['cardid'] = $core_app_userinfo['cardid'];
 		$this->info['accessgp'] = $core_app_userinfo['accessgp'];
@@ -117,6 +122,8 @@ class UserM extends MY_Model {
 		$this->info['vendorid'] = $core_app_userinfo['vendorid'];
 		$this->info['memberid'] = $core_app_userinfo['memberid'];
 		$this->info['subgp'] = $core_app_userinfo['subgp'];
+		 */
+		$this->info = $core_app_userinfo;
 
 		$this->admin = ($this->info['accessgp']==1);
 		/*
@@ -168,23 +175,22 @@ class UserM extends MY_Model {
 				->get('access_user', 1);
 		$result = $rs->row_array();
 
-		$thisresult = array();
 		if ($result['card_fname']){
-			$thisresult['name'] = $result['card_fname'];
-		}elseif ($result['card_lname']){
-			$thisresult['name'] = $result['card_lname'];
-		}elseif ($result['card_orgname']){
-			$thisresult['name'] = $result['card_orgname'];
+			$result['name'] = $result['card_fname'];
+		} elseif ($result['card_lname']){
+			$result['name'] = $result['card_lname'];
+		} elseif ($result['card_orgname']){
+			$result['name'] = $result['card_orgname'];
 		}
 
-		$thisresult['cardid'] = $result['card_id'];
+		$result['cardid'] = $result['card_id'];
 
-		$thisresult['subgp'] = $this->core_app_getsubgp($thisresult['cardid']);
-		$core_app_getaccessgp = $this->core_app_getaccessgp($thisresult['cardid']);
+		$result['subgp'] = $this->core_app_getsubgp($result['cardid']);
+		$core_app_getaccessgp = $this->core_app_getaccessgp($result['cardid']);
 
-		$thisresult = array_merge($thisresult, $core_app_getaccessgp);
+		$result = array_merge($result, $core_app_getaccessgp);
 
-		return $thisresult;
+		return $result;
 	}
 
 	private function core_app_getsubgp($cardid){
