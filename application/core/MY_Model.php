@@ -56,20 +56,22 @@ class MY_Model extends CI_Model {
 			}
 		}
 
-		$rs = $this->db->select()
-				->from($this->table)
-				->where_in($this->id_field, $ids)
-				->get();
+		if (count($ids)>0) {
+			$rs = $this->db->select()
+					->from($this->table)
+					->where_in($this->id_field, $ids)
+					->get();
 
-		$temp = $rs->result_array();
+			$temp = $rs->result_array();
 
-		if ($this->cache_enabled) {
-			foreach($temp AS $t) {
-				$this->cache[$this->table][$t[$this->id_field]] = $t;
+			if ($this->cache_enabled) {
+				foreach($temp AS $t) {
+					$this->cache[$this->table][$t[$this->id_field]] = $t;
+				}
 			}
-		}
 
-		$results = $results + $temp;
+			$results = $results + $temp;
+		}
 
 		if ($id_as_key) {
 			$temp = $results;
