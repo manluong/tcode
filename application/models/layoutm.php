@@ -100,27 +100,35 @@ class LayoutM extends CI_Model {
 	    }
 
 		//OTHER
-		$CI->layout['format'] = $apps_action['core_apps_action_x_core_layout_format_name'];
-		$CI->layout['content'] = $apps_action['core_apps_action_content_layout'];
-		$CI->layout['breadcrumb'] = $apps_action['core_apps_action_breadcrumb'];
-		if ($apps_action['core_apps_action_addons']) $CI->layout['addons'] .= $apps_action['core_apps_action_addons'].',';
+		$CI->layout['format'] = isset($apps_action['core_apps_action_x_core_layout_format_name'])
+									? $apps_action['core_apps_action_x_core_layout_format_name']
+									: '';
+		$CI->layout['content'] = isset($apps_action['core_apps_action_content_layout'])
+									? $apps_action['core_apps_action_content_layout']
+									: '';
+		$CI->layout['breadcrumb'] = isset($apps_action['core_apps_action_breadcrumb'])
+									? $apps_action['core_apps_action_breadcrumb']
+									: '';
+		$CI->layout['addons'] .= isset($apps_action['core_apps_action_addons'])
+									? $apps_action['core_apps_action_addons'].','
+									: '';
 
 		//MENU
 		if ($result['core_layout_format_menu']){
 			$CI->layout['menu_array'] = $this->get_mainmenu();
 		}
-		
-		if ($apps_action['core_apps_action_appmenu']) {
+
+		if (isset($apps_action['core_apps_action_appmenu']) && $apps_action['core_apps_action_appmenu']!='') {
 			$CI->layout['appmenu'] = 1;
 			if ($apps_action['core_apps_action_appmenu_gp']) {
 				$CI->layout['appmenu_gp'] = $apps_action['core_apps_action_appmenu_gp'];
 			}
-		}else{
+		} else {
 			$CI->layout['appmenu'] = 0;
 		}
 
 	}
-	
+
 	function html_addons($addonnames) {
 		$addons = array(
 			'css' => '',
@@ -145,13 +153,13 @@ class LayoutM extends CI_Model {
 
 
 	function get_mainmenu() {
-		
+
 		$sql = "SELECT core_apps_name,core_apps_icon FROM core_apps WHERE core_apps_status = '1' AND core_apps_showmenu = '1' ORDER BY core_apps_menusort";
 		$rs = $this->db->query($sql);
 
 		if ($rs->num_rows() == 0) return FALSE;
-		return $rs->result_array();		
-		
+		return $rs->result_array();
+
 	}
 
 }
