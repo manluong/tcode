@@ -138,7 +138,7 @@ function set_return_url($querystring=FALSE) {
 			if ($CI->url[$s] === FALSE && $CI->url[$s] != '') continue;
 			$result[] = form_hidden('re_'.$s, $CI->url[$s]);
 		}
-		return implode('<br />', $result);
+		return implode("\n\r", $result);
 	}
 }
 
