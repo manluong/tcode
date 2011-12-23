@@ -87,7 +87,7 @@ class MY_Model extends CI_Model {
 
 
 	function save($data, $id_field='') {
-		if ($id_field == '') {
+		if ($id_field == '' || !isset($data[$id_field])) {
 			$rs = $this->db->insert($this->table, $data);
 			return $this->db->insert_id();
 		} else {
