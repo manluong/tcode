@@ -4,7 +4,7 @@ class CommentsM extends MY_Model {
 	var $results_per_page = 5;
 
 	function __construct() {
-		$this->table = 'comments';
+		$this->table = 'mod_comments';
 		$this->id_field = 'id';
 
 		parent::__construct();
@@ -13,7 +13,7 @@ class CommentsM extends MY_Model {
 
 	function get($id) {
 		$rs = $this->db->select()
-				->from('comments')
+				->from($this->table)
 				->where('id', $id)
 				->limit(1)
 				->get();
@@ -31,7 +31,7 @@ class CommentsM extends MY_Model {
 
 	function get_list($app_id, $app_data_id, $limit=5) {
 		$rs = $this->db->select()
-				->from('comments')
+				->from($this->table)
 				->where('app_id', $app_id)
 				->where('app_data_id', $app_data_id)
 				->where('parent_id', 0)
@@ -55,7 +55,7 @@ class CommentsM extends MY_Model {
 		if ($page<0) $page = 0;
 
 		$rs = $this->db->select()
-				->from('comments')
+				->from($this->table)
 				->where('app_id', $app_id)
 				->where('app_data_id', $app_data_id)
 				->where('parent_id', 0)
@@ -76,7 +76,7 @@ class CommentsM extends MY_Model {
 
 	function get_replies($id, $limit=5) {
 		$this->db->select()
-				->from('comments')
+				->from($this->table)
 				->where('parent_id', $id)
 				->order_by('id', 'DESC');
 
@@ -98,7 +98,7 @@ class CommentsM extends MY_Model {
 	function get_more_replies($id) {
 		//Retrieve all comments, except the first 5.
 		$this->db->select()
-				->from('comments')
+				->from($this->table)
 				->where('parent_id', $id)
 				->limit(1000000, 5)	//update this if you have a better idea
 				->order_by('id', 'DESC');
@@ -133,8 +133,8 @@ class CommentsM extends MY_Model {
 		$modified_cardid = $this->UserM->get_cardid();
 		$modified_stamp = get_current_stamp();
 
-		$sql = "UPDATE comments SET reply_count=reply_count+1, modified_cardid=?, modified_stamp=? WHERE id=?";
-		$this->db->query($sql, array($modified_cardid, $modified_stamp, $id));
+		$sql = "UPDATE ? SET reply_count=reply_count+1, modified_cardid=?, modified_stamp=? WHERE id=?";
+		$this->db->query($sql, array($this->table, $modified_cardid, $modified_stamp, $id));
 	}
 
 
