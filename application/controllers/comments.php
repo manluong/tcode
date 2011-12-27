@@ -10,6 +10,9 @@ class Comments extends MY_Controller {
 
 
 	function test() {
+		$this->commentsl->app_id = 1000;
+		$this->commentsl->app_data_id = 1;
+
 		$data = array();
 		$data['html'] = $this->commentsl->get_page_html();
 		$data['outputdiv'] = 1;

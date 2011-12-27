@@ -203,7 +203,7 @@ class MY_Controller extends CI_Controller {
 						break;
 
 					case 'comment' :
-						$output[$count_output]['html'] = $this->CommentsL->get_page_html();
+						$output[$count_output]['html'] = $this->commentsl->get_page_html();
 						$output[$count_output]['isoutput'] = 1;
 						$output[$count_output]['isdiv'] = 1;
 						break;

@@ -14,9 +14,6 @@ class CommentsL {
 		$this->app_id = $this->CI->url['app_id'];
 		$this->app_data_id = $this->CI->url['id_plain'];
 
-		$this->app_id = 100;
-		$this->app_data_id = 10;
-
 		$this->CI->load->model('CommentsM');
 		$this->CommentsM =& $this->CI->CommentsM;
 

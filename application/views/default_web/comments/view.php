@@ -60,7 +60,6 @@
 				<span class="displaydate" title="<?=$comment['created_stamp_iso8601']?>">
 					<?=$comment['created_stamp_iso']?>
 				</span>
-				Like
 			</div>
 
 			<?php
@@ -185,8 +184,7 @@
 										'<div class="controls">'+
 											'<span class="displaydate" title="'+v.created_stamp_iso8601+'">'+
 												v.created_stamp_iso+
-											'</span>'+
-											'Like'+
+											'</span> '+
 										'</div>'+
 										'<ul class="replies">';
 											if (parseInt(v.reply_count) > 5) {
@@ -272,8 +270,7 @@
 											'<div class="controls">'+
 												'<span class="displaydate" title="'+result.data.created_stamp_iso8601+'">'+
 													result.data.created_stamp_iso+
-												'</span>'+
-												'Like'+
+												'</span> '+
 											'</div>'+
 											'<ul class="replies">'+
 												'<li class="new_reply">'+
