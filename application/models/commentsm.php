@@ -1,8 +1,12 @@
 <?php
 
 class CommentsM extends MY_Model {
+	var $results_per_page = 5;
 
 	function __construct() {
+		$this->table = 'comments';
+		$this->id_field = 'id';
+
 		parent::__construct();
 	}
 
@@ -41,7 +45,30 @@ class CommentsM extends MY_Model {
 
 		foreach($results AS $k=>$v) {
 			$results[$k]['replies'] = $this->get_replies($v['id']);
-			$results[$k]['datetime'] = $v['created_stamp'];
+		}
+
+		return $results;
+	}
+
+	function get_page($app_id, $app_data_id, $page=1) {
+		$page--;
+		if ($page<0) $page = 0;
+
+		$rs = $this->db->select()
+				->from('comments')
+				->where('app_id', $app_id)
+				->where('app_data_id', $app_data_id)
+				->where('parent_id', 0)
+				->order_by('id', 'DESC')
+				->limit($this->results_per_page, ($this->results_per_page*$page))
+				->get();
+
+		$results = $rs->result_array();
+
+		$this->fill_card_info($results, 'many');
+
+		foreach($results AS $k=>$v) {
+			$results[$k]['replies'] = $this->get_replies($v['id']);
 		}
 
 		return $results;
@@ -63,20 +90,51 @@ class CommentsM extends MY_Model {
 
 		$this->fill_card_info($results, 'many');
 
-		foreach($results AS $k=>$v) {
-			$results[$k]['datetime'] = $v['created_stamp'];
-		}
+		$results = array_combine(array_reverse(array_keys($results)), array_reverse(array_values($results)));
+
+		return $results;
+	}
+
+	function get_more_replies($id) {
+		//Retrieve all comments, except the first 5.
+		$this->db->select()
+				->from('comments')
+				->where('parent_id', $id)
+				->limit(1000000, 5)	//update this if you have a better idea
+				->order_by('id', 'DESC');
+
+		$rs = $this->db->get();
+
+		if ($rs->num_rows() == 0) return array();
+
+		//$rs = $this->db->query("SELECT * FROM comments WHERE parent_id=$id LIMIT 0 OFFSET 5");
+
+		$results = $rs->result_array();
+
+		$this->fill_card_info($results, 'many');
 
 		$results = array_combine(array_reverse(array_keys($results)), array_reverse(array_values($results)));
 
 		return $results;
 	}
 
-	function save_reply($data) {
+	function save_reply(&$data) {
 		$data['created_cardid'] = $this->UserM->get_cardid();
 		$data['created_stamp'] = get_current_stamp();
 
-		$this->db->insert('comments', $data);
+		$data['id'] = $this->save($data, 'id');
+
+		if ($data['parent_id'] != 0) {
+			$this->update_comment_stats($data['parent_id']);
+		}
+	}
+
+	function update_comment_stats($id) {
+		$modified_cardid = $this->UserM->get_cardid();
+		$modified_stamp = get_current_stamp();
+
+		$sql = "UPDATE comments SET reply_count=reply_count+1, modified_cardid=?, modified_stamp=? WHERE id=?";
+		$this->db->query($sql, array($modified_cardid, $modified_stamp, $id));
 	}
 
 
