@@ -44,7 +44,44 @@ class docsM extends My_Model {
 		return $this->db->insert_id();
 	}
 
-	function update_doc($doc) {
+	function update_doc($values) {
+		$data = array(
+			'a_docs_docsid' => isset($values['docsid']) ? $values['docsid'] : '',
+			'a_docs_dirid' => isset($values['docsid']) ? $values['dirid'] : '',
+			'a_docs_dirpath' => isset($values['docsid']) ? $values['dirpath'] : '',
+			'a_docs_desc' => isset($values['desc']) ? $values['desc'] : '',
+			'a_docs_stamp' => get_current_stamp(),
+		);
+		if (isset($values['id'])) {
+			$this->db->update('a_docs', $data)
+				->where('a_docs_id', $values['id']);
+		} else {
+			$this->db->insert('a_docs', $data);
+		}
+
+		$data = array(
+			'a_docs_ver_docsid' => isset($values['docsid']) ? $values['docsid'] : '',
+			'a_docs_ver_filename' => isset($values['filename']) ? $values['filename'] : '',
+			'a_docs_ver_stamp' => isset($values['stamp']) ? $values['stamp'] : '',
+			'a_docs_ver_downloadhit' => isset($values['a_docs_ver_downloadhit']) ? $values['a_docs_ver_downloadhit'] : '',
+			'a_docs_ver_cardid' => $this->UserM->info['cardid'],
+			'a_docs_ver_uploadvia' => isset($values['uploadvia']) ? $values['uploadvia'] : '',
+			'a_docs_ver_filesize' => isset($values['filesize']) ? $values['filesize'] : '',
+			'a_docs_ver_mime' => isset($values['mime']) ? $values['mime'] : '',
+			'a_docs_ver_ocr' => isset($values['ocr']) ? $values['ocr'] : '',
+			'a_docs_ver_preview' => isset($values['preview']) ? $values['preview'] : '',
+			'a_docs_ver_encrypt' => isset($values['encrypt']) ? $values['encrypt'] : '',
+			'a_docs_ver_encryptkeytype' => isset($values['encryptkeytype']) ? $values['encryptkeytype'] : '',
+		);
+		if (isset($values['ver_id'])) {
+			$this->db->update('a_docs_ver', $data)
+				->where('a_docs_ver_id', $values['ver_id']);
+		} else {
+			$this->db->insert('a_docs_ver', $data);
+		}
+	}
+
+	function update_doc_ver($values) {
 
 	}
 
@@ -71,15 +108,50 @@ class docsM extends My_Model {
 	function get_folders() {
 		$query = $this->db->select('a_docs_dir_id, a_docs_dir_name')
 			->from('a_docs_dir')
-			->where('a_docs_dir_cardid', $this->UserM->info['cardid'])
+			->where(array('a_docs_dir_cardid' => $this->UserM->info['cardid'],
+					'a_docs_dir_parent' => $this->url['id_plain'],
+				))
 			->order_by('a_docs_dir_name')
 			->get();
 		return $query->result_array();
 	}
 
+	function get_docs($id) {
+		$query = $this->db->select('a_docs_dirpath, a_docs_ver_filename')
+			->from('a_docs')
+			->join('a_docs_ver', 'a_docs.a_docs_docsid = a_docs_ver.a_docs_ver_docsid')
+			->where('a_docs_dirid', $id)
+			->get();
+		return $query->result_array();
+	}
+
+	function get_dir_parent_path($id) {
+		$query = $this->db->select('a_docs_dir_id, a_docs_dir_name, a_docs_dir_parent')
+			->from('a_docs_dir')
+			->where(array('a_docs_dir_id'=>$id))
+			->get();
+		return $query->result_array();
+	}
+
+	function get_parent($id) {
+		$query = $this->db->select('a_docs_dir_parent')
+			->from('a_docs_dir')
+			->where(array('a_docs_dir_id'=>$id))
+			->get();
+		return $query->row_array();
+	}
+
+	function get_latest_docsid() {
+		$query = $this->db->select('a_docs_docsid')
+			->from('a_docs')
+			->order_by('a_docs_docsid', 'desc')
+			->get();
+		return $query->row_array();
+	}
+
 	function get_root_dir() {
 		$query = $this->db->select('a_docs_dir_id')
-			->get_where('a_docs_dir', array('a_docs_dir_cardid'=>$this->UserM->info['cardid']));
+			->get_where('a_docs_dir', array('a_docs_dir_cardid'=>$this->UserM->info['cardid'], 'a_docs_dir_parent'=>0));
 		return $query->row();
 	}
 }

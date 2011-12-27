@@ -1,0 +1,10 @@
+#context-menu {position:absolute;display:none;list-style: none;z-index: 9999;background:#fff;border:1px solid #aaa;padding:0;}
+#context-menu li {padding:5px 0;}
+#context-menu li:hover {background:#E0FCFF;cursor:pointer;}
+#context-menu li a {padding: 5px 10px;}
+
+#table-list-view {width:100%;}
+#table-list-view td {text-align: center;}
+#table-list-view td.col1 {text-align: left;}
+
+#upload-bin {border:1px dotted #aaa;}
