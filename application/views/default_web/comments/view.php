@@ -230,7 +230,10 @@
 				var parent_id = textbox.attr('data-parent_id');
 				var text = textbox.val();
 
-				if (text.length == 0) return false;
+				if (text.length == 0) {
+					e.preventDefault();
+					return false;
+				}
 
 				if (parent_id == 0) {
 					var is_reply = false;
