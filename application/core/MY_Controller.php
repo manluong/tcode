@@ -175,7 +175,7 @@ class MY_Controller extends CI_Controller {
 					case 'menu':
 						$this->load->model('AppmenuM');
 						$get_appmenu = $this->AppmenuM->get_appmenu($this_element['name']);
-						$output[$count_output]['html']= $this->load->view('/'.get_template().'/menuapp', $get_appmenu, true);
+						$output[$count_output]['html'] = $this->load->view('/'.get_template().'/menuapp', $get_appmenu, true);
 						$output[$count_output]['isoutput'] = 1;
 						$output[$count_output]['isdiv'] = 1;
 						break;
@@ -200,6 +200,12 @@ class MY_Controller extends CI_Controller {
 
 					case 'method':
 						if (method_exists($this, $this_element['name'])) $output[$count_output] = call_user_func_array(array($this, $this_element['name']), $params=array());
+						break;
+
+					case 'comment' :
+						$output[$count_output]['html'] = $this->CommentsL->get_page_html();
+						$output[$count_output]['isoutput'] = 1;
+						$output[$count_output]['isdiv'] = 1;
 						break;
 				}
 
@@ -433,7 +439,7 @@ class MY_Controller extends CI_Controller {
 			//include_once DOCUMENT_ROOT.'/'.$layout['folderinc'].'/appmenu.inc';
 			//$appmenu = core_appmenu($app,$layout['appmenu'],$layout['appmenu_gp'],$layout['breadcrumb']);
 			//$appmenu = f_layout_appmenu($appmenu,$layout['appmenu'],$layout['breadcrumb'],1);
-			
+
 			$this->load->model('AppmenuM');
 			$get_appmenu = $this->AppmenuM->get_appmenu();
 			$pagedata['menuapp'] = $this->load->view('/'.get_template().'/menuapp', $get_appmenu, true);
@@ -536,9 +542,9 @@ class MY_Controller extends CI_Controller {
 							//$chktab_cont = 1;
 
 							//while ($chktab_cont == 1){
-							
+
 							if (!isset($tabdata['gridnum'])) $tabdata['gridnum'] = $view_data['gridnum'];
-							
+
 							$tabdata['data'][$count_output]['div']['element_id'] = $view_data['data']['div']['element_id'];
 							$tabdata['data'][$count_output]['div']['title'] = $view_data['data']['div']['title'];
 							if (isset($view_data['data']['html'])) {
@@ -546,13 +552,13 @@ class MY_Controller extends CI_Controller {
 							} else {
 								$tabdata['data'][$count_output]['html'] = "";
 							}
-															
+
 							if (!isset($this->data[$count_output+1]) || isset($this->data[$count_output+1]) && $this->data[$count_output+1]['div']['tab'] == 0){
 									//next element is not a tab, so warp up the tab
 									$content_div[$data['colnum']] .= $this->load->view('/'.get_template().'/component_grid_tab', $tabdata, TRUE);
 									$tabdata = array();
-							} 
-								
+							}
+
 							//}
 						} else {
 							$content_div[$data['colnum']] .= $this->load->view('/'.get_template().'/component_grid', $view_data, TRUE);
