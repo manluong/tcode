@@ -31,6 +31,10 @@ $(document).ready(function() {
 			if (docs.display_errors_state !== true) {
 				$("#folder-name").after('<span class="error">'+msg+'</span>');
 				docs.display_errors_state = true;
+			} else {
+				if ($('.error').html() !== msg) {
+					$('.error').html(msg);
+				}
 			}
 		}
 
@@ -68,7 +72,16 @@ $(document).ready(function() {
 		}
 		function validate() {
 			var pattern = /^[a-zA-Z0-9_]*$/;
-			return pattern.exec($('#folder-name').val());
+			var basic = pattern.exec($('#folder-name').val());
+			var pattern = /^root$/;
+			var root_test =  pattern.exec($('#folder-name').val());
+
+			if (root_test !== null) {display_errors(' Root is not allowed');}
+			if (basic === null) {display_errors(' Only alpahnumeric and -, _ accepted');}
+
+			if (basic === null || root_test !== null) return null;
+			else return '';
+
 		}
 
 		function init_send() {
@@ -79,8 +92,6 @@ $(document).ready(function() {
 				$('#tick-icon, #cross-icon').hide();
 				$('#loader-icon').show();
 				create_folder();
-			} else {
-				display_errors('Only alpahnumeric and -, _ accepted');
 			}
 			$('#loader-icon').hide();
 		}

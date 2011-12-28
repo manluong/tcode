@@ -4,7 +4,7 @@ class MY_Model extends CI_Model {
 	var $table = '';
 	var $id_field = '';
 
-	var $cache = '';
+	var $cache = array();
 	var $cache_enabled = FALSE;
 
 	function __construct() {
@@ -46,9 +46,9 @@ class MY_Model extends CI_Model {
 		if (count($ids)==0) return array();
 
 		$results = array();
-
 		if ($this->cache_enabled) {
 			foreach($ids AS $k=>$id) {
+				//var_dump($this->cache[$this->table][$id]);die();
 				if (isset($this->cache[$this->table][$id])) {
 					$results[] = $this->cache[$this->table][$id];
 					unset($ids[$k]);

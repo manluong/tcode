@@ -2,6 +2,7 @@
 
 class Docs extends MY_Controller {
 	private $_views_data, $_dir_path = array();
+	private $_upload_status = FALSE;
 
 	function __construct() {
 		parent::__construct();
@@ -87,7 +88,7 @@ class Docs extends MY_Controller {
 		$targetDir = '/Applications/XAMPP/htdocs/tcode/tmp/';
 		$dirpath = $this->get_dirpath($this->url['id_plain']);
 
-		/*/ ----- S3 code ----
+		// ----- S3 code ----
 		// Look for the content type header
 		if (isset($_SERVER["HTTP_CONTENT_TYPE"]))
 			$contentType = $_SERVER["HTTP_CONTENT_TYPE"];
@@ -95,36 +96,44 @@ class Docs extends MY_Controller {
 		if (isset($_SERVER["CONTENT_TYPE"]))
 			$contentType = $_SERVER["CONTENT_TYPE"];
 		// Handle non multipart uploads older WebKit versions didn't support multipart in HTML5
-		if (strpos($contentType, "multipart") !== false) {
+		if (strpos($contentType, "multipart") !== FALSE) {
 			if (isset($_FILES['file']['tmp_name']) && is_uploaded_file($_FILES['file']['tmp_name'])) {
 				// Open temp file
-				if (S3::putObject(S3::inputFile($_FILES['file']['tmp_name']), 's3subscribers', $_FILES['file']['name'], S3::ACL_PRIVATE)) {
+				log_message('debug', 'Upload: '.$dirpath['dirpath_str'].$_FILES['file']['name']);
+				if (S3::putObject(S3::inputFile($_FILES['file']['tmp_name']), 's3subscribers', $dirpath['dirpath_str'].$_FILES['file']['name'], S3::ACL_PRIVATE)) {
 					$this->_upload_status = TRUE;
 				} else {
 					$this->_upload_status = FALSE;
 				}
 			}
 		}
-		// ----- end S3 code ---- */
+		// ----- end S3 code ---- /
 		//$this->_upload_status
-		if (TRUE) {
+		if ($this->_upload_status) {
 			$values['dirid'] = $this->url['id_plain'];
 			$values['dirpath'] = $dirpath['dirpath_str'];
 			$values['filename'] = $_FILES['file']['name'];
 			$values['uploadvia'] = 'web';
 			$values['filesize'] = $_FILES['file']['size'];
 			$values['mime'] = $_FILES['file']['type'];
+			log_message('debug','File type: '.$_FILES['file']['type']);
 			$this->DocsM->update_doc($values);
 		} else {
 
 		}
 	}
 
-	function get_object () {
+	function get_object($bucket, $uri) {
 		//print getcwd();
-		$object = S3::getObject('wwwbooks', '0137136692.pdf', FALSE);
+		$object = S3::getObject($bucket, $uri, FALSE);
+		return $object;
+		/*
 		$this->output->set_content_type($object->headers['type']);
-		$this->output->set_output($object->body);
+		$this->output->set_output($object->body);*/
+	}
+
+	function get_object_url($bucket, $uri, $lifetime) {
+		return S3::getAuthenticatedURL($bucket, $uri, $lifetime);
 	}
 
 	// Called when versioning is enabled.
@@ -148,7 +157,7 @@ class Docs extends MY_Controller {
 			$_dirpath = array_reverse($_dirpath);
 			$_dirpath_html = '<ul class="apphead_title">';
 			foreach ($_dirpath as $path) {
-				$_dirpath_str .= '/'.$path['a_docs_dir_name'];
+				if ($path['a_docs_dir_name'] !== 'root') $_dirpath_str .= '/'. $path['a_docs_dir_name'];
 				$_dirpath_html .= '<li><a href="/docs/view/'.$path['a_docs_dir_id'].'/'
 					.$this->url['subaction'].'">'.$path['a_docs_dir_name'].'</a></li>';
 			}
@@ -174,9 +183,17 @@ class Docs extends MY_Controller {
 	}
 
 	function preview() {
-		//$preview_data['doc']
+		$this->_views_data['docs_detail'] = $this->DocsM->get_docs_detail($this->url['id_plain']);
+		$this->_views_data['s3_object'] = $this->get_object_url('s3subscribers', $this->_views_data['docs_detail']['a_docs_dir_dirpath'].$this->_views_data['docs_detail']['a_docs_ver_filename'], '3600');
+
+		switch ($this->_views_data['docs_detail']['a_docs_ver_mime']) {
+			case 'image/png':
+				$this->_views_data['s3_object'] = '<img src="'.$this->_views_data['s3_object'].'">';
+				break;
+		}
+		
 		$data = array();
-		$data['html'] = $this->load->view('/'.get_template().'/docs/docs_view_preview.php',$preview_data, TRUE);
+		$data['html'] = $this->load->view('/'.get_template().'/docs/docs_view_preview.php',$this->_views_data, TRUE);
 		$data['outputdiv'] = 1;
 		$data['isdiv'] = TRUE;
 		$data['div']['title'] = 'Documents';
@@ -188,7 +205,9 @@ class Docs extends MY_Controller {
 	}
 
 	function test() {
-		$i = $this->get_dirpath(0);
+		$i = $this->get_dirpath(1);
 		print_r($i);
+		$img =  S3::getAuthenticatedURL('s3subscribers', 'gravatar-140.png', '3600');
+		echo '<img src="'.$img.'">';
 	}
 }

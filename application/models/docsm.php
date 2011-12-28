@@ -11,7 +11,7 @@ class docsM extends My_Model {
 		$data = array(
 			'a_docs_dir_name' => $values['name'],
 			'a_docs_dir_parent' => isset($values['parent']) ? $values['parent'] : 0,
-			'a_docs_dir_dirpath' => isset($values['dirpath']) ? $values['dirpath'] : '/',
+			'a_docs_dir_dirpath' => isset($values['dirpath']) ? $values['dirpath'] : '',
 			'a_docs_dir_stamp' => get_current_stamp(),
 			//'tag' => isset($values['tag'])? : '',
 			'a_docs_dir_desc' => isset($values['desc'])? $values['desc'] : '',
@@ -32,8 +32,8 @@ class docsM extends My_Model {
 			'a_docs_dir_encrypt' => isset($value['encrypt']) ? $value['encrypt'] : '',
 			'a_docs_dir_browsestyle' => isset($value['browsestyle']) ? $value['browsestyle'] : '',
 			'a_docs_dir_reapp' => isset($value['reapp']) ? $value['reapp'] : '',
-			'a_docs_dir_rean' => isset($value['rean']) ? $value['rean'] : '',
-			'a_docs_dir_reaved' => isset($value['reaved']) ? $value['reaved'] : '',
+			'a_docs_dir_reaction' => isset($value['rean']) ? $value['rean'] : '',
+			'a_docs_dir_resubaction' => isset($value['reaved']) ? $value['reaved'] : '',
 			'a_docs_dir_noocrindex' => isset($value['noocrindex']) ? $value['noocrindex'] : '',
 		);
 		if (isset($values['id'])) {
@@ -115,9 +115,9 @@ class docsM extends My_Model {
 		return $query->result_array();
 	}
 
-	// Gets docs based on dirid
+	// Returns all docs in a dirid
 	function get_docs($id) {
-		$query = $this->db->select('a_docs_dir_dirpath, a_docs_ver_filename, a_docs_ver_filesize, a_docs_ver_stamp')
+		$query = $this->db->select('a_docs_dir_dirpath, a_docs_ver_id, a_docs_ver_filename, a_docs_ver_filesize, a_docs_ver_stamp')
 			->from('a_docs')
 			->join('a_docs_ver', 'a_docs.a_docs_id = a_docs_ver.a_docs_ver_docsid')
 			->join('a_docs_dir', 'a_docs_dir.a_docs_dir_id = a_docs.a_docs_dirid')
@@ -156,14 +156,14 @@ class docsM extends My_Model {
 		return $query->row_array();
 	}
 
-	// Returns docs details based on path
-	function get_doc_detail($path) {
-		$dirpath_filename = explode_filename_dirpath($path);
+	function get_docs_detail($id) {
 		$query = $this->db->select()
 			->from('a_docs')
 			->join('a_docs_ver', 'a_docs.a_docs_id = a_docs_ver.a_docs_ver_docsid')
-			->where('a_docs_dir_dirpath')
+			->join ('a_docs_dir', 'a_docs.a_docs_dirid = a_docs_dir.a_docs_dir_id')
+			->where('a_docs_id', $id)
 			->get();
+		return $query->row_array();
 	}
 
 	function does_folder_exists($id) {
