@@ -31,9 +31,9 @@
 		</tr>
 		<?php endif; ?>
 
-		<?php if ( ! empty($folders)) : ?>
-		<?php foreach($folders as $folder) : ?>
-		<tr type="folder">
+		<?php if ( ! empty($sub_folders)) : ?>
+		<?php foreach($sub_folders as $folder) : ?>
+		<tr type="sub_folder">
 			<td class="col1 folder-td" value="<?php echo $folder['a_docs_dir_id']; ?>"><?php echo $folder_icon.' '.$folder["a_docs_dir_name"];?></td>
 			<td class="col2"> -- </td>
 			<td class="col3"> -- </td>
@@ -44,13 +44,14 @@
 		<?php if ( ! empty($docs)) : ?>
 		<?php foreach($docs as $doc) : ?>
 		<tr type="docs">
-			<td id="docs"><?php echo $doc_icon.' '.$doc["a_docs_ver_filename"];?></td>
-			<td></td>
-			<td></td>
+			<td class="col1 docs-td"><?php echo $docs_icon.' '.$doc["a_docs_ver_filename"];?></td>
+			<td><?php echo byte_size($doc['a_docs_ver_filesize']); ?></td>
+			<td><?php echo $doc['a_docs_ver_stamp'];?></td>
 		</tr>
 		</tbody>
 		<?php endforeach; ?>
 		<?php endif; ?>
+
 
 		<?php if (empty($folders) && empty($docs)) : ?>
 		<tr type="started"><td colspan="3">Get started by uploading some files now...</td></tr>

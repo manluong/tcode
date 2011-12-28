@@ -92,7 +92,6 @@ $(document).ready(function() {
 		function blind_dblClick_folder() {
 			$('.folder-td').each(function () {
 				$(this).dblclick(function(e) {
-					console.log('dd');
 					window.location = '/docs/view/'+$(e.target).attr('value')+'/list-view';
 				})
 			});

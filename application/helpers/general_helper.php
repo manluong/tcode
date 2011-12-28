@@ -268,12 +268,42 @@ function parse_timestamp($timestamp, $format='ISO') {
 }
 
 
-
-
 function extract_distinct_values($data, $key) {
 	$result = array();
 	foreach($data AS $d) {
 		$result[$d[$key]] = '';
 	}
 	return array_keys($result);
+}
+
+function byte_size($bytes) {
+	$size = $bytes / 1024;
+	if($size < 1024)
+		{
+		$size = number_format($size, 2);
+		$size .= ' KB';
+		}
+	else
+		{
+		if($size / 1024 < 1024)
+			{
+			$size = number_format($size / 1024, 2);
+			$size .= ' MB';
+			}
+		else if ($size / 1024 / 1024 < 1024)
+			{
+			$size = number_format($size / 1024 / 1024, 2);
+			$size .= ' GB';
+			}
+		}
+	return $size;
+}
+
+/** Input /a/b/file.jpg
+ * returns dirpath /a/b and filename file.jpg
+ */
+function explode_filename_dirpath ($path) {
+	$i = explode($path);
+	$filename = array_pop($i);
+	return array('dirpath' =>$i, 'filename'=>$filename);
 }

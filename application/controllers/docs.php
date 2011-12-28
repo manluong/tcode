@@ -22,15 +22,28 @@ class Docs extends MY_Controller {
 	function view() {
 		if ($this->url['subaction'] === 'folder-view') {
 
-		} else{
-			$this->_views_data['folders'] = $this->DocsM->get_folders();
-			$i = $this->DocsM->get_parent($this->url['id_plain']);
-			if ( ! empty($i)) $this->_views_data['parent'] = $this->DocsM->get_parent($this->url['id_plain']);
-
-
-			$data = array();
-			$data['html'] = $this->load->view('/'.get_template().'/docs/docs_view_start.php', $this->_views_data, TRUE);
+		} else {
+			$folder_exists = $this->DocsM->does_folder_exists($this->url['id_plain']);
+			if ( ! empty ($folder_exists)) {
+				$this->_views_data['sub_folders'] = $this->DocsM->get_sub_folders();
+				$i = $this->DocsM->get_parent($this->url['id_plain']);
+				if ( ! empty($i)) $this->_views_data['parent'] = $this->DocsM->get_parent($this->url['id_plain']);
+				$this->_views_data['docs'] = $this->DocsM->get_docs($this->url['id_plain']);
+			} else {
+				// Does user has a root directory
+				$root_dir = $this->DocsM->get_root_dir();
+				if ( ! empty($root_dir)) {
+					redirect('/docs/view/'.$root_dir['a_docs_dir_id'].'/list-view');
+				} else {
+					// Create root folder
+					$values['name'] = 'root';
+					$id = $this->DocsM->update_folder($values);
+					redirect('/docs/view/'.$id.'/list-view');
+				}
+			}
 		}
+		$data = array();
+		$data['html'] = $this->load->view('/'.get_template().'/docs/docs_view_start.php', $this->_views_data, TRUE);
 		$data['outputdiv'] = 1;
 		$data['isdiv'] = TRUE;
 		$data['div']['title'] = 'Documents';
@@ -41,8 +54,6 @@ class Docs extends MY_Controller {
 		$this->output();
 	}
 
-
-
 	function permission_form() {
 
 	}
@@ -50,6 +61,8 @@ class Docs extends MY_Controller {
 	function create_folder() {
 		if ($this->input->get('name')) {
 			$values['name'] = $this->input->get('name');
+			$dirpath = $this->get_dirpath($this->url['id_plain']);
+			$values['dirpath'] = $dirpath['dirpath_str'];
 			if ($this->url['id_plain'] !== 0) $values['parent'] = $this->url['id_plain'];
 			$this->output->set_content_type('application/json');
 			$insert_id = $this->DocsM->update_folder($values);
@@ -72,7 +85,7 @@ class Docs extends MY_Controller {
 
 	function put_object() {
 		$targetDir = '/Applications/XAMPP/htdocs/tcode/tmp/';
-		$dir_path = $this->get_dir_path($this->url['id_plain']);
+		$dirpath = $this->get_dirpath($this->url['id_plain']);
 
 		/*/ ----- S3 code ----
 		// Look for the content type header
@@ -95,11 +108,8 @@ class Docs extends MY_Controller {
 		// ----- end S3 code ---- */
 		//$this->_upload_status
 		if (TRUE) {
-			$latest_docsid = $this->DocsM->get_latest_docsid();
-			$latest_docsid = ( ! empty($latest_docsid)) ? $latest_docsid['a_docs_docsid'] : 0;
-			$values['docsid'] =  $latest_docsid + 1;
-			$values['dirid'] = $this->input->get('dirid');
-			$values['dirpath'] = $dir_path['dir_path_str'];
+			$values['dirid'] = $this->url['id_plain'];
+			$values['dirpath'] = $dirpath['dirpath_str'];
 			$values['filename'] = $_FILES['file']['name'];
 			$values['uploadvia'] = 'web';
 			$values['filesize'] = $_FILES['file']['size'];
@@ -127,28 +137,28 @@ class Docs extends MY_Controller {
 
 	}
 
-	function get_dir_path($id) {
-		$_dir_path = array();
-		$_dir_path_str = '';
+	function get_dirpath($id) {
+		$_dirpath = array();
+		$_dirpath_str = '';
 		while ($i = $this->DocsM->get_dir_parent_path($id)) {
-			$_dir_path[] = $i[0];
+			$_dirpath[] = $i[0];
 			$id = $i[0]['a_docs_dir_parent'];
 		};
-		if ( ! empty($_dir_path)) {
-			$_dir_path = array_reverse($_dir_path);
-			$_dir_path_html = '<ul class="apphead_title">';
-			foreach ($_dir_path as $path) {
-				$_dir_path_str .= '/'.$path['a_docs_dir_name'];
-				$_dir_path_html .= '<li><a href="/docs/view/'.$path['a_docs_dir_id'].'/'
+		if ( ! empty($_dirpath)) {
+			$_dirpath = array_reverse($_dirpath);
+			$_dirpath_html = '<ul class="apphead_title">';
+			foreach ($_dirpath as $path) {
+				$_dirpath_str .= '/'.$path['a_docs_dir_name'];
+				$_dirpath_html .= '<li><a href="/docs/view/'.$path['a_docs_dir_id'].'/'
 					.$this->url['subaction'].'">'.$path['a_docs_dir_name'].'</a></li>';
 			}
-			$_dir_path_html .= '</ul>';
-			return array('dir_path_str'=>$_dir_path_str,
-					'dir_path_html'=>$_dir_path_html,
+			$_dirpath_html .= '</ul>';
+			return array('dirpath_str'=>$_dirpath_str,
+					'dirpath_html'=>$_dirpath_html,
 				);
 		} else {
-			return array('dir_path_str'=>'/',
-					'dir_path_html'=>'',
+			return array('dirpath_str'=>'/',
+					'dirpath_html'=>'',
 				);
 		}
 	}
@@ -163,8 +173,22 @@ class Docs extends MY_Controller {
 		}
 	}
 
+	function preview() {
+		//$preview_data['doc']
+		$data = array();
+		$data['html'] = $this->load->view('/'.get_template().'/docs/docs_view_preview.php',$preview_data, TRUE);
+		$data['outputdiv'] = 1;
+		$data['isdiv'] = TRUE;
+		$data['div']['title'] = 'Documents';
+		$data['div']['element_name'] = 'loginwin';
+		$data['div']['element_id'] = 'divlogin';
+		$this->data[] = $data;
+		$this->LayoutM->load_format();
+		$this->output();
+	}
+
 	function test() {
-		$this->get_dir_path();
-		print_r($this->_dir_path);
+		$i = $this->get_dirpath(0);
+		print_r($i);
 	}
 }
