@@ -23,6 +23,7 @@
 	.comment .controls { margin:5px 0; }
 	.comment_input { width: 100%; }
 	.fade_text { color:#AAA; }
+	div.sending { border: solid 1px #A8A; background-color:#FEF; text-align:center; font-weight:bold; padding:5px; color:#A8A; }
 
 	.show_more_replies { background-color:#EEF; border-bottom: solid 1px #9C9; padding:5px; text-align: center; cursor:pointer; }
 	.show_more_comments { background-color:#EEF; border: solid 1px #99C; padding:5px; text-align: center; cursor:pointer; }
@@ -228,6 +229,10 @@
 				var parent_id = textbox.attr('data-parent_id');
 				var text = textbox.val();
 
+				var textboxform = textbox.closest('form');
+
+				var sending = '<div class="sending">Sending message</div>';
+
 				if (text.length == 0) {
 					e.preventDefault();
 					return false;
@@ -240,6 +245,11 @@
 					var is_reply = true;
 					var url = '/comments/ajax_save_reply';
 				}
+
+				textbox.attr('disabled', 'disabled').fadeTo('slow', 0.1);
+				var sending_div = $(sending);
+				sending_div.insertAfter(textbox).hide().fadeTo('slow', 1.0);
+				$(textboxform).attr('onSubmit', 'return false;')
 
 				$.post(
 					url,
@@ -285,6 +295,9 @@
 						} else {
 							alert('Unable to save comment. Please try again.'+result.message);
 						}
+						textbox.removeAttr('disabled').fadeTo('slow', 1.0);
+						sending_div.fadeTo('slow', 0.1).delay(5000).remove();
+						$(textboxform).removeAttr('onSubmit');
 					},
 					'json'
 				);

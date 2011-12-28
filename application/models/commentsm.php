@@ -133,8 +133,8 @@ class CommentsM extends MY_Model {
 		$modified_cardid = $this->UserM->get_cardid();
 		$modified_stamp = get_current_stamp();
 
-		$sql = "UPDATE ? SET reply_count=reply_count+1, modified_cardid=?, modified_stamp=? WHERE id=?";
-		$this->db->query($sql, array($this->table, $modified_cardid, $modified_stamp, $id));
+		$sql = "UPDATE ".$this->table." SET reply_count=reply_count+1, modified_cardid=?, modified_stamp=? WHERE id=?";
+		$this->db->query($sql, array($modified_cardid, $modified_stamp, $id));
 	}
 
 
