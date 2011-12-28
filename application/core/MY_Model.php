@@ -4,7 +4,7 @@ class MY_Model extends CI_Model {
 	var $table = '';
 	var $id_field = '';
 
-	var $cache = '';
+	var $cache = array();
 	var $cache_enabled = FALSE;
 
 	function __construct() {
