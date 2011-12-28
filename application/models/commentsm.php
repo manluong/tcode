@@ -90,7 +90,7 @@ class CommentsM extends MY_Model {
 
 		$this->fill_card_info($results, 'many');
 
-		$results = array_combine(array_reverse(array_keys($results)), array_reverse(array_values($results)));
+		$results = array_reverse_order($results);
 
 		return $results;
 	}
@@ -113,7 +113,7 @@ class CommentsM extends MY_Model {
 
 		$this->fill_card_info($results, 'many');
 
-		$results = array_combine(array_reverse(array_keys($results)), array_reverse(array_values($results)));
+		$results = array_reverse_order($results);
 
 		return $results;
 	}
