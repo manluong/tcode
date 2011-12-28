@@ -1,12 +1,15 @@
 <?php if (!defined('BASEPATH')) exit('No direct access allowed.');
 
-class AppM extends CI_Model {
+class AppM extends MY_Model {
 	var $url = array();
 	var $actions = array();
 
 	var $public_apps = array('access', 'dashboard');
 
 	function __construct() {
+		$this->table = 'core_apps';
+		$this->id_field = 'core_apps_id';
+
 		parent::__construct();
 
 		$CI =& get_instance();

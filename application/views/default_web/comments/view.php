@@ -100,7 +100,9 @@
 	</li>
 	<?php endforeach; ?>
 
-	<li class="show_more_comments" data-comments_page="2" data-app_id="<?=$app_id?>" data-app_data_id="<?=$app_data_id?>">Show more comments</li>
+	<?php if (count($comments)>=5) : ?>
+		<li class="show_more_comments" data-comments_page="2" data-app_id="<?=$app_id?>" data-app_data_id="<?=$app_data_id?>">Show more comments</li>
+	<?php endif; ?>
 </ul>
 
 

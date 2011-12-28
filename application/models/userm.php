@@ -63,6 +63,22 @@ class UserM extends MY_Model {
 		return $this->info['card_timezone'];
 	}
 
+	public function get_data_name($cardid) {
+		$rs = $this->db->select('card_fname, card_mname, card_lname')
+				->from($this->table)
+				->where('card_id', $cardid)
+				->limit(1)
+				->get();
+
+		$name = $rs->row_array();
+		$result = array();
+		foreach($name AS $n) {
+			if ($n != '') $result[] = $name;
+		}
+
+		return implode(' ', $name);
+	}
+
 
 	public function is_valid_password($username, $password) {
 		$rs = $this->db->select()
