@@ -191,17 +191,12 @@ class Docs extends MY_Controller {
 				$this->_views_data['s3_object'] = '<img src="'.$this->_views_data['s3_object'].'">';
 				break;
 		}
-		
+
 		$data = array();
 		$data['html'] = $this->load->view('/'.get_template().'/docs/docs_view_preview.php',$this->_views_data, TRUE);
-		$data['outputdiv'] = 1;
-		$data['isdiv'] = TRUE;
-		$data['div']['title'] = 'Documents';
-		$data['div']['element_name'] = 'loginwin';
-		$data['div']['element_id'] = 'divlogin';
-		$this->data[] = $data;
-		$this->LayoutM->load_format();
-		$this->output();
+		$data['isoutput'] = 1;
+		$data['isdiv'] = 1;
+		return $data;
 	}
 
 	function test() {
