@@ -46,8 +46,6 @@ class MY_Controller extends CI_Controller {
 		if ($this->AppM->must_disable_plain_id()) $this->ACLM->check_id_encryption();
 		$this->ACLM->check_app_access();
 
-		$this->load->library('CommentsL');
-
 		//$this->output->enable_profiler(true);
 	}
 
@@ -203,7 +201,15 @@ class MY_Controller extends CI_Controller {
 						break;
 
 					case 'comment' :
+						$this->load->library('CommentsL');
 						$output[$count_output]['html'] = $this->commentsl->get_page_html();
+						$output[$count_output]['isoutput'] = 1;
+						$output[$count_output]['isdiv'] = 1;
+						break;
+
+					case 'tag' :
+						$this->load->library('TagsL');
+						$output[$count_output]['html'] = $this->tagsl->get_html();
 						$output[$count_output]['isoutput'] = 1;
 						$output[$count_output]['isdiv'] = 1;
 						break;
