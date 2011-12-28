@@ -276,6 +276,7 @@ function extract_distinct_values($data, $key) {
 	return array_keys($result);
 }
 
+
 function byte_size($bytes) {
 	$size = $bytes / 1024;
 	if($size < 1024)
@@ -306,4 +307,8 @@ function explode_filename_dirpath ($path) {
 	$i = explode($path);
 	$filename = array_pop($i);
 	return array('dirpath' =>$i, 'filename'=>$filename);
+}
+
+function array_reverse_order($array) {
+	return array_combine(array_reverse(array_keys($array)), array_reverse(array_values($array)));
 }
