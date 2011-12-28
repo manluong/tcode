@@ -300,7 +300,8 @@ class View_dgroup extends CI_model {
 				'input' => '',
 				'input_end' => '',
 				'start' => '',
-				'end' => ''
+				'end' => '',
+				'value' => ''
 			);
 			
 	        if ($field['form_required']) { $lableextra .= " <em>*</em>"; $forminput .= ' required="required"'; }

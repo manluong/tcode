@@ -516,8 +516,12 @@ class MY_Controller extends CI_Controller {
 
 				if (!isset($view_data['divstyle'][$active_style])) $view_data['divstyle'][$active_style] = $this->get_divstyle($active_style);
 
-				if (!isset($data['colnum'])) $data['colnum'] = 1;
-				if (!isset($content_div[$data['colnum']])) $content_div[$data['colnum']] = '';
+				if (!isset($data['div']['colnum'])) {
+					$data['div']['colnum'] = 1;
+				} elseif ($data['div']['colnum'] == 0){
+					$data['div']['colnum'] = 1;
+				}
+				if (!isset($content_div[$data['div']['colnum']])) $content_div[$data['div']['colnum']] = '';
 
 				//$this_apps_html['colnum']
 				//$this_apps_html['actlayout']
@@ -555,18 +559,18 @@ class MY_Controller extends CI_Controller {
 
 							if (!isset($this->data[$count_output+1]) || isset($this->data[$count_output+1]) && $this->data[$count_output+1]['div']['tab'] == 0){
 									//next element is not a tab, so warp up the tab
-									$content_div[$data['colnum']] .= $this->load->view('/'.get_template().'/component_grid_tab', $tabdata, TRUE);
+									$content_div[$data['div']['colnum']] .= $this->load->view('/'.get_template().'/component_grid_tab', $tabdata, TRUE);
 									$tabdata = array();
 							}
 
 							//}
 						} else {
-							$content_div[$data['colnum']] .= $this->load->view('/'.get_template().'/component_grid', $view_data, TRUE);
+							$content_div[$data['div']['colnum']] .= $this->load->view('/'.get_template().'/component_grid', $view_data, TRUE);
 						}
 						break;
 
 					case 'simple':
-						$content_div[$data['colnum']] .= $this->load->view('/'.get_template().'/component_simple', $view_data, TRUE);
+						$content_div[$data['div']['colnum']] .= $this->load->view('/'.get_template().'/component_simple', $view_data, TRUE);
 						break;
 				}
 
@@ -583,8 +587,6 @@ class MY_Controller extends CI_Controller {
 
 			$count_output++;
 		}
-
-
 
 		/////////////////////////////////////////////////////////
 		//load content
@@ -610,7 +612,6 @@ class MY_Controller extends CI_Controller {
 		$layout_boxformat = $result3['core_layout_content_defboxcol'];
 
 		//insert the content_div into the core_layout_content as h_html
-
 		$div_count = 0;
 
 		foreach ($layout_cf_sort as $this_cf) {
