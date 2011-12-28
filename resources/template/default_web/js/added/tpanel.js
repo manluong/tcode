@@ -358,11 +358,14 @@ function dgroup_submit(element_id){
 				//for(var i = 0; i < formLength; i++) {}
 				
 			} else if (json['form']['save_error_json']) {
-				form.data("validator").invalidate(json['form']['save_error_json']);
+				//alert(decodeURIComponent(json['form']['save_error_json']));
+				form.data("validator").invalidate(jQuery.parseJSON(json['form']['save_error_json']));
+				
 			} else if (json['form']['save_error_msg']) {
 			
 			}		
 		});
+	
 		// submit with AJAX
 		//var ajaxvalue = '';
 		//'.$ajax_getvalue.'

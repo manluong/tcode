@@ -71,7 +71,7 @@ class View_button extends CI_Model {
 		                $this_icon_only = '';
 		            }
 
-		            if (isset($this_button['lang__d'])) $result[$this_button['position']] .= '<font class="bu__d">'.$this_button['lang__d'].'</font>';
+		            if (isset($this_button['lang__d']) && $this_button['lang__d']) $result[$this_button['position']] .= '<font class="bu__d">'.$this_button['lang__d'].'</font>';
 
 		            if ($this_button['type'] == "listtitle"){
 		            $result[$this_button['position']] .= '<font style="padding-left:10px; padding-right:10px; font-weight: bold;">'.$this_button['lang'].'</font>';
@@ -127,7 +127,7 @@ class View_button extends CI_Model {
 		        $this_icon_only = '';
 		    }
 
-		    if (isset($this_button['lang__d'])) $result[$this_button['position']] .= '<font class="bu__d">'.$this_button['lang__d'].'</font>';
+		    if ($this_button['lang__d']) $result[$this_button['position']] .= '<font class="bu__d">'.$this_button['lang__d'].'</font>';
 
 		    $result .= '<button type="button" class="button"'.$this_iconclass.''.$this_icon_only.' onclick="'.$this->output_button_formatjs($this_button,0,$targetid[$count]['targetid']).'">'.$this_button['lang'].'</button>';
 
@@ -168,7 +168,7 @@ class View_button extends CI_Model {
 	        $thisid_isjs = 0;
 	    }elseif ($this_button['targetid'] == "parentid") {
 	        $thisid_format = $this_button['parentid'];
-	        $thisid_isjs = 1;
+	        $thisid_isjs = 0;
 	    }elseif ($this_button['targetid'] == "noid") {
 	        $thisid_format = 0;
 	    }

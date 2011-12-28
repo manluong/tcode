@@ -49,6 +49,7 @@ $active_group = 'default';
 $active_record = TRUE;
 
 $db['default']['hostname'] = '0810.dyndns.org:10306';
+$db['default']['hostname'] = '192.168.1.54';
 $db['default']['username'] = 'snowman';
 $db['default']['password'] = 'fast123';
 $db['default']['database'] = 'snowman3';

@@ -232,7 +232,10 @@ function parse_stamp($stamp, $format='ISO') {
 }
 
 function parse_stamp_user($stamp, $format='ISO') {
+	
 	$timestamp = strtotime($stamp);
+	
+	if ($timestamp == 0) return false;
 
 	$CI =& get_instance();
 	$timezone = $CI->UserM->get_timezone();

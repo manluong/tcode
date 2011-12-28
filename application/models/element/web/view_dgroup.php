@@ -149,6 +149,7 @@ class View_dgroup extends CI_model {
 		$html = "";
 		
 		foreach ($this_output['data']['form']['field'] as $this_field){
+			
 	    //foreach (array_keys($formdata['fieldsort']) as $this_fieldname){
 	
 	        //$this_field = $formdata['table'][$formdata['fieldsort'][$this_fieldname]['tablenum']]['fields'][$formdata['fieldsort'][$this_fieldname]['fieldnum']];
@@ -547,7 +548,7 @@ class View_dgroup extends CI_model {
 	        if ($value == "0000-00-00") {
 	        $value = "";
 	        }else {
-	        if ($aved == "ed") $value = core_date_convert($field['date'],$field['date_showformat'],$value);
+	        if ($aved == "e") $value = parse_stamp_user($value, $field['date_showformat']);
 	        }
 	
 	        $fieldformat = $this->f_layout_form_edit_fieldformat($field,$value,$aved,'date',$inputwidth);
@@ -573,7 +574,7 @@ class View_dgroup extends CI_model {
 	        if ($value == "0000-00-00 00:00:00") {
 	        $value = "";
 	        }else {
-	        if ($aved == "ed") $value = core_date_convert($field['date'],$field['date_showformat'],$value);
+	        if ($aved == "e") $value = parse_stamp_user($value, $field['date_showformat']);
 	        }
 	
 	        $fieldformat = $this->f_layout_form_edit_fieldformat($field,$value,$aved,'date',$inputwidth);
@@ -599,7 +600,7 @@ class View_dgroup extends CI_model {
 	        if ($value == "00:00:00") {
 	        $value = "";
 	        }else {
-	        if ($aved == "ed") $value = core_date_convert($field['date'],$field['date_showformat'],$value);
+	        if ($aved == "e") $value = parse_stamp_user($value, $field['date_showformat']);
 	        }
 	
 	        $fieldformat = $this->f_layout_form_edit_fieldformat($field,$value,$aved,'date',$inputwidth);

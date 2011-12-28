@@ -23,7 +23,8 @@ function dgroup_list($dgroup_structure,$dgroup_value,$element_button,$searcharra
 
 	if ($element_button) {
 	foreach ($element_button['buttons'] as $this_button) {
-
+		
+		if (!isset($this_button['lang__d'])) $this_button['lang__d'] = "";
 		//format the name of the button
 		//use the field name in a button
 		//like "back to [parent field name]", example use in product app
@@ -59,10 +60,10 @@ function dgroup_list($dgroup_structure,$dgroup_value,$element_button,$searcharra
 					}
 	                if ($parentid == 0 && !isset($this_parentname)){
 	                $this_button['lang'] = preg_replace("/XXparentname/",$dgroup_structure['listparenttop_lang'], $this_button['lang']);
-	                if (isset($this_button['lang__d'])) $this_button['lang__d'] = preg_replace("/XXparentname/",$dgroup_structure['listparenttop_lang'], $this_button['lang__d']);
+	                if ($this_button['lang__d']) $this_button['lang__d'] = preg_replace("/XXparentname/",$dgroup_structure['listparenttop_lang'], $this_button['lang__d']);
 	                } elseif ($this_parentname){
 	                $this_button['lang'] = preg_replace("/XXparentname/",$this_parentname, $this_button['lang']);
-	                if (isset($this_button['lang__d'])) $this_button['lang__d'] = preg_replace("/XXparentname/",$this_parentname, $this_button['lang__d']);
+	                if ($this_button['lang__d']) $this_button['lang__d'] = preg_replace("/XXparentname/",$this_parentname, $this_button['lang__d']);
 	                }
 	            }
 	        }
@@ -100,11 +101,11 @@ function dgroup_list($dgroup_structure,$dgroup_value,$element_button,$searcharra
 					$this_fieldname = explode("FIELD", $this_button['lang'],3);
 					if ($this->url['id_plain']){
 						$sql = 'SELECT '.$this_fieldname[1].' FROM '.$thisidform[0].' WHERE '.$thisidform[1].' = '.$this->url['id_plain'];
-						$result = $this->db->query($sql);
-						$result = $result->row_array(1);
-						$result = $result[$this_fieldname[1]];
+						$resulttitle = $this->db->query($sql);
+						$resulttitle = $resulttitle->row_array(1);
+						$resulttitle = $resulttitle[$this_fieldname[1]];
 
-						$this_button['lang'] = $this_fieldname[0].$result.$this_fieldname[2];
+						$this_button['lang'] = $this_fieldname[0].$resulttitle.$this_fieldname[2];
 					}else{
 						$this_button['lang'] = $this_fieldname[0].$this_fieldname[2];
 					}
@@ -435,7 +436,7 @@ function dgroup_list($dgroup_structure,$dgroup_value,$element_button,$searcharra
 	 */
 
 
-
+	$result_button = array('rowend' => array());
 	foreach (array_keys($element_button_row) as $this_button_key){
 		$element_button_row[$this_button_key]['key'] = $this_button_key;
 		if ($element_button_row[$this_button_key]['position'] == "rowend"){

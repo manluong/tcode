@@ -188,6 +188,7 @@ function dgroup_view($dgroup_structure,$dgroup_value,$element_button,$aved){
             //date
             case "6":
             //if ($dgroup_value[$this_fieldname]) $this_value = core_date_convert($this_field['date'],$this_field['date_showformat'],$dgroup_value[$this_fieldname]);
+            if ($dgroup_value[$this_fieldname]) $this_value = parse_stamp_user($dgroup_value[$this_fieldname], $this_field['date_showformat']);
             $form[$count]['title'] = $this_field['form_name_lang'];
 			$form[$count]['value'] = $this_value;
 			$form[$count]['name'] = $this_fieldname;
@@ -199,6 +200,7 @@ function dgroup_view($dgroup_structure,$dgroup_value,$element_button,$aved){
             //datetime
             case "18":
             //if ($dgroup_value[$this_fieldname]) $this_value = core_date_convert($this_field['date'],$this_field['date_showformat'],$dgroup_value[$this_fieldname]);
+			if ($dgroup_value[$this_fieldname]) $this_value = parse_stamp_user($dgroup_value[$this_fieldname], $this_field['date_showformat']);
             $form[$count]['title'] = $this_field['form_name_lang'];
 			$form[$count]['value'] = $this_value;
 			$form[$count]['name'] = $this_fieldname;
@@ -210,6 +212,7 @@ function dgroup_view($dgroup_structure,$dgroup_value,$element_button,$aved){
             //time
             case "12":
             //if ($dgroup_value[$this_fieldname]) $this_value = core_date_convert($this_field['date'],$this_field['date_showformat'],$dgroup_value[$this_fieldname]);
+			if ($dgroup_value[$this_fieldname]) $this_value = parse_stamp_user($dgroup_value[$this_fieldname], $this_field['date_showformat']);
             $form[$count]['title'] = $this_field['form_name_lang'];
 			$form[$count]['value'] = $this_value;
 			$form[$count]['name'] = $this_fieldname;

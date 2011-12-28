@@ -11,7 +11,7 @@ function dgroup_save($dgroup_structure,$dgroup_value,$aved){
 	
     global $_POST;
 	
-	$listid = "";
+	$listid = $error_json = "";
 	
     ////////////////////////////////////////////////////////////////////////////////
     //error checking
@@ -31,7 +31,7 @@ function dgroup_save($dgroup_structure,$dgroup_value,$aved){
 		    if ($this_field_value){
 		        $this_field_value = explode("/", $this_field_value);
 		        if (!checkdate($this_field_value[1], $this_field_value[2], $this_field_value[0])) $error_json .= '"'.$this_fieldname.'":"Date Error",';
-		        if ($this_field_value[3]) $error_json .= '"'.$this_fieldname.'":"Date Error",';
+		        if (isset($this_field_value[3])) $error_json .= '"'.$this_fieldname.'":"Date Error",';
 		    }
 		
 		    ; break;
@@ -70,7 +70,7 @@ function dgroup_save($dgroup_structure,$dgroup_value,$aved){
     ////////////////////////////////////////////////////////////////////////////////
     // Saving (if no error_json)
     ////////////////////////////////////////////////////////////////////////////////
-    if (!isset($error_json)) {
+    if (!$error_json) {
 				
 	$this_parent_id = "";
 		
@@ -379,11 +379,10 @@ function dgroup_save($dgroup_structure,$dgroup_value,$aved){
 		$listid = $listid[$list_key[1]];
 	}
 		
-  	if (isset($error_json)){
+  	if ($error_json){
 
-      	substr($error_json, 0, -1);
       	$form['save_error_json'] = '{
-        	'.$error_json.'
+        	'.substr($error_json, 0, -1).'
       	}';
 		$form['save_success'] = 0;
 		
