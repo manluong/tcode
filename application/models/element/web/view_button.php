@@ -129,7 +129,9 @@ class View_button extends CI_Model {
 
 		    if ($this_button['lang__d']) $result[$this_button['position']] .= '<font class="bu__d">'.$this_button['lang__d'].'</font>';
 
-		    $result .= '<button type="button" class="button"'.$this_iconclass.''.$this_icon_only.' onclick="'.$this->output_button_formatjs($this_button,0,$targetid[$count]['targetid']).'">'.$this_button['lang'].'</button>';
+			if (isset($targetid[$count]['targetvalue'])) { $targetvalue = $targetid[$count]['targetvalue']; } else { $targetvalue = ""; }
+			
+		    $result .= '<button type="button" class="button"'.$this_iconclass.''.$this_icon_only.' onclick="'.$this->output_button_formatjs($this_button,0,$targetid[$count]['targetid'],0,$targetvalue).'">'.$this_button['lang'].'</button>';
 
 		$count++;
 	    }
@@ -137,7 +139,7 @@ class View_button extends CI_Model {
 	return ($result);
 	}
 
-	function output_button_formatjs($this_button,$thisid_en,$targetid=0,$listid=0){
+	function output_button_formatjs($this_button,$thisid_en,$targetid=0,$listid=0,$targetvalue=""){
 
 	    /*
 	            $this_button['position']
@@ -203,13 +205,13 @@ class View_button extends CI_Model {
 				}
 			}
 			
-            if ($this_button['targetvalue']) $thisjsline .= '/'.$this_button['targetvalue'];
+            if (isset($this_button['targetvalue']) && $this_button['targetvalue']) $thisjsline .= '/'.$targetvalue;
 
             $result = "apps_action_pageload('".$thisjsline."');";
 
         }else{
 
-            if (isset($this_button['targetvalue'])) {$this_targetvalue = ",'".$this_button['targetvalue']."'";}else{$this_targetvalue = "";}
+            if (isset($this_button['targetvalue'])) {$this_targetvalue = ",'".$targetvalue."'";}else{$this_targetvalue = "";}
 
 			//if ($dgroup_submit){
 			//$result = "dgroup_submit('".$this_button['targetapp']."','".$this_button['targetan']."','".$this_button['targetaved']."','".$this_button['div']."','".$thisid_format."".$this_targetvalue."','".$morevalue_new."','".$this_element_id."');";

@@ -172,18 +172,20 @@ function dgroup_list($dgroup_structure,$dgroup_value,$element_button,$searcharra
 		if (isset($element_button_row[$count]['targetvalue']) && preg_match("/FIELD/",$element_button_row[$count]['targetvalue'])){
         	$this_targetvalue_array = explode("FIELD", $element_button_row[$count]['targetvalue']);
             foreach ($this_targetvalue_array as $this_targetvalue) {
+            	if(preg_match("/XX/",$this_targetvalue)){
             	$this_targetvalue_name = explode("XX", $this_targetvalue);
-            	$fieldreplace[] = $element_button_row[$count]['targetvalue_field'][] = $fieldreplace_targetvalue[] = $this_targetvalue_name[0];
+            	$fieldreplace[] = $element_button_row[$count]['targetvalue_field'][] = $fieldreplace_targetvalue[] = $this_targetvalue_name[0];        		
+            	}
             }
 
 		}
 
 	$count++;
 	}
-
 	//check for all fields inside $fieldreplace are in the fieldlist
 	//if no, add to the fieldlist, as fieldlist is used to generate the SQL statement
-	//if not in field list the value will not be loaded from DB
+	//if not in field list the value will not be loaded from DB3
+	
 	foreach ($fieldreplace as $this_fieldreplace){
             if (!preg_match("/".$this_fieldreplace.",/",$dgroup_structure['fieldlist']) && !preg_match("/.".$this_fieldreplace."/",$dgroup_structure['fieldlist'])) {
             $dgroup_structure['fieldlist'] = $dgroup_structure['fieldlist'].",".$this_valuereplace['field'];
@@ -359,7 +361,7 @@ function dgroup_list($dgroup_structure,$dgroup_value,$element_button,$searcharra
 
                     } elseif ($dgroup_structure['listarray'][$fieldname]['list_formtype'] == 6 || $dgroup_structure['listarray'][$fieldname]['list_formtype'] == 12 || $dgroup_structure['listarray'][$fieldname]['list_formtype'] == 18) {
 
-                    $this_value = core_date_convert($this_field['date'],$this_field['date_showformat'],$field1[$fieldname]);
+                    $this_value = parse_stamp_user($field1[$fieldname], $this_field['date_showformat']);
                     $data_list[$data_listcount][] = $this_value;
 
                     } else {
@@ -383,15 +385,15 @@ function dgroup_list($dgroup_structure,$dgroup_value,$element_button,$searcharra
 						}elseif(isset($element_button_row[$count]['targetid']) && $element_button_row[$count]['targetid'] == "thisid"){
 							$this_row_button[$count]['targetid'] = $this->url['id_encrypted'];
 						}
+						
 
 						if (in_array($fieldname,$fieldreplace_targetvalue)){
 							foreach($element_button_row[$count]['targetvalue_field'] as $this_value_field){
 								if ($this_value_field == $fieldname){
-									$this_row_button[$count]['targetvalue'] = preg_replace("/FIELD".$fieldname."/XX",$field1[$fieldname], $element_button_row[$count]['targetvalue']);
+									$this_row_button[$count]['targetvalue'] = preg_replace("/FIELD".$fieldname."XX/",$field1[$fieldname], $element_button_row[$count]['targetvalue']);
 								}
 							}
 						}
-
 
 					$count++;
 					}
@@ -401,9 +403,9 @@ function dgroup_list($dgroup_structure,$dgroup_value,$element_button,$searcharra
 
             $thislist_count++;
             }
-
+			
 		$list['table_button'][$data_listcount] = $this_row_button;
-
+		
 /*
  *
     		foreach (array_keys($element_button_row) as $this_button_key){

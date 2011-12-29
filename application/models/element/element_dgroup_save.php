@@ -11,7 +11,7 @@ function dgroup_save($dgroup_structure,$dgroup_value,$aved){
 	
     global $_POST;
 	
-	$listid = $error_json = "";
+	$error_json = "";
 	
     ////////////////////////////////////////////////////////////////////////////////
     //error checking
@@ -371,7 +371,7 @@ function dgroup_save($dgroup_structure,$dgroup_value,$aved){
     // Returning Result
     ////////////////////////////////////////////////////////////////////////////////
     
-    if (!$listid && $dgroup_structure['basetype'] == "list" && $dgroup_structure['thisidlist'][1]){
+    if (!isset($listid) && $dgroup_structure['basetype'] == "list" && $dgroup_structure['thisidlist'][1]){
 		$list_key = explode(".", $dgroup_structure['thisidlist'][1],2);
 		$listid_sql = "SELECT ".$list_key[1]." FROM ".$dgroup_structure['table'][0]['table']." WHERE ".$dgroup_structure['table'][0]['index']." = '".$saveid."' LIMIT 1";
 		$listid = $this->db->query($listid_sql);

@@ -59,7 +59,7 @@ function dgroup_form($dgroup_structure,$dgroup_value,$element_button,$aved){
 	$listid_sql = "SELECT ".$list_key[1]." FROM ".$dgroup_structure['table'][0]['table']." WHERE ".$dgroup_structure['table'][0]['index']." = '".$this->url['id_plain']."' LIMIT 1";
 	$listid = $this->db->query($listid_sql);
 	$listid = $listid->row_array(0);
-	$listid = $listid[$list_key[1]];
+	if (isset($listid[$list_key[1]])) $listid = $listid[$list_key[1]];
 	}
 	
 	$result['dgrouptype'] = "form";
