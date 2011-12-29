@@ -84,6 +84,13 @@ class docsM extends My_Model {
 		}
 	}
 
+	function update_docs_display_name($title, $id) {
+		$data = array('a_docs_displayname' => $title);
+		$this->db->where('a_docs_id', $id)
+			->update('a_docs',$data);
+		return $this->db->affected_rows();
+	}
+
 	function update_docs_setting($values) {
 
 	}

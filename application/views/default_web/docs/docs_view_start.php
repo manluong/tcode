@@ -44,7 +44,7 @@
 		<?php if ( ! empty($docs)) : ?>
 		<?php foreach($docs as $doc) : ?>
 		<tr type="docs">
-			<td class="col1 docs-td"><a href="/docs/preview/<?php echo $doc['a_docs_ver_id'] ;?>/view"><?php echo $docs_icon.' '.$doc["a_docs_ver_filename"];?></a></td>
+			<td class="col1 docs-td"><a href="/docs/file/<?php echo $doc['a_docs_ver_id'] ;?>/view"><?php echo $docs_icon.' '.$doc["a_docs_ver_filename"];?></a></td>
 			<td><?php echo byte_size($doc['a_docs_ver_filesize']); ?></td>
 			<td><?php echo $doc['a_docs_ver_stamp'];?></td>
 		</tr>
@@ -75,7 +75,8 @@ $("#uploader").pluploadQueue({
 		// Specify what files to browse for
 		filters : [
 			{title : "Image files", extensions : "jpg,gif,png"},
-			{title : "Zip files", extensions : "zip"}
+			{title : "Zip files", extensions : "zip"},
+			{title : "PDF files", extensions : "pdf"},
 		],
 
 		// Flash settings

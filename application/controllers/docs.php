@@ -3,11 +3,13 @@
 class Docs extends MY_Controller {
 	private $_views_data, $_dir_path = array();
 	private $_upload_status = FALSE;
+	private $_temp_dir = '';
 
 	function __construct() {
 		parent::__construct();
 		$this->load->library('S3');
 		$this->load->model('DocsM');
+		$this->_temp_dir = $_SERVER['DOCUMENT_ROOT'].'/tmp/';
 
 		$this->_views_data['folder_icon'] = '<img src="/resources/template/'.get_template().'/images/icons/16/folder-small-horizontal.png">';
 		$this->_views_data['docs_icon'] = '<img src="/resources/template/'.get_template().'/images/icons/16/document-small.png">';
@@ -184,11 +186,23 @@ class Docs extends MY_Controller {
 
 	function preview() {
 		$this->_views_data['docs_detail'] = $this->DocsM->get_docs_detail($this->url['id_plain']);
-		$this->_views_data['s3_object'] = $this->get_object_url('s3subscribers', $this->_views_data['docs_detail']['a_docs_dir_dirpath'].$this->_views_data['docs_detail']['a_docs_ver_filename'], '3600');
 
 		switch ($this->_views_data['docs_detail']['a_docs_ver_mime']) {
 			case 'image/png':
+				$this->_views_data['s3_object'] = $this->get_object_url('s3subscribers', $this->_views_data['docs_detail']['a_docs_dir_dirpath'].$this->_views_data['docs_detail']['a_docs_ver_filename'], '3600');
 				$this->_views_data['s3_object'] = '<img src="'.$this->_views_data['s3_object'].'">';
+				break;
+			case 'application/pdf':
+				$this->_views_data['s3_object'] = $this->get_object('s3subscribers', $this->_views_data['docs_detail']['a_docs_dir_dirpath'].$this->_views_data['docs_detail']['a_docs_ver_filename']);
+				$this->save_to_file($this->_views_data['s3_object']->body, $this->_views_data['docs_detail']['a_docs_ver_filename']);
+				$this->convert_to_swf($this->_views_data['docs_detail']['a_docs_ver_filename']);
+				$this->_view_data['s3_object'] = $this->_temp_dir.$this->_views_data['docs_detail']['a_docs_ver_filename'].'.swf';
+
+				$data = array();
+				$data['html'] = $this->load->view('/'.get_template().'/docs/docs_view_preview_pdf.php',$this->_views_data, TRUE);
+				$data['isoutput'] = 1;
+				$data['isdiv'] = 1;
+				return $data;
 				break;
 		}
 
@@ -199,10 +213,43 @@ class Docs extends MY_Controller {
 		return $data;
 	}
 
+	function save_to_file(&$binary, $filename){
+		$fp = fopen($this->_temp_dir.$filename, 'wb');
+		$r = fwrite($fp, $binary);
+		fclose($fp);
+	}
+
+	function convert_to_swf($filename) {
+		if (file_exists($filename)) {
+			exec('pdf2swf '.$this->_temp_dir.$filename.' -o '.$this->_temp_dir.$filename.'.swf -T 9 -f');
+		}
+	}
+
+	function display_file_functions () {
+		$data = array();
+		$data['html'] = $this->load->view('/'.get_template().'/docs/docs_view_file_functions.php','',TRUE);
+		$data['isoutput'] = 1;
+		$data['isdiv'] = 1;
+		return $data;
+	}
+
+	function update_docs_title() {
+		if ($this->input->post('title') && $this->input->post('id')) {
+			if ($this->DocsM->update_docs_display_name($this->input->post('title'), $this->input->post('id'))) {
+				$this->output->set_content_type('application/json');
+			echo json_encode(array('message' => 'Title changed'));exit();
+			}
+		}
+		$this->output->set_status_header('400');exit();
+	}
+
 	function test() {
+		/*
 		$i = $this->get_dirpath(1);
 		print_r($i);
-		$img =  S3::getAuthenticatedURL('s3subscribers', 'gravatar-140.png', '3600');
+		$img =  S3::getAuthenticatedURL('s3subscribers', 'gravatar-14022.png', '3600');
 		echo '<img src="'.$img.'">';
+		*/
+		print_r($_SERVER);
 	}
 }
