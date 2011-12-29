@@ -222,7 +222,7 @@ function get_template() {
 function get_current_stamp() {
 	$timestamp = time();
 	$timestamp = $timestamp - date('Z');
-	return mdate("%Y-%n-%j %H:%i:%s", $timestamp);
+	return mdate("%Y-%m-%d %H:%i:%s", $timestamp);
 }
 
 function parse_stamp($stamp, $format='ISO') {
@@ -232,9 +232,9 @@ function parse_stamp($stamp, $format='ISO') {
 }
 
 function parse_stamp_user($stamp, $format='ISO') {
-	
+
 	$timestamp = strtotime($stamp);
-	
+
 	if ($timestamp == 0) return false;
 
 	$CI =& get_instance();
