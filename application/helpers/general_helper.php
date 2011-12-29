@@ -262,6 +262,14 @@ function parse_timestamp($timestamp, $format='ISO') {
 			//return standard_date('DATE_ISO8601', $timestamp);
 			return date('c', $timestamp);
 			break;
+		case 'ICAL_DATE':
+			//return standard_date('DATE_ISO8601', $timestamp);
+			return date('Ymd', $timestamp);
+			break;
+		case 'ICAL_DATETIME':
+			//return standard_date('DATE_ISO8601', $timestamp);
+			return date('Ymd\THis', $timestamp);
+			break;
 		default:
 			$format_string = $format;
 			break;
