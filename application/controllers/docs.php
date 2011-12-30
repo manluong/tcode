@@ -97,6 +97,7 @@ class Docs extends MY_Controller {
 
 		if (isset($_SERVER["CONTENT_TYPE"]))
 			$contentType = $_SERVER["CONTENT_TYPE"];
+		log_message('debug','Content-type:'.$contentType."\n");
 		// Handle non multipart uploads older WebKit versions didn't support multipart in HTML5
 		if (strpos($contentType, "multipart") !== FALSE) {
 			if (isset($_FILES['file']['tmp_name']) && is_uploaded_file($_FILES['file']['tmp_name'])) {
@@ -121,7 +122,7 @@ class Docs extends MY_Controller {
 			log_message('debug','File type: '.$_FILES['file']['type']);
 			$this->DocsM->update_doc($values);
 		} else {
-
+			log_message('debug',"Upload failed.\n ".'Content-type:'.$contentType."\n");
 		}
 	}
 
@@ -186,8 +187,9 @@ class Docs extends MY_Controller {
 
 	function preview() {
 		$this->_views_data['docs_detail'] = $this->DocsM->get_docs_detail($this->url['id_plain']);
-
 		switch ($this->_views_data['docs_detail']['a_docs_ver_mime']) {
+			case 'image/gif':
+			case 'image/jpeg':
 			case 'image/png':
 				$this->_views_data['s3_object'] = $this->get_object_url('s3subscribers', $this->_views_data['docs_detail']['a_docs_dir_dirpath'].$this->_views_data['docs_detail']['a_docs_ver_filename'], '3600');
 				$this->_views_data['s3_object'] = '<img src="'.$this->_views_data['s3_object'].'">';
@@ -220,8 +222,24 @@ class Docs extends MY_Controller {
 	}
 
 	function convert_to_swf($filename) {
-		if (file_exists($filename)) {
-			exec('pdf2swf '.$this->_temp_dir.$filename.' -o '.$this->_temp_dir.$filename.'.swf -T 9 -f');
+		require_once('application/libraries/pdf2swf/common.php');
+		require_once("application/libraries/pdf2swf/pdf2swf_php5.php");
+		$page = '';
+		$configManager = new Config();
+		$swfFilePath = $configManager->getConfig('path.swf') . $filename  . $page. ".swf";
+		$pdfFilePath = $configManager->getConfig('path.pdf') . $filename;
+
+		if(	!validPdfParams($pdfFilePath,$filename,$page) )
+			echo "[Incorrect file specified]";
+		else{
+			$pdfconv=new pdf2swf();
+			$output=$pdfconv->convert($filename,$page);
+
+			if(rtrim($output) === "[Converted]"){
+
+			}else {
+				echo $output; //error messages etc
+			}
 		}
 	}
 
@@ -250,6 +268,106 @@ class Docs extends MY_Controller {
 		$img =  S3::getAuthenticatedURL('s3subscribers', 'gravatar-14022.png', '3600');
 		echo '<img src="'.$img.'">';
 		*/
-		print_r($_SERVER);
+		/*
+		$p = '/Applications/XAMPP/xamppfiles/htdocs/tcode/tmp/unisim.pdf';
+		exec('pdf2swf '.$this->_temp_dir.$filename.' -o '.$this->_temp_dir.$filename.'.swf -T 9 -f', $arr, $r);
+		var_dump($arr);
+		var_dump($r);*/
+		require_once('application/libraries/pdf2swf/common.php');
+		require_once('application/libraries/pdf2swf/config.php');
+		$configManager = new Config();
+		// Setting current document from parameter or defaulting to 'Paper.pdf'
+
+		$doc = "Paper.pdf";
+		if(isset($_GET["doc"]))
+		$doc = $_GET["doc"];
+
+		$pdfFilePath = $configManager->getConfig('path.pdf') . $doc;
+		$swfFilePath = $configManager->getConfig('path.swf');
+
+		$html = '<div style="position:absolute;left:10px;top:60px;">
+	        <p id="viewerPlaceHolder" style="width:660px;height:553px;display:block">Document loading..</p>';
+		if(validPdfParams($pdfFilePath,$doc,null) && is_dir($swfFilePath) ){
+			$html .= '<script type="text/javascript">'
+				 . 'var doc = "'.$doc.'";'
+				 ."var fp = new FlexPaperViewer(
+						 '/resources/template/default_web/lib/flexpaperViewer/FlexPaperViewer',
+						 'viewerPlaceHolder', { config : {
+						 SwfFile : escape('/docs/testView?doc='+doc),
+						 Scale : 0.6,
+						 ZoomTransition : 'easeOut',
+						 ZoomTime : 0.5,
+						 ZoomInterval : 0.2,
+						 FitPageOnLoad : true,
+						 FitWidthOnLoad : false,
+						 FullScreenAsMaxWindow : false,
+						 ProgressiveLoading : false,
+						 MinZoomSize : 0.2,
+						 MaxZoomSize : 5,
+						 SearchMatchAll : false,
+						 InitViewMode : 'Portrait',
+
+						 ViewModeToolsVisible : true,
+						 ZoomToolsVisible : true,
+						 NavToolsVisible : true,
+						 CursorToolsVisible : true,
+						 SearchToolsVisible : true,
+
+  						 localeChain: 'en_US'
+						 }});"
+				."function onDocumentLoadedError(errMessage){
+					$('#viewerPlaceHolder').html(\"Error displaying document. Make sure the conversion tool is installed and that correct user permissions are applied to the SWF Path directory".$configManager->getDocUrl()."\");}</script>";
+		} else {
+			$html = "<script type=\"text/javascript\">
+				$('#viewerPlaceHolder').html('Cannot read pdf file path, please check your configuration (in php/lib/config/)');
+			</script>";
+		}
+		$html .="</div>";
+		$data['html'] = $html;
+		$data['outputdiv'] = 1;
+		$data['isdiv'] = TRUE;
+		$data['div']['title'] = 'Documents';
+		$data['div']['element_name'] = 'loginwin';
+		$data['div']['element_id'] = 'divlogin';
+		$this->data[] = $data;
+		$this->LayoutM->load_format();
+		$this->output();
+	}
+
+	function testView() {
+		require_once('application/libraries/pdf2swf/common.php');
+		require_once("application/libraries/pdf2swf/pdf2swf_php5.php");
+
+			$doc=$_GET["doc"];
+			$page = "";
+			if(isset($_GET["page"]))
+				$page = $_GET["page"];
+
+			$pos = strpos($doc, "/");
+			$configManager = new Config();
+			$swfFilePath = $configManager->getConfig('path.swf') . $doc  . $page. ".swf";
+			$pdfFilePath = $configManager->getConfig('path.pdf') . $doc;
+
+			if(	!validPdfParams($pdfFilePath,$doc,$page) )
+				echo "[Incorrect file specified]";
+			else{
+				$pdfconv=new pdf2swf();
+				$output=$pdfconv->convert($doc,$page);
+				if(rtrim($output) === "[Converted]"){
+
+					if($configManager->getConfig('allowcache')){
+						setCacheHeaders();
+					}
+
+					if(!$configManager->getConfig('allowcache') || ($configManager->getConfig('allowcache') && endOrRespond())){
+						header('Content-type: application/x-shockwave-flash');
+						header('Accept-Ranges: bytes');
+						header('Content-Length: ' . filesize($swfFilePath));
+
+						echo file_get_contents($swfFilePath);
+					}
+				}else
+					echo $output; //error messages etc
+			}
 	}
 }

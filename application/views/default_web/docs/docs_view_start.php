@@ -63,10 +63,9 @@
 $(document).ready(function() {
 $("#uploader").pluploadQueue({
 		// General settings
-		runtimes : 'gears,flash,silverlight,browserplus,html5',
+		runtimes : 'html5,flash',
 		url : '/docs/put_object/<?php echo $this->url['id_plain'] ?>/put',
 		max_file_size : '10mb',
-		chunk_size : '1mb',
 		unique_names : true,
 
 		// Resize images on clientside if we can
