@@ -40,6 +40,7 @@ class Docs extends MY_Controller {
 				} else {
 					// Create root folder
 					$values['name'] = 'root';
+					$values['a_docs_dir_dirpath'] = '/';
 					$id = $this->DocsM->update_folder($values);
 					redirect('/docs/view/'.$id.'/list-view');
 				}
@@ -146,7 +147,21 @@ class Docs extends MY_Controller {
 
 	// Removes files from server. No way to retrieve.
 	function delete_object() {
-
+		$this->output->set_content_type('application/json');
+		if ($this->input->get('id')) {
+			$_this_object_details = $this->DocsM->get_docs_detail($this->input->get('id'));
+			$_this_object_path = $this->DocsM->get_dirpath_docs_dir($this->input->get('id'));
+			if ($_this_object_path['a_docs_dir_dirpath'] === '/') $_this_object_path['a_docs_dir_dirpath'] = '';
+			$uri = $_this_object_path['a_docs_dir_dirpath'].'/'.$_this_object_details['a_docs_ver_filename'];
+			$_bucket = 's3subscribers';
+			if (S3::deleteObject('s3subscribers',$uri)) {
+				// Remove db entries
+				$this->db->delete('a_docs', array('a_docs_id'=>$this->input->get('id')));
+				$this->db->delete('a_docs_ver', array('a_docs_ver_docsid'=>$this->input->get('id')));
+				return $this->output->set_output(json_encode(array('message', 'File deleted')));
+			}
+		}
+		return $this->output->set_output(json_encode(array('message' => 'error')));
 	}
 
 	function get_dirpath($id) {
@@ -187,6 +202,9 @@ class Docs extends MY_Controller {
 
 	function preview() {
 		$this->_views_data['docs_detail'] = $this->DocsM->get_docs_detail($this->url['id_plain']);
+		//$i = $this->_views_data['docs_detail']['a_docs_dir_dirpath'].$this->_views_data['docs_detail']['a_docs_ver_filename'];
+		//$x = substr($this->_views_data['docs_detail']['a_docs_dir_dirpath'].$this->_views_data['docs_detail']['a_docs_ver_filename'], 1);
+
 		switch ($this->_views_data['docs_detail']['a_docs_ver_mime']) {
 			case 'image/gif':
 			case 'image/jpeg':
@@ -262,76 +280,12 @@ class Docs extends MY_Controller {
 	}
 
 	function test() {
-		/*
-		$i = $this->get_dirpath(1);
-		print_r($i);
-		$img =  S3::getAuthenticatedURL('s3subscribers', 'gravatar-14022.png', '3600');
-		echo '<img src="'.$img.'">';
-		*/
-		/*
-		$p = '/Applications/XAMPP/xamppfiles/htdocs/tcode/tmp/unisim.pdf';
-		exec('pdf2swf '.$this->_temp_dir.$filename.' -o '.$this->_temp_dir.$filename.'.swf -T 9 -f', $arr, $r);
-		var_dump($arr);
-		var_dump($r);*/
-		require_once('application/libraries/pdf2swf/common.php');
-		require_once('application/libraries/pdf2swf/config.php');
-		$configManager = new Config();
-		// Setting current document from parameter or defaulting to 'Paper.pdf'
-
-		$doc = "Paper.pdf";
-		if(isset($_GET["doc"]))
-		$doc = $_GET["doc"];
-
-		$pdfFilePath = $configManager->getConfig('path.pdf') . $doc;
-		$swfFilePath = $configManager->getConfig('path.swf');
-
-		$html = '<div style="position:absolute;left:10px;top:60px;">
-	        <p id="viewerPlaceHolder" style="width:660px;height:553px;display:block">Document loading..</p>';
-		if(validPdfParams($pdfFilePath,$doc,null) && is_dir($swfFilePath) ){
-			$html .= '<script type="text/javascript">'
-				 . 'var doc = "'.$doc.'";'
-				 ."var fp = new FlexPaperViewer(
-						 '/resources/template/default_web/lib/flexpaperViewer/FlexPaperViewer',
-						 'viewerPlaceHolder', { config : {
-						 SwfFile : escape('/docs/testView?doc='+doc),
-						 Scale : 0.6,
-						 ZoomTransition : 'easeOut',
-						 ZoomTime : 0.5,
-						 ZoomInterval : 0.2,
-						 FitPageOnLoad : true,
-						 FitWidthOnLoad : false,
-						 FullScreenAsMaxWindow : false,
-						 ProgressiveLoading : false,
-						 MinZoomSize : 0.2,
-						 MaxZoomSize : 5,
-						 SearchMatchAll : false,
-						 InitViewMode : 'Portrait',
-
-						 ViewModeToolsVisible : true,
-						 ZoomToolsVisible : true,
-						 NavToolsVisible : true,
-						 CursorToolsVisible : true,
-						 SearchToolsVisible : true,
-
-  						 localeChain: 'en_US'
-						 }});"
-				."function onDocumentLoadedError(errMessage){
-					$('#viewerPlaceHolder').html(\"Error displaying document. Make sure the conversion tool is installed and that correct user permissions are applied to the SWF Path directory".$configManager->getDocUrl()."\");}</script>";
-		} else {
-			$html = "<script type=\"text/javascript\">
-				$('#viewerPlaceHolder').html('Cannot read pdf file path, please check your configuration (in php/lib/config/)');
-			</script>";
-		}
-		$html .="</div>";
-		$data['html'] = $html;
-		$data['outputdiv'] = 1;
-		$data['isdiv'] = TRUE;
-		$data['div']['title'] = 'Documents';
-		$data['div']['element_name'] = 'loginwin';
-		$data['div']['element_id'] = 'divlogin';
-		$this->data[] = $data;
-		$this->LayoutM->load_format();
-		$this->output();
+		$_this_object = $this->DocsM->get_docs_detail($this->input->get('id'));
+		$_this_object_path = $this->DocsM->get_dirpath_docs_dir($this->input->get('id'));
+		$uri = $_this_object_path['a_docs_dir_dirpath'].'/'.$_this_object_details['a_docs_'];
+		print_r($_this_object);echo"<br><br>";
+		print_r($_this_object_path);echo"<br><br>";
+		print_r($uri. "<br>");
 	}
 
 	function testView() {

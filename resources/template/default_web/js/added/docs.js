@@ -195,6 +195,40 @@ $(document).ready(function() {
 				}
 			});
 
+			//File operations
+			$("#confirm").dialog({
+				autoOpen: false,
+				modal: true,
+				buttons: {
+					"Confirm" : function() {
+						$(this).dialog("close");
+						$.get('/docs/delete_object?id='+$('#docs_id').val(), function() {
+
+						}).success(function(data){
+
+						}).error(function(data) {
+							console.log('Error deleting file');
+						});
+					},
+					"Cancel" : function() {
+						$(this).dialog("close");
+					}
+				}
+			});
+			$('.delete').on('click', function() {
+				//$("#confirm").dialog("open");
+				var user_response = confirm("All files and versions will be removed.");
+				if (user_response) {
+					$.get('/docs/delete_object?id='+$('#docs_id').val(), function() {
+
+					}).success(function(data){
+
+					}).error(function(data) {
+						console.log('Error deleting file');
+					});
+				}
+			});
+
 			/* $('#list-view').dataTable({
 				"bAutoWidth": false,
 				"bJQueryUI": false,

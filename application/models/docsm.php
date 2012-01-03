@@ -136,7 +136,7 @@ class docsM extends My_Model {
 	function get_dir_parent_path($id) {
 		$query = $this->db->select('a_docs_dir_id, a_docs_dir_name, a_docs_dir_parent')
 			->from('a_docs_dir')
-			->where(array('a_docs_dir_id'=>$id))
+			->where(array('a_docs_dir_id'=>$id, 'a_docs_dir_parent <>'=>' 0'))
 			->get();
 		return $query->result_array();
 	}
@@ -145,6 +145,14 @@ class docsM extends My_Model {
 		$query = $this->db->select('a_docs_dir_parent')
 			->from('a_docs_dir')
 			->where(array('a_docs_dir_id'=>$id))
+			->get();
+		return $query->row_array();
+	}
+
+	function get_dirpath_docs_dir($id) {
+		$query = $this->db->select('a_docs_dir_dirpath')
+			->from('a_docs_dir')
+			->join('a_docs', 'a_docs_dir.a_docs_dir_id = a_docs.a_docs_dirid')
 			->get();
 		return $query->row_array();
 	}
