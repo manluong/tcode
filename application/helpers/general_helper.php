@@ -222,7 +222,7 @@ function get_template() {
 function get_current_stamp() {
 	$timestamp = time();
 	$timestamp = $timestamp - date('Z');
-	return mdate("%Y-%m-%d %H:%i:%s", $timestamp);
+	return parse_timestamp($timestamp, 'MYSQL');
 }
 
 function parse_stamp($stamp, $format='ISO') {
@@ -266,6 +266,9 @@ function parse_timestamp($timestamp, $format='ISO') {
 			break;
 		case 'ISO_TIME':
 			$format_string = '%H:%i:%s';
+			break;
+		case 'MYSQL':
+			$format_string = '%Y-%m-%d %H:%i:%s';
 			break;
 		case 'ATOM':
 			return standard_date('DATE_ATOM', $timestamp);
