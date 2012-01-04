@@ -25,7 +25,7 @@
 		</tr>
 		<?php if ( ! empty($parent)) : ?>
 		<tr type="folder">
-			<td class="col1 folder-td" value="<?php echo $parent['a_docs_dir_parent']; ?>"><?php echo $folder_icon.'...'?></td>
+			<td class="col1 folder-td" value="<?php echo $parent['a_docs_parentid']; ?>"><?php echo $folder_icon.'...'?></td>
 			<td class="col2"> -- </td>
 			<td class="col3"> -- </td>
 		</tr>
@@ -34,7 +34,7 @@
 		<?php if ( ! empty($sub_folders)) : ?>
 		<?php foreach($sub_folders as $folder) : ?>
 		<tr type="sub_folder">
-			<td class="col1 folder-td" value="<?php echo $folder['a_docs_dir_id']; ?>"><?php echo $folder_icon.' '.$folder["a_docs_dir_name"];?></td>
+			<td class="col1 folder-td" value="<?php echo $folder['a_docs_id']; ?>"><?php echo $folder_icon.' '.$folder["a_docs_displayname"];?></td>
 			<td class="col2"> -- </td>
 			<td class="col3"> -- </td>
 		</tr>

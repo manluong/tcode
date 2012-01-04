@@ -28,20 +28,21 @@ class Docs extends MY_Controller {
 		} else {
 			$folder_exists = $this->DocsM->does_folder_exists($this->url['id_plain']);
 			if ( ! empty ($folder_exists)) {
-				$this->_views_data['sub_folders'] = $this->DocsM->get_sub_folders();
-				$i = $this->DocsM->get_parent($this->url['id_plain']);
-				if ( ! empty($i)) $this->_views_data['parent'] = $this->DocsM->get_parent($this->url['id_plain']);
+				$this->_views_data['sub_folders'] = $this->DocsM->get_sub_folders($this->url['id_plain']);
+				$i = $this->DocsM->get_parent_id($this->url['id_plain']);
+				if ( ! empty($i)) $this->_views_data['parent'] = $i;
 				$this->_views_data['docs'] = $this->DocsM->get_docs($this->url['id_plain']);
 			} else {
 				// Does user has a root directory
 				$root_dir = $this->DocsM->get_root_dir();
 				if ( ! empty($root_dir)) {
-					redirect('/docs/view/'.$root_dir['a_docs_dir_id'].'/list-view');
+					redirect('/docs/view/'.$root_dir['a_docs_id'].'/list-view');
 				} else {
 					// Create root folder
-					$values['name'] = 'root';
-					$values['a_docs_dir_dirpath'] = '/';
-					$id = $this->DocsM->update_folder($values);
+					$values['displayname'] = 'root';
+					$values['dirpath'] = '/';
+
+					$id = $this->DocsM->update_a_docs_dir_directory($values);
 					redirect('/docs/view/'.$id.'/list-view');
 				}
 			}
@@ -64,19 +65,20 @@ class Docs extends MY_Controller {
 
 	function create_folder() {
 		if ($this->input->get('name')) {
-			$values['name'] = $this->input->get('name');
-			$dirpath = $this->get_dirpath($this->url['id_plain']);
-			$values['dirpath'] = $dirpath['dirpath_str'];
-			if ($this->url['id_plain'] !== 0) $values['parent'] = $this->url['id_plain'];
+			$values['displayname'] = $this->input->get('name');
+			//dirpath finds the full directory patht to update
+			$_dirpath = $this->DocsM->get_dirpath($this->url['id_plain']);
+			$values['dirpath'] = $_dirpath['a_docs_dir_dirpath'].$this->input->get('name');
+			$values['parentid'] = $this->url['id_plain'];
+			$insert_id = $this->DocsM->update_a_docs_dir_directory($values);
 			$this->output->set_content_type('application/json');
-			$insert_id = $this->DocsM->update_folder($values);
 			if ($insert_id) {
 				return $this->output->set_output(json_encode(array('id'=>$insert_id,
 					'name'=>$this->input->get('name'),
 					'folder_icon'=>$this->_views_data['folder_icon'])));
 			}
 		}
-		return $this->output->set_output(json_encode(array('error'=>'Error processing request')));
+		return $this->output->set_output(json_encode(array('error'=>'Error processing request'.$insert_id)));
 	}
 
 	function delete_directory() {
@@ -89,7 +91,8 @@ class Docs extends MY_Controller {
 
 	function put_object() {
 		$targetDir = '/Applications/XAMPP/htdocs/tcode/tmp/';
-		$dirpath = $this->get_dirpath($this->url['id_plain']);
+		$dirpath = $this->DocsM->get_dirpath($this->url['id_plain']);
+		if ($dirpath['a_docs_dir_dirpath'] === '/') $dirpath['a_docs_dir_dirpath'] = ''; //if its root remove /
 
 		// ----- S3 code ----
 		// Look for the content type header
@@ -103,8 +106,8 @@ class Docs extends MY_Controller {
 		if (strpos($contentType, "multipart") !== FALSE) {
 			if (isset($_FILES['file']['tmp_name']) && is_uploaded_file($_FILES['file']['tmp_name'])) {
 				// Open temp file
-				log_message('debug', 'Upload: '.$dirpath['dirpath_str'].$_FILES['file']['name']);
-				if (S3::putObject(S3::inputFile($_FILES['file']['tmp_name']), 's3subscribers', $dirpath['dirpath_str'].$_FILES['file']['name'], S3::ACL_PRIVATE)) {
+				log_message('debug', 'Upload: '.$dirpath['a_docs_dir_dirpath'].'/'.$_FILES['file']['name']);
+				if (S3::putObject(S3::inputFile($_FILES['file']['tmp_name']), 's3subscribers', $dirpath['a_docs_dir_dirpath'].'/'.$_FILES['file']['name'], S3::ACL_PRIVATE)) {
 					$this->_upload_status = TRUE;
 				} else {
 					$this->_upload_status = FALSE;
@@ -114,14 +117,13 @@ class Docs extends MY_Controller {
 		// ----- end S3 code ---- /
 		//$this->_upload_status
 		if ($this->_upload_status) {
-			$values['dirid'] = $this->url['id_plain'];
-			$values['dirpath'] = $dirpath['dirpath_str'];
+			$values['parentid'] = $this->url['id_plain'];
 			$values['filename'] = $_FILES['file']['name'];
 			$values['uploadvia'] = 'web';
 			$values['filesize'] = $_FILES['file']['size'];
 			$values['mime'] = $_FILES['file']['type'];
 			log_message('debug','File type: '.$_FILES['file']['type']);
-			$this->DocsM->update_doc($values);
+			$this->DocsM->update_docs($values);
 		} else {
 			log_message('debug',"Upload failed.\n ".'Content-type:'.$contentType."\n");
 		}
@@ -150,32 +152,33 @@ class Docs extends MY_Controller {
 		$this->output->set_content_type('application/json');
 		if ($this->input->get('id')) {
 			$_this_object_details = $this->DocsM->get_docs_detail($this->input->get('id'));
-			$_this_object_path = $this->DocsM->get_dirpath_docs_dir($this->input->get('id'));
-			if ($_this_object_path['a_docs_dir_dirpath'] === '/') $_this_object_path['a_docs_dir_dirpath'] = '';
-			$uri = $_this_object_path['a_docs_dir_dirpath'].'/'.$_this_object_details['a_docs_ver_filename'];
-			$_bucket = 's3subscribers';
-			if (S3::deleteObject('s3subscribers',$uri)) {
-				// Remove db entries
-				$this->db->delete('a_docs', array('a_docs_id'=>$this->input->get('id')));
-				$this->db->delete('a_docs_ver', array('a_docs_ver_docsid'=>$this->input->get('id')));
-				return $this->output->set_output(json_encode(array('message', 'File deleted')));
+			if ( ! empty($_this_object_details)) {
+				$_this_object_path = $this->DocsM->get_dirpath($_this_object_details['a_docs_dir_docs_id']);
+				if ($_this_object_path['a_docs_dir_dirpath'] === '/') $_this_object_path['a_docs_dir_dirpath'] = '';
+				$uri = $_this_object_path['a_docs_dir_dirpath'].'/'.$_this_object_details['a_docs_ver_filename'];
+				$_bucket = 's3subscribers';
+				if (S3::deleteObject('s3subscribers',$uri)) {
+					$this->DocsM->delete_docs($_this_object_details['a_docs_id']);
+					return $this->output->set_output(json_encode(array('message', 'File deleted')));
+				}
 			}
 		}
 		return $this->output->set_output(json_encode(array('message' => 'error')));
 	}
 
+	/*
 	function get_dirpath($id) {
 		$_dirpath = array();
 		$_dirpath_str = '';
-		while ($i = $this->DocsM->get_dir_parent_path($id)) {
+		while ($i = $this->DocsM->get_dir_parent_id($id)) {
 			$_dirpath[] = $i[0];
-			$id = $i[0]['a_docs_dir_parent'];
+			$id = $i[0]['a_docs_parentid'];
 		};
 		if ( ! empty($_dirpath)) {
 			$_dirpath = array_reverse($_dirpath);
 			$_dirpath_html = '<ul class="apphead_title">';
 			foreach ($_dirpath as $path) {
-				if ($path['a_docs_dir_name'] !== 'root') $_dirpath_str .= '/'. $path['a_docs_dir_name'];
+				if ($path['a_docs_displayname'] !== 'root') $_dirpath_str .= '/'. $path['a_docs_dir_name'];
 				$_dirpath_html .= '<li><a href="/docs/view/'.$path['a_docs_dir_id'].'/'
 					.$this->url['subaction'].'">'.$path['a_docs_dir_name'].'</a></li>';
 			}
@@ -188,7 +191,7 @@ class Docs extends MY_Controller {
 					'dirpath_html'=>'',
 				);
 		}
-	}
+	}*/
 
 	function get_docs() {
 		$docs = $this->DocsM->get_docs($this->url['id_plain']);
@@ -202,9 +205,6 @@ class Docs extends MY_Controller {
 
 	function preview() {
 		$this->_views_data['docs_detail'] = $this->DocsM->get_docs_detail($this->url['id_plain']);
-		//$i = $this->_views_data['docs_detail']['a_docs_dir_dirpath'].$this->_views_data['docs_detail']['a_docs_ver_filename'];
-		//$x = substr($this->_views_data['docs_detail']['a_docs_dir_dirpath'].$this->_views_data['docs_detail']['a_docs_ver_filename'], 1);
-
 		switch ($this->_views_data['docs_detail']['a_docs_ver_mime']) {
 			case 'image/gif':
 			case 'image/jpeg':
@@ -280,12 +280,8 @@ class Docs extends MY_Controller {
 	}
 
 	function test() {
-		$_this_object = $this->DocsM->get_docs_detail($this->input->get('id'));
-		$_this_object_path = $this->DocsM->get_dirpath_docs_dir($this->input->get('id'));
-		$uri = $_this_object_path['a_docs_dir_dirpath'].'/'.$_this_object_details['a_docs_'];
-		print_r($_this_object);echo"<br><br>";
-		print_r($_this_object_path);echo"<br><br>";
-		print_r($uri. "<br>");
+		$i = $this->DocsM->get_docs_detail($this->url['id_plain']);
+
 	}
 
 	function testView() {

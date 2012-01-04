@@ -222,7 +222,7 @@ $(document).ready(function() {
 					$.get('/docs/delete_object?id='+$('#docs_id').val(), function() {
 
 					}).success(function(data){
-
+						console.log(data);
 					}).error(function(data) {
 						console.log('Error deleting file');
 					});

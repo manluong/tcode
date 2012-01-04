@@ -8,4 +8,4 @@
 	<li class="upload">Upload</li>
 	<li class="download">Download</li>
 </ul>
-<input type="hidden" id="docs_id" value="<?php echo $docs_detail['a_docs_id'];?>">
+<input type="hidden" id="docs_id" value="<?php echo $docs_detail['a_docs_ver_id'];?>">

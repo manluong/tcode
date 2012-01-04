@@ -7,14 +7,31 @@ class docsM extends My_Model {
 		$this->load->helper('date');
 	}
 
-	function update_folder($values) {
+	// Call this when creating/updating folders.
+	function update_a_docs_dir_directory($values) {
 		$data = array(
-			'a_docs_dir_name' => $values['name'],
-			'a_docs_dir_parent' => isset($values['parent']) ? $values['parent'] : 0,
+			'a_docs_parentid' => isset($values['parentid'])? $values['parentid'] : '',
+			'a_docs_isdir' => TRUE,
+			'a_docs_displayname' => isset($values['displayname'])? $values['displayname'] : '',
+			'a_docs_desc' => isset($values['desc'])? $values['desc'] : '',
+			'a_docs_status' => isset($values['a_docs_status'])? $values['a_docs_status'] : '',
+			'a_docs_stamp' => get_current_stamp(),
+		);
+		if(isset($values['id'])) {
+			$this->db->where(array('id'=> $value['id'], 'a_docs_isdir' => TRUE))
+				->update('a_docs', $data);
+		} else {
+			$this->db->insert('a_docs', $data);
+		}
+		$values['a_docs_id'] = $this->db->insert_id();
+		return 	$this->update_a_docs_dir($values);
+	}
+
+	function update_a_docs_dir($values) {
+		// Leaving a_docs_dir_id as autoincrement
+		$data = array(
+			'a_docs_dir_docs_id' => $values['a_docs_id'],
 			'a_docs_dir_dirpath' => isset($values['dirpath']) ? $values['dirpath'] : '',
-			'a_docs_dir_stamp' => get_current_stamp(),
-			//'tag' => isset($values['tag'])? : '',
-			'a_docs_dir_desc' => isset($values['desc'])? $values['desc'] : '',
 			'a_docs_dir_cardid' => $this->UserM->info['cardid'],
 			'a_docs_dir_dirtype' => isset($value['dirtype']) ? $value['dirtype'] : '',
 			'a_docs_dir_hide' => isset($value['hide']) ? $value['hide'] : '',
@@ -37,18 +54,22 @@ class docsM extends My_Model {
 			'a_docs_dir_noocrindex' => isset($value['noocrindex']) ? $value['noocrindex'] : '',
 		);
 		if (isset($values['id'])) {
-			$this->db->update('a_docs_dir', $data)
-				->where('id', $values['id']);
+			$this->db->where(array('id'=> $values['id'], 'a_docs_isdir' => TRUE))
+				->update('a_docs_dir', $data);
 		} else {
 			$this->db->insert('a_docs_dir', $data);
 		}
-		return $this->db->insert_id();
+		return $values['a_docs_id'];
 	}
 
-	function update_doc($values) {
+	function update_docs($values) {
+		//parentid == parentid for folders. and current dirid for docs
 		$data = array(
-			'a_docs_dirid' => isset($values['dirid']) ? $values['dirid'] : '',
-			'a_docs_desc' => isset($values['desc']) ? $values['desc'] : '',
+			'a_docs_parentid' => $values['parentid'],
+			'a_docs_isdir' => FALSE,
+			'a_docs_displayname' => isset($values['a_docs_displayname']) ? $values['a_docs_displayname'] : '',
+			'a_docs_desc' => isset($values['a_docs_desc']) ? $values['a_docs_desc'] : '',
+			'a_docs_status' => isset($values['a_docs_status']) ? $values['a_docs_status'] : '',
 			'a_docs_stamp' => get_current_stamp(),
 		);
 		if (isset($values['id'])) {
@@ -111,48 +132,54 @@ class docsM extends My_Model {
 
 	}
 
-	function get_sub_folders() {
-		$query = $this->db->select('a_docs_dir_id, a_docs_dir_name')
-			->from('a_docs_dir')
+	function get_sub_folders($id) {
+		$query = $this->db->select('a_docs_id, a_docs_displayname')
+			->from('a_docs')
+			->join('a_docs_dir', 'a_docs_dir.a_docs_dir_docs_id = a_docs.a_docs_id')
 			->where(array('a_docs_dir_cardid' => $this->UserM->info['cardid'],
-					'a_docs_dir_parent' => $this->url['id_plain'],
+					'a_docs_isdir <>' => '',
+					'a_docs_parentid' => $id,
 				))
-			->order_by('a_docs_dir_name')
+			->order_by('a_docs_displayname')
 			->get();
 		return $query->result_array();
 	}
 
-	// Returns all docs in a dirid
+	// Returns all docs in a dirid.
+	// Presents the latest ver id as link
 	function get_docs($id) {
-		$query = $this->db->select('a_docs_dir_dirpath, a_docs_ver_id, a_docs_ver_filename, a_docs_ver_filesize, a_docs_ver_stamp')
+		$query = $this->db->select('a_docs_displayname, a_docs_dir_dirpath, a_docs_ver_id, a_docs_ver_filename, a_docs_ver_filesize, a_docs_ver_stamp')
 			->from('a_docs')
 			->join('a_docs_ver', 'a_docs.a_docs_id = a_docs_ver.a_docs_ver_docsid')
-			->join('a_docs_dir', 'a_docs_dir.a_docs_dir_id = a_docs.a_docs_dirid')
-			->where('a_docs_dirid', $id)
+			->join('a_docs_dir', 'a_docs_dir.a_docs_dir_docs_id = a_docs.a_docs_parentid')
+			->where(array('a_docs_parentid'=> $id, 'a_docs_isdir' => FALSE))
+			->order_by('a_docs_ver_id')
+			->group_by('a_docs_ver_id')
 			->get();
 		return $query->result_array();
 	}
 
-	function get_dir_parent_path($id) {
-		$query = $this->db->select('a_docs_dir_id, a_docs_dir_name, a_docs_dir_parent')
-			->from('a_docs_dir')
-			->where(array('a_docs_dir_id'=>$id, 'a_docs_dir_parent <>'=>' 0'))
+	/*
+	function get_dir_parent_id($id) {
+		$query = $this->db->select('a_docs_id, a_docs_parentid, a_docs_displayname')
+			->from('a_docs')
+			->where(array('a_docs_id'=>$id, 'a_docs_parentid <>'=>' 0'))
 			->get();
-		return $query->result_array();
-	}
+		return $query->row_array();
+	}*/
 
-	function get_parent($id) {
-		$query = $this->db->select('a_docs_dir_parent')
-			->from('a_docs_dir')
-			->where(array('a_docs_dir_id'=>$id))
+	function get_parent_id($id) {
+		$query = $this->db->select('a_docs_parentid')
+			->from('a_docs')
+			->where(array('a_docs_id'=>$id))
 			->get();
 		return $query->row_array();
 	}
 
-	function get_dirpath_docs_dir($id) {
+	function get_dirpath($id) {
 		$query = $this->db->select('a_docs_dir_dirpath')
 			->from('a_docs_dir')
-			->join('a_docs', 'a_docs_dir.a_docs_dir_id = a_docs.a_docs_dirid')
+			->where('a_docs_dir_docs_id', $id)
 			->get();
 		return $query->row_array();
 	}
@@ -167,16 +194,20 @@ class docsM extends My_Model {
 
 	function get_root_dir() {
 		$query = $this->db->select()
-			->get_where('a_docs_dir', array('a_docs_dir_cardid'=>$this->UserM->info['cardid'], 'a_docs_dir_parent'=>0));
+			->from('a_docs')
+			->join('a_docs_dir', 'a_docs_dir.a_docs_dir_docs_id = a_docs.a_docs_id')
+			->where(array('a_docs_dir_cardid'=>$this->UserM->info['cardid'], 'a_docs_parentid'=>0))
+			->get();
 		return $query->row_array();
 	}
 
-	function get_docs_detail($id) {
+	// Pass in a_docs_ver_id
+	function get_docs_detail($ver_id) {
 		$query = $this->db->select()
 			->from('a_docs')
-			->join('a_docs_ver', 'a_docs.a_docs_id = a_docs_ver.a_docs_ver_docsid')
-			->join ('a_docs_dir', 'a_docs.a_docs_dirid = a_docs_dir.a_docs_dir_id')
-			->where('a_docs_id', $id)
+			->join('a_docs_ver', 'a_docs_ver.a_docs_ver_docsid = a_docs.a_docs_id')
+			->join ('a_docs_dir', 'a_docs_dir.a_docs_dir_docs_id = a_docs.a_docs_parentid')
+			->where('a_docs_ver_id', $ver_id)
 			->get();
 		return $query->row_array();
 	}
@@ -184,10 +215,15 @@ class docsM extends My_Model {
 	function does_folder_exists($id) {
 		$query = $this->db->select()
 			->from('a_docs_dir')
-			->where(array('a_docs_dir_id'=>$id,
+			->where(array('a_docs_dir_docs_id'=>$id,
 					'a_docs_dir_cardid'=>$this->UserM->info['cardid']
 				))
 			->get();
 		return $query->row_array();
+	}
+
+	function delete_docs($id) {
+		$this->db->delete('a_docs_ver', array('a_docs_ver_docsid'=>$id));
+		$this->db->delete('a_docs', array('a_docs_id'=>$id));
 	}
 }
