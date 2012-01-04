@@ -244,6 +244,18 @@ function parse_stamp_user($stamp, $format='ISO') {
 	return parse_timestamp($timestamp, $format);
 }
 
+function parse_user_date($date, $format='ISO') {
+	$timestamp = strtotime($date);
+
+	if ($timestamp == 0) return false;
+
+	$CI =& get_instance();
+	$timezone = $CI->UserM->get_timezone();
+	$timestamp = $timestamp - ((int)$timezone*60*60);
+
+	return parse_timestamp($timestamp, $format);
+}
+
 function parse_timestamp($timestamp, $format='ISO') {
 	switch($format) {
 		case 'ISO':
