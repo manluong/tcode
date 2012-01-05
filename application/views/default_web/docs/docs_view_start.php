@@ -44,7 +44,7 @@
 		<?php if ( ! empty($docs)) : ?>
 		<?php foreach($docs as $doc) : ?>
 		<tr type="docs">
-			<td class="col1 docs-td"><a href="/docs/file/<?php echo $doc['a_docs_ver_id'] ;?>/view"><?php echo $docs_icon.' '.$doc["a_docs_ver_filename"];?></a></td>
+			<td class="col1 docs-td"><a href="/docs/file/<?php echo $doc['a_docs_id'] ;?>/view/<?php echo $doc['a_docs_ver_id'];?>"><?php echo $docs_icon.' '.$doc["a_docs_ver_filename"];?></a></td>
 			<td><?php echo byte_size($doc['a_docs_ver_filesize']); ?></td>
 			<td><?php echo $doc['a_docs_ver_stamp'];?></td>
 		</tr>

@@ -63,7 +63,7 @@ class Docs extends MY_Controller {
 	function download_file() {
 		$i = $this->DocsM->get_docs_detail($this->input->get('id'));
 		if ( ! empty($i)) {
-			$uri = $this->dirpath($i['a_docs_dir_dirpath'], $i['a_docs_ver_filename']);
+			$uri = $this->format_dirpath($i['a_docs_dir_dirpath'], $i['a_docs_ver_filename']);
 			$_filecontent = $this->get_object('s3subscribers', $uri);
 			$this->output->set_content_type($i['a_docs_ver_mime']);
 			$this->output->set_header('Content-Disposition: attachment; filename="'.$i['a_docs_ver_filename'].'"');
@@ -220,7 +220,8 @@ class Docs extends MY_Controller {
 	}
 
 	function preview() {
-		$this->_views_data['docs_detail'] = $this->DocsM->get_docs_detail($this->url['id_plain']);
+		$_ver_id = $this->uri->segment(5, 0);
+		$this->_views_data['docs_detail'] = $this->DocsM->get_docs_detail($_ver_id);
 		switch ($this->_views_data['docs_detail']['a_docs_ver_mime']) {
 			case 'image/gif':
 			case 'image/jpeg':

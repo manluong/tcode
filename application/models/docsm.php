@@ -42,7 +42,7 @@ class docsM extends My_Model {
 	// Returns all docs in a dirid.
 	// Presents the latest ver id as link
 	function get_docs($id) {
-		$query = $this->db->select('a_docs_displayname, a_docs_dir_dirpath, a_docs_ver_id, a_docs_ver_filename, a_docs_ver_filesize, a_docs_ver_stamp')
+		$query = $this->db->select('a_docs_id, a_docs_displayname, a_docs_dir_dirpath, a_docs_ver_id, a_docs_ver_filename, a_docs_ver_filesize, a_docs_ver_stamp')
 			->from('a_docs')
 			->join('a_docs_ver', 'a_docs.a_docs_id = a_docs_ver.a_docs_ver_docsid')
 			->join('a_docs_dir', 'a_docs_dir.a_docs_dir_docs_id = a_docs.a_docs_parentid')
