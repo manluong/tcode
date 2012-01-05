@@ -56,7 +56,7 @@ class MY_Controller extends CI_Controller {
 		//if $this->url['action'] match a method in controller file, use it (including "index")
 		//"index" method will override default set in database
 		if (method_exists($this, $action)) {
-			return call_user_func_array(array($this, $action), $params=array());
+			return call_user_func_array(array($this, $action), $params);
 		}
 
 		if ($this->url['action']=='index') {
