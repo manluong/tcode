@@ -79,6 +79,18 @@ class UserM extends MY_Model {
 		return implode(' ', $name);
 	}
 
+	public function get_username($cardid) {
+		$rs = $this->db->select('access_user_username')
+				->from('access_user')
+				->where('access_user_cardid', $cardid)
+				->limit(1)
+				->get();
+
+		if ($rs->num_rows() == 0) return FALSE;
+
+		$result = $rs->row_array();
+		return $result['access_user_username'];
+	}
 
 	public function is_valid_password($username, $password) {
 		$rs = $this->db->select()
@@ -155,6 +167,11 @@ class UserM extends MY_Model {
 		$this->session->set_userdata('id', $this->id);
 		$this->session->set_userdata('username', $this->username);
 		$this->session->set_userdata('user_info', $this->info);
+	}
+
+	public function load_info($cardid) {
+		$username = $this->get_username($cardid);
+		$this->info = $this->core_app_userinfo($username);
 	}
 
 	public function logout() {
