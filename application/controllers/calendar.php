@@ -96,12 +96,51 @@ class Calendar extends MY_Controller {
 			$events[$k]['allDay'] = ($v['all_day'] == 1);
 		}
 
+		echo json_encode($events);
+	}
+
+	function ajax_update_event_dragdrop() {
+		$event_id = $this->input->post('event_id');
+		$delta_day = $this->input->post('delta_day');
+		$delta_min = $this->input->post('delta_min');
+		$all_day = $this->input->post('all_day');
+
+		$event = $this->CalendarM->get_event($event_id);
+		$adj = ($delta_day * 24 * 60 * 60) + ($delta_min * 60);
+
+		$event['date_start'] = parse_timestamp((strtotime($event['date_start']) + $adj), 'MYSQL');
+		$event['date_end'] = parse_timestamp((strtotime($event['date_end']) + $adj), 'MYSQL');
+		$event['all_day'] = ($all_day == 'true') ? 1 : 0;
+
+		$this->CalendarM->update_event($event);
+
 		$response = array(
 			'success' => TRUE,
-			'data' => $events,
+			'data' => '',
 		);
 
-		echo json_encode($response['data']);
+		echo json_encode($response);
+	}
+
+	function ajax_update_event() {
+		$event = array(
+			'id' => $this->input->post('event_id'),
+			'title' => $this->input->post('event_title'),
+			'date_start' => parse_user_date($this->input->post('event_date_start')),
+			'date_end' => parse_user_date($this->input->post('event_date_end')),
+			'calendar_id' => $this->input->post('calendar_id'),
+			'memo' => $this->input->post('event_memo'),
+			'all_day' => $this->input->post('event_allday'),
+		);
+
+		$result = $this->CalendarM->update_event($event);
+
+		$response = array(
+			'success' => $result,
+			'data' => '',
+		);
+
+		echo json_encode($response);
 	}
 
 

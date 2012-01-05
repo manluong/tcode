@@ -34,6 +34,18 @@ class CalendarM extends MY_Model {
 		return $results;
 	}
 
+	function get_event($event_id) {
+		$rs = $this->db->select()
+				->from('a_calendars_objects')
+				->where('id', $event_id)
+				->limit(1)
+				->get();
+
+		if ($rs->num_rows() == 0) return FALSE;
+
+		return $rs->row_array();
+	}
+
 	function get_events($start, $end, $card_id='', $calendar_ids=array()) {
 		if ($card_id == '') $card_id = $this->UserM->get_cardid();
 
@@ -51,6 +63,17 @@ class CalendarM extends MY_Model {
 		if ($rs->num_rows() == 0) return array();
 
 		return $rs->result_array();
+	}
+
+	function update_event($event) {
+		$event['modified_cardid'] = $this->UserM->get_cardid();
+		$event['modified_stamp'] = get_current_stamp();
+
+		$id = $event['id'];
+		unset($event['id']);
+
+		$this->db->where('id', $id)
+				->update('a_calendars_objects', $event);
 	}
 
 

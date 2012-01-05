@@ -20,16 +20,19 @@
 		padding-left:0;
 	}
 	#calendar_list li {
+		cursor:pointer;
 		list-style: none;
 		padding:3px;
 		margin:1px 0;
 	}
 
 
-	#calendar_list li.cal_0 { background-color:#36C; color:#FFF; }
-	#calendar_list li.cal_1 { background-color:#C36; color:#FFF; }
-	#calendar_list li.cal_2 { background-color:#3A6; color:#FFF; }
-	#calendar_list li.cal_3 { background-color:#C63; color:#FFF; }
+	#calendar_list li.cal_0 { background-color:#36C; border:solid 1px #36C; color:#FFF; }
+	#calendar_list li.cal_1 { background-color:#C36; border:solid 1px #C36; color:#FFF; }
+	#calendar_list li.cal_2 { background-color:#3A6; border:solid 1px #3A6; color:#FFF; }
+	#calendar_list li.cal_3 { background-color:#C63; border:solid 1px #C63; color:#FFF; }
+
+	#calendar_list li.unselected { background-color:#FFF; color:#333; }
 
 
 	/* css for timepicker */
@@ -59,7 +62,7 @@
 				$color = ($cal['calendar_color'] == NULL)
 							? $cal['calendar_order']
 							: $cal['calendar_color'];
-				echo '<li class="cal_',$color,'">',$cal['display_name'],'</li>';
+				echo '<li class="cal_',$color,'" data-cal_id=',$cal['id'],'>',$cal['display_name'],'</li>';
 			}
 		?>
 		</ul>
@@ -73,6 +76,7 @@
 
 <div id="create_event_form" title="Create new event">
 	<form id="form_event">
+		<input type="hidden" name="event_id" id="event_id" value="" />
 
 		<table id="event_table">
 			<tr>
@@ -119,6 +123,7 @@
 
 <script>
 	var estart, eend, eallDay;
+	var is_update = false;
 
 	var bgcolor = new Array();
 	bgcolor[0] = '#36C';
@@ -132,30 +137,27 @@
 	fontcolor[2] = '#FFF';
 	fontcolor[3] = '#FFF';
 
-	var calSources = [
+	var calSources = new Array();
 	<?php
-		$output = array();
 		foreach($calendars AS $cal) {
-			$temp = '';
+			$temp = 'calSources['.$cal['id'].'] = ';
 
 			$color = ($cal['calendar_color'] == NULL)
 						? $cal['calendar_order']
 						: $cal['calendar_color'];
 
 			$temp .= '{';
-			$temp .= 'url: "/calendar/ajax_get_events",';
+			$temp .= 'url: "/calendar/ajax_get_events/'.$cal['id'].'",';
 			$temp .= 'data:';
 				$temp .= '{';
 				$temp .= 'calendar_id:'.$cal['id'];
 				$temp .= '},';
 			$temp .= 'color: bgcolor['.$color.'],';
 			$temp .= 'textColor: fontcolor['.$color.']';
-			$temp .= '}';
-			$output[] = $temp;
+			$temp .= '};';
+			echo $temp;
 		}
-		echo implode(',',$output);
 	?>
-	];
 
 	$(document).ready(function() {
 		$.datepicker.setDefaults({
@@ -169,7 +171,7 @@
 		$('.datepicker').datetimepicker();
 
 
-        var eventtitle = $( "#event_title" )
+        var eventtitle = $("#event_title");
 
 
 		var calendar = $('#calendar').fullCalendar({
@@ -182,25 +184,48 @@
 			},
             selectable: true,
 			selectHelper: true,
+			editable: true,
+			eventSources: calSources,
 			select: function(start, end, allDay) {
                 estart=start;
                 eend=end;
                 eallDay=allDay;
+				is_update = false;
 
-				$('#event_date_start').val(datestring(start));
-				$('#event_date_end').val(datestring(end));
+				$('#event_date_start').val(datestring(start, allDay));
+				$('#event_date_end').val(datestring(end, allDay));
 
 				$('#event_allday').prop('checked', allDay);
 				$.uniform.update();
 
                 $("#create_event_form").dialog("open");
 			},
-			editable: true,
-			eventSources: calSources
+			eventDrop: function(event, delta_day, delta_min, all_day, revert_func) {
+				update_event(event, delta_day, delta_min, all_day, revert_func);
+			},
+			eventResize: function(event, delta_day, delta_min, revert_func) {
+				update_event(event, delta_day, delta_min, false, revert_func);
+			},
+			eventClick: function(event, jsevent, view) {
+				estart=event.start;
+                eend=event.end;
+                eallDay=event.allDay;
+				is_update = true;
+
+				$('#event_id').val(event.id);
+				$('#calendar_id').val(event.calendar_id);
+				$('#event_title').val(event.title);
+				$('#event_date_start').val(datestring(event.start, event.allDay));
+				$('#event_date_end').val(datestring(event.end, event.allDay));
+				$('#event_memo').val(event.memo);
+				$('#event_allday').prop('checked', event.allDay);
+				$.uniform.update();
+				$('#create_event_form').dialog('open');
+			}
 		});
 
 
-		$( "#create_event_form" ).dialog({
+		$('#create_event_form').dialog({
 			autoOpen: false,
 			height: 400,
 			width: 450,
@@ -210,58 +235,63 @@
             show: 'fade',
 			buttons: {
 				Cancel: function() {
-					$( this ).dialog( "close" );
+					$(this).dialog('close');
 				},
 
-				"Create Event": function() {
+				'Save Event': function() {
 					var bValid = true;
-					eventtitle.removeClass( "ui-state-error" );
-
+					eventtitle.removeClass('ui-state-error');
 					bValid = bValid && eventtitle.val() != '';
 
-					if ( bValid ) {
-                        var title = eventtitle.val();
-                        calendar.fullCalendar('renderEvent',
-                            {
-                                title: title,
-                                start: estart,
-                                end: eend,
-                                allDay: eallDay
-                            },
-                            true // make the event "stick"
-                        );
+					if (bValid) {
+						if (is_update) {
+							var ajax_url = '/calendar/ajax_update_event';
+						} else {
+							var ajax_url = '/calendar/ajax_save_event';
+						}
 
 						$.post(
-							'/calendar/ajax_save_event',
+							ajax_url,
 							$('#form_event').serializeArray(),
-							function(resp) {
-
-							},
+							function(resp) {},
 							'json'
 						);
 
+						calendar.fullCalendar('refetchEvents');
                         calendar.fullCalendar('unselect');
-						$( this ).dialog( "close" );
+						$(this).dialog('close');
 					}
 				}
 
 			},
             close: function() {
-                eventtitle.val("").removeClass( "ui-state-error" );
+                eventtitle.val('').removeClass('ui-state-error');
                 estart=eend=eallDay=null;
             }
 		});
 
 
+		$('#calendar_list li').click(function() {
+			var li = $(this);
+			var cal_id = li.attr('data-cal_id');
 
-
+			if (li.hasClass('unselected')) {
+				li.removeClass('unselected');
+				calendar.fullCalendar('addEventSource', calSources[cal_id]);
+			} else {
+				li.addClass('unselected');
+				calendar.fullCalendar('removeEventSource', calSources[cal_id]);
+			}
+		});
 
 
 
 	});
 
-	function datestring(MyDate) {
-		if (eallDay) {
+	function datestring(MyDate, allDay) {
+		if (MyDate == null) return '';
+
+		if (allDay) {
 			return MyDate.getFullYear() + '-'
 				+ ('0' + (MyDate.getMonth()+1)).slice(-2) + '-'
 				+ ('0' + MyDate.getDate()).slice(-2);
@@ -273,6 +303,17 @@
 				+ ('0' + MyDate.getMinutes()).slice(-2);
 
 		}
+	}
+
+	function update_event(event, delta_day, delta_min, all_day, revert_func) {
+		$.post(
+			'/calendar/ajax_update_event_dragdrop',
+			{ event_id:event.id, delta_day:delta_day, delta_min:delta_min, all_day:all_day},
+			function(resp) {
+
+			},
+			'json'
+		);
 	}
 
 </script>
