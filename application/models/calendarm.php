@@ -46,19 +46,22 @@ class CalendarM extends MY_Model {
 		return $rs->row_array();
 	}
 
-	function get_events($start, $end, $card_id='', $calendar_ids=array()) {
+	function get_events($start='', $end='', $card_id='', $calendar_ids=array()) {
 		if ($card_id == '') $card_id = $this->UserM->get_cardid();
 
 		if (count($calendar_ids) == 0) $calendar_ids = $this->get_user_calendar_ids($card_id);
 
-		$start = parse_timestamp($start, 'MYSQL');
-		$end = parse_timestamp($end, 'MYSQL');
+		$this->db->select()
+			->from('a_calendars_objects')
+			->where_in('calendar_id', $calendar_ids);
 
-		$rs = $this->db->select()
-				->from('a_calendars_objects')
-				->where_in('calendar_id', $calendar_ids)
-				->where('date_start BETWEEN "'.$start.'" AND "'.$end.'"')
-				->get();
+		if ($start != '' && $end != '') {
+			$start = parse_timestamp($start, 'MYSQL');
+			$end = parse_timestamp($end, 'MYSQL');
+			$this->db->where('date_start BETWEEN "'.$start.'" AND "'.$end.'"');
+		}
+
+		$rs = $this->db->get();
 
 		if ($rs->num_rows() == 0) return array();
 

@@ -26,6 +26,10 @@
 		margin:1px 0;
 	}
 
+	#calendar_list a {
+		color:#FFF;
+	}
+
 
 	#calendar_list li.cal_0 { background-color:#36C; border:solid 1px #36C; color:#FFF; }
 	#calendar_list li.cal_1 { background-color:#C36; border:solid 1px #C36; color:#FFF; }
@@ -56,13 +60,20 @@
 
 	<div id="calendar_options">
 
-		<ul id="calendar_list">
+		<ul id="calendar_list" class="sf-menu sf-vertical">
 		<?php
 			foreach($calendars AS $cal) {
 				$color = ($cal['calendar_color'] == NULL)
 							? $cal['calendar_order']
 							: $cal['calendar_color'];
-				echo '<li class="cal_',$color,'" data-cal_id=',$cal['id'],'>',$cal['display_name'],'</li>';
+				echo '<li class="cal_',$color,'">';
+					echo '<div class="cal_showhide" data-cal_id=',$cal['id'],'>';
+					echo $cal['display_name'];
+					echo '</div>';
+					echo '<ul>';
+						echo '<li><a href="webcal://'.str_replace('http://','',site_url()).'ical/index/',encode_id($cal['id']),'/',encode_id($cuid),'">Add to iCal</a></li>';
+					echo '</ul>';
+				echo '</li>';
 			}
 		?>
 		</ul>
@@ -121,8 +132,9 @@
 	</form>
 </div>
 
+
+
 <script>
-	var estart, eend, eallDay;
 	var is_update = false;
 
 	var bgcolor = new Array();
@@ -168,11 +180,16 @@
 			stepMinute: 5
 		});
 
+		$('#calendar_list').superfish({
+			delay: 500,
+			animation: { height:'show' },
+			speed: 'fast'
+		});
+
 		$('.datepicker').datetimepicker();
 
 
-        var eventtitle = $("#event_title");
-
+        var eventtitle = $('#event_title');
 
 		var calendar = $('#calendar').fullCalendar({
             theme: true,
@@ -187,18 +204,14 @@
 			editable: true,
 			eventSources: calSources,
 			select: function(start, end, allDay) {
-                estart=start;
-                eend=end;
-                eallDay=allDay;
 				is_update = false;
 
 				$('#event_date_start').val(datestring(start, allDay));
 				$('#event_date_end').val(datestring(end, allDay));
-
 				$('#event_allday').prop('checked', allDay);
 				$.uniform.update();
 
-                $("#create_event_form").dialog("open");
+                $('#create_event_form').dialog('open');
 			},
 			eventDrop: function(event, delta_day, delta_min, all_day, revert_func) {
 				update_event(event, delta_day, delta_min, all_day, revert_func);
@@ -207,9 +220,6 @@
 				update_event(event, delta_day, delta_min, false, revert_func);
 			},
 			eventClick: function(event, jsevent, view) {
-				estart=event.start;
-                eend=event.end;
-                eallDay=event.allDay;
 				is_update = true;
 
 				$('#event_id').val(event.id);
@@ -220,6 +230,7 @@
 				$('#event_memo').val(event.memo);
 				$('#event_allday').prop('checked', event.allDay);
 				$.uniform.update();
+
 				$('#create_event_form').dialog('open');
 			}
 		});
@@ -240,7 +251,6 @@
 
 				'Save Event': function() {
 					var bValid = true;
-					eventtitle.removeClass('ui-state-error');
 					bValid = bValid && eventtitle.val() != '';
 
 					if (bValid) {
@@ -265,21 +275,19 @@
 
 			},
             close: function() {
-                eventtitle.val('').removeClass('ui-state-error');
-                estart=eend=eallDay=null;
-            }
+			}
 		});
 
 
-		$('#calendar_list li').click(function() {
+		$('#calendar_list li div.cal_showhide').click(function() {
 			var li = $(this);
 			var cal_id = li.attr('data-cal_id');
 
-			if (li.hasClass('unselected')) {
-				li.removeClass('unselected');
+			if (li.parent().hasClass('unselected')) {
+				li.parent().removeClass('unselected');
 				calendar.fullCalendar('addEventSource', calSources[cal_id]);
 			} else {
-				li.addClass('unselected');
+				li.parent().addClass('unselected');
 				calendar.fullCalendar('removeEventSource', calSources[cal_id]);
 			}
 		});
@@ -308,10 +316,8 @@
 	function update_event(event, delta_day, delta_min, all_day, revert_func) {
 		$.post(
 			'/calendar/ajax_update_event_dragdrop',
-			{ event_id:event.id, delta_day:delta_day, delta_min:delta_min, all_day:all_day},
-			function(resp) {
-
-			},
+			{ event_id:event.id, delta_day:delta_day, delta_min:delta_min, all_day:all_day },
+			function(resp) { },
 			'json'
 		);
 	}

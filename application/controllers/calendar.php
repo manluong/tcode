@@ -12,6 +12,7 @@ class Calendar extends MY_Controller {
 	public function index()	{
 		$html_data = array();
 		$html_data['calendars'] = $this->CalendarM->get_user_calendars($this->UserM->get_cardid());
+		$html_data['cuid'] = $this->UserM->get_cardid();
 
 		$data = array();
 		$data['html'] = $this->load->view('/'.get_template().'/calendar/view', $html_data, TRUE);
@@ -27,57 +28,6 @@ class Calendar extends MY_Controller {
 		$this->LayoutM->load_format();
 
 		$this->output();
-	}
-
-
-	function test_ical() {
-		$events = array();
-
-		$event = array();
-		$event['title'] = 'buffalo wings';
-		$event['description'] = 'eat lots of buffalo wings';
-		$event['start'] = '20120109T180000';
-		$event['end'] = '20120109T190000';
-		$events[] = $event;
-
-		$event = array();
-		$event['title'] = 'beer';
-		$event['description'] = 'drink lots of beer';
-		$event['start'] = '20120119T200000';
-		$event['end'] = '20120121T220000';
-		$events[] = $event;
-
-
-		$event = array();
-		$event['title'] = 'pizza';
-		$event['description'] = 'eat lots of pizza';
-		$event['start'] = '20120123T180000';
-		$event['end'] = '20120123T190000';
-		$events[] = $event;
-
-		header('Content-type: text/calendar; charset=utf-8');
-		header('Content-Disposition: inline; filename=calendar.ics');
-		echo $this->to_ical($events);
-	}
-
-
-	private function to_ical($events) {
-		$nl = "\n";
-
-		$output = 'BEGIN:VCALENDAR'.$nl;
-
-		foreach($events AS $e) {
-			$output .= 'BEGIN:VEVENT'.$nl;
-			$output .= 'DTSTART:'.$e['start'].$nl;
-			$output .= 'DTEND:'.$e['end'].$nl;
-			$output .= 'SUMMARY:'.$e['title'].$nl;
-			$output .= 'DESCRIPTION:'.$e['description'].$nl;
-			$output .= 'END:VEVENT'.$nl;
-		}
-
-		$output .= 'END:VCALENDAR'.$nl;
-
-		return $output;
 	}
 
 
