@@ -219,7 +219,7 @@ $(document).ready(function() {
 				//$("#confirm").dialog("open");
 				var user_response = confirm("All files and versions will be removed.");
 				if (user_response) {
-					$.get('/docs/delete_object?id='+$('#docs_id').val(), function() {
+					$.get('/docs/delete_object?id='+$('#ver_id').val(), function() {
 
 					}).success(function(data){
 						console.log(data);
@@ -227,6 +227,28 @@ $(document).ready(function() {
 						console.log('Error deleting file');
 					});
 				}
+			});
+
+			$('#filetree').dialog({
+				autoOpen: false
+			});
+			$('.move').on('click', function() {
+				$('#filetree').dialog('open');
+			});
+			$('.tree-folders').on('click', function(e) {
+				console.log('id:%s', $(this).attr('folder_id'));
+				$.get('/docs/move_file',
+					{folder_id: $(this).attr('folder_id'), docs_id:$('#docs_id').val(),
+					ver_id:$("#ver_id").val()
+				},function() {
+
+				}).success(function (data) {
+					console.log(data);
+				}).error(function() {
+
+				});
+				$('#filetree').dialog('close');
+				e.stopPropagation();
 			});
 
 			/* $('#list-view').dataTable({

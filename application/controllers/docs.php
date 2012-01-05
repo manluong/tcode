@@ -10,6 +10,7 @@ class Docs extends MY_Controller {
 		$this->load->library('S3');
 		$this->load->model('DocsM');
 		$this->_temp_dir = $_SERVER['DOCUMENT_ROOT'].'/tmp/';
+		$this->_bucket = 's3subscribers';
 
 		$this->_views_data['folder_icon'] = '<img src="/resources/template/'.get_template().'/images/icons/16/folder-small-horizontal.png">';
 		$this->_views_data['docs_icon'] = '<img src="/resources/template/'.get_template().'/images/icons/16/document-small.png">';
@@ -57,6 +58,26 @@ class Docs extends MY_Controller {
 		$this->data[] = $data;
 		$this->LayoutM->load_format();
 		$this->output();
+	}
+
+	function download_file() {
+		$i = $this->DocsM->get_docs_detail($this->input->get('id'));
+		if ( ! empty($i)) {
+			$uri = $this->dirpath($i['a_docs_dir_dirpath'], $i['a_docs_ver_filename']);
+			$_filecontent = $this->get_object('s3subscribers', $uri);
+			$this->output->set_content_type($i['a_docs_ver_mime']);
+			$this->output->set_header('Content-Disposition: attachment; filename="'.$i['a_docs_ver_filename'].'"');
+			return $this->output->set_output($_filecontent->body);
+		}
+	}
+
+	// Helper function to format full path correctly
+	function format_dirpath($dirpath, $filename) {
+		if ($dirpath === '/') {
+			return $dirpath.$filename;
+		} else {
+			return $dirpath.'/'.$filename;
+		}
 	}
 
 	function permission_form() {
@@ -130,12 +151,8 @@ class Docs extends MY_Controller {
 	}
 
 	function get_object($bucket, $uri) {
-		//print getcwd();
 		$object = S3::getObject($bucket, $uri, FALSE);
 		return $object;
-		/*
-		$this->output->set_content_type($object->headers['type']);
-		$this->output->set_output($object->body);*/
 	}
 
 	function get_object_url($bucket, $uri, $lifetime) {
@@ -154,10 +171,9 @@ class Docs extends MY_Controller {
 			$_this_object_details = $this->DocsM->get_docs_detail($this->input->get('id'));
 			if ( ! empty($_this_object_details)) {
 				$_this_object_path = $this->DocsM->get_dirpath($_this_object_details['a_docs_dir_docs_id']);
-				if ($_this_object_path['a_docs_dir_dirpath'] === '/') $_this_object_path['a_docs_dir_dirpath'] = '';
-				$uri = $_this_object_path['a_docs_dir_dirpath'].'/'.$_this_object_details['a_docs_ver_filename'];
+				$uri = $this->format_dirpath($_this_object_path['a_docs_dir_dirpath'], $_this_object_details['a_docs_ver_filename']);
 				$_bucket = 's3subscribers';
-				if (S3::deleteObject('s3subscribers',$uri)) {
+				if (S3::deleteObject($this->_bucket,$uri)) {
 					$this->DocsM->delete_docs($_this_object_details['a_docs_id']);
 					return $this->output->set_output(json_encode(array('message', 'File deleted')));
 				}
@@ -209,7 +225,7 @@ class Docs extends MY_Controller {
 			case 'image/gif':
 			case 'image/jpeg':
 			case 'image/png':
-				$this->_views_data['s3_object'] = $this->get_object_url('s3subscribers', $this->_views_data['docs_detail']['a_docs_dir_dirpath'].$this->_views_data['docs_detail']['a_docs_ver_filename'], '3600');
+				$this->_views_data['s3_object'] = $this->get_object_url('s3subscribers',$this->format_dirpath( $this->_views_data['docs_detail']['a_docs_dir_dirpath'],$this->_views_data['docs_detail']['a_docs_ver_filename']), '3600');
 				$this->_views_data['s3_object'] = '<img src="'.$this->_views_data['s3_object'].'">';
 				break;
 			case 'application/pdf':
@@ -262,11 +278,42 @@ class Docs extends MY_Controller {
 	}
 
 	function display_file_functions () {
+		$this->_views_data['root_dir'] = $this->DocsM->get_root_dir();
+		$this->_views_data['tree'] = $this->get_tree($this->_views_data['root_dir']['a_docs_id']);
 		$data = array();
-		$data['html'] = $this->load->view('/'.get_template().'/docs/docs_view_file_functions.php','',TRUE);
+		$data['html'] = $this->load->view('/'.get_template().'/docs/docs_view_file_functions.php',$this->_views_data,TRUE);
 		$data['isoutput'] = 1;
 		$data['isdiv'] = 1;
 		return $data;
+	}
+
+	function get_tree($id) {
+		$i = $this->DocsM->get_sub_folders($id);
+		foreach($i as &$sub_folder) {
+			$j = $this->get_tree($sub_folder['a_docs_id']);
+			if ( ! empty($j)) $sub_folder['child'] = $j;
+		}
+		return $i;
+	}
+
+	function move_file() {
+		if ($this->input->get('folder_id') && $this->input->get('docs_id') && $this->input->get('ver_id')) {
+			$i = $this->DocsM->get_docs_detail($this->input->get('ver_id'));
+			$filename = $this->format_dirpath($i['a_docs_dir_dirpath'], $i['a_docs_ver_filename']);
+			$j = $this->DocsM->get_dirpath_dir($this->input->get('folder_id'));
+			$destination = $this->format_dirpath($j['a_docs_dir_dirpath'], $i['a_docs_ver_filename']);
+			if (S3::copyObject('s3subscribers', $filename, 's3subscribers', $destination, S3::ACL_PRIVATE)) {
+				if (S3::deleteObject($this->_bucket, $filename)) {
+				}
+				$this->DocsM->update_docs_location($this->input->get('folder_id'), $this->input->get('docs_id'));
+				$this->output->set_content_type('application/json');
+				return $this->output->set_output(json_encode(array('message'=>'File Moved')));
+			} else {
+				return $this->output->set_header('HTTP/1.1 500');
+			}
+		} else {
+			return $this->output->set_header('HTTP/1.1 400');
+		}
 	}
 
 	function update_docs_title() {
@@ -280,8 +327,26 @@ class Docs extends MY_Controller {
 	}
 
 	function test() {
-		$i = $this->DocsM->get_docs_detail($this->url['id_plain']);
+		$_root_dir = $this->DocsM->get_root_dir();
+		$_tree = $this->get_tree($_root_dir['a_docs_id']);
+		print_r($_tree);
 
+		foreach($_tree as $t) {
+			print $t['a_docs_displayname'];print "<br>";
+		}
+		print $this->print_tree($_tree, '');
+	}
+
+	function print_tree($tree, $html) {
+		$html .= '<ul>';
+		foreach ($tree as $folder) {
+			$html .= '<li>'.$folder['a_docs_displayname'].'</li>';
+			if (isset($folder['child'])) {
+				$html .= $this->print_tree($folder['child'], $html);
+			}
+		}
+		$html .= '</ul>';
+		return $html;
 	}
 
 	function testView() {
