@@ -4,6 +4,9 @@ class ACLM extends CI_Model {
 	var $url = array();
 
 	var $cache_acl = array();
+	var $unit_test = array(
+		'triggered_rule' => array(),
+	);
 
 	function __construct() {
 		parent::__construct();
@@ -238,17 +241,24 @@ class ACLM extends CI_Model {
 
 			foreach($acl AS $a) {
 				if ($a['app_data_id'] != $adi) continue;
+				$this->unit_test['triggered_rule'] = array();
 
 				switch($a['role_type']) {
 					case 1:	//card
 
-						if ($a['role_id'] == $cardid) return ($a[$action] == 1);
+						if ($a['role_id'] == $cardid) {
+							$this->unit_test['triggered_rule'][] = $a['id'];
+							return ($a[$action] == 1);
+						}
 
 						break;
 
 					case 2: //subgroup
 
-						if (in_array($a['role_id'], $subgp)) $case2_acl[] = $a;
+						if (in_array($a['role_id'], $subgp)) {
+							$this->unit_test['triggered_rule'][] = $a['id'];
+							$case2_acl[] = $a;
+						}
 
 						break;
 
@@ -260,7 +270,12 @@ class ACLM extends CI_Model {
 							return ($case2_acl[$action] == 1);
 						}
 
-						if ($a['role_id'] == $mastergp) return ($a[$action] == 1);
+						$this->unit_test['triggered_rule'] = array();
+
+						if ($a['role_id'] == $mastergp) {
+							$this->unit_test['triggered_rule'][] = $a['id'];
+							return ($a[$action] == 1);
+						}
 
 						break;
 				}
