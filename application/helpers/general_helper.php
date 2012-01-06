@@ -338,3 +338,23 @@ function explode_filename_dirpath ($path) {
 function array_reverse_order($array) {
 	return array_combine(array_reverse(array_keys($array)), array_reverse(array_values($array)));
 }
+
+function randStr($length=3)
+{
+    $str = "";
+    $characters = "abcdefghjkmnpqrstwxyz123456789";
+    $maxlength = strlen($characters);
+    if ($length > $maxlength) {
+      $length = $maxlength;
+    }
+    $i = 0;
+    while ($i < $length) {
+      $char = substr($characters, mt_rand(0, $maxlength-1), 1);
+      if (!strstr($str, $char)) {
+        $str .= $char;
+        $i++;
+      }
+
+    }
+    return $str;
+}
