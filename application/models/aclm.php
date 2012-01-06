@@ -3,6 +3,8 @@
 class ACLM extends CI_Model {
 	var $url = array();
 
+	var $cache_acl = array();
+
 	function __construct() {
 		parent::__construct();
 
@@ -40,15 +42,6 @@ class ACLM extends CI_Model {
 			}
 		}
 	}
-
-
-
-
-
-
-
-
-
 
 
 
@@ -220,6 +213,113 @@ class ACLM extends CI_Model {
 			$result = ($this->url['id_plain']!=0 && $this->UserM->info[$access['access_rights_matchthisidtype']] == $this->url['plain_id'])
 				? 1
 				: 2;
+		}
+
+		return $result;
+	}
+
+
+
+
+
+
+	function check($action='', $app='', $actiongp='', $app_data_id=0) {
+		if ($app == '') $app = $this->url['app'];
+		if ($actiongp == '') $actiongp = $this->AppM->get_group($app, $this->url['action']);
+		if ($app_data_id != 0) $app_data_id = array($app_data_id, 0);
+
+		$acl = $this->get_acl($app, $actiongp, $app_data_id);
+		$cardid = $this->UserM->get_cardid();
+		$subgp = $this->UserM->info['subgp'];
+		$mastergp = $this->UserM->info['accessgp'];
+
+		foreach($app_data_id AS $adi) {
+			$case2_acl = array();
+
+			foreach($acl AS $a) {
+				if ($a['app_data_id'] != $adi) continue;
+
+				switch($a['role_type']) {
+					case 1:	//card
+
+						if ($a['role_id'] == $cardid) return ($a[$action] == 1);
+
+						break;
+
+					case 2: //subgroup
+
+						if (in_array($a['role_id'], $subgp)) $case2_acl[] = $a;
+
+						break;
+
+					case 3: //mastergroup
+
+						//if there's any acl from case 2, consolidate them and return result
+						if (count($case2_acl) > 0) {
+							$case2_acl = $this->consolidate_acl($case2_acl);
+							return ($case2_acl[$action] == 1);
+						}
+
+						if ($a['role_id'] == $mastergp) return ($a[$action] == 1);
+
+						break;
+				}
+			}
+		}
+
+		return FALSE;
+	}
+
+	function get_acl($app, $actiongp, $app_data_id=array(0)) {
+		$result = array();
+
+		foreach($app_data_id AS $k=>$adi) {
+			$key = $app.'_'.$actiongp.'_'.$adi;
+			if (isset($this->cache_acl[$key])) {
+				$result += $this->cache_acl[$key];
+				unset($app_data_id[$k]);
+			}
+		}
+
+		if (count($app_data_id) == 0) return $result;
+
+		$rs = $this->db->select()
+				->from('access_rights_new')
+				->where('app', $app)
+				->where('actiongp', $actiongp)
+				->where_in('app_data_id', $app_data_id)
+				->order_by('role_type', 'ASC')
+				->get();
+
+		foreach($rs->result_array() AS $acl) {
+			$result[] = $acl;
+
+			$key = $acl['app'].'_'.$acl['actiongp'].'_'.$acl['app_data_id'];
+			$this->cache_acl[$key][] = $acl;
+		}
+
+		return $result;
+	}
+
+	private function consolidate_acl($acl) {
+		$result = array(
+			'admin' => 1,
+			'read' => 1,
+			'list' => 1,
+			'search' => 1,
+			'copy' => 1,
+			'download' => 1,
+			'write' => 1,
+			'add' => 1,
+			'move' => 1,
+			'rename' => 1,
+			'delete' => 1
+		);
+
+		foreach($acl AS $a) {
+			foreach ($result AS $act=>$val) {
+				if ($a[$act] < $val) $result[$act] = $a[$act];
+			}
 		}
 
 		return $result;
