@@ -4,7 +4,7 @@ class AppM extends MY_Model {
 	var $url = array();
 	var $actions = array();
 
-	var $public_apps = array('access', 'ical');
+	var $public_apps = array('access', 'ical', 'unittest');
 
 	function __construct() {
 		$this->table = 'core_apps';
@@ -109,13 +109,15 @@ class AppM extends MY_Model {
 	}
 
 	function get_action_element($app, $action){
-
-		$sql = "SELECT * FROM core_apps_action_element WHERE core_apps_action_element_x_core_apps_action_name = '$action' AND core_apps_action_element_active = '1' AND core_apps_action_element_x_core_apps_name = '$app' ORDER BY core_apps_action_element_sort ASC";
-		$rs = $this->db->query($sql);
+		$rs = $this->db->select()
+				->where('core_apps_action_element_x_core_apps_action_name', $action)
+				->where('core_apps_action_element_active', 1)
+				->where('core_apps_action_element_x_core_apps_name', $app)
+				->order_by('core_apps_action_element_sort', 'ASC')
+				->get('core_apps_action_element');
 
 		if ($rs->num_rows() == 0) return FALSE;
 		return $rs->result_array();
-
 	}
 
 	function get_this_element($this_element, $mfunction, $apps_action){
@@ -154,10 +156,10 @@ class AppM extends MY_Model {
 			//if this is a ajax call
 			//get the aved from the target AN
             if (!isset($mfunction['target_an'])) {
-            $rs['target_an'] = $this_element['core_apps_action_element_target_an'];
+				$rs['target_an'] = $this_element['core_apps_action_element_target_an'];
             } else {
-            $rs['target_an'] = $mfunction['target_an'];
-            $rs['subaction'] = $mfunction['element_aved'];
+				$rs['target_an'] = $mfunction['target_an'];
+				$rs['subaction'] = $mfunction['element_aved'];
             }
 
 			$this_ajax_an = $this->get_actions($this->url['app'], $rs['target_an']);

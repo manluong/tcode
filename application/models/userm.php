@@ -260,7 +260,7 @@ class UserM extends MY_Model {
 				if ($rs->num_rows()>0) {
 					$temp = $rs->row_array();
 					$result['staffid'] = $temp['staff_id'];
-					$result['en']['staffid'] = f_thisid_encode($temp['staff_id']);
+					$result['en']['staffid'] = encode_id($temp['staff_id']);
 				}
 				break;
 			case '3':
@@ -271,7 +271,7 @@ class UserM extends MY_Model {
 				if ($rs->num_rows()>0) {
 					$temp = $rs->row_array();
 					$result['clientid'] = $temp['client_id'];
-					$result['en']['clientid'] = f_thisid_encode($temp['client_id']);
+					$result['en']['clientid'] = encode_id($temp['client_id']);
 				}
 				break;
 			case "4":  break;
@@ -283,7 +283,7 @@ class UserM extends MY_Model {
 				if ($rs->num_rows()>0) {
 					$temp = $rs->row_array();
 					$result['vendorid'] = $temp['vendor_id'];
-					$result['en']['vendorid'] = f_thisid_encode($temp['vendor_id']);
+					$result['en']['vendorid'] = encode_id($temp['vendor_id']);
 				}
 				break;
 			case "6":  break;
@@ -295,7 +295,7 @@ class UserM extends MY_Model {
 				if ($rs->num_rows()>0) {
 					$temp = $rs->row_array();
 					$result['spuid'] = $temp['spu_id'];
-					$result['en']['spuid'] = f_thisid_encode($temp['spu_id']);
+					$result['en']['spuid'] = encode_id($temp['spu_id']);
 				}
 				break;
 		}
