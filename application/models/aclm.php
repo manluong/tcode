@@ -292,6 +292,8 @@ class ACLM extends MY_Model {
 	function get_acl($app, $actiongp, $app_data_id=array(0)) {
 		if ($actiongp == '') $actiongp = $this->AppM->get_group($app, $this->url['action']);
 
+		if (!is_array($app_data_id)) $app_data_id = array($app_data_id);
+
 		$result = array();
 
 		foreach($app_data_id AS $k=>$adi) {
