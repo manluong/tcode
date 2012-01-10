@@ -1,6 +1,6 @@
 <?php if (!defined('BASEPATH')) exit('No direct access allowed.');
 
-class ACLM extends CI_Model {
+class ACLM extends MY_Model {
 	var $url = array();
 
 	var $cache_acl = array();
@@ -9,6 +9,10 @@ class ACLM extends CI_Model {
 	);
 
 	function __construct() {
+		$this->table = 'access_rights_new';
+		$this->id_field = 'id';
+		$this->cache_enabled = TRUE;
+
 		parent::__construct();
 
 		$CI =& get_instance();
@@ -178,7 +182,7 @@ class ACLM extends CI_Model {
 			$rs = $this->db->query('SELECT * FROM access_rights WHERE '.$sql[$count]);
 			if ($rs->num_rows()>0){
 				foreach ($rs->result_array() as $field) {
-					if ($result['allow'] != 1){
+					if (!isset($result['allow']) || $result['allow'] != 1){
 						$result['allow'] = $this->check_table_rights($field, $avedfield);
 						$result['typeid'] = $field['access_rights_id'];
 						$result['type'] = 'rightstable';
@@ -238,10 +242,10 @@ class ACLM extends CI_Model {
 
 		foreach($app_data_id AS $adi) {
 			$case2_acl = array();
+			$this->unit_test['triggered_rule'] = array();
 
 			foreach($acl AS $a) {
 				if ($a['app_data_id'] != $adi) continue;
-				$this->unit_test['triggered_rule'] = array();
 
 				switch($a['role_type']) {
 					case 1:	//card
@@ -286,6 +290,8 @@ class ACLM extends CI_Model {
 	}
 
 	function get_acl($app, $actiongp, $app_data_id=array(0)) {
+		if ($actiongp == '') $actiongp = $this->AppM->get_group($app, $this->url['action']);
+
 		$result = array();
 
 		foreach($app_data_id AS $k=>$adi) {
@@ -340,4 +346,142 @@ class ACLM extends CI_Model {
 		return $result;
 	}
 
+	function fill_acl_details(&$acl) {
+		$card_ids = $subgp_ids = $gp_ids = array();
+
+		foreach($acl AS $a) {
+			switch($a['role_type']) {
+				case 1:
+					$card_ids[] = $a['role_id'];
+					break;
+				case 2:
+					$subgp_ids[] = $a['role_id'];
+					break;
+				case 3:
+					$gp_ids[] = $a['role_id'];
+					break;
+			}
+		}
+
+		$card_details = $this->UserM->get_batch($card_ids, TRUE);
+
+		$subgp_details = $this->get_subgp_batch($subgp_ids, TRUE);
+		foreach($subgp_details AS $s) {
+			$gp_ids[] = $s['access_gpsub_gpmaster'];
+		}
+
+		$gp_details = $this->get_gp_batch($gp_ids, TRUE);
+
+		foreach($acl AS $k=>$a) {
+			switch($a['role_type']) {
+				case 1:
+					$acl[$k]['name'] = $card_details[$a['role_id']]['card_fname'].' '.$card_details[$a['role_id']]['card_lname'];
+					break;
+				case 2:
+					$gp_id = $subgp_details[$a['role_id']]['access_gpsub_gpmaster'];
+					$acl[$k]['name'] = $gp_details[$gp_id]['access_gpmaster_name'].' - '.$subgp_details[$a['role_id']]['access_gpsub_name'];
+					break;
+				case 3:
+					$acl[$k]['name'] = $gp_details[$a['role_id']]['access_gpmaster_name'];
+					break;
+			}
+		}
+	}
+
+
+
+	function get_subgp_batch($ids, $id_as_key=FALSE) {
+		$temp_tb = $this->table;
+		$temp_id = $this->id_field;
+
+		$this->table = 'access_gpsub';
+		$this->id_field = 'access_gpsub_id';
+
+		$results = parent::get_batch($ids, $id_as_key);
+
+		$this->table = $temp_tb;
+		$this->id_field = $temp_id;
+
+		return $results;
+	}
+
+	function get_gp_batch($ids, $id_as_key=FALSE) {
+		$temp_tb = $this->table;
+		$temp_id = $this->id_field;
+
+		$this->table = 'access_gpmaster';
+		$this->id_field = 'access_gpmaster_code';
+
+		$results = parent::get_batch($ids, $id_as_key);
+
+		$this->table = $temp_tb;
+		$this->id_field = $temp_id;
+
+		return $results;
+	}
+
+	function get_gp_list() {
+		$temp_tb = $this->table;
+		$temp_id = $this->id_field;
+
+		$this->table = 'access_gpmaster';
+		$this->id_field = 'access_gpmaster_code';
+
+		$results = parent::get_list();
+
+		$this->table = $temp_tb;
+		$this->id_field = $temp_id;
+
+		return $results;
+	}
+
+	function get_subgp($gp='') {
+		$this->db->select()
+			->from('access_gpsub');
+
+		if ($gp != '') $this->db->where('access_gpsub_gpmaster', $gp);
+
+		$rs = $this->db->get();
+
+		if ($rs->num_rows() == 0) return array();
+
+		return $rs->result_array();
+	}
+
+	function get_users($gp='') {
+		$roles = $this->get_subgp($gp);
+
+		$role_ids = array();
+
+		foreach($roles AS $r) {
+			$role_ids[] = $r['access_gpsub_id'];
+		}
+
+		if (count($role_ids) == 0) return array();
+
+		$rs = $this->db->select('DISTINCT access_usergp.access_usergp_cardid, CONCAT(card.card_fname," ",card.card_lname) AS name', false)
+				->from('access_usergp')
+				->where_in('access_usergp.access_usergp_gpsub', $role_ids)
+				->join('card', 'card.card_id=access_usergp.access_usergp_cardid', 'left')
+				->get();
+
+		if ($rs->num_rows() == 0) return array();
+
+
+
+		return $rs->result_array();
+	}
+
+	function save_acl($data) {
+		$data['created_cardid'] = $this->UserM->get_cardid();
+		$data['created_stamp'] = get_current_stamp();
+
+		parent::save($data, $this->id_field);
+	}
+
+	function delete_acl($id) {
+		$this->db->where('id', $id)
+				->limit(1)
+				->delete($this->table);
+	}
 }

@@ -34,10 +34,26 @@ class Unittest extends MY_Controller {
 
 				'move_client_list_12' => 'no',
 				'move_client_list_88' => 'yes',
-			)
+			),
+
+			149 => array(
+				'admin_client_search_1' => 'no',
+				'admin_client_list_12' => 'no',
+				'admin_client_search_88' => 'no',
+				'admin_client_list_88' => 'no',
+
+				'write_client_search_12' => 'no',
+
+				'read_client_search_12' => 'no',
+
+				'move_client_list_12' => 'yes',
+				'move_client_list_88' => 'no',
+			),
 		);
 
 		echo '<p>ACL Tests:</p>';
+
+		if (!isset($tests[$cuid])) die('no unit tests setup for the currently logged in user');
 
 		$test_set = $tests[$cuid];
 		if ($sett_randomize_tests) $test_set = shuffle_assoc($test_set);
