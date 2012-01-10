@@ -21,15 +21,13 @@ class docsM extends My_Model {
 		return $query->row_array();
 	}
 
-	// Pass in docs id
+	// Pass in docs id. Return dirpath of doc
 	function get_dirpath($id) {
-		$query = $this->db->select('a_docs_dir_dirpath')
-			->from('a_docs_dir')
-			->where('a_docs_dir_docs_id', $id)
-			->get();
+		$query = $this->db->query('SELECT a_docs_dir_dirpath FROM a_docs_dir WHERE a_docs_dir_docs_id = (SELECT a_docs_parentid FROM a_docs WHERE a_docs_id = '.$id.')');
 		return $query->row_array();
 	}
 
+	// Gets direct dirpath stored in a_docs_dir_dirpath
 	// Pass in docs_dir_id
 	function get_dirpath_dir($id) {
 		$query = $this->db->select()
@@ -42,23 +40,56 @@ class docsM extends My_Model {
 	// Returns all docs in a dirid.
 	// Presents the latest ver id as link
 	function get_docs($id) {
-		$query = $this->db->select('a_docs_id, a_docs_displayname, a_docs_dir_dirpath, a_docs_ver_id, a_docs_ver_filename, a_docs_ver_filesize, a_docs_ver_stamp')
-			->from('a_docs')
-			->join('a_docs_ver', 'a_docs.a_docs_id = a_docs_ver.a_docs_ver_docsid')
-			->join('a_docs_dir', 'a_docs_dir.a_docs_dir_docs_id = a_docs.a_docs_parentid')
-			->where(array('a_docs_parentid'=> $id, 'a_docs_isdir' => FALSE))
-			->order_by('a_docs_ver_id')
-			->group_by('a_docs_ver_id')
-			->get();
+		$query = $this->db->query('SELECT * FROM
+				(SELECT * FROM a_docs LEFT JOIN a_docs_ver ON a_docs.a_docs_id = a_docs_ver.a_docs_ver_docsid
+					WHERE a_docs_parentid = '.$id.' AND a_docs_isdir = 0 ORDER BY a_docs_ver_id DESC )
+				AS a LEFT JOIN a_docs_dir ON a_docs_dir.a_docs_dir_docs_id = a.a_docs_parentid
+				GROUP BY a_docs_id ORDER BY a_docs_ver_id DESC');
 		return $query->result_array();
 	}
 
-	// Pass in a_docs_ver_id
-	function get_docs_detail($ver_id) {
+	// Used in preview screen
+	function get_docs_detail($docs_id) {
 		$query = $this->db->select()
 			->from('a_docs')
 			->join('a_docs_ver', 'a_docs_ver.a_docs_ver_docsid = a_docs.a_docs_id')
 			->join ('a_docs_dir', 'a_docs_dir.a_docs_dir_docs_id = a_docs.a_docs_parentid')
+			->where('a_docs_ver_docsid', $docs_id)
+			->order_by('a_docs_ver_id', 'desc')
+			->group_by('a_docs_ver_id')
+			->get();
+		return $query->row_array();
+	}
+
+	function get_docs_ver_detail($ver_id) {
+		$query = $this->db->select()
+			->from('a_docs')
+			->join('a_docs_ver', 'a_docs_ver.a_docs_ver_docsid = a_docs.a_docs_id')
+			->join ('a_docs_dir', 'a_docs_dir.a_docs_dir_docs_id = a_docs.a_docs_parentid')
+			->where('a_docs_ver_id', $ver_id)
+			->limit(1)
+			->get();
+		return $query->row_array();
+	}
+
+	// Pass in docs id
+	function get_docs_dir_ver($id) {
+		$query = $this->db->select('a_docs_dir_nover')
+			->from('a_docs_dir')
+			->join('a_docs', 'a_docs.a_docs_parentid = a_docs_dir.a_docs_dir_docs_id')
+			->where(array('a_docs_id'=> $id, 'a_docs_dir_nover'=>'IS NOT NULL'))
+			->get();
+		return $query->row_array();
+	}
+
+	function get_docs_settings() {
+		$query = $this->db->get('a_docs_setting');
+		return $query->row_array();
+	}
+
+	function get_file_name($ver_id) {
+		$query = $this->db->select('a_docs_ver_filename')
+			->from('a_docs_ver')
 			->where('a_docs_ver_id', $ver_id)
 			->get();
 		return $query->row_array();
@@ -92,6 +123,14 @@ class docsM extends My_Model {
 			->order_by('a_docs_displayname')
 			->get();
 		return $query->result_array();
+	}
+
+	function search_filename($filename) {
+		$query = $this->db->select('a_docs_ver_filename')
+			->from('a_docs_ver')
+			->where('a_docs_ver_filename', $filename)
+			->get();
+		return $query->row_array();
 	}
 
 	function update_a_docs_dir($values) {
@@ -149,10 +188,10 @@ class docsM extends My_Model {
 		return 	$this->update_a_docs_dir($values);
 	}
 
-	function update_docs($values) {
+	function insert_docs($values) {
 		//parentid == parentid for folders. and current dirid for docs
 		$data = array(
-			'a_docs_parentid' => $values['parentid'],
+			'a_docs_parentid' => $values['a_docs_parentid'],
 			'a_docs_isdir' => FALSE,
 			'a_docs_displayname' => isset($values['a_docs_displayname']) ? $values['a_docs_displayname'] : '',
 			'a_docs_desc' => isset($values['a_docs_desc']) ? $values['a_docs_desc'] : '',
@@ -165,8 +204,8 @@ class docsM extends My_Model {
 		} else {
 			$this->db->insert('a_docs', $data);
 		}
-		$values['docsid'] = $this->db->insert_id();
-		$this->update_doc_ver($values);
+		$values['a_docs_ver_docsid'] = $this->db->insert_id();
+		$this->insert_docs_ver($values);
 	}
 
 	// Pass in new parentid, ver_id
@@ -180,27 +219,29 @@ class docsM extends My_Model {
 		}
 	}
 
-	function update_doc_ver($values) {
+	function update_docs_ver($values) {
+		if (isset($values['a_docs_ver_id'])) {
+			$this->db->where('a_docs_ver_id', $values['a_docs_ver_id'])
+				->update('a_docs_ver', $values);
+		}
+	}
+
+	function insert_docs_ver($values) {
 		$data = array(
-			'a_docs_ver_docsid' => isset($values['docsid']) ? $values['docsid'] : '',
-			'a_docs_ver_filename' => isset($values['filename']) ? $values['filename'] : '',
+			'a_docs_ver_docsid' => isset($values['a_docs_ver_docsid']) ? $values['a_docs_ver_docsid'] : '',
+			'a_docs_ver_filename' => isset($values['a_docs_ver_filename']) ? $values['a_docs_ver_filename'] : '',
 			'a_docs_ver_stamp' => get_current_stamp(),
 			'a_docs_ver_downloadhit' => isset($values['a_docs_ver_downloadhit']) ? $values['a_docs_ver_downloadhit'] : '',
 			'a_docs_ver_cardid' => $this->UserM->info['cardid'],
-			'a_docs_ver_uploadvia' => isset($values['uploadvia']) ? $values['uploadvia'] : '',
-			'a_docs_ver_filesize' => isset($values['filesize']) ? $values['filesize'] : '',
-			'a_docs_ver_mime' => isset($values['mime']) ? $values['mime'] : '',
-			'a_docs_ver_ocr' => isset($values['ocr']) ? $values['ocr'] : '',
-			'a_docs_ver_preview' => isset($values['preview']) ? $values['preview'] : '',
-			'a_docs_ver_encrypt' => isset($values['encrypt']) ? $values['encrypt'] : '',
-			'a_docs_ver_encryptkeytype' => isset($values['encryptkeytype']) ? $values['encryptkeytype'] : '',
+			'a_docs_ver_uploadvia' => isset($values['a_docs_ver_uploadvia']) ? $values['a_docs_ver_uploadvia'] : '',
+			'a_docs_ver_filesize' => isset($values['a_docs_ver_filesize']) ? $values['a_docs_ver_filesize'] : '',
+			'a_docs_ver_mime' => isset($values['a_docs_ver_mime']) ? $values['a_docs_ver_mime'] : '',
+			'a_docs_ver_ocr' => isset($values['a_docs_ver_ocr']) ? $values['a_docs_ver_ocr'] : '',
+			'a_docs_ver_preview' => isset($values['a_docs_ver_preview']) ? $values['a_docs_ver_preview'] : '',
+			'a_docs_ver_encrypt' => isset($values['enca_docs_ver_encryptrypt']) ? $values['a_docs_ver_encrypt'] : '',
+			'a_docs_ver_encryptkeytype' => isset($values['a_docs_ver_encryptkeytype']) ? $values['a_docs_ver_encryptkeytype'] : '',
 		);
-		if (isset($values['ver_id'])) {
-			$this->db->update('a_docs_ver', $data)
-				->where('a_docs_ver_id', $values['ver_id']);
-		} else {
-			$this->db->insert('a_docs_ver', $data);
-		}
+		$this->db->insert('a_docs_ver', $data);
 	}
 
 	function update_docs_display_name($title, $id) {
@@ -208,6 +249,17 @@ class docsM extends My_Model {
 		$this->db->where('a_docs_id', $id)
 			->update('a_docs',$data);
 		return $this->db->affected_rows();
+	}
+
+	function get_all_versions($docs_id) {
+		$query = $this->db->select('a_docs_ver_id,a_docs_displayname,a_docs_ver_filename,a_docs_ver_stamp, a_docs_dir_dirpath')
+			->from('a_docs_ver')
+			->join('a_docs','a_docs.a_docs_id = a_docs_ver.a_docs_ver_docsid')
+			->join('a_docs_dir','a_docs_dir.a_docs_dir_docs_id = a_docs.a_docs_parentid')
+			->where('a_docs_ver_docsid', $docs_id)
+			->order_by('a_docs_ver_id', 'desc')
+			->get();
+		return $query->result_array();
 	}
 
 	/*

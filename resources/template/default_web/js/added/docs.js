@@ -219,7 +219,7 @@ $(document).ready(function() {
 				//$("#confirm").dialog("open");
 				var user_response = confirm("All files and versions will be removed.");
 				if (user_response) {
-					$.get('/docs/delete_object?id='+$('#ver_id').val(), function() {
+					$.get('/docs/delete_docs?id='+$('#docs_id').val(), function() {
 
 					}).success(function(data){
 						console.log(data);
@@ -250,6 +250,9 @@ $(document).ready(function() {
 				$('#filetree').dialog('close');
 				e.stopPropagation();
 			});
+
+
+
 
 			/* $('#list-view').dataTable({
 				"bAutoWidth": false,

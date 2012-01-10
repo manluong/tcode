@@ -4,7 +4,7 @@
 		var fp = new FlexPaperViewer(
 				 '/resources/template/default_web/lib/flexpaperViewer/FlexPaperViewer',
 				 'viewerPlaceHolder', { config : {
-				 SwfFile : escape('/docs/testView?doc=<?php echo $docs_detail['a_docs_ver_filename']; ?>'),
+				 SwfFile : escape('/docs/pdfPreview?doc=<?php echo $docs_detail['a_docs_ver_filename']; ?>'),
 				 Scale : 0.6,
 				 ZoomTransition : 'easeOut',
 				 ZoomTime : 0.5,

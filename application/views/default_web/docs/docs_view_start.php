@@ -64,7 +64,7 @@ $(document).ready(function() {
 $("#uploader").pluploadQueue({
 		// General settings
 		runtimes : 'html5,flash',
-		url : '/docs/put_object/<?php echo $this->url['id_plain'] ?>/put',
+		url : '/docs/upload/<?php echo $this->url['id_plain'] ?>',
 		max_file_size : '10mb',
 		unique_names : true,
 
