@@ -408,8 +408,8 @@ class Docs extends MY_Controller {
 	}
 
 	function update_docs_title() {
-		if ($this->input->post('title') && $this->input->post('id')) {
-			if ($this->DocsM->update_docs_display_name($this->input->post('title'), $this->input->post('id'))) {
+		if ($this->input->get('title') && $this->input->get('id')) {
+			if ($this->DocsM->update_docs_display_name($this->input->get('title'), $this->input->get('id'))) {
 				$this->output->set_content_type('application/json');
 			echo json_encode(array('message' => 'Title changed'));exit();
 			}

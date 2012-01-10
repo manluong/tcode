@@ -116,12 +116,12 @@ $(document).ready(function() {
 				});
 			}
 
-			function post_change_title(title, e) {
+			function change_title(title, e) {
 				if (title === docs.prev_title) {
 					return;
 				}
 				if (validate_basic(title)) {
-					$.post('/docs/update_docs_title',
+					$.get('/docs/update_docs_title',
 						{title: title, id: e.id}
 					).success(function (data) {
 						data = JSON.parse(data);
@@ -182,7 +182,7 @@ $(document).ready(function() {
 				$(this).select();
 			});
 			$('.docs-title').on('blur', function (e) {
-				post_change_title($('.docs-title').val(), e.target);
+				change_title($('.docs-title').val(), e.target);
 			})
 			$('.docs-title').on('keypress', function (e) {
 				if (e.keyCode === 13) {
