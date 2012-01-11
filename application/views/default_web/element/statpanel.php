@@ -1,5 +1,5 @@
 <fieldset class="dashboard fieldset-buttons">
-    <ul class="isotope-widgets">';
+    <ul class="isotope-widgets">
 <?php foreach ($set as $thisset): ?>
 <?php if ($thisset): foreach ($thisset as $thisrow): ?>
         <li class="<?=$thisrow['set']?>">
