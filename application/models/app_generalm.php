@@ -3,7 +3,7 @@
 class App_generalM extends CI_Model {
 
 	var $moreid = array();
-	
+
 	function __construct() {
 		parent::__construct();
 	}
@@ -56,6 +56,8 @@ function get_accessgp($cardid){
     $sql = "SELECT access_link_gpmaster FROM access_link WHERE access_link_cardid = ".$cardid." LIMIT 1";
 	$result = $this->db->query($sql);
 	$result = $result->row_array(1);
+
+	print $this->db->last_query();
 	$thisresult['accessgp'] = $result['access_link_gpmaster'];
 
     switch($thisresult['accessgp']){
@@ -200,48 +202,40 @@ function get_moreid($thisidtype){
 
 	$moreid['set'] = 1;
 	$this->moreid = $moreid;
-	
+
 }
 
 
 
 function core_app_id2name($app,$theid,$moreinfo=0){
-//input the app,id
-//output the standard name representation
+	//input the app,id
+	//output the standard name representation
+	if ($theid) {
+		switch($app){
+			  case "card": $idtype = "contactid"; break;
+			  case "client": $idtype = "clientid"; break;
+			  case "staff": $idtype = "staffid"; break;
+			  case "vendor": $idtype = "vendorid"; break;
+			  case "product": $idtype = "productid"; break;
+			  case "invoice": $idtype = "invid"; break;
+		}
 
-    global $db;
-
-    if ($theid){
-    switch($app){
-          case "card": $idtype = "contactid"; break;
-          case "client": $idtype = "clientid"; break;
-          case "staff": $idtype = "staffid"; break;
-          case "vendor": $idtype = "vendorid"; break;
-          case "product": $idtype = "productid"; break;
-          case "invoice": $idtype = "invid"; break;
+		$fieldsql = $this->core_app_id2name_sql($idtype);
+		$sql = preg_replace("/ORDER BY/", " WHERE ".$fieldsql['this_key']." = '".$theid."' ORDER BY", $fieldsql['sql']);
+		$query = $this->db->query($sql);
+		$fieldvalue = $query->row_array();
+		if ($fieldvalue) $result = $this->core_app_id2name_format($fieldsql,$fieldvalue);
     }
 
-    $fieldsql = core_app_id2name_sql($idtype);
-    $sql = preg_replace("/ORDER BY/", " WHERE ".$fieldsql['this_key']." = '".$theid."' ORDER BY", $fieldsql['sql']);
-    //echo $sql;
-    $fieldvalue = $db->fetchRow($sql, 2);
-    if ($fieldvalue) $result = core_app_id2name_format($fieldsql,$fieldvalue);
-    }
-
-    if ($moreinfo){
-
+    if ($moreinfo) {
         switch ($app) {
-
-        case "invoice":
-        $clientid = app_convertid("invoiceid","clientid",$theid);
-        $result .= " - ".core_app_id2name("client",$clientid);
-        break;
-
+			case "invoice":
+			$clientid = app_convertid("invoiceid","clientid",$theid);
+			$result .= " - ".core_app_id2name("client",$clientid);
+			break;
         }
-
     }
-
-return($result);
+	return($result);
 }
 
 
@@ -390,7 +384,7 @@ function core_app_id2name_format($fieldsql,$fieldvalue){
     global $lang;
 
     if (!isset($fieldsql['formattype'])) $fieldsql['formattype'] = "";
-    
+
     switch ($fieldsql['formattype']){
 
     case "1":

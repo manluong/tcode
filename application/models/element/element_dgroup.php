@@ -7,36 +7,36 @@ class Element_dgroup extends CI_Model {
 	}
 
 	function element_fdata_from_dgroup($dgroup_name,$fdata_name,$thisid,$thisapp=0,$thisaved=0){
-		
+
 	    if (!$thisapp) $thisapp = $this->url['app'];
 	    if (!$thisaved) $thisaved = "v";
-	
+
 	    $dgroup_structure = $this->core_element_dgroup_structure($thisapp,$thisaved,$dgroup_name,$thisid,0);
 		$dgroup_value = $this->core_element_dgroup_value($dgroup_structure);
 	    $f_element_fdata = $this->element_fdata($fdata_name,$dgroup_value);
 	    //print_r($f_element_fdata);
-	
+
 	return($f_element_fdata);
 	}
 
 	function element_fdata($this_element_name,$dataarray=""){
-	
+
 	$sql1 = "SELECT * FROM core_e_fdata WHERE core_e_fdata_name = '$this_element_name' LIMIT 1";
 	$result1 = $this->db->query($sql1);
 	$result1 = $result1->row_array(1);
-	
+
 	if ($result1){
-	
+
 	    if ($result1['core_e_fdata_type'] == "jsonac"){
-		
+
 	        $jsonac_value = explode(",", $result1['core_e_fdata_jsonac_value']);
 	        $jsonac_label = explode(",", $result1['core_e_fdata_jsonac_label']);
 	        $jsonac_seprator = explode("^,", $result1['core_e_fdata_jsonac_seprator']);
-	
+
 			$core_element_dgroup = $this->core_element_dgroup($result1['core_e_fdata_dgroupname'],"",$app,"sq","","","sq","",0,0,0,0,1,1,"",1);
-	
-	
-	
+
+
+
 	        $this_array = array();
 	        //print_r($h_apps_html[0]['data']['listfield']);
 	        //print_r($jsonac_value);
@@ -46,55 +46,55 @@ class Element_dgroup extends CI_Model {
 			//$json_data = ;
 			//print_r($json_data);
 	        if ($core_element_dgroup['data']['table']){
-	
+
 	             $json_count = 0;
 	             foreach ($core_element_dgroup['data']['table'] as $this_row) {
-	
+
 	                $count=0;
 	                $vaule="";
 	                $label="";
 	                foreach (array_keys($core_element_dgroup['data']['listarray']) as $this_field) {
 	                    foreach ($jsonac_value as $this_value) {
 	                    if ($this_field == $this_value) $vaule .= $this_row[$count];
-	
+
 	                    }
 	                    $count++;
 	                }
-	
+
 	                $count=0;
 	                $count2=0;
 	                foreach (array_keys($core_element_dgroup['data']['listarray']) as $this_field) {
 	                    foreach ($jsonac_label as $this_label) {
-	
+
 	                    if ($this_field == $this_label) {
 	                        if ($count2 == 0) { $label = $jsonac_seprator[$count2]; $count2++; }
 	                        $label .= $this_row[$count].$jsonac_seprator[$count2];
 	                        $count2++;
 	                    }
-	
+
 	                    }
 	                    $count++;
 	                }
-	
+
 	          		array_push($this_array, array(
 	          			"value" => $vaule,
 	          			"label" => $label
 	          		));
-	
+
 	                $json_count++;
 	             }
-	
+
 	        }
-	
+
 	        $result = $this_array;
-	
+
 	    }elseif ($result1['core_e_fdata_type'] == "arrayone"){
-	
+
 	        $arrayone_value = explode(",", $result1['core_e_fdata_arrayone_field']);
 	        $arrayone_seprator = explode("^,", $result1['core_e_fdata_arrayone_seprator']);
 	        $arrayone_langpre = $result1['core_e_fdata_arrayone_langpre'];
 	        $arrayone_langsub = $result1['core_e_fdata_arrayone_langsub'];
-	
+
 	        //foreach (array_keys($dataarray) as $this_field){
 	        $count=0;
 	        foreach ($arrayone_value as $this_value) {
@@ -104,16 +104,16 @@ class Element_dgroup extends CI_Model {
 	            $count++;
 	        }
 	        //}
-	
-	
+
+
 	    }
-	
-	
-	
+
+
+
 	}else{
 	  echo "No Fdata Name";
 	}
-	
+
 	return($result);
 	}
 
@@ -699,10 +699,10 @@ function core_element_dgroup_structure($app,$aved,$dgroupname,$thisid,$this_elem
                             $structure['table'][$this_count2]['fields'][$this_count3]['name_lang_chkname0'] = $this->lang->line($app.$field3['core_db_fields_chkname0']);
                             $structure['table'][$this_count2]['fields'][$this_count3]['name_lang_chkname1'] = $this->lang->line($app.$field3['core_db_fields_chkname1']);
                             }else{
-                            	
+
 								$structure['table'][$this_count2]['fields'][$this_count3]['name_lang_chkname0_icon'] = "";
 								$structure['table'][$this_count2]['fields'][$this_count3]['name_lang_chkname1_icon'] = "";
-								
+
                                 switch($field3['core_db_fields_chknametype']){
                                 /*
                                 array("0","No/Yes"),

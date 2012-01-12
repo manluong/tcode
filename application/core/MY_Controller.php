@@ -23,6 +23,14 @@ class MY_Controller extends CI_Controller {
 
 	var $system_messages = array();
 
+	// Needed for logM
+	var $log_data = array(
+		'start_time' => 0,
+		'insert_id' => 0,
+		'log_type' => array(),
+		'saveid' => 0,
+	);
+
 	function __construct() {
 		parent::__construct();
 
@@ -79,12 +87,6 @@ class MY_Controller extends CI_Controller {
 		$this->output();
 	}
 
-
-
-
-
-
-
 	private function setup_url() {
 		$this->url['app'] = $this->router->fetch_class();
 
@@ -117,14 +119,6 @@ class MY_Controller extends CI_Controller {
 		$this->lang->loadarray($this->LangM->loadarray('core', $this->lang->lang_use));
 		$this->lang->loadarray($this->LangM->loadarray($this->url['app'], $this->lang->lang_use));
 	}
-
-
-
-
-
-
-
-
 
 	private function app_load(){
 

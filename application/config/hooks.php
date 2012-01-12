@@ -11,9 +11,9 @@
 */
 
 $hook['post_controller'] = array(
-                                'class'    => 'Log',
+                                'class'    => 'LogM',
                                 'function' => 'stop_log',
-                                'filename' => 'log.php',
+                                'filename' => 'logm.php',
                                 'filepath' => 'models',
                                 'params'   => array('')
                                 );
