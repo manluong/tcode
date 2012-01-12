@@ -423,7 +423,16 @@ class MY_Controller extends CI_Controller {
 				}
 
 				$pagetopdata['companyname'] = 'Telcoson';
-				$pagetopdata['welcome'] = 'Welcome to CI';
+
+
+				if ($this->UserM->is_logged_in()) {
+					$pagetopdata['show_user_status'] = TRUE;
+					$pagetopdata['welcome'] = $this->UserM->get_name();
+				} else {
+					$pagetopdata['show_user_status'] = FALSE;
+					$pagetopdata['welcome'] = '';
+				}
+
 				$pagedata['top'] = $this->load->view('/'.get_template().'/top', $pagetopdata, true);
 			}
 
