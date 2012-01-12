@@ -63,6 +63,12 @@ class UserM extends MY_Model {
 		return $this->info['card_timezone'];
 	}
 
+	public function get_name() {
+		return ($this->logged_in)
+			? $this->info['card_fname'].' '.$this->info['card_lname']
+			: '';
+	}
+
 	public function get_data_name($cardid) {
 		$rs = $this->db->select('card_fname, card_mname, card_lname')
 				->from($this->table)
