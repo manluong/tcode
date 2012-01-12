@@ -121,6 +121,7 @@ class LogM extends CI_Model {
 	private function _insert_log_event() {
 		$data = array(
 			'log_type_id' => $this->_log_data['log_type']['id'],
+			'app_id' => $this->_url['app_id'],
 			'app_data_id' => $this->url['id_plain'],
 			'saveid' => $this->_log_data['saveid'],
 			'card_id' => $this->UserM->info['cardid'],
