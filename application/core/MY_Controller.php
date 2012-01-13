@@ -416,6 +416,12 @@ class MY_Controller extends CI_Controller {
 				//$history = core_log_loadhistory();
 				//$lang['session']['companyname']
 				//$lang['core']['welcome'].' '.$id['name']
+				$pagetopdata['history'] = $this->LogM->get_history();
+				if (isset($this->log_data['log_type']) && ! empty($this->log_data['log_type'])) {
+					$pagetopdata['can_follow'] = $this->log_data['log_type']['can_follow'];
+					$pagetopdata['can_favorite'] = $this->log_data['log_type']['can_favorite'];
+				}
+
 				$pagetopdata['companyname'] = 'Telcoson';
 				$pagetopdata['welcome'] = 'Welcome to CI';
 				$pagedata['top'] = $this->load->view('/'.get_template().'/top', $pagetopdata, true);

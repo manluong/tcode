@@ -295,7 +295,32 @@ class LogM extends CI_Model {
 	}
 
 	function get_history(&$limit = 10) {
-		//$query =
+		$query = $this->db->select()
+			->from('log_history')
+			->where('cardid', $this->UserM->info['cardid'])
+			->limit($limit)
+			->order_by('stamp', 'desc')
+			->get();
+		return $query->result_array();
+	}
+
+	function insert_follow($values) {
+		$data = array(
+			'following_app_data_id' => $values['following_app_data_id'],
+			'following_card_id' => $values['following_card_id'],
+			'following_log_type_id' => $values['following_log_type_id'],
+		);
+		$this->db->insert('following', $data);
+		return $this->db->insert_id();
+	}
+	function insert_favorite($values) {
+		$data = array(
+			'favorite_cardid' => $values['favorite_cardid'],
+			'favorite_name' => $values['favorite_name'],
+			'favorite_furi' => $values['favorite_furi'],
+		);
+		$this->db->insert('favorite', $data);
+		return $this->db->insert_id();
 	}
 	//	private function _get_request_uri() {
 	//		$_url = explode("?", $_SERVER['REQUEST_URI'],2);
