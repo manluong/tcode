@@ -162,9 +162,9 @@ class LogM extends CI_Model {
 			}
 
 			if ($this->_log_data['log_type']['msg_history'] !== '') {
-				$text = $this->_get_custom_msg($this->_url['subaction'], $this->lang->line('core'.$this->_log_data['log_type']['msg_history']));
+				$text = $this->_get_custom_msg($this->lang->line('core'.$this->_log_data['log_type']['msg_history']));
 			} else {
-				$text = $this->_get_default_msg($this->_url['app'], $this->_url['id_plain']);
+				$text = $this->_get_default_msg($this->_url['subaction'], $this->_url['app'], $this->_url['id_plain']);
 			}
 			$data = array(
 				'log_type_id' => $this->_log_data['log_type']['id'],
@@ -292,6 +292,10 @@ class LogM extends CI_Model {
 
 
 		return $result;
+	}
+
+	function get_history(&$limit = 10) {
+		//$query =
 	}
 	//	private function _get_request_uri() {
 	//		$_url = explode("?", $_SERVER['REQUEST_URI'],2);
