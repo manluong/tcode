@@ -328,6 +328,62 @@ class ACLM extends MY_Model {
 		return $result;
 	}
 
+	function get_acl_app_ids() {
+		$result = array();
+		$cardid = $this->UserM->get_cardid();
+		$subgp = $this->UserM->info['subgp'];
+		$mastergp = $this->UserM->info['accessgp'];
+		$case2_acl = array();
+
+		$rs = $this->db->select('DISTINCT app_id, role_type, role_id, `read`', FALSE)
+				->from($this->table)
+				->where('actiongp', '')
+				->order_by('role_type', 'DESC')
+				->get();
+
+		$acls = $rs->result_array();
+
+		foreach($acls AS $a) {
+			switch($a['role_type']) {
+				case 3:	//mastergroup
+
+					if ($a['role_id'] == $mastergp) {
+						$result[$a['app_id']] = $a['read'];
+					}
+
+					break;
+
+				case 2: //subgroup
+
+					if (in_array($a['role_id'], $subgp)) {
+						$case2_acl[] = $a;
+					}
+
+					break;
+
+				case 1: //card
+
+					//if there's any acl from case 2, consolidate them and return result
+					if (count($case2_acl) > 0) {
+						$case2_acl = $this->consolidate_acl($case2_acl);
+						$result[$a['app_id']] = $case2_acl['read'];
+					}
+
+					if ($a['role_id'] == $cardid) {
+						$result[$a['app_id']] = $a['read'];
+					}
+
+					break;
+			}
+		}
+
+		foreach($result AS $app_id => $access) {
+			if ($access == 0) unset($result[$app_id]);
+		}
+
+		return array_keys($result);
+	}
+
 	private function consolidate_acl($acl) {
 		$result = array(
 			'admin' => 1,
@@ -345,6 +401,7 @@ class ACLM extends MY_Model {
 
 		foreach($acl AS $a) {
 			foreach ($result AS $act=>$val) {
+				if (!isset($a[$act])) continue;
 				if ($a[$act] < $val) $result[$act] = $a[$act];
 			}
 		}
