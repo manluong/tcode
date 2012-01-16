@@ -230,12 +230,14 @@ class ACLM extends MY_Model {
 
 
 
-	function check($action='', $app='', $actiongp='', $app_data_id=0) {
-		if ($app == '') $app = $this->url['app'];
+	function check($action='', $app_id='', $actiongp='', $app_data_id=0) {
+		$app = $this->AppM->get_name($app_id);
+
+		if ($app_id == '') $app_id = $this->url['app_id'];
 		if ($actiongp == '') $actiongp = $this->AppM->get_group($app, $this->url['action']);
 		if ($app_data_id != 0) $app_data_id = array($app_data_id, 0);
 
-		$acl = $this->get_acl($app, $actiongp, $app_data_id);
+		$acl = $this->get_acl($app_id, $actiongp, $app_data_id);
 		$cardid = $this->UserM->get_cardid();
 		$subgp = $this->UserM->info['subgp'];
 		$mastergp = $this->UserM->info['accessgp'];
@@ -289,7 +291,9 @@ class ACLM extends MY_Model {
 		return FALSE;
 	}
 
-	function get_acl($app, $actiongp, $app_data_id=array(0)) {
+	function get_acl($app_id, $actiongp, $app_data_id=array(0)) {
+		$app = $this->AppM->get_name($app_id);
+
 		if ($actiongp == '') $actiongp = $this->AppM->get_group($app, $this->url['action']);
 
 		if (!is_array($app_data_id)) $app_data_id = array($app_data_id);
@@ -297,7 +301,7 @@ class ACLM extends MY_Model {
 		$result = array();
 
 		foreach($app_data_id AS $k=>$adi) {
-			$key = $app.'_'.$actiongp.'_'.$adi;
+			$key = $app_id.'_'.$actiongp.'_'.$adi;
 			if (isset($this->cache_acl[$key])) {
 				$result += $this->cache_acl[$key];
 				unset($app_data_id[$k]);
@@ -308,7 +312,7 @@ class ACLM extends MY_Model {
 
 		$rs = $this->db->select()
 				->from('access_rights_new')
-				->where('app', $app)
+				->where('app_id', $app_id)
 				->where('actiongp', $actiongp)
 				->where_in('app_data_id', $app_data_id)
 				->order_by('role_type', 'ASC')
@@ -317,7 +321,7 @@ class ACLM extends MY_Model {
 		foreach($rs->result_array() AS $acl) {
 			$result[] = $acl;
 
-			$key = $acl['app'].'_'.$acl['actiongp'].'_'.$acl['app_data_id'];
+			$key = $acl['app_id'].'_'.$acl['actiongp'].'_'.$acl['app_data_id'];
 			$this->cache_acl[$key][] = $acl;
 		}
 
