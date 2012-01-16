@@ -2,7 +2,7 @@
 	<p id="viewerPlaceHolder" style="width:660px;height:553px;display:block">Document loading..</p>
 	<script type="text/javascript">
 		var fp = new FlexPaperViewer(
-				 '/resources/template/default_web/lib/flexpaperViewer/FlexPaperViewer',
+				 '/resources/addon/flexpaperViewer/FlexPaperViewer',
 				 'viewerPlaceHolder', { config : {
 				 SwfFile : escape('/docs/pdfPreview?doc=<?php echo $docs_detail['a_docs_ver_filename']; ?>'),
 				 Scale : 0.6,
