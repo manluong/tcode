@@ -63,6 +63,20 @@ class AppM extends MY_Model {
 		return $result['core_apps_id'];
 	}
 
+	function get_name($app_id) {
+		$rs = $this->db->select('core_apps_name')
+				->from('core_apps')
+				->where('core_apps_id', $app_id)
+				->limit(1)
+				->get();
+
+		if ($rs->num_rows()==0) return FALSE;
+
+		$result = $rs->row_array();
+
+		return $result['core_apps_name'];
+	}
+
 	function get_group($app, $action) {
 		$rs = $this->db->select('core_apps_action_gp')
 				->from('core_apps_action')
