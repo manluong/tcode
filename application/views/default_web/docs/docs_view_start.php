@@ -82,10 +82,10 @@ $("#uploader").pluploadQueue({
 		],
 
 		// Flash settings
-		flash_swf_url : '/resources/template/default_web/lib/plupload/js/plupload.flash.swf',
+		flash_swf_url : '/resources/addon/plupload/js/plupload.flash.swf',
 
 		// Silverlight settings
-		silverlight_xap_url : '/resources/template/default_web/lib/plupload/js/plupload.silverlight.xap'
+		silverlight_xap_url : '/resources/addon/plupload/js/plupload.silverlight.xap'
 	});
 
 	// Client side form validation

@@ -10,6 +10,7 @@
  */
 
 // HTTP headers for no cache etc
+//include('');
 header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
 header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
 header("Cache-Control: no-store, no-cache, must-revalidate");
@@ -54,22 +55,6 @@ if ($chunks < 2 && file_exists($targetDir . DIRECTORY_SEPARATOR . $fileName)) {
 if (!file_exists($targetDir))
 	@mkdir($targetDir);
 
-// Remove old temp files
-/* this doesn't really work by now
-	
-if (is_dir($targetDir) && ($dir = opendir($targetDir))) {
-	while (($file = readdir($dir)) !== false) {
-		$filePath = $targetDir . DIRECTORY_SEPARATOR . $file;
-
-		// Remove temp files if they are older than the max age
-		if (preg_match('/\\.tmp$/', $file) && (filemtime($filePath) < time() - $maxFileAge))
-			@unlink($filePath);
-	}
-
-	closedir($dir);
-} else
-	die('{"jsonrpc" : "2.0", "error" : {"code": 100, "message": "Failed to open temp directory."}, "id" : "id"}');
-*/
 
 // Look for the content type header
 if (isset($_SERVER["HTTP_CONTENT_TYPE"]))
@@ -118,23 +103,7 @@ if (strpos($contentType, "multipart") !== false) {
 		die('{"jsonrpc" : "2.0", "error" : {"code": 102, "message": "Failed to open output stream."}, "id" : "id"}');
 }
 
-
-include '../../../../includes/addon/imagetools/src/ImageTools.class.php';
-
-$img = new ImageTools("uploads/".$fileName);
-$this_imgwidth = $img->getX();
-
-if ($this_imgwidth > 200){
-    $img->resizeWidth(200); // new width
-    $img->save("uploads",$fileName);
-    //$img->showImage();
-}
-$img->destroy();
-
 // Return JSON-RPC response
-die('{"jsonrpc" : "2.0", "result" : "'.$fileName.'", "id" : "id"}');
-
-
-
+die('{"jsonrpc" : "2.0", "result" : null, "id" : "id"}');
 
 ?>
