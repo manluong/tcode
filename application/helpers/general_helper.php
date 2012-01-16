@@ -326,15 +326,6 @@ function byte_size($bytes) {
 	return $size;
 }
 
-/** Input /a/b/file.jpg
- * returns dirpath /a/b and filename file.jpg
- */
-function explode_filename_dirpath ($path) {
-	$i = explode($path);
-	$filename = array_pop($i);
-	return array('dirpath' =>$i, 'filename'=>$filename);
-}
-
 function array_reverse_order($array) {
 	return array_combine(array_reverse(array_keys($array)), array_reverse(array_values($array)));
 }
