@@ -5,6 +5,7 @@ class MY_Controller extends CI_Controller {
 		'app' => '',
 		'app_id' => '',
 		'action' => '',
+		'actiongp' => '',
 		'id_plain' => 0,
 		'id_encrypted' => 0,
 		'id' => 0,	//original ID passed in by request
@@ -44,6 +45,7 @@ class MY_Controller extends CI_Controller {
 		$this->load->model('LogM');
 
 		$this->url['app_id'] = $this->AppM->get_id($this->url['app']);
+		$this->url['actiongp'] = $this->AppM->get_group($this->url['app'], $this->url['action']);
 
 		$this->UserM->setup();
 		$this->setup_language();
