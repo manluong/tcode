@@ -37,7 +37,7 @@ class Comments extends MY_Controller {
 			'text' => $this->input->post('text'),
 		);
 
-		$this->CommentsM->save_reply($data);
+		$this->CommentsM->save($data);
 
 		execute_return_url();
 	}
@@ -50,7 +50,7 @@ class Comments extends MY_Controller {
 			'text' => $this->input->post('text'),
 		);
 
-		$this->CommentsM->save_reply($data);
+		$this->CommentsM->save($data);
 		$this->UserM->fill_card_info($data);
 
 		$data['created_stamp_iso8601'] = parse_stamp_user($data['created_stamp'], 'ISO_8601');
@@ -72,7 +72,7 @@ class Comments extends MY_Controller {
 			'text' => $this->input->post('text'),
 		);
 
-		$this->CommentsM->save_reply($data);
+		$this->CommentsM->save($data);
 		$this->UserM->fill_card_info($data);
 
 		$data['created_stamp_iso8601'] = parse_stamp_user($data['created_stamp'], 'ISO_8601');

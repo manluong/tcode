@@ -118,11 +118,11 @@ class CommentsM extends MY_Model {
 		return $results;
 	}
 
-	function save_reply(&$data) {
+	function save(&$data) {
 		$data['created_cardid'] = $this->UserM->get_cardid();
 		$data['created_stamp'] = get_current_stamp();
 
-		$data['id'] = $this->save($data, 'id');
+		$data['id'] = parent::save($data, 'id');
 
 		if ($data['parent_id'] != 0) {
 			$this->update_comment_stats($data['parent_id']);
