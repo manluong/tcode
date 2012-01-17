@@ -39,6 +39,10 @@ define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 
 
 define('DOCUMENT_ROOT',		'.');
+define('APP_ROLE', 'TBOSS');
+	//TBOSS - For internal use
+	//TSUB - Tenant software
+
 
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */
