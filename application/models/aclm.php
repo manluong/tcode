@@ -234,7 +234,7 @@ class ACLM extends MY_Model {
 		$app = $this->AppM->get_name($app_id);
 
 		if ($app_id == '') $app_id = $this->url['app_id'];
-		if ($actiongp == '') $actiongp = $this->AppM->get_group($app, $this->url['action']);
+		if ($actiongp == '') $actiongp = $this->url['actiongp'];
 		if ($app_data_id != 0) $app_data_id = array($app_data_id, 0);
 
 		$acl = $this->get_acl($app_id, $actiongp, $app_data_id);
@@ -294,7 +294,7 @@ class ACLM extends MY_Model {
 	function get_acl($app_id, $actiongp, $app_data_id=array(0)) {
 		$app = $this->AppM->get_name($app_id);
 
-		if ($actiongp == '') $actiongp = $this->AppM->get_group($app, $this->url['action']);
+		if ($actiongp == '') $actiongp = $this->url['actiongp'];
 
 		if (!is_array($app_data_id)) $app_data_id = array($app_data_id);
 
