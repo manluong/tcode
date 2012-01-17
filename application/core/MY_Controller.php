@@ -43,6 +43,7 @@ class MY_Controller extends CI_Controller {
 		$this->load->model('LayoutM');
 		$this->load->model('AppM');
 		$this->load->model('LogM');
+		$this->load->model('LicenseM');
 
 		$this->url['app_id'] = $this->AppM->get_id($this->url['app']);
 		$this->url['actiongp'] = $this->AppM->get_group($this->url['app'], $this->url['action']);
@@ -52,6 +53,7 @@ class MY_Controller extends CI_Controller {
 		$this->LogM->start_log();
 		$this->AppM->setup();
 		$this->LayoutM->setup();
+		$this->LicenseM->setup();
 
 		if ($this->AppM->must_disable_plain_id()) $this->ACLM->check_id_encryption();
 		$this->ACLM->check_app_access();
@@ -61,6 +63,13 @@ class MY_Controller extends CI_Controller {
 
 	//remap every URI call
 	function _remap($action, $params = array()) {
+
+		if (APP_ROLE == 'TSUB') {
+			if ($this->LicenseM->has_restriction($this->url['app_id'], $this->url['actiongp'], 'access')) {
+				$access = $this->LicenseM->get_restriction($this->url['app_id'], $this->url['actiongp'], 'access');
+				if ($access == 0) die('Your license does not permit you to use this application.');
+			}
+		}
 
 		//controller file always override settings in DB
 		//if $this->url['action'] match a method in controller file, use it (including "index")
