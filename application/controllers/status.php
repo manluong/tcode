@@ -36,7 +36,7 @@ class Status extends MY_Controller {
 
 		$this->StatusM->delete($status_id, $card_id);
 
-		$new_status = $this->StatusM->get($card_id);
+		$new_status = $this->StatusM->get_user_current($card_id);
 
 		$response = array(
 			'success' => TRUE,

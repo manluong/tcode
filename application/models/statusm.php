@@ -10,10 +10,10 @@ class StatusM extends MY_Model {
 	}
 
 
-	function get($cardid) {
+	function get_user_current($card_id) {
 		$rs = $this->db->select()
 				->from('status')
-				->where('card_id', $cardid)
+				->where('card_id', $card_id)
 				->limit(1)
 				->get();
 
@@ -28,18 +28,25 @@ class StatusM extends MY_Model {
 		$this->update_current_status($status);
 	}
 
-	function delete($status_id, $cardid='') {
-		if ($cardid == '') $cardid = $this->UserM->get_cardid();
+	function delete($status_id) {
+		$rs = $this->db->select()
+				->from('status_history')
+				->where('id', $status_id)
+				->limit(1)
+				->get();
+
+		$status = $rs->row_array();
+		$card_id = $status['card_id'];
 
 		$this->db->where('id', $status_id)
 			->limit(1)
 			->delete('status_history');
 
-		$current_status = $this->get_status($cardid);
+		$current_status = $this->get_status($card_id);
 		if ($current_status['status_history_id'] == $status_id) {
 			$rs = $this->select()
 					->from('status_history')
-					->where('card_id', $cardid)
+					->where('card_id', $card_id)
 					->order_by('id', 'DESC')
 					->limit(1)
 					->get();
@@ -74,4 +81,3 @@ class StatusM extends MY_Model {
 	}
 
 }
-?>
