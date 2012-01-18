@@ -20,7 +20,7 @@ class Status extends MY_Controller {
 			'created_stamp' => get_current_stamp(),
 		);
 
-		$this->StatusM->save_status($status);
+		$this->StatusM->save($status);
 
 		$response = array(
 			'success' => TRUE,
@@ -34,9 +34,9 @@ class Status extends MY_Controller {
 		$status_id = $this->input->post('status_id');
 		$card_id = $this->UserM->get_cardid();
 
-		$this->StatusM->delete_status($status_id, $card_id);
+		$this->StatusM->delete($status_id, $card_id);
 
-		$new_status = $this->StatusM->get_status($card_id);
+		$new_status = $this->StatusM->get($card_id);
 
 		$response = array(
 			'success' => TRUE,

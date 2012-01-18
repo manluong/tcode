@@ -10,7 +10,7 @@ class StatusM extends MY_Model {
 	}
 
 
-	function get_status($cardid) {
+	function get($cardid) {
 		$rs = $this->db->select()
 				->from('status')
 				->where('card_id', $cardid)
@@ -20,7 +20,7 @@ class StatusM extends MY_Model {
 		return $rs->row_array();
 	}
 
-	function save_status($status) {
+	function save($status) {
 		$this->db->insert('status_history', $status);
 		$new_id = $this->db->insert_id();
 
@@ -28,7 +28,7 @@ class StatusM extends MY_Model {
 		$this->update_current_status($status);
 	}
 
-	function delete_status($status_id, $cardid='') {
+	function delete($status_id, $cardid='') {
 		if ($cardid == '') $cardid = $this->UserM->get_cardid();
 
 		$this->db->where('id', $status_id)
