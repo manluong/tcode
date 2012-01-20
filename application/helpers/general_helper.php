@@ -165,6 +165,14 @@ function execute_return_url($link_only=FALSE) {
 
 	redirect(get_return_url());
 }
+// Helper function to format full path correctly
+function format_dirpath($dirpath, $filename) {
+	if ($dirpath === '/') {
+		return $dirpath.$filename;
+	} else {
+		return $dirpath.'/'.$filename;
+	}
+}
 
 
 
