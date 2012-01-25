@@ -191,10 +191,6 @@ class EmailL {
 		);
 	}
 
-	private function _save_content_to_s3() {
-		//TODO
-	}
-
 	private function _insert_email() {
 		$data = array(
 			'app_id' => $this->_ci->url['app_id'],
