@@ -11,6 +11,12 @@ class EmailM extends MY_Model {
 		return $this->db->insert_id();
 	}
 
+	function update_email($insert_id, $data) {
+		$this->db->where('id', $insert_id)
+			->update('email', $data);
+		return $this->db->affected_rows();
+	}
+
 	function check_bcc () {
 		$query = $this->db->select('alwaysbcc')
 			->from('email_generalsetting')

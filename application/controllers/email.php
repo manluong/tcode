@@ -26,18 +26,20 @@ class Email extends MY_Controller {
 	}
 
 	function test () {
-		$this->emaill->set_type('card');
-		$this->emaill->set_type_id(array(2));
-		$this->emaill->set_to(array('roy.wong.80@gmail.com'));
-		$this->emaill->set_toname(array('roygmail'));
-		$this->emaill->set_template('testplate');
-		$this->emaill->set_content('hhhh');
-		$this->emaill->set_subject('test');
-		$this->emaill->set_attachment_id(array(5=>4));
-		$this->emaill->set_replace_value(array('keys'=>array('%name%', '%result%'), 'values'=>array(array('Roy'), array('Success!!'))));
-		$this->emaill->set_from('docs@telcoson.com');
-		$this->emaill->set_fromname('Docs');
-		$i = $this->emaill->debug();
+		$this->emaill->set_type('card')
+			->set_type_id(array(2))
+			->set_template('testplate')
+			->set_subject('test')
+			->set_attachment_id(array(5=>4)) // docs_id => ver_id or just docs_id => ''
+			->set_replace_value(array('keys'=>array('%name%', '%result%'), 'values'=>array(array('Roy'), array('Success!!'))))
+			->set_from('docs@telcoson.com')
+			->set_fromname('Docs');
+		//$this->emaill->debug();die();
+		var_dump($this->emaill->send_email());
+	}
+
+	function t() {
+
 	}
 
 	function send_email() {

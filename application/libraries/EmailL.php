@@ -7,6 +7,7 @@ class EmailL {
 	private $_type_id = array();
 	private $_bcc = array();
 	private $_replace_value = array();
+	private $_files = array();
 	private $_type = '';
 	private $_from = '';
 	private $_fromname = '';
@@ -16,7 +17,10 @@ class EmailL {
 	private $_date = '';
 	private $_attachment_id = '';
 	private $_query_str = '';
+	private $_insert_id = '';
 
+
+	private $_email_storage_dir = '/email/content/';
 	private $_api_user = 'tcsteam';
 	private $_api_key = 'express08)*';
 	private $_bucket = 's3subscribers';
@@ -46,53 +50,65 @@ class EmailL {
 	 */
 	function set_type($type) {
 		$this->_type = $type;
+		return $this;
 	}
 
 	function set_type_id($type_id) {
 		$this->_type_id = $type_id;
+		return $this;
 	}
 
 	function set_subject($subject) {
 		$this->_subject = $subject;
+		return $this;
 	}
 
 	function set_bcc($bcc) {
 		$this->_bcc = $bcc;
+		return $this;
 	}
 
 	function set_template($template) {
 		$this->_template = $template;
+		return $this;
 	}
 
 	function set_content($content) {
 		$this->_content = $content;
+		return $this;
 	}
 
 	/**
 	 * Example
-	 * Version
+	 * 1. Version
 	 * array(docs_id=>ver_id)
-	 * Doc
+	 *
+	 * 2. Docs (non versioning)
 	 * array(docs_id=>'')
 	 */
 	function set_attachment_id($attachment_id) {
 		$this->_attachment_id = $attachment_id;
+		return $this;
 	}
 
 	function set_to($to) {
 		$this->_to = array_merge($to);
+		return $this;
 	}
 
 	function set_toname($toname) {
 		$this->_toname = array_merge($toname);
+		return $this;
 	}
 
 	function set_from($from) {
 		$this->_from = $from;
+		return $this;
 	}
 
 	function set_fromname($fromname) {
 		$this->_fromname = $fromname;
+		return $this;
 	}
 
 	/*
@@ -109,6 +125,7 @@ class EmailL {
 			log_message('error', 'Replace value must have a key with values to replace');exit();
 		}
 		$this->_replace_value = $replace_value;
+		return $this;
 	}
 
 	private function _get_to() {
@@ -141,6 +158,7 @@ class EmailL {
 
 	/**
 	 * File size must be less than 7mb - http://docs.sendgrid.com/documentation/api/web-api/mail/
+	 * Get file from s3, save to tmp folder for attaching
 	 */
 	private function _get_attachements() {
 		foreach($this->_attachment_id as $docs_id => $ver_id) {
@@ -159,13 +177,22 @@ class EmailL {
 				log_message('error', 'File size is > then 7168 Docsid: '.$docs_detail['a_docs_id'].' Verid: '.$docs_detail['a_docs_ver_id']);
 				return '';
 			}
+			$uri = format_dirpath($docs_detail['a_docs_dir_dirpath'], $docs_detail['a_docs_ver_filename']);
+			$object = S3::getObject($this->_bucket, $uri);
 
-			print_r($docs_detail);
-			$uri = $this->_ci->DocsM->format_dirpath($docs_detail['a_docs_dir_dirpath'], $docs_detail['a_docs_ver_filename']);
-			print $uri;
+			$fp = fopen($_SERVER['DOCUMENT_ROOT'].'/tmp/'.$docs_detail['a_docs_ver_filename'], 'wb');
+			$i = fwrite($fp, $object->body);
+			fclose($fp);
 
-			//$object = S3::getObject($this->_bucket, $uri);
-		}
+		} // end foreach
+		// Start populating the $_files[] variable
+		$this->_files[] = array('name' => $docs_detail['a_docs_ver_filename'],
+			'path' => $_SERVER['DOCUMENT_ROOT'].'/tmp/'.$docs_detail['a_docs_ver_filename'],
+		);
+	}
+
+	private function _save_content_to_s3() {
+		//TODO
 	}
 
 	private function _insert_email() {
@@ -174,7 +201,7 @@ class EmailL {
 			'to' => serialize($this->_to),
 			'toname' => serialize($this->_toname),
 			'subject' => $this->_subject,
-			's3file' => '', // path to s3 files?
+			's3file' => '', // path to s3 where the contents of email is stored
 			'from' => $this->_from,
 			'fromname' => $this->_fromname,
 			'bcc' => serialize($this->_bcc),
@@ -186,9 +213,25 @@ class EmailL {
 			'respond' => '',
 			'result' => '',
 		);
-		$insert_id = $this->_ci->EmailM->insert_new_email($data);
+		$this->_insert_id = $this->_ci->EmailM->insert_new_email($data);
 		// Set unique args
-		$this->_ci->smtpapiheaderl->setUniqueArgs(array('email_id'=>$insert_id));
+		$this->_ci->smtpapiheaderl->setUniqueArgs(array('email_id'=>$this->_insert_id));
+	}
+
+	private function _upload_s3file() {
+		$tfile = $this->_insert_id.'.txt';
+		$fp = fopen($_SERVER['DOCUMENT_ROOT'].'/tmp/'.$tfile, 'w');
+		fwrite($fp, $this->_content);
+		fclose($fp);
+		if (S3::putObject(S3::inputFile($_SERVER['DOCUMENT_ROOT'].'/tmp/'.$tfile),
+			$this->_bucket, $this->_email_storage_dir.$tfile, S3::ACL_PRIVATE)) {
+			log_message('debug', 'Email content uploaded to S3 file: '.$tfile);
+		}
+	}
+
+	private function _update_email() {
+		$data = array('query'=>$this->_query_str, 's3file'=>$this->_email_storage_dir.$this->_insert_id.'.txt');
+		$this->_ci->EmailM->update_email($this->_insert_id, $data);
 	}
 
 	private function _build_query() {
@@ -204,8 +247,11 @@ class EmailL {
 		}
 
 		$this->_query_str = $to_str;
-		if (isset($this->_replace_value['keys'])) {
-			$this->_query_str .= '&x-smtpapi='.$this->_ci->smtpapiheaderl->asJSON();
+		$this->_query_str .= '&x-smtpapi='.$this->_ci->smtpapiheaderl->asJSON();
+		if ( ! empty($this->_files)) {
+			foreach ($this->_files as $file) {
+				$this->_query_str .= '&files['.$file['name'].']=@'.$file['path'];
+			}
 		}
 		$this->_query_str .= '&subject='.$this->_subject.
 			'&from='.$this->_from.
@@ -224,7 +270,9 @@ class EmailL {
 		$this->_get_attachements();
 		$this->_insert_email();
 		$this->_build_query();
-		print $this->_query_str;
+		$this->_upload_s3file();
+		$this->_update_email();
+		print '<h1>DEBUG: </h1>'.$this->_query_str;
 	}
 
 	function send_email () {
@@ -233,10 +281,13 @@ class EmailL {
 		$this->_get_content();
 		$this->_get_replace_value();
 		$this->_date = date('r');
+		$this->_get_attachements();
 		$this->_insert_email();
-
 		$this->_build_query();
+		$this->_upload_s3file();
+		$this->_update_email();
 		$i = $this->_ci->curl->simple_post('https://sendgrid.com/api/mail.send.json', $this->_query_str);
-		return $i;
+		$i = json_decode($i, true);
+		return ($i['message'] === 'success') ? TRUE : FALSE;
 	}
 }
