@@ -15,7 +15,7 @@ class UserM extends MY_Model {
 		// 6=login and failed no such username
 		// 7=login and failed user not active
 
-	var $info = array();
+	var $info = array('cardid'=>0);
 
 	//var $info = array();
 
