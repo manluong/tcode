@@ -88,4 +88,25 @@ class EmailM extends MY_Model {
 		$i = $query->row_array();
 		return ( ! empty($i)) ? $i['content'] : '';
 	}
+
+	// Functions for email events_parser
+	function get_result_arr($id) {
+		$query = $this->db->get_where('email', array('id' => $id), 1);
+		if ($query->num_rows !== 0) {
+			$i = $query->result_array();
+			return $i[0]['result'];
+		}
+	}
+
+	function update_email_events_result($data, $email_id) {
+		$this->db->where('id', $email_id)
+			->update('email', $data);
+		return $this->db->affected_rows();
+	}
+
+	// Functions for email email_parser
+	function save_received_email($data) {
+		$this->db->insert('email_received', $data);
+		return $this->db->insert_id();
+	}
 }

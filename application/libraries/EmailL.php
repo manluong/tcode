@@ -19,11 +19,11 @@ class EmailL {
 	private $_query_str = '';
 	private $_insert_id = '';
 
-
 	private $_email_storage_dir = '/email/content/';
-	private $_api_user = 'tcsteam';
-	private $_api_key = 'express08)*';
-	private $_bucket = 's3subscribers';
+	private $_email_attachements_storage = '/email/content/attachments/';
+	private $_api_user = 'tcsteam'; // sendgrid
+	private $_api_key = 'express08)*'; // sendgrid
+	private $_bucket = 'tcs99';
 
 	function __construct($url = '') {
 		$this->_ci = & get_instance();
@@ -192,6 +192,10 @@ class EmailL {
 	}
 
 	private function _insert_email() {
+		// Domain keys
+		$this->_ci->smtpapiheaderl->addFilterSetting('domainkeys', 'enable', 1);
+		$this->_ci->smtpapiheaderl->addFilterSetting('domainkeys', "domain", "www.telcoson.com");
+
 		$data = array(
 			'app_id' => $this->_ci->url['app_id'],
 			'to' => serialize($this->_to),
@@ -238,8 +242,10 @@ class EmailL {
 		}
 		$to_str = substr($to_str, 1);  //remove the first '&'
 
-		for($i=0;$i<count($this->_bcc);$i++) {
-			$to_str .= '&bcc[]='.$this->_bcc[$i];
+		if ( ! empty($this->_bcc[0])) {
+			for($i=0;$i<count($this->_bcc);$i++) {
+				$to_str .= '&bcc[]='.$this->_bcc[$i];
+			}
 		}
 
 		$this->_query_str = $to_str;
@@ -263,7 +269,7 @@ class EmailL {
 		$this->_get_content();
 		$this->_get_replace_value();
 		$this->_date = date('r');
-		$this->_get_attachements();
+		if ($this->_attachment_id !== '') $this->_get_attachements();
 		$this->_insert_email();
 		$this->_build_query();
 		$this->_upload_s3file();
@@ -277,13 +283,57 @@ class EmailL {
 		$this->_get_content();
 		$this->_get_replace_value();
 		$this->_date = date('r');
-		$this->_get_attachements();
+		if ($this->_attachment_id !== '') $this->_get_attachements();
 		$this->_insert_email();
 		$this->_build_query();
 		$this->_upload_s3file();
 		$this->_update_email();
 		$i = $this->_ci->curl->simple_post('https://sendgrid.com/api/mail.send.json', $this->_query_str);
+		$this->log_send_response($i);
 		$i = json_decode($i, true);
 		return ($i['message'] === 'success') ? TRUE : FALSE;
+	}
+
+	function log_send_response($response) {
+		$str = date('F j, Y, g:i a') .": ";
+		$str .= 'Sendgrid response: '.$response."\n";
+		$fp = fopen($_SERVER['DOCUMENT_ROOT'].'/tmp/sendgrid_send_response.log','a+');
+		fwrite($fp, $str);
+		fclose($fp);
+	}
+
+	// Log incoming sendgrid Events
+	function log_sendgrid($type) {
+		$allowed_type = array('events', 'email');
+		if ( ! in_array($type, $allowed_type)) {
+			log_message('debug', 'Log type not allowed'); return '';
+		}
+		$str = date('F j, Y, g:i a')."\n";
+		$str .= "====================\n";
+		$str .= '$_POST = '.print_r($_POST, true);
+		$str .= "====================\n\n";
+		$str .= '$_FILES = '.print_r($_FILES, true);
+		$str .= "====================\n\n";
+		$str .= 'PHP input = '.file_get_contents('php://input');
+		$str .= "====================\n\n";
+		$str .= '$_SERVER = '.print_r($_SERVER, true);
+		$str .= "====================\n\n";
+		$fp = fopen($_SERVER['DOCUMENT_ROOT'].'/tmp/sendgrid_'.$type.'.log','a+');
+		fwrite($fp, $str);
+		fclose($fp);
+	}
+
+	// $files_arr is from $_FILES, you need the tmp_name here.
+	// $files is from [attachment-info], you need the filename here.
+	function upload_attachment_s3 ($files_arr, $files) {
+		foreach ($files_arr as $key => $file) {
+			$f = $_SERVER['DOCUMENT_ROOT'].'/tmp/'.$files[$key]['filename'];
+			move_uploaded_file($file['tmp_name'], $f);
+			if (S3::putObject(S3::inputFile($f), $this->_bucket, $this->_email_attachements_storage.$files[$key]['filename'], S3::ACL_PRIVATE)) {
+				log_message('debug', 'Email attachement uploaded: '.$f);
+			} else {
+				log_message('error', 'Email attachement upload failed');
+			}
+		}
 	}
 }

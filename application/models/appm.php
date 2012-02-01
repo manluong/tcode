@@ -4,7 +4,7 @@ class AppM extends MY_Model {
 	var $url = array();
 	var $actions = array();
 
-	var $public_apps = array('access', 'ical', 'unittest');
+	var $public_apps = array('access', 'ical', 'unittest', 'email');
 
 	function __construct() {
 		$this->table = 'core_apps';

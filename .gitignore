@@ -13,6 +13,5 @@ license.txt
 #CI config files#
 application/config/config.php
 index.php
-application/config/s3.php
 tmp/*
 application/logs/*
