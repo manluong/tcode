@@ -1,3 +1,4 @@
+<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/jquery.fullcalendar.min.js"></script>
 
 <style>
 	#calendar .fc-sun, #calendar .fc-sat {

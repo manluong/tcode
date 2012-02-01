@@ -20,7 +20,26 @@ class MY_Controller extends CI_Controller {
 	var $has_return = FALSE;
 
 	var $data = array();
-	var $layout = array();
+	var $layout = array(
+		'name' => '',
+		'formtype' => '',
+		'listtype' => '',
+
+		'type' => '',
+		'logo' => '',
+		'menu' => '',
+		'footer' => '',
+		'boxformat' => '',
+
+		'format' => '',
+		'breadcrumnb' => '',
+		'content' => '',
+		'icons' => '',
+
+		'menu_array' => '',
+		'appmenu' => '0',
+		'appmenu_gp' => '',
+	);
 
 	var $system_messages = array();
 
@@ -178,7 +197,7 @@ class MY_Controller extends CI_Controller {
 					case 'menu':
 						$this->load->model('AppmenuM');
 						$get_appmenu = $this->AppmenuM->get_appmenu($this_element['name']);
-						$output[$count_output]['html'] = $this->load->view('/'.get_template().'/menuapp', $get_appmenu, true);
+						$output[$count_output]['html'] = $this->load->view('/'.get_template().'/app_menu', $get_appmenu, true);
 						$output[$count_output]['isoutput'] = 1;
 						$output[$count_output]['isdiv'] = 1;
 						break;
@@ -301,7 +320,6 @@ class MY_Controller extends CI_Controller {
 		//	if (!isset($output[$this_key]['ajax'])) $output[$this_key] = $this->output_foreach($output[$this_key],$layout['folderinc'],$layout['name']);
 		//}
 
-
 		//temp fix for new json output for dgroup
 		if ($this->layout['type'] == 2) $this->layout['type'] = 4;
 
@@ -386,10 +404,11 @@ class MY_Controller extends CI_Controller {
 			'css' => '',
 			'js' => '',
 
-			'menumain' => '',
-			'top' => '',
+			'sidebar' => '',
 
+			'breadcrumb' => '',
 			'content' => '',
+			'app_menu' => '',
 
 			'js_bodyend' => ''
 		);
@@ -412,46 +431,50 @@ class MY_Controller extends CI_Controller {
 		//load either the pagefile or pageplain
 		//load MAINMENU
 		//load TOPBAR
-		if (isset($layout['logo']) || isset($layout['menu'])){
-	        //$layout_page = file_get_contents($layout['pagefile']);
+		if ($this->UserM->is_logged_in()) {
+			if (isset($layout['logo']) || isset($layout['menu'])){
+				//$layout_page = file_get_contents($layout['pagefile']);
 
-			if ($layout['menu']) {
-				$pagedata['menumain'] = $this->load->view('/'.get_template().'/menumain', $layout, true);
+				$sidebar['app_list'] = ($layout['menu'])
+					? $layout['menu_array']
+					: array();
+
+				if ($layout['logo']) {
+					//include_once DOCUMENT_ROOT.'/'.$layout['folderinc'].'/topbar.inc';
+					//$layout_page = preg_replace("/#topbar#/", topbar(), $layout_page);
+					//$history = core_log_loadhistory();
+					//$lang['session']['companyname']
+					//$lang['core']['welcome'].' '.$id['name']
+					$sidebar['history'] = $this->LogM->get_history();
+					if (isset($this->log_data['log_type']) && ! empty($this->log_data['log_type'])) {
+						$sidebar['can_follow'] = $this->log_data['log_type']['can_follow'];
+						$sidebar['can_favorite'] = $this->log_data['log_type']['can_favorite'];
+					}
+
+					$sidebar['company_name'] = 'Telcoson';
+					$sidebar['show_user_status'] = TRUE;
+					$sidebar['welcome'] = $this->UserM->get_name();
+
+					$pagedata['sidebar'] = $this->load->view('/'.get_template().'/sidebar', $sidebar, TRUE);
+				}
+
+				//no action for $layout_format_footer
+
 			} else {
-				$pagedata['menumain'] = '';
+				//$layout_page = file_get_contents($layout['pageplain']);
 			}
 
-			if ($layout['logo']) {
-				//include_once DOCUMENT_ROOT.'/'.$layout['folderinc'].'/topbar.inc';
-				//$layout_page = preg_replace("/#topbar#/", topbar(), $layout_page);
-				//$history = core_log_loadhistory();
-				//$lang['session']['companyname']
-				//$lang['core']['welcome'].' '.$id['name']
-				$pagetopdata['history'] = $this->LogM->get_history();
-				if (isset($this->log_data['log_type']) && ! empty($this->log_data['log_type'])) {
-					$pagetopdata['can_follow'] = $this->log_data['log_type']['can_follow'];
-					$pagetopdata['can_favorite'] = $this->log_data['log_type']['can_favorite'];
-				}
+			//load appmenu + breadcrumb
+			if ($layout['appmenu'] || $layout['breadcrumb']) {
+				//$appmenu = core_appmenu($app,$layout['appmenu'],$layout['appmenu_gp'],$layout['breadcrumb']);
+				//$appmenu = f_layout_appmenu($appmenu,$layout['appmenu'],$layout['breadcrumb'],1);
 
-				$pagetopdata['companyname'] = 'Telcoson';
-
-
-				if ($this->UserM->is_logged_in()) {
-					$pagetopdata['show_user_status'] = TRUE;
-					$pagetopdata['welcome'] = $this->UserM->get_name();
-				} else {
-					$pagetopdata['show_user_status'] = FALSE;
-					$pagetopdata['welcome'] = '';
-				}
-
-				$pagedata['top'] = $this->load->view('/'.get_template().'/top', $pagetopdata, true);
+				$this->load->model('AppmenuM');
+				$app_menu = $this->AppmenuM->get_appmenu();
+				$pagedata['breadcrumb'] = $this->load->view('/'.get_template().'/breadcrumb', $app_menu, TRUE);
+				$pagedata['app_menu'] = $this->load->view('/'.get_template().'/app_menu', $app_menu, TRUE);
 			}
-
-			//no action for $layout_format_footer
-
-	    } else {
-	        //$layout_page = file_get_contents($layout['pageplain']);
-	    }
+		}
 
 		//load the content in $output to $h_html
 		//makeup the DIV html
@@ -459,19 +482,6 @@ class MY_Controller extends CI_Controller {
 		$output_content = $this->output_content();
 		//$h_html = $output_page['html'];
 		//$h_js_onload = $output_page['jsonload'];
-
-	    //load appmenu + breadcrumb
-	    if ($layout['appmenu'] || $layout['breadcrumb']){
-			//include_once DOCUMENT_ROOT.'/'.$layout['folderinc'].'/appmenu.inc';
-			//$appmenu = core_appmenu($app,$layout['appmenu'],$layout['appmenu_gp'],$layout['breadcrumb']);
-			//$appmenu = f_layout_appmenu($appmenu,$layout['appmenu'],$layout['breadcrumb'],1);
-
-			$this->load->model('AppmenuM');
-			$get_appmenu = $this->AppmenuM->get_appmenu();
-			$pagedata['menuapp'] = $this->load->view('/'.get_template().'/menuapp', $get_appmenu, true);
-	    } else {
-	    	$pagedata['menuapp'] = '';
-	    }
 
 	    //format $h_js_onload
 		if (isset($output_content['jsonload'])) {
@@ -487,23 +497,21 @@ class MY_Controller extends CI_Controller {
 
 		$pagedata['title'] = 'T Business';
 		$pagedata['head'] = $pagedata['css'].$pagedata['js'].$output_content['jsonload'];
-		//$pagedata['head'] = $pagedata['css'].$pagedata['js'];
 		$pagedata['content'] = $output_content['html'].$pagedata['js_bodyend'];
 		$this->load->view('/'.get_template().'/page_full', $pagedata);
 
-		//$layout_page = preg_replace("/#title#/", "T Business", $layout_page);
 		//$layout_page = preg_replace("/#head#/", $h_css.''.$h_head.''.$h_js.''.$h_js_onload, $layout_page);
-		//$layout_page = preg_replace("/#menuapp#/", $appmenu, $layout_page);
 		//$layout_page = preg_replace("/#content#/", megshow().''.$h_html.''.$h_js_bodyend, $layout_page);
-
-		//header("Content-Type:text/html");
-		//echo $layout_page;
 	}
 
 
 	private function output_content() {
 		$result = array();
-		$content_div = array();
+		$content_div = array(
+			'col_1' => '',
+			'col_2' => '',
+			'col_3' => ''
+		);
 
 		//print_r($output);
 		if (isset($this->layout['boxformat'])) $boxformat_array = explode(',', $this->layout['boxformat']);
@@ -533,8 +541,6 @@ class MY_Controller extends CI_Controller {
 					$this_boxformat = 1;
 				}
 
-				//print_r($data);
-
 				$active_style = (isset($data['div']['divstyle']) && $data['div']['divstyle'] != '')
 					? $data['div']['divstyle']
 					: 'default';
@@ -544,10 +550,10 @@ class MY_Controller extends CI_Controller {
 
 				if (!isset($data['div']['colnum'])) {
 					$data['div']['colnum'] = 1;
-				} elseif ($data['div']['colnum'] == 0){
+				} elseif ($data['div']['colnum'] == 0) {
 					$data['div']['colnum'] = 1;
 				}
-				if (!isset($content_div[$data['div']['colnum']])) $content_div[$data['div']['colnum']] = '';
+				if (!isset($content_div['col_'.$data['div']['colnum']])) $content_div['col_'.$data['div']['colnum']] = '';
 
 				//$this_apps_html['colnum']
 				//$this_apps_html['actlayout']
@@ -556,11 +562,11 @@ class MY_Controller extends CI_Controller {
 				switch ($view_data['divstyle'][$active_style]['style']) {
 					case 'tgrid':
 						switch($this_boxformat){
-							case '1': $view_data['gridnum'] = 'grid_6'; break;
-							case '2': $view_data['gridnum'] = 'grid_4'; break;
-							case '3': $view_data['gridnum'] = 'grid_3'; break;
-							case '6': $view_data['gridnum'] = 'grid_1'; break;
-							default: $view_data['gridnum'] = 'grid_6'; break;
+							case '1': $view_data['gridnum'] = '12'; break;
+							case '2': $view_data['gridnum'] = '5'; break;
+							case '3': $view_data['gridnum'] = '3'; break;
+							case '6': $view_data['gridnum'] = '2'; break;
+							default: $view_data['gridnum'] = '12'; break;
 						}
 
 						if (isset($data['div']['tab']) && $data['div']['tab'] == 1) {
@@ -584,19 +590,19 @@ class MY_Controller extends CI_Controller {
 							}
 
 							if (!isset($this->data[$count_output+1]) || isset($this->data[$count_output+1]) && $this->data[$count_output+1]['div']['tab'] == 0){
-									//next element is not a tab, so warp up the tab
-									$content_div[$data['div']['colnum']] .= $this->load->view('/'.get_template().'/component_grid_tab', $tabdata, TRUE);
-									$tabdata = array();
+								//next element is not a tab, so warp up the tab
+								$content_div['col_'.$data['div']['colnum']] .= $this->load->view('/'.get_template().'/element/component_grid_tab', $tabdata, TRUE);
+								$tabdata = array();
 							}
 
 							//}
 						} else {
-							$content_div[$data['div']['colnum']] .= $this->load->view('/'.get_template().'/component_grid', $view_data, TRUE);
+							$content_div['col_'.$data['div']['colnum']] .= $this->load->view('/'.get_template().'/element/component_grid', $view_data, TRUE);
 						}
 						break;
 
 					case 'simple':
-						$content_div[$data['div']['colnum']] .= $this->load->view('/'.get_template().'/component_simple', $view_data, TRUE);
+						$content_div['col_'.$data['div']['colnum']] .= $this->load->view('/'.get_template().'/element/component_simple', $view_data, TRUE);
 						break;
 				}
 
@@ -615,36 +621,14 @@ class MY_Controller extends CI_Controller {
 		}
 
 		/////////////////////////////////////////////////////////
-		//load content
+		//load content layout
 		/////////////////////////////////////////////////////////
-		$sql3 = (isset($this->layout['content']) && $this->layout['content']!='')
-			? "SELECT * FROM core_layout_content WHERE core_layout_content_name  = '".$this->layout['content']."'"
-			: "SELECT * FROM core_layout_content WHERE core_layout_content_name  = 'full'";
+		$template = '/'.get_template().'/element/content_layout_';
+		$template .= (isset($this->layout['content']) && $this->layout['content']!='')
+			? $this->layout['content']
+			: 'full';
 
-		$result3 = $this->db->query($sql3);
-		$result3 = $result3->row_array(0);
-
-		if (!$result3) meg(999,'No Content Format Specified Found.');
-
-		$layout_cf_sort = explode(',', $result3['core_layout_content_sort']);
-		$layout_cf[1]['start'] = $result3['core_layout_content_1_start'];
-		$layout_cf[1]['end'] = $result3['core_layout_content_1_end'];
-		$layout_cf[2]['start'] = $result3['core_layout_content_2_start'];
-		$layout_cf[2]['end'] = $result3['core_layout_content_2_end'];
-		$layout_cf[3]['start'] = $result3['core_layout_content_3_start'];
-		$layout_cf[3]['end'] = $result3['core_layout_content_3_end'];
-		$layout_cf[4]['start'] = $result3['core_layout_content_4_start'];
-		$layout_cf[4]['end'] = $result3['core_layout_content_4_end'];
-		$layout_boxformat = $result3['core_layout_content_defboxcol'];
-
-		//insert the content_div into the core_layout_content as h_html
-		$div_count = 0;
-
-		foreach ($layout_cf_sort as $this_cf) {
-			$result['html'] .= $layout_cf[$this_cf]['start'];
-			if (isset($content_div[$this_cf])) $result['html'] .= $content_div[$this_cf];
-			$result['html'] .= $layout_cf[$this_cf]['end'];
-		}
+		$result['html'] = $this->load->view($template, $content_div, TRUE);
 
 		return $result;
 	}

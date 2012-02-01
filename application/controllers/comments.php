@@ -6,6 +6,7 @@ class Comments extends MY_Controller {
 		parent::__construct();
 
 		$this->load->model('CommentsM');
+		$this->load->library('CommentsL');
 	}
 
 

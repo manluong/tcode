@@ -2,66 +2,77 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" >
 	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
 	<title><?=$title?></title>
-	<!-- <script type="text/javascript" src="https://getfirebug.com/firebug-lite-debug.js"></script> -->
 
-	<!-- from head START-->
+	<script type="text/javascript" src="/resources/addon/jquery.min.js"></script>
+	<script type="text/javascript" src="/resources/addon/jquery.ui.min.js"></script>
+	<script type="text/javascript" src="/resources/addon/tpanel.js"></script>
+	<script type="text/javascript" src="/resources/addon/jquery.dataTables.min.js"></script>
+	<script type="text/javascript" src="/resources/addon/jquery.defaulttext.js"></script>
+
+	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/bootstrap-tooltip.js"></script>
+	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/bootstrap-dropdown.js"></script>
+	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/dataTables.bootstrap-paging.js"></script>
+
+	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/base.css" />
+	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/bootstrap.min.responsive.css" />
+
 	<?=$head?>
-	<!-- from head END -->
 
-	<!-- static -->
-	<script>
-	$(window).load(function(){
-		$("#loading").fadeOut(function(){
-			$(this).remove();
-			$('body').removeAttr('style');
-		});
-		//notification_autoclose('notification_spot');
-	});
-	</script>
-	<style type = "text/css">
-		#container {position: absolute; top:50%; left:50%;}
-		#content {width: 800px; text-align:center; margin-left: -400px; height:50px; margin-top:-25px; line-height: 50px;}
-		#content {font-family: "Helvetica", "Arial", sans-serif; font-size: 18px; color: black; text-shadow: 0px 1px 0px white; }
-		#loadinggraphic {margin-right: 0.2em; margin-bottom:-2px;}
-		#loading {background-color: #eeeeee; overflow:hidden; width:100%; height:100%; position: absolute; top: 0; left: 0; z-index: 9999;}
-	</style>
-	<!-- static END -->
 </head>
 
-<body style="overflow: hidden;">
-	<div id="loading">
-		<script type = "text/javascript">
-			document.write("<div id='container'><p id='content'>" +
-				"<img id='loadinggraphic' width='16' height='16' src='/resources/template/default_web/images/ajax-loader-eeeeee.gif' /> " +
-				"Loading...</p></div>");
-		</script>
-	</div>
+<body>
+	<div id="popup_message"></div>
 
-    <div id="wrapper" class="clearfix">
-		<?=$top?>
-		<section>
-			<div class="container_main clearfix">
-				<section class="main-section full">
-					<?=$menumain?>
-					<div class="main-content">
-						<?=$menuapp?>
-						<section class="container_6 clearfix">
-							<div id="xmsg"></div>
-							<!-- app content START -->
-							<?=$content?>
-							<!-- app content END -->
-						</section>
-					</div>
-				</section>
-			</div>
-		</section>
-	</div>
 
-	<footer>
-		<div id="footer-inner">
-			<span class="fr">&copy; 2011. All rights reserved. Telcoson Pte Ltd | <a href="#">Feedback</a></span>
+    <div class="container-full">
+
+
+		<div id="sidebar">
+			<?=$sidebar?>
 		</div>
-	</footer>
+
+
+
+		<div id="content-container">
+			<?=$breadcrumb?>
+			<div id="content">
+				<?=$content?>
+			</div>
+			<div id="content-footer">
+				<?=$app_menu?>
+			</div>
+		</div>
+
+
+	</div>
+
+
+
+	<script>
+		$(document).ready(function() {
+			resize_nav();
+
+			$('.fade_text').defaultText();
+			$('.dropdown-toggle').dropdown()
+		});
+
+		$(window).resize(function(){
+			resize_nav();
+		});
+
+		function resize_nav() {
+			var sidebar_height = $('#sidebar').outerHeight();
+			sidebar_height -= $('#company-logo').outerHeight();
+			sidebar_height -= $('#global-search-container').outerHeight();
+			sidebar_height -= $('#status').outerHeight();
+			sidebar_height -= $('#sidebar-footer').outerHeight();
+
+			$('#nav').outerHeight(sidebar_height);
+		}
+	</script>
+
 </body>
 </html>

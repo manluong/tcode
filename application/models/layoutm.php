@@ -11,6 +11,7 @@ class LayoutM extends CI_Model {
 	function setup() {
 		$apps_action = $this->AppM->actions;
 		$CI =& get_instance();
+		$layout_template_theme = 0;
 
 		//LOAD TEMPLATE
 		if (isset($apps_action['core_apps_action_template']) && $apps_action['core_apps_action_template']!='') {
@@ -20,7 +21,6 @@ class LayoutM extends CI_Model {
 					->where('core_layout_template_platform', $this->platform)
 					->limit(1)
 					->get();
-			$layout_template_theme = 0;
 		} else {
 			$rs = $this->db->select()
 					->from('core_layout_template')
@@ -28,24 +28,20 @@ class LayoutM extends CI_Model {
 					->where('core_layout_template_default', 1)
 					->limit(1)
 					->get();
-			$layout_template_theme = 0;
 		}
 
-		if ($rs->num_rows()>0) {
-			$result = $rs->row_array();
+		if ($rs->num_rows() == 0) meg(999, 'No Template Found.');
 
-			$CI->layout['name'] = $result['core_layout_template_name'];
-		    //$CI->layout['pagefile'] = DOCUMENT_ROOT.'/'.$result['core_layout_template_folder'].'/'.$result['core_layout_template_pagefile'];
-		    //$CI->layout['pageplain'] = DOCUMENT_ROOT.'/'.$result['core_layout_template_folder'].'/'.$result['core_layout_template_pageplain'];
-		    //$CI->layout['folder'] = $result['core_layout_template_folder'];
-		    //$CI->layout['folderinc'] = $result['core_layout_template_folderinc'];
-		    $CI->layout['formtype'] = $result['core_layout_template_formtype'];
-		    $CI->layout['listtype'] = $result['core_layout_template_listtype'];
-		    if ($result['core_layout_template_addons']) $CI->layout['addons'] = $result['core_layout_template_addons'].',';
+		$result = $rs->row_array();
 
-		} else {
-		    meg(999, 'No Template Found.');
-		}
+		$CI->layout['name'] = $result['core_layout_template_name'];
+		//$CI->layout['pagefile'] = DOCUMENT_ROOT.'/'.$result['core_layout_template_folder'].'/'.$result['core_layout_template_pagefile'];
+		//$CI->layout['pageplain'] = DOCUMENT_ROOT.'/'.$result['core_layout_template_folder'].'/'.$result['core_layout_template_pageplain'];
+		//$CI->layout['folder'] = $result['core_layout_template_folder'];
+		//$CI->layout['folderinc'] = $result['core_layout_template_folderinc'];
+		$CI->layout['formtype'] = $result['core_layout_template_formtype'];
+		$CI->layout['listtype'] = $result['core_layout_template_listtype'];
+		if ($result['core_layout_template_addons']) $CI->layout['addons'] = $result['core_layout_template_addons'].',';
 	}
 
 	/////////////////////////////////////////////////////////
@@ -86,45 +82,29 @@ class LayoutM extends CI_Model {
 					->get();
 	    }
 
-		if ($rs->num_rows()>0) {
-			$result = $rs->row_array();
+		if ($rs->num_rows() == 0) meg(999, 'No Layout Format Specified Found.');
 
-		    $CI->layout['type'] = $result['core_layout_format_type'];
-		    $CI->layout['logo'] = $result['core_layout_format_logo'];
-		    $CI->layout['menu'] = $result['core_layout_format_menu'];
-		    $CI->layout['footer'] = $result['core_layout_format_footer'];
-			$CI->layout['boxformat'] = $result['core_layout_format_boxformat'];
-			if ($result['core_layout_format_addons']) $CI->layout['addons'] .= $result['core_layout_format_addons'].',';
-	    } else {
-	    	meg(999, 'No Layout Format Specified Found.');
-	    }
+		$result = $rs->row_array();
+
+		$CI->layout['type'] = $result['core_layout_format_type'];
+		$CI->layout['logo'] = $result['core_layout_format_logo'];
+		$CI->layout['menu'] = $result['core_layout_format_menu'];
+		$CI->layout['footer'] = $result['core_layout_format_footer'];
+		$CI->layout['boxformat'] = $result['core_layout_format_boxformat'];
+		if ($result['core_layout_format_addons']) $CI->layout['addons'] .= $result['core_layout_format_addons'].',';
 
 		//OTHER
-		$CI->layout['format'] = isset($apps_action['core_apps_action_x_core_layout_format_name'])
-									? $apps_action['core_apps_action_x_core_layout_format_name']
-									: '';
-		$CI->layout['content'] = isset($apps_action['core_apps_action_content_layout'])
-									? $apps_action['core_apps_action_content_layout']
-									: '';
-		$CI->layout['breadcrumb'] = isset($apps_action['core_apps_action_breadcrumb'])
-									? $apps_action['core_apps_action_breadcrumb']
-									: '';
-		$CI->layout['addons'] .= isset($apps_action['core_apps_action_addons'])
-									? $apps_action['core_apps_action_addons'].','
-									: '';
+		if ( isset($apps_action['core_apps_action_x_core_layout_format_name']) ) $CI->layout['format'] =  $apps_action['core_apps_action_x_core_layout_format_name'];
+		if ( isset($apps_action['core_apps_action_content_layout']) ) $CI->layout['content'] = $apps_action['core_apps_action_content_layout'];
+		if ( isset($apps_action['core_apps_action_breadcrumb']) ) $CI->layout['breadcrumb'] = $apps_action['core_apps_action_breadcrumb'];
+		if ( isset($apps_action['core_apps_action_addons']) ) $CI->layout['addons'] .= $apps_action['core_apps_action_addons'].',';
 
 		//MENU
-		if ($result['core_layout_format_menu']){
-			$CI->layout['menu_array'] = $this->get_mainmenu();
-		}
+		if ($result['core_layout_format_menu']) $CI->layout['menu_array'] = $this->get_mainmenu();
 
 		if (isset($apps_action['core_apps_action_appmenu']) && $apps_action['core_apps_action_appmenu']) {
 			$CI->layout['appmenu'] = 1;
-			if ($apps_action['core_apps_action_appmenu_gp']) {
-				$CI->layout['appmenu_gp'] = $apps_action['core_apps_action_appmenu_gp'];
-			}
-		} else {
-			$CI->layout['appmenu'] = 0;
+			if ($apps_action['core_apps_action_appmenu_gp']) $CI->layout['appmenu_gp'] = $apps_action['core_apps_action_appmenu_gp'];
 		}
 	}
 
@@ -141,7 +121,7 @@ class LayoutM extends CI_Model {
 				->order_by('core_addons_sort')
 				->get();
 
-		foreach($rs->result_array() as $field){
+		foreach($rs->result_array() as $field) {
 			if (isset($field['core_addons_css'])) $addons['css'] .= $field['core_addons_css'];
 			if (isset($field['core_addons_js'])) $addons['js'] .= $field['core_addons_js'];
 			if (isset($field['core_addons_bodyendjs'])) $addons['js_bodyend'] .= $field['core_addons_bodyendjs'];
@@ -152,13 +132,15 @@ class LayoutM extends CI_Model {
 
 
 	function get_mainmenu() {
-
-		$sql = "SELECT core_apps_name,core_apps_icon FROM core_apps WHERE core_apps_status = '1' AND core_apps_showmenu = '1' ORDER BY core_apps_menusort";
-		$rs = $this->db->query($sql);
+		$rs = $this->db->select('core_apps_name, core_apps_icon')
+				->from('core_apps')
+				->where('core_apps_status', 1)
+				->where('core_apps_showmenu', 1)
+				->order_by('core_apps_menusort')
+				->get();
 
 		if ($rs->num_rows() == 0) return FALSE;
 		return $rs->result_array();
-
 	}
 
 }

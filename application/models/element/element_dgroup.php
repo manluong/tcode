@@ -118,7 +118,8 @@ class Element_dgroup extends CI_Model {
 	}
 
 	function core_element_dgroup($this_element, $is_fdata=0){
-
+		$result = array();
+		
 		$app = $this->url['app'];
 		$an = $this->url['action'];
 

@@ -7,19 +7,20 @@ class Element_dgroup_form extends Element_dgroup {
 	}
 
 
-function dgroup_form($dgroup_structure,$dgroup_value,$element_button,$aved){
+function dgroup_form($dgroup_structure,$dgroup_value,$element_button){
+	$aved = $this->url['subaction'];
 
 	$count = 0;
 	$previous_fnobr = 0;
-	
+
 	foreach (array_keys($dgroup_structure['fieldsort']) as $this_fieldname){
 
 		$this_field = $dgroup_structure['table'][$dgroup_structure['fieldsort'][$this_fieldname]['tablenum']]['fields'][$dgroup_structure['fieldsort'][$this_fieldname]['fieldnum']];
-		
+
 		if (!$this_field['hide']){
-		
+
 		if ($this_field['fhidden']) $this_field['form_fieldtype'] = "19";
-		
+
 		$this_field['core_db_fields_name'] = $this_fieldname;
 
 		
@@ -30,9 +31,9 @@ function dgroup_form($dgroup_structure,$dgroup_value,$element_button,$aved){
 		  if (!$this_field['fnobr']) $this_field['fnobr_stop'] = 1;
 		}
 		if ($this_field['fnobr']) $previous_fnobr = 1;
-		
+
 		if (isset($dgroup_structure['fieldsort'][$this_fieldname]['lang_name'])) $this_field['form_name_lang'] = $this_field['form_name_lang'] . " (".$dgroup_structure['fieldsort'][$this_fieldname]['lang_name'].")";
-		
+
 		//$this_value
 		//$this_value = $dgroup_value[$this_fieldname];
 		//echo $this_fieldname.$dgroup_value[$this_fieldname];
@@ -44,12 +45,12 @@ function dgroup_form($dgroup_structure,$dgroup_value,$element_button,$aved){
 		} else{
 			$this_value = "";
 		}
-		
+
 		$result['form']['field'][$count] = $this_field;
 		$result['form']['field'][$count]['value'] = $this_value;
 		$count++;
 		}
-	
+
 	}
 
 	//thisid is needed for cancel button
@@ -61,23 +62,23 @@ function dgroup_form($dgroup_structure,$dgroup_value,$element_button,$aved){
 	$listid = $listid->row_array(0);
 	if (isset($listid[$list_key[1]])) $listid = $listid[$list_key[1]];
 	}
-	
+
 	$result['dgrouptype'] = "form";
 	$result['element_button'] = $element_button;
 	$result['element_button']['listid'] = $listid;
-	//$result['autocomplete'] = $dgroup_structure['autocomplete']; 
-	
-return($result);	
+	//$result['autocomplete'] = $dgroup_structure['autocomplete'];
+
+return($result);
 }
-	
+
 function dgroup_view($dgroup_structure,$dgroup_value,$element_button,$aved){
-	
+
 		global $getthisid;
-		
+
 		$this_allfvnolabel = 0;
 		$this_fvnolabel = 0;
 		$previous_fvnobr = 0;
-	
+
         if ($dgroup_structure['fieldsort']){
 
         if ($dgroup_structure['fvnolabel']) { $this_allfvnolabel = 1; $this_fvnolabel = 1; }
@@ -87,7 +88,7 @@ function dgroup_view($dgroup_structure,$dgroup_value,$element_button,$aved){
 
             //core_db_fields_name
             $this_field = $dgroup_structure['table'][$dgroup_structure['fieldsort'][$this_fieldname]['tablenum']]['fields'][$dgroup_structure['fieldsort'][$this_fieldname]['fieldnum']];
-			
+
 			//because is viewing, ignore hidden field
             if (!$this_field['hide']){
 
@@ -96,7 +97,7 @@ function dgroup_view($dgroup_structure,$dgroup_value,$element_button,$aved){
             if ($this_field['fvnobr']) { $previous_fvnobr = 1; $this_fvnobr['this'] = 1; } else { $this_fvnobr['this'] = 0; }
             $this_fvnobr['pretxt'] = $this_field['fvnobrpre'];
             $this_fvnobr['subtxt'] = $this_field['fvnobrsub'];
-			
+
 			//field title
             if (isset($dgroup_structure['fieldsort'][$this_fieldname]['lang_name'])) $this_field['form_name_lang'] = $this_field['form_name_lang'] . " (".$dgroup_structure['fieldsort'][$this_fieldname]['lang_name'].")";
 
@@ -121,7 +122,7 @@ function dgroup_view($dgroup_structure,$dgroup_value,$element_button,$aved){
 
             //set fieldtype
             $form[$count]['type'] = $this_field['form_fieldtype'];
-			
+
             switch($this_field['form_fieldtype']){
 
             //input
@@ -131,7 +132,7 @@ function dgroup_view($dgroup_structure,$dgroup_value,$element_button,$aved){
 			$form[$count]['name'] = $this_fieldname;
 			$form[$count]['fvnolabel'] = $this_fvnolabel;
 			$form[$count]['fvnobr'] = $this_fvnobr;
-			
+
             ; break;
 
             //select
@@ -142,7 +143,7 @@ function dgroup_view($dgroup_structure,$dgroup_value,$element_button,$aved){
 			$form[$count]['name'] = $this_fieldname;
 			$form[$count]['fvnolabel'] = $this_fvnolabel;
 			$form[$count]['fvnobr'] = $this_fvnobr;
-			
+
 			; break;
 
             //checkbox
@@ -168,7 +169,7 @@ function dgroup_view($dgroup_structure,$dgroup_value,$element_button,$aved){
 			$form[$count]['name'] = $this_fieldname;
 			$form[$count]['fvnolabel'] = $this_fvnolabel;
 			$form[$count]['fvnobr'] = $this_fvnobr;
-			
+
             ; break;
 
             //textarea
@@ -178,7 +179,7 @@ function dgroup_view($dgroup_structure,$dgroup_value,$element_button,$aved){
 			$form[$count]['name'] = $this_fieldname;
 			$form[$count]['fvnolabel'] = $this_fvnolabel;
 			$form[$count]['fvnobr'] = $this_fvnobr;
-			
+
             ; break;
 
             //radio
@@ -193,8 +194,8 @@ function dgroup_view($dgroup_structure,$dgroup_value,$element_button,$aved){
 			$form[$count]['value'] = $this_value;
 			$form[$count]['name'] = $this_fieldname;
 			$form[$count]['fvnolabel'] = $this_fvnolabel;
-			$form[$count]['fvnobr'] = $this_fvnobr;			
-			
+			$form[$count]['fvnobr'] = $this_fvnobr;
+
             ; break;
 
             //datetime
@@ -206,7 +207,7 @@ function dgroup_view($dgroup_structure,$dgroup_value,$element_button,$aved){
 			$form[$count]['name'] = $this_fieldname;
 			$form[$count]['fvnolabel'] = $this_fvnolabel;
 			$form[$count]['fvnobr'] = $this_fvnobr;
-			
+
 			; break;
 
             //time
@@ -218,7 +219,7 @@ function dgroup_view($dgroup_structure,$dgroup_value,$element_button,$aved){
 			$form[$count]['name'] = $this_fieldname;
 			$form[$count]['fvnolabel'] = $this_fvnolabel;
 			$form[$count]['fvnobr'] = $this_fvnobr;
-			
+
 			; break;
 
             //password
@@ -227,7 +228,7 @@ function dgroup_view($dgroup_structure,$dgroup_value,$element_button,$aved){
 			$form[$count]['value'] = "******";
 			$form[$count]['name'] = $this_fieldname;
 			$form[$count]['fvnolabel'] = $this_fvnolabel;
-			$form[$count]['fvnobr'] = $this_fvnobr;			
+			$form[$count]['fvnobr'] = $this_fvnobr;
             ; break;
 
             case "8":
@@ -253,7 +254,7 @@ function dgroup_view($dgroup_structure,$dgroup_value,$element_button,$aved){
 			$form[$count]['fvnolabel'] = $this_fvnolabel;
 			$form[$count]['fvnobr'] = $this_fvnobr;
 			; break;
-			
+
             }
 
         }
@@ -263,27 +264,27 @@ function dgroup_view($dgroup_structure,$dgroup_value,$element_button,$aved){
 
         //for button that is using a FIELDxx replace (use a field value in a button),
         //check if match this foreach fieldname value, change the button is so
-    
+
     	$count = 0;
 		while (isset($element_button['buttons'][$count])){
 
 			if (substr($element_button['buttons'][$count]['targetid'],0,5) == "FIELD") {
 				$element_button['buttons'][$count]['thisid'] = encode_id($dgroup_value[substr($element_button['buttons'][$count]['targetid'],5)]);
 			}
-			
+
 			if (isset($element_button['buttons'][$count]['targetvalue']) && preg_match("/FIELD/",$element_button['buttons'][$count]['targetvalue'])){
 	        	$this_targetvalue_array = explode("FIELD", $element_button['buttons'][$count]['targetvalue']);
 	            foreach ($this_targetvalue_array as $this_targetvalue) {
 	            	$this_targetvalue_name = explode("XX", $this_targetvalue);
 					$element_button['buttons'][$count]['targetvalue'] = preg_replace("/FIELD".$this_targetvalue_name[0]."/XX",$dgroup_value[$this_targetvalue_name[0]],$element_button['buttons'][$count]['targetvalue']);
-				}	
-						
-			}
-				
+				}
 
-		$count++;		
+			}
+
+
+		$count++;
 		}
-			
+
 
         }//end if fieldsort
 
@@ -296,15 +297,15 @@ function dgroup_view($dgroup_structure,$dgroup_value,$element_button,$aved){
 	$listid = $listid->row_array(0);
 	$listid = $listid[$list_key[1]];
 	}
-	
-	$result['dgrouptype'] = "view";	
+
+	$result['dgrouptype'] = "view";
 	$result['element_button'] = $element_button;
 	$result['element_button']['listid'] = $listid;
 	$result['form']['field'] = $form;
 	if ($this_allfvnolabel) $result['form']['fvnolabel'] = 1;
-	
+
 return ($result);
-}        
+}
 
 
 
