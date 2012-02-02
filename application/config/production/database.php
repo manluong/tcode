@@ -48,9 +48,9 @@
 $active_group = 'default';
 $active_record = TRUE;
 
-$db['default']['hostname'] = 'localhost';
-$db['default']['username'] = 'snowman';
-$db['default']['password'] = 'fast123';
+$db['default']['hostname'] = 'telcosondb1.cjhahrtrq51i.ap-southeast-1.rds.amazonaws.com';
+$db['default']['username'] = 'telcosonawsdb1';
+$db['default']['password'] = '721hewX';
 $db['default']['database'] = 'snowman3';
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = '';
