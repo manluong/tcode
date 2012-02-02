@@ -9,11 +9,12 @@
 	<script type="text/javascript" src="/resources/addon/jquery.ui.min.js"></script>
 	<script type="text/javascript" src="/resources/addon/tpanel.js"></script>
 	<script type="text/javascript" src="/resources/addon/jquery.dataTables.min.js"></script>
-	<script type="text/javascript" src="/resources/addon/jquery.defaulttext.js"></script>
 
 	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/bootstrap-tooltip.js"></script>
 	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/bootstrap-dropdown.js"></script>
 	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/dataTables.bootstrap-paging.js"></script>
+	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/jquery.cookie.js"></script>
+	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/theme-global.js"></script>
 
 	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/base.css" />
 	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/bootstrap.min.css" />
@@ -24,17 +25,10 @@
 </head>
 
 <body>
-	<div id="popup_message"></div>
-
+	<div id="popup_message" class="hide"></div>
 
     <div class="container-full">
-
-
-		<div id="sidebar">
-			<?=$sidebar?>
-		</div>
-
-
+		<?=$sidebar?>
 
 		<div id="content-container">
 			<?=$breadcrumb?>
@@ -46,16 +40,12 @@
 			</div>
 		</div>
 
-
 	</div>
-
-
 
 	<script>
 		$(document).ready(function() {
 			resize_nav();
 
-			$('.fade_text').defaultText();
 			$('.dropdown-toggle').dropdown()
 		});
 
@@ -71,6 +61,10 @@
 			sidebar_height -= $('#sidebar-footer').outerHeight();
 
 			$('#nav').outerHeight(sidebar_height);
+
+			var offset = $('#status').offset();
+			var offset_top = offset.top + $('#status').outerHeight() - 15;
+			$('#status-update').offset({ top: offset_top });
 		}
 	</script>
 

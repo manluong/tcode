@@ -17,17 +17,22 @@ body {
 	bottom:0;
 
 	overflow:hidden;
+	z-index:5;
 }
 
 
 
 
 #company-logo {
+	background-color:#FFF;
 	text-align:center;
 	padding:10px 0;
+	height:50px;
 }
 #company-logo img {
 	vertical-align:middle;
+	max-height:50px;
+	max-width:210px;
 }
 #company-logo h3 {
 	display: inline;
@@ -37,20 +42,32 @@ body {
 
 
 #global-search-container {
-	padding: 10px 0;
-	height:30px;
+	background-color:#FFF;
+	padding-bottom:10px;
 }
 
 #global-search {
 	margin:0 auto;
 	width: 200px;
 }
+#global-search-options {
+	margin:0 auto;
+	margin-top:10px;
+	width:150px;
+	overflow: auto;
+}
 #global-search i {
 	margin:3px;
 }
 #global-search-field {
-	width: 140px;
+	background-image: url('../images/icon-magnifier.png');
+	background-repeat: no-repeat;
+	background-position: 10px 50%;
+
+	width: 150px;
 	height:20px;
+
+	padding-left:30px;
 }
 
 
@@ -59,21 +76,59 @@ body {
 	background:#EEF url('../images/gd-shade-lr.png') repeat-y left;
 	border-top: solid 1px #888;
 	border-bottom: solid 1px #888;
-	height:50px;
 	padding: 10px;
+	z-index: 5;
+	position:relative;
+	cursor:pointer;
 }
 #status .avatar {
+	position:relative;
 	background-color:#3F3;
 	height:50px;
 	width:50px;
 	float:left;
+	z-index:5;
 }
-#status .status-details {
+#status .avatar img {
+	position:relative;
+	z-index:5;
+}
+#status-details {
 	margin-left: 60px;
 }
-#status .status-details div {
+#status-details div {
 	font-size:11px;
 	line-height:16px;
+}
+#status-update {
+	position:absolute;
+	z-index:20;
+
+	min-height:100px;
+	width:200px;
+	height: 200px;
+}
+#status-update .popover-inner {
+	width: 100%;
+}
+#status-update a.close {
+	line-height: 0.5;
+}
+#status-update .popover-content {
+	padding:5px;
+}
+#status-update .form-actions {
+	margin:0;
+	padding:10px;
+}
+#status-update .form-actions a {
+	margin:0 5px;
+}
+#status-update input {
+	width:180px;
+}
+#status-more {
+	font-size:11px;
 }
 
 
@@ -82,8 +137,13 @@ body {
 #nav {
 	overflow-y:scroll;
 	padding-bottom:80px;
-	z-index:5;
 	width:150%;
+	position:relative;
+	z-index:5;
+}
+#nav ul {
+	position:relative;
+	z-index: 5;
 }
 #nav ul li {
 	background-color:#FFF;
@@ -95,12 +155,14 @@ body {
 }
 #nav ul li a {
 	display:block;
+	position:relative;
+	z-index:5;
 }
 
 #nav ul li .app-icon {
 	width:30px;
 	height:30px;
-	margin:7px;
+	margin:7px 10px;
 	background-color:#99F;
 	display:inline-block;
 }
@@ -203,7 +265,7 @@ body {
 
 
 #popup_message {
-	display:none;
+
 }
 
 

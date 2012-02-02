@@ -6,7 +6,7 @@
 
 
 <style>
-	.comments { list-style-type: none; padding-left:0; margin:10px; font-family:"Lucida Grande"; }
+	.comments { list-style-type: none; padding-left:0; margin:0; font-family:"Lucida Grande"; }
 	.replies { list-style-type: none; padding-left:0; }
 	.comments li, .replies li { padding: 5px; overflow:auto; }
 	.comments li.comment { border: solid 1px #999; margin-bottom:10px; }
@@ -21,7 +21,7 @@
 	.text { margin: 10px 0; font-size: 12px; }
 	.displaydate { font-size:10px; color: #AAA; margin: 2px 0; }
 	.comment .controls { margin:5px 0; }
-	.comment_input { width: 100%; }
+	.comment_input { width: 95%; }
 
 	div.sending { border: solid 1px #A8A; background-color:#FEF; text-align:center; font-weight:bold; padding:5px; color:#A8A; }
 
@@ -42,7 +42,7 @@
 			<input type="hidden" name="parent_id" value="0" />
 			<?=set_return_url();?>
 
-			<input type="text" name="text" class="comment_input fade_text" value="" data-default_text="write new comment..." autocomplete="off" data-app_id="<?=$app_id?>" data-app_data_id="<?=$app_data_id?>" data-parent_id="0" />
+			<input type="text" name="text" class="comment_input" value="" placeholder="write new comment..." autocomplete="off" data-app_id="<?=$app_id?>" data-app_data_id="<?=$app_data_id?>" data-parent_id="0" />
 		<?=form_close()?>
 	</li>
 
@@ -90,7 +90,7 @@
 						<input type="hidden" name="parent_id" value="<?=$comment['id']?>" />
 						<?=set_return_url();?>
 
-						<input type="text" name="text" class="comment_input fade_text" value="" data-default_text="reply..." autocomplete="off" data-app_id="<?=$app_id?>" data-app_data_id="<?=$app_data_id?>" data-parent_id="<?=$comment['id']?>" />
+						<input type="text" name="text" class="comment_input" value="" placeholder="reply..." autocomplete="off" data-app_id="<?=$app_id?>" data-app_data_id="<?=$app_data_id?>" data-parent_id="<?=$comment['id']?>" />
 					<?=form_close()?>
 				</li>
 			</ul>
@@ -194,7 +194,7 @@
 											});
 
 							new_comments +=	'<li class="new_reply">'+
-												'<input type="text" name="text" class="comment_input fade_text" value="" data-default_text="reply..." autocomplete="off" data-app_id="'+app_id+'" data-app_data_id="'+app_data_id+'" data-parent_id="'+v.id+'" />'+
+												'<input type="text" name="text" class="comment_input" value="" placeholder="reply..." autocomplete="off" data-app_id="'+app_id+'" data-app_data_id="'+app_data_id+'" data-parent_id="'+v.id+'" />'+
 											'</li>'+
 										'</ul>'+
 									'</div>'+
@@ -273,7 +273,7 @@
 											'</div>'+
 											'<ul class="replies">'+
 												'<li class="new_reply">'+
-													'<input type="text" name="text" class="comment_input fade_text" value="" data-default_text="reply..." autocomplete="off" data-app_id="'+app_id+'" data-app_data_id="'+app_data_id+'" data-parent_id="'+result.data.id+'" />'+
+													'<input type="text" name="text" class="comment_input" value="" placeholder="reply..." autocomplete="off" data-app_id="'+app_id+'" data-app_data_id="'+app_data_id+'" data-parent_id="'+result.data.id+'" />'+
 												'</li>'+
 											'</ul>'+
 										'</div>'+

@@ -451,9 +451,10 @@ class MY_Controller extends CI_Controller {
 						$sidebar['can_favorite'] = $this->log_data['log_type']['can_favorite'];
 					}
 
+					$sidebar['company_logo'] = 'logo.png';
 					$sidebar['company_name'] = 'Telcoson';
 					$sidebar['show_user_status'] = TRUE;
-					$sidebar['welcome'] = $this->UserM->get_name();
+					$sidebar['user_name'] = $this->UserM->get_name();
 
 					$pagedata['sidebar'] = $this->load->view('/'.get_template().'/sidebar', $sidebar, TRUE);
 				}
