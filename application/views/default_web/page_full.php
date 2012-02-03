@@ -25,12 +25,12 @@
 </head>
 
 <body>
-	<div id="popup_message" class="hide"></div>
-
     <div class="container-full">
 		<?=$sidebar?>
 
 		<div id="content-container">
+			<div id="popup_message" class="hide"></div>
+			
 			<?=$breadcrumb?>
 			<div id="content">
 				<?=$content?>
@@ -50,7 +50,12 @@
 		});
 
 		$(window).resize(function(){
-			resize_nav();
+			setTimeout('resize_nav()', 1000);
+		});
+
+		$('#content-container').on('click', function() {
+			$('#status-update').slideUp(300);
+			$('#global-search-options').slideUp(300);
 		});
 
 		function resize_nav() {
@@ -61,10 +66,6 @@
 			sidebar_height -= $('#sidebar-footer').outerHeight();
 
 			$('#nav').outerHeight(sidebar_height);
-
-			var offset = $('#status').offset();
-			var offset_top = offset.top + $('#status').outerHeight() - 15;
-			$('#status-update').offset({ top: offset_top });
 		}
 	</script>
 

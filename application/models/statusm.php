@@ -10,14 +10,27 @@ class StatusM extends MY_Model {
 	}
 
 
-	function get_user_current($card_id) {
-		$rs = $this->db->select()
+	function get_user_current($card_id='') {
+		if ($card_id == '') $card_id = $this->UserM->get_cardid();
+
+		//, tasks.name AS task
+		$rs = $this->db->select('status.*, locations.name AS location, status_types.name AS status_type, status_types.availability AS availability')
 				->from('status')
+				->join('locations', 'locations.id=status.location_id', 'left')
+				//->join('tasks', 'tasks.id=status.task_id', 'left')
+				->join('status_types', 'status_types.id=status.status_type_id', 'left')
 				->where('card_id', $card_id)
 				->limit(1)
 				->get();
 
-		return $rs->row_array();
+		$result = $rs->row_array();
+
+		$this->load->model('LocationM');
+
+		$result['task'] = '';	//get task name
+		//$result['location'] = $this->LocationM->get_name($status);	//get location name
+
+		return $result;
 	}
 
 	function save($status) {
@@ -78,6 +91,14 @@ class StatusM extends MY_Model {
 		$this->table = 'status_types';
 		$this->save($status, 'id');
 		$this->table = 'status';
+	}
+
+	function get_status_types() {
+		$this->table = 'status_types';
+		$results = parent::get_list();
+		$this->table = 'status';
+
+		return $results;
 	}
 
 }

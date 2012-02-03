@@ -8,6 +8,28 @@ class Status extends MY_Controller {
 		$this->load->model('StatusM');
 	}
 
+	function ajax_get_status() {
+		$status = $this->StatusM->get_user_current();
+
+		$response = array(
+			'success' => TRUE,
+			'data' => $status,
+		);
+
+		echo json_encode($response);
+	}
+
+	function ajax_get_availability_list() {
+		$status = array_merge(array(array('id'=>'', 'name'=>'')), $this->StatusM->get_status_types());
+
+		$response = array(
+			'success' => TRUE,
+			'data' => $status,
+		);
+
+		echo json_encode($response);
+	}
+
 	function ajax_update() {
 		$status = array(
 			'card_id' => $this->UserM->get_cardid(),
@@ -19,6 +41,10 @@ class Status extends MY_Controller {
 			'geo_lng' => $this->input->post('geo_lng'),
 			'created_stamp' => get_current_stamp(),
 		);
+
+		foreach($status AS $k=>$v) {
+			if ($v === FALSE) unset($status[$k]);
+		}
 
 		$this->StatusM->save($status);
 
