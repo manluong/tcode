@@ -30,7 +30,7 @@
 
 		<div id="content-container">
 			<div id="popup_message" class="hide"></div>
-			
+
 			<?=$breadcrumb?>
 			<div id="content">
 				<?=$content?>
@@ -56,6 +56,7 @@
 		$('#content-container').on('click', function() {
 			$('#status-update').slideUp(300);
 			$('#global-search-options').slideUp(300);
+			setTimeout('resize_nav()', 400);
 		});
 
 		function resize_nav() {
