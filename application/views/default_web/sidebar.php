@@ -248,7 +248,7 @@
 				if ($field1['core_apps_icon']) $icon = $field1['core_apps_icon'];
 		?>
 			<li>
-				<a href="<?=base_url().$field1['core_apps_name']?>">
+				<a href="<?=base_url().$field1['core_apps_name']?>" data-app_name="<?=$field1['core_apps_name']?>" class="ajax">
 					<span class="app-icon">
 						<img src="/resources/template/<?=get_template()?>/images/placeholder-image.jpg" />
 					</span>
@@ -260,6 +260,21 @@
 		?>
 		</ul>
 	</div>
+
+	<script>
+		/*
+		$(document).ready(function() {
+			$('a.ajax').on('click', function(e) {
+				if (e.metaKey) return true; // if it's a ctrl/cmd + click, run normally
+
+				console.log('activate '+$(this).attr('data-app_name'));
+
+				e.preventDefault();
+				return false;
+			})
+		});
+		*/
+	</script>
 
 
 
