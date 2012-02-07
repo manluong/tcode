@@ -1,5 +1,5 @@
 <?php
-if ($breadcrumb) {
+if (isset($breadcrumb)) {
 	echo '<ul id="breadcrumb" class="breadcrumb">';
 
 	foreach ($breadcrumb as $x => $bc) {
