@@ -1,5 +1,5 @@
 <?php
-	if ($style) {
+	if (isset($style)) {
 		echo '<div id="appmenu_',$appmenu_gp,'" class="',$style,'">';
 	} else {
 		echo '<div id="appmenu_',$appmenu_gp,'" class="appsubmenu">';

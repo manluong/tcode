@@ -27,6 +27,8 @@ $css = ($divstyle[$active_style]['css'])
 		? ' class="'.$divstyle[$active_style]['css'].'"'
 		: '';
 
+if ($gridnum == 12) echo '<div class="row-fluid">';
+
 if ($divstyle[$active_style]['boxless'] != 1) {
 	echo '<div class="span'.$gridnum.$collapse.' widget" id="'.$data['div']['element_id'].'_parent"'.$draggable.'>';
 	if ($divstyle[$active_style]['title']) echo '<div class="widget-header"><h4>'.$data['div']['title'] .'</h4></div>';
@@ -39,3 +41,5 @@ if ($divstyle[$active_style]['boxless'] != 1) {
 		echo '</div></div>';
 
 echo '</div>';
+
+if ($gridnum == 12) echo '</div>';

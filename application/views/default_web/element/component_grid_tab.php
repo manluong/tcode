@@ -1,23 +1,22 @@
-	<!-- Tabs Section -->
-	<div class="<?=$gridnum?>">
-		<div class="tabs">
-			<ul>
-				<?php foreach ($data as $this_row): ?>
-			<li><a href="#pane-<?=$this_row['div']['element_id']?>" id="tablink-'<?=$this_row['div']['element_id']?>"><?=$this_row['div']['title']?></a></li>
-				<?php endforeach; ?>				
-			</ul>
+<!-- Tabs Section -->
+<div class="row-fluid">
+	<div class="tabbable widget span<?=$gridnum?>">
+
+		<ul class="nav nav-tabs">
+		<?php foreach ($data as $this_row): ?>
+			<li><a href="#<?=$this_row['div']['element_id']?>" data-toggle="tab"><?=$this_row['div']['title']?></a></li>
+		<?php endforeach; ?>
+		</ul>
 		<!-- tab "panes" -->
-			
-				<?php foreach ($data as $this_row): ?>
-				<div class="portlet">
-				<section id="pane-<?=$this_row['div']['element_id']?>" class="no-padding">
-					<div id="<?=$this_row['div']['element_id']?>">
-						<?=$this_row['html']?>
-					</div>
-				</section>	
-				</div>			
-				<?php endforeach; ?>
-			
+
+		<div class="tab-content widget-body">
+		<?php foreach ($data as $this_row): ?>
+			<div id="<?=$this_row['div']['element_id']?>" class="tab-pane">
+				<?=$this_row['html']?>
+			</div>
+		<?php endforeach; ?>
 		</div>
+
 	</div>
-	<!-- End Tabs Section -->
+</div>
+<!-- End Tabs Section -->

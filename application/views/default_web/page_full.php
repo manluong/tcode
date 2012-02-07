@@ -14,6 +14,7 @@
 
 	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/bootstrap-tooltip.js"></script>
 	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/bootstrap-dropdown.js"></script>
+	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/bootstrap-tab.js"></script>
 	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/dataTables.bootstrap-paging.js"></script>
 	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/jquery.cookie.js"></script>
 	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/theme-global.js"></script>
