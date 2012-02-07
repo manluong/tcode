@@ -57,7 +57,7 @@ function get_accessgp($cardid){
 	$result = $this->db->query($sql);
 	$result = $result->row_array(1);
 
-	print $this->db->last_query();
+
 	$thisresult['accessgp'] = $result['access_link_gpmaster'];
 
     switch($thisresult['accessgp']){
