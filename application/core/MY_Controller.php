@@ -51,8 +51,14 @@ class MY_Controller extends CI_Controller {
 		'saveid' => 0,
 	);
 
+	var $model = '';
+
+	var $is_ajax = FALSE;
+
 	function __construct() {
 		parent::__construct();
+
+		if ($this->input->is_ajax_request()) $this->is_ajax = TRUE;
 
 		$this->setup_url();
 
@@ -143,12 +149,15 @@ class MY_Controller extends CI_Controller {
 		if ($this->re_url['app'] !== FALSE && $this->re_url['action'] !== FALSE) $this->has_return = TRUE;
 	}
 
+
+
 	private function setup_language() {
 		$this->load->model('LangM');
 		$this->lang->initialise($this->LangM->initialise());
 		$this->lang->loadarray($this->LangM->loadarray('core', $this->lang->lang_use));
 		$this->lang->loadarray($this->LangM->loadarray($this->url['app'], $this->lang->lang_use));
 	}
+
 
 	private function app_load(){
 
@@ -407,6 +416,7 @@ class MY_Controller extends CI_Controller {
 			'sidebar' => '',
 
 			'breadcrumb' => '',
+			'jsonload' => '',
 			'content' => '',
 			'app_menu' => '',
 
@@ -466,7 +476,7 @@ class MY_Controller extends CI_Controller {
 			}
 
 			//load appmenu + breadcrumb
-			if ($layout['appmenu'] || $layout['breadcrumb']) {
+			if (isset($layout['appmenu']) || isset($layout['breadcrumb'])) {
 				//$appmenu = core_appmenu($app,$layout['appmenu'],$layout['appmenu_gp'],$layout['breadcrumb']);
 				//$appmenu = f_layout_appmenu($appmenu,$layout['appmenu'],$layout['breadcrumb'],1);
 
@@ -488,18 +498,23 @@ class MY_Controller extends CI_Controller {
 		if (isset($output_content['jsonload'])) {
 			$output_content['jsonload'] = '
 				<script type="text/javascript">
-					window.onload = start;
-					function start() {
+					$(document).ready(function() {
 						'.$output_content['jsonload'].'
-					}
+					});
 				</script>
 			';
 		}
 
 		$pagedata['title'] = 'T Business';
-		$pagedata['head'] = $pagedata['css'].$pagedata['js'].$output_content['jsonload'];
+		$pagedata['head'] = $pagedata['css'].$pagedata['js'];
+		$pagedata['jsonload'] = $output_content['jsonload'];
 		$pagedata['content'] = $output_content['html'].$pagedata['js_bodyend'];
-		$this->load->view('/'.get_template().'/page_full', $pagedata);
+
+		if ($this->is_ajax) {
+			$this->load->view('/'.get_template().'/page_ajax', $pagedata);
+		} else {
+			$this->load->view('/'.get_template().'/page_full', $pagedata);
+		}
 
 		//$layout_page = preg_replace("/#head#/", $h_css.''.$h_head.''.$h_js.''.$h_js_onload, $layout_page);
 		//$layout_page = preg_replace("/#content#/", megshow().''.$h_html.''.$h_js_bodyend, $layout_page);
@@ -670,8 +685,29 @@ class MY_Controller extends CI_Controller {
 
 
 
+	//basic API functions for all controllers
+	function api_get() {
+		$data = $this->model->get($this->url['id_plain']);
+
+		$resp = array(
+			'success' => TRUE,
+			'data' => $data
+		);
+
+		echo json_encode($resp);
+	}
 
 
+	function api_list() {
+		$data = $this->model->get_list();
+
+		$resp = array(
+			'success' => TRUE,
+			'data' => $data
+		);
+
+		echo json_encode($resp);
+	}
 
 
 

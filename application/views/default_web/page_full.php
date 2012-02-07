@@ -9,6 +9,8 @@
 	<script type="text/javascript" src="/resources/addon/jquery.ui.min.js"></script>
 	<script type="text/javascript" src="/resources/addon/tpanel.js"></script>
 	<script type="text/javascript" src="/resources/addon/jquery.dataTables.min.js"></script>
+	<script type="text/javascript" src="/resources/addon/global.js"></script>
+	<script type="text/javascript" src="/resources/addon/pjax.min.js"></script>
 
 	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/bootstrap-tooltip.js"></script>
 	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/bootstrap-dropdown.js"></script>
@@ -28,9 +30,8 @@
     <div class="container-full">
 		<?=$sidebar?>
 
+		<div id="popup_message" class="hide"></div>
 		<div id="content-container">
-			<div id="popup_message" class="hide"></div>
-
 			<?=$breadcrumb?>
 			<div id="content">
 				<?=$content?>
@@ -38,6 +39,7 @@
 			<div id="content-footer">
 				<?=$app_menu?>
 			</div>
+			<?=$jsonload?>
 		</div>
 
 	</div>
@@ -46,7 +48,9 @@
 		$(document).ready(function() {
 			resize_nav();
 
-			$('.dropdown-toggle').dropdown()
+			load_panels();
+
+			$('.dropdown-toggle').dropdown();
 		});
 
 		$(window).resize(function(){
