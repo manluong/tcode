@@ -49,6 +49,12 @@ body {
 #global-search {
 	margin:0 auto;
 	width: 200px;
+	position:relative;
+}
+#global-search-icon {
+	position:absolute;
+	left:8px;
+	top:5px;
 }
 #global-search-options {
 	margin:0 auto;
@@ -60,13 +66,8 @@ body {
 	margin:3px;
 }
 #global-search-field {
-	background-image: url('../images/icon-magnifier.png');
-	background-repeat: no-repeat;
-	background-position: 10px 50%;
-
 	width: 150px;
 	height:20px;
-
 	padding-left:30px;
 }
 

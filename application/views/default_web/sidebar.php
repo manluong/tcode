@@ -12,6 +12,7 @@
 	<div id="global-search-container">
 		<div id="global-search">
 			<input type="text" name="global-search" id="global-search-field" class="search-query" />
+			<i class="icon-search" id="global-search-icon"></i>
 		</div>
 		<div id="global-search-options" class="hide">
 			<div class="control-group">
