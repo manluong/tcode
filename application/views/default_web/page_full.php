@@ -48,8 +48,6 @@
 		$(document).ready(function() {
 			resize_nav();
 
-			load_panels();
-
 			$('.dropdown-toggle').dropdown();
 		});
 
