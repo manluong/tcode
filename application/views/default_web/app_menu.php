@@ -49,7 +49,7 @@
 			} else {
 				$menu .= ( isset($thisbutton['nolink']) )
 					? '<li class="'.$thisclass.' nolink">'.$thisbutton['lang'].'</li>'
-					: '<li class="'.$thisclass.'"><a href="'.$thisbutton['link'].'" class="'.$thisicon.'">'.$thisbutton['lang'].'</a></li>';
+					: '<li class="'.$thisclass.'"><a href="'.$thisbutton['link'].'" class="'.$thisicon.' ajax">'.$thisbutton['lang'].'</a></li>';
 			}
 
 		}

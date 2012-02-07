@@ -9,7 +9,7 @@ if (isset($breadcrumb)) {
 			echo '<li class="active">';
 		}
 
-		echo '<a href="',$bc['link'],'" title="',$bc['title'],'" class="appname">';
+		echo '<a href="',$bc['link'],'" title="',$bc['title'],'" class="appname ajax">';
 		echo $bc['title'];
 		echo '</a>';
 
