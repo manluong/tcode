@@ -79,7 +79,6 @@ body {
 	padding: 10px;
 	z-index: 5;
 	position:relative;
-	cursor:pointer;
 }
 #status .avatar {
 	position:relative;
@@ -88,6 +87,7 @@ body {
 	width:50px;
 	float:left;
 	z-index:5;
+	cursor:pointer;
 }
 #status .avatar img {
 	position:relative;
@@ -95,37 +95,22 @@ body {
 }
 #status-details {
 	margin-left: 60px;
+	cursor:pointer;
 }
 #status-details div {
 	font-size:11px;
 	line-height:16px;
 }
-#status-update {
-	position:absolute;
-	z-index:20;
 
-	min-height:100px;
-	width:200px;
-	height: 200px;
+#status-update {
+	display:none;
+	margin-top: 10px;
 }
-#status-update .popover-inner {
-	width: 100%;
+#status-update-submit {
+	margin-right:10px;
 }
-#status-update a.close {
-	line-height: 0.5;
-}
-#status-update .popover-content {
-	padding:5px;
-}
-#status-update .form-actions {
-	margin:0;
-	padding:10px;
-}
-#status-update .form-actions a {
-	margin:0 5px;
-}
-#status-update input {
-	width:180px;
+#status-update input, #status-update select {
+	width:190px;
 }
 #status-more {
 	font-size:11px;
@@ -139,12 +124,10 @@ body {
 	padding-bottom:80px;
 	width:150%;
 	position:relative;
-	z-index:5;
+	bottom:20px;
+	top:0;
 }
-#nav ul {
-	position:relative;
-	z-index: 5;
-}
+
 #nav ul li {
 	background-color:#FFF;
 	font-size:16px;
@@ -183,9 +166,12 @@ body {
 	bottom:40px;
 	height:50px;
 	width:100%;
-	z-index:0;
+	z-index:4;
 	text-align: center;
 }
+
+
+
 
 #sidebar-footer {
 	/*border-top:solid 1px #888;*/
@@ -217,6 +203,9 @@ body {
 
 
 
+#popup_message {
+
+}
 
 #content-container {
 	background:#789 url('../images/bg-stripes.png');
@@ -264,10 +253,6 @@ body {
 }
 
 
-#popup_message {
-
-}
-
 
 
 
@@ -281,18 +266,6 @@ body {
 .widget-footer{padding:14px 15px 15px;margin-bottom:0;background-color:#f5f5f5;border-top:1px solid #ddd;-webkit-border-radius:0 0 6px 6px;-moz-border-radius:0 0 6px 6px;border-radius:0 0 6px 6px;-webkit-box-shadow:inset 0 1px 0 #ffffff;-moz-box-shadow:inset 0 1px 0 #ffffff;box-shadow:inset 0 1px 0 #ffffff;*zoom:1;}.modal-footer:before,.modal-footer:after{display:table;content:"";}
 .widget-footer:after{clear:both;}
 .widget-footer .btn{float:right;margin-left:5px;margin-bottom:0;}
-
-.widgetsize-12 {
-	width:100%;
-}
-.widgetsize-6 {
-	width:48%;
-	margin: 0 1%;
-}
-
-
-
-.fade_text { color:#AAA; }
 
 
 
