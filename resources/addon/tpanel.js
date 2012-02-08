@@ -91,7 +91,11 @@ function apps_action_json(jarray) {
 
 function apps_action_pageload(url) {
     //alert(url);
-    window.location = url;
+    //window.location = url;
+	$.pjax({
+		url: url,
+		container: '#content-container'
+	});
 }
 
 

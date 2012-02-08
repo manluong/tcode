@@ -40,7 +40,7 @@
 					if (isset($thisbuttonchild['lang'])) $lang = $thisbuttonchild['lang'];
 
 					$menu .= '<li class="'.$thisclass.'">';
-					$menu .= '<a href="'.$link.'" class="'.$thisicon.'">'.$lang.'</a>';
+					$menu .= '<a href="'.$link.'" class="'.$thisicon.' ajax">'.$lang.'</a>';
 					$menu .= '</li>';
 				}
 				$menu .= '</ul>';
