@@ -20,6 +20,7 @@ class View_button extends CI_Model {
 
 		if ($element_button['buttons']) {
 			foreach ($element_button['buttons'] as $this_button) {
+				$this_iconclass = '';
 
 				if ($this_button['position'] == 'rowone') {
 	            	$result['rowone'] = output_button_formatjs($this_button,$this->thisid['encode'],$saveid);
@@ -50,34 +51,30 @@ class View_button extends CI_Model {
 				$previous_align = $this_button['align'];
 
 				//add icon class to button
-				$this_iconclass = '';
 				if (preg_match('/UIXX/', $this_button['lang'])){
 					//2 icon = UIXXplusXXplusXX
 					//1 icon = UIXXplusXXXX
 					//1 right icon = UIXXXXplusXX
 					$this_langarray = explode('XX', $this_button['lang'],4); //print_r($this_iconclass);
 					$this_button['lang'] = $this_langarray[3];
-					if ($this_langarray[1]) $this_iconclass = ' data-icon-primary="ui-icon-'.$this_langarray[1].'"';
-					if ($this_langarray[2]) $this_iconclass .= ' data-icon-secondary="ui-icon-'.$this_langarray[2].'"';
+					if ($this_langarray[1]) $this_iconclass = ' <i class="icon-'.$this_langarray[1].'"></i> ';
+					if ($this_langarray[2]) $this_iconclass .= ' <i class="icon-'.$this_langarray[2].'"></i> ';
 				}
 
 				if ((isset($this_button['icononly']) && $this_button['icononly']) || $this_button['lang'] == 'xx') {
-					$this_icon_only = ' data-icon-only="true"';
 					$this_button['lang'] = '';
-				} else {
-					$this_icon_only = '';
 				}
 
 				if (isset($this_button['lang__d']) && $this_button['lang__d']) $result[$this_button['position']] .= '<font class="bu__d">'.$this_button['lang__d'].'</font>';
 
 				if ($this_button['type'] == 'listtitle') {
-					$result[$this_button['position']] .= '<font style="padding-left:10px; padding-right:10px; font-weight: bold;">'.$this_button['lang'].'</font>';
+					$result[$this_button['position']] .= '<span style="padding-left:10px; padding-right:10px; font-weight: bold;">'.$this_button['lang'].'</span>';
 				} elseif ($button_save_nojs && ($this_button['type'] == 'as' || $this_button['type'] == 'es' || $this_button['type'] == 'ss' || $this_button['type'] == 'fs')){
-					$result[$this_button['position']] .= '<button type="submit" class="button"'.$this_iconclass.''.$this_icon_only.'>'.$this_button['lang'].'</button>';
+					$result[$this_button['position']] .= '<button type="submit" class="btn">'.$this_iconclass.$this_button['lang'].'</button>';
 					//} elseif ($dgroup_submit && ($this_button['type'] == "as" || $this_button['type'] == "es" || $this_button['type'] == "ss" || $this_button['type'] == "fs")){
-					//$result[$this_button['position']] .= '<button type="submit" class="button"'.$this_iconclass.''.$this_icon_only.' onclick="'.output_button_formatjs($this_button,$thisid_en,0,1,$this_element_id).'">'.$this_button['lang'].'</button>';
+					//$result[$this_button['position']] .= '<button type="submit" class="button"'.$this_iconclass.' onclick="'.output_button_formatjs($this_button,$thisid_en,0,1,$this_element_id).'">'.$this_button['lang'].'</button>';
 				} else {
-					$result[$this_button['position']] .= '<button type="button" class="button"'.$this_iconclass.''.$this_icon_only.' onclick="'.$button_savecancel_js.''.$this->output_button_formatjs($this_button,$this->url['id_encrypted'],0,$listid).'">'.$this_button['lang'].'</button>';
+					$result[$this_button['position']] .= '<button type="button" class="btn" onclick="'.$button_savecancel_js.''.$this->output_button_formatjs($this_button,$this->url['id_encrypted'],0,$listid).'">'.$this_iconclass.$this_button['lang'].'</button>';
 				}
 
 				//$button[$countbutton]['targeturl']
@@ -104,7 +101,7 @@ class View_button extends CI_Model {
 		$count = 0;
 		$result = '';
 		foreach ($button as $this_button) {
-			$this_iconclass = $targetvalue = $this_icon_only = '';
+			$this_iconclass = $targetvalue = '';
 
 			if (preg_match('/UIXX/', $this_button['lang'])){
 				//2 icon = UIXXplusXXplusXX
@@ -126,7 +123,7 @@ class View_button extends CI_Model {
 			if (isset($targetid[$count]['targetvalue'])) $targetvalue = $targetid[$count]['targetvalue'];
 
 
-			$result .= '<button type="button" class="button"'.$this_iconclass.''.$this_icon_only.' onclick="'.$this->output_button_formatjs($this_button,0,$targetid[$count]['targetid'],0,$targetvalue).'">'.$this_button['lang'].'</button>';
+			$result .= '<button type="button" class="btn"'.$this_iconclass.' onclick="'.$this->output_button_formatjs($this_button,0,$targetid[$count]['targetid'],0,$targetvalue).'">'.$this_button['lang'].'</button>';
 
 			$count++;
 		}

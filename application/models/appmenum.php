@@ -172,6 +172,7 @@ class AppmenuM extends CI_Model {
 					//$button[$thisparent][$button_count]['replace_dgroupname'] = $field_menu['core_apps_menu_dgroupname'];
 					//$button[$thisparent][$button_count]['replace_fdataname'] = $field_menu['core_apps_menu_fdataname'];
 
+					/*
 					if ($field_menu['core_apps_menu_replacetitle']) {
 						if ($field_menu['core_apps_menu_replace_thisidtype']) {
 							$this_replace_thisid = $this->App_generalM->moreid[$field_menu['core_apps_menu_replace_thisidtype']];
@@ -181,6 +182,7 @@ class AppmenuM extends CI_Model {
 						$this->load->model('element/Element_dgroup');
 						$button[$thisparent][$button_count]['lang'] = $this->Element_dgroup->element_fdata_from_dgroup($field_menu['core_apps_menu_dgroupname'], $field_menu['core_apps_menu_fdataname'], $this_replace_thisid, $field_menu['core_apps_menu_dgroupapp']);
 					}
+					*/
 
 					if ($field_menu['core_apps_menu_seprator']) {
 						$button_count++;
@@ -196,6 +198,8 @@ class AppmenuM extends CI_Model {
 
 		if (isset($this->layout['breadcrumb']) && $this->layout['breadcrumb']) {
 			//format the breadcrumb
+			$appmenu['apphead'] = 1;
+
 			$this_breadcrumb[0]['title'] = $this->lang->line('coreapptitle_'.$menugp_app);
 			$this_breadcrumb[0]['link'] = '/'.$menugp_app;
 
@@ -209,23 +213,21 @@ class AppmenuM extends CI_Model {
 						$this_breadcrumb_found = 1;
 					}
 
-					if ( isset($button[$thisbutton['name']]) ) {
-						foreach ($button[$thisbutton['name']] as $thisbuttonchild) {
-							if ($thisbuttonchild['an'] == $an) {
-								$this_breadcrumb[2]['title'] = $thisbuttonchild['lang'];
-								$this_breadcrumb[2]['link'] = $thisbuttonchild['link'];
-								$this_breadcrumb[1]['title'] = $thisbutton['lang'];
-								$this_breadcrumb[1]['link'] = $thisbutton['link'];
-								$this_breadcrumb_found = 1;
-							}
-						}
-					}
+					if ( !isset($button[$thisbutton['name']]) ) continue;
 
+					foreach ($button[$thisbutton['name']] as $thisbuttonchild) {
+						if ($thisbuttonchild['an'] != $an) continue;
+
+						$this_breadcrumb[2]['title'] = $thisbuttonchild['lang'];
+						$this_breadcrumb[2]['link'] = $thisbuttonchild['link'];
+						$this_breadcrumb[1]['title'] = $thisbutton['lang'];
+						$this_breadcrumb[1]['link'] = $thisbutton['link'];
+						$this_breadcrumb_found = 1;
+					}
 				}
 			}
 
 			$appmenu['breadcrumb'] = $this_breadcrumb;
-			$appmenu['apphead'] = 1;
 		}
 
 
