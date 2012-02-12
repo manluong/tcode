@@ -158,7 +158,7 @@ class AppmenuM extends CI_Model {
 
 					$button[$thisparent][$button_count]['name'] = $field_menu['core_apps_menu_name'];
 					$langname = 'appmenu_'.$field_menu['core_apps_menu_name'];
-					$button[$thisparent][$button_count]['lang'] = $this->lang->line('core'.$langname);
+					$button[$thisparent][$button_count]['lang'] = $this->lang->line('core_'.$langname);
 
 					$button[$thisparent][$button_count]['icon'] = $field_menu['core_apps_menu_icon'];
 					//$button[$thisparent][$button_count]['icon2'] = $field_menu['core_apps_menu_icon2'];
@@ -200,7 +200,7 @@ class AppmenuM extends CI_Model {
 			//format the breadcrumb
 			$appmenu['apphead'] = 1;
 
-			$this_breadcrumb[0]['title'] = $this->lang->line('coreapptitle_'.$menugp_app);
+			$this_breadcrumb[0]['title'] = $this->lang->line('core_apptitle_'.$menugp_app);
 			$this_breadcrumb[0]['link'] = '/'.$menugp_app;
 
 			if ($button['top']) {

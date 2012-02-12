@@ -77,7 +77,7 @@ class LayoutM extends CI_Model {
 	    } else {
 			$rs = $this->db->select()
 					->from('core_layout_format')
-					->where('core_layout_format_name', 'default')
+					->where('core_layout_format_name', 'full')
 					->limit(1)
 					->get();
 	    }
@@ -132,7 +132,7 @@ class LayoutM extends CI_Model {
 
 
 	function get_mainmenu() {
-		$rs = $this->db->select('core_apps_name, core_apps_icon')
+		$rs = $this->db->select('core_apps_name')
 				->from('core_apps')
 				->where('core_apps_status', 1)
 				->where('core_apps_showmenu', 1)

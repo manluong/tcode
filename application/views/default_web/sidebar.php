@@ -253,7 +253,7 @@
 					<span class="app-icon">
 						<img src="/resources/template/<?=get_template()?>/images/placeholder-image.jpg" />
 					</span>
-					<span class="app-name"><?=$this->lang->line('core'.$langname)?></span>
+					<span class="app-name"><?=$this->lang->line('core_'.$langname)?></span>
 				</a>
 			</li>
 		<?php
