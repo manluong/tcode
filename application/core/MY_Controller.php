@@ -4,11 +4,14 @@ class MY_Controller extends CI_Controller {
 	var $url = array(
 		'app' => '',
 		'app_id' => '',
+
 		'action' => '',
 		'actiongp' => '',
+
 		'id_plain' => 0,
 		'id_encrypted' => 0,
 		'id' => 0,	//original ID passed in by request
+
 		'subaction' => '',
 	);
 	var $re_url = array(
@@ -167,7 +170,14 @@ class MY_Controller extends CI_Controller {
 		 * use plain id only check
 		 *
 		 */
+/*
+		$this->url['subaction'] = 'v';
+		$this->load->model('DatasetM');
+		$this->DatasetM->load('info');
 
+		echo '<pre>', print_r($this->DatasetM->get_fields(), TRUE), '</pre>';
+		die();
+*/
 
 		//looping the elements, and switch the element_type
 
