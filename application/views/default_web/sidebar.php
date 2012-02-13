@@ -245,8 +245,6 @@
 			foreach ($app_list as $field1) {
 				$langname = 'apptitle_'.$field1['core_apps_name'];
 				$icon = '';
-
-				if ($field1['core_apps_icon']) $icon = $field1['core_apps_icon'];
 		?>
 			<li>
 				<a href="<?=base_url().$field1['core_apps_name']?>" data-app_name="<?=$field1['core_apps_name']?>" class="ajax">
