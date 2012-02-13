@@ -634,6 +634,7 @@ class MY_Controller extends CI_Controller {
 
 			}
 
+			/*
 			if (isset($data['ajax']) && $data['ajax']) {
 				$result['jsonload'] .= 'apps_action_ajax("';
 				$result['jsonload'] .= $data['ajax']['app'].'","';
@@ -641,6 +642,16 @@ class MY_Controller extends CI_Controller {
 				$result['jsonload'] .= $data['ajax']['subaction'].'","';
 				$result['jsonload'] .= $data['ajax']['elementid'].'","';
 				$result['jsonload'] .= $data['ajax']['id'].'");';
+			}
+			*/
+			
+			if (isset($data['ajax']) && $data['ajax']) {
+				$result['jsonload'] .= 'ajax_content("';
+				$result['jsonload'] .= $data['ajax']['app'].'/';
+				$result['jsonload'] .= $data['ajax']['an'].'/';
+				$result['jsonload'] .= $data['ajax']['id'].'/';
+				$result['jsonload'] .= $data['ajax']['subaction'].'","';
+				$result['jsonload'] .= $data['ajax']['elementid'].'");';
 			}
 
 			$count_output++;

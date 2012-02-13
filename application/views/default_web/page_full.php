@@ -5,13 +5,16 @@
 
 	<title><?=$title?></title>
 
+	<script type="text/javascript" src="/resources/addon/tpl.js"></script>
 	<script type="text/javascript" src="/resources/addon/jquery.min.js"></script>
 	<script type="text/javascript" src="/resources/addon/jquery.ui.min.js"></script>
 	<script type="text/javascript" src="/resources/addon/tpanel.js"></script>
+	<script type="text/javascript" src="/resources/addon/content.js"></script>
 	<script type="text/javascript" src="/resources/addon/jquery.dataTables.min.js"></script>
 	<script type="text/javascript" src="/resources/addon/global.js"></script>
 	<script type="text/javascript" src="/resources/addon/pjax.min.js"></script>
-
+	<script type="text/javascript" src="/resources/addon/mustache.js"></script>
+		
 	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/bootstrap-tooltip.js"></script>
 	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/bootstrap-dropdown.js"></script>
 	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/bootstrap-tab.js"></script>
