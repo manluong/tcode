@@ -2,13 +2,9 @@
 
 if (isset($status) && $status == 3) {
 echo '
-	<div class="ui-widget message closeable">
-		<div class="ui-state-error ui-corner-all">
-			<p>
-				<span class="ui-icon ui-icon-alert"></span>
-				<strong>'.lang('accesslogin_failure').'</strong>
-			</p>
-		</div>
+	<div class="alert alert-error">
+		<i class="icon-exclamation-sign"></i>
+		<strong>'.lang('accesslogin_failure').'</strong>
 	</div>
 ';
 }

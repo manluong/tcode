@@ -154,7 +154,7 @@ function reset_return_url_form() {
 	}
 
 	if (count($result)==0) return '';
-	return implode('<br />', $result);
+	return implode("\n\r", $result);
 }
 
 function execute_return_url($link_only=FALSE) {

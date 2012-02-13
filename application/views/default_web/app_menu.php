@@ -1,4 +1,6 @@
 <?php
+	if (!isset($appmenu_gp)) $appmenu_gp = '';
+
 	if (isset($style)) {
 		echo '<div id="appmenu_',$appmenu_gp,'" class="',$style,'">';
 	} else {
@@ -8,7 +10,7 @@
 
     <ul class="nav nav-pills">
 <?php
-    if ($appmenu && $button['top']) {
+	if ($appmenu && $button['top']) {
 		$menu = '';
 
 		foreach ($button['top'] as $thisbutton) {
