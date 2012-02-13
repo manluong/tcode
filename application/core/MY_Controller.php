@@ -340,7 +340,7 @@ class MY_Controller extends CI_Controller {
 		//}
 
 		//temp fix for new json output for dgroup
-		if ($this->layout['type'] == 2) $this->layout['type'] = 4;
+		if ($this->layout['type'] == 'html') $this->layout['type'] = 'json';
 
 		switch ($this->layout['type']) {
 			// 0=no output (no swithc case form this)
@@ -351,36 +351,28 @@ class MY_Controller extends CI_Controller {
 			// /////5=json auto complete
 			// /////6=html one value
 
-			case '1':
-				//load the template page.inc file to output the full page with template layout
-				//include_once DOCUMENT_ROOT.'/'.$layout['folderinc'].'/page.inc';
-				//output_fullpage($output,$layout);
-				$this->output_fullpage();
-
-				break;
-
-			case '2':
+			case 'html':
 				header('Content-Type:text/html');
 				//just print content in the array name "html"
 				if ($this->data){
-					foreach ($this->data as $this_output) {
-						if (isset($this_output['html'])) echo $this_output['html'];
+					foreach ($this->data as $output) {
+						if (isset($output['html'])) echo $output['html'];
 					}
 				}
 
 				break;
 
-			case '3':
+			case 'xml':
 				header('Content-Type:text/xml');
 				// this part is changed but yet to test
 				// if there is an array name "xml", just print, content alreay in xml format
 				// else if there is array name "data", convert to xml format
 				//echo $h_xml; << old value name
 				if ($this->data){
-					foreach ($this->data as $this_output) {
-						if ($this_output['xml']){
-							echo $this_output['xml'];
-						} elseif ($this_output['data']) {
+					foreach ($this->data as $output) {
+						if ($output['xml']){
+							echo $output['xml'];
+						} elseif ($output['data']) {
 							//php array to xml format
 						}
 					}
@@ -389,17 +381,17 @@ class MY_Controller extends CI_Controller {
 
 				break;
 
-			case '4':
+			case 'json':
 				header('Content-type: text/json');
 				header('Content-type: application/json');
 				// if there is an array name "json", just print, content alreay in json format
 				// else if there is array name "data", convert to json format
 				if ($this->data) {
-					foreach ($this->data as $this_output) {
-						if (isset($this_output['json'])) {
-							echo $this_output['json'];
-						} elseif (isset($this_output['data'])) {
-							echo json_encode($this_output['data']);
+					foreach ($this->data as $output) {
+						if (isset($output['json'])) {
+							echo $output['json'];
+						} elseif (isset($output['data'])) {
+							echo json_encode($output['data']);
 						}
 					}
 				}
@@ -408,6 +400,14 @@ class MY_Controller extends CI_Controller {
 				//header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
 				break;
 
+			case 'full':
+			default:
+				//load the template page.inc file to output the full page with template layout
+				//include_once DOCUMENT_ROOT.'/'.$layout['folderinc'].'/page.inc';
+				//output_fullpage($output,$layout);
+				$this->output_fullpage();
+
+				break;
 		}
 	}
 

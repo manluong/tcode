@@ -86,7 +86,7 @@ class LayoutM extends CI_Model {
 
 		$result = $rs->row_array();
 
-		$CI->layout['type'] = $result['core_layout_format_type'];
+		$CI->layout['type'] = $result['core_layout_format_name'];
 		$CI->layout['logo'] = $result['core_layout_format_logo'];
 		$CI->layout['menu'] = $result['core_layout_format_menu'];
 		$CI->layout['footer'] = $result['core_layout_format_footer'];
