@@ -62,8 +62,10 @@ class Helloworld extends MY_Controller {
 	function sendjson_form(){
 
 		$data = array();
+
 		
 		$links = ',"links":[{"type":"submit","url":"/helloworld/contact/1/as","target":"","text":"Submit"},{"type":"ajax","url":"/helloworld/contact/1/v","target":"","text":"Cancel"}]';
+
 
 		$the_dataarray = '{"label":"First Name","value":"Anthony","form_type":"text","name":"firstname","required":"","min":"","max":"","validate":"","pattern":"","chk_name0":"","chk_name1":"","date_showformat":"","sel_multiple":"","select_options":[{"key":"Option 1","value":"1"},{"key":"Option 1","value":"1"}],"helptext":"help me text"}';
 		$the_dataarray .= ',{"label":"Last Name","value":"Andy","form_type":"text","name":"lastname","required":"","min":"","max":"","validate":"","pattern":"","chk_name0":"","chk_name1":"","date_showformat":"","sel_multiple":"","select_options":[{"key":"Option 1","value":"1"},{"key":"Option 1","value":"1"}],"helptext":"help me text"}';
