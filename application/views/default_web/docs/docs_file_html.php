@@ -104,24 +104,25 @@ $(document).ready(function () {
 
 			$.get('/docs/json_tree/1/v').success(function (data) {
 				var html = '';
-				function generate_html(data) {
+				html += '<ul>';
+				html += '<li class="tree-folders">/<button class="btn-primary move" folder_id="1">Move</button></li>';
+				function generate_html(data, index) {
 					html += '<ul>';
-					html += '<li class="tree-folders">/<button class="btn-primary move" folder_id="1">Move</button></li>';
-
 					for(var i=0;i<data.length;i++) {
 						html += '<li class="tree-folders">'+data[i].a_docs_displayname+'<button class="btn-primary move" folder_id="'+data[i].a_docs_id+'">Move</button></li>';
 						if (data[i].child !== undefined) {
-							generate_html(data[i].child);
+							generate_html(data[i].child, i);
 						}
 						else {
 							html += '</li>';
+							if (index !== 0 && data[index+1] !== undefined) generate_html(data[index+1], 0);
 						}
 					}
-					html += '</ul>';
+					html += '</ul></ul>';
 					return html;
 				}
-				;
-				$('#tree').html(generate_html(data));
+
+				$('#tree').html(generate_html(data, 0));
 
 				$('.move').on('click', function () {
 					$.post('/docs/move_file/'+d.docs_id+'/',{folder_id: $(this).attr('folder_id')})
