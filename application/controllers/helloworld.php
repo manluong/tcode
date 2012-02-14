@@ -63,7 +63,6 @@ class Helloworld extends MY_Controller {
 
 		$data = array();
 
-
 		
 		$links = ',"links":[{"type":"submit","url":"/helloworld/contact/1/as","target":"","text":"Submit"},{"type":"ajax","url":"/helloworld/contact/1/v","target":"","text":"Cancel"}]';
 
@@ -95,6 +94,7 @@ class Helloworld extends MY_Controller {
 		$data['isdiv'] = 0;
 
 		return($data);
+
 
 
 	}
