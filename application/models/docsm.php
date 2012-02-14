@@ -97,9 +97,8 @@ class docsM extends My_Model {
 
 	function get_parent_id($id) {
 		$query = $this->db->select('a_docs_parentid')
-			->from('a_docs')
 			->where(array('a_docs_id'=>$id))
-			->get();
+			->get('a_docs',1);
 		return $query->row_array();
 	}
 
@@ -168,16 +167,8 @@ class docsM extends My_Model {
 		return $values['a_docs_id'];
 	}
 
-	// Call this when creating/updating folders.
+	/*
 	function update_a_docs_dir_directory($values) {
-		$data = array(
-			'a_docs_parentid' => isset($values['parentid'])? $values['parentid'] : '',
-			'a_docs_isdir' => TRUE,
-			'a_docs_displayname' => isset($values['displayname'])? $values['displayname'] : '',
-			'a_docs_desc' => isset($values['desc'])? $values['desc'] : '',
-			'a_docs_status' => isset($values['a_docs_status'])? $values['a_docs_status'] : '',
-			'a_docs_stamp' => get_current_stamp(),
-		);
 		if(isset($values['id'])) {
 			$this->db->where(array('id'=> $value['id'], 'a_docs_isdir' => TRUE))
 				->update('a_docs', $data);
@@ -186,6 +177,16 @@ class docsM extends My_Model {
 		}
 		$values['a_docs_id'] = $this->db->insert_id();
 		return 	$this->update_a_docs_dir($values);
+	}*/
+
+	function insert_a_docs_entry($data) {
+		$this->db->insert('a_docs',$data);
+		return $this->db->insert_id();
+	}
+
+	function insert_a_docs_dir_entry($data) {
+		$this->db->insert('a_docs_dir',$data);
+		return $this->db->insert_id();
 	}
 
 	function insert_docs($values) {
@@ -245,14 +246,13 @@ class docsM extends My_Model {
 	}
 
 	function update_docs_display_name($title, $id) {
-		$data = array('a_docs_displayname' => $title);
 		$this->db->where('a_docs_id', $id)
 			->update('a_docs',$data);
 		return $this->db->affected_rows();
 	}
 
 	function get_all_versions($docs_id) {
-		$query = $this->db->select('a_docs_ver_id,a_docs_displayname,a_docs_ver_filename,a_docs_ver_stamp, a_docs_dir_dirpath')
+		$query = $this->db->select('a_docs_ver_id,a_docs_displayname,a_docs_ver_filesize,a_docs_ver_filename,a_docs_ver_stamp, a_docs_dir_dirpath')
 			->from('a_docs_ver')
 			->join('a_docs','a_docs.a_docs_id = a_docs_ver.a_docs_ver_docsid')
 			->join('a_docs_dir','a_docs_dir.a_docs_dir_docs_id = a_docs.a_docs_parentid')
