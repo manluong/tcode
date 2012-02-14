@@ -73,6 +73,9 @@ class MY_Controller extends CI_Controller {
 		$this->load->model('LogM');
 		$this->load->model('LicenseM');
 
+		$this->load->model('DatasetM');
+		$this->load->model('RespM');
+
 		$this->url['app_id'] = $this->AppM->get_id($this->url['app']);
 		$this->url['actiongp'] = $this->AppM->get_group($this->url['app'], $this->url['action']);
 
@@ -170,14 +173,7 @@ class MY_Controller extends CI_Controller {
 		 * use plain id only check
 		 *
 		 */
-/*
-		$this->url['subaction'] = 'v';
-		$this->load->model('DatasetM');
-		$this->DatasetM->load('info');
 
-		echo '<pre>', print_r($this->DatasetM->get_fields(), TRUE), '</pre>';
-		die();
-*/
 
 		//looping the elements, and switch the element_type
 
@@ -644,7 +640,7 @@ class MY_Controller extends CI_Controller {
 				$result['jsonload'] .= $data['ajax']['id'].'");';
 			}
 			*/
-			
+
 			if (isset($data['ajax']) && $data['ajax']) {
 				$result['jsonload'] .= 'ajax_content("';
 				$result['jsonload'] .= $data['ajax']['app'].'/';
