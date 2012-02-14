@@ -8,12 +8,14 @@
 	<script type="text/javascript" src="/resources/addon/tpl.js"></script>
 	<script type="text/javascript" src="/resources/addon/jquery.min.js"></script>
 	<script type="text/javascript" src="/resources/addon/jquery.ui.min.js"></script>
-	<script type="text/javascript" src="/resources/addon/tpanel.js"></script>
-	<script type="text/javascript" src="/resources/addon/content.js"></script>
+	<script type="text/javascript" src="/resources/addon/jquery.tools.min.js"></script>
 	<script type="text/javascript" src="/resources/addon/jquery.dataTables.min.js"></script>
-	<script type="text/javascript" src="/resources/addon/global.js"></script>
-	<script type="text/javascript" src="/resources/addon/pjax.min.js"></script>
 	<script type="text/javascript" src="/resources/addon/mustache.js"></script>
+	<script type="text/javascript" src="/resources/addon/pjax.min.js"></script>
+	
+	<script type="text/javascript" src="/resources/addon/global.js"></script>
+	<script type="text/javascript" src="/resources/addon/content.js"></script>
+	<script type="text/javascript" src="/resources/addon/tpanel.js"></script>
 		
 	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/bootstrap-tooltip.js"></script>
 	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/bootstrap-dropdown.js"></script>
@@ -25,7 +27,8 @@
 	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/base.css" />
 	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/bootstrap.min.css" />
 	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/bootstrap.min.responsive.css" />
-
+	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/jquerytool.css" />
+	
 	<?=$head?>
 
 </head>

@@ -211,17 +211,36 @@ function ajax_content_save(json){
 function ajax_content_form(json,divid){
 
 	var html = "";
+	var linkhtml = "";
 	var thisLength = json['details']['data'].length;
 	var jsonformat = { items: [] };
 	var addclass = "input-xlarge";
-	//var template_input = "<div class=\"control-group\"><label class=\"control-label\" for=\"form_{{fieldname}}\">{{label}}</label><div class=\"controls\"><input type=\"text\" class=\"input-xlarge\" id=\"form_{{fieldname}}\" value=\"{{value}}\"><p class=\"help-block\">{{helptext}}</p></div></div>";
 
-	
-	//if not custom template
 	for(var i = 0; i < thisLength; i++) {
+		
+		//SET STYLE
 		json['details']['data'][i]['addclass'] = 'input-xlarge';
+		//json['details']['data'][i]['helpblk'] = 'help-block';
+		
 		template = tpl_form[json['details']['data'][i]['form_type']];
+		
+		switch (json['details']['data'][i]['form_type']) {
+			
+			case 'select':
+			if(json['details']['data'][i]['form_type'] == "select" && json['details']['data'][i]['value']){
+				var selLength = json['details']['data'][i]['select_options'].length;	
+				for(var si = 0; si < selLength; si++) {
+					if (json['details']['data'][i]['select_options'][si]['value'] == json['details']['data'][i]['value']){
+						json['details']['data'][i]['select_options'][si]['selected'] = ' SELECTED';	
+					}
+				}
+			}
+			break;
+			
+		}
+		
 		jsonformat.items[i] = {control: Mustache.to_html(template, json['details']['data'][i]), fieldname: json['details']['data'][i]['name'], label: json['details']['data'][i]['label'], helptext: json['details']['data'][i]['helptext']};
+
 	}
 		
 	
@@ -230,69 +249,106 @@ function ajax_content_form(json,divid){
 	console.log(jsonformat);
 	html = Mustache.to_html(tpl_form_ctlgroup, jsonformat)
 
-	document.getElementById(divid).innerHTML = '<div class="formview"><form class="form-horizontal" id="formid_'+divid+'" name="formid_'+divid+'">'+html+'</form></div><div id="'+divid+'_submiturl" style="display:none;"></div><div id="'+divid+'_formsetup" style="display:none;"></div>';
 
+	//LINKS
+	var linkLength = json['details']['links'].length;
+	for(var iln = 0; iln < linkLength; iln++) {
+		
+		if (json['details']['links'][iln]['type'] == "ajax" && (json['details']['links'][iln]['target'] == "" || json['details']['links'][iln]['target'] == null)) {
+			json['details']['links'][iln]['target'] = divid;
+		}
+		
+		template = tpl_link[json['details']['links'][iln]['type']];
+		linkhtml = linkhtml + Mustache.to_html(template, json['details']['links'][iln]);
+		
+		//set submit url
+		if (json['details']['links'][iln]['type'] == "submit") {
+			var submiturl = json['details']['links'][iln];
+		}
+		
+	}
+	var linkarray = {links: linkhtml}
+	linkhtml = Mustache.to_html(tpl_link.warp, linkarray);
+
+
+	document.getElementById(divid).innerHTML = '<div class="formview"><form class="form-horizontal" id="formid_'+divid+'" name="formid_'+divid+'">'+html+linkhtml+'</form></div><div id="'+divid+'_submiturl" style="display:none;"></div><div id="'+divid+'_formsetup" style="display:none;"></div>';
+
+
+	
+	
+
+
+          
     //formui_reload();
 	//$(".form .form-input textarea").css({"max-width":"100%"})
-	/*
-    var thisLength = json['details']['data'].length;
-    
-    
+	    
 	for(var i = 0; i < thisLength; i++) {
-		if (json['formsetup'][i]['set']){
-			switch (json['formsetup'][i]['set']) {
+		switch (json['details']['data'][i]['form_type']) {
 
-				case 'uniform':
-				$('#form_'+json['formsetup'][i]['field']).uniform();
-				break;
+			//case 'uniform':
+			//$('#form_'+json['formsetup'][i]['field']).uniform();
+			//break;
 
-				case 'combobox':
-				$('#form_'+json['formsetup'][i]['field']).combobox();
-				break;
+			//case 'combobox':
+			//$('#form_'+json['formsetup'][i]['field']).combobox();
+			//break;
 
-				case 'date':
-				$('#form_'+json['formsetup'][i]['field']).datepicker({dateFormat: 'yy/mm/dd'});
-				break;
+			case 'date':
+			$('#form_'+json['details']['data'][i]['name']).datepicker();
+			//$('#form_'+json['details']['data'][i]['name']).datepicker({dateFormat: 'yy/mm/dd'});
+			break;
 
-				case 'datetime':
-				$('#form_'+json['formsetup'][i]['field']).datetimepicker({dateFormat: 'yy/mm/dd',timeFormat: 'hh:mm:ss'});
-				break;
+			case 'datetime':
+			//$('#form_'+json['details']['data'][i]['name']).datetimepicker({dateFormat: 'yy/mm/dd',timeFormat: 'hh:mm:ss'});
+			break;
 
-				case 'time':
-				$('#form_'+json['formsetup'][i]['field']).timepicker({timeFormat: 'hh:mm:ss'});
-				break;
+			case 'time':
+			//$('#form_'+json['details']['data'][i]['name']).timepicker({timeFormat: 'hh:mm:ss'});
+			break;
 
-			}
 		}
 
-		if (json['formsetup'][i]['autocomplete']){
-			dgroup_autocomplete(json['formsetup'][i]['field'],json['formsetup'][i]['autocomplete']);
-		}
+		//if (json['formsetup'][i]['autocomplete']){
+		//	dgroup_autocomplete(json['formsetup'][i]['field'],json['formsetup'][i]['autocomplete']);
+		//}
 
 	}
 
-    document.getElementById(divid+"_submiturl").innerHTML = json['dgroup_savejs']['base_url']+json['dgroup_savejs']['app']+'/'+json['dgroup_savejs']['an']+'/'+json['dgroup_savejs']['thisid']+'/'+json['dgroup_savejs']['aved'];
+    //ajax_content_submit(divid,submiturl,json);
 
-    var formsetup_text = JSON.stringify(json['formsetup'], json_replacer);
-    document.getElementById(divid+"_formsetup").innerHTML = formsetup_text;
-    //document.getElementById(json['element_id']+"_formsetup").innerHTML = json['formsetup'];
+$('#formid_'+divid).validator().submit(function(e) {
+console.log(e);
+	var form = $(this);
 
-    dgroup_submit(divid);
-    */
+	// client-side validation OK.
+	if (!e.isDefaultPrevented()) {
+	alert('xx');
+		// submit with AJAX
+		$.getJSON("server-fail.js?" + form.serialize(), function(json) {
+
+			// everything is ok. (server returned true)
+			if (json === true)  {
+				form.load("success.php");
+
+			// server-side validation failed. use invalidate() to show errors
+			} else {
+				form.data("validator").invalidate(json);
+			}
+		});
+
+		// prevent default form submission logic
+		e.preventDefault();
+	}else{
+		alert('xxxx');
+	}
+});
+
 
 }
 
-function json_replacer(key, value) {
-if (typeof value === 'number' && !isFinite(value)) {
-    return String(value);
-}
-return value;
-}
-
-function ajax_content_submit(divid){
+function ajax_content_submit(divid,submiturl,json){
 
 	//formui_removeerrmeg('formid_'+element_id);
-
 
 	$('#formid_'+divid).validator({
 		position : 'bottom left',
@@ -303,100 +359,57 @@ function ajax_content_submit(divid){
 
 	  	var form = $(this);
 
-		var formsetup = document.getElementById(divid+"_formsetup").innerHTML;
-		var submiturl = document.getElementById(divid+"_submiturl").innerHTML;
-		var submiturl = $('<div/>').html(submiturl).text();
-		//var submiturl = $(divid+"_submiturl").html(encodedStr).text();
-
-
-
 	  	// client-side validation OK.
 	  	if (!e.isDefaultPrevented()) {
 
 		// prevent default form submission logic
 		e.preventDefault();
 
-		//alert(divid);
-		//alert(formsetup.[0].field);
+		var ajaxvalue = "";		
+		
+		$.each(json['details']['data'], function(index, value) {
 
-		var ajaxvalue = "";
-		var formsetupobj = JSON.parse(formsetup);
-		$.each(formsetupobj, function(index, value) {
-
-			if (value.valuebycheck){
-                if (document.getElementById('form_'+value.field).checked){
-                ajaxvalue = ajaxvalue+value.field+'=1&';
+			if (value.form_type == 'checkbox'){
+                if (document.getElementById('form_'+value.name).checked){
+                ajaxvalue = ajaxvalue+value.name+'=1&';
                 }else{
-                ajaxvalue = ajaxvalue+value.field+'=0&';
+                ajaxvalue = ajaxvalue+value.name+'=0&';
                 };
-			}else if (value.valuebyradio){
-                ajaxvalue = ajaxvalue+value.field+'='+form_radio_getvalue(document.forms['formid_'+divid].elements['form_'+value.field])+'&';
+			}else if (value.form_type == 'radio'){
+                ajaxvalue = ajaxvalue+value.name+'='+form_radio_getvalue(document.forms['formid_'+divid].elements['form_'+value.name])+'&';
 
 			}else{
-				ajaxvalue = ajaxvalue+value.field+'='+document.getElementById('form_'+value.field).value+'&';
+				ajaxvalue = ajaxvalue+value.name+'='+document.getElementById('form_'+value.name).value+'&';
 			}
 
 		});
-
+console.log(submiturl);
 		//$.getJSON(submiturl+form.serialize(), function(json) {
 		dhtmlxAjax.post(submiturl, encodeURI(ajaxvalue),function(loader){
 
-			//console.log(loader.xmlDoc.responseText);
-
 			var json = jQuery.parseJSON(loader.xmlDoc.responseText);
 
-			//console.log(json['form']['save_success']);
-
-			if (json['form']['save_success'] == 1)  {
-			//form.load("success.php");
-			// server-side validation failed. use invalidate() to show errors
-				var buLength = json['savebutton']['buttons'].length;
+			if (json['success'] == 1)  {
+			
+				var buLength = json['details']['links'].length;
 				var targetthisid = "";
 				//auto redirect if there is only 1 button, auto go the the page in the button
 				if (buLength == 1){
-					if (json['savebutton']['buttons'][0]['targetid'] == 'thisid') {
-						targetthisid = json['form']['save_id'];
-					} else if (json['savebutton']['buttons'][0]['targetid'] == 'listid') {
-						targetthisid = json['form']['list_id'];
-					} else {
-						targetthisid = json['savebutton']['buttons'][0]['targetid'];
-					}
-					apps_action_ajax(json['savebutton']['buttons'][0]['targetapp'],json['savebutton']['buttons'][0]['targetan'],json['savebutton']['buttons'][0]['targetaved'],json['savebutton']['buttons'][0]['div'],targetthisid);
+					ajax_content(json['details']['links'][0]['url'],json['details']['links'][0]['target']);	
 				}
 
-				//for(var i = 0; i < formLength; i++) {}
+			} else if (json['details']['data']) {
+				
+				//server-side validation failed. use invalidate() to show errors
+				form.data("validator").invalidate(jQuery.parseJSON(json['details']['data']));
 
-			} else if (json['form']['save_error_json']) {
-				//alert(decodeURIComponent(json['form']['save_error_json']));
-				form.data("validator").invalidate(jQuery.parseJSON(json['form']['save_error_json']));
-
-			} else if (json['form']['save_error_msg']) {
+			} else if (json['message']) {
 
 			}
 		});
 
-		// submit with AJAX
-		//var ajaxvalue = '';
-		//'.$ajax_getvalue.'
-		//dhtmlxAjax.post('?app='+app+'&an='+an+'&thisid='+thisid+'&aved='+aved, encodeURI(ajaxvalue),function(loader){
-
-			  //alert(loader.xmlDoc.responseText);
-			  //jsCkStr = loader.xmlDoc.responseText.substring(0,4)
-
-			  //if (jsCkStr == '//js'){
-			  //if return js
-			  //var head= document.getElementsByTagName('head')[0];
-			  //var script= document.createElement('script');
-			  //script.type= "text/javascript";script.text= loader.xmlDoc.responseText;
-			  //head.appendChild(script);
-
-			  //} else {
-			  //var json = jQuery.parseJSON(loader.xmlDoc.responseText);
-			  //form.data("validator").invalidate(json);
-
-			  //}
-		//});
-
+		}else{
+			alert("not fine");
 		}
 
 	});
