@@ -36,18 +36,29 @@ class Helloworld extends MY_Controller {
 		return($data);
 	}
 
-	function sendjson_list_x(){
+	function sendjson_list() {
+		$this->url['subaction'] = 'l';
 
-		$data = array();
-		$data['json'] = '{"success":"1","message":"1","template":"1","title":"Title","type":"list","details":{"columns":[{"sTitle":null},{"sTitle":null},{"sTitle":null},{"sTitle":null},{"sTitle":null},{"sTitle":""}],"data":[["3","Willson","W.","Willson","Intern7","<div class=\"ar bu-div\"><button type=\"button\" class=\"btn\" onclick=\"ajax_content(\'\/staff\/viewstaff\/nttpw%3D%3D\/v\',\'page\');\"><\/button><\/div>"],["4","John","J.","Jo","","<div class=\"ar bu-div\"><button type=\"button\" class=\"btn\" onclick=\"apps_action_pageload(\'\/staff\/viewstaff\/nttqA%3D%3D\/v\');\"><\/button><\/div>"]],"setting":{"hidetitle":"0"}}}';
-		$data['isoutput'] = 1;
-		$data['isdiv'] = 0;
+		$this->DatasetM->load('ds_helloworld');
 
-		return($data);
+		$details = array(
+			'columns' => $this->DatasetM->get_datatable_fields(),
+			'data' => $this->DatasetM->get_datatable_data(),
+			'setting' => array(
+				'hidetitle' => 0,
+			),
+		);
 
+		$this->RespM->set_message($this->DatasetM->sql)
+				->set_type('list')
+				->set_template('list_template')
+				->set_success(true)
+				->set_title('Hello Dataset')
+				->set_details($details)
+				->output();
 	}
 
-	function sendjson_view(){
+	function sendjson_view() {
 
 		$data = array();
 		$data['json'] = '{"success":"1","message":"1","template":"1","title":"Title","type":"view","details":{"setting":{"hidelabel":"0"},"data":[{"fieldname":"firstname","label":"First Name","value":"Anthony"},{"fieldname":"lastname","label":"Last Name","value":"Andy"}]}}';
@@ -59,7 +70,7 @@ class Helloworld extends MY_Controller {
 
 	}
 
-	function sendjson_form(){
+	function sendjson_form() {
 
 		$data = array();
 		
@@ -91,27 +102,5 @@ class Helloworld extends MY_Controller {
 
 	}
 
-	function sendjson_list() {
-		$this->url['subaction'] = 'l';
-
-		$this->DatasetM->load('ds_helloworld');
-
-		$details = array(
-			'columns' => $this->DatasetM->get_datatable_fields(),
-			'data' => $this->DatasetM->get_datatable_data(),
-			'setting' => array(
-				'hidetitle' => 0,
-			),
-		);
-
-		$this->RespM->set_message('Message')
-				->set_type('list')
-				->set_template('list_template')
-				->set_success(true)
-				->set_title('Hello Dataset')
-				->set_details($details)
-				->output();
-
-	}
 
 }
