@@ -1,7 +1,6 @@
 <?php
 
 class DatasetM extends CI_Model {
-
 	protected $db_tables = '';
 	protected $fields = '';
 	protected $data = '';
@@ -51,6 +50,28 @@ class DatasetM extends CI_Model {
 		return $fields;
 	}
 
+	function get_datatable_fields() {
+		$results = array();
+
+		$fields = $this->get_fields();
+		foreach($fields AS $f) {
+			$results[] = array('sTitle'=>$f['db_field']);
+//			$result[] = array('sTitle'=>$f['label']);
+		}
+
+		return $results;
+	}
+	function get_datatable_data() {
+		$results = array();
+
+		$data = $this->get_data();
+		foreach($data AS $d) {
+			$results[] = array_values($d);
+		}
+
+		return $results;
+	}
+
 
 
 
@@ -92,7 +113,7 @@ class DatasetM extends CI_Model {
 		$this->fields = $rs->result_array();
 
 		foreach($this->fields AS $k=>$v) {
-			$this->fields[$k]['label'] = $this->lang($this->properties['app'].'_'.$v['fb_field']);
+			$this->fields[$k]['label'] = $this->lang->line($this->properties['app_name'].'_'.$v['db_field']);
 		}
 	}
 
@@ -113,7 +134,7 @@ class DatasetM extends CI_Model {
 		//join any secondary tables
 		if (count($this->db_tables)>1) {
 			//join field of primary table
-			$pj_field = $this->get_join_field($this->db_tables[0]);
+			$pj_field = $this->get_join_field($this->db_tables[0]['db_table']);
 
 			foreach($this->db_tables AS $k=>$v) {
 				if ($k == 0) continue;
@@ -124,8 +145,9 @@ class DatasetM extends CI_Model {
 		}
 
 		//add where statement based on subaction
+
 		if ($this->url['subaction'] == 'l') {
-			$this->db->where($this->get_list_field(), $this->url['id_plain']);
+			if ($this->url['id_plain']!=0) $this->db->where($this->get_list_field(), $this->url['id_plain']);
 		} else {
 			$this->db->where($this->get_form_field(), $this->url['id_plain']);
 		}
