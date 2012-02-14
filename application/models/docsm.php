@@ -9,6 +9,7 @@ class docsM extends My_Model {
 	function delete_docs($id) {
 		$this->db->delete('a_docs_ver', array('a_docs_ver_docsid'=>$id));
 		$this->db->delete('a_docs', array('a_docs_id'=>$id));
+		return $this->db->affected_rows();
 	}
 
 	function does_folder_exists($id) {
