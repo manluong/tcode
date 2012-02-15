@@ -45,10 +45,13 @@ class DatasetM extends CI_Model {
 				continue;
 			}
 
-//			unset($fields[$k]['dataset_name'], $fields[$k]['db_table'], $fields[$k]['form_id'], $fields[$k]['list_id'], $fields[$k]['parent_join'], $fields[$k]['child_join']);
+			unset($fields[$k]['dataset_name'], $fields[$k]['db_table'], $fields[$k]['form_id'], $fields[$k]['list_id'], $fields[$k]['parent_join'], $fields[$k]['child_join']);
 			unset($fields[$k]['a'], $fields[$k]['v'], $fields[$k]['e'], $fields[$k]['d'], $fields[$k]['l'], $fields[$k]['s'], $fields[$k]['sq']);
 			unset($fields[$k]['sort_form'], $fields[$k]['sort_list'], $fields[$k]['sort_search']);
 			unset($fields[$k]['sel_source'], $fields[$k]['sel_groupname'], $fields[$k]['sel_sql'], $fields[$k]['sel_sqlkey'], $fields[$k]['sel_sqlname']);
+
+			unset($fields[$k]['chk_type'], $fields[$k]['date_to'], $fields[$k]['db_field'], $fields[$k]['db_primary'], $fields[$k]['id'], $fields[$k]['textarea_type']);
+			unset($fields[$k]['hidden'], $fields[$k]['default_value']);
 		}
 
 		return $fields;
@@ -59,7 +62,7 @@ class DatasetM extends CI_Model {
 
 		$fields = $this->get_fields();
 		foreach($fields AS $f) {
-			$results[] = array('sTitle'=>$f['db_field']);
+			$results[] = array('sTitle'=>$f['name']);
 //			$result[] = array('sTitle'=>$f['label']);
 		}
 
@@ -98,6 +101,7 @@ class DatasetM extends CI_Model {
 		if ($this->url['subaction']=='e') {
 			foreach($fields AS $field_key=>$field) {
 				$fields[$field_key]['value'] = $this->data[$field_key];
+				$fields[$field_key]['label'] = $this->fields[$field_key]['db_field'];
 				$fields[$field_key]['helptext'] = '';
 				$fields[$field_key]['select_options'] = '';
 			}

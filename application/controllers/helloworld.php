@@ -83,7 +83,7 @@ class Helloworld extends MY_Controller {
 	function sendjson_form() {
 /*
 		$data = array();
-		
+
 		$links = ',"links":[{"type":"submit","url":"/helloworld/returnjson_save/1/es","target":"","text":"Submit"},{"type":"ajax","url":"/helloworld/contact/1/v","target":"","text":"Cancel"}]';
 
 		$the_dataarray = '{"label":"First Name","value":"Anthony","form_type":"text","name":"firstname","required":"1","min":"","max":"","validate":"","pattern":"","chk_name0":"","chk_name1":"","date_showformat":"","sel_multiple":"","select_options":[{"key":"Option 1","value":"1"},{"key":"Option 1","value":"1"}],"helptext":"help me text"}';
@@ -110,6 +110,8 @@ class Helloworld extends MY_Controller {
 
 		return($data);
 */
+
+
 		$this->url['subaction'] = 'e';
 		$this->url['id_plain'] = '150';
 
@@ -148,12 +150,12 @@ class Helloworld extends MY_Controller {
 				->set_details($details)
 				->output_json();
 	}
-	
-	
+
+
 	function sendjson_save() {
 
 		$data = array();
-		
+
 		//success
 		$links = '"links":[{"type":"ajax","url":"helloworld/returnjson_view","target":"","text":""}]';
 		$data['json'] = '{"success":"1","details":{'.$links.'}}';
@@ -161,7 +163,7 @@ class Helloworld extends MY_Controller {
 		//fail
 		$links = '"data":{"firstname":"Problem 1","email":"Problem 2"}';
 		$data['json'] = '{"success":"0","details":{'.$links.'}}';
-				
+
 		$data['isoutput'] = 1;
 		$data['isdiv'] = 0;
 
@@ -180,5 +182,5 @@ class Helloworld extends MY_Controller {
 		echo '<pre>', print_r($data, TRUE), '</pre>';
 	}
 
-	
+
 }
