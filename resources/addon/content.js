@@ -2,9 +2,7 @@ function ajax_content(url,divid) {
 
 	//temp
 	//to change to Jquery ajax function
-    dhtmlxAjax.get("/"+url, apps_action_ajax2);
-
-    function apps_action_ajax2(loader) {
+    dhtmlxAjax.get("/"+url, function(loader) {
 
     jsCkStr = loader.xmlDoc.responseText.substring(0,60)
 
@@ -53,7 +51,7 @@ function ajax_content(url,divid) {
 
     }
 
-    }
+    });
 
 
 }
@@ -90,7 +88,6 @@ function ajax_content_json(jarray,divid) {
 }
 
 function ajax_content_echo(json,divid,content){
-	console.log(content);
 	var view = {title: json['title'], content: content};
 	if (!json['template']) {
 		document.getElementById(divid).innerHTML = Mustache.to_html(tpl_c_stdwidget, view);	
@@ -305,7 +302,7 @@ function ajax_content_submit(divid,submiturl,json){
 			} else if (json['details']['data']) {
 				//server-side validation failed. use invalidate() to show errors
 				//return as {"fieldname":"message"}
-				console.log(json['details']['data']);
+				//console.log(json['details']['data']);
 				form.data("validator").invalidate(json['details']['data']);
 
 			} else if (json['message']) {
