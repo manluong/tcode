@@ -86,11 +86,18 @@ function ajax_content_json(jarray,divid) {
 
 function ajax_content_list(json,divid){
 
+	var links = "";
+	
+	if (json['details']['links']){
+		var linkre = ajax_content_links(json['details']['links'],divid);
+		links = linkre.html;		
+	}
+	
 	var tableid = divid+"_table";
 
 	if (json['details']['setting']['hidetitle'] == 1){
 
-		document.getElementById(divid).innerHTML = '<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-condensed tpaneltable_notitle" id="'+tableid+'"></table>';
+		document.getElementById(divid).innerHTML = '<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-condensed tpaneltable_notitle" id="'+tableid+'"></table>'+links;
 
 		$('#'+tableid).dataTable({
 			"aoColumns": json['details']['columns'],
@@ -117,7 +124,7 @@ function ajax_content_list(json,divid){
 
 	}else{
 
-		document.getElementById(divid).innerHTML = '<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-condensed tpaneltable" id="'+tableid+'"></table>';
+		document.getElementById(divid).innerHTML = '<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-condensed tpaneltable" id="'+tableid+'"></table>'+links;
 
 		$('#'+tableid).dataTable({
 			"aoColumns": json['details']['columns'],
@@ -150,7 +157,7 @@ function ajax_content_view(json,divid){
 	
 	for(var i = 0; i < thisLength; i++) {
 		var view = {label: json['details']['data'][i]['label'], value: json['details']['data'][i]['value'], fieldname: json['details']['data'][i]['fieldname']}
-		var html = html + Mustache.to_html(tpl_content_view, view);
+		html = html + Mustache.to_html(tpl_content_view, view);
 		
 		jsonformat[json['details']['data'][i]['fieldname']+'_label'] = json['details']['data'][i]['label'];
 		jsonformat[json['details']['data'][i]['fieldname']+'_value'] = json['details']['data'][i]['value'];
@@ -160,6 +167,11 @@ function ajax_content_view(json,divid){
 	//where to store custom template
 	//var template = "My {{firstname_label}} is {{firstname_value}}!";
 	//var html = html + Mustache.to_html(template, jsonformat);
+	
+	if (json['details']['links']){
+		var linkre = ajax_content_links(json['details']['links'],divid);
+		html = html + linkre.html;		
+	}
 	
 	var view = {content: html};
 	document.getElementById(divid).innerHTML = Mustache.to_html(tpl_content_viewwarp, view);  
