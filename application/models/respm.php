@@ -43,7 +43,7 @@ class RespM extends CI_Model {
 		return $this;
 	}
 
-	function output($return = false) {
+	function output() {
 		$result = array(
 			'success' => $this->success,
 			'message' => $this->message,
@@ -53,11 +53,11 @@ class RespM extends CI_Model {
 			'details' => $this->details
 		);
 
-		if ($return) {
-			return $result;
-		} else {
-			echo json_encode($result);
-		}
+		return $result;
+	}
+
+	function output_json() {
+		echo json_encode($this->output());
 	}
 
 }

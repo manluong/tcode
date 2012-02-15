@@ -55,7 +55,7 @@ class Helloworld extends MY_Controller {
 				->set_success(true)
 				->set_title('Hello Dataset')
 				->set_details($details)
-				->output();
+				->output_json();
 	}
 
 	function sendjson_view() {
@@ -73,7 +73,7 @@ class Helloworld extends MY_Controller {
 	function sendjson_form() {
 
 		$data = array();
-		
+
 		$links = ',"links":[{"type":"submit","url":"/helloworld/contact/1/as","target":"","text":"Submit"},{"type":"ajax","url":"/helloworld/contact/1/v","target":"","text":"Cancel"}]';
 
 		$the_dataarray = '{"label":"First Name","value":"Anthony","form_type":"text","name":"firstname","required":"","min":"","max":"","validate":"","pattern":"","chk_name0":"","chk_name1":"","date_showformat":"","sel_multiple":"","select_options":[{"key":"Option 1","value":"1"},{"key":"Option 1","value":"1"}],"helptext":"help me text"}';
