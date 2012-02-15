@@ -55,19 +55,29 @@ class Helloworld extends MY_Controller {
 				->set_success(true)
 				->set_title('Hello Dataset')
 				->set_details($details)
-				->output();
+				->output_json();
 	}
 
 	function sendjson_view() {
+		$this->url['subaction'] = 'v';
+		$this->url['id_plain'] = '150';
 
-		$data = array();
-		$data['json'] = '{"success":"1","message":"1","template":"1","title":"Title","type":"view","details":{"setting":{"hidelabel":"0"},"data":[{"fieldname":"firstname","label":"First Name","value":"Anthony"},{"fieldname":"lastname","label":"Last Name","value":"Andy"}]}}';
+		$this->DatasetM->load('ds_helloworld');
 
-		$data['isoutput'] = 1;
-		$data['isdiv'] = 0;
+		$details = array(
+			'data' => $this->DatasetM->get_view_data(),
+			'setting' => array(
+				'hidelabel' => 0,
+			),
+		);
 
-		return($data);
-
+		$this->RespM->set_message($this->DatasetM->sql)
+				->set_type('view')
+				->set_template('view_template')
+				->set_success(true)
+				->set_title('Hello Dataset')
+				->set_details($details)
+				->output_json();
 	}
 
 	function sendjson_form() {
@@ -101,4 +111,15 @@ class Helloworld extends MY_Controller {
 		return($data);
 
 	}
+
+	function show_data() {
+
+		$this->DatasetM->load('ds_helloworld');
+
+		$data = $this->DatasetM->get_view_data();
+
+		echo '<pre>', print_r($data, TRUE), '</pre>';
+	}
+
+	
 }

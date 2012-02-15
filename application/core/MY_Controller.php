@@ -58,6 +58,9 @@ class MY_Controller extends CI_Controller {
 
 	var $is_ajax = FALSE;
 
+	//valid subactions
+	var $subactions = array('a','v','e','d','l','s');
+
 	function __construct() {
 		parent::__construct();
 
@@ -136,6 +139,7 @@ class MY_Controller extends CI_Controller {
 		$this->url['action'] = $this->router->fetch_method();
 
 		$this->url['subaction'] = $this->uri->segment(4, '');
+		if (!in_array($this->url['subaction'], $this->subactions)) $this->url['subaction'] = 'v';
 
 		$this->url['id'] = $id = $this->uri->segment(3, 0);
 
