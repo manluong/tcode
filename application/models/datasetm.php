@@ -45,8 +45,10 @@ class DatasetM extends CI_Model {
 				continue;
 			}
 
-			unset($fields[$k]['a'], $fields[$k]['v'], $fields[$k]['e'], $fields[$k]['d'], $fields[$k]['l'], $fields[$k]['s']);
+//			unset($fields[$k]['dataset_name'], $fields[$k]['db_table'], $fields[$k]['form_id'], $fields[$k]['list_id'], $fields[$k]['parent_join'], $fields[$k]['child_join']);
+			unset($fields[$k]['a'], $fields[$k]['v'], $fields[$k]['e'], $fields[$k]['d'], $fields[$k]['l'], $fields[$k]['s'], $fields[$k]['sq']);
 			unset($fields[$k]['sort_form'], $fields[$k]['sort_list'], $fields[$k]['sort_search']);
+			unset($fields[$k]['sel_source'], $fields[$k]['sel_groupname'], $fields[$k]['sel_sql'], $fields[$k]['sel_sqlkey'], $fields[$k]['sel_sqlname']);
 		}
 
 		return $fields;
@@ -89,6 +91,21 @@ class DatasetM extends CI_Model {
 		return $result;
 	}
 
+	function get_form_data() {
+		$fields = $this->get_fields();
+		$this->load_data();
+
+		if ($this->url['subaction']=='e') {
+			foreach($fields AS $field_key=>$field) {
+				$fields[$field_key]['value'] = $this->data[$field_key];
+				$fields[$field_key]['helptext'] = '';
+				$fields[$field_key]['select_options'] = '';
+			}
+		}
+
+		return array_values($fields);
+	}
+
 
 
 	private function load_properties($ds) {
@@ -127,12 +144,13 @@ class DatasetM extends CI_Model {
 		if ($rs->num_rows() == 0) die('No fields were configured for this dataset.');
 
 		foreach($rs->result_array() AS $r) {
-			$this->fields[$r['db_table'].'_'.$r['db_field']] = $r;
-		}
+			//fill in label
+			$r['label'] = $this->lang->line($this->properties['app_name'].'_'.$r['db_field']);
 
-		//load the labels for each field
-		foreach($this->fields AS $k=>$v) {
-			$this->fields[$k]['label'] = $this->lang->line($this->properties['app_name'].'_'.$v['db_field']);
+			//fill in select_options
+			if ($r['form_type'] == 'select') $r['select_options'] = $this->get_select_options($r);
+
+			$this->fields[$r['db_table'].'_'.$r['db_field']] = $r;
 		}
 	}
 
@@ -227,6 +245,37 @@ class DatasetM extends CI_Model {
 			$fields[$f[$sort_field]] = $f['db_table'].'.'.$f['db_field'];
 		}
 		return implode(', ',$fields);
+	}
+
+	private function get_select_options($field) {
+		$result = array();
+
+		//if field is not required, add blank selection
+		if (!$field['required']) $result[] = array('key'=>'', 'value'=>'');
+
+		if ($field['select_source'] == 'group') {
+			$rs = $this->db->select('core_select_name, core_select_value')
+					->from('core_select')
+					->where('core_select_group', $field['sel_groupname'])
+					->get();
+
+			$key_field = 'core_select_value';
+			$val_field = 'core_select_name';
+		} else {
+			$rs = $this->db->query($field['sel_sql']);
+
+			$key_field = $field['sel_sqlkey'];
+			$val_field = $field['sel_sqlname'];
+		}
+
+		foreach($rs->result_array() AS $r) {
+			$result[] = array(
+				'key' => $r[$key_field],
+				'value' => $r[$val_field]
+			);
+		}
+
+		return $result;
 	}
 
 }
