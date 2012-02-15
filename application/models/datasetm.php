@@ -75,7 +75,19 @@ class DatasetM extends CI_Model {
 		return $results;
 	}
 
+	function get_view_data() {
+		$result = array();
+		foreach($this->get_data() AS $field_key=>$value) {
+			$result[] = array(
+				'fieldname' => $this->fields[$field_key]['db_field'],
+				'label' => $this->fields[$field_key]['db_field'],
+//				'label' => $this->fields[$field_key]['label'],
+				'value' => $value,
+			);
+		}
 
+		return $result;
+	}
 
 
 
@@ -100,6 +112,7 @@ class DatasetM extends CI_Model {
 		if ($rs->num_rows() == 0) die('No tables were configured for this dataset.');
 
 		foreach($rs->result_array() AS $t) {
+			if (isset($this->db_tables[$t['sort']])) die('More than 1 tables have the same sort number');
 			$this->db_tables[$t['sort']] = $t;
 		}
 	}
@@ -113,8 +126,11 @@ class DatasetM extends CI_Model {
 
 		if ($rs->num_rows() == 0) die('No fields were configured for this dataset.');
 
-		$this->fields = $rs->result_array();
+		foreach($rs->result_array() AS $r) {
+			$this->fields[$r['db_table'].'_'.$r['db_field']] = $r;
+		}
 
+		//load the labels for each field
 		foreach($this->fields AS $k=>$v) {
 			$this->fields[$k]['label'] = $this->lang->line($this->properties['app_name'].'_'.$v['db_field']);
 		}
@@ -127,7 +143,7 @@ class DatasetM extends CI_Model {
 		$fields = array();
 		foreach($this->fields AS $f) {
 			//checks avedls
-			if ($f[$this->url['subaction']] == 1) $fields[] = $f['db_table'].'.'.$f['db_field'].' ';
+			if ($f[$this->url['subaction']] == 1) $fields[] = $f['db_table'].'.'.$f['db_field'].' AS '.$f['db_table'].'_'.$f['db_field'];
 		}
 		$this->db->select(implode(', ', $fields), FALSE);
 
@@ -148,7 +164,6 @@ class DatasetM extends CI_Model {
 		}
 
 		//add where statement based on subaction
-
 		if ($this->url['subaction'] == 'l') {
 			if ($this->url['id_plain']!=0) $this->db->where($this->get_list_field(), $this->url['id_plain']);
 		} else {
@@ -174,6 +189,7 @@ class DatasetM extends CI_Model {
 			$this->data = $rs->row_array();
 		}
 
+		//store the SQL for debugging
 		$this->sql = $this->db->last_query();
 	}
 
