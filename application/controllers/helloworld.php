@@ -81,7 +81,7 @@ class Helloworld extends MY_Controller {
 	}
 
 	function sendjson_form() {
-
+/*
 		$data = array();
 
 		$links = ',"links":[{"type":"submit","url":"/helloworld/contact/1/as","target":"","text":"Submit"},{"type":"ajax","url":"/helloworld/contact/1/v","target":"","text":"Cancel"}]';
@@ -109,14 +109,53 @@ class Helloworld extends MY_Controller {
 		$data['isdiv'] = 0;
 
 		return($data);
-
-	}
-
-	function show_data() {
+*/
+		$this->url['subaction'] = 'e';
+		$this->url['id_plain'] = '150';
 
 		$this->DatasetM->load('ds_helloworld');
 
-		$data = $this->DatasetM->get_view_data();
+		$details = array(
+			'data' => $this->DatasetM->get_form_data(),
+			'links' => array(
+				array(
+					'target' => '',
+					'text' => 'Submit',
+					'type' => 'submit',
+					'url' => '/helloworld/contact/1/as',
+					'style' => 'default',
+					'icon' => '',
+				),
+				array(
+					'target' => '',
+					'text' => 'Cancel',
+					'type' => 'ajax',
+					'url' => '/helloworld/contact/1/v',
+					'style' => 'warning',
+					'icon' => 'trash',
+				)
+			),
+			'setting' => array(
+				'hidelabel' => 0,
+			)
+		);
+
+		$this->RespM->set_message($this->DatasetM->sql)
+				->set_type('form')
+				->set_template('form_template')
+				->set_success(true)
+				->set_title('Hello Dataset')
+				->set_details($details)
+				->output_json();
+	}
+
+	function show_data() {
+		$this->url['subaction'] = 'e';
+		$this->url['id_plain'] = '150';
+
+		$this->DatasetM->load('ds_helloworld');
+
+		$data = $this->DatasetM->get_form_data();
 
 		echo '<pre>', print_r($data, TRUE), '</pre>';
 	}
