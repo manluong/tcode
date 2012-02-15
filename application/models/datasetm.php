@@ -8,6 +8,8 @@ class DatasetM extends CI_Model {
 
 	var $loaded = false;
 
+	var $sql = '';
+
 	function __construct() {
 		parent::__construct();
 	}
@@ -61,6 +63,7 @@ class DatasetM extends CI_Model {
 
 		return $results;
 	}
+
 	function get_datatable_data() {
 		$results = array();
 
@@ -170,6 +173,8 @@ class DatasetM extends CI_Model {
 		} else {
 			$this->data = $rs->row_array();
 		}
+
+		$this->sql = $this->db->last_query();
 	}
 
 
