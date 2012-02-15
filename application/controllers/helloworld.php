@@ -83,10 +83,10 @@ class Helloworld extends MY_Controller {
 	function sendjson_form() {
 
 		$data = array();
+		
+		$links = ',"links":[{"type":"submit","url":"/helloworld/returnjson_save/1/es","target":"","text":"Submit"},{"type":"ajax","url":"/helloworld/contact/1/v","target":"","text":"Cancel"}]';
 
-		$links = ',"links":[{"type":"submit","url":"/helloworld/contact/1/as","target":"","text":"Submit"},{"type":"ajax","url":"/helloworld/contact/1/v","target":"","text":"Cancel"}]';
-
-		$the_dataarray = '{"label":"First Name","value":"Anthony","form_type":"text","name":"firstname","required":"","min":"","max":"","validate":"","pattern":"","chk_name0":"","chk_name1":"","date_showformat":"","sel_multiple":"","select_options":[{"key":"Option 1","value":"1"},{"key":"Option 1","value":"1"}],"helptext":"help me text"}';
+		$the_dataarray = '{"label":"First Name","value":"Anthony","form_type":"text","name":"firstname","required":"1","min":"","max":"","validate":"","pattern":"","chk_name0":"","chk_name1":"","date_showformat":"","sel_multiple":"","select_options":[{"key":"Option 1","value":"1"},{"key":"Option 1","value":"1"}],"helptext":"help me text"}';
 		$the_dataarray .= ',{"label":"Last Name","value":"Andy","form_type":"text","name":"lastname","required":"","min":"","max":"","validate":"","pattern":"","chk_name0":"","chk_name1":"","date_showformat":"","sel_multiple":"","select_options":[{"key":"Option 1","value":"1"},{"key":"Option 1","value":"1"}],"helptext":"help me text"}';
 		$the_dataarray .= ',{"label":"Email","value":"ea@abc.com","form_type":"email","name":"email","required":"","min":"","max":"","validate":"","pattern":"","chk_name0":"","chk_name1":"","date_showformat":"","sel_multiple":"","select_options":[{"key":"Option 1","value":"1"},{"key":"Option 1","value":"1"}],"helptext":"help me text"}';
 		$the_dataarray .= ',{"label":"Number","value":"32.10","form_type":"number","name":"number","required":"","min":"","max":"","validate":"","pattern":"","chk_name0":"","chk_name1":"","date_showformat":"","sel_multiple":"","select_options":[{"key":"Option 1","value":"1"},{"key":"Option 1","value":"1"}],"helptext":"help me text"}';
@@ -105,6 +105,26 @@ class Helloworld extends MY_Controller {
 
 		$data['json'] = '{"success":"1","message":"1","template":"1","title":"Title","type":"form","details":{"setting":{"hidelabel":"0"},"data":['.$the_dataarray.']'.$links.'}}';
 
+		$data['isoutput'] = 1;
+		$data['isdiv'] = 0;
+
+		return($data);
+
+	}
+	
+	
+	function sendjson_save() {
+
+		$data = array();
+		
+		//success
+		$links = '"links":[{"type":"ajax","url":"helloworld/returnjson_view","target":"","text":""}]';
+		$data['json'] = '{"success":"1","details":{'.$links.'}}';
+
+		//fail
+		$links = '"data":{"firstname":"Problem 1","email":"Problem 2"}';
+		$data['json'] = '{"success":"0","details":{'.$links.'}}';
+				
 		$data['isoutput'] = 1;
 		$data['isdiv'] = 0;
 
