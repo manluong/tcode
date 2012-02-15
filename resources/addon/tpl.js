@@ -35,6 +35,7 @@ tpl_link.ajax = ' <a class="btn{{#style}} btn-{{style}}{{/style}}" href="#" oncl
 tpl_link.page = ' <a class="btn{{#style}} btn-{{style}}{{/style}}" href="{{url}}">{{text}}</a>';
 tpl_link.warp = '<div class="form-actions">{{{links}}}</div>';
 
+tpl_c_stdwidget = '<div class="widget">{{#title}}<div class="widget-header"><h4>{{title}}</h4></div>{{/title}}<div class="widget-body">{{{content}}}</div></div>';
 
-          
-          
+var custom_viewcard = "My {{#content}}{{card_fname_label}} is {{card_fname_value}}!{{{links}}}{{/content}}<br>";
+var custom_editcard = "My {{#content}}{{#card_fname}}{{label}} is {{{control}}}{{/card_fname}}!{{{links}}}{{/content}}<br>";

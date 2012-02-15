@@ -9,10 +9,10 @@ class Helloworld extends MY_Controller {
 
 	function sendhtml() {
 		$data = array();
-		$data['data'] = "I am a some HTML";
+		$data['html'] = "I am a some HTML";
 		$data['isoutput'] = 1;
 		$data['isdiv'] = 0;
-
+		echo $data['html'];
 		return($data);
 	}
 
@@ -51,7 +51,7 @@ class Helloworld extends MY_Controller {
 
 		$this->RespM->set_message($this->DatasetM->sql)
 				->set_type('list')
-				->set_template('list_template')
+				->set_template('')
 				->set_success(true)
 				->set_title('Hello Dataset')
 				->set_details($details)
@@ -66,6 +66,24 @@ class Helloworld extends MY_Controller {
 
 		$details = array(
 			'data' => $this->DatasetM->get_view_data(),
+			'links' => array(
+				array(
+					'target' => '',
+					'text' => 'Edit',
+					'type' => 'ajax',
+					'url' => '/helloworld/contact/1/as',
+					'style' => 'default',
+					'icon' => '',
+				),
+				array(
+					'target' => '',
+					'text' => 'Cancel',
+					'type' => 'ajax',
+					'url' => '/helloworld/contact/1/v',
+					'style' => 'warning',
+					'icon' => 'trash',
+				)
+			),			
 			'setting' => array(
 				'hidelabel' => 0,
 			),
@@ -73,7 +91,8 @@ class Helloworld extends MY_Controller {
 
 		$this->RespM->set_message($this->DatasetM->sql)
 				->set_type('view')
-				->set_template('view_template')
+				->set_template('')
+				//->set_template('custom_viewcard')//custom template
 				->set_success(true)
 				->set_title('Hello Dataset')
 				->set_details($details)
@@ -144,7 +163,8 @@ class Helloworld extends MY_Controller {
 
 		$this->RespM->set_message($this->DatasetM->sql)
 				->set_type('form')
-				->set_template('form_template')
+				->set_template('')
+				//->set_template('custom_editcard')//custom template
 				->set_success(true)
 				->set_title('Hello Dataset')
 				->set_details($details)

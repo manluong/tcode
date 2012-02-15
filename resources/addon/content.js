@@ -62,43 +62,52 @@ function ajax_content(url,divid) {
 function ajax_content_json(jarray,divid) {
 
 	var json = jQuery.parseJSON( jarray );
-
+	
+	var links = { html: '', bu: ''};
+	if (json['details']['links']){
+		links = ajax_content_links(json['details']['links'],divid);	
+	}
+		
 	switch (json['type']) {
 		case 'list':
-		ajax_content_list(json,divid);
+		ajax_content_list(json,divid,links);
 		break;
 
 		case 'view':
-		ajax_content_view(json,divid);
+		ajax_content_view(json,divid,links);
 		break;
 
 		case 'form':
-		ajax_content_form(json,divid);
+		ajax_content_form(json,divid,links);
 		break;
 
 		case 'save':
-		ajax_content_save(json,divid);
+		ajax_content_save(json,divid,links);
 		break;
 
 	}
-	
+		
 }
 
-function ajax_content_list(json,divid){
-
-	var links = "";
-	
-	if (json['details']['links']){
-		var linkre = ajax_content_links(json['details']['links'],divid);
-		links = linkre.html;		
+function ajax_content_echo(json,divid,content){
+	console.log(content);
+	var view = {title: json['title'], content: content};
+	if (!json['template']) {
+		document.getElementById(divid).innerHTML = Mustache.to_html(tpl_c_stdwidget, view);	
+	} else {
+		document.getElementById(divid).innerHTML = Mustache.to_html(window[json['template']], view);
 	}
-	
+}
+
+
+function ajax_content_list(json,divid,links){
+
 	var tableid = divid+"_table";
 
 	if (json['details']['setting']['hidetitle'] == 1){
 
-		document.getElementById(divid).innerHTML = '<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-condensed tpaneltable_notitle" id="'+tableid+'"></table>'+links;
-
+		ajax_content_echo(json,divid,'<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-condensed tpaneltable_notitle" id="'+tableid+'"></table>'+links.html);
+		
 		$('#'+tableid).dataTable({
 			"aoColumns": json['details']['columns'],
 			"aaData": json['details']['data'],
@@ -124,7 +133,7 @@ function ajax_content_list(json,divid){
 
 	}else{
 
-		document.getElementById(divid).innerHTML = '<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-condensed tpaneltable" id="'+tableid+'"></table>'+links;
+		ajax_content_echo(json,divid,'<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-condensed tpaneltable" id="'+tableid+'"></table>'+links.html);
 
 		$('#'+tableid).dataTable({
 			"aoColumns": json['details']['columns'],
@@ -149,7 +158,7 @@ function ajax_content_list(json,divid){
 	} );
 }
 
-function ajax_content_view(json,divid){
+function ajax_content_view(json,divid,links){
 
 	var html = "";
 	var thisLength = json['details']['data'].length;
@@ -164,20 +173,18 @@ function ajax_content_view(json,divid){
 		
 	}
 
-	//where to store custom template
-	//var template = "My {{firstname_label}} is {{firstname_value}}!";
-	//var html = html + Mustache.to_html(template, jsonformat);
-	
-	if (json['details']['links']){
-		var linkre = ajax_content_links(json['details']['links'],divid);
-		html = html + linkre.html;		
+	if (!json['template']) {
+		html = html + links.html;		
+		var view = {content: html};
+		ajax_content_echo(json,divid,Mustache.to_html(tpl_content_viewwarp, view));
+	} else {
+		jsonformat['links'] = links.bu;
+		ajax_content_echo(json,divid,jsonformat);
 	}
 	
-	var view = {content: html};
-	document.getElementById(divid).innerHTML = Mustache.to_html(tpl_content_viewwarp, view);  
 }
 
-function ajax_content_form(json,divid){
+function ajax_content_form(json,divid,links){
 
 	var html = "";
 	var thisLength = json['details']['data'].length;
@@ -209,17 +216,23 @@ function ajax_content_form(json,divid){
 			
 		}
 		
+		if (!json['template']) {
 		jsonformat.items[i] = {control: Mustache.to_html(template, json['details']['data'][i]), fieldname: json['details']['data'][i]['name'], label: json['details']['data'][i]['label'], helptext: json['details']['data'][i]['helptext']};
-
+		} else {
+		jsonformat[json['details']['data'][i]['name']] = {control: Mustache.to_html(template, json['details']['data'][i]), fieldname: json['details']['data'][i]['name'], label: json['details']['data'][i]['label'], helptext: json['details']['data'][i]['helptext']};
+		}
 	}
 		
+
+	if (!json['template']) {
+		jsonformat.divid = divid;
+		jsonformat.links = links.html;
+		ajax_content_echo(json,divid,Mustache.to_html(tpl_form_ctlgroup, jsonformat));		
+	} else {
+		jsonformat['links'] = links.bu;
+		ajax_content_echo(json,divid,jsonformat);
+	}
 	
-	//to improve, wait for final design
-	//warp up every row
-	var linkre = ajax_content_links(json['details']['links'],divid);
-	jsonformat.divid = divid;
-	jsonformat.links = linkre.html;
-	document.getElementById(divid).innerHTML = Mustache.to_html(tpl_form_ctlgroup, jsonformat);
 	
 	//post action after form is renden    
 	for(var i = 0; i < thisLength; i++) {
@@ -254,7 +267,7 @@ function ajax_content_form(json,divid){
 
 	}		
 	ajax_content_errorstyle();
-    ajax_content_submit(divid,linkre.submiturl,json);
+    ajax_content_submit(divid,links.submiturl,json);
 }
 
 function ajax_content_submit(divid,submiturl,json){
@@ -300,7 +313,7 @@ function ajax_content_submit(divid,submiturl,json){
 			}
 		});
 
-		}
+	}
 
 	});
 
@@ -326,6 +339,11 @@ function ajax_content_links(links,divid){
 		}
 		
 	}
+	
+	//button only html
+	linkre.bu = linkhtml;
+	
+	//warp the button
 	var linkarray = {links: linkhtml}
 	linkre.html = Mustache.to_html(tpl_link.warp, linkarray);
 	
