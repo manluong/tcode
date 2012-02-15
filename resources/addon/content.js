@@ -189,7 +189,9 @@ function ajax_content_form(json,divid){
 		//SET STYLE
 		json['details']['data'][i]['addclass'] = 'input-xlarge';
 		//json['details']['data'][i]['helpblk'] = 'help-block';
-		
+		if (!json['details']['data'][i]['form_type']) json['details']['data'][i]['form_type'] = "text";
+		if (json['details']['data'][i]['required'] == "0") json['details']['data'][i]['required'] = null;
+						
 		template = tpl_form[json['details']['data'][i]['form_type']];
 		
 		switch (json['details']['data'][i]['form_type']) {
