@@ -1,4 +1,3 @@
-
 function ajax_content(url,divid) {
 
 	//temp
@@ -81,9 +80,6 @@ function ajax_content_json(jarray,divid) {
 		ajax_content_save(json,divid);
 		break;
 
-		case 'empty':
-		ajax_content_empty(json,divid);
-		break;
 	}
 	
 }
@@ -139,13 +135,11 @@ function ajax_content_list(json,divid){
 		});
 	}
 
-$.extend( $.fn.dataTableExt.oStdClasses, {
-    "sSortAsc": "header headerSortDown",
-    "sSortDesc": "header headerSortUp",
-    "sSortable": "header"
-} );
-
-
+	$.extend( $.fn.dataTableExt.oStdClasses, {
+	    "sSortAsc": "header headerSortDown",
+	    "sSortDesc": "header headerSortUp",
+	    "sSortable": "header"
+	} );
 }
 
 function ajax_content_view(json,divid){
@@ -168,50 +162,12 @@ function ajax_content_view(json,divid){
 	//var html = html + Mustache.to_html(template, jsonformat);
 	
 	var view = {content: html};
-	document.getElementById(divid).innerHTML = Mustache.to_html(tpl_content_viewwarp, view);
-          
-}
-
-function ajax_content_empty(json){
-
-	var buttontop = "";
-	var buttonbottom = "";
-	if (json['element_button_format']['top']) buttontop = '<div class="bu-div bu-formview">'+json['element_button_format']['top']+'</div>';
-	if (json['element_button_format']['bottom']) buttonbottom = '<div class="bu-div bu-formview">'+json['element_button_format']['bottom']+'</div>';
-
-	document.getElementById(json['divid']).innerHTML = buttontop+'<div class="formview '+json['divid']+'_inner"></div>'+buttonbottom;
-	formui_reload();
- 	//if ($aved == "fd"){   method="post" action="?app='.json['element_button']['buttons'][0]['targetapp'].'&an='.json['element_button']['buttons'][0]['targetan'].'">
-
-}
-
-function ajax_content_save(json){
-
-	if (json['form']['save_success'] == 1)  {
-//form.load("success.php");
-// server-side validation failed. use invalidate() to show errors
-	var buLength = json['savebutton']['buttons'].length;
-	var targetthisid = "";
-	//auto redirect if there is only 1 button, auto go the the page in the button
-	if (buLength == 1){
-		if (json['savebutton']['buttons'][0]['targetid'] == 'thisid') {
-			targetthisid = json['form']['save_id'];
-		} else if (json['savebutton']['buttons'][0]['targetid'] == 'listid') {
-			targetthisid = json['form']['list_id'];
-		} else {
-			targetthisid = json['savebutton']['buttons'][0]['targetid'];
-		}
-		apps_action_ajax(json['savebutton']['buttons'][0]['targetapp'],json['savebutton']['buttons'][0]['targetan'],json['savebutton']['buttons'][0]['targetaved'],json['savebutton']['buttons'][0]['div'],targetthisid);
-	}
-
-	}
-
+	document.getElementById(divid).innerHTML = Mustache.to_html(tpl_content_viewwarp, view);  
 }
 
 function ajax_content_form(json,divid){
 
 	var html = "";
-	var linkhtml = "";
 	var thisLength = json['details']['data'].length;
 	var jsonformat = { items: [] };
 	var addclass = "input-xlarge";
@@ -246,42 +202,12 @@ function ajax_content_form(json,divid){
 	
 	//to improve, wait for final design
 	//warp up every row
-	console.log(jsonformat);
-	html = Mustache.to_html(tpl_form_ctlgroup, jsonformat)
-
-
-	//LINKS
-	var linkLength = json['details']['links'].length;
-	for(var iln = 0; iln < linkLength; iln++) {
-		
-		if (json['details']['links'][iln]['type'] == "ajax" && (json['details']['links'][iln]['target'] == "" || json['details']['links'][iln]['target'] == null)) {
-			json['details']['links'][iln]['target'] = divid;
-		}
-		
-		template = tpl_link[json['details']['links'][iln]['type']];
-		linkhtml = linkhtml + Mustache.to_html(template, json['details']['links'][iln]);
-		
-		//set submit url
-		if (json['details']['links'][iln]['type'] == "submit") {
-			var submiturl = json['details']['links'][iln];
-		}
-		
-	}
-	var linkarray = {links: linkhtml}
-	linkhtml = Mustache.to_html(tpl_link.warp, linkarray);
-
-
-	document.getElementById(divid).innerHTML = '<div class="formview"><form class="form-horizontal" id="formid_'+divid+'" name="formid_'+divid+'">'+html+linkhtml+'</form></div><div id="'+divid+'_submiturl" style="display:none;"></div><div id="'+divid+'_formsetup" style="display:none;"></div>';
-
-
+	var linkre = ajax_content_links(json['details']['links'],divid);
+	jsonformat.divid = divid;
+	jsonformat.links = linkre.html;
+	document.getElementById(divid).innerHTML = Mustache.to_html(tpl_form_ctlgroup, jsonformat);
 	
-	
-
-
-          
-    //formui_reload();
-	//$(".form .form-input textarea").css({"max-width":"100%"})
-	    
+	//post action after form is renden    
 	for(var i = 0; i < thisLength; i++) {
 		switch (json['details']['data'][i]['form_type']) {
 
@@ -312,38 +238,9 @@ function ajax_content_form(json,divid){
 		//	dgroup_autocomplete(json['formsetup'][i]['field'],json['formsetup'][i]['autocomplete']);
 		//}
 
-	}
-
-    //ajax_content_submit(divid,submiturl,json);
-
-$('#formid_'+divid).validator().submit(function(e) {
-console.log(e);
-	var form = $(this);
-
-	// client-side validation OK.
-	if (!e.isDefaultPrevented()) {
-	alert('xx');
-		// submit with AJAX
-		$.getJSON("server-fail.js?" + form.serialize(), function(json) {
-
-			// everything is ok. (server returned true)
-			if (json === true)  {
-				form.load("success.php");
-
-			// server-side validation failed. use invalidate() to show errors
-			} else {
-				form.data("validator").invalidate(json);
-			}
-		});
-
-		// prevent default form submission logic
-		e.preventDefault();
-	}else{
-		alert('xxxx');
-	}
-});
-
-
+	}		
+	ajax_content_errorstyle();
+    ajax_content_submit(divid,linkre.submiturl,json);
 }
 
 function ajax_content_submit(divid,submiturl,json){
@@ -364,55 +261,127 @@ function ajax_content_submit(divid,submiturl,json){
 
 		// prevent default form submission logic
 		e.preventDefault();
-
-		var ajaxvalue = "";		
 		
-		$.each(json['details']['data'], function(index, value) {
-
-			if (value.form_type == 'checkbox'){
-                if (document.getElementById('form_'+value.name).checked){
-                ajaxvalue = ajaxvalue+value.name+'=1&';
-                }else{
-                ajaxvalue = ajaxvalue+value.name+'=0&';
-                };
-			}else if (value.form_type == 'radio'){
-                ajaxvalue = ajaxvalue+value.name+'='+form_radio_getvalue(document.forms['formid_'+divid].elements['form_'+value.name])+'&';
-
-			}else{
-				ajaxvalue = ajaxvalue+value.name+'='+document.getElementById('form_'+value.name).value+'&';
-			}
-
-		});
-console.log(submiturl);
-		//$.getJSON(submiturl+form.serialize(), function(json) {
-		dhtmlxAjax.post(submiturl, encodeURI(ajaxvalue),function(loader){
+		dhtmlxAjax.post(submiturl.url, form.serialize(),function(loader){
 
 			var json = jQuery.parseJSON(loader.xmlDoc.responseText);
 
 			if (json['success'] == 1)  {
 			
 				var buLength = json['details']['links'].length;
-				var targetthisid = "";
 				//auto redirect if there is only 1 button, auto go the the page in the button
 				if (buLength == 1){
+					if (json['details']['links'][0]['target'] == "") { json['details']['links'][0]['target'] = divid; }
 					ajax_content(json['details']['links'][0]['url'],json['details']['links'][0]['target']);	
 				}
 
 			} else if (json['details']['data']) {
-				
 				//server-side validation failed. use invalidate() to show errors
-				form.data("validator").invalidate(jQuery.parseJSON(json['details']['data']));
+				//return as {"fieldname":"message"}
+				console.log(json['details']['data']);
+				form.data("validator").invalidate(json['details']['data']);
 
 			} else if (json['message']) {
 
 			}
 		});
 
-		}else{
-			alert("not fine");
 		}
 
 	});
 
 }
+
+function ajax_content_links(links,divid){
+
+	var linkhtml = "";
+	var linkre = {};
+	var linkLength = links.length;
+	for(var iln = 0; iln < linkLength; iln++) {
+		
+		if (links[iln]['type'] == "ajax" && (links[iln]['target'] == "" || links[iln]['target'] == null)) {
+			links[iln]['target'] = divid;
+		}
+		
+		template = tpl_link[links[iln]['type']];
+		linkhtml = linkhtml + Mustache.to_html(template, links[iln]);
+		
+		//set submit url
+		if (links[iln]['type'] == "submit") {
+			linkre.submiturl = links[iln];
+		}
+		
+	}
+	var linkarray = {links: linkhtml}
+	linkre.html = Mustache.to_html(tpl_link.warp, linkarray);
+	
+	return linkre;
+}
+
+
+function ajax_content_errorstyle(){
+// Replace Jquery Tool error message style with twitter-bootstrap, directly cut and paste code from:
+// http://wezfurlong.org/blog/2011/dec/jquery-tools-form-validator-and-twitter-bootstrap/
+    $(function () {
+        function find_container(input) {
+            return input.parent().parent();
+        }
+        function remove_validation_markup(input) {
+            var cont = find_container(input);
+            cont.removeClass('error success warning');
+            $('.help-inline.error, .help-inline.success, .help-inline.warning',
+                cont).remove();
+        }
+        function add_validation_markup(input, cls, caption) {
+            var cont = find_container(input);
+            cont.addClass(cls);
+            input.addClass(cls);
+                
+            if (caption) {
+                var msg = $('<span class="help-inline"/>');
+                msg.addClass(cls);
+                msg.text(caption);
+                input.after(msg);
+            }       
+        }
+        function remove_all_validation_markup(form) {
+            $('.help-inline.error, .help-inline.success, .help-inline.warning',
+                form).remove(); 
+            $('.error, .success, .warning', form)
+                .removeClass('error success warning');
+        }               
+        $('form').each(function () {
+            var form = $(this);
+                    
+            form
+                .validator({
+                })
+                .bind('reset.validator', function () {
+                    remove_all_validation_markup(form);
+                })
+                .bind('onSuccess', function (e, ok) {
+                    $.each(ok, function() {
+                        var input = $(this);
+                        remove_validation_markup(input);
+                        // uncomment next line to highlight successfully
+                        // validated fields in green
+                        //add_validation_markup(input, 'success');
+                    }); 
+                })
+                .bind('onFail', function (e, errors) {
+                    $.each(errors, function() {
+                        var err = this;
+                        var input = $(err.input);
+                        remove_validation_markup(input);
+                        add_validation_markup(input, 'error',
+                            err.messages.join(' '));
+                    });
+                    return false;
+                });
+        });
+    });
+//end Replace Jquery Tool error message style
+}
+
+
 

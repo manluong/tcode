@@ -6,7 +6,8 @@
 				"sDom": "<'row'<'span8'l><'span8'f>r>t<'row'<'span8'i><'span8'p>>",
 				"sPaginationType": "bootstrap",
 				"bJQueryUI": true
-			});
+		});
+
 		$("#uploader").pluploadQueue({
 			// General settings
 			runtimes : 'html5,flash',
@@ -57,6 +58,17 @@
 		"sSortDesc": "header headerSortUp",
 		"sSortable": "header"
 	});
+
+	$('#create-folder, #context-create-folder').click(function() {
+		if ($('#name').val() !== '') {
+			$.post('/docs/ajax_create_folder/<?php echo $url['id_encrypted']; ?>/',
+				{
+				cardid: "<?php echo $this->UserM->info['cardid']; ?>",
+				name: $('#name').val()})
+				.success(function () {});
+		}
+	});
+	/*
 	var docs = {
 		display_errors_state: false,
 		prev_title: $('.docs-title').val(),
@@ -205,24 +217,6 @@
 				}
 			});
 
-			$('#cross-icon').click(function() {
-				reset_errors();
-				$('tr[type="add-folder"]').hide(function () {
-				});
-			});
-
-			$('#folder-name').keydown(function(e){
-				if (e.keyCode === 13) { //bind enter key
-					init_send();
-				}
-			});
-
-			$('#tick-icon, #error-icon').click(function() {
-				init_send();
-			});
-
-
-
 			// Context Menu bindings
 			$('.folder-td').bind("contextmenu",function(e){
 			e.preventDefault();
@@ -284,6 +278,22 @@
 			});
 
 			/*
+			$('#cross-icon').click(function() {
+				reset_errors();
+				$('tr[type="add-folder"]').hide(function () {
+				});
+			});
+
+			$('#folder-name').keydown(function(e){
+				if (e.keyCode === 13) { //bind enter key
+					init_send();
+				}
+			});
+
+			$('#tick-icon, #error-icon').click(function() {
+				init_send();
+			});
+
 			$('#delete').on('click', function() {
 				//$("#confirm").dialog("open");
 				var user_response = confirm("All files and versions will be removed.");
@@ -301,7 +311,7 @@
 			$('#filetree').dialog({
 				autoOpen: false
 			});
-			
+
 			$('#move').on('click', function() {
 				$('#filetree').dialog('open');
 			});
@@ -340,9 +350,9 @@
 				"bInfo": false,
 				"bAutoWidth": false
 
-			}); */
+			});
 			blind_dblClick_folder();
 		}
 	}
-	docs.run();
+	docs.run();*/
 </script>

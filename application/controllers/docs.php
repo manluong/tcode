@@ -43,11 +43,11 @@ class Docs extends MY_Controller {
 	}
 
 	function ajax_create_folder() {
-		$insert_id = $this->_create_folder(decode_id($this->input->post('id')), $this->input->post('cardid'), $this->input->post('name'));
+		$insert_id = $this->_create_folder($this->url['id_plain'], $this->input->post('cardid'), $this->input->post('name'));
 		$this->output->set_content_type('application/json');
 		($insert_id)
-			? $this->output->set_output(json_encode(array('success' => 'success')))
-			: $this->output->set_output(json_encode(array('error' => 'error')));
+			? $this->output->set_output(json_encode(array('success' => '1')))
+			: $this->output->set_output(json_encode(array('success' => '0')));
 	}
 
 	private function _create_folder($id, $cardid, $name) {
@@ -111,8 +111,11 @@ class Docs extends MY_Controller {
 				log_message('debug', 'Docs: Deleted '. $this->format_dirpath($_obj_details['a_docs_dir_dirpath'], $version['a_docs_ver_filename']));
 			}
 		}
-		$this->DocsM->delete_docs($_obj_details['a_docs_id']);
-		$this->output->set_output(json_encode(array('message' => 'error'))); exit();
+		$i = '';
+		$i = $this->DocsM->delete_docs($_obj_details['a_docs_id']);
+		($i !== '')
+		 ? $this->output->set_output(json_encode(array('success' => '1')))
+		 : $this->output->set_output(json_encode(array('success' => '0')));
 	}
 	/*
 	function delete_single() {
@@ -162,6 +165,7 @@ class Docs extends MY_Controller {
 		}
 	}
 
+	/*
 	function get_docs() {
 		$docs = $this->DocsM->get_docs($this->url['id_plain']);
 		if ( ! empty($docs)) {
@@ -170,7 +174,7 @@ class Docs extends MY_Controller {
 		} else {
 			return $this->output->set_output(json_encode(array('message'=>'Your folder is empty.')));
 		}
-	}
+	}*/
 
 	function get_object($bucket, $uri) {
 		$object = S3::getObject($bucket, $uri, FALSE);
@@ -203,6 +207,7 @@ class Docs extends MY_Controller {
 
 	function move_file() {
 		if ($this->input->post('folder_id')) {
+			$this->output->set_content_type('application/json');
 			$versions = $this->DocsM->get_all_versions($this->url['id_plain']);
 			$new_dir = $this->DocsM->get_dirpath_dir($this->input->post('folder_id'));
 			foreach ($versions as $version) {
@@ -213,9 +218,10 @@ class Docs extends MY_Controller {
 					}
 				}
 				$this->DocsM->update_docs_location($this->input->post('folder_id'), $this->url['id_plain']);
+				$this->output->set_output(json_encode(array('success'=>'1')));
 			}
 		} else {
-			return $this->output->set_header('HTTP/1.1 500');
+			$this->output->set_output(json_encode(array('success'=>'0')));
 		}
 	}
 
