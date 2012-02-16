@@ -83,7 +83,7 @@ class Helloworld extends MY_Controller {
 					'style' => 'warning',
 					'icon' => 'trash',
 				)
-			),			
+			),
 			'setting' => array(
 				'hidelabel' => 0,
 			),
@@ -173,7 +173,7 @@ class Helloworld extends MY_Controller {
 
 
 	function sendjson_save() {
-
+/*
 		$data = array();
 
 		//success
@@ -188,7 +188,34 @@ class Helloworld extends MY_Controller {
 		$data['isdiv'] = 0;
 
 		return($data);
+ */
+		$this->url['subaction'] = 'es';
+		$this->url['id_plain'] = '150';
 
+		$this->DatasetM->load('ds_helloworld');
+
+		$success = $this->DatasetM->save();
+
+		if ($success) {
+			$details['links'] = array(
+				'type' => 'ajax',
+				'url' => '/helloworld/returnjson_view',
+				'target' => '',
+				'text' => ''
+			);
+			$message = 'Data saved.';
+		} else {
+			$details['data'] = $this->DatasetM->get_save_errors();
+			$message = 'There was an error saving your data';
+		}
+
+		$this->RespM->set_message($message)
+				->set_type('')
+				->set_template('')
+				->set_success($success)
+				->set_title('Save Hello Dataset')
+				->set_details($details)
+				->output_json();
 	}
 
 	function show_data() {
@@ -203,23 +230,23 @@ class Helloworld extends MY_Controller {
 	}
 
 	function sendjson_sample(){
-			
+
 		//sample json respond
 		//for testing
-		
-		$data = array();	
+
+		$data = array();
 		$links = ',"links":[{"type":"submit","url":"/helloworld/returnjson_save/1/es","target":"","text":"Submit"},{"type":"ajax","url":"/helloworld/contact/1/v","target":"","text":"Cancel","style":"","icon":""}]';
-			
+
 		//for list
 		$data['json'] = '{"success":"1","message":"1","template":"1","title":"Title","type":"view","details":{"setting":{"hidelabel":"0"}'.$links.',"data":[{"fieldname":"firstname","label":"First Name","value":"Anthony"},{"fieldname":"lastname","label":"Last Name","value":"Andy"}]}}';
-		
+
 		//for view
 		$data['json'] = '{"success":"1","message":"1","template":"1","title":"Title","type":"list","details":{"columns":[{"sTitle":null},{"sTitle":null},{"sTitle":null},{"sTitle":null},{"sTitle":null},{"sTitle":""}],"data":[["3","Willson","W.","Willson","Intern7","<div class=\"ar bu-div\"><button type=\"button\" class=\"btn\" onclick=\"ajax_content(\'\/staff\/viewstaff\/nttpw%3D%3D\/v\',\'page\');\"><\/button><\/div>"],["4","John","J.","Jo","","<div class=\"ar bu-div\"><button type=\"button\" class=\"btn\" onclick=\"apps_action_pageload(\'\/staff\/viewstaff\/nttqA%3D%3D\/v\');\"><\/button><\/div>"]],"setting":{"hidetitle":"0"}'.$links.'}}';
-		
+
 		$data['isoutput'] = 1;
 		$data['isdiv'] = 0;
 		return($data);
 
 	}
-	
+
 }
