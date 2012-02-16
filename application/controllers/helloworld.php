@@ -143,7 +143,7 @@ class Helloworld extends MY_Controller {
 					'target' => '',
 					'text' => 'Submit',
 					'type' => 'submit',
-					'url' => '/helloworld/contact/1/as',
+					'url' => '/helloworld/sendjson_save/150/es',
 					'style' => 'default',
 					'icon' => '',
 				),
