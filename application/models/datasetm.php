@@ -154,6 +154,9 @@ class DatasetM extends CI_Model {
 			//fill in select_options
 			if ($r['form_type'] == 'select') $r['select_options'] = $this->get_select_options($r);
 
+			//if form type not defined, default to text
+			if ($r['form_type'] == '') $r['form_type'] = 'text';
+
 			$this->fields[$r['db_table'].'_'.$r['db_field']] = $r;
 		}
 	}
