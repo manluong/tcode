@@ -66,7 +66,7 @@ class Docs extends MY_Controller {
 			'a_docs_desc' => '',
 			'a_docs_status' => '',
 			'a_docs_stamp' => get_current_stamp(),
-			'a_docs_rethisid' => '',
+			'a_docs_app_data_id' => '',
 		);
 		$insert_id = $this->DocsM->insert_a_docs_entry($data);
 
@@ -89,9 +89,9 @@ class Docs extends MY_Controller {
 			'a_docs_dir_socialack' => '',
 			'a_docs_dir_encrypt' => '',
 			'a_docs_dir_browsestyle' => '',
-			'a_docs_dir_reapp' => '',
-			'a_docs_dir_reaction' => '',
-			'a_docs_dir_resubaction' => '',
+			'a_docs_dir_app' => '',
+			'a_docs_dir_action' => '',
+			'a_docs_dir_subaction' => '',
 			'a_docs_dir_noocrindex' => '',
 		);
 		$insert_id = $this->DocsM->insert_a_docs_dir_entry($data);
@@ -201,9 +201,10 @@ class Docs extends MY_Controller {
 		return $i;
 	}
 
+	/*
 	function index() {
 		redirect('/docs/view/0/list-view');
-	}
+	}*/
 
 	function move_file() {
 		if ($this->input->post('folder_id')) {
@@ -274,7 +275,7 @@ class Docs extends MY_Controller {
 		$vars['page'] = '/'.get_template().'/docs/docs_file_html';
 		$data['html'] = $this->load->view('/'.get_template().'/docs/docs_view',$vars,TRUE);
 		$data['isoutput'] = 1;
-		$data['isdiv'] = 1;
+		$data['isdiv'] = 0;
 		return $data;
 	}
 
@@ -486,7 +487,8 @@ class Docs extends MY_Controller {
 		$vars['page'] = '/'.get_template().'/docs/docs_view_html';
 		$data['html'] = $this->load->view('/'.get_template().'/docs/docs_view',$vars,TRUE);
 		$data['isoutput'] = 1;
-		$data['isdiv'] = 1;
+		$data['isdiv'] = 0;
+		//echo $data['html'];
 		return($data);
 	}
 
