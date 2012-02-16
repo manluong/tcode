@@ -2,7 +2,7 @@
 	$(document).ready(function() {
 		$('#directory_contents').dataTable({
 				"bProcessing": true,
-				"sAjaxSource": "http://telcoson.local/docs/get_dir_contents/<?php echo $url['id_encrypted']; ?>/v",
+				"sAjaxSource": "/docs/get_dir_contents/<?php echo $url['id_encrypted']; ?>/v",
 				"sDom": "<'row'<'span8'l><'span8'f>r>t<'row'<'span8'i><'span8'p>>",
 				"sPaginationType": "bootstrap",
 				"bJQueryUI": true
