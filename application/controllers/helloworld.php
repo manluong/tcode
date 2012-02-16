@@ -71,7 +71,7 @@ class Helloworld extends MY_Controller {
 					'target' => '',
 					'text' => 'Edit',
 					'type' => 'ajax',
-					'url' => '/helloworld/contact/1/as',
+					'url' => 'helloworld/contact/1/as',
 					'style' => 'default',
 					'icon' => '',
 				),
@@ -79,7 +79,7 @@ class Helloworld extends MY_Controller {
 					'target' => '',
 					'text' => 'Cancel',
 					'type' => 'ajax',
-					'url' => '/helloworld/contact/1/v',
+					'url' => 'helloworld/contact/1/v',
 					'style' => 'warning',
 					'icon' => 'trash',
 				)
@@ -143,7 +143,7 @@ class Helloworld extends MY_Controller {
 					'target' => '',
 					'text' => 'Submit',
 					'type' => 'submit',
-					'url' => '/helloworld/sendjson_save/150/es',
+					'url' => 'helloworld/sendjson_save/150/es',
 					'style' => 'default',
 					'icon' => '',
 				),
@@ -151,7 +151,7 @@ class Helloworld extends MY_Controller {
 					'target' => '',
 					'text' => 'Cancel',
 					'type' => 'ajax',
-					'url' => '/helloworld/contact/1/v',
+					'url' => 'helloworld/contact/1/v',
 					'style' => 'warning',
 					'icon' => 'trash',
 				)
@@ -198,10 +198,12 @@ class Helloworld extends MY_Controller {
 
 		if ($success) {
 			$details['links'] = array(
+				array(
 				'type' => 'ajax',
-				'url' => '/helloworld/returnjson_view',
+				'url' => 'helloworld/returnjson_view',
 				'target' => '',
 				'text' => ''
+				)
 			);
 			$message = 'Data saved.';
 		} else {

@@ -273,8 +273,9 @@ function ajax_content_submit(divid,submiturl,json){
 				var buLength = json['details']['links'].length;
 				//auto redirect if there is only 1 button, auto go the the page in the button
 				if (buLength == 1){
-					if (json['details']['links'][0]['target'] == "") { json['details']['links'][0]['target'] = divid; }
-					ajax_content(json['details']['links'][0]['url'],json['details']['links'][0]['target']);	
+					if (json['details']['links'][0]['target'] == "") json['details']['links'][0]['target'] = divid;
+					ajax_content(json['details']['links'][0]['url'],json['details']['links'][0]['target']);
+					console.log(json['details']['links'][0]);
 				}
 
 			} else if (json['details']['data']) {
