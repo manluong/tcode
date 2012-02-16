@@ -1,0 +1,737 @@
+<!DOCTYPE html><html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" >
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
+	<title>T Business</title>
+
+	<link rel="stylesheet" href="resources/template/default_web/css/base.css" />
+	<link rel="stylesheet" href="resources/template/default_web/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="resources/template/default_web/css/bootstrap.min.responsive.css" />
+		
+	<script type="text/javascript" src="resources/addon/jquery.min.js"></script>
+	<script type="text/javascript" src="resources/addon/jquery.ui.min.js"></script>
+	<script type="text/javascript" src="resources/addon/content.js"></script>
+	<script type="text/javascript" src="resources/addon/jquery.dataTables.min.js"></script>
+
+	<script type="text/javascript" src="resources/template/default_web/js/dataTables.bootstrap-paging.js"></script>
+	<script type="text/javascript" src="resources/template/default_web/js/bootstrap-tooltip.js"></script>
+	<script type="text/javascript" src="resources/template/default_web/js/bootstrap-dropdown.js"></script>
+	<script type="text/javascript" src="resources/template/default_web/js/jquery.cookie.js"></script>
+	<script type="text/javascript" src="resources/template/default_web/js/theme-global.js"></script>
+
+	<script type="text/javascript" src="resources/addon/ajax_dhtx/ajax_dhtx.js"></script>
+		
+				<script type="text/javascript">
+					window.onload = start;
+					function start() {
+					}
+				</script>
+			
+</head>
+
+<body>
+    <div class="container-full">
+		<div id="sidebar">
+	<div id="company-logo">
+	<img src="resources/images/logo.png" />	</div>
+
+	<div id="global-search-container">
+		<div id="global-search">
+			<input type="text" name="global-search" id="global-search-field" class="search-query" />
+		</div>
+		<div id="global-search-options" class="hide">
+			<div class="control-group">
+				<div class="controls">
+					<label class="checkbox">
+						<input type="checkbox" name="optionsCheckboxList1" value="option1">
+						Contacts
+					</label>
+					<label class="checkbox">
+						<input type="checkbox" name="optionsCheckboxList2" value="option2">
+						Vendors
+					</label>
+					<label class="checkbox">
+						<input type="checkbox" name="optionsCheckboxList3" value="option3">
+						Documents
+					</label>
+					<a class="btn btn-primary">Search</a>
+					<a class="btn" id="global-search-cancel">Cancel</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		$(document).ready(function() {
+			$('#global-search-field').on('focus click', function() {
+				$('#global-search-options').slideDown(300);
+				hide_status_update();
+			}).on('keypress', function(e) {
+				if (e.which == 13) $('#global-search-options').slideUp(300);
+			});
+
+			$('#global-search-cancel').on('click', function() {
+				$('#global-search-options').slideUp(300);
+			});
+		});
+	</script>
+
+
+
+
+	<div id="status">
+		<div class="row-fluid">
+			<div class="avatar"><img src="resources/template/default_web/images/placeholder-image.jpg" /></div>
+			<div id="status-details">
+				<strong>Master Admin</strong><br />
+				<div id="status-current"></div>
+				<div>
+					<span id="status-availability" class="label"></span>
+					<span id="status-location"></span>
+					<span id="status-task"></span>
+				</div>
+			</div>
+		</div>
+
+		<div id="status-update" class="row-fluid">
+			<form id="status-update-form">
+				Currently:<br /> <input type="text" id="status-message" name="message" value="" />
+
+				<div id="status-more-options" class="hide">
+					Availability:<br /> <select id="status-status_type_id" name="status_type_id"></select>
+					Location:<br /> <select id="status-location_id" name="location_id"></select>
+					Working On:<br /> <select id="status-task_id" name="task_id"></select>
+				</div>
+
+				<div id="status-more" class="row-fluid">
+					<a href="#" class="pull-right">More Options</a>
+				</div>
+
+				<input type="hidden" name="geo_lat" val="" />
+				<input type="hidden" name="geo_lng" val="" />
+
+				<a class="btn btn-primary" id="status-update-submit">Update</a><a class="btn status-close">Cancel</a>
+			<form>
+		</div>
+	</div>
+
+	<script>
+		var status_dropdowns_loaded = false;
+		var stor_status;
+
+		$(document).ready(function() {
+			update_status();
+
+			//Make status update
+			$('#status-update-submit').on('click', function() {
+				var new_status = $('#status-update-form').serializeArray();
+				$.post(
+					'/status/ajax_update',
+					new_status,
+					function(resp) {
+						if (resp.success) {
+							update_status();
+							hide_status_update();
+						}
+					},
+					'json'
+				)
+			});
+
+			//Open status update form
+			$('#status-details, #status .avatar').on('click', function() {
+				if ($('#toggle_sidebar').hasClass('icon-chevron-right')) {
+					show_sidebar();
+				}
+
+				$('#status-update').slideDown(300);
+				$('#global-search-options').slideUp(300);
+				$('#status-message').focus().on('keypress', function(e) {
+					if (e.which == 13) $('#status-update-submit').click();
+				});
+
+				setTimeout('resize_nav()', 500);
+			});
+
+			//override status update form's default submit event
+			$('#status-update-form').on('submit', function(e) {
+				e.preventDefault();
+				return false;
+			});
+
+			//Close status update form
+			$('#status-update a.status-close').on('click', function() {
+				hide_status_update();
+			});
+
+			//Open up more options on the status update form
+			$('#status-more a').on('click', function() {
+				//loads up all the dropdown fields and show the extra fields
+				if (!status_dropdowns_loaded) {
+					load_status_locations();
+					load_status_tasks();
+					load_status_availability();
+					status_dropdowns_loaded = true;
+				}
+
+				$('#status-more').addClass('hide');
+				$('#status-more-options').slideDown(300);
+				setTimeout('resize_nav()', 500);
+			});
+		});
+
+		function hide_status_update() {
+			$('#status-update').slideUp(300);
+			$('#status-more').removeClass('hide');
+			$('#status-more-options').slideUp(300);
+			setTimeout('resize_nav()', 500);
+		}
+
+		function update_status() {
+			$.get(
+				'/status/ajax_get_status',
+				function (resp) {
+					if (resp.data.message != '') {
+						stor_status = resp.data;
+						$('#status-current').html(resp.data.message);
+						$('#status-message').val(resp.data.message);
+
+						if (resp.data.status_type != '') $('#status-availability').html(resp.data.status_type);
+						if (resp.data.location != '') $('#status-location').html('@ ' + resp.data.location);
+						if (resp.data.task != '') $('#status-task').html('on ' + resp.data.task);
+
+						if (resp.data.availability == 1) {
+							$('#status-availability').addClass('label-success');
+						} else {
+							$('#status-availability').addClass('label-important');
+						}
+					} else {
+						$('#status-current').html('');
+					}
+				},
+				'json'
+			);
+		}
+
+		function load_status_locations() {
+			$.get(
+				'/locations/ajax_get_list',
+				function(resp) {
+					var target = $('#status-location_id');
+					$(resp.data).each(function(i, v) {
+						target.append('<option value="'+v.id+'">'+v.name+'</option>');
+					});
+					if (stor_status.location_id != '') {
+						$('#status-location_id').val(stor_status.location_id);
+					}
+				},
+				'json'
+			);
+		}
+
+		function load_status_tasks() {
+			$.get(
+				'/tasks/ajax_get_list',
+				function(resp) {
+					var target = $('#status-task_id');
+					$(resp.data).each(function(i, v) {
+						target.append('<option value="'+v.id+'">'+v.name+'</option>');
+					});
+					if (stor_status.task_id != '') {
+						$('#status-task_id').val(stor_status.task_id);
+					}
+				},
+				'json'
+			);
+		}
+
+		function load_status_availability() {
+			$.get(
+				'/status/ajax_get_availability_list',
+				function(resp) {
+					var target = $('#status-status_type_id');
+					$(resp.data).each(function(i, v) {
+						target.append('<option value="'+v.id+'">'+v.name+'</option>');
+					});
+					if (stor_status.status_type_id != '') {
+						$('#status-status_type_id').val(stor_status.status_type_id);
+					}
+				},
+				'json'
+			);
+		}
+	</script>
+
+
+
+	<div id="nav">
+		<ul class="unstyled">
+					<li>
+				<a href="http://tcode.local:10088/dashboard" data-app_name="dashboard" class="ajax">
+					<span class="app-icon">
+						<img src="resources/template/default_web/images/placeholder-image.jpg" />
+					</span>
+					<span class="app-name">Dashboard</span>
+				</a>
+			</li>
+					<li>
+				<a href="http://tcode.local:10088/card" data-app_name="card" class="ajax">
+					<span class="app-icon">
+						<img src="resources/template/default_web/images/placeholder-image.jpg" />
+					</span>
+					<span class="app-name">Contacts</span>
+				</a>
+			</li>
+					<li>
+				<a href="http://tcode.local:10088/client" data-app_name="client" class="ajax">
+					<span class="app-icon">
+						<img src="resources/template/default_web/images/placeholder-image.jpg" />
+					</span>
+					<span class="app-name">Client</span>
+				</a>
+			</li>
+					<li>
+				<a href="http://tcode.local:10088/vendor" data-app_name="vendor" class="ajax">
+					<span class="app-icon">
+						<img src="resources/template/default_web/images/placeholder-image.jpg" />
+					</span>
+					<span class="app-name">Vendor</span>
+				</a>
+			</li>
+					<li>
+				<a href="http://tcode.local:10088/staff" data-app_name="staff" class="ajax">
+					<span class="app-icon">
+						<img src="resources/template/default_web/images/placeholder-image.jpg" />
+					</span>
+					<span class="app-name">Staff</span>
+				</a>
+			</li>
+					<li>
+				<a href="http://tcode.local:10088/product" data-app_name="product" class="ajax">
+					<span class="app-icon">
+						<img src="resources/template/default_web/images/placeholder-image.jpg" />
+					</span>
+					<span class="app-name">Product</span>
+				</a>
+			</li>
+					<li>
+				<a href="http://tcode.local:10088resources" data-app_name="resources" class="ajax">
+					<span class="app-icon">
+						<img src="resources/template/default_web/images/placeholder-image.jpg" />
+					</span>
+					<span class="app-name">Resource</span>
+				</a>
+			</li>
+					<li>
+				<a href="http://tcode.local:10088/subscription" data-app_name="subscription" class="ajax">
+					<span class="app-icon">
+						<img src="resources/template/default_web/images/placeholder-image.jpg" />
+					</span>
+					<span class="app-name">Subscription</span>
+				</a>
+			</li>
+					<li>
+				<a href="http://tcode.local:10088/invoice" data-app_name="invoice" class="ajax">
+					<span class="app-icon">
+						<img src="resources/template/default_web/images/placeholder-image.jpg" />
+					</span>
+					<span class="app-name">Invoice</span>
+				</a>
+			</li>
+					<li>
+				<a href="http://tcode.local:10088/access" data-app_name="access" class="ajax">
+					<span class="app-icon">
+						<img src="resources/template/default_web/images/placeholder-image.jpg" />
+					</span>
+					<span class="app-name">Access</span>
+				</a>
+			</li>
+					<li>
+				<a href="http://tcode.local:10088/lang" data-app_name="lang" class="ajax">
+					<span class="app-icon">
+						<img src="resources/template/default_web/images/placeholder-image.jpg" />
+					</span>
+					<span class="app-name">Languages</span>
+				</a>
+			</li>
+					<li>
+				<a href="http://tcode.local:10088/setting" data-app_name="setting" class="ajax">
+					<span class="app-icon">
+						<img src="resources/template/default_web/images/placeholder-image.jpg" />
+					</span>
+					<span class="app-name">Settings</span>
+				</a>
+			</li>
+					<li>
+				<a href="http://tcode.local:10088/docs" data-app_name="docs" class="ajax">
+					<span class="app-icon">
+						<img src="resources/template/default_web/images/placeholder-image.jpg" />
+					</span>
+					<span class="app-name">Docs</span>
+				</a>
+			</li>
+					<li>
+				<a href="http://tcode.local:10088/license" data-app_name="license" class="ajax">
+					<span class="app-icon">
+						<img src="resources/template/default_web/images/placeholder-image.jpg" />
+					</span>
+					<span class="app-name">License</span>
+				</a>
+			</li>
+					<li>
+				<a href="http://tcode.local:10088/tcs" data-app_name="tcs" class="ajax">
+					<span class="app-icon">
+						<img src="resources/template/default_web/images/placeholder-image.jpg" />
+					</span>
+					<span class="app-name">Tcs</span>
+				</a>
+			</li>
+				</ul>
+	</div>
+
+	<script>
+		/*
+		$(document).ready(function() {
+			$('a.ajax').on('click', function(e) {
+				if (e.metaKey) return true; // if it's a ctrl/cmd + click, run normally
+
+				console.log('activate '+$(this).attr('data-app_name'));
+
+				e.preventDefault();
+				return false;
+			})
+		});
+		*/
+	</script>
+
+
+
+	<div id="sidebar-logo">
+		<a href="#1">
+			<img src="resources/template/default_web/images/telcoson-embossed.png" />
+		</a>
+	</div>
+
+
+
+	<div id="sidebar-footer">
+		<span id="sidebar-footer-controls">
+			<a href="/access/logout" title="Log Off"><i class="icon-off"></i></a>
+			<a href="#" title="Settings"><i class="icon-cog"></i></a>
+			<a href="#" title="History"><i class="icon-time"></i></a>
+			<a href="#" title="Feedback"><i class="icon-comment"></i></a>
+		</span>
+		<i class="icon-chevron-left" id="toggle_sidebar"></i>
+	</div>
+
+	<script>
+		$(document).ready(function() {
+			$('#sidebar-footer-controls a').tooltip();
+
+			if ($.cookie) {
+				if ($.cookie('menuCollapsed') === '1') {
+					hide_sidebar();
+				}
+			}
+
+			$('#toggle_sidebar').click(function() {
+				if ($('#toggle_sidebar').hasClass('icon-chevron-left')) {
+					hide_sidebar();
+				} else {
+					show_sidebar();
+				}
+			});
+		});
+	</script>
+
+
+
+</div>
+		<div id="content-container">
+			<div id="popup_message" class="hide"></div>
+
+			<ul id="breadcrumb" class="breadcrumb"><li><a href="/card" title="Contacts" class="appname">Contacts</a><span class="divider">/</span></li><li class="active"><a href="/card/list" title="List" class="appname">List</a></li></ul>			<div id="content">
+				<div class="container-fluid">
+<div class="row-fluid">
+	
+	<div class="span12 widget">
+		<div class="widget-header"><h4>Files</h4></div>
+		<div class="widget-body">
+			
+						
+<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="example">
+	<thead>
+		<tr>
+			
+			<th>Rendering engine</th>
+			<th>Browser</th>
+			<th>Platform(s)</th>
+			<th>Engine version</th>
+			<th>CSS grade</th>
+		</tr>
+
+	</thead>
+	<tbody>
+		<tr class="odd gradeX">
+			<td>Trident</td>
+			<td>Internet
+				 Explorer 4.0</td>
+			<td>Win 95+</td>
+			<td class="center"> 4</td>
+			<td class="center">X</td>
+		</tr>
+		<tr class="even gradeC">
+			<td>Trident</td>
+			<td>Internet
+				 Explorer 5.0</td>
+			<td>Win 95+</td>
+			<td class="center">5</td>
+			<td class="center">C</td>
+		</tr>
+		<tr class="odd gradeX">
+			<td>Trident</td>
+			<td>Internet
+				 Explorer 4.0</td>
+			<td>Win 95+</td>
+			<td class="center"> 4</td>
+			<td class="center">X</td>
+		</tr>
+		<tr class="even gradeC">
+			<td>Trident</td>
+			<td>Internet
+				 Explorer 5.0</td>
+			<td>Win 95+</td>
+			<td class="center">5</td>
+			<td class="center">C</td>
+		</tr>
+		<tr class="odd gradeX">
+			<td>Trident</td>
+			<td>Internet
+				 Explorer 4.0</td>
+			<td>Win 95+</td>
+			<td class="center"> 4</td>
+			<td class="center">X</td>
+		</tr>
+		<tr class="even gradeC">
+			<td>Trident</td>
+			<td>Internet
+				 Explorer 5.0</td>
+			<td>Win 95+</td>
+			<td class="center">5</td>
+			<td class="center">C</td>
+		</tr>
+		<tr class="odd gradeX">
+			<td>Trident</td>
+			<td>Internet
+				 Explorer 4.0</td>
+			<td>Win 95+</td>
+			<td class="center"> 4</td>
+			<td class="center">X</td>
+		</tr>
+		<tr class="even gradeC">
+			<td>Trident</td>
+			<td>Internet
+				 Explorer 5.0</td>
+			<td>Win 95+</td>
+			<td class="center">5</td>
+			<td class="center">C</td>
+		</tr>
+		<tr class="odd gradeX">
+			<td>Trident</td>
+			<td>Internet
+				 Explorer 4.0</td>
+			<td>Win 95+</td>
+			<td class="center"> 4</td>
+			<td class="center">X</td>
+		</tr>
+		<tr class="even gradeC">
+			<td>Trident</td>
+			<td>Internet
+				 Explorer 5.0</td>
+			<td>Win 95+</td>
+			<td class="center">5</td>
+			<td class="center">C</td>
+		</tr>
+		<tr class="odd gradeX">
+			<td>Trident</td>
+			<td>Internet
+				 Explorer 4.0</td>
+			<td>Win 95+</td>
+			<td class="center"> 4</td>
+			<td class="center">X</td>
+		</tr>
+		<tr class="even gradeC">
+			<td>Trident</td>
+			<td>Internet
+				 Explorer 5.0</td>
+			<td>Win 95+</td>
+			<td class="center">5</td>
+			<td class="center">C</td>
+		</tr>
+		<tr class="odd gradeX">
+			<td>Trident</td>
+			<td>Internet
+				 Explorer 4.0</td>
+			<td>Win 95+</td>
+			<td class="center"> 4</td>
+			<td class="center">X</td>
+		</tr>
+		<tr class="even gradeC">
+			<td>Trident</td>
+			<td>Internet
+				 Explorer 5.0</td>
+			<td>Win 95+</td>
+			<td class="center">5</td>
+			<td class="center">C</td>
+		</tr>
+		<tr class="odd gradeX">
+			<td>Trident</td>
+			<td>Internet
+				 Explorer 4.0</td>
+			<td>Win 95+</td>
+			<td class="center"> 4</td>
+			<td class="center">X</td>
+		</tr>
+		<tr class="even gradeC">
+			<td>Trident</td>
+			<td>Internet
+				 Explorer 5.0</td>
+			<td>Win 95+</td>
+			<td class="center">5</td>
+			<td class="center">C</td>
+		</tr>
+		<tr class="odd gradeX">
+			<td>Trident</td>
+			<td>Internet
+				 Explorer 4.0</td>
+			<td>Win 95+</td>
+			<td class="center"> 4</td>
+			<td class="center">X</td>
+		</tr>
+		<tr class="even gradeC">
+			<td>Trident</td>
+			<td>Internet
+				 Explorer 5.0</td>
+			<td>Win 95+</td>
+			<td class="center">5</td>
+			<td class="center">C</td>
+		</tr>
+		<tr class="odd gradeX">
+			<td>Trident</td>
+			<td>Internet
+				 Explorer 4.0</td>
+			<td>Win 95+</td>
+			<td class="center"> 4</td>
+			<td class="center">X</td>
+		</tr>
+		<tr class="even gradeC">
+			<td>Trident</td>
+			<td>Internet
+				 Explorer 5.0</td>
+			<td>Win 95+</td>
+			<td class="center">5</td>
+			<td class="center">C</td>
+		</tr>
+		<tr class="odd gradeX">
+			<td>Trident</td>
+			<td>Internet
+				 Explorer 4.0</td>
+			<td>Win 95+</td>
+			<td class="center"> 4</td>
+			<td class="center">X</td>
+		</tr>
+		<tr class="even gradeC">
+			<td>Trident</td>
+			<td>Internet
+				 Explorer 5.0</td>
+			<td>Win 95+</td>
+			<td class="center">5</td>
+			<td class="center">C</td>
+		</tr>
+	</tbody>
+</table>
+		
+					
+		</div>
+	</div></div>
+	
+	
+	
+</div>			</div>
+
+
+
+			<div id="content-footer">
+				<div id="appmenu_card" class="appsubmenu">
+    <ul class="nav nav-pills">
+<li class=""><a href="/card/list" class="icon16 icon16-user-silhouette">List</a></li><li class=""><a href="/card/searchcard" class="icon16 icon16-magnifier">Search</a></li><li class=""><a href="/card/card_add/a" class="icon16 icon16-plus">Add</a></li>	</ul>
+
+
+</div>			</div>
+		</div>
+
+	</div>
+
+	<script>
+		$(document).ready(function() {
+			resize_nav();
+
+			$('.dropdown-toggle').dropdown()
+
+    
+/* Table initialisation */
+	$('#example').dataTable( {
+		//"sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
+		"sDom": "<<'pull-right'p>f>t<<'pull-right'p>li>",
+		"sPaginationType": "bootstrap",
+		"oLanguage": {
+			"sSearch" : "<div class=\"input-prepend\"><span class=\"add-on\"><i class=\"icon-search\"></i></span></i>_INPUT_</div>",
+			"sInfo": "Showing _START_ to _END_ of _TOTAL_",
+			"sLengthMenu": "_MENU_ Rows per Page",
+			"sInfoFiltered": " - filtering from _MAX_ records",
+			"oPaginate": {
+        		"sPrevious": "Previous",
+        		"sNext": "Next"
+      		},
+      		"sLengthMenu": '<select>'+
+	        '<option value="10">10</option>'+
+	        '<option value="20">20</option>'+
+	        '<option value="30">30</option>'+
+	        '<option value="40">40</option>'+
+	        '<option value="50">50</option>'+
+	        '<option value="-1">All</option>'+
+	        '</select> Rows'
+      	
+		}
+	} );
+	
+	
+			
+			
+					
+		});
+
+		$(window).resize(function(){
+			setTimeout('resize_nav()', 1000);
+		});
+
+		$('#content-container').on('click', function() {
+			$('#status-update').slideUp(300);
+			$('#global-search-options').slideUp(300);
+			setTimeout('resize_nav()', 400);
+		});
+
+		function resize_nav() {
+			var sidebar_height = $('#sidebar').outerHeight();
+			sidebar_height -= $('#company-logo').outerHeight();
+			sidebar_height -= $('#global-search-container').outerHeight();
+			sidebar_height -= $('#status').outerHeight();
+			sidebar_height -= $('#sidebar-footer').outerHeight();
+
+			$('#nav').outerHeight(sidebar_height);
+		}
+	</script>
+
+</body>
+</html>

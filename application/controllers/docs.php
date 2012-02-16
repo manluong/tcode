@@ -487,7 +487,7 @@ class Docs extends MY_Controller {
 		$vars['page'] = '/'.get_template().'/docs/docs_view_html';
 		$data['html'] = $this->load->view('/'.get_template().'/docs/docs_view',$vars,TRUE);
 		$data['isoutput'] = 1;
-		$data['isdiv'] = 0;
+		$data['isdiv'] = 1;
 		//echo $data['html'];
 		return($data);
 	}

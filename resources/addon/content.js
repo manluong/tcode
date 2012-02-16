@@ -101,58 +101,36 @@ function ajax_content_list(json,divid,links){
 
 	var tableid = divid+"_table";
 
-	if (json['details']['setting']['hidetitle'] == 1){
+	//if (json['details']['setting']['hidetitle'] == 1){
 
-		ajax_content_echo(json,divid,'<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-condensed tpaneltable_notitle" id="'+tableid+'"></table>'+links.html);
-		
-		$('#'+tableid).dataTable({
-			"aoColumns": json['details']['columns'],
-			"aaData": json['details']['data'],
-			"bAutoWidth": false,
-			"bJQueryUI": false,
-			"bProcessing": true,
-			"sPaginationType": "full_numbers",
-			"fnDrawCallback": function() {
-				//formui_reload();
-			},
-			"bPaginate": false,
-			"bLengthChange": false,
-			"bFilter": false,
-			"bSort": false,
-			"bInfo": false,
-			"bAutoWidth": false
+	ajax_content_echo(json,divid,'<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="'+tableid+'"></table>'+links.html);
+	
+	$('#'+tableid).dataTable( {
+		"aoColumns": json['details']['columns'],
+		"aaData": json['details']['data'],
+		"sDom": "<<'pull-right'p>f>t<<'pull-right'p>li>",
+		"sPaginationType": "bootstrap",
+		"oLanguage": {
+			"sSearch" : "<div class=\"input-prepend\"><span class=\"add-on\"><i class=\"icon-search\"></i></span></i>_INPUT_</div>",
+			"sInfo": "Showing _START_ to _END_ of _TOTAL_",
+			"sLengthMenu": "_MENU_ Rows per Page",
+			"sInfoFiltered": " - filtering from _MAX_ records",
+			"oPaginate": {
+        		"sPrevious": "Previous",
+        		"sNext": "Next"
+      		},
+      		"sLengthMenu": '<select>'+
+	        '<option value="10">10</option>'+
+	        '<option value="20">20</option>'+
+	        '<option value="30">30</option>'+
+	        '<option value="40">40</option>'+
+	        '<option value="50">50</option>'+
+	        '<option value="-1">All</option>'+
+	        '</select> Rows'
+      	
+		}
+	});		
 
-			,"sDom": "<'row'<'span8'l><'span8'f>r>t<'row'<'span8'i><'span8'p>>",
-			"sPaginationType": "bootstrap"
-		});
-
-
-
-	}else{
-
-		ajax_content_echo(json,divid,'<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-condensed tpaneltable" id="'+tableid+'"></table>'+links.html);
-
-		$('#'+tableid).dataTable({
-			"aoColumns": json['details']['columns'],
-			"aaData": json['details']['data'],
-			"bAutoWidth": false,
-			"bJQueryUI": true,
-			"bProcessing": true,
-			"sPaginationType": "full_numbers",
-			"fnDrawCallback": function() {
-				//formui_reload();
-				}
-
-			,"sDom": "<'row'<'span5'l><'span5'f>r>t<'row'<'span5'i><'span5'p>>",
-			"sPaginationType": "bootstrap"
-		});
-	}
-
-	$.extend( $.fn.dataTableExt.oStdClasses, {
-	    "sSortAsc": "header headerSortDown",
-	    "sSortDesc": "header headerSortUp",
-	    "sSortable": "header"
-	} );
 }
 
 function ajax_content_view(json,divid,links){
