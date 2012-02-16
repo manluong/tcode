@@ -8,6 +8,7 @@ class DatasetM extends CI_Model {
 	protected $properties = array();
 
 	var $loaded = false;
+	var $subaction = '';
 
 	var $sql = '';
 
@@ -20,7 +21,13 @@ class DatasetM extends CI_Model {
 	function load($ds) {
 		$this->load_properties($ds);
 
-		if ($this->properties[$this->url['subaction']] == 0) die('The subaction you requested for this dataset is not allowed.');
+		$subaction = $this->url['subaction'];
+		if ($subaction == 'as') $subaction = 'a';
+		if ($subaction == 'es') $subaction = 'e';
+
+		if ($this->properties[$subaction] == 0) die('The subaction you requested for this dataset is not allowed.');
+
+		$this->subaction = $subaction;
 
 		$this->load_tables($ds);
 		$this->load_fields($ds);
@@ -43,7 +50,7 @@ class DatasetM extends CI_Model {
 		//remove unneeded data
 		foreach($fields AS $k=>$f) {
 			//checks avedls
-			if ($f[$this->url['subaction']] == 0) {
+			if ($f[$this->subaction] == 0) {
 				unset($fields[$k]);
 				continue;
 			}
@@ -110,9 +117,9 @@ class DatasetM extends CI_Model {
 
 
 		foreach($fields AS $field_key=>$field) {
-			if ($this->url['subaction']=='e') {
+			if ($this->subaction=='e') {
 				$fields[$field_key]['value'] = $this->data[$field_key];
-			} elseif ($this->url['subaction']=='a') {
+			} elseif ($this->subaction=='a') {
 				$fields[$field_key]['value'] = $field['default_value'];
 			}
 			$fields[$field_key]['label'] = $this->fields[$field_key]['db_field'];
@@ -133,7 +140,7 @@ class DatasetM extends CI_Model {
 			//data verified
 
 			//load old data
-			if ($this->url['subaction'] == 'es') $this->load_data();
+			if ($this->subaction == 'e') $this->load_data(true);
 
 			//go through each table
 			foreach($this->db_tables AS $order=>$table) {
@@ -145,14 +152,14 @@ class DatasetM extends CI_Model {
 					$data[$this->fields[$key_field]['db_field']] = $d;
 				}
 
-				if ($this->url['subaction'] == 'es') {
+				if ($this->subaction == 'e') {
 					//define the primary fields
 					$primary_field = $this->get_form_field($table['db_table']);
-					$primary_key_field = $table['db_table'].'_'.$primary_field;
+					$primary_key_field = str_replace('.', '_', $primary_field);
 
 					$this->db->where($primary_field, $this->data[$primary_key_field])
 							->update($table['db_table'], $data);
-				} elseif ($this->url['subaction'] == 'as') {
+				} elseif ($this->subaction == 'a') {
 					$this->db->insert($table['db_table'], $data);
 				}
 			}
@@ -225,12 +232,16 @@ class DatasetM extends CI_Model {
 
 
 
-	private function load_data() {
+	private function load_data($unfiltered_fields = false) {
 		//load fields
 		$fields = array();
 		foreach($this->fields AS $f) {
 			//checks avedls
-			if ($f[$this->url['subaction']] == 1) $fields[] = $f['db_table'].'.'.$f['db_field'].' AS '.$f['db_table'].'_'.$f['db_field'];
+			if ($unfiltered_fields) {
+				$fields[] = $f['db_table'].'.'.$f['db_field'].' AS '.$f['db_table'].'_'.$f['db_field'];
+			} else {
+				if ($f[$this->subaction] == 1) $fields[] = $f['db_table'].'.'.$f['db_field'].' AS '.$f['db_table'].'_'.$f['db_field'];
+			}
 		}
 		$this->db->select(implode(', ', $fields), FALSE);
 
@@ -251,16 +262,16 @@ class DatasetM extends CI_Model {
 		}
 
 		//add where statement based on subaction
-		if ($this->url['subaction'] == 'l') {
+		if ($this->subaction == 'l') {
 			if ($this->url['id_plain']!=0) $this->db->where($this->get_list_field(), $this->url['id_plain']);
 		} else {
 			$this->db->where($this->get_form_field($this->db_tables[0]['db_table']), $this->url['id_plain']);
 		}
 
 		//order by fields based on subaction
-		if ($this->url['subaction'] == 'l') {
+		if ($this->subaction == 'l') {
 			$sort_fields = $this->get_sort_fields('sort_list');
-		} elseif ($this->url['subaction'] == 's') {
+		} elseif ($this->subaction == 's') {
 			$sort_fields = $this->get_sort_fields('sort_search');
 		} else {
 			$sort_fields = $this->get_sort_fields('sort_form');
@@ -270,7 +281,7 @@ class DatasetM extends CI_Model {
 		$rs = $this->db->get();
 
 
-		if ($this->url['subaction'] == 'l') {
+		if ($this->subaction == 'l') {
 			$this->data = $rs->result_array();
 		} else {
 			$this->data = $rs->row_array();
@@ -284,8 +295,7 @@ class DatasetM extends CI_Model {
 
 	private function load_submit_data() {
 		foreach($this->fields AS $key_field=>$f) {
-			if ($this->url['subaction']=='es' && $f['e'] == 0) continue;
-			if ($this->url['subaction']=='as' && $f['a'] == 0) continue;
+			if ($f[$this->subaction] == 0) continue;
 
 			$this->form_data[$key_field] = $this->input->get_post($key_field, TRUE);
 		}
@@ -399,7 +409,7 @@ class DatasetM extends CI_Model {
 		$fields = array();
 		foreach($this->fields AS $f) {
 			if ($f[$sort_field] == 0) continue;
-			if ($f[$this->url['subaction']] == 0) continue;	//checks avedls
+			if ($f[$this->subaction] == 0) continue;	//checks avedls
 			$fields[$f[$sort_field]] = $f['db_table'].'.'.$f['db_field'];
 		}
 		return implode(', ',$fields);
