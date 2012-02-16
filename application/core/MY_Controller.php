@@ -59,7 +59,7 @@ class MY_Controller extends CI_Controller {
 	var $is_ajax = FALSE;
 
 	//valid subactions
-	var $subactions = array('a','v','e','d','l','s','as','es');
+	var $subactions = array('a','v','e','d','l','s','as','es','ds');
 
 	function __construct() {
 		parent::__construct();
