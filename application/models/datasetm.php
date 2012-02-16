@@ -4,11 +4,14 @@ class DatasetM extends CI_Model {
 	protected $db_tables = '';
 	protected $fields = '';
 	protected $data = '';
+	protected $form_data = array();
 	protected $properties = array();
 
 	var $loaded = false;
 
 	var $sql = '';
+
+	var $data_errors = array();
 
 	function __construct() {
 		parent::__construct();
@@ -45,19 +48,20 @@ class DatasetM extends CI_Model {
 				continue;
 			}
 
-			unset($fields[$k]['dataset_name'], $fields[$k]['db_table'], $fields[$k]['form_id'], $fields[$k]['list_id'], $fields[$k]['parent_join'], $fields[$k]['child_join']);
+			unset($fields[$k]['dataset_name'], $fields[$k]['parent_join'], $fields[$k]['child_join']);
 			unset($fields[$k]['a'], $fields[$k]['v'], $fields[$k]['e'], $fields[$k]['d'], $fields[$k]['l'], $fields[$k]['s'], $fields[$k]['sq']);
 			unset($fields[$k]['sort_form'], $fields[$k]['sort_list'], $fields[$k]['sort_search']);
 			unset($fields[$k]['sel_source'], $fields[$k]['sel_groupname'], $fields[$k]['sel_sql'], $fields[$k]['sel_sqlkey'], $fields[$k]['sel_sqlname']);
 
-			unset($fields[$k]['chk_type'], $fields[$k]['date_to'], $fields[$k]['db_field'], $fields[$k]['db_primary'], $fields[$k]['id'], $fields[$k]['textarea_type']);
-			unset($fields[$k]['hidden'], $fields[$k]['default_value']);
+			unset($fields[$k]['db_primary']);
 		}
 
 		return $fields;
 	}
 
 	function get_datatable_fields() {
+		if (!$this->loaded) die('No dataset loaded, please call $this->DatasetM->load($dataset_name) first.');
+
 		$results = array();
 
 		$fields = $this->get_fields();
@@ -70,6 +74,8 @@ class DatasetM extends CI_Model {
 	}
 
 	function get_datatable_data() {
+		if (!$this->loaded) die('No dataset loaded, please call $this->DatasetM->load($dataset_name) first.');
+
 		$results = array();
 
 		$data = $this->get_data();
@@ -81,6 +87,8 @@ class DatasetM extends CI_Model {
 	}
 
 	function get_view_data() {
+		if (!$this->loaded) die('No dataset loaded, please call $this->DatasetM->load($dataset_name) first.');
+
 		$result = array();
 		foreach($this->get_data() AS $field_key=>$value) {
 			$result[] = array(
@@ -95,21 +103,75 @@ class DatasetM extends CI_Model {
 	}
 
 	function get_form_data() {
+		if (!$this->loaded) die('No dataset loaded, please call $this->DatasetM->load($dataset_name) first.');
+
 		$fields = $this->get_fields();
 		$this->load_data();
 
-		if ($this->url['subaction']=='e') {
-			foreach($fields AS $field_key=>$field) {
+
+		foreach($fields AS $field_key=>$field) {
+			if ($this->url['subaction']=='e') {
 				$fields[$field_key]['value'] = $this->data[$field_key];
-				$fields[$field_key]['label'] = $this->fields[$field_key]['db_field'];
-				$fields[$field_key]['helptext'] = '';
-				$fields[$field_key]['select_options'] = '';
+			} elseif ($this->url['subaction']=='a') {
+				$fields[$field_key]['value'] = $field['default_value'];
 			}
+			$fields[$field_key]['label'] = $this->fields[$field_key]['db_field'];
+			$fields[$field_key]['db_field'] = $field_key;
+			$fields[$field_key]['name'] = $field_key;	//temp override
 		}
 
 		return array_values($fields);
 	}
 
+
+	function save() {
+		if (!$this->loaded) die('No dataset loaded, please call $this->DatasetM->load($dataset_name) first.');
+
+		$this->load_submit_data();
+
+		if ($this->verify_data()) {
+			//data verified
+
+			//load old data
+			if ($this->url['subaction'] == 'es') $this->load_data();
+
+			//go through each table
+			foreach($this->db_tables AS $order=>$table) {
+
+				//gather the data for that table in a var
+				$data = array();
+				foreach($this->form_data AS $key_field=>$d) {
+					if ($this->fields[$key_field]['db_table'] != $table['db_table']) continue;
+					$data[$this->fields[$key_field]['db_field']] = $d;
+				}
+
+				if ($this->url['subaction'] == 'es') {
+					//define the primary fields
+					$primary_field = $this->get_form_field($table['db_table']);
+					$primary_key_field = $table['db_table'].'_'.$primary_field;
+
+					$this->db->where($primary_field, $this->data[$primary_key_field])
+							->update($table['db_table'], $data);
+				} elseif ($this->url['subaction'] == 'as') {
+					$this->db->insert($table['db_table'], $data);
+				}
+			}
+			return TRUE;
+		} else {
+			//error in data
+			return FALSE;
+		}
+	}
+
+	function get_save_errors() {
+		$result = array();
+
+		foreach($this->data_errors AS $field=>$error_array) {
+			$result[$field] = implode('<br />',$error_array);
+		}
+
+		return $result;
+	}
 
 
 	private function load_properties($ds) {
@@ -192,7 +254,7 @@ class DatasetM extends CI_Model {
 		if ($this->url['subaction'] == 'l') {
 			if ($this->url['id_plain']!=0) $this->db->where($this->get_list_field(), $this->url['id_plain']);
 		} else {
-			$this->db->where($this->get_form_field(), $this->url['id_plain']);
+			$this->db->where($this->get_form_field($this->db_tables[0]['db_table']), $this->url['id_plain']);
 		}
 
 		//order by fields based on subaction
@@ -220,6 +282,94 @@ class DatasetM extends CI_Model {
 
 
 
+	private function load_submit_data() {
+		foreach($this->fields AS $key_field=>$f) {
+			if ($this->url['subaction']=='es' && $f['e'] == 0) continue;
+			if ($this->url['subaction']=='as' && $f['a'] == 0) continue;
+
+			$this->form_data[$key_field] = $this->input->get_post($key_field, TRUE);
+		}
+	}
+
+
+	private function verify_data() {
+		$has_error = FALSE;
+
+		//check for required field
+		foreach($this->form_data AS $key_field => $data) {
+			if (!$this->fields[$key_field]['required']) continue;
+			if ($data !== FALSE && strlen($data) > 0) continue;
+
+			$has_error = TRUE;
+			$this->data_errors[$key_field][] = 'Required Field';
+		}
+
+		//check for min length
+		foreach($this->form_data AS $key_field => $data) {
+			if ($this->fields[$key_field]['min'] == 0) continue;
+
+			if ($this->fields[$key_field]['form_type'] == 'select') {
+				if (count($data) >= $this->fields[$key_field]['min']) continue;
+
+				$has_error = TRUE;
+				$this->data_errors[$key_field][] = 'You need to select at least '.$this->fields[$key_field]['min'].' items.';
+			} else {
+				if (strlen($data) >= $this->fields[$key_field]['min']) continue;
+
+				$has_error = TRUE;
+				$this->data_errors[$key_field][] = 'You need to enter at least '.$this->fields[$key_field]['min'].' characters.';
+			}
+		}
+
+		//check for max length
+		foreach($this->form_data AS $key_field => $data) {
+			if ($this->fields[$key_field]['max'] == 0) continue;
+
+			if ($this->fields[$key_field]['form_type'] == 'select') {
+				if (count($data) <= $this->fields[$key_field]['max']) continue;
+
+				$has_error = TRUE;
+				$this->data_errors[$key_field][] = 'You can only select up to '.$this->fields[$key_field]['max'].' items.';
+			} else {
+				if (strlen($data) <= $this->fields[$key_field]['max']) continue;
+
+				$has_error = TRUE;
+				$this->data_errors[$key_field][] = 'You can only enter up to '.$this->fields[$key_field]['max'].' characters.';
+			}
+		}
+
+		//check for valid select options
+		foreach($this->form_data AS $key_field => $data) {
+			if ($this->fields[$key_field]['form_type'] != 'select') continue;
+
+			$select_options = array();
+			foreach($this->fields[$key_field]['select_options'] AS $s) {
+				$select_options[] = $s['key'];
+			}
+
+			foreach($data AS $d) {
+				if (in_array($d, $select_options)) continue;
+
+				$has_error = TRUE;
+				$this->data_errors[$key_field][] = 'Invalid selection detected: '.$d;
+			}
+		}
+
+		//check for valid email
+		foreach($this->form_data AS $key_field => $data) {
+			if ($this->fields[$key_field]['form_type'] != 'email') continue;
+
+			if (strpos($data, '@') !== FALSE) continue;
+
+			$has_error = TRUE;
+			$this->data_errors[$key_field][] = 'Invalid email address';
+		}
+
+		return !$has_error;
+	}
+
+
+
 
 	// $join = parent_join | child_join
 	private function get_join_field($table, $join='parent_join') {
@@ -237,8 +387,9 @@ class DatasetM extends CI_Model {
 		die('This dataset does not have a list_id field selected');
 	}
 
-	private function get_form_field() {
+	private function get_form_field($table) {
 		foreach($this->fields AS $f) {
+			if ($f['db_table'] != $table) continue;
 			if ($f['form_id'] == 1) return $f['db_table'].'.'.$f['db_field'];
 		}
 		die('This dataset does not have a form_id field selected');
@@ -286,4 +437,3 @@ class DatasetM extends CI_Model {
 	}
 
 }
-?>
