@@ -2,8 +2,8 @@
 	<div class="title">
 		<input type="text" value="" id="title_input" class="docs-title"><br><span class="message" style="display:none;"></span>
 	</div>
-	<img src="" id="s3_object">
-	<?php //echo $s3_object; ?>
+	<img src="" id="image_placeholder">
+	<p id="viewerPlaceHolder" style="width:660px;height:553px;display:block">Document loading..</p>
 </div>
 <div id="tree"></div>
 <div class="actions btn-group">
@@ -46,13 +46,52 @@ $(document).ready(function () {
 	window.d = {
 		docs_id: '<?php echo $url['id_encrypted']; ?>',
 		init: function () {
-			$.getJSON('/docs/get_file_details/<?php echo $url['id_encrypted']; ?>/v').success(function(data) {
+			$.get('/docs/get_file_details/<?php echo $url['id_encrypted']; ?>/v').success(function(data) {
+				d = data;
 				var title_input_value = (data['docs_details']['a_docs_displayname'] !== '')
 				? data['docs_details']['a_docs_displayname']
 				: data['docs_details']['a_docs_ver_filename'];
 
 				$('#title_input').attr('value', title_input_value);
-				$('#s3_object').attr('src', data['s3object']);
+
+				// Sets display
+				if (data['docs_details']['a_docs_ver_mime'] === 'application/pdf') {
+					var fp = new FlexPaperViewer(
+						'/resources/addon/docs/FlexPaper_1.5.1_flash/FlexPaperViewer',
+						'viewerPlaceHolder', { config : {
+						SwfFile : escape('/docs/pdfPreview?doc='+data['docs_details']['a_docs_ver_filename']),
+						Scale : 0.6,
+						ZoomTransition : 'easeOut',
+						ZoomTime : 0.5,
+						ZoomInterval : 0.2,
+						FitPageOnLoad : true,
+						FitWidthOnLoad : false,
+						FullScreenAsMaxWindow : false,
+						ProgressiveLoading : false,
+						MinZoomSize : 0.2,
+						MaxZoomSize : 5,
+						SearchMatchAll : false,
+						InitViewMode : 'Portrait',
+						PrintPaperAsBitmap : false,
+
+						ViewModeToolsVisible : true,
+						ZoomToolsVisible : true,
+						NavToolsVisible : true,
+						CursorToolsVisible : true,
+						SearchToolsVisible : true,
+
+						localeChain: 'en_US'
+						}});
+					$('#image_placeholder').hide();
+				}
+
+				if (data['docs_details']['a_docs_ver_mime'] === 'image') {
+					$('#image_placeholder').attr('src', data['s3object']);
+					$('#viewerPlaceHolder').hide();
+				}
+
+
+
 				$('#download').attr('href', '/docs/download_file/'+data['docs_details']['a_docs_ver_id']+'/download');
 
 				$('#file_info').dataTable({
@@ -76,7 +115,7 @@ $(document).ready(function () {
 					"bJQueryUI": true
 				});
 
-				// versions
+				// bind upload
 				var uploader = new plupload.Uploader({
 					runtimes: "html5, flash",
 					browse_button: "upload",
