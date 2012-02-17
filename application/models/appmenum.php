@@ -89,7 +89,7 @@ class AppmenuM extends CI_Model {
 
 		$result_menugp = $this->get_appmenu_gp($appmenu_gp);
 
-		if ($result_menugp === FALSE) return FALSE;
+		if ($result_menugp === FALSE) return array('appmenu'=>FALSE);
 
 		$menugp_getthisid = $result_menugp['core_apps_menu_gp_getthisid'];
 		$menugp_thisidtype = $result_menugp['core_apps_menu_gp_thisidtype'];
