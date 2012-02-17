@@ -8,19 +8,16 @@ class DatasetM extends CI_Model {
 	protected $properties = array();
 
 	var $loaded = false;
+
+	var $id = '';
 	var $subaction = '';
 
 	var $sql = '';
 
 	var $data_errors = array();
 
-	var $url = array();
-
 	function __construct() {
 		parent::__construct();
-
-		$CI =& get_instance();
-		$this->url = $CI->url;
 	}
 
 	function load($ds) {
@@ -36,6 +33,8 @@ class DatasetM extends CI_Model {
 
 		$this->load_tables($ds);
 		$this->load_fields($ds);
+
+		$this->id = $this->url['id_plain'];
 
 		$this->loaded = true;
 
@@ -326,9 +325,9 @@ class DatasetM extends CI_Model {
 
 		//add where statement based on subaction
 		if ($this->subaction == 'l') {
-			if ($this->url['id_plain']!=0) $this->db->where($this->get_list_field(), $this->url['id_plain']);
+			if ($this->id!=0) $this->db->where($this->get_list_field(), $this->id);
 		} else {
-			$this->db->where($this->get_form_field($this->db_tables[0]['db_table']), $this->url['id_plain']);
+			$this->db->where($this->get_form_field($this->db_tables[0]['db_table']), $this->id);
 		}
 
 		//order by fields based on subaction
