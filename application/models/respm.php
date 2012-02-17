@@ -60,5 +60,9 @@ class RespM extends CI_Model {
 		echo json_encode($this->output());
 	}
 
+	function return_json() {
+		return json_encode($this->output());
+	}
+
 }
 ?>
