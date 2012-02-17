@@ -17,11 +17,6 @@
 	<script type="text/javascript" src="/resources/addon/content.js"></script>
 	<script type="text/javascript" src="/resources/addon/tpanel.js"></script>
 
-	<script type="text/javascript" src="http://bp.yahooapis.com/2.4.21/browserplus-min.js"></script>
-<script type="text/javascript" src="/resources/addon/plupload/js/plupload.full.js"></script>
-<script type="text/javascript" src="/resources/addon/plupload/js/jquery.plupload.queue/jquery.plupload.queue.js"></script>
-<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/added/flexpaper_flash.js"></script>
-
 	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/bootstrap-tooltip.js"></script>
 	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/bootstrap-dropdown.js"></script>
 	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/bootstrap-tab.js"></script>
@@ -33,6 +28,14 @@
 	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/bootstrap.min.css" />
 	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/bootstrap.min.responsive.css" />
 	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/jquerytool.css" />
+
+	<!-- Docs -->
+	<script type="text/javascript" src="http://bp.yahooapis.com/2.4.21/browserplus-min.js"></script>
+<script type="text/javascript" src="/resources/addon/docs/plupload/js/plupload.full.js"></script>
+	<script type="text/javascript" src="/resources/addon/docs/plupload/js/jquery.plupload.queue/jquery.plupload.queue.js"></script>
+	<script type="text/javascript" src="/resources/template/docs/FlexPaper_1.5.1_flash/js/flexpaper_flash.js"></script>
+	<link href="/resources/addon/docs/plupload/js/jquery.plupload.queue/css/jquery.plupload.queue.css" media="screen" rel="stylesheet" type="text/css" />
+	<!-- end Docs -->
 
 	<?=$head?>
 
