@@ -14,8 +14,13 @@ class DatasetM extends CI_Model {
 
 	var $data_errors = array();
 
+	var $url = array();
+
 	function __construct() {
 		parent::__construct();
+
+		$CI =& get_instance();
+		$this->url = $CI->url;
 	}
 
 	function load($ds) {
@@ -33,6 +38,8 @@ class DatasetM extends CI_Model {
 		$this->load_fields($ds);
 
 		$this->loaded = true;
+
+		return $this;
 	}
 
 	function get_data() {
@@ -136,38 +143,94 @@ class DatasetM extends CI_Model {
 
 		$this->load_submit_data();
 
-		if ($this->verify_data()) {
-			//data verified
+		if (!$this->verify_data()) return FALSE;
 
-			//load old data
-			if ($this->subaction == 'e') $this->load_data(true);
-
-			//go through each table
-			foreach($this->db_tables AS $order=>$table) {
-
-				//gather the data for that table in a var
-				$data = array();
-				foreach($this->form_data AS $key_field=>$d) {
-					if ($this->fields[$key_field]['db_table'] != $table['db_table']) continue;
-					$data[$this->fields[$key_field]['db_field']] = $d;
-				}
-
-				if ($this->subaction == 'e') {
-					//define the primary fields
-					$primary_field = $this->get_form_field($table['db_table']);
-					$primary_key_field = str_replace('.', '_', $primary_field);
-
-					$this->db->where($primary_field, $this->data[$primary_key_field])
-							->update($table['db_table'], $data);
-				} elseif ($this->subaction == 'a') {
-					$this->db->insert($table['db_table'], $data);
-				}
-			}
-			return TRUE;
-		} else {
-			//error in data
-			return FALSE;
+		if ($this->subaction == 'e') {
+			return $this->edit_save();
+		} elseif ($this->subaction == 'a') {
+			return $this->add_save();
 		}
+	}
+
+
+	private function edit_save() {
+		//load old data
+		$this->load_data(true);
+
+		//go through each table
+		foreach($this->db_tables AS $order=>$table) {
+
+			//gather the data for that table in a var
+			$data = array();
+			foreach($this->form_data AS $field_key=>$d) {
+				if ($this->fields[$field_key]['db_table'] != $table['db_table']) continue;
+				$data[$this->fields[$field_key]['db_field']] = $d;
+			}
+
+			//define the primary fields
+			$form_field = $this->get_form_field($table['db_table']);
+			$form_field_key = str_replace('.', '_', $form_field);
+
+			$this->db->where($form_field, $this->data[$form_field_key])
+					->update($table['db_table'], $data);
+		}
+
+		return TRUE;
+	}
+
+	private function add_save() {
+		$table_keys = array();
+
+		//go through each table
+		foreach($this->db_tables AS $order=>$table) {
+			//gather the data for that table in a var
+			$data = array();
+			foreach($this->form_data AS $field_key=>$d) {
+				if ($this->fields[$field_key]['db_table'] != $table['db_table']) continue;
+				$data[$this->fields[$field_key]['db_field']] = $d;
+			}
+
+			$this->db->insert($table['db_table'], $data);
+
+			//define the primary fields
+			$form_field_key = str_replace('.', '_', $this->get_form_field($table['db_table']));
+
+			//if the form_id field value exists in the data
+			$value = (isset($data[$this->fields[$form_field_key]['db_field']]))
+					? $data[$this->fields[$form_field_key]['db_field']]
+					: $this->db->insert_id();
+
+			$table_keys[$order] = array(
+				'form_field_key' => $form_field_key,
+				'value' => $value,
+			);
+
+			//if primary table, store the parent_join field value
+			if ($order == 0) $pt_value = $value;
+		}
+
+		//save pk-fk link for multiple tables
+		if (count($this->db_tables)>1) {
+			foreach($this->db_tables AS $order=>$table) {
+				//skip primary table
+				if ($order == 0) continue;
+
+				//st = secondary table
+				$st_form_field = $this->fields[$table_keys[$order]['form_field_key']];
+				$st_form_value = $table_keys[$order]['value'];
+
+				$cj_field = $this->fields[str_replace('.', '_', $this->get_join_field($table['db_table'], 'child_join'))]['db_field'];
+
+				$data = array(
+					$cj_field => $pt_value,
+				);
+
+				$this->db->where($st_form_field, $st_form_value)
+						->update($table['db_table'], $data);
+			}
+		}
+
+		return TRUE;
 	}
 
 	function get_save_errors() {
