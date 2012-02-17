@@ -382,8 +382,6 @@ class MY_Controller extends CI_Controller {
 				break;
 
 			case 'json':
-				break;
-
 				header('Content-type: text/json');
 				header('Content-type: application/json');
 				// if there is an array name "json", just print, content alreay in json format
