@@ -462,6 +462,21 @@ class Docs extends MY_Controller {
 			->set_output(json_encode(array('aaData'=>$rows)));
 	}
 
+	/**
+	 * Returns raw json values of directory contents
+	 */
+	function get_dir_contents_raw() {
+		$sub_folders = $this->DocsM->get_sub_folders($this->url['id_plain']);
+		if ($this->url['id_plain'] !== '1') {
+			$parent = $this->DocsM->get_parent_id($this->url['id_plain']);
+		}
+		$docs = $this->DocsM->get_docs($this->url['id_plain']);
+		$json = array('parent' => isset($parent) ? $parent : '',
+			'sub_folder' => $sub_folders, 'docs' => $docs);
+		$this->output->set_content_type('application/json')
+			->set_output(json_encode($json));
+	}
+
 	// Called by view in tbuilder
 	function load_html() {
 		if ($this->url['subaction'] === 'folder-view') {
