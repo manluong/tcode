@@ -136,6 +136,32 @@ class DatasetM extends CI_Model {
 		return array_values($fields);
 	}
 
+	function delete() {
+		if (!$this->loaded) die('No dataset loaded, please call $this->DatasetM->load($dataset_name) first.');
+
+		$this->load_data(true);
+
+		$pj_value = '';
+
+		foreach($this->db_tables AS $order=>$table) {
+			if ($order == 0) {
+				$form_field = $this->get_form_field($table['db_table']);
+				$form_value = $this->data[$table['db_table'].'_'.$form_field];
+
+				$this->db->where($form_field, $form_value)
+						->delete($table['db_table']);
+
+				$pj_value = $this->data[$table['db_table'].'_'.$this->get_join_field($table['db_table'], 'parent_join')];
+			} else {
+				if ($pj_value == '') die('Unexpected error. There should be a primary table.');
+
+				$cj_field = $this->get_join_field($table['db_table'], 'child_join');
+
+				$this->db->where($cj_field, $pj_value)
+						->delete($table['db_table']);
+			}
+		}
+	}
 
 	function save() {
 		if (!$this->loaded) die('No dataset loaded, please call $this->DatasetM->load($dataset_name) first.');
@@ -150,7 +176,6 @@ class DatasetM extends CI_Model {
 			return $this->add_save();
 		}
 	}
-
 
 	private function edit_save() {
 		//load old data
@@ -168,7 +193,7 @@ class DatasetM extends CI_Model {
 
 			//define the primary fields
 			$form_field = $this->get_form_field($table['db_table']);
-			$form_field_key = str_replace('.', '_', $form_field);
+			$form_field_key = $table['db_table'].'_'.$form_field;
 
 			$this->db->where($form_field, $this->data[$form_field_key])
 					->update($table['db_table'], $data);
@@ -192,7 +217,7 @@ class DatasetM extends CI_Model {
 			$this->db->insert($table['db_table'], $data);
 
 			//define the primary fields
-			$form_field_key = str_replace('.', '_', $this->get_form_field($table['db_table']));
+			$form_field_key = $table['db_table'].'_'.$this->get_form_field($table['db_table']);
 
 			//if the form_id field value exists in the data
 			$value = (isset($data[$this->fields[$form_field_key]['db_field']]))
@@ -218,7 +243,7 @@ class DatasetM extends CI_Model {
 				$st_form_field = $this->fields[$table_keys[$order]['form_field_key']];
 				$st_form_value = $table_keys[$order]['value'];
 
-				$cj_field = $this->fields[str_replace('.', '_', $this->get_join_field($table['db_table'], 'child_join'))]['db_field'];
+				$cj_field = $this->fields[$table['db_table'].'_'.$this->get_join_field($table['db_table'], 'child_join')]['db_field'];
 
 				$data = array(
 					$cj_field => $pt_value,
@@ -267,6 +292,8 @@ class DatasetM extends CI_Model {
 			if (isset($this->db_tables[$t['sort']])) die('More than 1 tables have the same sort number');
 			$this->db_tables[$t['sort']] = $t;
 		}
+
+		if (!isset($this->db_tables[0])) die('Primary table not set. It must have a sort order of 0.');
 	}
 
 	private function load_fields($ds) {
@@ -313,12 +340,12 @@ class DatasetM extends CI_Model {
 		//join any secondary tables
 		if (count($this->db_tables)>1) {
 			//join field of primary table
-			$pj_field = $this->get_join_field($this->db_tables[0]['db_table']);
+			$pj_field = $this->db_tables[0]['db_table'].'.'.$this->get_join_field($this->db_tables[0]['db_table']);
 
 			foreach($this->db_tables AS $k=>$v) {
 				if ($k == 0) continue;
 				//join field of secondary table
-				$cj_field = $this->get_join_field($v['db_table'], 'child_join');
+				$cj_field = $v['db_table'].'.'.$this->get_join_field($v['db_table'], 'child_join');
 				$this->db->join($v['db_table'], $pj_field.'='.$cj_field, 'left');
 			}
 		}
@@ -327,7 +354,7 @@ class DatasetM extends CI_Model {
 		if ($this->subaction == 'l') {
 			if ($this->id!=0) $this->db->where($this->get_list_field(), $this->id);
 		} else {
-			$this->db->where($this->get_form_field($this->db_tables[0]['db_table']), $this->id);
+			$this->db->where($this->db_tables[0]['db_table'].'.'.$this->get_form_field($this->db_tables[0]['db_table']), $this->id);
 		}
 
 		//order by fields based on subaction
@@ -447,7 +474,7 @@ class DatasetM extends CI_Model {
 	private function get_join_field($table, $join='parent_join') {
 		foreach($this->fields AS $f) {
 			if ($f['db_table'] != $table) continue;
-			if ($f[$join] == 1) return $f['db_table'].'.'.$f['db_field'];
+			if ($f[$join] == 1) return $f['db_field'];
 		}
 		die('This dataset has multiple tables but no join fields configured');
 	}
@@ -462,7 +489,7 @@ class DatasetM extends CI_Model {
 	private function get_form_field($table) {
 		foreach($this->fields AS $f) {
 			if ($f['db_table'] != $table) continue;
-			if ($f['form_id'] == 1) return $f['db_table'].'.'.$f['db_field'];
+			if ($f['form_id'] == 1) return $f['db_field'];
 		}
 		die('This dataset does not have a form_id field selected');
 	}
