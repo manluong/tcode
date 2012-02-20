@@ -325,12 +325,7 @@ class DatasetM extends CI_Model {
 		//load fields
 		$fields = array();
 		foreach($this->fields AS $f) {
-			//checks avedls
-			if ($unfiltered_fields) {
-				$fields[] = $f['db_table'].'.'.$f['db_field'].' AS '.$f['db_table'].'_'.$f['db_field'];
-			} else {
-				if ($f[$this->subaction] == 1) $fields[] = $f['db_table'].'.'.$f['db_field'].' AS '.$f['db_table'].'_'.$f['db_field'];
-			}
+			$fields[] = $f['db_table'].'.'.$f['db_field'].' AS '.$f['db_table'].'_'.$f['db_field'];
 		}
 		$this->db->select(implode(', ', $fields), FALSE);
 
