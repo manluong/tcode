@@ -236,6 +236,11 @@ class Docs extends MY_Controller {
 			$docs_details = $this->DocsM->get_docs_detail($this->url['id_plain']);
 		}
 
+		if (empty($docs_details)) {
+			$this->output->set_content_type('application/json')
+				->set_output(json_encode(array('success'=>0, 'message'=>'No details found')));
+			return;
+		}
 		$past_versions = $this->DocsM->get_all_versions($this->url['id_plain']);
 		switch ($docs_details['a_docs_ver_mime']) {
 			case 'image/gif':

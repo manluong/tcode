@@ -47,6 +47,10 @@ $(document).ready(function () {
 		docs_id: '<?php echo $url['id_encrypted']; ?>',
 		init: function () {
 			$.get('/docs/get_file_details/<?php echo $url['id_encrypted']; ?>/v').success(function(data) {
+				if (data.success === 0) {
+					$('.preview-content').html('No file found')
+					return null;
+				}
 				d = data;
 				var title_input_value = (data['docs_details']['a_docs_displayname'] !== '')
 				? data['docs_details']['a_docs_displayname']
@@ -85,12 +89,10 @@ $(document).ready(function () {
 					$('#image_placeholder').hide();
 				}
 
-				if (data['docs_details']['a_docs_ver_mime'] === 'image') {
+				if (data['docs_details']['a_docs_ver_mime'] === 'image/png') {
 					$('#image_placeholder').attr('src', data['s3object']);
 					$('#viewerPlaceHolder').hide();
 				}
-
-
 
 				$('#download').attr('href', '/docs/download_file/'+data['docs_details']['a_docs_ver_id']+'/download');
 
@@ -164,12 +166,12 @@ $(document).ready(function () {
 				$('#tree').html(generate_html(data, 0));
 
 				$('.move').on('click', function () {
-					$.post('/docs/move_file/'+d.docs_id+'/',{folder_id: $(this).attr('folder_id')})
+					$.post('/docs/move_file/<?php echo $url['id_encrypted']; ?>/',{folder_id: $(this).attr('folder_id')})
 						.success(function(data) {});
 				});
 
 				$('#delete').on('click', function () {
-					$.post('/docs/delete_docs/'+d.docs_id).success(function() {
+					$.post('/docs/delete_docs/<?php echo $url['id_encrypted']; ?>').success(function() {
 						//window.location = '/docs';
 					});
 				});
