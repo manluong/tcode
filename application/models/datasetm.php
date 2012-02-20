@@ -45,7 +45,25 @@ class DatasetM extends CI_Model {
 		if (!$this->loaded) die('No dataset loaded, please call $this->DatasetM->load($dataset_name) first.');
 
 		$this->load_data();
-		return $this->data;
+
+		$result = array();
+
+		if ($this->subaction == 'l') {
+			foreach($this->data AS $order=>$row) {
+				foreach($row AS $key_field => $data) {
+					if ($this->fields[$key_field][$this->subaction] == 0) continue;
+
+					$result[$order][$key_field] = $data;
+				}
+			}
+		} else {
+			foreach($this->data AS $key_field=>$data) {
+				if ($this->fields[$key_field][$this->subaction] == 0) continue;
+
+				$result[$key_field] = $data;
+			}
+		}
+		return $result;
 	}
 
 	function get_fields() {
