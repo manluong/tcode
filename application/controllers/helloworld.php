@@ -44,6 +44,7 @@ class Helloworld extends MY_Controller {
 		$details = array(
 			'columns' => $this->DatasetM->get_datatable_fields(),
 			'data' => $this->DatasetM->get_datatable_data(),
+			'ids' => $this->DatasetM->get_list_ids(),
 			'setting' => array(
 				'hidetitle' => 0,
 			),
