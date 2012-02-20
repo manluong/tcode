@@ -267,7 +267,7 @@ class EmailL {
 		$this->_get_to();
 		$this->_get_bcc();
 		$this->_get_content();
-		$this->_get_replace_value();
+		if ( ! empty($this->_replace_value)) $this->_get_replace_value();
 		$this->_date = date('r');
 		if ($this->_attachment_id !== '') $this->_get_attachements();
 		$this->_insert_email();
@@ -281,7 +281,7 @@ class EmailL {
 		$this->_get_to();
 		$this->_get_bcc();
 		$this->_get_content();
-		$this->_get_replace_value();
+		if ( ! empty($this->_replace_value)) $this->_get_replace_value();
 		$this->_date = date('r');
 		if ($this->_attachment_id !== '') $this->_get_attachements();
 		$this->_insert_email();
