@@ -46,13 +46,11 @@ class Access extends MY_Controller {
 
 		if ($this->UserM->is_valid_password($username, $password)) {
 			$this->UserM->login($username);
-		} else {
-			$this->index();
-			return false;
+			execute_return_url();
+			redirect('/dashboard');
 		}
 
-		execute_return_url();
-		redirect('/dashboard');
+		$this->index();
 	}
 
 	public function logout() {
@@ -61,6 +59,8 @@ class Access extends MY_Controller {
 	}
 
 	public function test($id='none') {
+		if (ENVIRONMENT == 'production') return FALSE;
+
 		echo 'main test id:',$id,'<br />';
 		echo '<pre>',print_r($this->ACLM->url,true),'</pre>';
 
