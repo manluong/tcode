@@ -61,7 +61,7 @@
 				<strong><?=$user_name?></strong><br />
 				<div id="status-current"></div>
 				<div>
-					<span id="status-availability" class="label"></span>
+					<span id="status-availability"></span>
 					<span id="status-location"></span>
 					<span id="status-task"></span>
 				</div>
@@ -171,9 +171,9 @@
 						$('#status-current').html(resp.data.message);
 						$('#status-message').val(resp.data.message);
 
-						if (resp.data.status_type != '') $('#status-availability').html(resp.data.status_type);
-						if (resp.data.location != '') $('#status-location').html('@ ' + resp.data.location);
-						if (resp.data.task != '') $('#status-task').html('on ' + resp.data.task);
+						if (typeof resp.data.status_type != 'undefined' && resp.data.status_type != '' && resp.data.status_type != null) $('#status-availability').html(resp.data.status_type).addClass('label');
+						if (typeof resp.data.location != 'undefined' && resp.data.location != '' && resp.data.location != null) $('#status-location').html('@ ' + resp.data.location);
+						if (typeof resp.data.task != 'undefined' && resp.data.task != '' && resp.data.task != null) $('#status-task').html('on ' + resp.data.task);
 
 						if (resp.data.availability == 1) {
 							$('#status-availability').addClass('label-success');
