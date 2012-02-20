@@ -163,9 +163,9 @@ class MY_Controller extends CI_Controller {
 
 	private function setup_language() {
 		$this->load->model('LangM');
-		$this->lang->initialise($this->LangM->initialise());
-		$this->lang->loadarray($this->LangM->loadarray('core', $this->lang->lang_use));
-		$this->lang->loadarray($this->LangM->loadarray($this->url['app'], $this->lang->lang_use));
+		$this->lang->initialise($this->LangM->active);
+		$this->lang->load($this->LangM->get_array('core', $this->lang->lang_use));
+		$this->lang->load($this->LangM->get_array($this->url['app'], $this->lang->lang_use));
 	}
 
 

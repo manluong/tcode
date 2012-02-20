@@ -119,7 +119,7 @@ class Element_dgroup extends CI_Model {
 
 	function core_element_dgroup($this_element, $is_fdata=0){
 		$result = array();
-		
+
 		$app = $this->url['app'];
 		$an = $this->url['action'];
 
@@ -434,7 +434,7 @@ function core_element_dgroup_structure($app,$aved,$dgroupname,$thisid,$this_elem
                     //echo $field2['core_e_dgroup_table_app'];
 
                     if ($field2['core_e_dgroup_table_app']) {
-                    $this->lang->loadarray($this->LangM->loadarray($field2['core_e_dgroup_table_app'], $this->lang->lang_use));
+                    $this->lang->load($this->LangM->get_array($field2['core_e_dgroup_table_app'], $this->lang->lang_use));
                     $app = $field2['core_e_dgroup_table_app'];
                     } else {
                     $app = $thisapp;

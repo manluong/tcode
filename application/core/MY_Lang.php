@@ -14,7 +14,7 @@ class MY_Lang extends CI_Lang {
 		if (isset($this->language[$line])) return $this->language[$line];
 	}
 
-	function loadarray($this_array){
+	function load($this_array){
 		$this->language = array_merge($this->language, $this_array);
 	}
 
