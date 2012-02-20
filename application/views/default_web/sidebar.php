@@ -248,8 +248,8 @@
 		?>
 			<li>
 				<a href="<?=base_url().$field1['core_apps_name']?>" data-app_name="<?=$field1['core_apps_name']?>" class="ajax">
-					<span class="app-icon">
-						<img src="/resources/template/<?=get_template()?>/images/placeholder-image.jpg" />
+					<span class="app-icon" title="<?=$this->lang->line('core_'.$langname)?>">
+						<img src="/resources/images/appicons/30/<?=$field1['core_apps_name']?>.png" />
 					</span>
 					<span class="app-name"><?=$this->lang->line('core_'.$langname)?></span>
 				</a>
@@ -261,21 +261,17 @@
 	</div>
 
 	<script>
-		/*
-		$(document).ready(function() {
-			$('a.ajax').on('click', function(e) {
-				if (e.metaKey) return true; // if it's a ctrl/cmd + click, run normally
-
-				console.log('activate '+$(this).attr('data-app_name'));
-
-				e.preventDefault();
-				return false;
-			})
-		});
-		*/
-
 	   $(document).ready(function() {
 		  $('a.ajax').pjax('#content-container');
+		  $('#nav span.app-icon').tooltip({
+			  trigger: 'manual',
+			  placement: 'right'
+		  });
+		  $('#nav').on('mouseover', 'span.app-icon', function(e) {
+			  if ($('#toggle_sidebar').hasClass('icon-chevron-right')) $(this).tooltip('show');
+		  }).on('mouseout', 'span.app-icon', function(e) {
+			  if ($('#toggle_sidebar').hasClass('icon-chevron-right')) $(this).tooltip('hide');
+		  });
 	   });
 	</script>
 
