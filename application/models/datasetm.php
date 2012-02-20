@@ -115,8 +115,7 @@ class DatasetM extends CI_Model {
 
 		$fields = $this->get_fields();
 		foreach($fields AS $f) {
-			$results[] = array('sTitle'=>$f['name']);
-//			$result[] = array('sTitle'=>$f['label']);
+			$results[] = array('sTitle'=>$f['label']);
 		}
 
 		return $results;
@@ -142,8 +141,7 @@ class DatasetM extends CI_Model {
 		foreach($this->get_data() AS $field_key=>$value) {
 			$result[] = array(
 				'fieldname' => $this->fields[$field_key]['db_field'],
-				'label' => $this->fields[$field_key]['db_field'],
-//				'label' => $this->fields[$field_key]['label'],
+				'label' => $this->fields[$field_key]['label'],
 				'value' => $value,
 			);
 		}
@@ -164,7 +162,7 @@ class DatasetM extends CI_Model {
 			} elseif ($this->subaction=='a') {
 				$fields[$field_key]['value'] = $field['default_value'];
 			}
-			$fields[$field_key]['label'] = $this->fields[$field_key]['db_field'];
+			$fields[$field_key]['label'] = $this->fields[$field_key]['label'];
 			$fields[$field_key]['db_field'] = $field_key;
 			$fields[$field_key]['name'] = $field_key;	//temp override
 		}
@@ -327,6 +325,8 @@ class DatasetM extends CI_Model {
 		foreach($rs->result_array() AS $t) {
 			if (isset($this->db_tables[$t['sort']])) die('More than 1 tables have the same sort number');
 			$this->db_tables[$t['sort']] = $t;
+			//load the language for each table
+			$this->lang->load($this->LangM->get_array($t['app_name'], $this->lang->lang_use));
 		}
 
 		if (!isset($this->db_tables[0])) die('Primary table not set. It must have a sort order of 0.');
@@ -343,7 +343,8 @@ class DatasetM extends CI_Model {
 
 		foreach($rs->result_array() AS $r) {
 			//fill in label
-			$r['label'] = $this->lang->line($this->properties['app_name'].'_'.$r['db_field']);
+			$db_table_app_name = $this->get_table_app_name($r['db_table']);
+			$r['label'] = $this->lang->line($db_table_app_name.'_'.$r['db_field']);
 
 			//fill in select_options
 			if ($r['form_type'] == 'select') $r['select_options'] = $this->get_select_options($r);
@@ -533,6 +534,14 @@ class DatasetM extends CI_Model {
 			$fields[$f[$sort_field]] = $f['db_table'].'.'.$f['db_field'];
 		}
 		return implode(', ',$fields);
+	}
+
+	private function get_table_app_name($table) {
+		foreach($this->db_tables AS $t) {
+			if ($t['db_table'] != $table) continue;
+
+			return $t['app_name'];
+		}
 	}
 
 	private function get_select_options($field) {
