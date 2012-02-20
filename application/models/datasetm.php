@@ -90,6 +90,24 @@ class DatasetM extends CI_Model {
 		return $fields;
 	}
 
+	function get_list_ids() {
+		if (!$this->loaded) die('No dataset loaded, please call $this->DatasetM->load($dataset_name) first.');
+
+		$result = array();
+
+		foreach($this->data AS $order=>$row) {
+			foreach($row AS $key_field => $data) {
+				if ($this->fields[$key_field]['db_table'] != $this->db_tables[0]['db_table']) continue;
+				$form_key_field = $this->fields[$key_field]['db_table'].'_'.$this->get_form_field($this->fields[$key_field]['db_table']);
+				if ($key_field != $form_key_field) continue;
+
+				$result[$order] = $data;
+			}
+		}
+
+		return $result;
+	}
+
 	function get_datatable_fields() {
 		if (!$this->loaded) die('No dataset loaded, please call $this->DatasetM->load($dataset_name) first.');
 
