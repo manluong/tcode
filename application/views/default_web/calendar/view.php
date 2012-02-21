@@ -1,4 +1,4 @@
-<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/jquery.fullcalendar.min.js"></script>
+<script type="text/javascript" src="/resources/addon/jquery.fullcalendar.min.js"></script>
 
 <style>
 	#calendar .fc-sun, #calendar .fc-sat {
@@ -52,7 +52,6 @@
 	td.ui-widget-content { padding: 0 !important; }
 	th.ui-widget-header { padding: 0 !important; }
 
-	#event_table tr td { padding:3px; }
 </style>
 
 
@@ -86,51 +85,74 @@
 
 
 
-<div id="create_event_form" title="Create new event">
-	<form id="form_event">
-		<input type="hidden" name="event_id" id="event_id" value="" />
+<div id="create_event_form" class="modal hide">
 
-		<table id="event_table">
-			<tr>
-				<td><label for="calendar_id">Calendar</label></td>
-				<td>
-					<select name="calendar_id" id="calendar_id">
-					<?php
-						foreach($calendars AS $cal) {
-							echo '<option value="',$cal['id'],'">',$cal['display_name'],'</option>';
-						}
-					?>
-					</select>
-				</td>
-			</tr>
 
-			<tr>
-				<td><label for="event_title">Event Title</label></td>
-				<td><input type="text" name="event_title" id="event_title" style="width: 255px;" /></td>
-			</tr>
+		<div class="modal-header">
+			<a class="close" data-dismiss="modal">×</a>
+			<h3>Create new event</h3>
+		</div>
 
-			<tr>
-				<td><label for="event_date_start">Start Date</label></td>
-				<td><input type="text" name="event_date_start" id="event_date_start" class="datepicker" style="width: 200px;" /></td>
-			</tr>
+		<div class="modal-body">
+			<form id="form_event" class="form-horizontal">
+			<input type="hidden" name="event_id" id="event_id" value="" />
 
-			<tr>
-				<td><label for="event_date_end">End Date</label></td>
-				<td><input type="text" name="event_date_end" id="event_date_end" class="datepicker" style="width: 200px;" /></td>
-			</tr>
 
-			<tr>
-				<td><label for="event_allday">All Day</label></td>
-				<td><input type="checkbox" name="event_allday" id="event_allday" value="1" /></td>
-			</tr>
+				<div class="control-group">
+					<label class="control-label" for="calendar_id">Calendar</label>
+					<div class="controls">
+						<select name="calendar_id" id="calendar_id">
+						<?php
+							foreach($calendars AS $cal) {
+								echo '<option value="',$cal['id'],'">',$cal['display_name'],'</option>';
+							}
+						?>
+						</select>
+					</div>
+				</div>
 
-			<tr>
-				<td><label for="event_memo">Memo</label></td>
-				<td><input type="textarea" name="event_memo" id="event_memo" style="width:200px; height:100px;" /></td>
-			</tr>
-		</table>
+				<div class="control-group">
+					<label class="control-label" for="event_title">Event Title</label>
+					<div class="controls">
+						<input type="text" name="event_title" id="event_title" style="width: 255px;" />
+					</div>
+				</div>
 
-	</form>
+				<div class="control-group">
+					<label class="control-label" for="event_date_start">Start Date</label>
+					<div class="controls">
+						<input type="text" name="event_date_start" id="event_date_start" class="datepicker" style="width: 200px;" />
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label class="control-label" for="event_date_end">End Date</label>
+					<div class="controls">
+						<input type="text" name="event_date_end" id="event_date_end" class="datepicker" style="width: 200px;" />
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label class="control-label" for="event_allday">All Day</label>
+					<div class="controls">
+						<input type="checkbox" name="event_allday" id="event_allday" value="1" />
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label class="control-label" for="event_memo">Memo</label>
+					<div class="controls">
+						<input type="textarea" name="event_memo" id="event_memo" style="width:200px; height:100px;" />
+					</div>
+				</div>
+
+			</form>
+		</div>
+
+		<div class="modal-footer">
+			<a href="#" class="btn btn-primary" id="create_event_submit">Save changes</a>
+			<a href="#" class="btn" data-dismiss="modal">Close</a>
+		</div>
 </div>
 
 
@@ -176,6 +198,7 @@
 		$.datepicker.setDefaults({
 			dateFormat: 'yy-mm-dd'
 		});
+		/*
 		$.timepicker.setDefaults({
 			timeFormat: 'h:mm',
 			stepMinute: 5
@@ -188,7 +211,11 @@
 		});
 
 		$('.datepicker').datetimepicker();
-
+*/
+		$('#create_event_form').modal({
+			'backdrop': false,
+			'show':false
+		});
 
         var eventtitle = $('#event_title');
 
@@ -210,9 +237,8 @@
 				$('#event_date_start').val(datestring(start, allDay));
 				$('#event_date_end').val(datestring(end, allDay));
 				$('#event_allday').prop('checked', allDay);
-				$.uniform.update();
 
-                $('#create_event_form').dialog('open');
+                $('#create_event_form').modal('show');
 			},
 			eventDrop: function(event, delta_day, delta_min, all_day, revert_func) {
 				update_event(event, delta_day, delta_min, all_day, revert_func);
@@ -230,52 +256,32 @@
 				$('#event_date_end').val(datestring(event.end, event.allDay));
 				$('#event_memo').val(event.memo);
 				$('#event_allday').prop('checked', event.allDay);
-				$.uniform.update();
 
-				$('#create_event_form').dialog('open');
+				$('#create_event_form').modal('show');
 			}
 		});
 
+		$('#create_event_submit').on('click', function() {
+			var bValid = true;
+			bValid = bValid && eventtitle.val() != '';
 
-		$('#create_event_form').dialog({
-			autoOpen: false,
-			height: 400,
-			width: 450,
-			modal: true,
-            resizable: false,
-            hide: 'fade',
-            show: 'fade',
-			buttons: {
-				Cancel: function() {
-					$(this).dialog('close');
-				},
-
-				'Save Event': function() {
-					var bValid = true;
-					bValid = bValid && eventtitle.val() != '';
-
-					if (bValid) {
-						if (is_update) {
-							var ajax_url = '/calendar/ajax_update_event';
-						} else {
-							var ajax_url = '/calendar/ajax_save_event';
-						}
-
-						$.post(
-							ajax_url,
-							$('#form_event').serializeArray(),
-							function(resp) {},
-							'json'
-						);
-
-						calendar.fullCalendar('refetchEvents');
-                        calendar.fullCalendar('unselect');
-						$(this).dialog('close');
-					}
+			if (bValid) {
+				if (is_update) {
+					var ajax_url = '/calendar/ajax_update_event';
+				} else {
+					var ajax_url = '/calendar/ajax_save_event';
 				}
 
-			},
-            close: function() {
+				$.post(
+					ajax_url,
+					$('#form_event').serializeArray(),
+					function(resp) {},
+					'json'
+				);
+
+				calendar.fullCalendar('refetchEvents');
+				calendar.fullCalendar('unselect');
+				$('#create_event_form').modal('hide');
 			}
 		});
 
