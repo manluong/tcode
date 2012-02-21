@@ -352,7 +352,8 @@ class DatasetM extends CI_Model {
 			//if form type not defined, default to text
 			if ($r['form_type'] == '') $r['form_type'] = 'text';
 
-			$this->fields[$r['db_table'].'_'.$r['db_field']] = $r;
+			$field_key = $r['db_table'].'_'.$r['db_field'];
+			$this->fields[$field_key] = $r;
 		}
 	}
 
