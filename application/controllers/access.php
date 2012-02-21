@@ -33,6 +33,8 @@ class Access extends MY_Controller {
 
 		$this->LayoutM->load_format();
 
+		$this->layout['type'] = 'full';
+
 		$this->output();
 	}
 
