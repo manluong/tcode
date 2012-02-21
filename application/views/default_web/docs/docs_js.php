@@ -14,6 +14,7 @@
 			url : '/docs/upload/<?php echo $url['id_encrypted'] ?>',
 			max_file_size : '10mb',
 			unique_names : true,
+			multiple_queues : true,
 
 			// Resize images on clientside if we can
 			resize : {width : 320, height : 240, quality : 90},
@@ -29,7 +30,20 @@
 			flash_swf_url : '/resources/addon/plupload/js/plupload.flash.swf',
 
 			// Silverlight settings
-			silverlight_xap_url : '/resources/addon/plupload/js/plupload.silverlight.xap'
+			silverlight_xap_url : '/resources/addon/plupload/js/plupload.silverlight.xap',
+
+			init: {
+				FileUploaded: function() {
+					$('#directory_contents').dataTable({
+							"bDestroy": true,
+							"bProcessing": true,
+							"sAjaxSource": "/docs/get_dir_contents/<?php echo $url['id_encrypted']; ?>/v",
+							"sDom": "<'row'<'span8'l><'span8'f>r>t<'row'<'span8'i><'span8'p>>",
+							"sPaginationType": "bootstrap",
+							"bJQueryUI": true
+					});
+				}
+			}
 		});
 
 		// Client side form validation
