@@ -86,7 +86,7 @@
 				<input type="hidden" name="geo_lng" val="" />
 
 				<a class="btn btn-primary" id="status-update-submit">Update</a><a class="btn status-close">Cancel</a>
-			<form>
+			</form>
 		</div>
 	</div>
 
