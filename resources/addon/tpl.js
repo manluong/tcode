@@ -17,7 +17,7 @@ tpl_form.date = '<input type="date" class="{{addclass}} form-dateinput" id="form
 tpl_form.datetime = '<input type="date" class="{{addclass}} form-dateinput" id="form_{{name}}" name="{{name}}" value="{{value}}"{{#required}} required="required"{{/required}}>';
 tpl_form['time'] = '<input type="time" class="{{addclass}} form-dateinput" id="form_{{name}}" name="{{name}}" value="{{value}}"{{#required}} required="required"{{/required}}>';
 
-tpl_form.select = '<select id="select01" name="{{name}}">{{#select_options}}<option value="{{value}}"{{selected}}>{{value}}</option>{{/select_options}}</select>';              
+tpl_form.select = '<select id="select01" name="{{name}}">{{#select_options}}<option value="{{value}}"{{selected}}>{{value}}</option>{{/select_options}}</select>';
 tpl_form.select_switch = '';
 tpl_form.select_multi = '';
 
@@ -39,3 +39,29 @@ tpl_c_stdwidget = '<div class="widget">{{#title}}<div class="widget-header"><h4>
 
 var custom_viewcard = "My {{#content}}{{card_fname_label}} is {{card_fname_value}}!{{{links}}}{{/content}}<br>";
 var custom_editcard = "My {{#content}}{{#card_fname}}{{label}} is {{{control}}}{{/card_fname}}!{{{links}}}{{/content}}<br>";
+
+var tpl_comments = [];
+tpl_comments.reply = '<div class="{{reply_class}} reply row-fluid">{{#card_info}}'+
+							'<div class="span1"><img class="avatar" src="{{avatar}}" /></div>'+
+							'<div class="span11">'+
+								'<div class="name">{{card_fname}} {{card_lname}}</div>{{/card_info}}'+
+								'<div class="text">{{text}}</div>'+
+								'<span class="displaydate" title="{{created_stamp_iso8601}}">{{created_stamp_iso}}</span>'+
+							'</div>'+
+						'</div>';
+
+tpl_comments.comment = '<div class="comment row-fluid" id="comment_{{id}}">{{#card_info}}'+
+							'<div class="span1"><img class="avatar" src="/resources/template/default_web/images/placeholder-image.jpg" /></div>'+
+							'<div class="span11">'+
+								'<div class="name">{{card_fname}} {{card_lname}}</div>{{/card_info}}'+
+								'<div class="text">{{text}}</div>'+
+								'<div class="controls">'+
+									'<span class="displaydate" title="{{created_stamp_iso8601}}">{{created_stamp_iso}}</span>'+
+								'</div>'+
+								'{{{show_more_replies}}}<div class="replies">'+
+									'{{{replies_html}}}<div class="new_reply row-fluid">'+
+										'<input type="text" name="text" class="comment_input span12" value="" placeholder="reply..." autocomplete="off" data-app_id="{{app_id}}" data-app_data_id="{{app_data_id}}" data-parent_id="{{id}}" />'+
+									'</div>'+
+								'</div>'+
+							'</div>'+
+						'</div>';
