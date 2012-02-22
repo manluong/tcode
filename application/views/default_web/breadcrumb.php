@@ -18,6 +18,8 @@
 
 			echo '</li>';
 		}
+	} else {
+		echo '<li>&nbsp;</li>';
 	}
 	echo '<li class="pull-right"><i class="icon-star-empty"></i></li>';
 
