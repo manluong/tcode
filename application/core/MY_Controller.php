@@ -75,8 +75,6 @@ class MY_Controller extends CI_Controller {
 		$this->load->model('AppM');
 		$this->load->model('LogM');
 		$this->load->model('LicenseM');
-
-		$this->load->model('DatasetM');
 		$this->load->model('RespM');
 
 		$this->url['app_id'] = $this->AppM->get_id($this->url['app']);
