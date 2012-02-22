@@ -5,6 +5,7 @@ class Helloworld extends MY_Controller {
 	function __construct() {
 		parent::__construct();
 
+		$this->load->model('HelloworldM');
 	}
 
 	function sendhtml() {
@@ -37,20 +38,18 @@ class Helloworld extends MY_Controller {
 	}
 
 	function sendjson_list() {
-		$this->url['subaction'] = 'l';
-
-		$this->DatasetM->load('ds_helloworld');
+		$this->HelloworldM->subaction = 'l';
 
 		$details = array(
-			'columns' => $this->DatasetM->get_datatable_fields(),
-			'data' => $this->DatasetM->get_datatable_data(),
-			'ids' => $this->DatasetM->get_list_ids(),
+			'columns' => $this->HelloworldM->get_datatable_fields(),
+			'data' => $this->HelloworldM->get_datatable_data(),
+			'ids' => $this->HelloworldM->get_list_ids(),
 			'setting' => array(
 				'hidetitle' => 0,
 			),
 		);
 
-		$this->RespM->set_message($this->DatasetM->sql)
+		$this->RespM->set_message($this->HelloworldM->sql)
 				->set_type('list')
 				->set_template('')
 				->set_success(true)
@@ -60,19 +59,17 @@ class Helloworld extends MY_Controller {
 	}
 
 	function sendjson_view() {
-		$this->url['subaction'] = 'v';
-		$this->url['id_plain'] = '150';
-
-		$this->DatasetM->load('ds_helloworld');
+		$this->HelloworldM->subaction = 'v';
+		$this->HelloworldM->id = 150;
 
 		$details = array(
-			'data' => $this->DatasetM->get_view_data(),
+			'data' => $this->HelloworldM->get_view_data(),
 			'links' => array(
 				array(
 					'target' => '',
 					'text' => 'Edit',
 					'type' => 'ajax',
-					'url' => 'helloworld/contact/1/as',
+					'url' => '/helloworld/contact/1/as',
 					'style' => 'default',
 					'icon' => '',
 				),
@@ -80,7 +77,7 @@ class Helloworld extends MY_Controller {
 					'target' => '',
 					'text' => 'Cancel',
 					'type' => 'ajax',
-					'url' => 'helloworld/contact/1/v',
+					'url' => '/helloworld/contact/1/v',
 					'style' => 'warning',
 					'icon' => 'trash',
 				)
@@ -90,7 +87,7 @@ class Helloworld extends MY_Controller {
 			),
 		);
 
-		$this->RespM->set_message($this->DatasetM->sql)
+		$this->RespM->set_message($this->HelloworldM->sql)
 				->set_type('view')
 				->set_template('')
 				//->set_template('custom_viewcard')//custom template
@@ -132,19 +129,17 @@ class Helloworld extends MY_Controller {
 */
 
 
-		$this->url['subaction'] = 'e';
-		$this->url['id_plain'] = '150';
-
-		$this->DatasetM->load('ds_helloworld');
+		$this->HelloworldM->subaction = 'e';
+		$this->HelloworldM->id = 150;
 
 		$details = array(
-			'data' => $this->DatasetM->get_form_data(),
+			'data' => $this->HelloworldM->get_form_data(),
 			'links' => array(
 				array(
 					'target' => '',
 					'text' => 'Submit',
 					'type' => 'submit',
-					'url' => 'helloworld/sendjson_save/150/es',
+					'url' => '/helloworld/sendjson_save/150/es',
 					'style' => 'default',
 					'icon' => '',
 				),
@@ -152,7 +147,7 @@ class Helloworld extends MY_Controller {
 					'target' => '',
 					'text' => 'Cancel',
 					'type' => 'ajax',
-					'url' => 'helloworld/contact/1/v',
+					'url' => '/helloworld/contact/1/v',
 					'style' => 'warning',
 					'icon' => 'trash',
 				)
@@ -162,7 +157,7 @@ class Helloworld extends MY_Controller {
 			)
 		);
 
-		$this->RespM->set_message($this->DatasetM->sql)
+		$this->RespM->set_message($this->HelloworldM->sql)
 				->set_type('form')
 				->set_template('')
 				//->set_template('custom_editcard')//custom template
@@ -190,25 +185,23 @@ class Helloworld extends MY_Controller {
 
 		return($data);
  */
-		$this->url['subaction'] = 'es';
-		$this->url['id_plain'] = '150';
+		$this->HelloworldM->subaction = 'e';
+		$this->HelloworldM->id = 150;
 
-		$this->DatasetM->load('ds_helloworld');
-
-		$success = $this->DatasetM->save();
+		$success = $this->HelloworldM->save();
 
 		if ($success) {
 			$details['links'] = array(
 				array(
 				'type' => 'ajax',
-				'url' => 'helloworld/returnjson_view',
+				'url' => '/helloworld/returnjson_view',
 				'target' => '',
 				'text' => ''
 				)
 			);
 			$message = 'Data saved.';
 		} else {
-			$details['data'] = $this->DatasetM->get_save_errors();
+			$details['data'] = $this->HelloworldM->get_save_errors();
 			$message = 'There was an error saving your data';
 		}
 
@@ -222,12 +215,10 @@ class Helloworld extends MY_Controller {
 	}
 
 	function show_data() {
-		$this->url['subaction'] = 'e';
-		$this->url['id_plain'] = '150';
+		$this->HelloworldM->subaction = 'e';
+		$this->HelloworldM->id = 150;
 
-		$this->DatasetM->load('ds_helloworld');
-
-		$data = $this->DatasetM->get_form_data();
+		$data = $this->HelloworldM->get_form_data();
 
 		echo '<pre>', print_r($data, TRUE), '</pre>';
 	}
