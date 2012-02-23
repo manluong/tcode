@@ -5,7 +5,7 @@ class Helloworld extends MY_Controller {
 	function __construct() {
 		parent::__construct();
 
-		$this->load->model('HelloworldM');
+		$this->load->model('DS_HelloWorld');
 	}
 
 	function sendhtml() {
@@ -38,18 +38,18 @@ class Helloworld extends MY_Controller {
 	}
 
 	function sendjson_list() {
-		$this->HelloworldM->subaction = 'l';
+		$this->DS_HelloWorld->subaction = 'l';
 
 		$details = array(
-			'columns' => $this->HelloworldM->get_datatable_fields(),
-			'data' => $this->HelloworldM->get_datatable_data(),
-			'ids' => $this->HelloworldM->get_list_ids(),
+			'columns' => $this->DS_HelloWorld->get_datatable_fields(),
+			'data' => $this->DS_HelloWorld->get_datatable_data(),
+			'ids' => $this->DS_HelloWorld->get_list_ids(),
 			'setting' => array(
 				'hidetitle' => 0,
 			),
 		);
 
-		$this->RespM->set_message($this->HelloworldM->sql)
+		$this->RespM->set_message($this->DS_HelloWorld->sql)
 				->set_type('list')
 				->set_template('')
 				->set_success(true)
@@ -59,11 +59,11 @@ class Helloworld extends MY_Controller {
 	}
 
 	function sendjson_view() {
-		$this->HelloworldM->subaction = 'v';
-		$this->HelloworldM->id = 150;
+		$this->DS_HelloWorld->subaction = 'v';
+		$this->DS_HelloWorld->id = 150;
 
 		$details = array(
-			'data' => $this->HelloworldM->get_view_data(),
+			'data' => $this->DS_HelloWorld->get_view_data(),
 			'links' => array(
 				array(
 					'target' => '',
@@ -87,7 +87,7 @@ class Helloworld extends MY_Controller {
 			),
 		);
 
-		$this->RespM->set_message($this->HelloworldM->sql)
+		$this->RespM->set_message($this->DS_HelloWorld->sql)
 				->set_type('view')
 				->set_template('')
 				//->set_template('custom_viewcard')//custom template
@@ -129,11 +129,11 @@ class Helloworld extends MY_Controller {
 */
 
 
-		$this->HelloworldM->subaction = 'e';
-		$this->HelloworldM->id = 150;
+		$this->DS_HelloWorld->subaction = 'e';
+		$this->DS_HelloWorld->id = 150;
 
 		$details = array(
-			'data' => $this->HelloworldM->get_form_data(),
+			'data' => $this->DS_HelloWorld->get_form_data(),
 			'links' => array(
 				array(
 					'target' => '',
@@ -157,7 +157,7 @@ class Helloworld extends MY_Controller {
 			)
 		);
 
-		$this->RespM->set_message($this->HelloworldM->sql)
+		$this->RespM->set_message($this->DS_HelloWorld->sql)
 				->set_type('form')
 				->set_template('')
 				//->set_template('custom_editcard')//custom template
@@ -185,10 +185,10 @@ class Helloworld extends MY_Controller {
 
 		return($data);
  */
-		$this->HelloworldM->subaction = 'e';
-		$this->HelloworldM->id = 150;
+		$this->DS_HelloWorld->subaction = 'e';
+		$this->DS_HelloWorld->id = 150;
 
-		$success = $this->HelloworldM->save();
+		$success = $this->DS_HelloWorld->save();
 
 		if ($success) {
 			$details['links'] = array(
@@ -201,7 +201,7 @@ class Helloworld extends MY_Controller {
 			);
 			$message = 'Data saved.';
 		} else {
-			$details['data'] = $this->HelloworldM->get_save_errors();
+			$details['data'] = $this->DS_HelloWorld->get_save_errors();
 			$message = 'There was an error saving your data';
 		}
 
@@ -215,10 +215,10 @@ class Helloworld extends MY_Controller {
 	}
 
 	function show_data() {
-		$this->HelloworldM->subaction = 'e';
-		$this->HelloworldM->id = 150;
+		$this->DS_HelloWorld->subaction = 'e';
+		$this->DS_HelloWorld->id = 150;
 
-		$data = $this->HelloworldM->get_form_data();
+		$data = $this->DS_HelloWorld->get_form_data();
 
 		echo '<pre>', print_r($data, TRUE), '</pre>';
 	}
