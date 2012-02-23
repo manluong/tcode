@@ -51,8 +51,8 @@ function show_sidebar() {
 	},300);
 
 	$('#status .avatar').animate({
-		width:'50px',
-		height:'50px'
+		width:'40px',
+		height:'40px'
 	},500,function() {
 		$('#nav').outerHeight($('#nav').outerHeight()-220).css('padding-bottom','100px');
 	});
