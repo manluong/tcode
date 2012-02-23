@@ -57,6 +57,7 @@ class MY_Controller extends CI_Controller {
 	var $model = '';
 
 	var $is_ajax = FALSE;
+	var $is_mobile_app = FALSE;
 
 	//valid subactions
 	var $subactions = array('a','v','e','d','l','s','as','es','ds');
@@ -90,6 +91,12 @@ class MY_Controller extends CI_Controller {
 		if ($this->AppM->must_disable_plain_id()) $this->ACLM->check_id_encryption();
 		$this->ACLM->check_app_access();
 
+		//detect mobile app or not
+		$agent = trim($_SERVER['HTTP_USER_AGENT']);
+		$mobile_app_user_agents = array('8force-ios', '8force-and');
+		foreach($mobile_app_user_agents AS $maua) {
+			if (strpos($agent, $maua) !== FALSE) $this->is_mobile_app = TRUE;
+		}
 		//$this->output->enable_profiler(true);
 	}
 
