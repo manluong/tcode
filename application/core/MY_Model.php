@@ -146,7 +146,7 @@ class DatasetM extends CI_Model {
 		if ($subaction == 'as') $subaction = 'a';
 		if ($subaction == 'es') $subaction = 'e';
 
-		if ($this->properties[$subaction] == 0) die('The subaction you requested for this dataset is not allowed.');
+		//if ($this->properties[$subaction] == 0) die('The subaction:['.$subaction.'] you requested for this dataset is not allowed.');
 
 		$this->subaction = $subaction;
 
