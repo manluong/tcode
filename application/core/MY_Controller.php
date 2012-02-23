@@ -97,6 +97,13 @@ class MY_Controller extends CI_Controller {
 		foreach($mobile_app_user_agents AS $maua) {
 			if (strpos($agent, $maua) !== FALSE) $this->is_mobile_app = TRUE;
 		}
+
+		//change session timeout based on whether the requesting party is a mobile app or not
+		if ($this->is_mobile_app) {
+			$this->session->sess_expiration = 60*60*24*365*2;
+			$this->session->sess_expire_on_close = FALSE;
+		}
+
 		//$this->output->enable_profiler(true);
 	}
 
