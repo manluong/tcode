@@ -91,18 +91,7 @@ class MY_Controller extends CI_Controller {
 		if ($this->AppM->must_disable_plain_id()) $this->ACLM->check_id_encryption();
 		$this->ACLM->check_app_access();
 
-		//detect mobile app or not
-		$agent = trim($_SERVER['HTTP_USER_AGENT']);
-		$mobile_app_user_agents = array('8force-ios', '8force-and');
-		foreach($mobile_app_user_agents AS $maua) {
-			if (strpos($agent, $maua) !== FALSE) $this->is_mobile_app = TRUE;
-		}
-
-		//change session timeout based on whether the requesting party is a mobile app or not
-		if ($this->is_mobile_app) {
-			$this->session->sess_expiration = 60*60*24*365*2;
-			$this->session->sess_expire_on_close = FALSE;
-		}
+		$this->check_mobile_app();
 
 		//$this->output->enable_profiler(true);
 	}
@@ -178,6 +167,21 @@ class MY_Controller extends CI_Controller {
 		$this->lang->initialise($this->LangM->active);
 		$this->lang->load($this->LangM->get_array('core', $this->lang->lang_use));
 		$this->lang->load($this->LangM->get_array($this->url['app'], $this->lang->lang_use));
+	}
+
+	private function check_mobile_app() {
+		//detect mobile app or not
+		$agent = trim($_SERVER['HTTP_USER_AGENT']);
+		$mobile_app_user_agents = array('8force-ios', '8force-and');
+		foreach($mobile_app_user_agents AS $maua) {
+			if (strpos($agent, $maua) !== FALSE) $this->is_mobile_app = TRUE;
+		}
+
+		//change session timeout based on whether the requesting party is a mobile app or not
+		if ($this->is_mobile_app) {
+			$this->session->sess_expiration = 60*60*24*365*2;
+			$this->session->sess_expire_on_close = FALSE;
+		}
 	}
 
 
