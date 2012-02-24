@@ -18,6 +18,16 @@ class Card extends MY_Controller {
 			'setting' => array(
 				'hidetitle' => 0,
 			),
+			'listlinks' => array(
+				array(
+					'target' => '',
+					'text' => 'View',
+					'type' => 'ajax',
+					'url' => '/helloworld/contact/{{id}}/v',
+					'style' => 'default',
+					'icon' => '',
+				)
+			),			
 		);
 
 		$this->RespM->set_message($this->DS_Card->sql)

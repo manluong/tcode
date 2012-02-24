@@ -100,10 +100,21 @@ function ajax_content_echo(json,divid,content){
 function ajax_content_list(json,divid,links){
 
 	var tableid = divid+"_table";
-
+	var thisid = "";
 	//if (json['details']['setting']['hidetitle'] == 1){
 
 	ajax_content_echo(json,divid,'<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="'+tableid+'"></table>'+links.html);
+	
+	if (json['details']['listlinks']){
+		lslink = ajax_content_links(json['details']['listlinks'],divid);
+		var cl = json['details']['columns'].length;
+		var thisLength = json['details']['data'].length;
+		for(var i = 0; i < thisLength; i++) {
+				rid = {id: json['details']['ids'][i]};
+				json['details']['data'][i][cl] = Mustache.to_html(lslink.bu, rid);
+		}
+		json['details']['columns'][cl] = {sTitle: ''};
+	}
 	
 	$('#'+tableid).dataTable( {
 		"aoColumns": json['details']['columns'],
