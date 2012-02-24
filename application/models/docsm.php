@@ -22,10 +22,69 @@ class docsM extends My_Model {
 		return $query->row_array();
 	}
 
+	// Checks if path exists in a_docs_dir
+	function does_path_exists($path) {
+		$query = $this->db->select('a_docs_dir_dirpath')
+			->get_where('a_docs_dir', array('a_docs_dir_dirpath'=>$path), 1);
+		return ($query->num_rows()) ? TRUE : FALSE;
+	}
+
+	// Returns the latest version if file is found
+	function does_file_exists($path, $filename) {
+		$query = $this->db->query('SELECT a_docs_id, a_docs_ver_id
+			FROM a_docs
+			LEFT JOIN a_docs_ver ON a_docs_ver.a_docs_ver_docsid = a_docs.a_docs_id
+			WHERE a_docs_parentid = (SELECT a_docs_id
+				FROM a_docs
+				LEFT JOIN a_docs_dir ON a_docs_dir.a_docs_dir_docs_id = a_docs.a_docs_id
+				WHERE a_docs_dir_dirpath = ?
+			)
+			AND a_docs_ver_filename = ?
+			LIMIT 1
+		', array($path, $filename));
+		if ($query->num_rows()) {
+			$row = $query->row_array();
+			return array('docs_id'=>$row['a_docs_id'], 'ver_id'=>$row['a_docs_ver_id']);
+		}
+		return FALSE;
+	}
+
 	// Pass in docs id. Return dirpath of doc
 	function get_dirpath($id) {
 		$query = $this->db->query('SELECT a_docs_dir_dirpath FROM a_docs_dir WHERE a_docs_dir_docs_id = (SELECT a_docs_parentid FROM a_docs WHERE a_docs_id = '.$id.')');
 		return $query->row_array();
+	}
+
+	// Gets the latest version
+	function get_current_ver_id($docs_id) {
+		// TODO: change to get from the current_ver column
+		$query = $this->db->select('a_docs_ver_id')
+			->from('a_docs_ver')
+			->where('a_docs_ver_docsid', $docs_id)
+			->order_by('a_docs_ver_id', 'desc')
+			->limit(1)
+			->get();
+		if ($query->num_rows()) {
+			$ver_id = $query->row_array();
+			return $ver_id['a_docs_ver_id'];
+		}
+		return FALSE;
+	}
+
+	function get_docs_id_from_path($path, $filename) {
+		// Similiar to does_file_exists
+		$i = $this->does_file_exists($path, $filename);
+		return ($i) ? $i['docs_id'] : FALSE;
+	}
+
+	function get_dir_id_from_path($path) {
+		$query = $this->db->select('a_docs_dir_docs_id')
+			->get_where('a_docs_dir', array('a_docs_dir_dirpath'=>$path),1);
+		if ($query->num_rows()) {
+			$i = $query->row_array();
+			return $i['a_docs_dir_docs_id'];
+		}
+		return FALSE;
 	}
 
 	// Gets direct dirpath stored in a_docs_dir_dirpath
@@ -208,6 +267,7 @@ class docsM extends My_Model {
 		}
 		$values['a_docs_ver_docsid'] = $this->db->insert_id();
 		$this->insert_docs_ver($values);
+		return $values['a_docs_ver_docsid'];
 	}
 
 	// Pass in new parentid, ver_id
@@ -244,6 +304,7 @@ class docsM extends My_Model {
 			'a_docs_ver_encryptkeytype' => isset($values['a_docs_ver_encryptkeytype']) ? $values['a_docs_ver_encryptkeytype'] : '',
 		);
 		$this->db->insert('a_docs_ver', $data);
+		return;
 	}
 
 	function update_docs_display_name($title, $id) {

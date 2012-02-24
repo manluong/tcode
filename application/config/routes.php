@@ -40,6 +40,6 @@
 
 $route['default_controller'] = 'access';
 $route['404_override'] = '';
-
+//$route['file/(:any)'] = "file/read";
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

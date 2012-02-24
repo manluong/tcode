@@ -7,7 +7,7 @@ class Docs extends MY_Controller {
 
 	function __construct() {
 		parent::__construct();
-		$this->load->library('S3');
+		$this->load->library('fileL');
 		$this->load->model('DocsM');
 		$this->_temp_dir = $_SERVER['DOCUMENT_ROOT'].'/tmp/';
 		$this->_bucket = 'tcs99';

@@ -90,7 +90,8 @@ $(document).ready(function () {
 				}
 
 				if (data['docs_details']['a_docs_ver_mime'] === 'image/png') {
-					$('#image_placeholder').attr('src', data['s3object']);
+					//$('#image_placeholder').attr('src', data['s3object']);
+					$('#image_placeholder').attr('src', '/file/index'+data['docs_details']['a_docs_dir_dirpath']+data['docs_details']['a_docs_ver_filename']);
 					$('#viewerPlaceHolder').hide();
 				}
 
