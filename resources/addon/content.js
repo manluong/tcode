@@ -5,7 +5,8 @@ function ajax_content(url,divid) {
     dhtmlxAjax.get("/"+url, function(loader) {
 
     jsCkStr = loader.xmlDoc.responseText.substring(0,60)
-
+    console.log(url);
+	console.log(loader.xmlDoc.responseText);
 	//load full page
 	//to fix with pjax
 	if (divid == "page"){
@@ -58,7 +59,7 @@ function ajax_content(url,divid) {
 
 
 function ajax_content_json(jarray,divid) {
-
+	
 	var json = jQuery.parseJSON( jarray );
 	
 	var links = { html: '', bu: ''};
@@ -326,7 +327,6 @@ function ajax_content_links(links,divid){
 		}
 		
 	}
-	
 	//button only html
 	linkre.bu = linkhtml;
 	

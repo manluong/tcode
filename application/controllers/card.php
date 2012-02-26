@@ -22,8 +22,8 @@ class Card extends MY_Controller {
 				array(
 					'target' => '',
 					'text' => 'View',
-					'type' => 'ajax',
-					'url' => '/helloworld/contact/{{id}}/v',
+					'type' => 'page',
+					'url' => '/card/view/{{id}}/v',
 					'style' => 'default',
 					'icon' => '',
 				)
@@ -38,5 +38,59 @@ class Card extends MY_Controller {
 				->set_details($details)
 				->output_json();
 	}
+	
+	function x_info() {
+
+		$details = array(
+			'data' => $this->DS_Card->get_view_data(),
+			'links' => array(
+				array(
+					'target' => '',
+					'text' => 'Edit',
+					'type' => 'ajax',
+					'url' => '/card/x_info/'.$this->url['id_plain'].'/e',
+					'style' => 'default',
+					'icon' => '',
+				)
+			),
+			'setting' => array(
+				'hidelabel' => 0,
+			),
+		);
+
+		$this->RespM->set_message($this->DS_Card->sql)
+				->set_type('view')
+				->set_template('')
+				//->set_template('custom_viewcard')//custom template
+				->set_success(true)
+				->set_title('Card Info Dataset')
+				->set_details($details)
+				->output_json();
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+		
 
 }
