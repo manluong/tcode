@@ -670,7 +670,7 @@ class DatasetM extends CI_Model {
 		//if field is not required, add blank selection
 		if (!$field['required']) $result[] = array('key'=>'', 'value'=>'');
 
-		if ($field['select_source'] == 'group') {
+		if ($field['sel_source'] == 'group') {
 			$rs = $this->db->select('core_select_name, core_select_value')
 					->from('core_select')
 					->where('core_select_group', $field['sel_groupname'])

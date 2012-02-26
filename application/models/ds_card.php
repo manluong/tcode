@@ -4,7 +4,7 @@ class DS_Card extends DatasetM {
 	function __construct() {
 		parent::__construct();
 
-		$this->load('info');
+		$this->load('card_info');
 	}
 
 }
