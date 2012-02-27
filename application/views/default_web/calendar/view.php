@@ -1,4 +1,6 @@
 <script type="text/javascript" src="/resources/addon/jquery.fullcalendar.min.js"></script>
+<link rel="stylesheet" href="/resources/addon/jquery.fullcalendar.css" />
+<link rel="stylesheet" href="/resources/addon/jqueryui/aristo/ui.css" />
 
 <style>
 	#calendar .fc-sun, #calendar .fc-sat {
@@ -22,7 +24,6 @@
 	}
 	#calendar_list li {
 		cursor:pointer;
-		list-style: none;
 		padding:3px;
 		margin:1px 0;
 	}
@@ -60,7 +61,7 @@
 
 	<div id="calendar_options">
 
-		<ul id="calendar_list" class="sf-menu sf-vertical">
+		<ul id="calendar_list" class="unstyled">
 		<?php
 			foreach($calendars AS $cal) {
 				$color = ($cal['calendar_color'] == NULL)
@@ -70,7 +71,7 @@
 					echo '<div class="cal_showhide" data-cal_id=',$cal['id'],'>';
 					echo $cal['display_name'];
 					echo '</div>';
-					echo '<ul>';
+					echo '<ul class="hide unstyled">';
 						echo '<li><a href="webcal://'.str_replace('http://','',site_url()).'ical/index/',encode_id($cal['id']),'/',encode_id($cuid),'">Add to iCal</a></li>';
 					echo '</ul>';
 				echo '</li>';
@@ -198,24 +199,25 @@
 		$.datepicker.setDefaults({
 			dateFormat: 'yy-mm-dd'
 		});
-		/*
+
 		$.timepicker.setDefaults({
 			timeFormat: 'h:mm',
 			stepMinute: 5
 		});
 
-		$('#calendar_list').superfish({
-			delay: 500,
-			animation: { height:'show' },
-			speed: 'fast'
-		});
-
 		$('.datepicker').datetimepicker();
-*/
+
 		$('#create_event_form').modal({
 			'backdrop': false,
 			'show':false
 		});
+
+		$('#calendar_list li').on('hover', function(e) {
+			$(this).find('ul').slideDown(300);
+		}).on('mouseleave', function(e) {
+			$(this).find('ul').slideUp(300);
+		});
+
 
         var eventtitle = $('#event_title');
 
@@ -238,8 +240,11 @@
 				$('#event_date_end').val(datestring(end, allDay));
 				$('#event_allday').prop('checked', allDay);
 
+				$('#event_title').val('');
+				$('#event_memo').val('');
+
                 $('#create_event_form').modal('show');
-			},
+		},
 			eventDrop: function(event, delta_day, delta_min, all_day, revert_func) {
 				update_event(event, delta_day, delta_min, all_day, revert_func);
 			},
