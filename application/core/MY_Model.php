@@ -126,6 +126,9 @@ class DatasetM extends CI_Model {
 	protected $form_data = array();
 	protected $properties = array();
 
+	protected $where = array();
+	protected $search_where = array();
+
 	var $loaded = false;
 
 	var $id = '';
@@ -287,6 +290,18 @@ class DatasetM extends CI_Model {
 		}
 
 		return array_values($fields);
+	}
+
+	function search($string) {
+		$search_fields = $this->get_search_fields();
+
+		foreach($search_fields AS $s) {
+			$this->search_where[] = $s." LIKE '".$string."'";
+		}
+
+		$this->load_data();
+
+		return $this->data;
 	}
 
 	function delete() {
@@ -509,10 +524,19 @@ class DatasetM extends CI_Model {
 			$this->db->where($this->db_tables[0]['db_table'].'.'.$this->get_form_field($this->db_tables[0]['db_table']), $this->id);
 		}
 
+		//if there are criterias in $this->where and $this->search_where, load them
+		foreach($this->where AS $w) {
+			$this->db->where($w);
+		}
+
+		foreach($this->search_where AS $w) {
+			$this->db->or_where($w);
+		}
+
 		//order by fields based on subaction
 		if ($this->subaction == 'l') {
 			$sort_fields = $this->get_sort_fields('sort_list');
-		} elseif ($this->subaction == 's') {
+		} elseif ($this->subaction == 's' || $this->subaction == 'sq') {
 			$sort_fields = $this->get_sort_fields('sort_search');
 		} else {
 			$sort_fields = $this->get_sort_fields('sort_form');
@@ -654,6 +678,15 @@ class DatasetM extends CI_Model {
 			$fields[$f[$sort_field]] = $f['db_table'].'.'.$f['db_field'];
 		}
 		return implode(', ',$fields);
+	}
+
+	protected function get_search_fields() {
+		$fields = array();
+		foreach($this->fields AS $f) {
+			if ($f[$this->subaction] == 0) continue;	//checks avedls
+			$fields[$f['sort_search']] = $f['db_table'].'.'.$f['db_field'];
+		}
+		return $fields;
 	}
 
 	protected function get_table_app_name($table) {
