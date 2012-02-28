@@ -70,6 +70,7 @@ class MY_Controller extends CI_Controller {
 		if ($this->input->is_ajax_request()) $this->is_ajax = TRUE;
 
 		$this->setup_url();
+		$this->setup_db();
 
 		$this->load->model('UserM');
 		$this->load->model('ACLM');
@@ -166,6 +167,20 @@ class MY_Controller extends CI_Controller {
 			if ($domain[1]!=='8force' || $domain[2]!=='net') die('There is a problem with the domain name.');
 			$this->domain = $domain[0];
 		}
+	}
+
+	private function setup_db() {
+		if (ENVIRONMENT != 'production') return NULL;
+
+		//grab the db settings in the configuration files
+		include(APPPATH.'config/'.ENVIRONMENT.'/database.php');
+		$config = $db['default'];
+
+		//overwrite the database name to that of the tenant's domain
+		$config['database'] = 't_'.$this->domain;
+
+		//supposedly to overwrite the current database connection with a new one, connecting to the tenant's db
+		$this->load->database($config);
 	}
 
 
