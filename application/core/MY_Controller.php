@@ -177,6 +177,7 @@ class MY_Controller extends CI_Controller {
 		$config = $db['default'];
 
 		//overwrite the database name to that of the tenant's domain
+		$config['username'] = 't_'.$this->domain;
 		$config['database'] = 't_'.$this->domain;
 
 		//supposedly to overwrite the current database connection with a new one, connecting to the tenant's db
