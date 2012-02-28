@@ -162,7 +162,7 @@ class MY_Controller extends CI_Controller {
 
 		if ($this->re_url['app'] !== FALSE && $this->re_url['action'] !== FALSE) $this->has_return = TRUE;
 
-		if (ENVIRONMENT == 'production') {
+		if (ENVIRONMENT != 'development') {
 			$domain = explode('.', $_SERVER['SERVER_NAME']);
 			//if ($domain[1]!=='8force' || $domain[2]!=='net') die('There is a problem with the domain name.');
 			$this->domain = $domain[0];
@@ -170,17 +170,23 @@ class MY_Controller extends CI_Controller {
 	}
 
 	private function setup_db() {
-		if (ENVIRONMENT != 'production') return NULL;
+		if (ENVIRONMENT == 'development') return NULL;
 
 		//grab the db settings in the configuration files
 		include(APPPATH.'config/'.ENVIRONMENT.'/database.php');
 		$config = $db['default'];
 
 		//overwrite the database name to that of the tenant's domain
-		$config['username'] = 't_'.$this->domain;
-		$config['database'] = 't_'.$this->domain;
+		if (APP_ROLE == 'TSUB') {
+			$config['username'] = 't_'.$this->domain;
+			$config['database'] = 't_'.$this->domain;
+		} elseif (APP_ROLE == 'TBOSS') {
+			if (ENVIRONMENT == 'testing') {
+				$config['database'] = 't_'.$this->domain.'2';
+			}
+		}
 
-		//supposedly to overwrite the current database connection with a new one, connecting to the tenant's db
+		//supposedly to overwrite the current database connection with a new one, connecting to the tenant's db. needs testing
 		$this->load->database($config);
 	}
 
