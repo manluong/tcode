@@ -164,7 +164,7 @@ class MY_Controller extends CI_Controller {
 
 		if (ENVIRONMENT == 'production') {
 			$domain = explode('.', $_SERVER['SERVER_NAME']);
-			if ($domain[1]!=='8force' || $domain[2]!=='net') die('There is a problem with the domain name.');
+			//if ($domain[1]!=='8force' || $domain[2]!=='net') die('There is a problem with the domain name.');
 			$this->domain = $domain[0];
 		}
 	}
