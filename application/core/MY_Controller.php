@@ -1,6 +1,8 @@
 <?php
 
 class MY_Controller extends CI_Controller {
+	var $domain = '';
+
 	var $url = array(
 		'app' => '',
 		'app_id' => '',
@@ -158,6 +160,12 @@ class MY_Controller extends CI_Controller {
 		$this->re_url['id'] = $this->input->get_post('re_id', TRUE);
 
 		if ($this->re_url['app'] !== FALSE && $this->re_url['action'] !== FALSE) $this->has_return = TRUE;
+
+		if (ENVIRONMENT == 'production') {
+			$domain = explode('.', $_SERVER['SERVER_NAME']);
+			if ($domain[1]!=='8force' || $domain[2]!=='net') die('There is a problem with the domain name.');
+			$this->domain = $domain[0];
+		}
 	}
 
 
