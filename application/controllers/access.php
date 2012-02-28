@@ -19,6 +19,7 @@ class Access extends MY_Controller {
 		$html = array();
 		$html['status_message'] = $statuses[$this->UserM->status];
 		$html['status'] = $this->UserM->status;
+		$html['company_name'] = 'Telcoson'; //TODO: This should be the company name of the tenant.
 
 		$data = array();
 		$data['html'] = $this->load->view('/'.get_template().'/access/login', $html, TRUE);
