@@ -49,9 +49,9 @@ $active_group = 'default';
 $active_record = TRUE;
 
 $db['default']['hostname'] = 'telcosondb1.cjhahrtrq51i.ap-southeast-1.rds.amazonaws.com';
-$db['default']['username'] = 'telcosonawsdb1';
-$db['default']['password'] = '721hewX';
-$db['default']['database'] = 'snowman3';
+$db['default']['username'] = 'webdbuser';
+$db['default']['password'] = 'zX1@nM9)';
+$db['default']['database'] = 't_apple';
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;
