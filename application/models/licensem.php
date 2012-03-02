@@ -95,9 +95,8 @@ class LicenseM extends MY_Model {
 		$rules = $this->consolidate_rules($rs->result_array());
 
 		$this->load->model('TenantM');
-		$tenant_db = $this->TenantM->get_db_connection($tenant_id);
-
-		$tenant_db->insert_batch('tenant_license_rules', $rules);
+		$this->TenantM->setup($tenant_id);
+		$this->TenantM->save_license_rules($rules);
 	}
 
 
