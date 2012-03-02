@@ -48,11 +48,10 @@
 $active_group = 'default';
 $active_record = TRUE;
 
-$db['default']['hostname'] = '0810.dyndns.org:10306';
-$db['default']['hostname'] = '192.168.1.54';
-$db['default']['username'] = 'snowman';
-$db['default']['password'] = 'fast123';
-$db['default']['database'] = 'snowman3';
+$db['default']['hostname'] = 'telcosondb1.cjhahrtrq51i.ap-southeast-1.rds.amazonaws.com';
+$db['default']['username'] = 'telcosonawsdb1';
+$db['default']['password'] = '721hewX';
+$db['default']['database'] = '';
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;
