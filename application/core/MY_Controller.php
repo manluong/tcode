@@ -72,6 +72,8 @@ class MY_Controller extends CI_Controller {
 		$this->setup_url();
 		$this->setup_db();
 
+		$this->load->library('session');
+
 		$this->load->model('UserM');
 		$this->load->model('ACLM');
 		$this->load->model('App_generalM');
@@ -172,21 +174,21 @@ class MY_Controller extends CI_Controller {
 	private function setup_db() {
 		if (ENVIRONMENT == 'development') return NULL;
 
-		//grab the db settings in the configuration files
+		//load the default db settings in the configuration files
 		include(APPPATH.'config/'.ENVIRONMENT.'/database.php');
 		$config = $db['default'];
 
-		//overwrite the database name to that of the tenant's domain
+		//subdomain defines database table to use
+		$config['database'] = 't_'.$this->domain;
+
 		if (APP_ROLE == 'TSUB') {
 			$config['username'] = 't_'.$this->domain;
-			$config['database'] = 't_'.$this->domain;
-		} elseif (APP_ROLE == 'TBOSS') {
-			if (ENVIRONMENT == 'testing') {
-				$config['database'] = 't_'.$this->domain.'2';
-			}
 		}
 
-		//supposedly to overwrite the current database connection with a new one, connecting to the tenant's db. needs testing
+		if (APP_ROLE == 'TBOSS' && ENVIRONMENT == 'testing') {
+			$config['database'] = 't_'.$this->domain.'2';
+		}
+
 		$this->load->database($config);
 	}
 
