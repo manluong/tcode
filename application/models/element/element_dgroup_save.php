@@ -251,7 +251,7 @@ function dgroup_save($dgroup_structure,$dgroup_value,$aved){
 		//
         }elseif (isset($this_table['e_xtra'])) {
 
-            $req_table = "core_e_xtra_value";
+            $req_table = "global_setting.core_e_xtra_value";
             if (!$saveid) $saveid = $this->url['id_plain'];
             foreach ($this_table['fields'] as $this_field) {
 
@@ -281,7 +281,7 @@ function dgroup_save($dgroup_structure,$dgroup_value,$aved){
 
                 if ($aved == "es" || $aved == "as"){
 
-                    $sqlchk = "SELECT core_e_xtra_value_value FROM core_e_xtra_value WHERE core_e_xtra_value_linkid = '".$saveid."' AND core_e_xtra_value_gpid = '".$this_table['e_xtra_gpid']."' AND core_e_xtra_value_fieldid = '".$this_field['e_xtra_fieldid']."' AND core_e_xtra_value_lang = '".$where_lang."' LIMIT 1";
+                    $sqlchk = "SELECT core_e_xtra_value_value FROM global_setting.core_e_xtra_value WHERE core_e_xtra_value_linkid = '".$saveid."' AND core_e_xtra_value_gpid = '".$this_table['e_xtra_gpid']."' AND core_e_xtra_value_fieldid = '".$this_field['e_xtra_fieldid']."' AND core_e_xtra_value_lang = '".$where_lang."' LIMIT 1";
                     $resultchk = $this->db->query($sqlchk);
 					$resultchk = $resultchk->row_array(0);
 

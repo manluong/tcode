@@ -8,24 +8,24 @@ class Element_button extends CI_Model {
 
 	function Element_button_getbutton($app, $an, $sql_aved){
 
-	    $sql = "SELECT * FROM core_apps_action_element_button WHERE core_apps_action_element_button_app = '$app' AND core_apps_action_element_button_an = '$an' AND core_apps_action_element_button_usein = '$sql_aved' ORDER BY core_apps_action_element_button_position,core_apps_action_element_button_sort ASC";
+	    $sql = "SELECT * FROM global_setting.core_apps_action_element_button WHERE core_apps_action_element_button_app = '$app' AND core_apps_action_element_button_an = '$an' AND core_apps_action_element_button_usein = '$sql_aved' ORDER BY core_apps_action_element_button_position,core_apps_action_element_button_sort ASC";
 	    $rs = $this->db->query($sql);
-				
+
 		if ($rs->num_rows() == 0) return FALSE;
-		return $rs->result_array();		
+		return $rs->result_array();
 	}
 
 function core_element_button($app,$an,$this_element_aved,$this_element_id,$this_element_add,$this_element_view,$this_element_edit,$this_element_del,$this_element_list,$this_element_search,$dgourp_value_notfound,$basetype=0,$formadd_allowforceid=0,$button_e_xtra=0){
-	
+
     $sql_aved = $this_element_aved;
     if (substr($sql_aved,1,1) == "d") $sql_aved = substr($sql_aved,0,1);
 
 	$result1 = $this->Element_button_getbutton($app, $an, $sql_aved);
-	
+
     $totalbutton = count($result1);
     $countbutton = 0;
 	$buttonallicon = 0;
-	
+
     if ($basetype=="list"){
         $form_or_list = "l";
         $form_or_list_id = "listid";
@@ -76,7 +76,7 @@ function core_element_button($app,$an,$this_element_aved,$this_element_id,$this_
             if (!$button[$countbutton]['position']) $button[$countbutton]['position'] = "bottom";
 
                 if (!$button[$countbutton]['div'] && $button[$countbutton]['targetapp'] && $button[$countbutton]['targetan']){
-                $sql2 = "SELECT core_apps_action_element_name,core_apps_action_element_divname FROM core_apps_action_element WHERE core_apps_action_element_x_core_apps_name = '$this_targetapp' AND core_apps_action_element_x_core_apps_action_name = '$this_targetan' AND core_apps_action_element_active = '1' LIMIT 1";
+                $sql2 = "SELECT core_apps_action_element_name,core_apps_action_element_divname FROM global_setting.core_apps_action_element WHERE core_apps_action_element_x_core_apps_name = '$this_targetapp' AND core_apps_action_element_x_core_apps_action_name = '$this_targetan' AND core_apps_action_element_active = '1' LIMIT 1";
 				$result2 = $this->db->query($sql2);
 				$result2 = $result2->row_array(0);
 
@@ -141,7 +141,7 @@ function core_element_button($app,$an,$this_element_aved,$this_element_id,$this_
               $button[$countbutton]['align'] = '1';
               if ($buttonallicon) $button[$countbutton]['icononly'] = '1';
               }
-			  
+
         }elseif ($this_element_aved == "l" || $this_element_aved == "ld" || $this_element_aved == "ss" || $this_element_aved == "sq"){
 
               if ($this_element_add) {
@@ -203,7 +203,7 @@ function core_element_button($app,$an,$this_element_aved,$this_element_id,$this_
               if ($buttonallicon) $button[$countbutton]['icononly'] = '1';
               }
 			*/
-			
+
               if ($this_element_add) {
               $button[$countbutton]['type']="as";$button[$countbutton]['targetaved']="as";
               $button[$countbutton]['targetid']=$form_or_list_id_as;$button[$countbutton]['lang']=$this->lang->line('corebutton_save');
@@ -255,9 +255,9 @@ function core_element_button($app,$an,$this_element_aved,$this_element_id,$this_
               $button[$countbutton]['targetid']=$form_or_list_id;$button[$countbutton]['lang']=$this->lang->line('corebutton_cancel');
               $button[$countbutton]['position']=$buttonposition;$button[$countbutton]['div']=$this_element_id;$button[$countbutton]['targetapp']=$app;$button[$countbutton]['targetan']=$an;
               $button[$countbutton]['align'] = '1';
-              if (isset($buttonallicon)) $button[$countbutton]['icononly'] = '1';			
+              if (isset($buttonallicon)) $button[$countbutton]['icononly'] = '1';
               }
-	
+
         }elseif ($this_element_aved == "es"){
 
               if ($this_element_edit) {

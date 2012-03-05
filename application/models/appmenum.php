@@ -13,7 +13,7 @@ class AppmenuM extends CI_Model {
 
 	function get_menu() {
 		$rs = $this->db->select('core_apps_name, core_apps_icon')
-				->from('core_apps')
+				->from('global_setting.core_apps')
 				->where('core_apps_status', '1')
 				->where('core_apps_showmenu', '1')
 				->order_by('core_apps_menusort')
@@ -26,7 +26,7 @@ class AppmenuM extends CI_Model {
 	// Get the app menu array from db
 	function get_appmenu_gp($appmenu_gp) {
 		$rs = $this->db->select()
-				->from('core_apps_menu_gp')
+				->from('global_setting.core_apps_menu_gp')
 				->where('core_apps_menu_gp_name', $appmenu_gp)
 				->limit(1)
 				->get();
@@ -37,7 +37,7 @@ class AppmenuM extends CI_Model {
 
 	function get_appmenu_item($appmenu_gp) {
 		$rs = $this->db->select()
-				->from('core_apps_menu')
+				->from('global_setting.core_apps_menu')
 				->where('core_apps_menu_group', $appmenu_gp)
 				->where('core_apps_menu_status', 1)
 				->order_by('core_apps_menu_parent, core_apps_menu_sort', 'ASC')

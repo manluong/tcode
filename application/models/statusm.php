@@ -18,7 +18,7 @@ class StatusM extends MY_Model {
 				->from('status')
 				->join('locations', 'locations.id=status.location_id', 'left')
 				//->join('tasks', 'tasks.id=status.task_id', 'left')
-				->join('status_types', 'status_types.id=status.status_type_id', 'left')
+				->join('global_setting.status_types', 'status_types.id=status.status_type_id', 'left')
 				->where('card_id', $card_id)
 				->limit(1)
 				->get();
@@ -88,13 +88,13 @@ class StatusM extends MY_Model {
 	}
 
 	function save_status_type($status) {
-		$this->table = 'status_types';
+		$this->table = 'global_setting.status_types';	//TODO: save to custom_settings table
 		$this->save($status, 'id');
 		$this->table = 'status';
 	}
 
 	function get_status_types() {
-		$this->table = 'status_types';
+		$this->table = 'global_setting.status_types';
 		$results = parent::get_list();
 		$this->table = 'status';
 

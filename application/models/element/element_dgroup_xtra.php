@@ -17,7 +17,7 @@ function core_element_xtra_structure($structure){
     //continue only if there is a group of extra field specified
     if ($xtra_gpid){
 
-$sql1 = "SELECT * FROM core_e_xtra_field
+$sql1 = "SELECT * FROM global_setting.core_e_xtra_field
 LEFT JOIN langc ON core_e_xtra_field.core_e_xtra_field_id = langc.langc_tableid
 AND langc.langc_table = 'core_e_xtra_field'
 AND langc.langc_lang = '".$this->lang->langinfo['use']."'
@@ -78,7 +78,7 @@ WHERE core_e_xtra_field.core_e_xtra_field_gpid = '$xtra_gpid'";
 			 $structure['table'][$tablenum]['fields'][$fieldnum]['fvnobrpre'] = "";
 			 $structure['table'][$tablenum]['fields'][$fieldnum]['fvnobrsub'] = "";
 			 $structure['table'][$tablenum]['fields'][$fieldnum]['fvnolabel'] = "";
-			
+
 
              //if ($avedtype == "form" || $avedtype == "list" || $avedtype == "search"){
              /////////////////////////////////////////////////////////////////////////////
@@ -156,7 +156,7 @@ function core_element_xtra_value($xtra_structure){
 
     foreach ($xtra_structure['table'] as $this_table){
         if ($this_table['e_xtra']){
-        $sql = "SELECT core_e_xtra_value_value FROM core_e_xtra_value WHERE core_e_xtra_value_linkid = ".$this->url['id_plain']." AND core_e_xtra_value_gpid = '$xtra_gpid' AND core_e_xtra_value_lang = '".$this_table['e_xtra_lang']."'";
+        $sql = "SELECT core_e_xtra_value_value FROM global_setting.core_e_xtra_value WHERE core_e_xtra_value_linkid = ".$this->url['id_plain']." AND core_e_xtra_value_gpid = '$xtra_gpid' AND core_e_xtra_value_lang = '".$this_table['e_xtra_lang']."'";
 		$result = $this->db->query($sql);
 		$result = $result->result_array();
         }

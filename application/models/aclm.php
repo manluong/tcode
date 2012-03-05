@@ -472,7 +472,7 @@ class ACLM extends MY_Model {
 		$temp_tb = $this->table;
 		$temp_id = $this->id_field;
 
-		$this->table = 'access_gpmaster';
+		$this->table = 'global_setting.access_gpmaster';
 		$this->id_field = 'access_gpmaster_code';
 
 		$results = parent::get_batch($ids, $id_as_key);
@@ -487,7 +487,7 @@ class ACLM extends MY_Model {
 		$temp_tb = $this->table;
 		$temp_id = $this->id_field;
 
-		$this->table = 'access_gpmaster';
+		$this->table = 'global_setting.access_gpmaster';
 		$this->id_field = 'access_gpmaster_code';
 
 		$results = parent::get_list();

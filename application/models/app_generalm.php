@@ -316,14 +316,14 @@ function core_app_id2name_sql($idtype){
         break;
 
         case "currency":
-        $result['sql'] = "SELECT currency_id,currency_code,currency_default FROM currency ORDER BY currency_default DESC, currency_code ASC";
+        $result['sql'] = "SELECT currency_id,currency_code,currency_default FROM global_setting.currency ORDER BY currency_default DESC, currency_code ASC";
         $result['this_name'] = "currency_code";
         $result['this_key'] = "currency_id";
         $this_defaultfield = "currency_default";
         break;
 
         case "taxid":
-        $result['sql'] = "SELECT set_tax_id,set_tax_name,set_tax_default FROM set_tax ORDER BY set_tax_default DESC, set_tax_name ASC";
+        $result['sql'] = "SELECT set_tax_id,set_tax_name,set_tax_default FROM global_setting.set_tax ORDER BY set_tax_default DESC, set_tax_name ASC";
         $result['this_name'] = "set_tax_name";
         $result['this_key'] = "set_tax_id";
         $this_defaultfield = "set_tax_default";
@@ -355,19 +355,19 @@ function core_app_id2name_sql($idtype){
         break;
 
         case "xtragpid":
-        $result['sql'] = "SELECT core_e_xtra_group_id,core_e_xtra_group_name FROM core_e_xtra_group ORDER BY core_e_xtra_group_name";
+        $result['sql'] = "SELECT core_e_xtra_group_id,core_e_xtra_group_name FROM global_setting.core_e_xtra_group ORDER BY core_e_xtra_group_name";
         $result['this_name'] = "core_e_xtra_group_name";
         $result['this_key'] = "core_e_xtra_group_id";
         break;
 
         case "countrylist":
-        $result['sql'] = "SELECT countries_name,countries_iso_2 FROM countries ORDER BY countries_name";
+        $result['sql'] = "SELECT countries_name,countries_iso_2 FROM global_setting.countries ORDER BY countries_name";
         $result['this_name'] = "countries_name";
         $result['this_key'] = "countries_iso_2";
         break;
 
         case "timezone":
-        $result['sql'] = "SELECT countries_timezone_zone,countries_timezone_".$this->lang->lang_use." FROM countries_timezone ORDER BY countries_timezone_zone";
+        $result['sql'] = "SELECT countries_timezone_zone,countries_timezone_".$this->lang->lang_use." FROM global_setting.countries_timezone ORDER BY countries_timezone_zone";
         $result['this_name'] = "countries_timezone_".$this->lang->lang_use;
         $result['this_key'] = "countries_timezone_zone";
         break;

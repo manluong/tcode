@@ -7,7 +7,7 @@ class AppM extends MY_Model {
 	var $public_apps = array('access', 'ical', 'unittest', 'email');
 
 	function __construct() {
-		$this->table = 'core_apps';
+		$this->table = 'global_setting.core_apps';
 		$this->id_field = 'core_apps_id';
 
 		parent::__construct();
@@ -41,7 +41,7 @@ class AppM extends MY_Model {
 		$rs = $this->db->select('core_apps_status')
 				->where('core_apps_name', $app)
 				->where('core_apps_status', 1)
-				->get('core_apps', 1);
+				->get($this->table, 1);
 
 		if ($rs->num_rows()==0) return 0;
 
@@ -51,7 +51,7 @@ class AppM extends MY_Model {
 
 	function get_id($app_name) {
 		$rs = $this->db->select('core_apps_id')
-				->from('core_apps')
+				->from($this->table)
 				->where('core_apps_name', $app_name)
 				->limit(1)
 				->get();
@@ -65,7 +65,7 @@ class AppM extends MY_Model {
 
 	function get_name($app_id) {
 		$rs = $this->db->select('core_apps_name')
-				->from('core_apps')
+				->from($this->table)
 				->where('core_apps_id', $app_id)
 				->limit(1)
 				->get();
@@ -79,7 +79,7 @@ class AppM extends MY_Model {
 
 	function get_group($app, $action) {
 		$rs = $this->db->select('core_apps_action_gp')
-				->from('core_apps_action')
+				->from('global_setting.core_apps_action')
 				->where('core_apps_action_x_core_apps_name', $app)
 				->where('core_apps_action_name', $action)
 				->limit(1)
@@ -101,7 +101,7 @@ class AppM extends MY_Model {
 				->where('core_apps_action_x_core_apps_name', $app)
 				->where('core_apps_action_name', $action)
 				->where('core_apps_action_active', 1)
-				->get('core_apps_action', 1);
+				->get('global_setting.core_apps_action', 1);
 
 		if ($rs->num_rows() == 0) return FALSE;
 		return $rs->row_array();
@@ -116,7 +116,7 @@ class AppM extends MY_Model {
 				->where('core_apps_action_x_core_apps_name', $app)
 				->where('core_apps_action_default', 1)
 				->where('core_apps_action_active', 1)
-				->get('core_apps_action');
+				->get('global_setting.core_apps_action');
 
 		if ($rs->num_rows() == 0) return FALSE;
 		return $rs->row_array();
@@ -128,7 +128,7 @@ class AppM extends MY_Model {
 				->where('core_apps_action_element_active', 1)
 				->where('core_apps_action_element_x_core_apps_name', $app)
 				->order_by('core_apps_action_element_sort', 'ASC')
-				->get('core_apps_action_element');
+				->get('global_setting.core_apps_action_element');
 
 		if ($rs->num_rows() == 0) return FALSE;
 		return $rs->result_array();

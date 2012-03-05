@@ -722,7 +722,7 @@ class MY_Controller extends CI_Controller {
 	private function get_divstyle($action_layout_name) {
 		$rs = $this->db->select()
 				->where('core_apps_action_layout_name', $action_layout_name)
-				->get('core_apps_action_layout', 1);
+				->get('global_setting.core_apps_action_layout', 1);
 		$result = $rs->row_array();
 
 		$this_array = array();

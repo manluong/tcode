@@ -72,7 +72,7 @@ class LogM extends CI_Model {
 
 	function _get_log_type() {
 		$query = $this->db->select()
-				->from('log_type')
+				->from('global_setting.log_type')
 				->where(array('app'=>$this->_url['app'],'action'=>$this->_url['action'],
 						'subaction'=>$this->_url['subaction']
 					))
@@ -266,7 +266,7 @@ class LogM extends CI_Model {
 	public function get_wall($stamp, $limit=10) {
 		$query = $this->db->select()
 			->from('log_event')
-			->join('log_type', 'log_type.id = log_event.log_type_id')
+			->join('global_setting.log_type', 'log_type.id = log_event.log_type_id')
 			->where('log_event.stamp <', $stamp)
 			->order_by('log_event.stamp', 'desc')
 			->limit($limit)

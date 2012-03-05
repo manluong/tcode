@@ -16,14 +16,14 @@ class LayoutM extends CI_Model {
 		//LOAD TEMPLATE
 		if (isset($apps_action['core_apps_action_template']) && $apps_action['core_apps_action_template']!='') {
 			$rs = $this->db->select()
-					->from('core_layout_template')
+					->from('global_setting.core_layout_template')
 					->where('core_layout_template_name', $apps_action['core_apps_action_template'])
 					->where('core_layout_template_platform', $this->platform)
 					->limit(1)
 					->get();
 		} else {
 			$rs = $this->db->select()
-					->from('core_layout_template')
+					->from('global_setting.core_layout_template')
 					->where('core_layout_template_platform', $this->platform)
 					->where('core_layout_template_default', 1)
 					->limit(1)
@@ -70,13 +70,13 @@ class LayoutM extends CI_Model {
 		//if type=1 (noraml), with logo,menu?
 	    if (isset($apps_action['core_apps_action_x_core_layout_format_name']) && $apps_action['core_apps_action_x_core_layout_format_name']!='') {
 			$rs = $this->db->select()
-					->from('core_layout_format')
+					->from('global_setting.core_layout_format')
 					->where('core_layout_format_name', $apps_action['core_apps_action_x_core_layout_format_name'])
 					->limit(1)
 					->get();
 	    } else {
 			$rs = $this->db->select()
-					->from('core_layout_format')
+					->from('global_setting.core_layout_format')
 					->where('core_layout_format_name', 'full')
 					->limit(1)
 					->get();
@@ -116,7 +116,7 @@ class LayoutM extends CI_Model {
 		);
 
 		$rs = $this->db->select()
-				->from('core_addons')
+				->from('global_setting.core_addons')
 				->where_in('core_addons_name', explode(',', $addonnames))
 				->order_by('core_addons_sort')
 				->get();
@@ -133,7 +133,7 @@ class LayoutM extends CI_Model {
 
 	function get_mainmenu() {
 		$rs = $this->db->select('core_apps_name')
-				->from('core_apps')
+				->from('global_setting.core_apps')
 				->where('core_apps_status', 1)
 				->where('core_apps_showmenu', 1)
 				->order_by('core_apps_menusort')

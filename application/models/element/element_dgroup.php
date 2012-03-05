@@ -928,7 +928,7 @@ function core_element_dgroup_structure($app,$aved,$dgroupname,$thisid,$this_elem
             if(isset($structure['multilang'])){
             foreach ($structure['multilang'] as $this_multilang) {
 
-                $sqlml = "SELECT * FROM lang_use WHERE lang_use_active = '1'";
+                $sqlml = "SELECT * FROM global_setting.lang_use WHERE lang_use_active = '1'";
                 if ($this_multilang['show'] == 1) $sqlml .= " AND lang_use_code = '".$this->lang->lang_use."'";
                 $sqlml .= " ORDER BY lang_use_code";
 
@@ -1184,8 +1184,8 @@ function core_element_dgroup_value($dgroup_structure){
             foreach ($dgroup_structure['table'] as $this_table){
                 if (isset($this_table['e_xtra'])){
 
-$sql3 = "SELECT core_e_xtra_value.core_e_xtra_value_value,core_e_xtra_field.core_e_xtra_field_id FROM core_e_xtra_value
-LEFT JOIN core_e_xtra_field ON core_e_xtra_value.core_e_xtra_value_fieldid = core_e_xtra_field.core_e_xtra_field_id
+$sql3 = "SELECT core_e_xtra_value.core_e_xtra_value_value,core_e_xtra_field.core_e_xtra_field_id FROM global_setting.core_e_xtra_value
+LEFT JOIN global_setting.core_e_xtra_field ON core_e_xtra_value.core_e_xtra_value_fieldid = core_e_xtra_field.core_e_xtra_field_id
 WHERE core_e_xtra_value.core_e_xtra_value_linkid = '".$this->url['id_plain']."'
 AND core_e_xtra_value.core_e_xtra_value_gpid = '".$this_table['e_xtra_gpid']."'
 AND core_e_xtra_value.core_e_xtra_value_lang = '".$this_table['e_xtra_lang']."'";
@@ -1193,8 +1193,8 @@ $result3 = $this->db->query($sql3);
 $result3 = $result3->result_array();
 
                     if (!$result3 && $aved == "v" && !$this->lang->langinfo['thislang_get']){
-$sql3 = "SELECT core_e_xtra_value.core_e_xtra_value_value,core_e_xtra_field.core_e_xtra_field_id FROM core_e_xtra_value
-LEFT JOIN core_e_xtra_field ON core_e_xtra_value.core_e_xtra_value_fieldid = core_e_xtra_field.core_e_xtra_field_id
+$sql3 = "SELECT core_e_xtra_value.core_e_xtra_value_value,core_e_xtra_field.core_e_xtra_field_id FROM global_setting.core_e_xtra_value
+LEFT JOIN global_setting.core_e_xtra_field ON core_e_xtra_value.core_e_xtra_value_fieldid = core_e_xtra_field.core_e_xtra_field_id
 WHERE core_e_xtra_value.core_e_xtra_value_linkid = '".$this->url['id_plain']."'
 AND core_e_xtra_value.core_e_xtra_value_gpid = '".$this_table['e_xtra_gpid']."'
 AND core_e_xtra_value.core_e_xtra_value_lang = '".$this->lang->langinfo['default']."'";
@@ -1211,8 +1211,8 @@ $result3 = $result3->result_array();
                     foreach ($this_table['fields'] as $this_field){
                         if ($dgroup_structure['fieldsort'][$this_field['core_db_fields_name']]['e_xtra_shared'] && !$multilangresult[$this_field['core_db_fields_name']]){
                         // echo  "hello";
-$sql3 = "SELECT core_e_xtra_value.core_e_xtra_value_value,core_e_xtra_field.core_e_xtra_field_id FROM core_e_xtra_value
-LEFT JOIN core_e_xtra_field ON core_e_xtra_value.core_e_xtra_value_fieldid = core_e_xtra_field.core_e_xtra_field_id
+$sql3 = "SELECT core_e_xtra_value.core_e_xtra_value_value,core_e_xtra_field.core_e_xtra_field_id FROM global_setting.core_e_xtra_value
+LEFT JOIN global_setting.core_e_xtra_field ON core_e_xtra_value.core_e_xtra_value_fieldid = core_e_xtra_field.core_e_xtra_field_id
 WHERE core_e_xtra_value.core_e_xtra_value_linkid = '".$this->url['id_plain']."'
 AND core_e_xtra_value.core_e_xtra_value_gpid = '".$this_table['e_xtra_gpid']."'
 AND core_e_xtra_value.core_e_xtra_value_lang = 'en'

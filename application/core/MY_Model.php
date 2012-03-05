@@ -438,7 +438,7 @@ class DatasetM extends CI_Model {
 
 	protected function load_properties($ds) {
 		$rs = $this->db->select()
-				->from('core_dataset')
+				->from('global_setting.core_dataset')
 				->where('dataset_name', $ds)
 				->limit(1)
 				->get();
@@ -450,7 +450,7 @@ class DatasetM extends CI_Model {
 
 	protected function load_tables($ds) {
 		$rs = $this->db->select()
-				->from('core_dataset_tables')
+				->from('global_setting.core_dataset_tables')
 				->where('dataset_name', $ds)
 				->get();
 
@@ -468,8 +468,8 @@ class DatasetM extends CI_Model {
 
 	protected function load_fields($ds) {
 		$rs = $this->db->select('core_dataset_fields.*, core_fields.*')
-				->from('core_dataset_fields')
-				->join('core_fields', 'core_dataset_fields.db_field=core_fields.name', 'left')
+				->from('global_setting.core_dataset_fields')
+				->join('global_setting.core_fields', 'core_dataset_fields.db_field=core_fields.name', 'left')
 				->where('dataset_name', $ds)
 				->get();
 
@@ -705,7 +705,7 @@ class DatasetM extends CI_Model {
 
 		if ($field['sel_source'] == 'group') {
 			$rs = $this->db->select('core_select_name, core_select_value')
-					->from('core_select')
+					->from('global_setting.core_select')
 					->where('core_select_group', $field['sel_groupname'])
 					->get();
 
