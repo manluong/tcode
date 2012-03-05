@@ -72,6 +72,8 @@ class MY_Controller extends CI_Controller {
 		$this->setup_url();
 		$this->setup_db();
 
+		$this->check_mobile_app();
+
 		$this->load->library('session');
 
 		$this->load->model('UserM');
@@ -96,7 +98,6 @@ class MY_Controller extends CI_Controller {
 		if ($this->AppM->must_disable_plain_id()) $this->ACLM->check_id_encryption();
 		$this->ACLM->check_app_access();
 
-		$this->check_mobile_app();
 
 		//$this->output->enable_profiler(true);
 	}
