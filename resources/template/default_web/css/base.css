@@ -228,12 +228,12 @@ body {
 
 }
 
-#content-container {	
+#content-container {
 
     //-webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
     //-moz-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.7);
     //box-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
-    	
+
 	//background:#789 url('../images/bg-stripes.png');
 	background:#fafafa;
 	position:fixed;
@@ -282,6 +282,12 @@ body {
 
 
 
+ul.app_list li {
+	margin:5px 0;
+}
+ul.app_list li.selected {
+	font-weight:bold;
+}
 /*
 .tabbable {
 	background-color:#FFF;

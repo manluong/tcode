@@ -288,7 +288,7 @@
 	<div id="sidebar-footer">
 		<span id="sidebar-footer-controls">
 			<a href="/access/logout" title="Log Off"><i class="icon-off"></i></a>
-			<a href="#" title="Settings"><i class="icon-cog"></i></a>
+			<a href="/setting" title="Settings" class="ajax"><i class="icon-cog"></i></a>
 			<a href="#" title="History"><i class="icon-time"></i></a>
 			<a href="#" title="Feedback"><i class="icon-comment"></i></a>
 		</span>
