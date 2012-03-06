@@ -7,6 +7,8 @@ class MY_Model extends CI_Model {
 	var $cache = array();
 	var $cache_enabled = FALSE;
 
+	var $where = array();
+
 	function __construct() {
 		parent::__construct();
 	}
@@ -18,11 +20,17 @@ class MY_Model extends CI_Model {
 			if (isset($this->cache[$this->table][$id])) return $this->cache[$this->table][$id];
 		}
 
-		$rs = $this->db->select()
-				->from($this->table)
-				->where($this->id_field, $id)
-				->get();
+		$this->db->select()
+			->from($this->table)
+			->where($this->id_field, $id);
 
+		if (count($this->where) > 0) {
+			foreach($this->where AS $w) {
+				$this->db->where($w);
+			}
+		}
+
+		$rs = $this->db->get();
 		if ($rs->num_rows() == 0) return FALSE;
 
 		$result = $rs->row_array();
@@ -33,9 +41,16 @@ class MY_Model extends CI_Model {
 	}
 
 	function get_list($limit=0, $offset=0) {
-		$rs = $this->db->select()
-				->from($this->table)
-				->get();
+		$this->db->select()
+			->from($this->table);
+
+		if (count($this->where) > 0) {
+			foreach($this->where AS $w) {
+				$this->db->where($w);
+			}
+		}
+
+		$rs = $this->db->get();
 
 		$results = $rs->result_array();
 
