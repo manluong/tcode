@@ -126,6 +126,17 @@ class LicenseM extends MY_Model {
 		return $this->rules[$app_id][$actiongp][$rule_type];
 	}
 
+	function get_accessible_app_ids() {
+		$rs = $this->db->select('app_id')
+				->from('tenant_license_rules')
+				->where('rule_type', 1)
+				->where('rule_value', 1)
+				->get();
+
+		if ($rs->num_rows == 0) return array();
+
+		return $rs->result_array();
+	}
 
 
 
