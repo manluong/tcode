@@ -100,7 +100,7 @@ class LayoutM extends CI_Model {
 		if ( isset($apps_action['core_apps_action_addons']) ) $CI->layout['addons'] .= $apps_action['core_apps_action_addons'].',';
 
 		//MENU
-		if ($result['core_layout_format_menu']) $CI->layout['menu_array'] = $this->get_mainmenu();
+		if ($result['core_layout_format_menu']) $CI->layout['menu_array'] = $this->AppM->get_apps();
 
 		if (isset($apps_action['core_apps_action_appmenu']) && $apps_action['core_apps_action_appmenu']) {
 			$CI->layout['appmenu'] = 1;
@@ -129,18 +129,4 @@ class LayoutM extends CI_Model {
 
 		return $addons;
 	}
-
-
-	function get_mainmenu() {
-		$rs = $this->db->select('core_apps_name')
-				->from('global_setting.core_apps')
-				->where('core_apps_status', 1)
-				->where('core_apps_showmenu', 1)
-				->order_by('core_apps_menusort')
-				->get();
-
-		if ($rs->num_rows() == 0) return FALSE;
-		return $rs->result_array();
-	}
-
 }
