@@ -1,6 +1,6 @@
 <div class="widget">
 	<div class="widget-header">
-		Dashboard
+		Card
 	</div>
 	<div class="widget-body">
 		<?php

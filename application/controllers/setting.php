@@ -1,55 +1,111 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Setting extends MY_Controller {
-	var $app_list = array();
+	var $app_list = array(
+		array(
+			'core_apps_name' => 'general'
+		),
+	);
+
+	var $override = array(
+		0 => 'User cannot override',
+		1 => 'User can override',
+	);
 
 	function __construct() {
 		parent::__construct();
 
-		$this->app_list = $this->AppM->get_apps();
+		$apps = $this->AppM->get_apps();
+
+		//add app to the list only if there's a configuration view file created for it.
+		foreach($apps AS $a) {
+			if (file_exists(APPPATH.'/views/'.get_template().'/setting/configure_'.$a['core_apps_name'].'.php')) {
+				$this->app_list[] = $a;
+			}
+		}
+
+		$this->load->model('SettingM');
 	}
 
 	function index() {
-		$data_app_list['list'] = $this->app_list;
-		$data['col_2'] = $this->load->view(get_template().'/setting/app_list', $data_app_list, TRUE);
+		$html = array();
 
-		$data['col_1'] = 'Begin by selecting an application from the list on the left.';
+		$app_list['list'] = $this->app_list;
+		$html['col_2'] = $this->load->view(get_template().'/setting/app_list', $app_list, TRUE);
 
-		$this->load->view(get_template().'/element/content_layout_left', $data);
+		$html['col_1'] = 'Begin by selecting an application from the list on the left.';
+
+		$data = array();
+		$data['html'] = $this->load->view(get_template().'/element/content_layout_left', $html, TRUE);
+		if ($this->is_ajax) {
+			echo $data['html'];
+			return;
+		}
+		$data['outputdiv'] = 1;
+		$data['isdiv'] = TRUE;
+
+		$data['div']['title'] = 'Comments';
+		$data['div']['element_name'] = 'loginwin';
+		$data['div']['element_id'] = 'divlogin';
+
+		$this->data[] = $data;
+
+		$this->LayoutM->load_format();
+
+		$this->output();
 	}
 
 	function configure($app_name) {
-		$data_app_list['list'] = $this->app_list;
-		$data_app_list['selected'] = $app_name;
-		$data['col_2'] = $this->load->view(get_template().'/setting/app_list', $data_app_list, TRUE);
+		$this->verify_app($app_name);
 
-		//make sure the $app_name is valid
-		$app_list = array();
-		foreach($this->app_list AS $app) {
-			$app_list[] = $app['core_apps_name'];
-		}
-		if (!in_array($app_name, $app_list)) {
-			redirect('/setting');
-		}
+		$html = array();
+
+		$app_list['list'] = $this->app_list;
+		$app_list['selected'] = $app_name;
+		$html['col_2'] = $this->load->view(get_template().'/setting/app_list', $app_list, TRUE);
 
 		//load the view file that has the configuration options
 		$data_configure['app_name'] = $app_name;
 		$data_configure['is_admin'] = $this->UserM->is_admin();
-		//$data_configure['saved'] = $this->SettingM->get_saved_values($app_name);
-		$data['col_1'] = $this->load->view(get_template().'/setting/configure_'.$app_name, $data_configure, TRUE);
+		$data_configure['settings'] = $this->SettingM->get_for_configuration($app_name);
+		$data_configure['override_options'] = $this->override;
+		$html['col_1'] = $this->load->view(get_template().'/setting/configure_'.$app_name, $data_configure, TRUE);
 
-		$this->load->view(get_template().'/element/content_layout_left', $data);
+		$data = array();
+		$data['html'] = $this->load->view(get_template().'/element/content_layout_left', $html, TRUE);
+		if ($this->is_ajax) {
+			echo $data['html'];
+			return;
+		}
+		$data['outputdiv'] = 1;
+		$data['isdiv'] = TRUE;
+
+		$data['div']['title'] = 'Comments';
+		$data['div']['element_name'] = 'loginwin';
+		$data['div']['element_id'] = 'divlogin';
+
+		$this->data[] = $data;
+
+		$this->LayoutM->load_format();
+
+		$this->output();
 	}
 
 	function save($app_name) {
+		$this->verify_app($app_name);
+
+		$this->SettingM->save($app_name);
+
+		redirect('/setting/configure/'.$app_name);
+	}
+
+	//make sure the $app_name is valid
+	private function verify_app($app_name) {
 		$app_list = array();
 		foreach($this->app_list AS $app) {
 			$app_list[] = $app['core_apps_name'];
 		}
-		if (!in_array($app_name, $app_list)) {
-			redirect('/setting');
-		}
 
-		//save form data
+		if (!in_array($app_name, $app_list)) redirect('/setting');
 	}
 }
