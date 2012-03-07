@@ -6,7 +6,10 @@ class AppM extends MY_Model {
 
 	var $public_apps = array('access', 'ical', 'unittest', 'email');
 
-	var $app_cache = array();
+	var $app_cache = array(
+		0 => 'general',
+		'general' => 0,
+	);
 
 	function __construct() {
 		$this->table = 'global_setting.core_apps';
