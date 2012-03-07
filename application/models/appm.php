@@ -6,6 +6,8 @@ class AppM extends MY_Model {
 
 	var $public_apps = array('access', 'ical', 'unittest', 'email');
 
+	var $app_cache = array();
+
 	function __construct() {
 		$this->table = 'global_setting.core_apps';
 		$this->id_field = 'core_apps_id';
@@ -50,6 +52,8 @@ class AppM extends MY_Model {
 	}
 
 	function get_id($app_name) {
+		if (isset($this->app_cache[$app_name])) return $this->app_cache[$app_name];
+
 		$rs = $this->db->select('core_apps_id')
 				->from($this->table)
 				->where('core_apps_name', $app_name)
@@ -60,10 +64,14 @@ class AppM extends MY_Model {
 
 		$result = $rs->row_array();
 
+		$this->app_cache[$app_name] = $result['core_apps_id'];
+
 		return $result['core_apps_id'];
 	}
 
 	function get_name($app_id) {
+		if (isset($this->app_cache[$app_id])) return $this->app_cache[$app_id];
+
 		$rs = $this->db->select('core_apps_name')
 				->from($this->table)
 				->where('core_apps_id', $app_id)
@@ -73,6 +81,8 @@ class AppM extends MY_Model {
 		if ($rs->num_rows()==0) return FALSE;
 
 		$result = $rs->row_array();
+
+		$this->app_cache[$app_id] = $result['core_apps_name'];
 
 		return $result['core_apps_name'];
 	}
