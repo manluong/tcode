@@ -228,7 +228,7 @@ class AppM extends MY_Model {
 			->where('core_apps_showmenu', 1)
 			->order_by('core_apps_menusort');
 
-		if (APP_ROLE == 'TSUB' && ENVIRONMENT == 'production') {
+		if (APP_ROLE == 'TSUB' && ENVIRONMENT == 'production' && $this->UserM->is_logged_in()) {
 			$accessible_app_ids = $this->LicenseM->get_accessible_app_ids();
 			$this->db->where_in('core_apps_id', $accessible_app_ids);
 		}
