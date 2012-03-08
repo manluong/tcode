@@ -1,12 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Access extends MY_Controller {
-
-
-	public function index()	{
-		if ($this->UserM->is_logged_in()) redirect('/dashboard');
-
-		$statuses = array(
+	var $statuses = array(
 			1 => 'return user',
 			2 => 'login ok',
 			3 => 'wrong password',
@@ -16,8 +11,11 @@ class Access extends MY_Controller {
 			7 => 'username not activated',
 		);
 
+	public function index()	{
+		if ($this->UserM->is_logged_in()) redirect('/dashboard');
+
 		$html = array();
-		$html['status_message'] = $statuses[$this->UserM->status];
+		$html['status_message'] = $this->statuses[$this->UserM->status];
 		$html['status'] = $this->UserM->status;
 		$html['company_name'] = 'Telcoson'; //TODO: This should be the company name of the tenant.
 
@@ -66,6 +64,24 @@ class Access extends MY_Controller {
 
 		echo 'main test id:',$id,'<br />';
 		echo '<pre>',print_r($this->ACLM->url,true),'</pre>';
+	}
 
+	public function ajax_login() {
+		$username = $this->input->post('access_user_username');
+		$password = $this->input->post('access_user_pw');
+
+		$success = false;
+
+		if ($this->UserM->is_valid_password($username, $password)) {
+			$this->UserM->login($username);
+			$success = true;
+		}
+
+		$this->RespM->set_message($this->statuses[$this->UserM->status])
+			->set_type('view')
+			->set_template('')
+			->set_success($success)
+			->set_title('Login')
+			->output_json();
 	}
 }
