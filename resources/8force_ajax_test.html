@@ -1,0 +1,94 @@
+<html>
+	<head>
+		<script type="text/javascript" src="/resources/addon/jquery.min.js"></script>
+		<style>
+			#forms {
+				width:100%;
+			}
+			#forms div {
+				float:left;
+				width:30%;
+				padding:10px;
+				height:200px;
+			}
+			.clear{
+				clear:both;
+			}
+			#output {
+				width:1000px;
+				height:400px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="forms">
+			<div>
+				Username: <input type="text" id="username" value="admin" /><br />
+				Password: <input type="text" id="password" value="" /><br />
+				Domain: <input type="text" id="domain" value="apple" /><br />
+				<button id="btn_login">Login</button>
+			</div>
+			<div id="links">
+				<p><a href="#" data-url="/card/x_card/nttpA%3D%3D/l">Get Users List</a></p>
+				<p><a href="#" data-url="/access/logout">Logout</a></p>
+			</div>
+		</div>
+		<div class="clear"></div>
+		<div style="width:100%;">
+			JSON Response:<br />
+			<textarea id="output">
+			</textarea>
+		</div>
+
+
+		<script>
+			var logged_in = false;
+
+			$(document).ready(function() {
+				$('#btn_login').on('click', function() {
+
+					var username = $('#username').val();
+					var password = $('#password').val();
+					var domain = $('#domain').val();
+
+					var target = 'http://'+domain+'.8force.net';
+
+					$.post(
+						target+'/access/ajax_login',
+						{
+							access_user_username:username,
+							access_user_pw:password
+						},
+						function(resp) {
+							$('#output').val(JSON.stringify(resp));
+						},
+						'json'
+					);
+
+
+				});
+
+				$('#links a').on('click', function() {
+					$('#output').val('');
+
+					var domain = $('#domain').val();
+					var link = $(this).attr('data-url');
+
+					var target = 'http://'+domain+'.8force.net';
+
+					$.post(
+						target+link,
+						{},
+						function(resp) {
+							$('#output').val(JSON.stringify(resp));
+						},
+						'json'
+					);
+				});
+
+
+
+			});
+		</script>
+	</body>
+</html>
