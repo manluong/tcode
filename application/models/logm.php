@@ -140,7 +140,7 @@ class LogM extends CI_Model {
                  if (($this->_url['subaction'] == "as" && $this->_log_data['log_type']['eventfield'][$field]['new'])||
                      ($this->_url['subaction'] == "es" && $this->_log_data['log_type']['eventfield'][$field]['cur'] != $this->_log_data['log_type']['eventfield'][$field]['new'])) {
 					$data = array(
-						'eventid' => $this->_log_data['insert_id'],
+						'log_id' => $this->_log_data['insert_id'],
 						'field' => $field,
 						'from' => $this->_log_data['log_type']['eventfield'][$field]['cur'],
 						'to' => $this->_log_data['log_type']['eventfield'][$field]['new']
