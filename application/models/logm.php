@@ -224,7 +224,7 @@ class LogM extends CI_Model {
 			  case "a": $text = $this->lang->line('corehis_add'); break;
 			  case "v": $text = $this->lang->line('corehis_view'); break;
 			  case "e": $text = $this->lang->line('corehis_edit'); break;
-			  case "d": $text = $$this->lang->line('corehis_delete'); break;
+			  case "d": $text = $this->lang->line('corehis_delete'); break;
 			  case "l": $text = $this->lang->line('corehis_list'); break;
 			  case "s": $text = $this->lang->line('corehis_search'); break;
 		}
@@ -279,6 +279,7 @@ class LogM extends CI_Model {
 			return 'No events';
 		}
 
+		$result = array();
 		foreach ($i as $event) {
 			$furi = '/'.$event['app'].'/'.$event['action'].'/'.$event['app_data_id'].'/'.$event['subaction'];
 			if ($event['msg'] !== '') {
