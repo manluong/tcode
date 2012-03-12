@@ -263,14 +263,17 @@ class LogM extends CI_Model {
 		return $total_time;
 	}
 
-	public function get_wall($stamp, $limit=10) {
-		$query = $this->db->select()
+	public function get_wall($stamp='', $limit=10) {
+		$this->db->select()
 			->from('log_event')
 			->join('global_setting.log_type', 'log_type.id = log_event.log_type_id')
-			->where('log_event.stamp <', $stamp)
-			->order_by('log_event.stamp', 'desc')
-			->limit($limit)
-			->get();
+			->order_by('log_event.lastupdate', 'desc')
+			->limit($limit);
+
+		if ($stamp != '') $this->db->where('log_event.lastupdate <', $stamp);
+
+		$query = $this->db->get();
+
 		$i = $query->result_array();
 		if (empty($i)) {
 			return 'No events';
