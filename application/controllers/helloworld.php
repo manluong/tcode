@@ -49,7 +49,7 @@ class Helloworld extends MY_Controller {
 			),
 		);
 
-		$this->RespM->set_message($this->DS_HelloWorld->sql)
+		$this->RespM->set_message('sendjson_list')
 				->set_type('list')
 				->set_template('')
 				->set_success(true)
@@ -87,7 +87,7 @@ class Helloworld extends MY_Controller {
 			),
 		);
 
-		$this->RespM->set_message($this->DS_HelloWorld->sql)
+		$this->RespM->set_message('sendjson_view')
 				->set_type('view')
 				->set_template('')
 				//->set_template('custom_viewcard')//custom template
@@ -157,7 +157,7 @@ class Helloworld extends MY_Controller {
 			)
 		);
 
-		$this->RespM->set_message($this->DS_HelloWorld->sql)
+		$this->RespM->set_message('sendjson_form')
 				->set_type('form')
 				->set_template('')
 				//->set_template('custom_editcard')//custom template
