@@ -263,14 +263,14 @@ class LogM extends CI_Model {
 		return $total_time;
 	}
 
-	public function get_wall($stamp='', $limit=10) {
-		$this->db->select()
+	public function get_wall($id='', $limit=10) {
+		$this->db->select('log_event.*, global_setting.log_type.app, global_setting.log_type.tag, global_setting.log_type.action, global_setting.log_type.subaction')
 			->from('log_event')
 			->join('global_setting.log_type', 'log_type.id = log_event.log_type_id')
-			->order_by('log_event.lastupdate', 'desc')
+			->order_by('log_event.lastupdate, id', 'desc')
 			->limit($limit);
 
-		if ($stamp != '') $this->db->where('log_event.lastupdate <', $stamp);
+		if ($id != '') $this->db->where('log_event.id <', $id);
 
 		$query = $this->db->get();
 
@@ -288,10 +288,16 @@ class LogM extends CI_Model {
 				$text = $this->_get_default_msg($event['subaction'], $event['app'], $event['app_data_id']);
 				$text .= $event['stamp'];
 			}
-			$result[$event['stamp']]['text'] = $text;
-			$result[$event['stamp']]['furi'] = $furi;
-			$result[$event['stamp']]['app'] = $event['app'];
-			$result[$event['stamp']]['tag'] = $event['tag'];
+
+			$result[$event['id']]['id'] = $event['id'];
+			$result[$event['id']]['card_name'] = $this->UserM->get_data_name($event['card_id']);
+			$result[$event['id']]['text'] = $text;
+			$result[$event['id']]['furi'] = $furi;
+			$result[$event['id']]['app'] = $event['app'];
+			$result[$event['id']]['tag'] = $event['tag'];
+			$result[$event['id']]['priority'] = $event['priority'];
+			$result[$event['id']]['stamp'] = $event['stamp'];
+			$result[$event['id']]['lastupdate'] = $event['lastupdate'];
 		}
 
 

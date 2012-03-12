@@ -65,3 +65,6 @@ tpl_comments.comment = '<div class="comment row-fluid" id="comment_{{id}}">{{#ca
 								'</div>'+
 							'</div>'+
 						'</div>';
+
+var tpl_dashboard = [];
+tpl_dashboard.post = '<div class="post">{{card_name}} - {{text}} - {{furi}}</div>';
