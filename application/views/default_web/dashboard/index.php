@@ -4,6 +4,10 @@
 		border-bottom: solid 1px #EEE;
 		margin:5px 0;
 	}
+	.controls {
+		text-align:right;
+	}
+
 </style>
 
 <div class="container-fluid">
@@ -13,7 +17,7 @@
 				<div class="widget-body">
 					<div id="wall">
 						<div id="post_new">
-							<input type="text" name="" value="" placeholder="Something to share?" />
+							<input type="text" name="" value="" style="width:90%;" placeholder="Something to share?" />
 						</div>
 						<div id="posts">
 						</div>
@@ -64,6 +68,20 @@
 					$('#show_more').attr('data-last_id', last_id);
 				},
 				'json'
+			);
+		});
+
+		$('#posts').on('click', 'a.trigger_comment', function() {
+			var target = $(this);
+			var id = target.attr('data-id');
+
+			$.get(
+				'/comments/ajax_load/18/'+id,
+				function(resp) {
+					target.parent().next('div.post_comments').html(resp);
+					target.hide();
+				},
+				'html'
 			);
 		});
 	});
