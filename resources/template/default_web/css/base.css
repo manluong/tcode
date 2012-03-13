@@ -91,6 +91,8 @@ body {
 }
 #status .avatar img {
 	position:relative;
+	width:40px;
+	height:40px;
 	z-index:5;
 }
 #status-details {
