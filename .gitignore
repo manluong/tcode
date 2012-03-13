@@ -12,6 +12,6 @@ license.txt
 
 #CI config files#
 application/config/config.php
-index.php
+/index.php
 tmp/*
 application/logs/*
