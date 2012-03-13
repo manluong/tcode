@@ -13,7 +13,7 @@ function hide_sidebar() {
 		width:'-=170px'
 	},300);
 
-	$('#status .avatar').animate({
+	$('#status .avatar img').animate({
 		width:'30px',
 		height:'30px'
 	},500,function() {
@@ -50,7 +50,7 @@ function show_sidebar() {
 		width:'+=170px'
 	},300);
 
-	$('#status .avatar').animate({
+	$('#status .avatar img').animate({
 		width:'40px',
 		height:'40px'
 	},500,function() {

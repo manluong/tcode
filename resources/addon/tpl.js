@@ -51,7 +51,7 @@ tpl_comments.reply = '<div class="{{reply_class}} reply row-fluid">{{#card_info}
 						'</div>';
 
 tpl_comments.comment = '<div class="comment row-fluid" id="comment_{{id}}">{{#card_info}}'+
-							'<div class="span1"><img class="avatar" src="/resources/template/default_web/images/placeholder-image.jpg" /></div>'+
+							'<div class="span1"><img class="avatar" src="/resources/template/default_web/img/placeholder-image.jpg" /></div>'+
 							'<div class="span11">'+
 								'<div class="name">{{card_fname}} {{card_lname}}</div>{{/card_info}}'+
 								'<div class="text">{{text}}</div>'+

@@ -51,7 +51,7 @@
 			<div class="comment row-fluid" id="comment_<?=$comment['id']?>">
 
 				<div class="span1">
-					<img class="avatar" src="/resources/template/<?=get_template()?>/images/placeholder-image.jpg" />
+					<img class="avatar" src="/resources/template/<?=get_template()?>/img/placeholder-image.jpg" />
 				</div>
 
 				<div class="span11">
@@ -75,7 +75,7 @@
 						<?php foreach ($comment['replies'] AS $reply): ?>
 							<div class="reply row-fluid">
 								<div class="span1">
-									<img class="avatar" src="/resources/template/<?=get_template()?>/images/placeholder-image.jpg" />
+									<img class="avatar" src="/resources/template/<?=get_template()?>/img/placeholder-image.jpg" />
 								</div>
 								<div class="span11">
 									<div class="name"><?=$reply['card_info']['card_fname'].' '.$reply['card_info']['card_lname']?></div>

@@ -7,9 +7,7 @@ body {
 
 #sidebar {
 
-	background:#fdfdfd url('../images/bg-stripes.png');
-	//background:#fdfdfd url('../images/gd_shade_td.png');
-	//background:#fff;
+	background:#fdfdfd url('../img/bg-stripes.png');
 	border-right: solid 1px #ccc;
 
 	width:220px;
@@ -80,9 +78,6 @@ body {
     -moz-box-shadow: 0px -1px 2px #ccc;
     -webkit-box-shadow: 0px -1px 2px #ccc;
     box-shadow: 0px -1px 2px #ccc;
-	//background:#EEF url('../images/gd-shade-lr.png') repeat-y left;
-	//background:#ccc url('../images/bg-stripes.png');
-	//border-top: solid 1px #eee;
 	border-bottom: solid 1px #CCC;
 	padding: 10px;
 	z-index: 5;
@@ -90,9 +85,6 @@ body {
 }
 #status .avatar {
 	position:relative;
-	background-color:#3F3;
-	height:40px;
-	width:40px;
 	float:left;
 	z-index:5;
 	cursor:pointer;
@@ -181,7 +173,6 @@ body {
 
 
 #sidebar-logo {
-	/*background:transparent url('../images/telcoson-embossed.png') no-repeat center center;*/
 	position:absolute;
 	bottom:40px;
 	height:50px;
@@ -194,9 +185,6 @@ body {
 
 
 #sidebar-footer {
-	/*border-top:solid 1px #888;*/
-	//background:#EEE url('../images/bg-stripes.png');
-	//background: #eee;
 	position:fixed;
 	bottom:0;
 	height:20px;
@@ -229,12 +217,6 @@ body {
 }
 
 #content-container {
-
-    //-webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
-    //-moz-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.7);
-    //box-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
-
-	//background:#789 url('../images/bg-stripes.png');
 	background:#fafafa;
 	position:fixed;
 	top:0;
@@ -264,7 +246,7 @@ body {
 }
 
 #content-footer {
-	background:#eee url('../images/gd-shade-td.png') repeat-x;
+	background:#eee url('../img/gd-shade-td.png') repeat-x;
 	position:fixed;
 	bottom:0;
 	height:30px;
@@ -366,10 +348,6 @@ table.dataTable th:active {
 }
 
 
-//table {
-//    margin: 1em 0;
-//    clear: both;
-//}
 #divcard_table_filter input {
 	display:inline;
 }

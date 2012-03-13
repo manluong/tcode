@@ -56,7 +56,7 @@
 
 	<div id="status">
 		<div class="row-fluid">
-			<div class="avatar"><img src="/resources/template/<?=get_template()?>/images/placeholder-image.jpg" /></div>
+			<div class="avatar"><img src="/resources/template/<?=get_template()?>/img/placeholder-image.jpg" /></div>
 			<div id="status-details">
 				<strong><?=$user_name?></strong><br />
 				<div id="status-current"></div>
@@ -279,7 +279,7 @@
 
 	<div id="sidebar-logo">
 		<a href="#1">
-			<img src="/resources/template/<?=get_template()?>/images/telcoson-embossed.png" />
+			<img src="/resources/template/<?=get_template()?>/img/telcoson-embossed.png" />
 		</a>
 	</div>
 
