@@ -43,6 +43,13 @@ class Comments extends MY_Controller {
 		execute_return_url();
 	}
 
+	function ajax_load($app_id, $data_id) {
+		$this->commentsl->app_id = $app_id;
+		$this->commentsl->app_data_id = $data_id;
+
+		echo $this->commentsl->get_page_html();
+	}
+
 	function ajax_save_reply() {
 		$data = array(
 			'app_id' => $this->input->post('app_id'),

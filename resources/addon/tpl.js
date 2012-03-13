@@ -42,8 +42,8 @@ var custom_editcard = "My {{#content}}{{#card_fname}}{{label}} is {{{control}}}{
 
 var tpl_comments = [];
 tpl_comments.reply = '<div class="{{reply_class}} reply row-fluid">{{#card_info}}'+
-							'<div class="span1"><img class="avatar" src="{{avatar}}" /></div>'+
-							'<div class="span11">'+
+							'<div class="avatar"><img class="avatar" src="{{avatar}}" /></div>'+
+							'<div class="content">'+
 								'<div class="name">{{card_fname}} {{card_lname}}</div>{{/card_info}}'+
 								'<div class="text">{{text}}</div>'+
 								'<span class="displaydate" title="{{created_stamp_iso8601}}">{{created_stamp_iso}}</span>'+
@@ -51,8 +51,8 @@ tpl_comments.reply = '<div class="{{reply_class}} reply row-fluid">{{#card_info}
 						'</div>';
 
 tpl_comments.comment = '<div class="comment row-fluid" id="comment_{{id}}">{{#card_info}}'+
-							'<div class="span1"><img class="avatar" src="/resources/template/default_web/img/placeholder-image.jpg" /></div>'+
-							'<div class="span11">'+
+							'<div class="avatar"><img class="avatar" src="/resources/template/default_web/img/placeholder-image.jpg" /></div>'+
+							'<div class="content">'+
 								'<div class="name">{{card_fname}} {{card_lname}}</div>{{/card_info}}'+
 								'<div class="text">{{text}}</div>'+
 								'<div class="controls">'+
@@ -60,11 +60,17 @@ tpl_comments.comment = '<div class="comment row-fluid" id="comment_{{id}}">{{#ca
 								'</div>'+
 								'{{{show_more_replies}}}<div class="replies">'+
 									'{{{replies_html}}}<div class="new_reply row-fluid">'+
-										'<input type="text" name="text" class="comment_input span12" value="" placeholder="reply..." autocomplete="off" data-app_id="{{app_id}}" data-app_data_id="{{app_data_id}}" data-parent_id="{{id}}" />'+
+										'<input type="text" name="text" class="comment_input" value="" placeholder="reply..." autocomplete="off" data-app_id="{{app_id}}" data-app_data_id="{{app_data_id}}" data-parent_id="{{id}}" />'+
 									'</div>'+
 								'</div>'+
 							'</div>'+
 						'</div>';
 
 var tpl_dashboard = [];
-tpl_dashboard.post = '<div class="post">{{card_name}} - {{text}} - {{furi}}</div>';
+tpl_dashboard.post = '<div class="post">'+
+						'{{card_name}} - {{text}} - {{furi}}'+
+						'<div class="controls">'+
+							'<a href="#" data-id="{{id}}" class="trigger_comment">Comment</a>'+
+						'</div>'+
+						'<div class="post_comments"></div>'+
+					'</div>';

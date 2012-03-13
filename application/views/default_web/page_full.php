@@ -10,6 +10,7 @@
 	<script type="text/javascript" src="/resources/addon/jquery.ui.min.js"></script>
 	<script type="text/javascript" src="/resources/addon/jquery.tools.min.js"></script>
 	<script type="text/javascript" src="/resources/addon/jquery.dataTables.min.js"></script>
+	<script type="text/javascript" src="/resources/addon/jquery.timeago.js"></script>
 	<script type="text/javascript" src="/resources/addon/mustache.js"></script>
 	<script type="text/javascript" src="/resources/addon/pjax.min.js"></script>
 

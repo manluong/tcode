@@ -353,3 +353,36 @@ table.dataTable th:active {
 #divcard_table_filter input {
 	display:inline;
 }
+
+
+
+
+
+
+
+/* Comments */
+.comments .comment { border: solid 1px #999; margin-bottom:10px; }
+.replies .reply { border-bottom: solid 1px #9C9; background-color: #EFE; }
+.replies .loaded { background-color:#FFE; }
+
+.comment .avatar { width:50px; height:50px; margin:2px; float:left; }
+.comment .content { margin-left: 60px; margin-right:5px; }
+.reply .avatar { width:40px; height:40px; margin:2px; float:left; }
+.reply .content { margin-left: 50px; margin-right:5px; }
+
+.name { font-weight:bold; color:#393; }
+.text { margin: 5px 0; font-size: 12px; }
+.displaydate { font-size:10px; color: #AAA; margin: 2px 0; }
+.comment .controls { margin:5px 0; }
+
+div.sending { border: solid 1px #A8A; background-color:#FEF; text-align:center; font-weight:bold; padding:5px; color:#A8A; }
+
+.show_more_replies { background-color:#EEF; border-bottom: solid 1px #9C9; padding:5px; text-align: center; cursor:pointer; }
+.show_more_comments { background-color:#EEF; border: solid 1px #99C; padding:5px; text-align: center; cursor:pointer; }
+
+.comments div.span1 { margin-right:0;}
+.comments div.span11 { margin-left:0;}
+
+.new_reply { margin-top:5px; }
+
+.comment_input {width:90%;}

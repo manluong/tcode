@@ -1,36 +1,3 @@
-<script src="/resources/addon/jquery.timeago.js" type="text/javascript"></script>
-
-
-
-
-
-
-<style>
-	.comments .comment { border: solid 1px #999; margin-bottom:10px; }
-	.replies .reply { border-bottom: solid 1px #9C9; background-color: #EFE; }
-	.replies .loaded { background-color:#FFE; }
-
-	.comment .avatar { width:50px; height:50px; margin:2px; }
-	.reply .avatar { width:40px; height:40px; margin:2px; }
-
-	.name { font-weight:bold; color:#393; }
-	.text { margin: 5px 0; font-size: 12px; }
-	.displaydate { font-size:10px; color: #AAA; margin: 2px 0; }
-	.comment .controls { margin:5px 0; }
-
-	div.sending { border: solid 1px #A8A; background-color:#FEF; text-align:center; font-weight:bold; padding:5px; color:#A8A; }
-
-	.show_more_replies { background-color:#EEF; border-bottom: solid 1px #9C9; padding:5px; text-align: center; cursor:pointer; }
-	.show_more_comments { background-color:#EEF; border: solid 1px #99C; padding:5px; text-align: center; cursor:pointer; }
-
-	.comments div.span1 { margin-right:0;}
-	.comments div.span11 { margin-left:0;}
-
-	.new_reply { margin-top:5px; }
-</style>
-
-
-
 <div class="widget">
 	<div class="widget-header">
 		<h4>Comments</h4>
@@ -43,18 +10,18 @@
 				<input type="hidden" name="app_data_id" value="<?=$app_data_id?>" />
 				<input type="hidden" name="parent_id" value="0" />
 				<?=set_return_url();?>
-				<input type="text" name="text" class="comment_input span12" value="" placeholder="write new comment..." autocomplete="off" data-app_id="<?=$app_id?>" data-app_data_id="<?=$app_data_id?>" data-parent_id="0" />
+				<input type="text" name="text" class="comment_input" value="" placeholder="write new comment..." autocomplete="off" data-app_id="<?=$app_id?>" data-app_data_id="<?=$app_data_id?>" data-parent_id="0" />
 			<?=form_close()?>
 			</div>
 
 			<?php foreach ($comments AS $comment): ?>
 			<div class="comment row-fluid" id="comment_<?=$comment['id']?>">
 
-				<div class="span1">
+				<div class="avatar">
 					<img class="avatar" src="/resources/template/<?=get_template()?>/img/placeholder-image.jpg" />
 				</div>
 
-				<div class="span11">
+				<div class="content">
 
 					<div class="name"><?=$comment['card_info']['card_fname'].' '.$comment['card_info']['card_lname']?></div>
 					<div class="text"><?=$comment['text']?></div>
@@ -74,10 +41,10 @@
 					<div class="replies row-fluid">
 						<?php foreach ($comment['replies'] AS $reply): ?>
 							<div class="reply row-fluid">
-								<div class="span1">
+								<div class="avatar">
 									<img class="avatar" src="/resources/template/<?=get_template()?>/img/placeholder-image.jpg" />
 								</div>
-								<div class="span11">
+								<div class="content">
 									<div class="name"><?=$reply['card_info']['card_fname'].' '.$reply['card_info']['card_lname']?></div>
 									<div class="text"><?=$reply['text']?></div>
 									<span class="displaydate" title="<?=$reply['created_stamp_iso8601']?>">
@@ -95,7 +62,7 @@
 								<?=set_return_url();?>
 
 								<div class="row-fluid">
-								<input type="text" name="text" class="comment_input span12" value="" placeholder="reply..." autocomplete="off" data-app_id="<?=$app_id?>" data-app_data_id="<?=$app_data_id?>" data-parent_id="<?=$comment['id']?>" />
+								<input type="text" name="text" class="comment_input" value="" placeholder="reply..." autocomplete="off" data-app_id="<?=$app_id?>" data-app_data_id="<?=$app_data_id?>" data-parent_id="<?=$comment['id']?>" />
 								</div>
 							<?=form_close()?>
 						</div>
@@ -132,12 +99,10 @@
 				function(result) {
 					if (result.success) {
 						var new_replies = '';
-						console.log(result.data);
 						$.each(result.data, function(k, v) {
 							v.reply_class = "loaded";
 							new_replies += Mustache.to_html(tpl_comments.reply, v);
 						});
-						console.log(new_replies);
 						$(new_replies).hide().prependTo('#comment_'+id+' div.replies').fadeIn('slow');
 						show_more_div.hide();
 						$('span.displaydate').timeago();
