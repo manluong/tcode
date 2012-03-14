@@ -30,6 +30,11 @@ class Dashboard extends MY_Controller {
 	function ajax_wall($id='') {
 		$wall = $this->LogM->get_wall($id, 10);
 
+		$this->load->model('CommentsM');
+		foreach($wall AS $k=>$v) {
+			$wall[$k]['comment_count'] = $this->CommentsM->get_comment_count(18, $v['id']);
+		}
+
 		$this->RespM->set_message('')
 				->set_type('list')
 				->set_template('wall')

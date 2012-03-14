@@ -47,7 +47,7 @@ class Comments extends MY_Controller {
 		$this->commentsl->app_id = $app_id;
 		$this->commentsl->app_data_id = $data_id;
 
-		echo $this->commentsl->get_page_html();
+		echo $this->commentsl->get_lite_html(1);
 	}
 
 	function ajax_save_reply() {
@@ -96,8 +96,9 @@ class Comments extends MY_Controller {
 
 	function ajax_load_more_replies() {
 		$parent_id = $this->input->post('parent_id');
+		$show_replies = $this->input->post('show_replies');
 
-		$results = $this->CommentsM->get_more_replies($parent_id);
+		$results = $this->CommentsM->get_more_replies($parent_id, $show_replies);
 
 		foreach($results AS $k=>$v) {
 			$results[$k]['created_stamp_iso8601'] = parse_stamp_user($v['created_stamp'], 'ISO_8601');
@@ -116,7 +117,9 @@ class Comments extends MY_Controller {
 		$app_id = $this->input->post('app_id');
 		$app_data_id = $this->input->post('app_data_id');
 		$page = $this->input->post('page');
+		$per_page = $this->input->post('per_page');
 
+		$this->CommentsM->results_per_page = $per_page;
 		$results = $this->CommentsM->get_page($app_id, $app_data_id, $page);
 
 		foreach($results AS $k=>$v) {

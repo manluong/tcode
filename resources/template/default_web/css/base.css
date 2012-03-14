@@ -362,8 +362,8 @@ table.dataTable th:active {
 
 /* Comments */
 .comments .comment { border: solid 1px #999; margin-bottom:10px; }
-.replies .reply { border-bottom: solid 1px #9C9; background-color: #EFE; }
-.replies .loaded { background-color:#FFE; }
+.replies .reply { border-bottom: solid 1px #9C9; }
+.replies .loaded { background-color:#EFE; }
 
 .comment .avatar { width:50px; height:50px; margin:2px; float:left; }
 .comment .content { margin-left: 60px; margin-right:5px; }
@@ -377,12 +377,16 @@ table.dataTable th:active {
 
 div.sending { border: solid 1px #A8A; background-color:#FEF; text-align:center; font-weight:bold; padding:5px; color:#A8A; }
 
-.show_more_replies { background-color:#EEF; border-bottom: solid 1px #9C9; padding:5px; text-align: center; cursor:pointer; }
-.show_more_comments { background-color:#EEF; border: solid 1px #99C; padding:5px; text-align: center; cursor:pointer; }
-
-.comments div.span1 { margin-right:0;}
-.comments div.span11 { margin-left:0;}
+.show_more_replies, .show_more_comments { width:100%; }
 
 .new_reply { margin-top:5px; }
 
 .comment_input {width:90%;}
+
+.new_comment form, .new_reply form {
+	margin-bottom: 0px;
+}
+
+.comments-lite { background-color: #EEF; }
+.comments-lite .comment { border-bottom: solid 1px #999; margin-bottom:2px; }
+.comments-lite .new_comment { margin:5px 0 0 5px; }

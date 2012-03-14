@@ -4,7 +4,7 @@
 		border-bottom: solid 1px #EEE;
 		margin:5px 0;
 	}
-	.controls {
+	.post_controls {
 		text-align:right;
 	}
 
@@ -12,7 +12,7 @@
 
 <div class="container-fluid">
 	<div class="row-fluid">
-		<div class="span5">
+		<div class="span7">
 			<div class="widget">
 				<div class="widget-body">
 					<div id="wall">
@@ -80,6 +80,7 @@
 				function(resp) {
 					target.parent().next('div.post_comments').html(resp);
 					target.hide();
+					$('span.displaydate').timeago();
 				},
 				'html'
 			);

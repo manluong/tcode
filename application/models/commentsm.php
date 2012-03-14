@@ -2,6 +2,8 @@
 
 class CommentsM extends MY_Model {
 	var $results_per_page = 5;
+	var $older_comments_first = FALSE;
+	var $older_replies_first = TRUE;
 
 	function __construct() {
 		$this->table = 'mod_comments';
@@ -30,15 +32,20 @@ class CommentsM extends MY_Model {
 	}
 
 	function get_list($app_id, $app_data_id, $limit=5) {
-		$rs = $this->db->select()
-				->from($this->table)
-				->where('app_id', $app_id)
-				->where('app_data_id', $app_data_id)
-				->where('parent_id', 0)
-				->order_by('id', 'DESC')
-				->limit($limit)
-				->get();
+		$this->db->select()
+			->from($this->table)
+			->where('app_id', $app_id)
+			->where('app_data_id', $app_data_id)
+			->where('parent_id', 0)
+			->limit($limit);
 
+		if ($this->older_comments_first) {
+			$this->db->order_by('id', 'ASC');
+		} else {
+			$this->db->order_by('id', 'DESC');
+		}
+
+		$rs = $this->db->get();
 		$results = $rs->result_array();
 
 		$this->fill_card_info($results, 'many');
@@ -50,25 +57,30 @@ class CommentsM extends MY_Model {
 		return $results;
 	}
 
-	function get_page($app_id, $app_data_id, $page=1) {
+	function get_page($app_id, $app_data_id, $page=1, $replies=5) {
 		$page--;
 		if ($page<0) $page = 0;
 
-		$rs = $this->db->select()
-				->from($this->table)
-				->where('app_id', $app_id)
-				->where('app_data_id', $app_data_id)
-				->where('parent_id', 0)
-				->order_by('id', 'DESC')
-				->limit($this->results_per_page, ($this->results_per_page*$page))
-				->get();
+		$this->db->select()
+			->from($this->table)
+			->where('app_id', $app_id)
+			->where('app_data_id', $app_data_id)
+			->where('parent_id', 0)
+			->limit($this->results_per_page, ($this->results_per_page*$page));
 
+		if ($this->older_comments_first) {
+			$this->db->order_by('id', 'ASC');
+		} else {
+			$this->db->order_by('id', 'DESC');
+		}
+
+		$rs = $this->db->get();
 		$results = $rs->result_array();
 
 		$this->fill_card_info($results, 'many');
 
 		foreach($results AS $k=>$v) {
-			$results[$k]['replies'] = $this->get_replies($v['id']);
+			$results[$k]['replies'] = $this->get_replies($v['id'], $replies);
 		}
 
 		return $results;
@@ -90,17 +102,19 @@ class CommentsM extends MY_Model {
 
 		$this->fill_card_info($results, 'many');
 
-		$results = array_reverse_order($results);
+		if ($this->older_replies_first) {
+			$results = array_reverse_order($results);
+		}
 
 		return $results;
 	}
 
-	function get_more_replies($id) {
-		//Retrieve all comments, except the first 5.
+	function get_more_replies($id, $skip_rows=5) {
+		//Retrieve all comments, except the first $skip_rows.
 		$this->db->select()
 				->from($this->table)
 				->where('parent_id', $id)
-				->limit(1000000, 5)	//update this if you have a better idea
+				->limit(1000000, $skip_rows)	//update this if you have a better idea
 				->order_by('id', 'DESC');
 
 		$rs = $this->db->get();
@@ -113,7 +127,9 @@ class CommentsM extends MY_Model {
 
 		$this->fill_card_info($results, 'many');
 
-		$results = array_reverse_order($results);
+		if ($this->older_replies_first) {
+			$results = array_reverse_order($results);
+		}
 
 		return $results;
 	}
@@ -137,6 +153,15 @@ class CommentsM extends MY_Model {
 		$this->db->query($sql, array($modified_cardid, $modified_stamp, $id));
 	}
 
+	function get_comment_count($app_id, $app_data_id) {
+		$rs = $this->db->select()
+				->from($this->table)
+				->where('app_id', $app_id)
+				->where('app_data_id', $app_data_id)
+				->where('parent_id', 0)
+				->get();
 
+		return $rs->num_rows();
+	}
 }
 ?>

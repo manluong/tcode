@@ -66,11 +66,13 @@ tpl_comments.comment = '<div class="comment row-fluid" id="comment_{{id}}">{{#ca
 							'</div>'+
 						'</div>';
 
+tpl_comments.show_more_replies_button = '<button class="btn btn-info show_more_replies" data-parent_id="{{id}}">Show {{reply_count}} Replies</button>';
+
 var tpl_dashboard = [];
 tpl_dashboard.post = '<div class="post">'+
 						'{{card_name}} - {{text}} - {{furi}}'+
-						'<div class="controls">'+
-							'<a href="#" data-id="{{id}}" class="trigger_comment">Comment</a>'+
+						'<div class="post_controls">'+
+							'<a href="#" data-id="{{id}}" class="trigger_comment">{{comment_count}} Comment(s)</a>'+
 						'</div>'+
-						'<div class="post_comments"></div>'+
+						'<div class="post_comments clearfix"></div>'+
 					'</div>';
