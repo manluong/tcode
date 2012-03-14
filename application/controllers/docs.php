@@ -20,28 +20,6 @@ class Docs extends MY_Controller {
 		$this->_views_data['error_icon'] = '<img src="/resources/template/'.get_template().'/images/icons/16/exclamation-red.png" style="display:none;" id="error-icon">';
 	}
 
-	function convert_to_swf($filename) {
-		require_once('application/libraries/pdf2swf/common.php');
-		require_once("application/libraries/pdf2swf/pdf2swf_php5.php");
-		$page = '';
-		$configManager = new Config();
-		$swfFilePath = $configManager->getConfig('path.swf') . $filename  . $page. ".swf";
-		$pdfFilePath = $configManager->getConfig('path.pdf') . $filename;
-
-		if(	!validPdfParams($pdfFilePath,$filename,$page) )
-			echo "[Incorrect file specified]";
-		else{
-			$pdfconv=new pdf2swf();
-			$output=$pdfconv->convert($filename,$page);
-
-			if(rtrim($output) === "[Converted]"){
-
-			}else {
-				echo $output; //error messages etc
-			}
-		}
-	}
-
 	function ajax_create_folder() {
 		$insert_id = $this->_create_folder($this->url['id_plain'], $this->input->post('cardid'), $this->input->post('name'));
 		$this->output->set_content_type('application/json');
@@ -250,17 +228,7 @@ class Docs extends MY_Controller {
 				//$s3object = '<img src="'.$this->_views_data['s3_object'].'">';
 				break;
 			case 'application/pdf':
-				$s3object = $this->get_object($this->_bucket, $this->format_dirpath($docs_details['a_docs_dir_dirpath'],$docs_details['a_docs_ver_filename']));
-				$this->save_to_file($s3object->body, $docs_details['a_docs_ver_filename']);
-				$this->convert_to_swf($docs_details['a_docs_ver_filename']);
-				$s3object = $this->_temp_dir.$docs_details['a_docs_ver_filename'].'.swf';
 
-				/*$data = array();
-				$data['html'] = $this->load->view('/'.get_template().'/docs/docs_view_preview_pdf.php',$this->_views_data, TRUE);
-				$data['isoutput'] = 1;
-				$data['isdiv'] = 1;
-				return $data; */
-				break;
 		}
 		$data = array('docs_details'=>$docs_details, 's3object'=>$s3object, 'versions'=>$past_versions);
 		$this->output->set_content_type('application/json')
@@ -273,6 +241,7 @@ class Docs extends MY_Controller {
 		$data['isdiv'] = 1;
 		return $data; */
 	}
+
 
 	function load_file_html() {
 		$data = array();
@@ -524,6 +493,162 @@ class Docs extends MY_Controller {
 
 
 	function pdfPreview() {
+		require_once('/resources/addon/docs/AdaptiveUI1.3.5/pdf2json_php5.php');
+		require_once('/resources/addon/docs/AdaptiveUI1.3.5/pdf2swf_php5.php');
+		require_once('/resources/addon/docs/AdaptiveUI1.3.5/pdf2render_php5.php');
+		require_once('/resources/addon/docs/AdaptiveUI1.3.5/common.php');
+
+		$pdfdoc 	= $_GET["doc"];
+		$configManager 	= new Config();
+
+		if(isset($_GET["page"])){$page = $_GET["page"];}else{$page = "";}
+		if(isset($_GET["format"])){$format=$_GET["format"];}else{$format="swf";}
+		if($configManager->getConfig('splitmode')){$swfdoc 	= $pdfdoc . "_" . $page . ".swf";}else{$swfdoc 	= $pdfdoc . ".swf";}
+
+		$pngdoc 		= $pdfdoc . "_" . $page . ".png";
+		$jsondoc 		= $pdfdoc . ".js";
+		$messages 		= "";
+
+		$swfFilePath 	= $configManager->getConfig('path.swf') . $swfdoc;
+		$pdfFilePath 	= $configManager->getConfig('path.pdf') . $pdfdoc;
+		$pngFilePath 	= $configManager->getConfig('path.swf') . $pngdoc;
+		$jsonFilePath 	= $configManager->getConfig('path.swf') . $jsondoc;
+		$validatedConfig = true;
+
+		session_start();
+
+		if(!is_dir($configManager->getConfig('path.swf'))){
+			$messages = "[Cannot find SWF output directory, please check your configuration file]";
+			$validatedConfig = false;
+		}
+
+		if(!is_dir($configManager->getConfig('path.pdf'))){
+			$messages = "[Cannot find PDF output directory, please check your configuration file]";
+			$validatedConfig = false;
+		}
+
+		if(!$validatedConfig){
+			echo "[Cannot read directories set up in configuration file, please check your configuration.]";
+		}else if(	!validPdfParams($pdfFilePath,$pdfdoc,$page) /*|| !validSwfParams($swfFilePath,$swfdoc,$page) */){
+			echo "[Incorrect file specified, please check your path]";
+		}else{
+			if($format == "swf" || $format == "png"){
+
+				// converting pdf files to swf format
+				if(!file_exists($swfFilePath)){
+					$pdfconv=new pdf2swf();
+					$messages=$pdfconv->convert($pdfdoc,$page);
+				}
+
+				// rendering swf files to png images
+				if($format == "png"){
+					if(validSwfParams($swfFilePath,$swfdoc,$page)){
+						if(!file_exists($pngFilePath)){
+							$pngconv=new swfrender();
+							$pngconv->renderPage($pdfdoc,$swfdoc,$page);
+						}
+
+						if($configManager->getConfig('allowcache')){
+							setCacheHeaders();
+						}
+
+						if(!$configManager->getConfig('allowcache') || ($configManager->getConfig('allowcache') && endOrRespond())){
+							header('Content-Type: image/png');
+							echo file_get_contents($pngFilePath);
+						}
+					}else{
+						if(strlen($messages)==0 || $messages == "[OK]")
+							$messages = "[Incorrect file specified, please check your path]";
+					}
+				}
+
+				// rendering pdf files to the browser, split pages if nessecary
+				if($format == "pdf"){
+
+				}
+
+				// writing files to output
+				if(file_exists($swfFilePath)){
+					if($format == "swf"){
+
+						if($configManager->getConfig('allowcache')){
+							setCacheHeaders();
+						}
+
+						if(!$configManager->getConfig('allowcache') || ($configManager->getConfig('allowcache') && endOrRespond())){
+							header('Content-type: application/x-shockwave-flash');
+							header('Accept-Ranges: bytes');
+							header('Content-Length: ' . filesize($swfFilePath));
+							echo file_get_contents($swfFilePath);
+						}
+					}
+				}else{
+					if(strlen($messages)==0)
+						$messages = "[Cannot find SWF file. Please check your PHP configuration]";
+				}
+			}
+
+			// for exporting pdf to json format
+			if($format == "json"){
+				if(!file_exists($jsonFilePath)){
+					$jsonconv = new pdf2json();
+					$messages=$jsonconv->convert($pdfdoc,$jsondoc,$page);
+				}
+
+				if(file_exists($jsonFilePath)){
+					if($configManager->getConfig('allowcache')){
+							setCacheHeaders();
+					}
+
+					if(!$configManager->getConfig('allowcache') || ($configManager->getConfig('allowcache') && endOrRespond())){
+						header('Content-Type: text/javascript');
+						echo file_get_contents($jsonFilePath);
+					}
+				}else{
+					if(strlen($messages)==0)
+						$messages = "[Cannot find JSON file. Please check your PHP configuration]";
+				}
+			}
+
+			// write any output messages
+			if(strlen($messages)>0 && $messages != "[OK]"){
+				echo "Error:" . substr($messages,1,strlen($messages)-2);
+			}
+		}
+
+	}
+	/** Old functions for Flexpaper flash **/
+	/*
+	case 'application/pdf':
+	$s3object = $this->get_object($this->_bucket, $this->format_dirpath($docs_details['a_docs_dir_dirpath'],$docs_details['a_docs_ver_filename']));
+				$this->save_to_file($s3object->body, $docs_details['a_docs_ver_filename']);
+	$this->convert_to_swf($docs_details['a_docs_ver_filename']);
+	$s3object = $this->_temp_dir.$docs_details['a_docs_ver_filename'].'.swf';
+	break;
+
+	function convert_to_swf($filename) {
+		require_once('application/libraries/pdf2swf/common.php');
+		require_once("application/libraries/pdf2swf/pdf2swf_php5.php");
+		$page = '';
+		$configManager = new Config();
+		$swfFilePath = $configManager->getConfig('path.swf') . $filename  . $page. ".swf";
+		$pdfFilePath = $configManager->getConfig('path.pdf') . $filename;
+
+		if(	!validPdfParams($pdfFilePath,$filename,$page) )
+			echo "[Incorrect file specified]";
+		else{
+			$pdfconv=new pdf2swf();
+			$output=$pdfconv->convert($filename,$page);
+
+			if(rtrim($output) === "[Converted]"){
+
+			}else {
+				echo $output; //error messages etc
+			}
+		}
+	}
+
+	function pdfPreview() {
 		require_once('application/libraries/pdf2swf/common.php');
 		require_once("application/libraries/pdf2swf/pdf2swf_php5.php");
 
@@ -558,7 +683,7 @@ class Docs extends MY_Controller {
 				}else
 					echo $output; //error messages etc
 			}
-	}
+	}*/
 
 	/*
 	function permission_form() {
@@ -607,8 +732,8 @@ class Docs extends MY_Controller {
 
 	/** Test functions **/
 	function test() {
-		$i = $this->DocsM->get_all_versions($this->input->get('id'));
-		print_r($i);die();
+		print $this->domain;
+		die();
 	}
 
 	function print_tree($tree, $html) {

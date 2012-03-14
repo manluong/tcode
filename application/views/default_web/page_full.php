@@ -30,11 +30,20 @@
 	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/jquerytool.css" />
 
 	<!-- Docs -->
-	<script type="text/javascript" src="http://bp.yahooapis.com/2.4.21/browserplus-min.js"></script>
-<script type="text/javascript" src="/resources/addon/docs/plupload/js/plupload.full.js"></script>
-	<script type="text/javascript" src="/resources/addon/docs/plupload/js/jquery.plupload.queue/jquery.plupload.queue.js"></script>
-	<script type="text/javascript" src="/resources/addon/docs/FlexPaper_1.5.1_flash/js/flexpaper_flash.js"></script>
-	<link href="/resources/addon/docs/plupload/js/jquery.plupload.queue/css/jquery.plupload.queue.css" media="screen" rel="stylesheet" type="text/css" />
+		<!-- plupload -->
+		<script type="text/javascript" src="http://bp.yahooapis.com/2.4.21/browserplus-min.js"></script>
+	<script type="text/javascript" src="/resources/addon/docs/plupload/js/plupload.full.js"></script>
+		<script type="text/javascript" src="/resources/addon/docs/plupload/js/jquery.plupload.queue/jquery.plupload.queue.js"></script>
+		<link href="/resources/addon/docs/plupload/js/jquery.plupload.queue/css/jquery.plupload.queue.css" media="screen" rel="stylesheet" type="text/css" />
+		<!-- end plupload -->
+
+		<!-- Adaptive ui -->
+		<link rel="stylesheet" type="text/css" href="/resources/addon/docs/flexpaper.css" />
+		<script type="text/javascript" src="/resources/addon/jquery.min.js"></script>
+		<script type="text/javascript" src="/resources/addon/jquery.extensions.min.js"></script>
+		<script type="text/javascript" src="/resources/addon/docs/flexpaper.js"></script>
+		<script type="text/javascript" src="/resources/addon/docs/flexpaper_handlers.js"></script>
+		<!-- end adaptive ui -->
 	<!-- end Docs -->
 
 	<?=$head?>

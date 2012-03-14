@@ -1,16 +1,47 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class File extends CI_Controller{
+	var $domain = '';
 	private $_filename = '';
 	private $_filepath = '';
 
 	function __construct() {
 		parent::__construct();
+
+		$this->setup_db();
 		$this->load->library('fileL');
+		$this->load->library('session');
 		$this->load->model('LogM');
 		$this->load->model('UserM');
 		$this->load->model('ACLM');
 		$this->load->helpers('form');
+	}
+
+	private function setup_db() {
+		if (ENVIRONMENT != 'development') {
+			$domain = explode('.', $_SERVER['SERVER_NAME']);
+			//if ($domain[1]!=='8force' || $domain[2]!=='net') die('There is a problem with the domain name.');
+			$this->domain = $domain[0];
+		}
+
+		if (ENVIRONMENT == 'development') return NULL;
+
+		//load the default db settings in the configuration files
+		include(APPPATH.'config/'.ENVIRONMENT.'/database.php');
+		$config = $db['default'];
+
+		//subdomain defines database table to use
+		$config['database'] = 't_'.$this->domain;
+
+		if (APP_ROLE == 'TSUB') {
+			$config['username'] = 't_'.$this->domain;
+		}
+
+		if (APP_ROLE == 'TBOSS' && ENVIRONMENT == 'testing') {
+			$config['database'] = 't_'.$this->domain.'2';
+		}
+
+		$this->load->database($config);
 	}
 
 	function read() {
@@ -45,7 +76,7 @@ class File extends CI_Controller{
 		else {
 			$filepath = '/';
 		}
-		$this->_filename = $filename;
+		$this->_filename = urldecode($filename);
 		$this->_filepath = $filepath;
 	}
 

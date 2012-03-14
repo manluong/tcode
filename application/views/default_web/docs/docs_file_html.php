@@ -60,6 +60,42 @@ $(document).ready(function () {
 
 				// Sets display
 				if (data['docs_details']['a_docs_ver_mime'] === 'application/pdf') {
+					var startDocument = data['docs_details']['a_docs_ver_filename'];
+					function getDocumentUrl(document){
+						return "/docs/pdfPreview?doc={doc}&format={format}&page={page}&id="+ data['docs_details']['a_docs_id'].replace("{doc}",document);
+					}
+					var fp = new FlexPaperViewer(
+							'FlexPaperViewer',
+							'documentViewer', { config : {
+
+							DOC : escape(getDocumentUrl(startDocument)),
+							key : "@63fe01a5804d28236b8$bd56bc57d4f62cc10eb",
+							Scale : 0.6,
+							ZoomTransition : 'easeOut',
+							ZoomTime : 0.5,
+							ZoomInterval : 0.2,
+							FitPageOnLoad : false,
+							FitWidthOnLoad : false,
+							FullScreenAsMaxWindow : false,
+							ProgressiveLoading : false,
+							MinZoomSize : 0.2,
+							MaxZoomSize : 5,
+							SearchMatchAll : false,
+							InitViewMode : 'Portrait',
+							RenderingOrder : 'html5,flash',
+
+							ViewModeToolsVisible : true,
+							ZoomToolsVisible : true,
+							NavToolsVisible : true,
+							CursorToolsVisible : true,
+							SearchToolsVisible : true,
+
+							localeChain: 'en_US'
+							}});
+				}
+
+				/*
+				if (data['docs_details']['a_docs_ver_mime'] === 'application/pdf') {
 					var fp = new FlexPaperViewer(
 						'/resources/addon/docs/FlexPaper_1.5.1_flash/FlexPaperViewer',
 						'viewerPlaceHolder', { config : {
@@ -87,11 +123,11 @@ $(document).ready(function () {
 						localeChain: 'en_US'
 						}});
 					$('#image_placeholder').hide();
-				}
+				} */
 
 				if (data['docs_details']['a_docs_ver_mime'] === 'image/png') {
 					//$('#image_placeholder').attr('src', data['s3object']);
-					$('#image_placeholder').attr('src', '/file/index'+data['docs_details']['a_docs_dir_dirpath']+data['docs_details']['a_docs_ver_filename']);
+					$('#image_placeholder').attr('src', '/file/read'+data['docs_details']['a_docs_dir_dirpath']+data['docs_details']['a_docs_ver_filename']);
 					$('#viewerPlaceHolder').hide();
 				}
 
