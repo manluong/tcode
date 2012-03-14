@@ -493,13 +493,13 @@ class Docs extends MY_Controller {
 
 
 	function pdfPreview() {
-		require_once('/resources/addon/docs/AdaptiveUI1.3.5/pdf2json_php5.php');
-		require_once('/resources/addon/docs/AdaptiveUI1.3.5/pdf2swf_php5.php');
-		require_once('/resources/addon/docs/AdaptiveUI1.3.5/pdf2render_php5.php');
-		require_once('/resources/addon/docs/AdaptiveUI1.3.5/common.php');
+		require_once('resources/addon/docs/AdaptiveUI1.3.5/pdf2json_php5.php');
+		require_once('resources/addon/docs/AdaptiveUI1.3.5/pdf2swf_php5.php');
+		require_once('resources/addon/docs/AdaptiveUI1.3.5/swfrender_php5.php');
+		require_once('resources/addon/docs/AdaptiveUI1.3.5/common.php');
 
 		$pdfdoc 	= $_GET["doc"];
-		$configManager 	= new Config();
+		$configManager 	= new Config($this->domain);
 
 		if(isset($_GET["page"])){$page = $_GET["page"];}else{$page = "";}
 		if(isset($_GET["format"])){$format=$_GET["format"];}else{$format="swf";}

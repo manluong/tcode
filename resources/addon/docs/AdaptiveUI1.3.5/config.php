@@ -2,7 +2,7 @@
 class Config{
   protected $config;
 
-    public function __construct()
+    public function __construct($domain)
     {
 			/*
 		if(	PHP_OS == "WIN32" || PHP_OS == "WINNT"	)
@@ -11,10 +11,15 @@ class Config{
 			$this->config = parse_ini_file('config/config.ini.nix.php');
 
 			 */
+		if (! is_dir('tmp/'.$domain.'/docs/files/')) {
+			$oldumask = umask(0);
+			mkdir('tmp/'.$domain.'/docs/files/', 0777, true);
+			umask($oldumask);
+		}
 		$this->config['allowcache'] = true;
 		$this->config['splitmode'] = false;
-		$this->config['path.pdf'] = '/tmp/'.$this->domain.'/docs/files/';
-		$this->config['path.swf'] = '/tmp/'.$this->domain.'/docs/files/';
+		$this->config['path.pdf'] = 'tmp/'.$domain.'/docs/files/';
+		$this->config['path.swf'] = 'tmp/'.$domain.'/docs/files/';
 
 		///usr/local/bin/pdf2json
 		$this->config['cmd.conversion.singledoc'] = '/usr/bin/pdf2swf {path.pdf}{pdffile} -o {path.swf}{pdffile}.swf -f -T 9 -t -s storeallcharacters';
