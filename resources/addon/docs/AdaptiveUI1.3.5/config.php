@@ -2,7 +2,7 @@
 class Config{
   protected $config;
 
-    public function __construct($domain)
+    public function __construct()
     {
 			/*
 		if(	PHP_OS == "WIN32" || PHP_OS == "WINNT"	)
@@ -11,6 +11,8 @@ class Config{
 			$this->config = parse_ini_file('config/config.ini.nix.php');
 
 			 */
+		$domain = explode('.', $_SERVER['SERVER_NAME']);
+		$domain = $domain[0];
 		if (! is_dir('tmp/'.$domain.'/docs/files/')) {
 			$oldumask = umask(0);
 			mkdir('tmp/'.$domain.'/docs/files/', 0777, true);

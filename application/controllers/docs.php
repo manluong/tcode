@@ -9,7 +9,7 @@ class Docs extends MY_Controller {
 		parent::__construct();
 		$this->load->library('fileL');
 		$this->load->model('DocsM');
-		$this->_temp_dir = $_SERVER['DOCUMENT_ROOT'].'/tmp/';
+		$this->_temp_dir = $_SERVER['DOCUMENT_ROOT'].'/tmp/'.$this->domain.'/docs/files/';
 		$this->_bucket = 'tcs99';
 
 		$this->_views_data['folder_icon'] = '<img src="/resources/template/'.get_template().'/images/icons/16/folder-small-horizontal.png">';
@@ -228,7 +228,9 @@ class Docs extends MY_Controller {
 				//$s3object = '<img src="'.$this->_views_data['s3_object'].'">';
 				break;
 			case 'application/pdf':
-
+				$s3object = $this->get_object($this->_bucket, $this->format_dirpath($docs_details['a_docs_dir_dirpath'],$docs_details['a_docs_ver_filename']));
+				$this->save_to_file($s3object->body, $docs_details['a_docs_id'].'.pdf');
+				break;
 		}
 		$data = array('docs_details'=>$docs_details, 's3object'=>$s3object, 'versions'=>$past_versions);
 		$this->output->set_content_type('application/json')
@@ -499,7 +501,7 @@ class Docs extends MY_Controller {
 		require_once('resources/addon/docs/AdaptiveUI1.3.5/common.php');
 
 		$pdfdoc 	= $_GET["doc"];
-		$configManager 	= new Config($this->domain);
+		$configManager 	= new Config();
 
 		if(isset($_GET["page"])){$page = $_GET["page"];}else{$page = "";}
 		if(isset($_GET["format"])){$format=$_GET["format"];}else{$format="swf";}
@@ -620,8 +622,7 @@ class Docs extends MY_Controller {
 	/** Old functions for Flexpaper flash **/
 	/*
 	case 'application/pdf':
-	$s3object = $this->get_object($this->_bucket, $this->format_dirpath($docs_details['a_docs_dir_dirpath'],$docs_details['a_docs_ver_filename']));
-				$this->save_to_file($s3object->body, $docs_details['a_docs_ver_filename']);
+
 	$this->convert_to_swf($docs_details['a_docs_ver_filename']);
 	$s3object = $this->_temp_dir.$docs_details['a_docs_ver_filename'].'.swf';
 	break;

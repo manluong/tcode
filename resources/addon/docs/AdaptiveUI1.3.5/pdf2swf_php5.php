@@ -1,7 +1,7 @@
 <?php
 /**
-* █▒▓▒░ The FlexPaper Project 
-* 
+* █▒▓▒░ The FlexPaper Project
+*
 * Copyright (c) 2009 - 2011 Devaldi Ltd
 *
 * Commercial licenses are available. The commercial player version
@@ -9,7 +9,7 @@
 * some additional features.
 * When purchasing a commercial license, its terms substitute this license.
 * Please see http://flexpaper.devaldi.com/ for further details.
-* 
+*
 */
 
 require_once("config.php");
@@ -42,16 +42,16 @@ class pdf2swf
 		$output=array();
 		$pdfFilePath = $this->configManager->getConfig('path.pdf') . $doc;
 		$swfFilePath = $this->configManager->getConfig('path.swf') . $doc  . $page. ".swf";
-		
+
 		if($this->configManager->getConfig('splitmode'))
 			$command = $this->configManager->getConfig('cmd.conversion.splitpages');
 		else
 			$command = $this->configManager->getConfig('cmd.conversion.singledoc');
-			
+
 		$command = str_replace("{path.pdf}",$this->configManager->getConfig('path.pdf'),$command);
 		$command = str_replace("{path.swf}",$this->configManager->getConfig('path.swf'),$command);
 		$command = str_replace("{pdffile}",$doc,$command);
-		
+
 		try {
 			if (!$this->isNotConverted($pdfFilePath,$swfFilePath)) {
 				array_push ($output, utf8_encode("[Converted]"));
@@ -63,7 +63,7 @@ class pdf2swf
 		}
 
 		$return_var=0;
-		
+
 		if($this->configManager->getConfig('splitmode')){
 			$pagecmd = str_replace("%",$page,$command);
 			$pagecmd = $pagecmd . " -p " . $page;
@@ -71,8 +71,9 @@ class pdf2swf
 			exec($pagecmd,$output,$return_var);
 			exec(getForkCommandStart() . $command . getForkCommandEnd());
 		}else
+			var_dump($command); die();
 			exec($command,$output,$return_var);
-			
+
 		if($return_var==0){
 			$s="[Converted]";
 		}else{
