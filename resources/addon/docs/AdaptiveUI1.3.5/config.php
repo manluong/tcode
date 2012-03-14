@@ -13,11 +13,7 @@ class Config{
 			 */
 		$domain = explode('.', $_SERVER['SERVER_NAME']);
 		$domain = $domain[0];
-		if (! is_dir('tmp/'.$domain.'/docs/files/')) {
-			$oldumask = umask(0);
-			mkdir('tmp/'.$domain.'/docs/files/', 0777, true);
-			umask($oldumask);
-		}
+		
 		$this->config['allowcache'] = true;
 		$this->config['splitmode'] = false;
 		$this->config['path.pdf'] = 'tmp/'.$domain.'/docs/files/';

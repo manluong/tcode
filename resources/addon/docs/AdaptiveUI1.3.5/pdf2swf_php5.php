@@ -71,7 +71,6 @@ class pdf2swf
 			exec($pagecmd,$output,$return_var);
 			exec(getForkCommandStart() . $command . getForkCommandEnd());
 		}else
-			var_dump($command); die();
 			exec($command,$output,$return_var);
 
 		if($return_var==0){
