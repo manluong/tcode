@@ -406,6 +406,13 @@ class Docs extends MY_Controller {
 	}
 
 	function save_to_file(&$binary, $filename){
+		// Create dir if it doesnt exist
+		if (! is_dir('tmp/'.$this->domain.'/docs/files/')) {
+			$oldumask = umask(0);
+			mkdir('tmp/'.$this->domain.'/docs/files/', 0777, true);
+			umask($oldumask);
+		}
+
 		$fp = fopen($this->_temp_dir.$filename, 'wb');
 		$r = fwrite($fp, $binary);
 		fclose($fp);
