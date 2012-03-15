@@ -77,7 +77,7 @@ class Docs extends MY_Controller {
 	}
 
 	// Removes files from server. No way to retrieve.
-	function delete_docs() {
+	function delete_all_docs() {
 		$this->output->set_content_type('application/json');
 		$_obj_details = $this->DocsM->get_docs_detail($this->url['id_plain']);
 		if (empty($_obj_details)) {
@@ -90,8 +90,8 @@ class Docs extends MY_Controller {
 			}
 		}
 		$i = '';
-		$i = $this->DocsM->delete_docs($_obj_details['a_docs_id']);
-		($i !== '')
+		$i = $this->DocsM->delete_all_docs($_obj_details['a_docs_id']);
+		($i)
 		 ? $this->output->set_output(json_encode(array('success' => '1')))
 		 : $this->output->set_output(json_encode(array('success' => '0')));
 	}

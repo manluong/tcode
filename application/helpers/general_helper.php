@@ -357,3 +357,12 @@ function randStr($length=3)
     }
     return $str;
 }
+// Checks if dir exists and create if it doesnt
+function create_dir($path, $mode) {
+	if (! is_dir($path)) {
+		$oldumask = umask(0);
+		mkdir($path, $mode, true);
+		umask($oldumask);
+	}
+	return;
+}

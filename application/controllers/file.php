@@ -54,7 +54,10 @@ class File extends CI_Controller{
 	}
 
 	function save() {
-		$i = $this->filel->save($this->input->post('path'), $this->input->post('overwrite'), $this->input->post('via'));
+		$fp = fopen($_FILES['file']['tmp_name'],'r');
+		$content = fread($fp, $_FILES['file']['size']);
+		$filename = $_FILES['file']['name'];
+		$i = $this->filel->save_new($content, $this->input->post('path'), $filename, $this->input->post('overwrite'), $this->input->post('via'));
 		print_r($i);
 	}
 
@@ -90,5 +93,30 @@ class File extends CI_Controller{
 		$h .= form_close();
 
 		print $h;
+	}
+
+	function save2() {
+		$content = 'dd';
+		$docs_id = 5;
+		$filename = 'nowman3.sql';
+		$version = '0';
+		$via = 'web';
+		$i = $this->filel->save_existing($content, $docs_id, $filename, $version, $via);
+		print_r($i);
+	}
+
+	function del1() {
+		$docs_id = 5;
+		$all = '0';
+		$ver_id = 4;
+		$i = $this->filel->del_by_id($docs_id, $all, $ver_id);
+		var_dump($i);
+	}
+
+	function delall() {
+		$docs_id = 5;
+		$all = '1';
+		$i = $this->filel->del_by_id($docs_id, $all);
+		var_dump($i);
 	}
 }
