@@ -65,6 +65,7 @@ class filel {
 
 		if ($this->_fs === 's3') {
 			$docs_id_n_path = $this->_upload_files_existing($path, $filename, $docs_id, $version, $via);
+			return $docs_id_n_path;
 		}
 
 		if ($this->_fs === 'local') {
@@ -134,13 +135,16 @@ class filel {
 	}
 
 	private function _upload_files_existing($path, $filename, $docs_id, $version, $via) {
-		if ($version === '0') {
-			$filename = $this->_check_filename($filename);
+		if ($version === '1') {
+			$this->_rename_old_ver($docs_id);
 		}
 		$this->_s3_put_object($path, $filename);
 
 		$values = array();
 		if ($this->_upload_status) {
+			$docs_detail = $this->_ci->DocsM->get_docs_detail($docs_id);
+			$values['a_docs_ver_id'] = $docs_detail['a_docs_ver_id'];
+			$values['a_docs_ver_docsid'] = $docs_id;
 			$values['a_docs_ver_filename'] = $filename;
 			$values['a_docs_ver_uploadvia'] = $via;
 			$values['a_docs_ver_filesize'] = filesize($this->_temp_file);
@@ -149,13 +153,28 @@ class filel {
 			finfo_close($f);
 			$values['a_docs_ver_mime'] = $mime_type;
 			$values['a_docs_ver_stamp'] = get_current_stamp();
-			if ($overwrite === '1') { // Update version
+			if ($version === '0') { // Update version
 				$ver_id = $this->_ci->DocsM->get_current_ver_id($docs_id);
 				$this->_ci->DocsM->update_docs_ver($values);
 				return array('docs_id'=>$docs_id, 'path'=>$this->_format_dirpath($path, $filename));
 			}
 			$docs_id = $this->_ci->DocsM->insert_docs_ver($values); // else insert version
 			return array('docs_id'=>$docs_id, 'path'=>$this->_format_dirpath($path, $filename));
+		}
+	}
+
+	private function _rename_old_ver($docs_id) {
+		$docs_detail = $this->_ci->DocsM->get_docs_detail($docs_id);
+		$ver_detail = $this->_ci->DocsM->get_docs_ver_detail($docs_detail['a_docs_ver_id']);
+		$values['a_docs_ver_id'] = $ver_detail['a_docs_ver_id'];
+		$values['a_docs_ver_filename'] = '._'.$ver_detail['a_docs_ver_filename'];
+		if (S3::copyObject($this->_bucket, $this->_format_dirpath($docs_detail['a_docs_dir_dirpath'],$ver_detail['a_docs_ver_filename']),
+			$this->_bucket, $this->_format_dirpath($docs_detail['a_docs_dir_dirpath'], $values['a_docs_ver_filename']), S3::ACL_PRIVATE)) {
+			log_message('debug', 'Docs: Copied file to '. $this->_format_dirpath($docs_detail['a_docs_dir_dirpath'], $values['a_docs_ver_filename']));
+			if (S3::deleteObject($this->_bucket, $this->_format_dirpath($docs_detail['a_docs_dir_dirpath'],$ver_detail['a_docs_ver_filename']))) {
+				log_message('debug', 'Docs: Removed old renamed file: '.$this->_format_dirpath($docs_detail['a_docs_dir_dirpath'],$ver_detail['a_docs_ver_filename']));
+			}
+			$this->_ci->DocsM->update_docs_ver($values);
 		}
 	}
 

@@ -96,6 +96,11 @@ class File extends CI_Controller{
 	}
 
 	function save2() {
+		$content = 'dd';
+		$docs_id = 5;
+		$filename = 'nowman3.sql';
+		$version = '0';
+		$via = 'web';
 		$i = $this->filel->save_existing($content, $docs_id, $filename, $version, $via);
 		print_r($i);
 	}

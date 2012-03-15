@@ -109,6 +109,7 @@ class docsM extends My_Model {
 	}
 
 	// Used in preview screen
+	// Returns details of latest version of doc
 	function get_docs_detail($docs_id) {
 		$query = $this->db->select()
 			->from('a_docs')
