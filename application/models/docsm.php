@@ -6,10 +6,16 @@ class docsM extends My_Model {
 		parent::__construct();
 	}
 
-	function delete_docs($id) {
-		$this->db->delete('a_docs_ver', array('a_docs_ver_docsid'=>$id));
-		$this->db->delete('a_docs', array('a_docs_id'=>$id));
-		return $this->db->affected_rows();
+	// Deletes all docs and ver
+	function delete_all_docs($docs_id) {
+		$this->db->delete('a_docs_ver', array('a_docs_ver_docsid'=>$docs_id));
+		$this->db->delete('a_docs', array('a_docs_id'=>$docs_id));
+		return ($this->db->affected_rows() > 0) ? TRUE : FALSE;
+	}
+
+	function delete_single_ver($docs_id, $ver_id) {
+		$this->db->delete('a_docs_ver', array('a_docs_ver_docsid'=>$docs_id, 'a_docs_ver_id'=>$ver_id));
+		return ($this->db->affected_rows() > 0) ? TRUE : FALSE;
 	}
 
 	function does_folder_exists($id) {

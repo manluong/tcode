@@ -34,6 +34,7 @@ class filel {
 		}
 	}
 
+	// Saves new content, creates a new docs_id
 	function save_new(&$content, $path, $filename, $overwrite, $via) {
 		$this->_write_to_temp($content, $filename);
 
@@ -53,6 +54,7 @@ class filel {
 		}
 	}
 
+	// Saves content over existing docs_id or creates a new ver for it.
 	function save_existing(&$content, $docs_id, $filename, $version, $via) {
 		$path = array();
 		$path = $this->_ci->DocsM->get_dirpath($docs_id);
@@ -73,6 +75,40 @@ class filel {
 		}
 	}
 
+	function del_by_id($docs_id, $all, $ver_id='') {
+		$path = $this->_ci->DocsM->get_dirpath($docs_id);
+		if (empty($path)) {
+			log_message('debug', 'Unable to get path to docs_id: '.$docs_id);
+			return;
+		}
+		$path = $path['a_docs_dir_dirpath'];
+		if ($all === '1') {
+			$versions = $this->_ci->DocsM->get_all_versions($docs_id);
+			$d = FALSE;
+			foreach ($versions as $version) {
+				if (S3::deleteObject($this->_bucket, $this->_format_dirpath($path, $version['a_docs_ver_filename']))) {
+					log_message('debug', 'Docs: Deleted '. $this->_format_dirpath($path, $version['a_docs_ver_filename']));
+					$d = TRUE;
+				}
+			}
+			$this->_ci->DocsM->delete_all_docs($docs_id);
+			return $d;
+		} elseif ($all === '0' && $ver_id !== '') {
+			$version = $this->_ci->DocsM->get_docs_ver_detail($ver_id);
+			if (S3::deleteObject($this->_bucket, $this->_format_dirpath($path, $version['a_docs_ver_filename']))) {
+				log_message('debug', 'Docs: Deleted '. $this->_format_dirpath($path, $version['a_docs_ver_filename']));
+				$this->_ci->DocsM->delete_single_ver($docs_id, $ver_id);
+				return TRUE;
+			}
+			die('f');
+			return FALSE;
+		} else {
+			log_message('debug', 'Ver id cannot be empty');
+			return FALSE;
+		}
+	}
+
+	/* Unused, to delete by path
 	function delete($path) {
 		$filepath = explode('/',$path);
 		$filename = array_pop($filepath);
@@ -103,17 +139,12 @@ class filel {
 				return TRUE;
 			}
 			return FALSE;
-			/*
-			$this->output->set_content_type('application/json');
-			($i !== '')
-			? $this->output->set_output(json_encode(array('success' => '1')))
-			: $this->output->set_output(json_encode(array('success' => '0')));*/
 		}
 
 		if ($this->_fs === 'local') {
 
 		}
-	}
+	} */
 
 	private function _write_to_temp(&$content, $filename) {
 		$this->_temp_file = $this->_temp_dir.$filename;

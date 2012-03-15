@@ -104,4 +104,19 @@ class File extends CI_Controller{
 		$i = $this->filel->save_existing($content, $docs_id, $filename, $version, $via);
 		print_r($i);
 	}
+
+	function del1() {
+		$docs_id = 5;
+		$all = '0';
+		$ver_id = 4;
+		$i = $this->filel->del_by_id($docs_id, $all, $ver_id);
+		var_dump($i);
+	}
+
+	function delall() {
+		$docs_id = 5;
+		$all = '1';
+		$i = $this->filel->del_by_id($docs_id, $all);
+		var_dump($i);
+	}
 }
