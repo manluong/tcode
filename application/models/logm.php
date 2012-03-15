@@ -189,6 +189,23 @@ class LogM extends CI_Model {
 		return;
 	}
 
+	private function _remove_extra_history() {
+		$query = $this->db->select()
+				->from('log_history')
+				->where('cardid', $this->UserM->info['cardid'])
+				->order_by('stamp', 'desc')
+				->limit(10,10)
+				->get();
+
+		$ids = array();
+		foreach ($query->result_array() as $row) {
+			$ids[] = $row['id'];
+		}
+
+		$this->db->where_in('id', $ids)
+			->delete('log_history');
+	}
+
 	private function _get_custom_msg($msg) {
 		$data = array();
 		$patterns = array();
@@ -205,18 +222,6 @@ class LogM extends CI_Model {
 		$replacements[3] = '';//$this->App_generalM->core_app_id2name("card",app_convertid("emailid","cardid",$field1['tid']),0);
 		$replacements[4] = parse_stamp(get_current_stamp());
 		return preg_replace($patterns, $replacements, $msg);
-	}
-
-	private function _remove_extra_history() {
-		$query = $this->db->select()
-				->from('log_history')
-				->where('cardid', $this->UserM->info['cardid'])
-				->order_by('stamp', 'desc')
-				->limit(10,10)
-				->get();
-		foreach ($query->result_array() as $row) {
-			$this->db->delete('log_history', array('id'=>$row['id']));
-		}
 	}
 
 	private function _get_default_msg($subaction, $app, $url_id) {
