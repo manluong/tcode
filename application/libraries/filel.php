@@ -55,16 +55,16 @@ class filel {
 
 	function save_existing(&$content, $docs_id, $filename, $version, $via) {
 		$path = array();
-		$path = $this->_ci->docsm->get_dirpath($docs_id);
+		$path = $this->_ci->DocsM->get_dirpath($docs_id);
 		if (empty($path)) {
 			log_message('debug', 'No records found for doc_id: '.$docs_id);
 			return;
 		}
+		$path = $path['a_docs_dir_dirpath'];
 		$this->_write_to_temp($content, $filename);
 
 		if ($this->_fs === 's3') {
-
-			$docs_id_n_path = $this->_upload_files($path, $filename, $overwrite, $via);
+			$docs_id_n_path = $this->_upload_files_existing($path, $filename, $docs_id, $version, $via);
 		}
 
 		if ($this->_fs === 'local') {
@@ -133,6 +133,32 @@ class filel {
 		return;
 	}
 
+	private function _upload_files_existing($path, $filename, $docs_id, $version, $via) {
+		if ($version === '0') {
+			$filename = $this->_check_filename($filename);
+		}
+		$this->_s3_put_object($path, $filename);
+
+		$values = array();
+		if ($this->_upload_status) {
+			$values['a_docs_ver_filename'] = $filename;
+			$values['a_docs_ver_uploadvia'] = $via;
+			$values['a_docs_ver_filesize'] = filesize($this->_temp_file);
+			$f = finfo_open(FILEINFO_MIME_TYPE);
+			$mime_type = finfo_file($f, $this->_temp_file);
+			finfo_close($f);
+			$values['a_docs_ver_mime'] = $mime_type;
+			$values['a_docs_ver_stamp'] = get_current_stamp();
+			if ($overwrite === '1') { // Update version
+				$ver_id = $this->_ci->DocsM->get_current_ver_id($docs_id);
+				$this->_ci->DocsM->update_docs_ver($values);
+				return array('docs_id'=>$docs_id, 'path'=>$this->_format_dirpath($path, $filename));
+			}
+			$docs_id = $this->_ci->DocsM->insert_docs_ver($values); // else insert version
+			return array('docs_id'=>$docs_id, 'path'=>$this->_format_dirpath($path, $filename));
+		}
+	}
+
 	private function _upload_files($path, $filename, $overwrite, $via) {
 		if ($overwrite === '0') {
 			$filename = $this->_check_filename($filename);
@@ -191,21 +217,13 @@ class filel {
 	}
 
 	private function _s3_put_object($path, $filename) {
-		if (isset($_SERVER["HTTP_CONTENT_TYPE"]))
-			$contentType = $_SERVER["HTTP_CONTENT_TYPE"];
-
-		if (isset($_SERVER["CONTENT_TYPE"]))
-			$contentType = $_SERVER["CONTENT_TYPE"];
-		// Handle non multipart uploads older WebKit versions didn't support multipart in HTML5
-		if (strpos($contentType, "multipart") !== FALSE) {
-			if (isset($this->_temp_file)) {
-				if (S3::putObject(S3::inputFile($this->_temp_file), $this->_bucket,
-					$this->_format_dirpath($path, $filename), S3::ACL_PRIVATE)) {
-					$this->_upload_status = TRUE;
-					log_message('debug', 'FileL: Upload: '.$this->_format_dirpath($path, $filename));
-				} else {
-					$this->_upload_status = FALSE;
-				}
+		if (isset($this->_temp_file)) {
+			if (S3::putObject(S3::inputFile($this->_temp_file), $this->_bucket,
+				$this->_format_dirpath($path, $filename), S3::ACL_PRIVATE)) {
+				$this->_upload_status = TRUE;
+				log_message('debug', 'FileL: Upload: '.$this->_format_dirpath($path, $filename));
+			} else {
+				$this->_upload_status = FALSE;
 			}
 		}
 		// ----- end S3 code ---- /
