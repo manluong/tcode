@@ -94,4 +94,9 @@ class File extends CI_Controller{
 
 		print $h;
 	}
+
+	function save2() {
+		$i = $this->filel->save_existing($content, $docs_id, $filename, $version, $via);
+		print_r($i);
+	}
 }

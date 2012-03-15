@@ -6,6 +6,7 @@ class filel {
 	private $_bucket = 'tcs99';
 	private $_upload_status = FALSE;
 	private $_temp_dir = '';
+	private $_temp_file = '';
 
 	function __construct() {
 		$this->_ci = & get_instance();
@@ -34,11 +35,7 @@ class filel {
 	}
 
 	function save_new(&$content, $path, $filename, $overwrite, $via) {
-		$fp = fopen($this->_temp_dir.$filename,'wb');
-		if ( ! fwrite($fp, $content)) {
-			log_message('debug', 'Error saving content to '.$this->_temp_dir.$filename);
-			return;
-		}
+		$this->_write_to_temp($content, $filename);
 
 		if ($this->_fs === 's3') {
 			$this->_check_folder($path);
@@ -56,8 +53,17 @@ class filel {
 		}
 	}
 
-	function save_current($docs_id, $overwrite, $via, $filename='') {
+	function save_existing(&$content, $docs_id, $filename, $version, $via) {
+		$path = array();
+		$path = $this->_ci->docsm->get_dirpath($docs_id);
+		if (empty($path)) {
+			log_message('debug', 'No records found for doc_id: '.$docs_id);
+			return;
+		}
+		$this->_write_to_temp($content, $filename);
+
 		if ($this->_fs === 's3') {
+
 			$docs_id_n_path = $this->_upload_files($path, $filename, $overwrite, $via);
 		}
 
@@ -108,6 +114,17 @@ class filel {
 		}
 	}
 
+	private function _write_to_temp(&$content, $filename) {
+		$this->_temp_file = $this->_temp_dir.$filename;
+		$fp = fopen($this->_temp_file,'wb');
+		if ( ! fwrite($fp, $content)) {
+			fclose($fp);
+			log_message('debug', 'Error saving content to '.$this->_temp_file);
+			return;
+		}
+		fclose($fp);
+	}
+
 	private function _check_folder($path) {
 		if ( ! $this->_ci->DocsM->does_path_exists($path)) {
 			// Create folder
@@ -118,7 +135,7 @@ class filel {
 
 	private function _upload_files($path, $filename, $overwrite, $via) {
 		if ($overwrite === '0') {
-			$filename = $this->_check_filename($_FILES['file']['name']);
+			$filename = $this->_check_filename($filename);
 		}
 
 		$this->_s3_put_object($path, $filename);
@@ -128,8 +145,11 @@ class filel {
 			$values['a_docs_parentid'] = $dir_id;
 			$values['a_docs_ver_filename'] = $filename;
 			$values['a_docs_ver_uploadvia'] = $via;
-			$values['a_docs_ver_filesize'] = $_FILES['file']['size'];
-			$values['a_docs_ver_mime'] = $_FILES['file']['type'];
+			$values['a_docs_ver_filesize'] = filesize($this->_temp_file);
+			$f = finfo_open(FILEINFO_MIME_TYPE);
+			$mime_type = finfo_file($f, $this->_temp_file);
+			finfo_close();
+			$values['a_docs_ver_mime'] = $mime_type;
 			$values['a_docs_ver_stamp'] = get_current_stamp();
 			$file_exists = $this->_ci->DocsM->does_file_exists($path, $filename);
 			if ($overwrite === '1') {
@@ -176,11 +196,10 @@ class filel {
 
 		if (isset($_SERVER["CONTENT_TYPE"]))
 			$contentType = $_SERVER["CONTENT_TYPE"];
-		log_message('debug','Content-type:'.$contentType."\n");
 		// Handle non multipart uploads older WebKit versions didn't support multipart in HTML5
 		if (strpos($contentType, "multipart") !== FALSE) {
-			if (isset($_FILES['file']['tmp_name']) && is_uploaded_file($_FILES['file']['tmp_name'])) {
-				if (S3::putObject(S3::inputFile($_FILES['file']['tmp_name']), $this->_bucket,
+			if (isset($this->_temp_file)) {
+				if (S3::putObject(S3::inputFile($this->_temp_file), $this->_bucket,
 					$this->_format_dirpath($path, $filename), S3::ACL_PRIVATE)) {
 					$this->_upload_status = TRUE;
 					log_message('debug', 'FileL: Upload: '.$this->_format_dirpath($path, $filename));
