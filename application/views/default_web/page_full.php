@@ -27,7 +27,6 @@
 	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/base.css" />
 	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/bootstrap.min.css" />
 	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/bootstrap-responsive.min.css" />
-	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/jquerytool.css" />
 
 	<!-- Docs -->
 		<!-- plupload -->
