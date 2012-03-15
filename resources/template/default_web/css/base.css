@@ -390,3 +390,20 @@ div.sending { border: solid 1px #A8A; background-color:#FEF; text-align:center; 
 .comments-lite { background-color: #EEF; }
 .comments-lite .comment { border-bottom: solid 1px #999; margin-bottom:2px; }
 .comments-lite .new_comment { margin:5px 0 0 5px; }
+
+
+
+/* codeigniter profiler */
+#codeigniter_profiler {
+	padding:5px;
+	background-color:#FFF;
+	border:solid 1px #F33;
+	float:left;
+	position: absolute;
+	width: 800px;
+	height: 250px;
+	bottom: 0;
+	right:10px;
+	z-index:1000000;
+	overflow:auto;
+}

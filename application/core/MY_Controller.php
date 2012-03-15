@@ -99,7 +99,7 @@ class MY_Controller extends CI_Controller {
 		$this->ACLM->check_app_access();
 
 
-		//$this->output->enable_profiler(true);
+		//if (!$this->is_ajax) $this->output->enable_profiler(true);
 	}
 
 	//remap every URI call
