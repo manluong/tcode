@@ -54,7 +54,10 @@ class File extends CI_Controller{
 	}
 
 	function save() {
-		$i = $this->filel->save($this->input->post('path'), $this->input->post('overwrite'), $this->input->post('via'));
+		$fp = fopen($_FILES['file']['tmp_name'],'r');
+		$content = fread($fp, $_FILES['file']['size']);
+		$filename = $_FILES['file']['name'];
+		$i = $this->filel->save_new($content, $this->input->post('path'), $filename, $this->input->post('overwrite'), $this->input->post('via'));
 		print_r($i);
 	}
 

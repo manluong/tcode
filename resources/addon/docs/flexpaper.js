@@ -273,6 +273,8 @@ function loadFromUrl(instance,url){
 			if(true){
 				$(document).ready(function() {
 					$.getScript('/resources/addon/docs/FlexPaperViewer.js', function() {
+					//console.dir(conf);
+					//$.getScript(conf.jsDirectory+'FlexPaperViewer.js', function() {
 						var viewerId = $(root).attr('id');
 						var userAgent = navigator.userAgent.toLowerCase();
 						var browser = {
@@ -480,13 +482,13 @@ window.FlexPaperViewer = window.$f = function() {
 	_IMGFiles = (config.IMGFiles!=null?config.IMGFiles:_IMGFiles);
 	_IMGFiles = (config.PageImagePattern!=null?config.PageImagePattern:_IMGFiles);
 	_JSONFile = (config.JSONFile!=null?config.JSONFile:_JSONFile);
-	_jsDirectory = (config.jsDirectory!=null?config.jsDirectory:"js/");
+	_jsDirectory = (config.jsDirectory!=null?config.jsDirectory:"/js/");
 	_cssDirectory = (config.cssDirectory!=null?config.cssDirectory:"css/");
 
 	window[instance] = flashembed(arguments[1], {
 			src: arguments[0]+".swf",
 			version: [10, 0],
-			expressInstall: "resources/addon/docs/AdaptiveUI1.3.5/expressinstall.swf",
+			expressInstall: "js/expressinstall.swf",
 			wmode: _WMode
 		},{
 			SwfFile  : escape(_SWFFile),

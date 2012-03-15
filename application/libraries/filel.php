@@ -5,11 +5,17 @@ class filel {
 	private $_ci = '';
 	private $_bucket = 'tcs99';
 	private $_upload_status = FALSE;
+	private $_temp_dir = '';
 
 	function __construct() {
 		$this->_ci = & get_instance();
 		$this->_ci->load->library('s3');
 		$this->_ci->load->Model('DocsM');
+
+		$domain = explode('.', $_SERVER['SERVER_NAME']);
+		$domain = $domain[0];
+		create_dir($_SERVER['DOCUMENT_ROOT'].'/tmp/'.$domain.'/docs/files/upload/', 0777);
+		$this->_temp_dir = $_SERVER['DOCUMENT_ROOT'].'/tmp/'.$domain.'/docs/files/upload/';
 	}
 
 	function set_fs($fs) {
@@ -27,10 +33,16 @@ class filel {
 		}
 	}
 
-	function save($path, $overwrite, $via, $filename='') {
+	function save_new(&$content, $path, $filename, $overwrite, $via) {
+		$fp = fopen($this->_temp_dir.$filename,'wb');
+		if ( ! fwrite($fp, $content)) {
+			log_message('debug', 'Error saving content to '.$this->_temp_dir.$filename);
+			return;
+		}
+
 		if ($this->_fs === 's3') {
 			$this->_check_folder($path);
-			$docs_id_n_path = $this->_upload_files($path, $overwrite, $via);
+			$docs_id_n_path = $this->_upload_files($path, $filename, $overwrite, $via);
 			return $docs_id_n_path;
 			/*
 			$this->_ci->output->set_content_type('application/json');
@@ -44,9 +56,9 @@ class filel {
 		}
 	}
 
-	function save_current($path, $version, $via, $filename='') {
+	function save_current($docs_id, $overwrite, $via, $filename='') {
 		if ($this->_fs === 's3') {
-
+			$docs_id_n_path = $this->_upload_files($path, $filename, $overwrite, $via);
 		}
 
 		if ($this->_fs === 'local') {
@@ -104,14 +116,8 @@ class filel {
 		return;
 	}
 
-	private function _upload_files($path, $overwrite, $via) {
-		if (empty($_FILES)) {
-			return;
-		}
-		if ($overwrite === '1') {
-			$filename = $_FILES['file']['name'];
-		}
-		else {
+	private function _upload_files($path, $filename, $overwrite, $via) {
+		if ($overwrite === '0') {
 			$filename = $this->_check_filename($_FILES['file']['name']);
 		}
 

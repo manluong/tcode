@@ -3,7 +3,9 @@
 		<input type="text" value="" id="title_input" class="docs-title"><br><span class="message" style="display:none;"></span>
 	</div>
 	<img src="" id="image_placeholder">
-	<p id="viewerPlaceHolder" style="width:660px;height:553px;display:block"><div id="documentViewer" class="viewer"></div>Document loading..</p>
+	<div id="viewerPlaceHolder" style="width:660px;height:553px;display:block">
+		<div id="documentViewer" class="viewer"></div>
+	</div>
 </div>
 <div id="tree"></div>
 <div class="actions btn-group">
@@ -60,7 +62,6 @@ $(document).ready(function () {
 
 				// Sets display
 				if (data['docs_details']['a_docs_ver_mime'] === 'application/pdf') {
-					console.log(data['docs_details']['a_docs_id']);
 					var startDocument = data['docs_details']['a_docs_id'];
 					function getDocumentUrl(document){
 						return "/docs/pdfPreview?doc={doc}&format={format}&page={page}&id="+ data['docs_details']['a_docs_id'].replace("{doc}",document);
@@ -91,7 +92,7 @@ $(document).ready(function () {
 							CursorToolsVisible : true,
 							SearchToolsVisible : true,
 
-							localeChain: 'en_US'
+							localeChain: 'en_US',
 							}});
 				}
 
