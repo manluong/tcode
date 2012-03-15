@@ -18,10 +18,10 @@ class LogM extends CI_Model {
 		$this->_insert_log();
 		$this->_start_timer();
 		$this->_log_data['log_type'] = $this->_get_log_type();
-		if (isset($this->_log_data['log_type']['eventfield'])) {
-			$this->_log_data['log_type']['eventfield'] = explode(",", $this->_log_data['log_type']['eventfield']);
-			foreach ($this->_log_data['log_type']['eventfield'] as $thisfield) {
-				$this->_log_data['log_type']['eventfield'][$thisfield]['log'] = 1;
+		if (isset($this->_log_data['log_type']['auditfield'])) {
+			$this->_log_data['log_type']['auditfield'] = explode(',', $this->_log_data['log_type']['auditfield']);
+			foreach ($this->_log_data['log_type']['auditfield'] as $thisfield) {
+				$this->_log_data['log_type']['auditfield'][$thisfield]['log'] = 1;
 			}
 		}
 		if ( ! empty($this->_log_data['log_type'])) {
@@ -37,7 +37,7 @@ class LogM extends CI_Model {
 		if ($this->_log_data['log_type']) {
 			if ($this->_log_data['log_type']['event']) {
 				$log_event_insert_id = $this->_insert_log_event();
-				$this->_insert_log_eventsub($log_event_insert_id);
+				$this->_insert_log_audit($log_event_insert_id);
 			}
 
 			if ($this->_log_data['log_type']['history']) {
@@ -133,19 +133,19 @@ class LogM extends CI_Model {
 		return $this->db->insert_id();
 	}
 
-	private function _insert_log_eventsub($log_event_insert_id) {
-		if ($this->_log_data['log_type']['eventfield']) {
-            foreach (array_keys($this->_log_data['log_type']['eventfield']) as $field){
+	private function _insert_log_audit($log_event_insert_id) {
+		if ($this->_log_data['log_type']['auditfield']) {
+            foreach (array_keys($this->_log_data['log_type']['auditfield']) as $field){
 				log_message('debug', 'Field: '.$field);
-                 if (($this->_url['subaction'] == "as" && $this->_log_data['log_type']['eventfield'][$field]['new'])||
-                     ($this->_url['subaction'] == "es" && $this->_log_data['log_type']['eventfield'][$field]['cur'] != $this->_log_data['log_type']['eventfield'][$field]['new'])) {
+                 if (($this->_url['subaction'] == 'as' && $this->_log_data['log_type']['auditfield'][$field]['new'])||
+                     ($this->_url['subaction'] == 'es' && $this->_log_data['log_type']['auditfield'][$field]['cur'] != $this->_log_data['log_type']['auditfield'][$field]['new'])) {
 					$data = array(
 						'log_id' => $this->_log_data['insert_id'],
 						'field' => $field,
-						'from' => $this->_log_data['log_type']['eventfield'][$field]['cur'],
-						'to' => $this->_log_data['log_type']['eventfield'][$field]['new']
+						'from' => $this->_log_data['log_type']['auditfield'][$field]['cur'],
+						'to' => $this->_log_data['log_type']['auditfield'][$field]['new']
 					);
-					$this->db->insert('log_eventsub', $data);
+					$this->db->insert('log_audit', $data);
 				}
             }
         }
