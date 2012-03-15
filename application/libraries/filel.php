@@ -148,7 +148,7 @@ class filel {
 			$values['a_docs_ver_filesize'] = filesize($this->_temp_file);
 			$f = finfo_open(FILEINFO_MIME_TYPE);
 			$mime_type = finfo_file($f, $this->_temp_file);
-			finfo_close();
+			finfo_close($f);
 			$values['a_docs_ver_mime'] = $mime_type;
 			$values['a_docs_ver_stamp'] = get_current_stamp();
 			$file_exists = $this->_ci->DocsM->does_file_exists($path, $filename);
