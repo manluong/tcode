@@ -35,8 +35,8 @@ class EmailL {
 
 		$domain = explode('.', $_SERVER['SERVER_NAME']);
 		$domain = $domain[0];
-		create_dir($_SERVER['DOCUMENT_ROOT'].'/tmp/'.$domain.'/docs/files/upload/', 0777);
-		$this->_temp_dir = $_SERVER['DOCUMENT_ROOT'].'/tmp/'.$domain.'/docs/files/upload/';
+		create_dir($_SERVER['DOCUMENT_ROOT'].'/tmp/'.$domain.'/', 0777);
+		$this->_temp_dir = $_SERVER['DOCUMENT_ROOT'].'/tmp/'.$domain.'/';
 	}
 
 	/*
@@ -303,7 +303,7 @@ class EmailL {
 	function log_send_response($response) {
 		$str = date('F j, Y, g:i a') .": ";
 		$str .= 'Sendgrid response: '.$response."\n";
-		$fp = fopen($_SERVER['DOCUMENT_ROOT'].'/tmp/sendgrid_send_response.log','a+');
+		$fp = fopen($this->_temp_dir.'sendgrid_send_response.log','a+');
 		fwrite($fp, $str);
 		fclose($fp);
 	}
@@ -324,7 +324,7 @@ class EmailL {
 		$str .= "====================\n\n";
 		$str .= '$_SERVER = '.print_r($_SERVER, true);
 		$str .= "====================\n\n";
-		$fp = fopen($_SERVER['DOCUMENT_ROOT'].'/tmp/sendgrid_'.$type.'.log','a+');
+		$fp = fopen($this->_temp_dir.'sendgrid_'.$type.'.log','a+');
 		fwrite($fp, $str);
 		fclose($fp);
 	}

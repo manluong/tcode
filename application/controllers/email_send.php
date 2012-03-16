@@ -46,7 +46,7 @@ class Email_send extends MY_Controller {
 			'html'      => '<p> the HTML </p>',
 			'text'      => 'the plain text',
 			'from'      => 'example@sendgrid.com',
-			'files['.$fileName.']' => '@'.$filePath.'/'.$fileName
+			//'files['.$fileName.']' => '@'.$filePath.'/'.$fileName
 		);
 
 		print_r($params);
