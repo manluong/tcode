@@ -26,6 +26,8 @@ class EmailL {
 	private $_api_key = 'express08)*'; // sendgrid
 	private $_bucket = 'tcs99';
 
+	private $_query_array = array();
+
 	function __construct($url = '') {
 		$this->_ci = & get_instance();
 		$this->_ci->load->model('EmailM');
@@ -179,22 +181,23 @@ class EmailL {
 			}
 
 			// Check file size
-			if ($docs_detail['a_docs_ver_filesize'] > 7168) {
+			if ($docs_detail['a_docs_ver_filesize'] > (7168*1024)) {
 				log_message('error', 'File size is > then 7168 Docsid: '.$docs_detail['a_docs_id'].' Verid: '.$docs_detail['a_docs_ver_id']);
 				return '';
 			}
 			$uri = format_dirpath($docs_detail['a_docs_dir_dirpath'], $docs_detail['a_docs_ver_filename']);
 			$object = S3::getObject($this->_bucket, $uri);
 
-			$fp = fopen($_SERVER['DOCUMENT_ROOT'].'/tmp/'.$docs_detail['a_docs_ver_filename'], 'wb');
+			$fp = fopen($this->_temp_dir.$docs_detail['a_docs_ver_filename'], 'wb');
 			$i = fwrite($fp, $object->body);
 			fclose($fp);
 
+			// Start populating the $_files[] variable
+			$this->_files[] = array('name' => $docs_detail['a_docs_ver_filename'],
+				'path' => $this->_temp_dir.$docs_detail['a_docs_ver_filename'],
+			);
 		} // end foreach
-		// Start populating the $_files[] variable
-		$this->_files[] = array('name' => $docs_detail['a_docs_ver_filename'],
-			'path' => $_SERVER['DOCUMENT_ROOT'].'/tmp/'.$docs_detail['a_docs_ver_filename'],
-		);
+
 	}
 
 	private function _insert_email() {
@@ -236,7 +239,12 @@ class EmailL {
 	}
 
 	private function _update_email() {
-		$data = array('query'=>$this->_query_str, 's3file'=>$this->_email_storage_dir.$this->_insert_id.'.txt');
+		if ($this->_attachment_id === '') {
+			$data = array('query'=>$this->_query_str, 's3file'=>$this->_email_storage_dir.$this->_insert_id.'.txt');
+		} else {
+			$data = array('query'=>serialize($this->_query_array), 's3file'=>$this->_email_storage_dir.$this->_insert_id.'.txt');
+		}
+
 		$this->_ci->EmailM->update_email($this->_insert_id, $data);
 	}
 
@@ -269,6 +277,33 @@ class EmailL {
 			'&api_key='.$this->_api_key;
 	}
 
+	function _build_query_array() {
+		/** Limitations when using smptapiheader:
+		 * There can only be one bcc
+		 */
+		// Here, to and bcc has to go into smtpapiheader
+		$this->_ci->smtpapiheaderl->addTo($this->_to);
+		if ( ! empty($this->_bcc)) {
+			$this->_ci->smtpapiheaderl->addFilterSetting('bcc','enable', 1);
+			$this->_ci->smtpapiheaderl->addFilterSetting('bcc','email', $this->_bcc[0]);
+		}
+
+		$data = array(
+			'api_user' => 'tcsteam',
+			'api_key' => 'express08)*',
+			'to' => 'noone@telcoson.com',
+			'bcc' => 'roy.wong.80@gmail.com',
+			'x-smtpapi' => $this->_ci->smtpapiheaderl->asJSON(),
+			'subject' => $this->_subject,
+			'html' => 'dd',
+			'from' => $this->_from,
+		);
+		foreach($this->_files as $file) {
+			$data['files['.$file['name'].']'] = '@'.$file['path'];
+		}
+		$this->_query_array = $data;
+	}
+
 	function debug() {
 		$this->_get_to();
 		$this->_get_bcc();
@@ -277,10 +312,18 @@ class EmailL {
 		$this->_date = date('r');
 		if ($this->_attachment_id !== '') $this->_get_attachements();
 		$this->_insert_email();
-		$this->_build_query();
+		if ($this->_attachment_id === '') {
+			$this->_build_query(); // use query string when here is no attachment.
+		} else {
+			$this->_build_query_array();
+		}
 		$this->_upload_s3file();
 		$this->_update_email();
-		print '<h1>DEBUG: </h1>'.$this->_query_str;
+		if ($this->_attachment_id === '') {
+			print '<h1>DEBUG: </h1>'.$this->_query_str;
+		} else {
+			print '<h1>DEBUG: </h1>'.print_r($this->_query_array, true);
+		}
 	}
 
 	function send_email () {
@@ -291,10 +334,27 @@ class EmailL {
 		$this->_date = date('r');
 		if ($this->_attachment_id !== '') $this->_get_attachements();
 		$this->_insert_email();
-		$this->_build_query();
+		if ($this->_attachment_id === '') {
+			$this->_build_query(); // build query string when there is no attachment.
+		} else {
+			$this->_build_query_array();
+		}
 		$this->_upload_s3file();
 		$this->_update_email();
-		$i = $this->_ci->curl->simple_post('https://sendgrid.com/api/mail.send.json', $this->_query_str);
+		if ($this->_attachment_id === '') {
+			$i = $this->_ci->curl->simple_post('https://sendgrid.com/api/mail.send.json', $this->_query_str); // use query string when there is no attachment. this will enables multiple bcc receipients.
+		} else {
+			// curl library doesnt allow passing in of arrays as parameter
+			$request =  'http://sendgrid.com/api/mail.send.json';
+			$session = curl_init($request);
+			curl_setopt ($session, CURLOPT_POST, true);
+			curl_setopt ($session, CURLOPT_POSTFIELDS, $this->_query_array);
+			curl_setopt($session, CURLOPT_HEADER, false);
+			curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
+			$i = curl_exec($session);
+			curl_close($session);
+		}
+
 		$i = json_decode($i, true);
 		$this->log_send_response($i);
 		return ($i['message'] === 'success') ? TRUE : FALSE;
@@ -304,7 +364,7 @@ class EmailL {
 		$data = array('respond'=>$response['message']);
 		$this->_ci->EmailM->update_email($this->_insert_id, $data);
 		$str = date('F j, Y, g:i a') .": ";
-		$str .= print_r('Sendgrid response: '.$response."\n", true);
+		$str .= 'Sendgrid response: '.print_r($response, true)."\n";
 		$fp = fopen($this->_temp_dir.'sendgrid_send_response.log','a+');
 		fwrite($fp, $str);
 		fclose($fp);

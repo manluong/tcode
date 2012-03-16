@@ -28,6 +28,24 @@ class Email_send extends MY_Controller {
 			->set_output(json_encode(array('success' => $result ? '1' : '0')));
 	}
 
+	function test2() {
+	$this->emaill->set_type('card')
+            ->set_type_id(array(2))
+            ->set_to(array('roy@telcoson.com'))
+            ->set_toname(array('roygmail'))
+			->set_bcc(array('roy.wong.80@gmail.com'))
+            ->set_template('testplate')
+            ->set_content('hhhh')
+            ->set_subject('test')
+            ->set_attachment_id(array(2=>'',3=>'')) // docs_id => ver_id or just docs_id => ''
+            ->set_replace_value(array('keys'=>array('%name%', '%result%'), 'values'=>array(array('Roy'), array('Success!!'))))
+            ->set_from('docs@telcoson.com')
+            ->set_fromname('Docs');
+			//$this->emaill->debug(); // prints the parameters to send
+			$i = $this->emaill->send_email(); var_dump($i);// actual email sending returns TRUE or FALSE
+
+	}
+
 	function test() {
 		$url = 'http://sendgrid.com/';
 		$user = 'tcsteam';
@@ -46,7 +64,7 @@ class Email_send extends MY_Controller {
 			'html'      => '<p> the HTML </p>',
 			'text'      => 'the plain text',
 			'from'      => 'example@sendgrid.com',
-			//'files['.$fileName.']' => '@'.$filePath.'/'.$fileName
+			'files['.$fileName.']' => '@'.$filePath.'/'.$fileName
 		);
 
 		print_r($params);
