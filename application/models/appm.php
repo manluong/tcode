@@ -4,7 +4,7 @@ class AppM extends MY_Model {
 	var $url = array();
 	var $actions = array();
 
-	var $public_apps = array('access', 'ical', 'unittest', 'callback_sendgrid');
+	var $public_apps = array('access', 'ical', 'unittest', 'callback_sendgrid', 'email_send');
 
 	var $app_cache = array(
 		0 => 'general',
