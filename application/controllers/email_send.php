@@ -36,7 +36,7 @@ class Email_send extends MY_Controller {
 		$fileName = 'gravatar-140.png';
 		//$filePath = dirname(__FILE__);
 
-		$filePath = '/Application/XAMPP/htdocs/tmp';
+		$filePath = 'tmp';
 
 		$params = array(
 			'api_user'  => $user,
@@ -68,6 +68,7 @@ class Email_send extends MY_Controller {
 
 		// obtain response
 		$response = curl_exec($session);
+		log_message('debug', 'Message sent!!');
 		curl_close($session);
 
 		// print everything out
