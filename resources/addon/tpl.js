@@ -41,38 +41,34 @@ var custom_viewcard = "My {{#content}}{{card_fname_label}} is {{card_fname_value
 var custom_editcard = "My {{#content}}{{#card_fname}}{{label}} is {{{control}}}{{/card_fname}}!{{{links}}}{{/content}}<br>";
 
 var tpl_comments = [];
-tpl_comments.reply = '<div class="{{reply_class}} reply row-fluid">{{#card_info}}'+
-							'<div class="avatar"><img class="avatar" src="{{avatar}}" /></div>'+
-							'<div class="content">'+
-								'<div class="name">{{card_fname}} {{card_lname}}</div>{{/card_info}}'+
-								'<div class="text">{{text}}</div>'+
-								'<span class="displaydate" title="{{created_stamp_iso8601}}">{{created_stamp_iso}}</span>'+
-							'</div>'+
-						'</div>';
-
-tpl_comments.comment = '<div class="comment row-fluid" id="comment_{{id}}">{{#card_info}}'+
+tpl_comments.post = '<div class="post {{reply}} clearfix">{{#card_info}}'+
 							'<div class="avatar"><img class="avatar" src="/resources/template/default_web/img/placeholder-image.jpg" /></div>'+
 							'<div class="content">'+
-								'<div class="name">{{card_fname}} {{card_lname}}</div>{{/card_info}}'+
-								'<div class="text">{{text}}</div>'+
-								'<div class="controls">'+
+								'<span class="name">{{card_fname}} {{card_lname}}</span> {{/card_info}}'+
+								'<span class="text">{{text}}</span>'+
+								'<div class="post_controls">'+
+									'<a href="#" class="comment_reply" data-reply_to="{{id}}" data-app_id="{{app_id}}" data-app_data_id="{{app_data_id}}">Reply</a> · '+
 									'<span class="displaydate" title="{{created_stamp_iso8601}}">{{created_stamp_iso}}</span>'+
-								'</div>'+
-								'{{{show_more_replies}}}<div class="replies">'+
-									'{{{replies_html}}}<div class="new_reply row-fluid">'+
-										'<input type="text" name="text" class="comment_input" value="" placeholder="reply..." autocomplete="off" data-app_id="{{app_id}}" data-app_data_id="{{app_data_id}}" data-parent_id="{{id}}" />'+
-									'</div>'+
 								'</div>'+
 							'</div>'+
 						'</div>';
 
-tpl_comments.show_more_replies_button = '<button class="btn btn-info show_more_replies" data-parent_id="{{id}}">Show {{reply_count}} Replies</button>';
+tpl_comments.show_more = '<div class="show_more">'+
+							'<a href="#" class="show_more_comments" data-last="{{last_id}}" data-threaded="false" data-app_id="{{app_id}}" data-app_data_id="{{id}}">Show older comments</a>'+
+						'</div>';
+tpl_comments.input = '<div class="new_comment">'+
+						'<input type="text" name="text" class="comment_input" value="" placeholder="write new comment..." autocomplete="off" data-app_id="{{app_id}}" data-app_data_id="{{app_data_id}}" data-parent_id="{{parent_id}}" />'+
+					'</div>';
 
 var tpl_dashboard = [];
 tpl_dashboard.post = '<div class="post">'+
-						'{{card_name}} - {{text}} - {{furi}}'+
-						'<div class="post_controls">'+
-							'<a href="#" data-id="{{id}}" class="trigger_comment">{{comment_count}} Comment(s)</a>'+
+						'<div class="avatar"><img class="avatar" src="/resources/template/default_web/img/placeholder-image.jpg" /></div>'+
+						'<div class="content">'+
+							'<span class="name">{{card_name}}</span><br />{{msg}}'+
+							'<div class="post_controls">'+
+								'<a href="#" class="comment_reply" data-reply_to="0" data-app_id="{{app_id}}" data-app_data_id="{{id}}">Reply</a> · '+
+								'<span class="displaydate" title="{{created_stamp_iso8601}}">{{created_stamp_iso}}</span>'+
+							'</div>'+
+							'<div class="comments clearfix" data-app_id="{{app_id}}" data-app_data_id="{{id}}">{{{comments_html}}}</div>'+
 						'</div>'+
-						'<div class="post_comments clearfix"></div>'+
 					'</div>';

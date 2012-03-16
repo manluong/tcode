@@ -44,7 +44,7 @@ class CommentsL {
 		$data['app_id'] = $this->app_id;
 		$data['app_data_id'] = $this->app_data_id;
 
-		return $this->to_html($data);
+		return $this->CI->load->view(get_template().'/comments/view', $data, TRUE);
 	}
 
 	function get_list_html($limit=5) {
@@ -53,7 +53,7 @@ class CommentsL {
 		$data['app_id'] = $this->app_id;
 		$data['app_data_id'] = $this->app_data_id;
 
-		return $this->to_html($data);
+		return $this->CI->load->view(get_template().'/comments/view', $data, TRUE);
 	}
 
 
@@ -65,40 +65,19 @@ class CommentsL {
 		$data['app_id'] = $this->app_id;
 		$data['app_data_id'] = $this->app_data_id;
 
-		return $this->to_html($data);
+		return $this->CI->load->view(get_template().'/comments/view', $data, TRUE);
 	}
 
 	function get_lite_html($page=1) {
 		$data = array();
 		$data['show_replies'] = 1;
 		$this->CommentsM->results_per_page = 2;
+		$this->CommentsM->older_comments_top = TRUE;
 		$data['comments'] = $this->CommentsM->get_page($this->app_id, $this->app_data_id, $page, $data['show_replies']);
 		$data['app_id'] = $this->app_id;
 		$data['app_data_id'] = $this->app_data_id;
 
-
-		return $this->to_html($data, TRUE);
-	}
-
-
-
-
-	private function to_html($data, $lite=FALSE) {
-		foreach($data['comments'] AS $k=>$v) {
-			$data['comments'][$k]['created_stamp_iso8601'] = parse_stamp_user($v['created_stamp'], 'ISO_8601');
-			$data['comments'][$k]['created_stamp_iso'] = parse_stamp_user($v['created_stamp'], 'ISO_DATE');
-
-			foreach($data['comments'][$k]['replies'] AS $rk=>$rv) {
-				$data['comments'][$k]['replies'][$rk]['created_stamp_iso8601'] = parse_stamp_user($rv['created_stamp'], 'ISO_8601');
-				$data['comments'][$k]['replies'][$rk]['created_stamp_iso'] = parse_stamp_user($rv['created_stamp'], 'ISO_DATE');
-			}
-		}
-
-		if ($lite) {
-			return $this->CI->load->view(get_template().'/comments/view_lite', $data, TRUE);
-		} else {
-			return $this->CI->load->view(get_template().'/comments/view', $data, TRUE);
-		}
+		return $this->CI->load->view(get_template().'/comments/view_lite', $data, TRUE);
 	}
 
 }

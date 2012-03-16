@@ -81,6 +81,10 @@ class LogM extends CI_Model {
 		return $query->row_array();
 	}
 
+	function update_log_type() {
+		$this->_log_data['log_type'] = $this->_get_log_type();
+	}
+
 	private function _do_log() {
 		$i = $this->_get_log_session_id();
 		if (empty($i)) $this->_insert_log_session();
@@ -125,12 +129,42 @@ class LogM extends CI_Model {
 			'app_data_id' => $this->url['id_plain'],
 			'saveid' => $this->_log_data['saveid'],
 			'card_id' => $this->UserM->info['cardid'],
+			'type' => 'standard',
 			'gpmid' => $this->UserM->info['accessgp'],
 			'timeline' => $this->_log_data['log_type']['timeline'],
 			'stamp' => get_current_stamp(),
+			'lastupdate' => get_current_stamp(),
 		);
 		$this->db->insert('log_event', $data);
 		return $this->db->insert_id();
+	}
+
+	function insert_wall_post($text) {
+		$data = array(
+			'log_type_id' => $this->_log_data['log_type']['id'],
+			'app_id' => $this->_url['app_id'],
+			'app_data_id' => $this->url['id_plain'],
+			'saveid' => $this->_log_data['saveid'],
+			'card_id' => $this->UserM->get_cardid(),
+			'sub_group' => '',
+			'type' => 'text',
+			'applink' => '',
+			'msg' => $text,
+			'html' => '',
+			'gpmid' => $this->UserM->info['accessgp'],
+			'timeline' => $this->_log_data['log_type']['timeline'],
+			'stamp' => get_current_stamp(),
+			'lastupdate' => get_current_stamp(),
+			'priority' => 0,
+		);
+
+		$this->db->insert('log_event', $data);
+		$data['id'] = $this->db->insert_id();
+		$data['card_name'] = $this->UserM->get_data_name($data['card_id']);
+		$data['created_stamp_iso8601'] = parse_user_date($data['stamp'], 'ISO_8601');
+		$data['created_stamp_iso'] = parse_user_date($data['stamp'], 'ISO');
+
+		return $data;
 	}
 
 	private function _insert_log_audit($log_event_insert_id) {
@@ -140,6 +174,7 @@ class LogM extends CI_Model {
                  if (($this->_url['subaction'] == 'as' && $this->_log_data['log_type']['auditfield'][$field]['new'])||
                      ($this->_url['subaction'] == 'es' && $this->_log_data['log_type']['auditfield'][$field]['cur'] != $this->_log_data['log_type']['auditfield'][$field]['new'])) {
 					$data = array(
+						'log_type_id' => $this->_log_data['log_type']['id'],
 						'log_id' => $this->_log_data['insert_id'],
 						'field' => $field,
 						'from' => $this->_log_data['log_type']['auditfield'][$field]['cur'],
@@ -218,27 +253,31 @@ class LogM extends CI_Model {
 		$replacements = array();
 		$replacements[0] = $this->_url['id_plain'];
 		$replacements[1] = $this->lang->line('coreapptitle_'.$this->_url['app']);
-		$replacements[2] = $this->App_generalM->core_app_id2name("card",$this->UserM->info['cardid'],0);
+		$replacements[2] = $this->App_generalM->core_app_id2name('card',$this->UserM->info['cardid'],0);
 		$replacements[3] = '';//$this->App_generalM->core_app_id2name("card",app_convertid("emailid","cardid",$field1['tid']),0);
 		$replacements[4] = parse_stamp(get_current_stamp());
 		return preg_replace($patterns, $replacements, $msg);
 	}
 
 	private function _get_default_msg($subaction, $app, $url_id) {
-		switch($subaction) {
-			  case "a": $text = $this->lang->line('corehis_add'); break;
-			  case "v": $text = $this->lang->line('corehis_view'); break;
-			  case "e": $text = $this->lang->line('corehis_edit'); break;
-			  case "d": $text = $this->lang->line('corehis_delete'); break;
-			  case "l": $text = $this->lang->line('corehis_list'); break;
-			  case "s": $text = $this->lang->line('corehis_search'); break;
-		}
+		$default_lang = array(
+			'a' => 'corehis_add',
+			'v' => 'corehis_view',
+			'e' => 'corehis_edit',
+			'd' => 'corehis_delete',
+			'l' => 'corehis_list',
+			's' => 'corehis_search'
+		);
+
+		$text = $this->lang->line($default_lang[$subaction]);
 		$text .= ' '.$this->lang->line('coreapptitle_'.$app).' - ';
+
 		if (in_array($app, $this->_core_apps)) {
 			$text .= $this->App_generalM->core_app_id2name($app, $url_id,1);
 		} else {
 			$text .= $_url['id_plain'];
 		}
+
 		return $text;
 	}
 
@@ -272,7 +311,7 @@ class LogM extends CI_Model {
 		$this->db->select('log_event.*, global_setting.log_type.app, global_setting.log_type.tag, global_setting.log_type.action, global_setting.log_type.subaction')
 			->from('log_event')
 			->join('global_setting.log_type', 'log_type.id = log_event.log_type_id')
-			->order_by('log_event.lastupdate, id', 'desc')
+			->order_by('log_event.lastupdate', 'desc')
 			->limit($limit);
 
 		if ($id != '') $this->db->where('log_event.id <', $id);
@@ -287,21 +326,28 @@ class LogM extends CI_Model {
 		$result = array();
 		foreach ($i as $event) {
 			$furi = '/'.$event['app'].'/'.$event['action'].'/'.$event['app_data_id'].'/'.$event['subaction'];
-			if ($event['msg'] !== '') {
-				$text = $this->_get_custom_msg($event['msg']);
+			if ($event['type'] == 'text') {
+				$msg = $event['msg'];
 			} else {
-				$text = $this->_get_default_msg($event['subaction'], $event['app'], $event['app_data_id']);
-				$text .= $event['stamp'];
+				if ($event['msg'] !== '') {
+					$msg = $this->_get_custom_msg($event['msg']);
+				} else {
+					$msg = $this->_get_default_msg($event['subaction'], $event['app'], $event['app_data_id']);
+					$msg .= $event['stamp'];
+				}
 			}
 
 			$result[$event['id']]['id'] = $event['id'];
 			$result[$event['id']]['card_name'] = $this->UserM->get_data_name($event['card_id']);
-			$result[$event['id']]['text'] = $text;
+			$result[$event['id']]['msg'] = $msg;
 			$result[$event['id']]['furi'] = $furi;
+			$result[$event['id']]['type'] = $event['type'];
 			$result[$event['id']]['app'] = $event['app'];
 			$result[$event['id']]['tag'] = $event['tag'];
 			$result[$event['id']]['priority'] = $event['priority'];
 			$result[$event['id']]['stamp'] = $event['stamp'];
+			$result[$event['id']]['created_stamp_iso8601'] = parse_user_date($event['stamp'], 'ISO_8601');
+			$result[$event['id']]['created_stamp_iso'] = parse_user_date($event['stamp'], 'ISO');
 			$result[$event['id']]['lastupdate'] = $event['lastupdate'];
 		}
 

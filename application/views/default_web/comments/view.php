@@ -3,30 +3,23 @@
 		<h4>Comments</h4>
 	</div>
 	<div class="widget-body">
-		<div class="comments row-fluid">
-			<div class="new_comment row-fluid">
-			<?=form_open('/comments/save')?>
-				<input type="hidden" name="app_id" value="<?=$app_id?>" />
-				<input type="hidden" name="app_data_id" value="<?=$app_data_id?>" />
-				<input type="hidden" name="parent_id" value="0" />
-				<?=set_return_url();?>
-				<input type="text" name="text" class="comment_input" value="" placeholder="write new comment..." autocomplete="off" data-app_id="<?=$app_id?>" data-app_data_id="<?=$app_data_id?>" data-parent_id="0" />
-			<?=form_close()?>
-			</div>
+		<div class="comments">
+			<?php if (count($comments)>=5) : ?>
+				<a href="#" class="show_more_comments" data-last="<?=$comments[1]['id']?>" data-threaded="false" data-app_id="<?=$app_id?>" data-app_data_id="<?=$app_data_id?>">Show older comments</a>
+			<?php endif; ?>
 
 			<?php foreach ($comments AS $comment): ?>
-			<div class="comment row-fluid" id="comment_<?=$comment['id']?>">
-
+			<div class="post">
 				<div class="avatar">
 					<img class="avatar" src="/resources/template/<?=get_template()?>/img/placeholder-image.jpg" />
 				</div>
 
 				<div class="content">
+					<span class="name"><?=$comment['card_info']['card_fname'].' '.$comment['card_info']['card_lname']?></span><br />
+					<span class="text"><?=$comment['text']?></span>
 
-					<div class="name"><?=$comment['card_info']['card_fname'].' '.$comment['card_info']['card_lname']?></div>
-					<div class="text"><?=$comment['text']?></div>
-
-					<div class="controls">
+					<div class="post_controls">
+						<a href="#" class="comment_reply" data-reply_to="<?=$comment['id']?>" data-app_id="<?=$app_id?>" data-app_data_id="<?=$app_data_id?>">Reply</a> ·
 						<span class="displaydate" title="<?=$comment['created_stamp_iso8601']?>">
 							<?=$comment['created_stamp_iso']?>
 						</span>
@@ -34,38 +27,28 @@
 
 					<?php
 						if ($comment['reply_count'] > 5) {
-							echo '<button class="btn btn-info show_more_replies" data-parent_id="'.$comment['id'].'" data-show_replies="5">Show '.($comment['reply_count']-5).' Replies</button>';
+							echo '<a href="#" class="show_more_comments" data-last="',$comment['replies'][1]['id'],'" data-threaded="false" data-app_id="',$app_id,'" data-app_data_id="',$app_data_id,'">Show older replies</a>';
 						}
 					?>
 
-					<div class="replies row-fluid">
+					<div class="replies">
 						<?php foreach ($comment['replies'] AS $reply): ?>
-							<div class="reply row-fluid">
+							<div class="post reply">
 								<div class="avatar">
 									<img class="avatar" src="/resources/template/<?=get_template()?>/img/placeholder-image.jpg" />
 								</div>
 								<div class="content">
-									<div class="name"><?=$reply['card_info']['card_fname'].' '.$reply['card_info']['card_lname']?></div>
-									<div class="text"><?=$reply['text']?></div>
-									<span class="displaydate" title="<?=$reply['created_stamp_iso8601']?>">
-										<?=$reply['created_stamp_iso']?>
-									</span>
+									<span class="name"><?=$reply['card_info']['card_fname'].' '.$reply['card_info']['card_lname']?></span>
+									<span class="text"><?=$reply['text']?></span>
+									<div class="post_controls">
+										<a href="#" class="comment_reply" data-reply_to="<?=$reply['id']?>" data-app_id="<?=$app_id?>" data-app_data_id="<?=$app_data_id?>">Reply</a> ·
+										<span class="displaydate" title="<?=$reply['created_stamp_iso8601']?>">
+											<?=$reply['created_stamp_iso']?>
+										</span>
+									</div>
 								</div>
 							</div>
 						<?php endforeach; ?>
-
-						<div class="new_reply row-fluid">
-							<?=form_open('/comments/save')?>
-								<input type="hidden" name="app_id" value="<?=$app_id?>" />
-								<input type="hidden" name="app_data_id" value="<?=$app_data_id?>" />
-								<input type="hidden" name="parent_id" value="<?=$comment['id']?>" />
-								<?=set_return_url();?>
-
-								<div class="row-fluid">
-								<input type="text" name="text" class="comment_input" value="" placeholder="reply..." autocomplete="off" data-app_id="<?=$app_id?>" data-app_data_id="<?=$app_data_id?>" data-parent_id="<?=$comment['id']?>" />
-								</div>
-							<?=form_close()?>
-						</div>
 					</div>
 
 				</div>
@@ -73,10 +56,9 @@
 
 			<?php endforeach; ?>
 
-			<?php if (count($comments)>=5) : ?>
-				<button class="btn btn-info show_more_comments" data-comments_page="2" data-per_page="5" data-app_id="<?=$app_id?>" data-app_data_id="<?=$app_data_id?>">Show more comments</button>
-			<?php endif; ?>
-
+			<div class="new_comment">
+				<input type="text" name="text" class="comment_input" value="" placeholder="write new comment..." autocomplete="off" data-app_id="<?=$app_id?>" data-app_data_id="<?=$app_data_id?>" data-parent_id="0" />
+			</div>
 		</div>
 	</div>
 </div>

@@ -361,37 +361,43 @@ table.dataTable th:active {
 
 
 /* Comments */
-.comments .comment { border: solid 1px #999; margin-bottom:10px; }
-.replies .reply { border-bottom: solid 1px #9C9; }
-.replies .loaded { background-color:#EFE; }
-
-.comment .avatar { width:50px; height:50px; margin:2px; float:left; }
-.comment .content { margin-left: 60px; margin-right:5px; }
-.reply .avatar { width:40px; height:40px; margin:2px; float:left; }
-.reply .content { margin-left: 50px; margin-right:5px; }
-
 .name { font-weight:bold; color:#393; }
-.text { margin: 5px 0; font-size: 12px; }
-.displaydate { font-size:10px; color: #AAA; margin: 2px 0; }
-.comment .controls { margin:5px 0; }
+.text { font-size: 12px; }
+.post_controls { font-size:10px; }
+.displaydate { color: #AAA; }
 
-div.sending { border: solid 1px #A8A; background-color:#FEF; text-align:center; font-weight:bold; padding:5px; color:#A8A; }
-
-.show_more_replies, .show_more_comments { width:100%; }
-
-.new_reply { margin-top:5px; }
-
-.comment_input {width:90%;}
-
-.new_comment form, .new_reply form {
-	margin-bottom: 0px;
+.show_more_replies, .show_more_comments {
+	font-size:10px;
+	padding:5px;
 }
 
-.comments-lite { background-color: #EEF; }
-.comments-lite .comment { border-bottom: solid 1px #999; margin-bottom:2px; }
-.comments-lite .new_comment { margin:5px 0 0 5px; }
+.comment_input {width:90%;}
+.comments form { margin-bottom: 0px; }
+.comments div { background-color: #EEF; }
+.comments .new_comment input { margin:5px; }
 
+.show_more, .post .reply, .new_comment {
+	border-bottom:solid 1px #CCF;
+	margin-bottom:2px;
+}
 
+.post .avatar {
+	width:48px;
+	height:48px;
+	margin:1px;
+	float:left;
+}
+.post .content {
+	margin-left:55px; margin-right:5px;
+}
+
+.post .reply .avatar {
+	width:33px;
+	height:33px;
+}
+.post .reply .content {
+	margin-left:40px;
+}
 
 /* codeigniter profiler */
 #codeigniter_profiler {
@@ -406,4 +412,11 @@ div.sending { border: solid 1px #A8A; background-color:#FEF; text-align:center; 
 	right:10px;
 	z-index:1000000;
 	overflow:auto;
+}
+
+
+/* dashboard wall */
+#posts .post {
+	padding:5px;
+	border-bottom: solid 1px #EEE;
 }

@@ -12,7 +12,7 @@ $(document).ready(function(){
 			function(result) {
 				if (result.success) {
 					var new_replies = '';
-					$.each(result.data, function(k, v) {
+					$.each(result.details, function(k, v) {
 						v.reply_class = "loaded";
 						new_replies += Mustache.to_html(tpl_comments.reply, v);
 					});
@@ -27,41 +27,28 @@ $(document).ready(function(){
 
 
 
-	$('#content-container').on('click', 'button.show_more_comments', function(e){
+	$('#content-container').on('click', 'a.show_more_comments', function(e){
 		var show_more_button = $(this);
-		var page = show_more_button.attr('data-comments_page');
-		var per_page = show_more_button.attr('data-per_page');
+		var last_id = show_more_button.attr('data-last');
+		var threaded = show_more_button.attr('data-threaded');
 		var app_id = show_more_button.attr('data-app_id');
 		var app_data_id = show_more_button.attr('data-app_data_id');
 
 		$.post(
 			'/comments/ajax_load_more_comments',
-			{ page: page, per_page:per_page, app_id: app_id, app_data_id: app_data_id },
+			{ last_id: last_id, threaded:threaded, app_id: app_id, app_data_id: app_data_id },
 			function(result) {
 				if (result.success) {
-					if (result.data.length < per_page) show_more_button.hide();
-
-					var new_comments = '';
-					$.each(result.data, function(k, v) {
+					var new_posts = '';
+					$.each(result.details, function(k, v) {
 						v.app_id = app_id;
 						v.app_data_id = app_data_id;
-						v.replies_html = '';
-						$.each(v.replies, function(sk, sv) {
-							v.replies_html += Mustache.to_html(tpl_comments.reply, sv);
-						});
-
-						v.show_more_replies = ''
-						if (parseInt(v.reply_count) > 5) {
-							var show_more = [];
-							show_more.id = v.id;
-							show_more.reply_count = parseInt(v.reply_count) - 5;
-							v.show_more_replies = Mustache.to_html(tpl_comments.show_more_replies_button, show_more);
-						}
-
-						new_comments += Mustache.to_html(tpl_comments.comment, v);
+						v.reply = 'reply';
+						new_posts += Mustache.to_html(tpl_comments.post, v);
 					});
-					$(new_comments).hide().insertBefore(show_more_button).fadeIn('slow');
-					show_more_button.attr('data-comments_page', parseInt(page)+1);
+
+					$(new_posts).hide().insertBefore(show_more_button).fadeIn('slow');
+					show_more_button.remove();
 					$('span.displaydate').timeago();
 				}
 			},
@@ -69,69 +56,61 @@ $(document).ready(function(){
 		);
 	});
 
+	//sets the parent_id attr of the input box to the reply that was clicked on
+	$('#content-container').on('click', '.comment_reply', function(e) {
+		var reply = $(this);
+		var reply_to = reply.attr('data-reply_to');
+		var app_id = reply.attr('data-app_id');
+		var data_id = reply.attr('data-app_data_id');
 
-	$('#content-container').on('keypress', 'input.comment_input', function(e){
-		if (e.which == 13) {	//if enter key is pressed
-			var textbox = $(this);
-			var app_id = textbox.attr('data-app_id');
-			var app_data_id = textbox.attr('data-app_data_id');
-			var parent_id = textbox.attr('data-parent_id');
-			var text = textbox.val();
-
-			var textboxform = textbox.closest('form');
-
-			var sending = '<div class="sending">Sending message</div>';
-
-			if (text.length == 0) {
-				e.preventDefault();
-				return false;
-			}
-
-			if (parent_id == 0) {
-				var is_reply = false;
-				var url = '/comments/ajax_save_comment';
-			} else {
-				var is_reply = true;
-				var url = '/comments/ajax_save_reply';
-			}
-
-			textbox.attr('disabled', 'disabled').fadeTo('slow', 0.1);
-			var sending_div = $(sending);
-			sending_div.insertAfter(textbox).hide().fadeTo('slow', 1.0);
-			$(textboxform).attr('onSubmit', 'return false;')
-
-			$.post(
-				url,
-				{ app_id: app_id, app_data_id: app_data_id, parent_id: parent_id, text: text },
-				function(result) {
-					if (result.success) {
-						textbox.val('');
-						if (is_reply) {
-							$('#comment_'+parent_id+' div.new_reply').before(
-								Mustache.to_html(tpl_comments.reply, result.data)
-							);
-						} else {
-							result.data.app_id = app_id;
-							result.data.app_data_id = app_data_id;
-							textbox.parent().after(
-								Mustache.to_html(tpl_comments.comment, result.data)
-							);
-						}
-						$('span.displaydate').timeago();
-					} else {
-						alert('Unable to save comment. Please try again.'+result.message);
-					}
-					textbox.removeAttr('disabled').fadeTo('slow', 1.0);
-					sending_div.fadeTo('slow', 0.1).delay(5000).remove();
-					$(textboxform).removeAttr('onSubmit');
-				},
-				'json'
-			);
-
-			//prevent enter key from submitting the form
-			e.preventDefault();
-			return false;
+		if ($('.comment_input[data-app_id='+app_id+'][data-app_data_id='+data_id+']').length) {
+			$('.comment_input[data-app_id='+app_id+'][data-app_data_id='+data_id+']').attr('data-parent_id', reply_to);
+		} else {
+			var v = [];
+			v.app_id = app_id;
+			v.app_data_id = data_id;
+			v.parent_id = reply_to;
+			var input_html = Mustache.to_html(tpl_comments.input, v);
+			$('div.comments[data-app_id='+app_id+'][data-app_data_id='+data_id+']').append(input_html);
 		}
+	});
+
+	//saves the comment
+	$('#content-container').on('keypress', 'input.comment_input', function(e) {
+		if (e.which != 13) return;	//if enter key is pressed
+
+		var textbox = $(this);
+		var app_id = textbox.attr('data-app_id');
+		var app_data_id = textbox.attr('data-app_data_id');
+		var parent_id = textbox.attr('data-parent_id');
+		var text = textbox.val();
+		if (text.length == 0) e.preventDefault();
+
+		textbox.attr('disabled', 'disabled');
+
+		$.post(
+			'/comments/ajax_save_comment',
+			{ app_id: app_id, app_data_id: app_data_id, parent_id: parent_id, text: text },
+			function(result) {
+				if (result.success) {
+					textbox.val('');
+					result.details.app_id = app_id;
+					result.details.app_data_id = app_data_id;
+					result.details.reply = 'reply';
+					textbox.parent().before(
+						Mustache.to_html(tpl_comments.post, result.details)
+					);
+					$('span.displaydate').timeago();
+				} else {
+					alert('Unable to save comment. Please try again.'+result.message);
+				}
+				textbox.removeAttr('disabled');
+			},
+			'json'
+		);
+
+		//prevent enter key from submitting the form
+		e.preventDefault();
 	});
 
 

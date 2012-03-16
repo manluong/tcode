@@ -2,8 +2,10 @@
 
 class CommentsM extends MY_Model {
 	var $results_per_page = 5;
-	var $older_comments_first = FALSE;
-	var $older_replies_first = TRUE;
+	var $older_comments_top = FALSE;
+	var $older_replies_top = TRUE;
+	var $get_all = FALSE;
+	var $threaded = TRUE;
 
 	function __construct() {
 		$this->table = 'mod_comments';
@@ -27,6 +29,7 @@ class CommentsM extends MY_Model {
 		$this->fill_card_info($result);
 
 		$result['replies'] = $this->get_replies($id);
+		$this->insert_timeago_stamp($result);
 
 		return $result;
 	}
@@ -39,10 +42,10 @@ class CommentsM extends MY_Model {
 			->where('parent_id', 0)
 			->limit($limit);
 
-		if ($this->older_comments_first) {
-			$this->db->order_by('id', 'ASC');
-		} else {
+		if ($this->older_comments_top) {
 			$this->db->order_by('id', 'DESC');
+		} else {
+			$this->db->order_by('id', 'ASC');
 		}
 
 		$rs = $this->db->get();
@@ -52,6 +55,11 @@ class CommentsM extends MY_Model {
 
 		foreach($results AS $k=>$v) {
 			$results[$k]['replies'] = $this->get_replies($v['id']);
+			$this->insert_timeago_stamp($results[$k]);
+		}
+
+		if ($this->older_comments_top) {
+			$results = array_reverse_order($results);
 		}
 
 		return $results;
@@ -65,22 +73,80 @@ class CommentsM extends MY_Model {
 			->from($this->table)
 			->where('app_id', $app_id)
 			->where('app_data_id', $app_data_id)
-			->where('parent_id', 0)
-			->limit($this->results_per_page, ($this->results_per_page*$page));
+			->where('parent_id', 0);
 
-		if ($this->older_comments_first) {
-			$this->db->order_by('id', 'ASC');
+		if ($this->get_all) {
+			$this->db->limit(10000000, ($this->results_per_page*$page));
 		} else {
+			$this->db->limit($this->results_per_page, ($this->results_per_page*$page));
+		}
+
+		if ($this->older_comments_top) {
 			$this->db->order_by('id', 'DESC');
+		} else {
+			$this->db->order_by('id', 'ASC');
 		}
 
 		$rs = $this->db->get();
+		if ($rs->num_rows() == 0) return array();
+
 		$results = $rs->result_array();
 
 		$this->fill_card_info($results, 'many');
 
+		if ($replies > 0) {
+			foreach($results AS $k=>$v) {
+				$results[$k]['replies'] = $this->get_replies($v['id'], $replies);
+			}
+		}
+
+		if ($this->older_comments_top) {
+			$results = array_reverse_order($results);
+		}
+
 		foreach($results AS $k=>$v) {
-			$results[$k]['replies'] = $this->get_replies($v['id'], $replies);
+			$this->insert_timeago_stamp($results[$k]);
+		}
+
+		return $results;
+	}
+
+	function get_remaining($app_id, $app_data_id, $last_id) {
+		$this->db->select()
+			->from($this->table)
+			->where('app_id', $app_id)
+			->where('app_data_id', $app_data_id)
+			->where('id <', $last_id);
+
+		if ($this->threaded) {
+			$this->db->where('parent_id', 0);
+		}
+
+		if ($this->older_comments_top) {
+			$this->db->order_by('id', 'DESC');
+		} else {
+			$this->db->order_by('id', 'ASC');
+		}
+
+		$rs = $this->db->get();
+		if ($rs->num_rows() == 0) return array();
+
+		$results = $rs->result_array();
+
+		$this->fill_card_info($results, 'many');
+
+		if ($this->threaded) {
+			foreach($results AS $k=>$v) {
+				$results[$k]['replies'] = $this->get_replies($v['id'], $replies);
+			}
+		}
+
+		if ($this->older_comments_top) {
+			$results = array_reverse_order($results);
+		}
+
+		foreach($results AS $k=>$v) {
+			$this->insert_timeago_stamp($results[$k]);
 		}
 
 		return $results;
@@ -102,8 +168,12 @@ class CommentsM extends MY_Model {
 
 		$this->fill_card_info($results, 'many');
 
-		if ($this->older_replies_first) {
+		if ($this->older_replies_top) {
 			$results = array_reverse_order($results);
+		}
+
+		foreach($results AS $k=>$v) {
+			$this->insert_timeago_stamp($results[$k]);
 		}
 
 		return $results;
@@ -127,8 +197,12 @@ class CommentsM extends MY_Model {
 
 		$this->fill_card_info($results, 'many');
 
-		if ($this->older_replies_first) {
+		if ($this->older_replies_top) {
 			$results = array_reverse_order($results);
+		}
+
+		foreach($results AS $k=>$v) {
+			$this->insert_timeago_stamp($results[$k]);
 		}
 
 		return $results;
@@ -162,6 +236,11 @@ class CommentsM extends MY_Model {
 				->get();
 
 		return $rs->num_rows();
+	}
+
+	function insert_timeago_stamp(&$result) {
+		$result['created_stamp_iso8601'] = parse_stamp_user($result['created_stamp'], 'ISO_8601');
+		$result['created_stamp_iso'] = parse_stamp_user($result['created_stamp'], 'ISO_DATE');
 	}
 }
 ?>
