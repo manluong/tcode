@@ -280,6 +280,7 @@ class EmailL {
 	function _build_query_array() {
 		/** Limitations when using smptapiheader:
 		 * There can only be one bcc
+		 * To address cannot have name
 		 */
 		// Here, to and bcc has to go into smtpapiheader
 		$this->_ci->smtpapiheaderl->addTo($this->_to);
