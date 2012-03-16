@@ -6,7 +6,7 @@
 					<div id="wall">
 						<div>
 							<?=form_open('/dashboard/new_post')?>
-							<input type="text" id="new_post" name="" value="" style="width:90%;" placeholder="Something to share?" />
+							<input type="text" class="input-block-level" id="new_post" name="" value="" placeholder="Something to share?" />
 							</form>
 						</div>
 						<div id="posts">

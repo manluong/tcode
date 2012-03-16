@@ -43,8 +43,9 @@ var custom_editcard = "My {{#content}}{{#card_fname}}{{label}} is {{{control}}}{
 var tpl_comments = [];
 tpl_comments.post = '<div class="post {{reply}} clearfix">{{#card_info}}'+
 							'<div class="avatar"><img class="avatar" src="/resources/template/default_web/img/placeholder-image.jpg" /></div>'+
-							'<div class="content">'+
+							'<div class="content" data-comment_id="{{id}}">'+
 								'<span class="name">{{card_fname}} {{card_lname}}</span> {{/card_info}}'+
+								'{{#in_reply_to}}<span class="in_reply_to"> in reply to {{name}}</span> {{/in_reply_to}}'+
 								'<span class="text">{{text}}</span>'+
 								'<div class="post_controls">'+
 									'<a href="#" class="comment_reply" data-reply_to="{{id}}" data-app_id="{{app_id}}" data-app_data_id="{{app_data_id}}">Reply</a> · '+
@@ -57,13 +58,14 @@ tpl_comments.show_more = '<div class="show_more">'+
 							'<a href="#" class="show_more_comments" data-last="{{last_id}}" data-threaded="false" data-app_id="{{app_id}}" data-app_data_id="{{id}}">Show older comments</a>'+
 						'</div>';
 tpl_comments.input = '<div class="new_comment">'+
-						'<input type="text" name="text" class="comment_input" value="" placeholder="write new comment..." autocomplete="off" data-app_id="{{app_id}}" data-app_data_id="{{app_data_id}}" data-parent_id="{{parent_id}}" />'+
+						'<div class="reply_to">{{reply_to_text}}</div>'+
+						'<input type="text" name="text" class="comment_input input-block-level" value="" placeholder="new reply..." autocomplete="off" data-app_id="{{app_id}}" data-app_data_id="{{app_data_id}}" data-parent_id="{{parent_id}}" />'+
 					'</div>';
 
 var tpl_dashboard = [];
 tpl_dashboard.post = '<div class="post">'+
 						'<div class="avatar"><img class="avatar" src="/resources/template/default_web/img/placeholder-image.jpg" /></div>'+
-						'<div class="content">'+
+						'<div class="content" data-comment_id="{{id}}">'+
 							'<span class="name">{{card_name}}</span><br />{{msg}}'+
 							'<div class="post_controls">'+
 								'<a href="#" class="comment_reply" data-reply_to="0" data-app_id="{{app_id}}" data-app_data_id="{{id}}">Reply</a> · '+

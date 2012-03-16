@@ -1,7 +1,7 @@
 $(document).ready(function(){
 	$.timeago.settings.allowFuture = true;
 
-
+/*
 	$('#content-container').on('click', 'button.show_more_replies', function(e){
 		var id = $(this).attr('data-parent_id');
 		var show_more_button = $(this);
@@ -24,7 +24,7 @@ $(document).ready(function(){
 			'json'
 		);
 	});
-
+*/
 
 
 	$('#content-container').on('click', 'a.show_more_comments', function(e){
@@ -63,13 +63,21 @@ $(document).ready(function(){
 		var app_id = reply.attr('data-app_id');
 		var data_id = reply.attr('data-app_data_id');
 
-		if ($('.comment_input[data-app_id='+app_id+'][data-app_data_id='+data_id+']').length) {
-			$('.comment_input[data-app_id='+app_id+'][data-app_data_id='+data_id+']').attr('data-parent_id', reply_to);
+		var reply_to_text = $('div.content[data-comment_id='+reply_to+']').find('span.name').html();
+		if (reply_to_text == null) reply_to_text = $('div.content[data-comment_id='+data_id+']').find('span.name').html();
+		reply_to_text = 'Replying to '+reply_to_text;
+
+		var input_field = $('.comment_input[data-app_id='+app_id+'][data-app_data_id='+data_id+']');
+
+		if (input_field.length) {
+			input_field.attr('data-parent_id', reply_to);
+			input_field.find('div.reply_to').html(reply_to_text);
 		} else {
 			var v = [];
 			v.app_id = app_id;
 			v.app_data_id = data_id;
 			v.parent_id = reply_to;
+			v.reply_to_text = reply_to_text;
 			var input_html = Mustache.to_html(tpl_comments.input, v);
 			$('div.comments[data-app_id='+app_id+'][data-app_data_id='+data_id+']').append(input_html);
 		}

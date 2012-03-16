@@ -366,17 +366,18 @@ table.dataTable th:active {
 .post_controls { font-size:10px; }
 .displaydate { color: #AAA; }
 
-.show_more_replies, .show_more_comments {
+.show_more_replies, .show_more_comments, .reply_to {
 	font-size:10px;
-	padding:5px;
+	padding:2px;
+}
+.in_reply_to {
+	color:#888;
 }
 
-.comment_input {width:90%;}
 .comments form { margin-bottom: 0px; }
 .comments div { background-color: #EEF; }
-.comments .new_comment input { margin:5px; }
 
-.show_more, .post .reply, .new_comment {
+.show_more, .post .reply {
 	border-bottom:solid 1px #CCF;
 	margin-bottom:2px;
 }

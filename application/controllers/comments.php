@@ -61,6 +61,9 @@ class Comments extends MY_Controller {
 		$this->CommentsM->save($data);
 		$this->UserM->fill_card_info($data);
 		$this->CommentsM->insert_timeago_stamp($data);
+		if ($data['parent_id'] != 0) {
+			$data['in_reply_to']['name'] = $this->CommentsM->get_reply_to_name($data['parent_id']);
+		}
 
 		$this->RespM->set_message('')
 				->set_type('list')

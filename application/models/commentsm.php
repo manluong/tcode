@@ -30,6 +30,9 @@ class CommentsM extends MY_Model {
 
 		$result['replies'] = $this->get_replies($id);
 		$this->insert_timeago_stamp($result);
+		if ($result['parent_id'] != 0) {
+			$result['in_reply_to']['name'] = $this->get_reply_to_name($result['parent_id']);
+		}
 
 		return $result;
 	}
@@ -56,6 +59,9 @@ class CommentsM extends MY_Model {
 		foreach($results AS $k=>$v) {
 			$results[$k]['replies'] = $this->get_replies($v['id']);
 			$this->insert_timeago_stamp($results[$k]);
+			if ($v['parent_id'] != 0) {
+				$results[$k]['in_reply_to']['name'] = $this->get_reply_to_name($v['parent_id']);
+			}
 		}
 
 		if ($this->older_comments_top) {
@@ -72,8 +78,11 @@ class CommentsM extends MY_Model {
 		$this->db->select()
 			->from($this->table)
 			->where('app_id', $app_id)
-			->where('app_data_id', $app_data_id)
-			->where('parent_id', 0);
+			->where('app_data_id', $app_data_id);
+
+		if ($this->threaded) {
+			$this->db->where('parent_id', 0);
+		}
 
 		if ($this->get_all) {
 			$this->db->limit(10000000, ($this->results_per_page*$page));
@@ -106,6 +115,9 @@ class CommentsM extends MY_Model {
 
 		foreach($results AS $k=>$v) {
 			$this->insert_timeago_stamp($results[$k]);
+			if ($v['parent_id'] != 0) {
+				$results[$k]['in_reply_to']['name'] = $this->get_reply_to_name($v['parent_id']);
+			}
 		}
 
 		return $results;
@@ -135,18 +147,20 @@ class CommentsM extends MY_Model {
 
 		$this->fill_card_info($results, 'many');
 
-		if ($this->threaded) {
-			foreach($results AS $k=>$v) {
-				$results[$k]['replies'] = $this->get_replies($v['id'], $replies);
-			}
-		}
-
 		if ($this->older_comments_top) {
 			$results = array_reverse_order($results);
 		}
 
 		foreach($results AS $k=>$v) {
 			$this->insert_timeago_stamp($results[$k]);
+
+			if ($this->threaded) {
+				$results[$k]['replies'] = $this->get_replies($v['id'], $replies);
+			} else {
+				if ($v['parent_id'] != 0) {
+					$results[$k]['in_reply_to']['name'] = $this->get_reply_to_name($v['parent_id']);
+				}
+			}
 		}
 
 		return $results;
@@ -236,6 +250,17 @@ class CommentsM extends MY_Model {
 				->get();
 
 		return $rs->num_rows();
+	}
+
+	function get_reply_to_name($id) {
+		$rs = $this->db->select('created_cardid')
+				->from('mod_comments')
+				->where('id', $id)
+				->get();
+
+		$result = $rs->row_array();
+
+		return $this->UserM->get_data_name($result['created_cardid']);
 	}
 
 	function insert_timeago_stamp(&$result) {
