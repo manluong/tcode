@@ -21,6 +21,7 @@ class EmailL {
 
 	private $_email_storage_dir = '/email/content/';
 	private $_email_attachements_storage = '/email/content/attachments/';
+	private $_temp_dir = '';
 	private $_api_user = 'tcsteam'; // sendgrid
 	private $_api_key = 'express08)*'; // sendgrid
 	private $_bucket = 'tcs99';
@@ -31,6 +32,11 @@ class EmailL {
 		$this->_ci->load->model('DocsM');
 		$this->_ci->load->spark('curl/1.2.0');
 		$this->_ci->load->library(array('SmtpApiHeaderL', 'S3'));
+
+		$domain = explode('.', $_SERVER['SERVER_NAME']);
+		$domain = $domain[0];
+		create_dir($_SERVER['DOCUMENT_ROOT'].'/tmp/'.$domain.'/docs/files/upload/', 0777);
+		$this->_temp_dir = $_SERVER['DOCUMENT_ROOT'].'/tmp/'.$domain.'/docs/files/upload/';
 	}
 
 	/*
