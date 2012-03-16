@@ -302,7 +302,7 @@ class EmailL {
 
 	function log_send_response($response) {
 		$data = array('response'=>$response['message']);
-		$this->_ci->emailm->update_email($this->_insert_id, $data);
+		$this->_ci->EmailM->update_email($this->_insert_id, $data);
 		$str = date('F j, Y, g:i a') .": ";
 		$str .= print_r('Sendgrid response: '.$response."\n", true);
 		$fp = fopen($this->_temp_dir.'sendgrid_send_response.log','a+');
