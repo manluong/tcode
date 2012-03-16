@@ -295,14 +295,16 @@ class EmailL {
 		$this->_upload_s3file();
 		$this->_update_email();
 		$i = $this->_ci->curl->simple_post('https://sendgrid.com/api/mail.send.json', $this->_query_str);
-		$this->log_send_response($i);
 		$i = json_decode($i, true);
+		$this->log_send_response($i);
 		return ($i['message'] === 'success') ? TRUE : FALSE;
 	}
 
 	function log_send_response($response) {
+		$data = array('response'=>$response['message']);
+		$this->_ci->emailm->update_email($this->_insert_id, $data);
 		$str = date('F j, Y, g:i a') .": ";
-		$str .= 'Sendgrid response: '.$response."\n";
+		$str .= print_r('Sendgrid response: '.$response."\n", true);
 		$fp = fopen($this->_temp_dir.'sendgrid_send_response.log','a+');
 		fwrite($fp, $str);
 		fclose($fp);
