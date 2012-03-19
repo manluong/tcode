@@ -46,7 +46,8 @@ class File extends CI_Controller{
 
 	function read() {
 		$this->_get_file_path();
-		$object = $this->filel->read($this->_filepath.$this->_filename);
+
+		$object = $this->filel->read(format_dirpath($this->_filepath,$this->_filename));
 		$this->output->set_header('Content-type: '.$object->headers['type'].';'
 				.'Content-Disposition:inline; filename="'.$this->_filename.'";'
 			)
@@ -81,6 +82,7 @@ class File extends CI_Controller{
 		}
 		$this->_filename = urldecode($filename);
 		$this->_filepath = $filepath;
+		return;
 	}
 
 	function test() {
