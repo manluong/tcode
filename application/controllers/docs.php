@@ -502,12 +502,13 @@ class Docs extends MY_Controller {
 
 
 	function pdfPreview() {
+		require_once('resources/addon/docs/AdaptiveUI1.3.5/common.php');
 		require_once('resources/addon/docs/AdaptiveUI1.3.5/pdf2json_php5.php');
 		require_once('resources/addon/docs/AdaptiveUI1.3.5/pdf2swf_php5.php');
 		require_once('resources/addon/docs/AdaptiveUI1.3.5/swfrender_php5.php');
-		require_once('resources/addon/docs/AdaptiveUI1.3.5/common.php');
 
 		$pdfdoc 	= $_GET["doc"];
+		$pdfdoc 	= $doc . ".pdf";
 		$configManager 	= new Config();
 
 		if(isset($_GET["page"])){$page = $_GET["page"];}else{$page = "";}
@@ -523,6 +524,7 @@ class Docs extends MY_Controller {
 		$pngFilePath 	= $configManager->getConfig('path.swf') . $pngdoc;
 		$jsonFilePath 	= $configManager->getConfig('path.swf') . $jsondoc;
 		$validatedConfig = true;
+		print $pdfFilePath;die();
 
 		session_start();
 
