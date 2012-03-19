@@ -524,7 +524,6 @@ class Docs extends MY_Controller {
 		$pngFilePath 	= $configManager->getConfig('path.swf') . $pngdoc;
 		$jsonFilePath 	= $configManager->getConfig('path.swf') . $jsondoc;
 		$validatedConfig = true;
-		print $_GET['doc'];die();
 
 		session_start();
 
