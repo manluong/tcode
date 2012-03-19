@@ -64,7 +64,7 @@ $(document).ready(function () {
 				if (data['docs_details']['a_docs_ver_mime'] === 'application/pdf') {
 					var startDocument = data['docs_details']['a_docs_id'];
 					function getDocumentUrl(document){
-						return "/docs/pdfPreview?doc={doc}&format={format}&page={page}&id="+ data['docs_details']['a_docs_id'].replace("{doc}",document);
+						return "/docs/pdfPreview?doc={doc}&format={format}&page={page}".replace("{doc}",document);
 					}
 					var fp = new FlexPaperViewer(
 							'FlexPaperViewer',
