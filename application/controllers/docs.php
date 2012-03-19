@@ -507,7 +507,7 @@ class Docs extends MY_Controller {
 		require_once('resources/addon/docs/AdaptiveUI1.3.5/pdf2swf_php5.php');
 		require_once('resources/addon/docs/AdaptiveUI1.3.5/swfrender_php5.php');
 
-		$pdfdoc 	= $_GET["doc"];
+		$doc 	= $_GET["doc"];
 		$pdfdoc 	= $doc . ".pdf";
 		$configManager 	= new Config();
 
@@ -524,7 +524,7 @@ class Docs extends MY_Controller {
 		$pngFilePath 	= $configManager->getConfig('path.swf') . $pngdoc;
 		$jsonFilePath 	= $configManager->getConfig('path.swf') . $jsondoc;
 		$validatedConfig = true;
-		print $pdfFilePath;die();
+		print $_GET['doc'];die();
 
 		session_start();
 
