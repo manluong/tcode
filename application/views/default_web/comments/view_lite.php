@@ -6,13 +6,18 @@
 	<?php endif; ?>
 
 	<?php foreach ($comments AS $comment): ?>
-	<div class="post reply">
+	<div class="post reply clearfix">
 		<div class="avatar">
 			<img class="avatar" src="/resources/template/<?=get_template()?>/img/placeholder-image.jpg" />
 		</div>
 
-		<div class="content">
+		<div class="content" data-comment_id="<?=$comment['id']?>">
 			<span class="name"><?=$comment['card_info']['card_fname'].' '.$comment['card_info']['card_lname']?></span>
+			<?php
+				if (isset($comment['in_reply_to'])) {
+					echo '<span class="in_reply_to"> in reply to '.$comment['in_reply_to']['name'].'</span> ';
+				}
+			?>
 			<span class="text"><?=$comment['text']?></span>
 
 			<div class="post_controls">
@@ -26,6 +31,7 @@
 	<?php endforeach; ?>
 
 	<div class="new_comment">
-		<input type="text" name="text" class="comment_input" value="" placeholder="write new comment..." autocomplete="off" data-app_id="<?=$app_id?>" data-app_data_id="<?=$app_data_id?>" data-parent_id="0" />
+		<div class="reply_to"></div>
+		<input type="text" name="text" class="comment_input input-block-level" value="" placeholder="write new comment..." autocomplete="off" data-app_id="<?=$app_id?>" data-app_data_id="<?=$app_data_id?>" data-parent_id="0" />
 	</div>
 </div>

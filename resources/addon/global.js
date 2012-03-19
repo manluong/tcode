@@ -71,7 +71,7 @@ $(document).ready(function(){
 
 		if (input_field.length) {
 			input_field.attr('data-parent_id', reply_to);
-			input_field.find('div.reply_to').html(reply_to_text);
+			input_field.parent().find('div.reply_to').html(reply_to_text);
 		} else {
 			var v = [];
 			v.app_id = app_id;

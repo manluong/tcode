@@ -15,7 +15,7 @@ class Comments extends MY_Controller {
 		$this->commentsl->app_data_id = 1;
 
 		$data = array();
-		$data['html'] = $this->commentsl->get_page_html();
+		$data['html'] = $this->commentsl->get_lite_html();
 		$data['outputdiv'] = 1;
 		$data['isdiv'] = TRUE;
 

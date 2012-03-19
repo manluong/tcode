@@ -57,7 +57,7 @@ class CommentsL {
 	}
 
 
-	//this should be the default function to call
+
 	function get_page_html($page=1) {
 		$data = array();
 		$data['show_replies'] = 5;
@@ -68,9 +68,11 @@ class CommentsL {
 		return $this->CI->load->view(get_template().'/comments/view', $data, TRUE);
 	}
 
+	//this should be the default function to call
 	function get_lite_html($page=1) {
 		$data = array();
 		$data['show_replies'] = 1;
+		$this->CommentsM->threaded = FALSE;
 		$this->CommentsM->results_per_page = 2;
 		$this->CommentsM->older_comments_top = TRUE;
 		$data['comments'] = $this->CommentsM->get_page($this->app_id, $this->app_data_id, $page, $data['show_replies']);
