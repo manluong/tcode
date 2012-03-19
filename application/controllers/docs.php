@@ -259,7 +259,7 @@ class Docs extends MY_Controller {
 		// Check docs_dir and return, if not found default to docs_settings table
 		$_docs_dir_ver = $this->DocsM->get_docs_dir_ver($this->url['id_plain']);
 		if ( ! empty($_docs_dir_ver)) {
-			return $_docs_dir_ver['a_docs_dir_nover'];
+			return $_docs_dir_ver['a_docs_dir_versioning'];
 		}
 		$_docs_app_ver = $this->DocsM->get_docs_settings();
 		return $_docs_app_ver['a_docs_setting_versioning'];

@@ -141,10 +141,10 @@ class docsM extends My_Model {
 
 	// Pass in docs id
 	function get_docs_dir_ver($id) {
-		$query = $this->db->select('a_docs_dir_nover')
+		$query = $this->db->select('a_docs_dir_versioning')
 			->from('a_docs_dir')
 			->join('a_docs', 'a_docs.a_docs_parentid = a_docs_dir.a_docs_dir_docs_id')
-			->where(array('a_docs_id'=> $id, 'a_docs_dir_nover'=>'IS NOT NULL'))
+			->where(array('a_docs_id'=> $id, 'a_docs_dir_versioning'=>'IS NOT NULL'))
 			->get();
 		return $query->row_array();
 	}
