@@ -324,6 +324,8 @@ class Docs extends MY_Controller {
 			$values['a_docs_ver_filename'] = $filename;
 			$values['a_docs_ver_stamp'] = get_current_stamp();
 			$values['a_docs_ver_mime'] = $_FILES['file']['type'];
+			$values['a_docs_ver_filesize'] = $_FILES['file']['size'];
+			$values['a_docs_ver_stamp'] = get_current_stamp();
 		} else {
 			log_message('debug', 'Docs: Error uploading File: '. $filename);exit();
 		}

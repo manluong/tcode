@@ -13,7 +13,7 @@
 	<a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
 	<ul class="dropdown-menu">
 	<li><a href="#" id="move"><i class="icon-move"></i> Move</a></li>
-	<li><a href="#" id="delete"><i class="icon-trash"></i> Delete</a></li>
+	<li><a href="#" id="delete"><i class="icon-trash"></i> Delete All</a></li>
 	<li  id="upload"><a href="#"><i class="icon-ban-circle"></i> Upload</a></li>
 	<li><a href="#" id="download"><i class="icon-ban-circle"></i> Download</a></li>
 	<li class="divider"></li>
@@ -127,7 +127,10 @@ $(document).ready(function () {
 					$('#image_placeholder').hide();
 				} */
 
-				if (data['docs_details']['a_docs_ver_mime'] === 'image/png') {
+				if (data['docs_details']['a_docs_ver_mime'] === 'image/png'
+					|| data['docs_details']['a_docs_ver_mime'] === 'image/jpeg'
+					|| data['docs_details']['a_docs_ver_mime'] === 'image/gif'
+					) {
 					//$('#image_placeholder').attr('src', data['s3object']);
 					if (data['docs_details']['a_docs_dir_dirpath'] === '/') {
 						$('#image_placeholder').attr('src', '/file/read'+data['docs_details']['a_docs_dir_dirpath']+data['docs_details']['a_docs_ver_filename']);
@@ -215,7 +218,7 @@ $(document).ready(function () {
 				});
 
 				$('#delete').on('click', function () {
-					$.post('/docs/delete_docs/<?php echo $url['id_encrypted']; ?>').success(function() {
+					$.post('/docs/delete_all_docs/<?php echo $url['id_encrypted']; ?>').success(function() {
 						//window.location = '/docs';
 					});
 				});
