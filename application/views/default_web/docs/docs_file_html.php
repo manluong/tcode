@@ -3,7 +3,7 @@
 		<input type="text" value="" id="title_input" class="docs-title"><br><span class="message" style="display:none;"></span>
 	</div>
 	<img src="" id="image_placeholder">
-	<div id="viewerPlaceHolder" style="width:660px;height:553px;display:block">
+	<div id="viewerPlaceHolder" style="width:660px;height:553px;display:block;position:relative;">
 		<div id="documentViewer" class="viewer"></div>
 	</div>
 </div>
