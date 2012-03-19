@@ -139,6 +139,26 @@ class docsM extends My_Model {
 		return $query->row_array();
 	}
 
+	function get_dir_id_from_docs_id($docs_id) {
+		$query = 'SELECT a.a_docs_parentid FROM a_docs a
+				LEFT JOIN a_docs b
+				ON a.a_docs_parentid = b.a_docs_parentid
+				WHERE b.a_docs_id = '.$docs_id.'
+				AND a.a_docs_isdir = 1
+			';
+		$query = $this->db->query($query);
+		/*
+		$query = $this->db->select('a_docs_parentid')
+			->from('a_docs')
+			->where(array('a_docs_id'=>$docs_id, 'a_docs_isdir'=>1))
+			->get();*/
+		if ($query->num_rows() > 0) {
+			$i = $query->row_array();
+			return $i['a_docs_parentid'];
+		}
+		return FALSE;
+	}
+
 	// Pass in docs id
 	function get_docs_dir_ver($id) {
 		$query = $this->db->select('a_docs_dir_versioning')

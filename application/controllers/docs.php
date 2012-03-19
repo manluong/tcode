@@ -257,7 +257,8 @@ class Docs extends MY_Controller {
 
 	function check_version_settings() {
 		// Check docs_dir and return, if not found default to docs_settings table
-		$_docs_dir_ver = $this->DocsM->get_docs_dir_ver($this->url['id_plain']);
+		$dir_id = $this->DocsM->get_dir_id_from_docs_id($this->url['id_plain']);
+		$_docs_dir_ver = $this->DocsM->get_docs_dir_ver($dir_id);
 		if ( ! empty($_docs_dir_ver)) {
 			return $_docs_dir_ver['a_docs_dir_versioning'];
 		}
@@ -272,6 +273,7 @@ class Docs extends MY_Controller {
 	}
 
 	function upload_single() {
+		// eg http://apple.telcoson.local/docs/upload_single/:docs_id/upload/:ver_id
 		$_ver_setting = $this->check_version_settings();
 		$_filename = $this->check_filename($_FILES['file']['name']); // Get new filename if filename conflict
 		if ($_ver_setting) {
