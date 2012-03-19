@@ -84,7 +84,7 @@ $(document).ready(function () {
 							MaxZoomSize : 5,
 							SearchMatchAll : false,
 							InitViewMode : 'Portrait',
-							RenderingOrder : 'html5,flash',
+							RenderingOrder : 'html,flash',
 
 							ViewModeToolsVisible : true,
 							ZoomToolsVisible : true,
