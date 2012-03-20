@@ -56,7 +56,7 @@
 
 	<div id="status">
 		<div class="row-fluid">
-			<div class="avatar"><img src="/resources/template/<?=get_template()?>/img/placeholder-image.jpg" /></div>
+			<div class="avatar"><img src="/resources/template/<?=get_template()?>/img/avatar.png" /></div>
 			<div id="status-details">
 				<strong><?=$user_name?></strong><br />
 				<div id="status-current"></div>
