@@ -167,10 +167,12 @@ $(document).ready(function () {
 
 				// Binds delete version button
 				$('.delete_ver').each(function() {
-					$.post('/docs/delete_single_ver/',
-						{docs_id: $(this).attr('docs_id'), ver_id:$(this).attr('ver_id')
-					}).success(function(){
-						console.log('ok');
+					$(this).on('click', function () {
+						$.post('/docs/delete_single_ver/',
+							{docs_id: $(this).attr('docs_id'), ver_id:$(this).attr('ver_id')
+						}).success(function(){
+							console.log('ok');
+						});
 					});
 				});
 

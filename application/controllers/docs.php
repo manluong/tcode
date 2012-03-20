@@ -253,6 +253,10 @@ class Docs extends MY_Controller {
 	function check_version_settings() {
 		// Check docs_dir and return, if not found default to docs_settings table
 		$dir_id = $this->DocsM->get_dir_id_from_docs_id($this->url['id_plain']);
+		if (! $dir_id) {
+			log_message('debug', 'Cannot locate dir_id of docs_id: '.$this->url['id_plain']);
+			return FALSE;
+		}
 		$_docs_dir_ver = $this->DocsM->get_docs_dir_ver($dir_id);
 		if ( ! empty($_docs_dir_ver)) {
 			return $_docs_dir_ver['a_docs_dir_versioning'];
@@ -271,7 +275,7 @@ class Docs extends MY_Controller {
 		// eg http://apple.telcoson.local/docs/upload_single/:docs_id/upload/:ver_id
 		$_ver_setting = $this->check_version_settings();
 		$_filename = $this->check_filename($_FILES['file']['name']); // Get new filename if filename conflict
-		if ($_ver_setting) {
+		if ($_ver_setting !== '0') {
 			$this->create_new_ver($_filename, $this->uri->segment(5,0));
 			return TRUE;
 		}
@@ -292,7 +296,8 @@ class Docs extends MY_Controller {
 			);
 			$this->rename_old_ver($dirpath, $this->url['id_plain']);
 			$this->DocsM->insert_docs_ver($values);
-			$this->output->set_output(array('message'=>'File uploaded'));
+			$this->output->set_content_type('application/json');
+			$this->output->set_output(json_encode(array('success'=>'1')));
 		} else {
 			$this->output->set_header('HTTP/1.1 500');exit();
 		}

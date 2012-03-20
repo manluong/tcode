@@ -140,18 +140,11 @@ class docsM extends My_Model {
 	}
 
 	function get_dir_id_from_docs_id($docs_id) {
-		$query = 'SELECT a.a_docs_parentid FROM a_docs a
-				LEFT JOIN a_docs b
-				ON a.a_docs_parentid = b.a_docs_parentid
-				WHERE b.a_docs_id = '.$docs_id.'
-				AND a.a_docs_isdir = 1
-			';
-		$query = $this->db->query($query);
-		/*
+		//$query = 'SELECT a_docs_parentid FROM a_docs WHERE a_docs_id = (SELECT a_docs_parentid FROM a_docs WHERE a_docs_id = '.$docs_id.') AND a_docs_isdir = 1';
 		$query = $this->db->select('a_docs_parentid')
 			->from('a_docs')
-			->where(array('a_docs_id'=>$docs_id, 'a_docs_isdir'=>1))
-			->get();*/
+			->where(array('a_docs_id'=>$docs_id))
+			->get();
 		if ($query->num_rows() > 0) {
 			$i = $query->row_array();
 			return $i['a_docs_parentid'];
@@ -160,12 +153,11 @@ class docsM extends My_Model {
 	}
 
 	// Pass in docs id
-	function get_docs_dir_ver($id) {
-		$query = $this->db->select('a_docs_dir_versioning')
-			->from('a_docs_dir')
-			->join('a_docs', 'a_docs.a_docs_parentid = a_docs_dir.a_docs_dir_docs_id')
-			->where(array('a_docs_id'=> $id, 'a_docs_dir_versioning'=>'IS NOT NULL'))
-			->get();
+	function get_docs_dir_ver($dir_id) {
+		$query = $this->db->query('SELECT a_docs_dir_versioning FROM a_docs_dir
+				LEFT JOIN a_docs ON a_docs.a_docs_parentid = a_docs_dir.a_docs_dir_docs_id
+				WHERE a_docs_dir_docs_id = ? AND (a_docs_dir_versioning <> "" OR a_docs_dir_versioning IS NOT NULL)
+			', array($dir_id));
 		return $query->row_array();
 	}
 
