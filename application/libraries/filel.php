@@ -98,9 +98,15 @@ class filel {
 			if (S3::deleteObject($this->_bucket, $this->_format_dirpath($path, $version['a_docs_ver_filename']))) {
 				log_message('debug', 'Docs: Deleted '. $this->_format_dirpath($path, $version['a_docs_ver_filename']));
 				$this->_ci->DocsM->delete_single_ver($docs_id, $ver_id);
+
+				// Check if other versions exists, if not, remove the doc also
+				$i = array();
+				$i = $this->_ci->DocsM->get_all_versions($docs_id);
+				if (empty($i)) {
+					$this->_ci->DocsM->delete_docs($docs_id);
+				}
 				return TRUE;
 			}
-			die('f');
 			return FALSE;
 		} else {
 			log_message('debug', 'Ver id cannot be empty');

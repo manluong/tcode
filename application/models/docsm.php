@@ -351,6 +351,12 @@ class docsM extends My_Model {
 		return $query->result_array();
 	}
 
+	// Deletes doc entry in a_docs. Eg, when no versions exists, this entry should be removed too.
+	function delete_docs($docs_id) {
+		$this->db->delete('a_docs', array('a_docs_id'=>$docs_id));
+		return ($this->db->affected_rows() > 0) ? TRUE : FALSE;
+	}
+
 	/*
 	function update_docs_setting($values) {
 

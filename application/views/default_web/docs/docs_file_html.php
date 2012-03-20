@@ -37,6 +37,7 @@
 				<th>Name</th>
 				<th>Size</th>
 				<th>Last Modified</th>
+				<th>Action</th>
 			</thead>
 			<td></td>
 		</table>
@@ -153,7 +154,7 @@ $(document).ready(function () {
 
 				var aaData = Array();
 				for (var i=0;i<data['versions'].length;i++) {
-					aaData[i] = [data['versions'][i]['a_docs_ver_filename'],data['versions'][i]['a_docs_ver_filesize'],data['versions'][i]['a_docs_ver_stamp']];
+					aaData[i] = [data['versions'][i]['a_docs_ver_filename'],data['versions'][i]['a_docs_ver_filesize'],data['versions'][i]['a_docs_ver_stamp'], '<a class="btn btn-danger delete_ver" docs_id = "'+data['docs_details']['a_docs_id']+'" ver_id="'+data['versions'][i]['a_docs_ver_id']+'">Delete</a>'];
 				}
 
 				$('#versions').dataTable({
@@ -162,6 +163,15 @@ $(document).ready(function () {
 					"sDom": "<'row'<'span8'l><'span8'f>r>t<'row'<'span8'i><'span8'p>>",
 					"sPaginationType": "bootstrap",
 					"bJQueryUI": true
+				});
+
+				// Binds delete version button
+				$('.delete_ver').each(function() {
+					$.post('/docs/delete_single_ver/',
+						{docs_id: $(this).attr('docs_id'), ver_id:$(this).attr('ver_id')
+					}).success(function(){
+						console.log('ok');
+					});
 				});
 
 				// bind upload

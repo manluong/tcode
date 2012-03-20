@@ -95,22 +95,17 @@ class Docs extends MY_Controller {
 		 ? $this->output->set_output(json_encode(array('success' => '1')))
 		 : $this->output->set_output(json_encode(array('success' => '0')));
 	}
-	/*
-	function delete_single() {
+
+	function delete_single_ver() {
+		// Usage /docs/delete_single_ver/:docs_id/d/:ver_id
 		$this->output->set_content_type('application/json');
-		if ($this->input->get('id')) { //docs_id
-			$_obj_details = $this->DocsM->get_docs_detail($this->input->get('id'));
-			if ( ! empty($_this_object_details)) {
-				$_obj_path = $this->DocsM->get_dirpath($_obj_details['a_docs_dir_docs_id']);
-				$uri = $this->format_dirpath($_obj_path['a_docs_dir_dirpath'], $_obj_details['a_docs_ver_filename']);
-				if (S3::deleteObject($this->_bucket,$uri)) {
-					$this->DocsM->delete_docs($_this_object_details['a_docs_id']);
-					$this->output->set_output(json_encode(array('message', 'File deleted'))); exit();
-				}
-			}
-		}
-		$this->output->set_output(json_encode(array('message' => 'error'))); exit();
-	}*/
+		$docs_id = $this->input->post('docs_id');
+		$ver_id = $this->input->post('ver_id');
+		$i = $this->filel->del_by_id($docs_id, '0', $ver_id);
+		($i)
+		? $this->output->set_output(json_encode(array('success' => '1')))
+		 : $this->output->set_output(json_encode(array('success' => '0')));
+	}
 
 	/*
 	function display_file_functions () {
