@@ -258,7 +258,8 @@ class Docs extends MY_Controller {
 			return FALSE;
 		}
 		$_docs_dir_ver = $this->DocsM->get_docs_dir_ver($dir_id);
-		if ( ! empty($_docs_dir_ver)) {
+		// 3 will take a_docs_setting's versioning
+		if ( ! empty($_docs_dir_ver) && $_docs_dir_ver['a_docs_dir_versioning'] !== '3') {
 			return $_docs_dir_ver['a_docs_dir_versioning'];
 		}
 		$_docs_app_ver = $this->DocsM->get_docs_settings();
