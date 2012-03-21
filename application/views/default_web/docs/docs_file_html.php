@@ -2,10 +2,13 @@
 	<div class="title">
 		<input type="text" value="" id="title_input" class="docs-title"><br><span class="message" style="display:none;"></span>
 	</div>
-	<img src="" id="image_placeholder">
-	<div id="viewerPlaceHolder" style="width:660px;height:553px;display:block;position:relative;">
-		<div id="documentViewer" class="viewer"></div>
+	<div class="content">
+		<img src="" id="image_placeholder">
+		<div id="viewerPlaceHolder" style="width:660px;height:553px;display:block;position:relative;">
+			<div id="documentViewer" class="viewer"></div>
+		</div>
 	</div>
+
 </div>
 <div id="tree"></div>
 <div class="actions btn-group">
@@ -48,13 +51,13 @@
 $(document).ready(function () {
 	window.d = {
 		docs_id: '<?php echo $url['id_encrypted']; ?>',
-		init: function () {
-			$.get('/docs/get_file_details/<?php echo $url['id_encrypted']; ?>/v').success(function(data) {
+		init: function (url) {
+			$.get(url).success(function(data) {
 				if (data.success === 0) {
 					$('.preview-content').html('No file found')
 					return null;
 				}
-				d = data;
+				d.data = data;
 				var title_input_value = (data['docs_details']['a_docs_displayname'] !== '')
 				? data['docs_details']['a_docs_displayname']
 				: data['docs_details']['a_docs_ver_filename'];
@@ -63,6 +66,11 @@ $(document).ready(function () {
 
 				// Sets display
 				if (data['docs_details']['a_docs_ver_mime'] === 'application/pdf') {
+					$('.content').html('\
+						<div id="viewerPlaceHolder" style="width:660px;height:553px;display:block;position:relative;">\
+							<div id="documentViewer" class="viewer"></div>\
+						</div>\
+					');
 					var startDocument = data['docs_details']['a_docs_id'];
 					function getDocumentUrl(document){
 						return "/docs/pdfPreview?doc={doc}&format={format}&page={page}".replace("{doc}",document);
@@ -97,42 +105,14 @@ $(document).ready(function () {
 							}});
 				}
 
-				/*
-				if (data['docs_details']['a_docs_ver_mime'] === 'application/pdf') {
-					var fp = new FlexPaperViewer(
-						'/resources/addon/docs/FlexPaper_1.5.1_flash/FlexPaperViewer',
-						'viewerPlaceHolder', { config : {
-						SwfFile : escape('/docs/pdfPreview?doc='+data['docs_details']['a_docs_ver_filename']),
-						Scale : 0.6,
-						ZoomTransition : 'easeOut',
-						ZoomTime : 0.5,
-						ZoomInterval : 0.2,
-						FitPageOnLoad : true,
-						FitWidthOnLoad : false,
-						FullScreenAsMaxWindow : false,
-						ProgressiveLoading : false,
-						MinZoomSize : 0.2,
-						MaxZoomSize : 5,
-						SearchMatchAll : false,
-						InitViewMode : 'Portrait',
-						PrintPaperAsBitmap : false,
-
-						ViewModeToolsVisible : true,
-						ZoomToolsVisible : true,
-						NavToolsVisible : true,
-						CursorToolsVisible : true,
-						SearchToolsVisible : true,
-
-						localeChain: 'en_US'
-						}});
-					$('#image_placeholder').hide();
-				} */
-
 				if (data['docs_details']['a_docs_ver_mime'] === 'image/png'
 					|| data['docs_details']['a_docs_ver_mime'] === 'image/jpeg'
 					|| data['docs_details']['a_docs_ver_mime'] === 'image/gif'
 					) {
-					//$('#image_placeholder').attr('src', data['s3object']);
+					$('.content').html('\
+							<img src="" id="image_placeholder">\
+						');
+
 					if (data['docs_details']['a_docs_dir_dirpath'] === '/') {
 						$('#image_placeholder').attr('src', '/file/read'+data['docs_details']['a_docs_dir_dirpath']+data['docs_details']['a_docs_ver_filename']);
 					} else {
@@ -146,6 +126,7 @@ $(document).ready(function () {
 
 				$('#file_info').dataTable({
 					"bProcessing" : true,
+					"bRetrieve" : true,
 					"aaData": [[data['docs_details']['a_docs_ver_filename'], data['docs_details']['a_docs_ver_filesize'], data['docs_details']['a_docs_ver_stamp']]],
 					"sDom": "<'row'<'span8'l><'span8'f>r>t<'row'<'span8'i><'span8'p>>",
 					"sPaginationType": "bootstrap",
@@ -154,11 +135,12 @@ $(document).ready(function () {
 
 				var aaData = Array();
 				for (var i=0;i<data['versions'].length;i++) {
-					aaData[i] = [data['versions'][i]['a_docs_ver_filename'],data['versions'][i]['a_docs_ver_filesize'],data['versions'][i]['a_docs_ver_stamp'], '<a class="btn btn-danger delete_ver" docs_id = "'+data['docs_details']['a_docs_id']+'" ver_id="'+data['versions'][i]['a_docs_ver_id']+'">Delete</a>'];
+					aaData[i] = ['<a href="#" docs_id="'+data['docs_details']['a_docs_id']+'" ver_id="'+data['versions'][i]['a_docs_ver_id']+'" class="old-ver">'+data['versions'][i]['a_docs_ver_filename']+'</a>',data['versions'][i]['a_docs_ver_filesize'],data['versions'][i]['a_docs_ver_stamp'], '<a class="btn btn-danger delete_ver" docs_id = "'+data['docs_details']['a_docs_id']+'" ver_id="'+data['versions'][i]['a_docs_ver_id']+'">Delete</a>'];
 				}
 
 				$('#versions').dataTable({
 					"bProcessing" : true,
+					"bRetrieve" : true,
 					"aaData": aaData,
 					"sDom": "<'row'<'span8'l><'span8'f>r>t<'row'<'span8'i><'span8'p>>",
 					"sPaginationType": "bootstrap",
@@ -173,6 +155,13 @@ $(document).ready(function () {
 						}).success(function(){
 							console.log('ok');
 						});
+					});
+				});
+
+				// Bind old version displays
+				$('.old-ver').each(function() {
+					$(this).on('click', function() {
+						d.init('/docs/get_file_details/'+$(this).attr('docs_id')+'/v/'+$(this).attr('ver_id'));
 					});
 				});
 
@@ -237,6 +226,6 @@ $(document).ready(function () {
 			});
 		}
 	}
-	d.init();
+	d.init('/docs/get_file_details/<?php echo $url['id_encrypted']; ?>/v');
 });
 </script>

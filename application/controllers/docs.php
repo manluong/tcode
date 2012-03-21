@@ -745,7 +745,10 @@ class Docs extends MY_Controller {
 
 	/** Test functions **/
 	function test() {
-		print $this->domain;
+		//$i = $this->DocsM->get_docs(1);
+		//$i = $this->DocsM->set_all_current_ver(2,0);
+		$i = $this->DocsM->set_current_ver(2, 2);
+		var_dump($i);
 		die();
 	}
 

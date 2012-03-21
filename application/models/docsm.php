@@ -61,6 +61,7 @@ class docsM extends My_Model {
 		return $query->row_array();
 	}
 
+	/* Can remove if confirm not in use
 	// Gets the latest version
 	function get_current_ver_id($docs_id) {
 		// TODO: change to get from the current_ver column
@@ -75,7 +76,7 @@ class docsM extends My_Model {
 			return $ver_id['a_docs_ver_id'];
 		}
 		return FALSE;
-	}
+	}*/
 
 	function get_docs_id_from_path($path, $filename) {
 		// Similiar to does_file_exists
@@ -103,14 +104,24 @@ class docsM extends My_Model {
 		return $query->row_array();
 	}
 
+	/* Previous version before implementing current_version
 	// Returns all docs in a dirid.
 	// Presents the latest ver id as link
-	function get_docs($id) {
+	function get_docs($dir_id) {
 		$query = $this->db->query('SELECT * FROM
 				(SELECT * FROM a_docs LEFT JOIN a_docs_ver ON a_docs.a_docs_id = a_docs_ver.a_docs_ver_docsid
 					WHERE a_docs_parentid = '.$id.' AND a_docs_isdir = 0 ORDER BY a_docs_ver_id DESC )
 				AS a LEFT JOIN a_docs_dir ON a_docs_dir.a_docs_dir_docs_id = a.a_docs_parentid
 				GROUP BY a_docs_id ORDER BY a_docs_ver_id DESC');
+		return $query->result_array();
+	}*/
+	// Returns all docs in a dirid that has a_docs_ver_current_version = 1.
+	function get_docs($dir_id) {
+		$query = $this->db->select()
+			->from('a_docs')
+			->join('a_docs_ver', 'a_docs.a_docs_id = a_docs_ver.a_docs_ver_docsid')
+			->where(array('a_docs_parentid'=>$dir_id, 'a_docs_ver_current_version'=>1))
+			->get();
 		return $query->result_array();
 	}
 
@@ -305,6 +316,39 @@ class docsM extends My_Model {
 			$this->db->where('a_docs_ver_id', $values['a_docs_ver_id'])
 				->update('a_docs_ver', $values);
 		}
+	}
+
+	// Sets all current_version to 1 or 0
+	function set_all_current_ver($docs_id, $val) {
+		if ($val !== 0 && $val !== 1) return FALSE;
+		$this->db->where('a_docs_ver_docsid', $docs_id)
+			->update('a_docs_ver', array('a_docs_ver_current_version'=>$val));
+		if ($this->db->affected_rows() > 0) {
+			return TRUE;
+		}
+		return FALSE;
+	}
+
+	function set_current_ver($docs_id, $ver_id) {
+		$this->db->where(array('a_docs_ver_id'=>$ver_id, 'a_docs_ver_docsid'=>$docs_id))
+			->update('a_docs_ver', array('a_docs_ver_current_version'=>1));
+		if ($this->db->affected_rows() > 0) {
+			return TRUE;
+		}
+		return FALSE;
+	}
+
+	// Returns ver_id of specified docs_id
+	function get_current_ver_id($docs_id) {
+		$query = $this->db->select('a_docs_ver_id')
+			->from('a_docs_ver')
+			->where(array('a_docs_ver_docsid'=>$docs_id, 'a_docs_ver_current_version'=>1))
+			->get();
+		if ($query->num_rows() > 0) {
+			$i = $query->row_array();
+			return $i['a_docs_ver_id'];
+		}
+		return FALSE;
 	}
 
 	function insert_docs_ver($values) {
