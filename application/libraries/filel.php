@@ -1,9 +1,9 @@
 <?php
 
 class filel {
-	private $_fs = 's3';
+	private $_fs = '';
 	private $_ci = '';
-	private $_bucket = 'tcs99';
+	private $_bucket = '';
 	private $_upload_status = FALSE;
 	private $_temp_dir = '';
 	private $_temp_file = '';
@@ -15,12 +15,23 @@ class filel {
 
 		$domain = explode('.', $_SERVER['SERVER_NAME']);
 		$domain = $domain[0];
+
+		$this->_bucket = $domain . '.telcoson.net.test';
+		if ( ! $this->_get_bucket($this->_bucket)) {
+			//$this->_create_bucket($this->_bucket);
+		}
+
+		$this->_fs = 's3';
 		create_dir($_SERVER['DOCUMENT_ROOT'].'/tmp/'.$domain.'/docs/files/upload/', 0777);
 		$this->_temp_dir = $_SERVER['DOCUMENT_ROOT'].'/tmp/'.$domain.'/docs/files/upload/';
 	}
 
 	function set_fs($fs) {
 		$this->_fs = $fs; return $this;
+	}
+
+	function set_bucket($bucket) {
+		$this->_bucket = $bucket; return this;
 	}
 
 	function read($filepath) {
@@ -112,6 +123,20 @@ class filel {
 			log_message('debug', 'Ver id cannot be empty');
 			return FALSE;
 		}
+	}
+
+	private function _get_bucket(){
+		if (($contents = S3::getBucket($this->_bucket)) !== false) {
+			return TRUE;
+		}
+		return FALSE;
+	}
+
+	private function _create_bucket() {
+		if (S3::putBucket($this->_bucket, S3::ACL_PRIVATE)) {
+			return TRUE;
+		}
+		return FALSE;
 	}
 
 	/* Unused, to delete by path

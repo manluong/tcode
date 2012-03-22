@@ -4,13 +4,23 @@ class Docs extends MY_Controller {
 	private $_views_data, $_dir_path = array();
 	private $_upload_status = FALSE;
 	private $_temp_dir = '';
+	private $_bucket = '';
 
 	function __construct() {
 		parent::__construct();
 		$this->load->library('fileL');
+		$this->load->library('CommentsL');
+		$this->_bucket = $this->domain .'.telcoson.net.test';
+		if ( ! $this->_get_bucket($this->_bucket)) {
+			if ($this->_create_bucket($this->_bucket)) {
+				log_message('debug', 'Created bucket '.$this->_bucket);
+			} else {
+				log_message('debug', 'Failed to create bucket ' . $this->_bucket);
+			}
+		}
+
 		$this->load->model('DocsM');
 		$this->_temp_dir = $_SERVER['DOCUMENT_ROOT'].'/tmp/'.$this->domain.'/docs/files/';
-		$this->_bucket = 'tcs99';
 
 		$this->_views_data['folder_icon'] = '<img src="/resources/template/'.get_template().'/images/icons/16/folder-small-horizontal.png">';
 		$this->_views_data['docs_icon'] = '<img src="/resources/template/'.get_template().'/images/icons/16/document-small.png">';
@@ -18,6 +28,10 @@ class Docs extends MY_Controller {
 		$this->_views_data['cross_icon'] = '<img src="/resources/template/'.get_template().'/images/icons/16/cross-circle.png" id="cross-icon">';
 		$this->_views_data['loader_icon'] = '<img src="/resources/template/'.get_template().'/images/ajax-loader.gif" style="display:none;" id="loader-icon">';
 		$this->_views_data['error_icon'] = '<img src="/resources/template/'.get_template().'/images/icons/16/exclamation-red.png" style="display:none;" id="error-icon">';
+	}
+
+	function set_bucket($bucket) {
+		$this->_bucket = $bucket; return this;
 	}
 
 	function ajax_create_folder() {
@@ -31,7 +45,7 @@ class Docs extends MY_Controller {
 	private function _create_folder($id, $cardid, $name) {
 		//dirpath finds the full directory patht to update
 		if ($name === 'root') {
-			$path = '/';
+			$path = '/'.$this->domain;
 		} else {
 			$_dirpath = $this->DocsM->get_dirpath_dir($id);
 			$path = $this->format_dirpath($_dirpath['a_docs_dir_dirpath'], $name);
@@ -289,13 +303,16 @@ class Docs extends MY_Controller {
 		if ($this->_upload_status) {
 			$values = array(
 				'a_docs_ver_docsid' => $this->url['id_plain'],
+				'a_docs_ver_uploadvia' => 'web',
 				'a_docs_ver_filename' => $filename,
 				'a_docs_ver_stamp'=> get_current_stamp(),
 				'a_docs_ver_filesize' => $_FILES['file']['size'],
 				'a_docs_ver_cardid' => $this->UserM->info['cardid'],
 				'a_docs_ver_mime'=> $_FILES['file']['type'],
+				'a_docs_ver_current_version' => 1,
 			);
 			$this->rename_old_ver($dirpath, $this->url['id_plain']);
+			$this->DocsM->set_all_current_ver($this->url['id_plain'], 0);
 			$this->DocsM->insert_docs_ver($values);
 			$this->output->set_content_type('application/json');
 			$this->output->set_output(json_encode(array('success'=>'1')));
@@ -379,6 +396,7 @@ class Docs extends MY_Controller {
 			$values['a_docs_ver_uploadvia'] = 'web';
 			$values['a_docs_ver_filesize'] = $_FILES['file']['size'];
 			$values['a_docs_ver_mime'] = $_FILES['file']['type'];
+			$values['a_docs_ver_current_version'] = 1;
 			$this->DocsM->insert_docs($values);exit();
 		}
 		$this->output->set_header('HTTP/1.1 500');
@@ -485,24 +503,29 @@ class Docs extends MY_Controller {
 				}
 			}
 		}
+
 		$data = array();
 		$vars['url'] = $this->url;
 		$vars['page'] = '/'.get_template().'/docs/docs_view_html';
 		$data['html'] = $this->load->view('/'.get_template().'/docs/docs_view',$vars,TRUE);
 		$data['isoutput'] = 1;
 		$data['isdiv'] = 1;
+
 		return($data);
 	}
 
 	function update_docs_title() {
-		if ($this->input->get('title') && $this->input->get('id')) {
-			$data = array('a_docs_displayname' => $title);
-			if ($this->DocsM->update_docs_display_name($data, $this->input->get('id'))) {
-				$this->output->set_content_type('application/json')
-					->set_output(json_encode(array('message' => 'Title changed')));
-			}
+		// /docs/update_docs_title/:docs_id/title
+		if ($this->input->post('title')) {
+			$i = $this->DocsM->update_docs_display_name($this->input->post('title'), $this->url['id_plain']);
+			$this->output->set_content_type('application/json');
+			($i)
+			? $this->output->set_output(json_encode(array('success'=>1)))
+			: $this->output->set_output(json_encode(array('success'=>0)));
+		} else {
+			log_message('debug', 'Missing title parameter');
 		}
-		$this->output->set_status_header('400');exit();
+
 	}
 
 
@@ -632,6 +655,21 @@ class Docs extends MY_Controller {
 		}
 
 	}
+
+	private function _get_bucket(){
+		if (($contents = S3::getBucket($this->_bucket)) !== false) {
+			return TRUE;
+		}
+		return FALSE;
+	}
+
+	private function _create_bucket() {
+		if (S3::putBucket($this->_bucket, S3::ACL_PRIVATE, 'ap-southeast-1')) {
+			return TRUE;
+		}
+		return FALSE;
+	}
+
 	/** Old functions for Flexpaper flash **/
 	/*
 	case 'application/pdf':
@@ -746,9 +784,8 @@ class Docs extends MY_Controller {
 
 	/** Test functions **/
 	function test() {
-		//$i = $this->DocsM->get_docs(1);
-		//$i = $this->DocsM->set_all_current_ver(2,0);
-		$i = $this->DocsM->set_current_ver(2, 2);
+		print $this->_bucket;
+		$i = S3::deleteBucket($this->_bucket);
 		var_dump($i);
 		die();
 	}

@@ -24,7 +24,7 @@ class EmailL {
 	private $_temp_dir = '';
 	private $_api_user = 'tcsteam'; // sendgrid
 	private $_api_key = 'express08)*'; // sendgrid
-	private $_bucket = 'tcs99';
+	private $_bucket = '';
 
 	private $_query_array = array();
 
@@ -37,6 +37,10 @@ class EmailL {
 
 		$domain = explode('.', $_SERVER['SERVER_NAME']);
 		$domain = $domain[0];
+		$this->_bucket = $domain . '.telcoson.net.test';
+		if ( ! $this->_get_bucket($this->_bucket)) {
+			//$this->_create_bucket($this->_bucket);
+		}
 		create_dir($_SERVER['DOCUMENT_ROOT'].'/tmp/'.$domain.'/', 0777);
 		$this->_temp_dir = $_SERVER['DOCUMENT_ROOT'].'/tmp/'.$domain.'/';
 	}
@@ -56,6 +60,10 @@ class EmailL {
 	 * @param from				To overwrite email_addresssetting and email_generalsetting
 	 * @param fromname			To overwrite email_addresssetting and email_generalsetting
 	 */
+	function set_bucket($bucket) {
+		$this->_bucket = $bucket; return this;
+	}
+
 	function set_type($type) {
 		$this->_type = $type;
 		return $this;
@@ -404,5 +412,19 @@ class EmailL {
 				log_message('error', 'Email attachement upload failed');
 			}
 		}
+	}
+
+	private function _get_bucket(){
+		if (($contents = S3::getBucket($this->_bucket)) !== false) {
+			return TRUE;
+		}
+		return FALSE;
+	}
+
+	private function _create_bucket() {
+		if (S3::putBucket($this->_bucket, S3::ACL_PRIVATE)) {
+			return TRUE;
+		}
+		return FALSE;
 	}
 }

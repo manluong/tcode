@@ -125,6 +125,7 @@ class docsM extends My_Model {
 		return $query->result_array();
 	}
 
+	/* Old version where it detects latest a_docs_ver_id as the current version
 	// Used in preview screen
 	// Returns details of latest version of doc
 	function get_docs_detail($docs_id) {
@@ -135,6 +136,17 @@ class docsM extends My_Model {
 			->where('a_docs_ver_docsid', $docs_id)
 			->order_by('a_docs_ver_id', 'desc')
 			->group_by('a_docs_ver_id')
+			->get();
+		return $query->row_array();
+	}*/
+	//Used in preview screen
+	// Returns details of latest version of doc
+	function get_docs_detail($docs_id) {
+		$query = $this->db->select()
+			->from('a_docs')
+			->join('a_docs_ver', 'a_docs.a_docs_id = a_docs_ver.a_docs_ver_docsid')
+			->join('a_docs_dir', 'a_docs.a_docs_parentid = a_docs_dir.a_docs_dir_docs_id')
+			->where(array('a_docs_ver_docsid'=>$docs_id, 'a_docs_ver_current_version'=>1))
 			->get();
 		return $query->row_array();
 	}
@@ -365,15 +377,19 @@ class docsM extends My_Model {
 			'a_docs_ver_preview' => isset($values['a_docs_ver_preview']) ? $values['a_docs_ver_preview'] : '',
 			'a_docs_ver_encrypt' => isset($values['enca_docs_ver_encryptrypt']) ? $values['a_docs_ver_encrypt'] : '',
 			'a_docs_ver_encryptkeytype' => isset($values['a_docs_ver_encryptkeytype']) ? $values['a_docs_ver_encryptkeytype'] : '',
+			'a_docs_ver_current_version' => isset($values['a_docs_ver_current_version']) ? $values['a_docs_ver_current_version'] : '',
 		);
 		$this->db->insert('a_docs_ver', $data);
 		return;
 	}
 
-	function update_docs_display_name($title, $id) {
-		$this->db->where('a_docs_id', $id)
-			->update('a_docs',$data);
-		return $this->db->affected_rows();
+	function update_docs_display_name($title, $docs_id) {
+		$this->db->where('a_docs_id', $docs_id)
+			->update('a_docs',array('a_docs_displayname'=>$title));
+		if ($this->db->affected_rows() > 0) {
+			return TRUE;
+		}
+		return FALSE;
 	}
 
 	function get_all_versions($docs_id) {
