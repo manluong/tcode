@@ -1,11 +1,27 @@
 <script>
 	$(document).ready(function() {
 		$('#directory_contents').dataTable({
-				"bProcessing": true,
+				"bDestory": true,
 				"sAjaxSource": "/docs/get_dir_contents/<?php echo $url['id_encrypted']; ?>/v",
-				"sDom": "<'row'<'span8'l><'span8'f>r>t<'row'<'span8'i><'span8'p>>",
+				"sDom": "<<'pull-right'p>>t<<'pull-right'p>li>",
 				"sPaginationType": "bootstrap",
-				"bJQueryUI": true
+				"oLanguage": {
+					"sSearch" : "<div class=\"input-prepend\"><span class=\"add-on\"><i class=\"icon-search\"></i></span></i>_INPUT_</div>",
+					"sInfo": "Showing _START_ to _END_ of _TOTAL_",
+					"sLengthMenu": "_MENU_ Rows per Page",
+					"sInfoFiltered": " - filtering from _MAX_ records",
+					"oPaginate": {
+						"sPrevious": "Previous",
+						"sNext": "Next"
+					},
+					"sLengthMenu": '<select>'+
+					'<option value="10">10</option>'+
+					'<option value="20">20</option>'+
+					'<option value="30">30</option>'+
+					'<option value="40">40</option>'+
+					'<option value="50">50</option>'+
+					'<option value="-1">All</option>'+
+					'</select> Rows'}
 		});
 
 		$("#uploader").pluploadQueue({
@@ -36,11 +52,26 @@
 				FileUploaded: function() {
 					$('#directory_contents').dataTable({
 							"bDestroy": true,
-							"bProcessing": true,
 							"sAjaxSource": "/docs/get_dir_contents/<?php echo $url['id_encrypted']; ?>/v",
-							"sDom": "<'row'<'span8'l><'span8'f>r>t<'row'<'span8'i><'span8'p>>",
+							"sDom": "<<'pull-right'p>f>t<<'pull-right'p>i>",
 							"sPaginationType": "bootstrap",
-							"bJQueryUI": true
+							"oLanguage": {
+								"sSearch" : "<div class=\"input-prepend\"><span class=\"add-on\"><i class=\"icon-search\"></i></span></i>_INPUT_</div>",
+								"sInfo": "Showing _START_ to _END_ of _TOTAL_",
+								"sLengthMenu": "_MENU_ Rows per Page",
+								"sInfoFiltered": " - filtering from _MAX_ records",
+								"oPaginate": {
+									"sPrevious": "Previous",
+									"sNext": "Next"
+								},
+								"sLengthMenu": '<select>'+
+								'<option value="10">10</option>'+
+								'<option value="20">20</option>'+
+								'<option value="30">30</option>'+
+								'<option value="40">40</option>'+
+								'<option value="50">50</option>'+
+								'<option value="-1">All</option>'+
+								'</select> Rows'}
 					});
 				}
 			}

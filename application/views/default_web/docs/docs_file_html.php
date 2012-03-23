@@ -52,6 +52,14 @@
 						<li><a href="#"><i class="icon-pencil"></i> Permission</a></li>
 						</ul>
 					</div>
+					<div class="alert alert-block alert-error" style="display:none;">
+						<h4>Delete All!</h4>
+						<p>This action will delete all versions of this document and cannot be undone!</p>
+						<p>
+							<a class="confirm-delete btn btn-danger">Confirm Delete</a>
+							<a class="cancel-delete btn">Cancel</a>
+						</p>
+					</div>
 				</td>
 				</tr>
 				</tbody>
@@ -163,10 +171,10 @@ $(document).ready(function () {
 				}
 
 				$('#versions').dataTable({
-					"bProcessing" : true,
+					"bDestroy" : true,
 					"bRetrieve" : true,
 					"aaData": aaData,
-					"sDom": "<'row'<'span8'l><'span8'f>r>t<'row'<'span8'i><'span8'p>>",
+					"sDom": "<<'pull-right'p>f>t<<'pull-right'p>li>",
 					"sPaginationType": "bootstrap",
 					"bJQueryUI": true,
 					"oLanguage": {
@@ -261,7 +269,14 @@ $(document).ready(function () {
 				});
 
 				$('#delete').on('click', function () {
+					$('.alert').show();
+				});
+				$('.cancel-delete').on('click', function() {
+					$('.alert').hide();
+				});
+				$('.confirm-delete').on('click', function() {
 					$.post('/docs/delete_all_docs/<?php echo $url['id_encrypted']; ?>').success(function() {
+						$('.alert').hide();
 						//window.location = '/docs';
 					});
 				});
