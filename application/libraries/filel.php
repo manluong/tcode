@@ -16,7 +16,7 @@ class filel {
 		$domain = explode('.', $_SERVER['SERVER_NAME']);
 		$domain = $domain[0];
 
-		$this->_bucket = $domain . '.telcoson.net.test';
+		$this->_bucket = $domain . '-telcoson-net-test';
 		if ( ! $this->_get_bucket($this->_bucket)) {
 			//$this->_create_bucket($this->_bucket);
 		}

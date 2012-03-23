@@ -10,7 +10,7 @@ class Docs extends MY_Controller {
 		parent::__construct();
 		$this->load->library('fileL');
 		$this->load->library('CommentsL');
-		$this->_bucket = $this->domain .'.telcoson.net.test';
+		$this->_bucket = $this->domain .'-telcoson-net-test';
 		if ( ! $this->_get_bucket($this->_bucket)) {
 			if ($this->_create_bucket($this->_bucket)) {
 				log_message('debug', 'Created bucket '.$this->_bucket);
