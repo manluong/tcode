@@ -70,7 +70,7 @@ class Callback_sendgrid extends MY_Controller {
 						$result_arr[$k[0]] = $v[0];
 					}
 				}
-				if ( ! $key_exists) $result_arr = $combined_arr;
+				if ( ! $key_exists) array_push($result_arr, $combined_arr);
 				unset($k);
 				unset($v);
 				$key_exists = FALSE;
