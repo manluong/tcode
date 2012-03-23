@@ -2,9 +2,9 @@
 	if (!isset($appmenu_gp)) $appmenu_gp = '';
 
 	if (isset($style)) {
-		echo '<div id="appmenu_',$appmenu_gp,'" class="',$style,'">';
+		echo '<div id="appmenu_',$appmenu_gp,'" class="',$style,' pull-left">';
 	} else {
-		echo '<div id="appmenu_',$appmenu_gp,'" class="appsubmenu">';
+		echo '<div id="appmenu_',$appmenu_gp,'" class="appsubmenu pull-left">';
 	}
 ?>
 

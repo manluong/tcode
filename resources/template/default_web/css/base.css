@@ -251,8 +251,9 @@ body {
 	background:#eee url('../img/gd-shade-td.png') repeat-x;
 	position:fixed;
 	bottom:0;
+	left:221px;
+	right:0;
 	height:30px;
-	width:100%;
 	z-index:10;
 
 	padding-left:10px;

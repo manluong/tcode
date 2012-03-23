@@ -8,6 +8,9 @@ function hide_sidebar() {
 	$('#content-container').animate({
 		left:'-=170px'
 	},300);
+	$('#content-footer').animate({
+		left:'-=170px'
+	},300);
 
 	$('#sidebar-footer').animate({
 		width:'-=170px'
@@ -43,6 +46,9 @@ function show_sidebar() {
 	},300);
 
 	$('#content-container').animate({
+		left:'+=170px'
+	},300);
+	$('#content-footer').animate({
 		left:'+=170px'
 	},300);
 
