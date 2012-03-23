@@ -318,13 +318,8 @@ class LogM extends CI_Model {
 
 		$query = $this->db->get();
 
-		$i = $query->result_array();
-		if (empty($i)) {
-			return 'No events';
-		}
-
 		$result = array();
-		foreach ($i as $event) {
+		foreach ($query->result_array() as $event) {
 			$furi = '/'.$event['app'].'/'.$event['action'].'/'.$event['app_data_id'].'/'.$event['subaction'];
 			if ($event['type'] == 'text') {
 				$msg = $event['msg'];
@@ -350,7 +345,6 @@ class LogM extends CI_Model {
 			$result[$event['id']]['created_stamp_iso'] = parse_user_date($event['stamp'], 'ISO');
 			$result[$event['id']]['lastupdate'] = $event['lastupdate'];
 		}
-
 
 		return $result;
 	}
