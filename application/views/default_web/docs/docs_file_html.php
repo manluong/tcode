@@ -14,8 +14,6 @@
 			</div>
 		</div>
 		<div class="span4">
-			<div id="tree"></div>
-
 			<div class="info">
 				<h2>File Info</h2>
 				<table class="table">
@@ -52,6 +50,14 @@
 						<li><a href="#"><i class="icon-pencil"></i> Permission</a></li>
 						</ul>
 					</div>
+
+					<div id="tree" class="alert">
+						Move<br>
+						<select id="dir_select"></select>
+						<a class="btn btn-danger">Move</a>
+						<a class="btn btn-danger">Cancel</a>
+					</div>
+
 					<div class="alert alert-block alert-error" style="display:none;">
 						<h4>Delete All!</h4>
 						<p>This action will delete all versions of this document and cannot be undone!</p>
@@ -240,8 +246,8 @@ $(document).ready(function () {
 				uploader.init();
 			});
 
-
 			$.get('/docs/json_tree/1/v').success(function (data) {
+				/* old tree
 				var html = '';
 				html += '<ul>';
 				html += '<li class="tree-folders">/<button class="btn-primary move" folder_id="1">Move</button></li>';
@@ -259,9 +265,41 @@ $(document).ready(function () {
 					}
 					html += '</ul></ul>';
 					return html;
+				}*/
+				console.log(data);
+				function hypen(depth) {
+					var hypen = '';
+					for(var i=0;i<depth*2;i++) {
+						hypen += '-';
+					}
+					return hypen;
 				}
+				var html = '';
+				function generate_html(data, index){
+					for(var i=0;i<data.length;i++) {
+						html += '<option value="'+data[i]['a_docs_id']+'">'+data[i]['a_docs_displayname']+'</option>';
+						if (data[i].hasOwnProperty('child')) {
+							html += generate_child_html(html, data[i]['child'], 0);
+						}
+					}
+					return html;
+				}
+				function generate_child_html(html, data, depth) {
+					depth++;
+					for(var i=0;i<data.length;i++) {
+						html += '<option value="'+data[i]['a_docs_id']+'">'+hypen(depth) + data[i]['a_docs_displayname']+'</option>';
 
-				$('#tree').html(generate_html(data, 0));
+						if (data[i].hasOwnProperty('child')) {
+
+							generate_child_html(html, data[i]['child'], depth);
+						}
+					}
+					console.log(html);
+					return html;
+				}
+				//old tree $('#tree').html(generate_html(data, 0));
+				$('#dir_select').html(generate_html(data,0));
+
 
 				$('.move').on('click', function () {
 					$.post('/docs/move_file/<?php echo $url['id_encrypted']; ?>/',{folder_id: $(this).attr('folder_id')})

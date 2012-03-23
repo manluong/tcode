@@ -272,11 +272,12 @@ class EmailL {
 
 		$this->_query_str = $to_str;
 		$this->_query_str .= '&x-smtpapi='.$this->_ci->smtpapiheaderl->asJSON();
+		/*
 		if ( ! empty($this->_files)) {
 			foreach ($this->_files as $file) {
 				$this->_query_str .= '&files['.$file['name'].']=@'.$file['path'];
 			}
-		}
+		}*/
 		$this->_query_str .= '&subject='.$this->_subject.
 			'&from='.$this->_from.
 			'&fromname='.$this->_fromname.
@@ -298,13 +299,13 @@ class EmailL {
 		}
 
 		$data = array(
-			'api_user' => 'tcsteam',
-			'api_key' => 'express08)*',
-			'to' => 'noone@telcoson.com',
-			'bcc' => 'roy.wong.80@gmail.com',
+			'api_user' => $this->_api_user,
+			'api_key' => $this->_api_key,
+			'to' => $this->_to,
+			'bcc' => $this->_bcc,
 			'x-smtpapi' => $this->_ci->smtpapiheaderl->asJSON(),
 			'subject' => $this->_subject,
-			'html' => 'dd',
+			'html' => $this->_content,
 			'from' => $this->_from,
 		);
 		foreach($this->_files as $file) {
@@ -363,7 +364,6 @@ class EmailL {
 			$i = curl_exec($session);
 			curl_close($session);
 		}
-
 		$i = json_decode($i, true);
 		$this->log_send_response($i);
 		return ($i['message'] === 'success') ? TRUE : FALSE;

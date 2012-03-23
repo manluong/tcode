@@ -63,7 +63,7 @@ class File extends CI_Controller{
 	}
 
 	function delete() {
-		var_dump($this->filel->delete('/vi_cheat_sheet.pdf'));
+		var_dump($this->filel->delete('/ironman.jpg'));
 		/*
 		if ($this->input->post('path')) {
 			$this->filel->delete($this->_filepath);
@@ -116,7 +116,7 @@ class File extends CI_Controller{
 	}
 
 	function delall() {
-		$docs_id = 5;
+		$docs_id = 2;
 		$all = '1';
 		$i = $this->filel->del_by_id($docs_id, $all);
 		var_dump($i);

@@ -105,7 +105,7 @@ class filel {
 			$this->_ci->DocsM->delete_all_docs($docs_id);
 			return $d;
 		} elseif ($all === '0' && $ver_id !== '') {
-			$version = $this->_ci->DocsM->get_docs_ver_detail($ver_id);
+			$version = $this->_ci->DocsM->get_docs_ver_detail($docs_id, $ver_id);
 			if (S3::deleteObject($this->_bucket, $this->_format_dirpath($path, $version['a_docs_ver_filename']))) {
 				log_message('debug', 'Docs: Deleted '. $this->_format_dirpath($path, $version['a_docs_ver_filename']));
 				$this->_ci->DocsM->delete_single_ver($docs_id, $ver_id);
