@@ -65,9 +65,11 @@ class Callback_sendgrid extends MY_Controller {
 				if ( ! empty($result_arr)) {
 					log_message('debug', 'Result array = '.print_r($result_arr, true));
 					foreach ($result_arr as $key => &$val) {
-						if ($key === $k[0]) $key_exists = TRUE;
-						// Replace previous status
-						$result_arr[$k[0]] = $v[0];
+						if ($key === $k[0]) {
+							$key_exists = TRUE;
+							// Replace previous status
+							$result_arr[$k[0]] = $v[0];
+						}
 					}
 				}
 				if ( ! $key_exists) array_push($result_arr, $combined_arr);
