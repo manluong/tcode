@@ -63,6 +63,7 @@ class Callback_sendgrid extends MY_Controller {
 				log_message('debug', '$combined_arr = '.print_r($combined_arr,true));
 				// Before pushing, check if key already exists
 				if ( ! empty($result_arr)) {
+					log_message('debug', 'Result array = '.print_r($result_arr, true));
 					foreach ($result_arr as $key => &$val) {
 						if ($key === $k[0]) $key_exists = TRUE;
 						// Replace previous status
