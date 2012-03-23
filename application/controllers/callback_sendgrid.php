@@ -70,7 +70,7 @@ class Callback_sendgrid extends MY_Controller {
 							if ($key === $k[0]) {
 								$key_exists = TRUE;
 								// Replace previous status
-								$result_arr[$i][$k[0]] = $v[0];
+								$email[$k[0]] = $v[0];
 								$i++;
 							}
 						}
