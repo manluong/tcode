@@ -266,7 +266,9 @@ class EmailL {
 
 		if ( ! empty($this->_bcc[0])) {
 			for($i=0;$i<count($this->_bcc);$i++) {
-				$to_str .= '&bcc[]='.$this->_bcc[$i];
+				if ($this->_bcc[$i] !== '') {
+					$to_str .= '&bcc[]='.$this->_bcc[$i];
+				}
 			}
 		}
 

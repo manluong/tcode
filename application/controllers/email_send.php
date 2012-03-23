@@ -36,7 +36,7 @@ class Email_send extends MY_Controller {
 			->set_bcc(array('roy.wong.80@gmail.com'))
             ->set_template('testplate')
             ->set_subject('test')
-            ->set_attachment_id(array(2=>'',3=>'')) // docs_id => ver_id or just docs_id => ''
+            ->set_attachment_id(array(2=>'')) // docs_id => ver_id or just docs_id => ''
             ->set_replace_value(array('keys'=>array('%name%', '%result%'), 'values'=>array(array('Roy'), array('Success!!'))))
             ->set_from('docs@telcoson.com')
             ->set_fromname('Docs');

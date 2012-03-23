@@ -44,7 +44,7 @@ class Callback_sendgrid extends MY_Controller {
 		if ($_SERVER['HTTP_USER_AGENT'] === 'SendGrid Event API') {
 			// Split response into individual json_result
 			preg_match_all('/\{.*\}/', $result, $json_result);
-
+			log_message('debug', 'JSON_result: '.print_r($json_result,true));
 			// Get exisiting result array
 			$i = json_decode($json_result[0][0],true);
 			$email_id = $i['email_id'];
