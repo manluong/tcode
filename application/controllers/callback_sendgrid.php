@@ -67,6 +67,10 @@ class Callback_sendgrid extends MY_Controller {
 					$i = 0;
 					foreach($result_arr as &$email) {
 						foreach ($email as $key => &$val) {
+							log_message('debug', 'key = '.$key);
+							log_message('debug', 'val = '.$val);
+							log_message('debug', 'k[0] = '.$k[0]);
+							log_message('debug', 'v[0] = '.$v[0]);
 							if ($key === $k[0]) {
 								$key_exists = TRUE;
 								// Replace previous status
