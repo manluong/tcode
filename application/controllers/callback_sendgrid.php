@@ -65,7 +65,7 @@ class Callback_sendgrid extends MY_Controller {
 				if ( ! empty($result_arr)) {
 					log_message('debug', 'Result array = '.print_r($result_arr, true));
 					$i = 0;
-					foreach($result_arr as $email) {
+					foreach($result_arr as &$email) {
 						foreach ($email as $key => &$val) {
 							if ($key === $k[0]) {
 								$key_exists = TRUE;
