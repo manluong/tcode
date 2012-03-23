@@ -350,7 +350,12 @@ class Docs extends MY_Controller {
 			log_message('debug', 'Docs: Error uploading File: '. $filename);exit();
 		}
 		$this->remove_old_file($ver_id, $_dirpath);
-		$this->DocsM->update_docs_ver($values);exit();
+		$this->DocsM->update_docs_ver($values);
+		$title = $this->_get_filename_wo_extension($filename);
+		$i = $this->DocsM->update_docs_display_name($title, $docs_id);
+		($i)
+		?log_message('debug', 'Updated display name')
+		:log_message('debug', 'Update display name failed');
 	}
 
 	function remove_old_file ($ver_id, $dirpath) {
@@ -392,15 +397,22 @@ class Docs extends MY_Controller {
 		$this->s3_put_object($dirpath, $filename);
 		if ($this->_upload_status) {
 			$values['a_docs_parentid'] = $folder_id;
+			$values['a_docs_displayname'] = $this->_get_filename_wo_extension($filename);
 			$values['a_docs_ver_filename'] = $filename;
 			$values['a_docs_ver_uploadvia'] = 'web';
 			$values['a_docs_ver_filesize'] = $_FILES['file']['size'];
 			$values['a_docs_ver_mime'] = $_FILES['file']['type'];
 			$values['a_docs_ver_current_version'] = 1;
+
 			$this->DocsM->insert_docs($values);exit();
 		}
 		$this->output->set_header('HTTP/1.1 500');
 		log_message('debug',"Docs: Upload failed.\n ".'Content-type:'.$contentType."\n");exit();
+	}
+
+	function _get_filename_wo_extension($filename) {
+		// Assuming all files are .xxx extension
+		return substr($filename, 0, -4);
 	}
 
 	function s3_put_object(&$dirpath, &$filename) {
@@ -784,8 +796,7 @@ class Docs extends MY_Controller {
 
 	/** Test functions **/
 	function test() {
-		print $this->_bucket;
-		$i = S3::deleteBucket($this->_bucket);
+		$i = $this->_get_filename_wo_extension('something.else.jpg');
 		var_dump($i);
 		die();
 	}

@@ -11,7 +11,6 @@
 						<div id="documentViewer" class="viewer"></div>
 					</div>
 				</div>
-
 			</div>
 		</div>
 		<div class="span4">
@@ -95,7 +94,7 @@ $(document).ready(function () {
 
 				// Sets display
 				if (data['docs_details']['a_docs_ver_mime'] === 'application/pdf') {
-					$('.content').html('\
+					$('.preview-content .content').html('\
 						<div id="viewerPlaceHolder" style="width:660px;height:553px;display:block;position:relative;">\
 							<div id="documentViewer" class="viewer"></div>\
 						</div>\
@@ -138,7 +137,7 @@ $(document).ready(function () {
 					|| data['docs_details']['a_docs_ver_mime'] === 'image/jpeg'
 					|| data['docs_details']['a_docs_ver_mime'] === 'image/gif'
 					) {
-					$('.content').html('\
+					$('.preview-content .content').html('\
 							<img src="" id="image_placeholder">\
 						');
 
