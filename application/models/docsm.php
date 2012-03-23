@@ -146,17 +146,19 @@ class docsM extends My_Model {
 			->from('a_docs')
 			->join('a_docs_ver', 'a_docs.a_docs_id = a_docs_ver.a_docs_ver_docsid')
 			->join('a_docs_dir', 'a_docs.a_docs_parentid = a_docs_dir.a_docs_dir_docs_id')
+			->join('card', 'a_docs_ver.a_docs_ver_cardid = card.card_id')
 			->where(array('a_docs_ver_docsid'=>$docs_id, 'a_docs_ver_current_version'=>1))
 			->get();
 		return $query->row_array();
 	}
 
-	function get_docs_ver_detail($ver_id) {
+	function get_docs_ver_detail($docs_id, $ver_id) {
 		$query = $this->db->select()
 			->from('a_docs')
 			->join('a_docs_ver', 'a_docs_ver.a_docs_ver_docsid = a_docs.a_docs_id')
-			->join ('a_docs_dir', 'a_docs_dir.a_docs_dir_docs_id = a_docs.a_docs_parentid')
-			->where('a_docs_ver_id', $ver_id)
+			->join('a_docs_dir', 'a_docs_dir.a_docs_dir_docs_id = a_docs.a_docs_parentid')
+			->join('card', 'a_docs_ver.a_docs_ver_cardid = card.card_id')
+			->where(array('a_docs_ver_id'=> $ver_id, 'a_docs_ver_docsid'=>$docs_id))
 			->limit(1)
 			->get();
 		return $query->row_array();

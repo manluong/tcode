@@ -218,7 +218,7 @@ class Docs extends MY_Controller {
 	 */
 	function get_file_details() {
 		if ($this->uri->segment(5)) {
-			$docs_details = $this->DocsM->get_docs_ver_detail($this->uri->segment(5,0));
+			$docs_details = $this->DocsM->get_docs_ver_detail($this->url['id_plain'], $this->uri->segment(5,0));
 		} else {
 			$docs_details = $this->DocsM->get_docs_detail($this->url['id_plain']);
 		}

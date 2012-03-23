@@ -163,7 +163,7 @@ $(document).ready(function () {
 				$('.filename').html(data['docs_details']['a_docs_ver_filename']);
 				$('.filesize').html(data['docs_details']['a_docs_ver_filesize']);
 				$('.date').html(data['docs_details']['a_docs_ver_stamp']);
-				$('.user-name').html(data['docs_details']['a_docs_ver_filename']);
+				$('.user-name').html(data['docs_details']['card_nick']);
 
 				var aaData = Array();
 				for (var i=0;i<data['versions'].length;i++) {
