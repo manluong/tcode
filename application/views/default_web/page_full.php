@@ -61,6 +61,7 @@
 			</div>
 			<div id="content-footer">
 				<?=$app_menu?>
+				<?php if (APP_ROLE == 'TBOSS') echo '<span class="pull-right">',ENVIRONTMENT,' - ',APP_ROLE,'</span>'; ?>
 			</div>
 			<?=$jsonload?>
 		</div>
