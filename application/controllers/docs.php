@@ -323,9 +323,10 @@ class Docs extends MY_Controller {
 
 	function rename_old_ver(&$dirpath, &$docs_id) {
 		$ver_id = $this->DocsM->get_docs_detail($docs_id);
-		$ver_detail = $this->DocsM->get_docs_ver_detail($ver_id['a_docs_ver_id']);
+		$ver_detail = $this->DocsM->get_docs_ver_detail($docs_id, $ver_id['a_docs_ver_id']);
 		$values['a_docs_ver_id'] = $ver_detail['a_docs_ver_id'];
-		$values['a_docs_ver_filename'] = $this->check_filename('._'.$ver_detail['a_docs_ver_filename']);
+		$filename = '._'.$ver_detail['a_docs_ver_filename'];
+		$values['a_docs_ver_filename'] = $this->check_filename($filename);
 
 		if (S3::copyObject($this->_bucket, $this->format_dirpath($dirpath['a_docs_dir_dirpath'],$ver_detail['a_docs_ver_filename']),
 			$this->_bucket, $this->format_dirpath($dirpath['a_docs_dir_dirpath'], $values['a_docs_ver_filename']), S3::ACL_PRIVATE)) {
