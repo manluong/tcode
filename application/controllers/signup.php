@@ -5,12 +5,12 @@ class Signup extends MY_Controller {
 	function __construct() {
 		parent::__construct();
 
-		//if (APP_ROLE!='TBOSS') redirect('http://my.8force.net/register');
+		//if (APP_ROLE!='TBOSS') redirect('http://my.8force.net/signup');
 	}
 
 	function index() {
 		$data = array();
-		$data['html'] = $this->load->view(get_template().'/register/index', '', TRUE);
+		$data['html'] = $this->load->view(get_template().'/signup/index', '', TRUE);
 		$data['outputdiv'] = 1;
 		$data['isdiv'] = TRUE;
 

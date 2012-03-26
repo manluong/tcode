@@ -1,4 +1,4 @@
-<?=form_open('register/step2')?>
+<?=form_open('signup/step2')?>
 	<fieldset>
 		<legend>Sign Up</legend>
 
