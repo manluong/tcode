@@ -1,10 +1,11 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Register extends MY_Controller {
+class Signup extends MY_Controller {
 
 	function __construct() {
 		parent::__construct();
 
+		//if (APP_ROLE!='TBOSS') redirect('http://my.8force.net/register');
 	}
 
 	function index() {
@@ -25,30 +26,28 @@ class Register extends MY_Controller {
 	}
 
 	function step2() {
-		$name = $this->input->post('name');
-		$email = $this->input->post('email');
-		$domain = $this->input->post('domain');
-		$username = $this->input->post('username');
-		$password = $this->input->post('password');
+		$signup_info = array();
+		$signup_info['name'] = $this->input->post('name');
+		$signup_info['email'] = $this->input->post('email');
+		$signup_info['domain'] = $this->input->post('domain');
+		$signup_info['username'] = $this->input->post('username');
+		$signup_info['password'] = $this->input->post('password');
 
-		$this->load->model('RegisterM');
+		$this->load->model('SignupM');
 
-		if ($this->RegisterM->setup_account($name, $email, $domain, $username, $password)) {
-			$this->session->set_flashdata('signup_name', $name);
-			$this->session->set_flashdata('signup_domain', $domain);
-			redirect('/register/step3');
+		if ($this->SignupM->validate_details($signup_info)) {
+			$this->session->set_userdata('signup_info', $signup_info);
+			redirect('/signup/step3');
 		} else {
-			redirect('/register');
+			redirect('/signup');
 		}
 	}
 
 	function step3() {
-		$html = array(
-			'name' => $this->session->flashdata('signup_name'),
-			'domain' => $this->session->flashdata('signup_domain')
-		);
+		$signup_info = $this->session->userdata('signup_info');
+
 		$data = array();
-		$data['html'] = $this->load->view(get_template().'/register/success', $html, TRUE);
+		$data['html'] = $this->load->view(get_template().'/signup/process', $signup_info, TRUE);
 		$data['outputdiv'] = 1;
 		$data['isdiv'] = TRUE;
 
@@ -61,5 +60,15 @@ class Register extends MY_Controller {
 		$this->LayoutM->load_format();
 
 		$this->output();
+	}
+
+	function ajax_begin_setup() {
+		$signup_info = $this->session->userdata('signup_info');
+		$result = $this->SignupM->setup_account($signup_info);
+		$messages = $this->SignupM->get_messages();
+
+		$this->RespM->set_success($result)
+				->set_details($messages)
+				->output_json();
 	}
 }

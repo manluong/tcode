@@ -1,23 +1,20 @@
 <?php if (!defined('BASEPATH')) exit('No direct access allowed.');
 
-class RegisterM extends CI_Model {
+class SignupM extends CI_Model {
+	var $messages = array();
+
 	function __construct() {
 		parent::__construct();
-
-
 	}
 
 	//TODO: Setup transactions?
-	function setup_account($name, $email, $domain, $username, $password) {
-		$this->create_tenant($name, $email, $domain, $username, $password);
-		$this->create_tenant_database($domain);
-		$this->create_tenant_account($name, $email, $domain, $username, $password);
+	function setup_account($info) {
 
-		return TRUE;
-	}
+		$this->db->trans_start();
 
-	function create_tenant($name, $email, $domain, $username, $password) {
-		$name = explode(' ', $name);
+	//create a tenant record in the t_my database
+		//save card details
+		$name = explode(' ', $info['name']);
 		$data = array(
 			'card_nick' => '',
 			'card_title' => 0,
@@ -25,70 +22,70 @@ class RegisterM extends CI_Model {
 			'card_mname' => '',
 			'card_lname' => ( isset($name[1]) ) ? $name[1] : '',
 			'card_formatname' => '',
-			'card_orgname' => $domain,
+			'card_orgname' => $info['domain'],
 			'card_orgnum' => '',
 			'card_orgtitle' => '',
 			'card_timezone' => 0,
 			'card_deflang' => '',
 		);
-		$this->db->insert('card', $data);
+		if ( ! $this->db->insert('card', $data) ) $this->messages[] = 'Unable to create tenant card record.';
 		$card_id = $this->db->insert_id();
 
+		//allow login
 		$data = array(
-			'access_user_username' => $username,
+			'access_user_username' => $info['username'],
 			'access_user_cardid' => $card_id,
 			'access_user_status' => 1,
 			'access_user_datecreate' => get_current_stamp(),
 			'access_user_dateactive' => get_current_stamp(),
 		);
-		$this->db->insert('access_user', $data);
+		if ( ! $this->db->insert('access_user', $data) ) $this->messages[] = 'Unable to create tenant login record';
 		$user_id = $this->db->insert_id();
 
+		//assign to client group
 		$data = array(
 			'access_link_cardid' => $card_id,
 			'access_link_gpmaster' => 3,
 		);
-		$this->db->insert('access_link', $data);
+		if ( ! $this->db->insert('access_link', $data) ) $this->messages[] = 'Unable to assign to client group';
 
+		//create password
 		$data = array(
 			'access_p_uid' => $user_id,
 			'access_p_p' => f_password_encrypt($password),
 		);
-		$this->db->insert('access_p', $data);
-	}
+		if ( ! $this->db->insert('access_p', $data) ) $this->messages[] = 'Unable to create tenant password';
 
-	function create_tenant_database($domain) {
-		$db_name = 't_'.$domain;
+	//create database and db user accounts, grant neccessary permissions.
+		$db_name = 't_'.$info['domain'];
 
 		//create tenant's database
-		$this->db->query('CREATE DATABASE '.$db_name.';');
+		if ( ! $this->db->query('CREATE DATABASE '.$db_name.';') ) $this->messages[] = 'Unable to create database';
 
-		//copy table structure from the current database which should be t_my
-		$rs = $this->db->query('SHOW TABLES');
+		//copy table structure from the 8force_template DB
+		$rs = $this->db->query('SHOW TABLES FROM 8force_template');
 		foreach($rs->result_array() AS $r) {
-			$t = $r['Tables_in_t_my'];
-			$this->db->query("CREATE TABLE $db_name.$t LIKE t_my.$t");
+			$t = $r['Tables_in_8force_template'];
+			if ( ! $this->db->query("CREATE TABLE $db_name.$t LIKE 8force_template.$t") ) $this->messages[] = 'Unable to create db table: '.$t;
 		}
 
 		//create tenant's db user account
-		$this->db->query("CREATE USER '$db_name'@'%' IDENTIFIED BY '721hewX';");
+		if ( ! $this->db->query("CREATE USER '$db_name'@'%' IDENTIFIED BY '721hewX';")) $this->messages[] = 'Unable to create db user account';
 
 		//grant db privileges
-		$sql = "GRANT SELECT, INSERT, UPDATE, DELETE ON $db_name.* TO '$db_name'@'%' ";
-		$sql .= " WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0 ;";
-		$this->db->query($sql);
+		$sql = "GRANT SELECT, INSERT, UPDATE, DELETE ON $db_name.* TO '$db_name'@'%'";
+		$sql .= " WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0;";
+		if ( ! $this->db->query($sql) ) $this->messages[] = 'Unable to grant privileges to db';
 
 		//grant db privileges to global_setting db
-		$sql = "GRANT SELECT, INSERT, UPDATE, DELETE ON global_setting.* TO '$db_name'@'%' ";
-		$sql .= " WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0 ;";
-		$this->db->query($sql);
-	}
+		$sql = "GRANT SELECT, INSERT, UPDATE, DELETE ON global_setting.* TO '$db_name'@'%'";
+		$sql .= " WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0;";
+		if ( ! $this->db->query($sql) ) $this->messages[] = 'Unable to grant privileges to global_setting db';
 
 	//sets up tenant admin's card id and login account in the tenant's db
-	function create_tenant_account($name, $email, $domain, $username, $password) {
-		$db_name = 't_'.$domain;
+		$db_name = 't_'.$info['domain'];
 
-		$name = explode(' ', $name);
+		//save card details
 		$data = array(
 			'card_nick' => '',
 			'card_title' => 0,
@@ -102,29 +99,46 @@ class RegisterM extends CI_Model {
 			'card_timezone' => 0,
 			'card_deflang' => '',
 		);
-		$this->db->insert($db_name.'.card', $data);
+		if ( ! $this->db->insert($db_name.'.card', $data) ) $this->messages[] = 'Unable to create card in tenant\'s DB';
 		$card_id = $this->db->insert_id();
 
+		//allow login
 		$data = array(
-			'access_user_username' => $username,
+			'access_user_username' => $info['username'],
 			'access_user_cardid' => $card_id,
 			'access_user_status' => 1,
 			'access_user_datecreate' => get_current_stamp(),
 			'access_user_dateactive' => get_current_stamp(),
 		);
-		$this->db->insert($db_name.'.access_user', $data);
+		if ( ! $this->db->insert($db_name.'.access_user', $data) ) $this->messages[] = 'Unable to create login record';
 		$user_id = $this->db->insert_id();
 
+		//assign to admin group
 		$data = array(
 			'access_link_cardid' => $card_id,
 			'access_link_gpmaster' => 1,
 		);
-		$this->db->insert($db_name.'.access_link', $data);
+		if ( ! $this->db->insert($db_name.'.access_link', $data) ) $this->messages[] = 'Unable to assign to admin group';
 
+		//save password
 		$data = array(
 			'access_p_uid' => $user_id,
 			'access_p_p' => f_password_encrypt($password),
 		);
-		$this->db->insert($db_name.'.access_p', $data);
+		if ( ! $this->db->insert($db_name.'.access_p', $data) ) $this->messages[] = 'Unable to create password';
+
+		$this->db->trans_complete();
+
+		return $this->db->trans_status();
+	}
+
+	function validate_details($info) {
+		if (!isset($info['name']) || $info['name'] === FALSE || strlen($info['name'])) {
+
+		}
+	}
+
+	function get_messages() {
+		return implode('<br />', $this->messages);
 	}
 }
