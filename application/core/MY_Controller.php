@@ -170,6 +170,14 @@ class MY_Controller extends CI_Controller {
 			//if ($domain[1]!=='8force' || $domain[2]!=='net') die('There is a problem with the domain name.');
 			$this->domain = $domain[0];
 		}
+
+		//TBOSS - For internal use
+		//TSUB - Tenant software
+		if ($this->domain === 'my') {
+			define('APP_ROLE', 'TBOSS');
+		} else {
+			define('APP_ROLE', 'TSUB');
+		}
 	}
 
 	private function setup_db() {
