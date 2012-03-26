@@ -52,7 +52,7 @@ class SignupM extends CI_Model {
 		//create password
 		$data = array(
 			'access_p_uid' => $user_id,
-			'access_p_p' => f_password_encrypt($password),
+			'access_p_p' => f_password_encrypt($info['password']),
 		);
 		if ( ! $this->db->insert('access_p', $data) ) $this->messages[] = 'Unable to create tenant password';
 
@@ -123,7 +123,7 @@ class SignupM extends CI_Model {
 		//save password
 		$data = array(
 			'access_p_uid' => $user_id,
-			'access_p_p' => f_password_encrypt($password),
+			'access_p_p' => f_password_encrypt($info['password']),
 		);
 		if ( ! $this->db->insert($db_name.'.access_p', $data) ) $this->messages[] = 'Unable to create password';
 
@@ -133,9 +133,33 @@ class SignupM extends CI_Model {
 	}
 
 	function validate_details($info) {
-		if (!isset($info['name']) || $info['name'] === FALSE || strlen($info['name'])) {
+		$result = TRUE;
 
+		$fields = array('name', 'email', 'domain', 'username', 'password');
+
+		foreach($fields AS $f) {
+			if (!isset($info[$f]) || $info[$f] === FALSE || strlen($info[$f])==0) {
+				$this->messages[$f] = ucfirst($f).' must not be blank';
+				$result = FALSE;
+			}
 		}
+
+		if (!isset($this->messages['domain']) && $this->domain_exists($info['domain'])) {
+			$this->messages['domain'] = 'This domain has already been taken up.';
+			$result = FALSE;
+		}
+
+		return $result;
+	}
+
+	function domain_exists($domain) {
+		$rs = $this->db->select('card_orgname')
+				->from('card')
+				->where('card_orgname', $domain)
+				->limit(1)
+				->get();
+
+		return ( $rs->num_rows() == 1 );
 	}
 
 	function get_messages() {

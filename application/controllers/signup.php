@@ -9,8 +9,11 @@ class Signup extends MY_Controller {
 	}
 
 	function index() {
+		$html['errors'] = $this->session->flashdata('signup_errors');
+		$html['signup'] = $this->session->userdata('signup_info');
+
 		$data = array();
-		$data['html'] = $this->load->view(get_template().'/signup/index', '', TRUE);
+		$data['html'] = $this->load->view(get_template().'/signup/index', $html, TRUE);
 		$data['outputdiv'] = 1;
 		$data['isdiv'] = TRUE;
 
@@ -34,11 +37,12 @@ class Signup extends MY_Controller {
 		$signup_info['password'] = $this->input->post('password');
 
 		$this->load->model('SignupM');
+		$this->session->set_userdata('signup_info', $signup_info);
 
 		if ($this->SignupM->validate_details($signup_info)) {
-			$this->session->set_userdata('signup_info', $signup_info);
 			redirect('/signup/step3');
 		} else {
+			$this->session->set_flashdata('signup_errors', $this->SignupM->messages);
 			redirect('/signup');
 		}
 	}
@@ -64,6 +68,8 @@ class Signup extends MY_Controller {
 
 	function ajax_begin_setup() {
 		$signup_info = $this->session->userdata('signup_info');
+		$this->load->model('SignupM');
+
 		$result = $this->SignupM->setup_account($signup_info);
 		$messages = $this->SignupM->get_messages();
 

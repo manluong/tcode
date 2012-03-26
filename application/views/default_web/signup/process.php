@@ -1,8 +1,8 @@
-<div class="hide" id="process">
+<div class="hide" id="signup_process">
 	We're setting up your account now. Please hold.
 </div>
 
-<div class="hide" id="success">
+<div class="hide" id="signup_success">
 	<h3>All Done!</h3>
 	<p>Your domain is now all setup and ready to go!</p>
 	<p>You may click on the link below to begin using.</p>
@@ -11,23 +11,23 @@
 	<p>Thank you for choosing 8Force.</p>
 </div>
 
-<div class="hide" id="error">
+<div class="hide" id="signup_error">
 </div>
 
 <script>
 	$(document).ready(function() {
-		$('#process').slideDown();
+		$('#signup_process').slideDown();
 		$.get(
 			'/signup/ajax_begin_setup',
 			function(resp) {
 				if (resp.success) {
-					$('#process').slideUp();
-					$('#success').slideDown();
+					$('#signup_process').slideUp();
+					$('#signup_success').slideDown();
 				} else {
-					$('#process').slideUp();
-					$('#error').html(resp.details).slideDown();
+					$('#signup_process').slideUp();
+					$('#signup_error').html(resp.details).slideDown();
 				}
-			}
+			},'json'
 		);
 	});
 </script>
