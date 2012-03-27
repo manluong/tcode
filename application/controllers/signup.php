@@ -73,6 +73,20 @@ class Signup extends MY_Controller {
 		$result = $this->SignupM->setup_account($signup_info);
 		$messages = $this->SignupM->get_messages();
 
+		$welcome_message = '<p>You can now access your account at: <a href="http://'.$signup_info['domain'].'.8force.net/">http://'.$signup_info['domain'].'.8force.net/</a></p>';
+		$welcome_message .= '<p>Your username is: '.$signup_info['username'].'</p>';
+
+		$this->load->library('EmailL');
+		$this->emaill->set_to(array($signup_info['email']))
+				->set_toname(array($signup_info['name']))
+				->set_subject('Welcome to 8force')
+				->set_content($welcome_message)
+				->set_from('support@8force.com')
+				->set_fromname('8Force')
+				->send_email();
+
+		$this->session->unset_userdata('signup_info');
+
 		$this->RespM->set_success($result)
 				->set_details($messages)
 				->output_json();
