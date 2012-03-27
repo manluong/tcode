@@ -163,7 +163,7 @@ class S3 {
 			$response->error = array('code' => $response->code, 'message' => 'Unexpected HTTP status');
 		if ($response->error !== false)
 		{
-			trigger_error(sprintf("S3::getBucket(): [%s] %s", $response->error['code'], $response->error['message']), E_USER_WARNING);
+			trigger_error(sprintf("S3::getBucket(): Code:[%s] - Message:%s - Bucket:%s", $response->error['code'], $response->error['message'], $bucket), E_USER_WARNING);
 			return false;
 		}
 
@@ -405,7 +405,7 @@ class S3 {
 			$rest->response->error = array('code' => $rest->response->code, 'message' => 'Unexpected HTTP status');
 		if ($rest->response->error !== false)
 		{
-			trigger_error(sprintf("S3::putObject(): [%s] %s", $rest->response->error['code'], $rest->response->error['message']), E_USER_WARNING);
+			trigger_error(sprintf("S3::putObject(): Code:[%s] - Message:%s - Bucket:%s", $rest->response->error['code'], $rest->response->error['message'], $bucket), E_USER_WARNING);
 			return false;
 		}
 		return true;
