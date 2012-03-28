@@ -10,7 +10,8 @@ class Docs extends MY_Controller {
 		parent::__construct();
 		$this->load->library('fileL');
 		$this->load->library('CommentsL');
-		$this->_bucket = $this->domain .'-telcoson-net-test';
+		$this->_bucket = 't-'.$this->domain;
+
 		if ( ! $this->_get_bucket($this->_bucket)) {
 			if ($this->_create_bucket($this->_bucket)) {
 				log_message('debug', 'Created bucket '.$this->_bucket);
@@ -18,6 +19,7 @@ class Docs extends MY_Controller {
 				log_message('debug', 'Failed to create bucket ' . $this->_bucket);
 			}
 		}
+
 
 		$this->load->model('DocsM');
 		$this->_temp_dir = $_SERVER['DOCUMENT_ROOT'].'/tmp/'.$this->domain.'/docs/files/';
