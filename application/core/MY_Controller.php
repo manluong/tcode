@@ -61,6 +61,8 @@ class MY_Controller extends CI_Controller {
 	var $is_ajax = FALSE;
 	var $is_mobile_app = FALSE;
 
+	var $access_keys = array();
+
 	var $debug = array();
 
 	//valid subactions
@@ -70,6 +72,9 @@ class MY_Controller extends CI_Controller {
 		parent::__construct();
 
 		if ($this->input->is_ajax_request()) $this->is_ajax = TRUE;
+
+		$this->load->config('third_party', TRUE);
+		$this->access_keys = $this->config->item('third_party');
 
 		$this->setup_url();
 		$this->setup_db();

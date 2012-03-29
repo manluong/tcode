@@ -22,14 +22,18 @@ class EmailL {
 	private $_email_storage_dir = '/email/content/';
 	private $_email_attachements_storage = '/email/content/attachments/';
 	private $_temp_dir = '';
-	private $_api_user = 'tcsteam'; // sendgrid
-	private $_api_key = 'express08)*'; // sendgrid
+	private $_api_user = '';
+	private $_api_key = '';
 	private $_bucket = '';
 
 	private $_query_array = array();
 
 	function __construct($url = '') {
 		$this->_ci = & get_instance();
+
+		$this->_api_user = $this->_ci->access_keys['sendgrid_api_user'];
+		$this->_api_key = $this->_ci->access_keys['sendgrid_api_key'];
+
 		$this->_ci->load->model('EmailM');
 		$this->_ci->load->model('DocsM');
 		$this->_ci->load->spark('curl/1.2.0');
