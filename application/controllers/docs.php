@@ -10,16 +10,6 @@ class Docs extends MY_Controller {
 		parent::__construct();
 		$this->load->library('fileL');
 		$this->load->library('CommentsL');
-		$this->_bucket = 't-'.$this->domain;
-
-		if ( ! $this->_get_bucket($this->_bucket)) {
-			if ($this->_create_bucket($this->_bucket)) {
-				log_message('debug', 'Created bucket '.$this->_bucket);
-			} else {
-				log_message('debug', 'Failed to create bucket ' . $this->_bucket);
-			}
-		}
-
 
 		$this->load->model('DocsM');
 		$this->_temp_dir = $_SERVER['DOCUMENT_ROOT'].'/tmp/'.$this->domain.'/docs/files/';
@@ -32,9 +22,6 @@ class Docs extends MY_Controller {
 		$this->_views_data['error_icon'] = '<img src="/resources/template/'.get_template().'/images/icons/16/exclamation-red.png" style="display:none;" id="error-icon">';
 	}
 
-	function set_bucket($bucket) {
-		$this->_bucket = $bucket; return this;
-	}
 
 	function ajax_create_folder() {
 		$insert_id = $this->_create_folder($this->url['id_plain'], $this->input->post('cardid'), $this->input->post('name'));
@@ -101,7 +88,7 @@ class Docs extends MY_Controller {
 		}
 		$versions = $this->DocsM->get_all_versions($this->url['id_plain']);
 		foreach ($versions as $version) {
-			if (S3::deleteObject($this->_bucket, $this->format_dirpath($_obj_details['a_docs_dir_dirpath'], $version['a_docs_ver_filename']))) {
+			if (S3::deleteObject($this->access_keys['s3_bucket'], $this->format_dirpath($_obj_details['a_docs_dir_dirpath'], $version['a_docs_ver_filename']))) {
 				log_message('debug', 'Docs: Deleted '. $this->format_dirpath($_obj_details['a_docs_dir_dirpath'], $version['a_docs_ver_filename']));
 			}
 		}
@@ -138,7 +125,7 @@ class Docs extends MY_Controller {
 		$i = $this->DocsM->get_docs_ver_detail($this->url['id_plain']);
 		if ( ! empty($i)) {
 			$uri = $this->format_dirpath($i['a_docs_dir_dirpath'], $i['a_docs_ver_filename']);
-			$_filecontent = $this->get_object($this->_bucket, $uri);
+			$_filecontent = $this->get_object($this->access_keys['s3_bucket'], $uri);
 			$this->output->set_content_type($i['a_docs_ver_mime']);
 			$this->output->set_header('Content-Disposition: attachment; filename="'.$i['a_docs_ver_filename'].'"');
 			$this->output->set_output($_filecontent->body);
@@ -165,13 +152,13 @@ class Docs extends MY_Controller {
 		}
 	}*/
 
-	function get_object($bucket, $uri) {
-		$object = S3::getObject($bucket, $uri, FALSE);
+	function get_object($uri) {
+		$object = S3::getObject($this->access_keys['s3_bucket'], $uri, FALSE);
 		return $object;
 	}
 
-	function get_object_url($bucket, $uri, $lifetime) {
-		return S3::getAuthenticatedURL($bucket, $uri, $lifetime);
+	function get_object_url($uri, $lifetime) {
+		return S3::getAuthenticatedURL($this->access_keys['s3_bucket'], $uri, $lifetime);
 	}
 
 	function json_tree() {
@@ -201,9 +188,9 @@ class Docs extends MY_Controller {
 			$versions = $this->DocsM->get_all_versions($this->url['id_plain']);
 			$new_dir = $this->DocsM->get_dirpath_dir($this->input->post('folder_id'));
 			foreach ($versions as $version) {
-				if (S3::copyObject($this->_bucket, $this->format_dirpath($version['a_docs_dir_dirpath'],$version['a_docs_ver_filename']), $this->_bucket, $this->format_dirpath($new_dir['a_docs_dir_dirpath'], $version['a_docs_ver_filename']), S3::ACL_PRIVATE)) {
+				if (S3::copyObject($this->access_keys['s3_bucket'], $this->format_dirpath($version['a_docs_dir_dirpath'],$version['a_docs_ver_filename']), $this->access_keys['s3_bucket'], $this->format_dirpath($new_dir['a_docs_dir_dirpath'], $version['a_docs_ver_filename']), S3::ACL_PRIVATE)) {
 					log_message('debug', 'Docs: Copied file '.$this->format_dirpath($version['a_docs_dir_dirpath'],$version['a_docs_ver_filename'].' to '.$this->format_dirpath($new_dir['a_docs_dir_dirpath'], $version['a_docs_ver_filename'])));
-					if (S3::deleteObject($this->_bucket, $this->format_dirpath($version['a_docs_dir_dirpath'],$version['a_docs_ver_filename']))) {
+					if (S3::deleteObject($this->access_keys['s3_bucket'], $this->format_dirpath($version['a_docs_dir_dirpath'],$version['a_docs_ver_filename']))) {
 						log_message('debug', 'Docs: Removed file '. $this->format_dirpath($version['a_docs_dir_dirpath'],$version['a_docs_ver_filename']));
 					}
 				}
@@ -235,11 +222,11 @@ class Docs extends MY_Controller {
 			case 'image/gif':
 			case 'image/jpeg':
 			case 'image/png':
-				$s3object = html_entity_decode($this->get_object_url($this->_bucket,$this->format_dirpath($docs_details['a_docs_dir_dirpath'],$docs_details['a_docs_ver_filename']), 3600));
+				$s3object = html_entity_decode($this->get_object_url($this->access_keys['s3_bucket'],$this->format_dirpath($docs_details['a_docs_dir_dirpath'],$docs_details['a_docs_ver_filename']), 3600));
 				//$s3object = '<img src="'.$this->_views_data['s3_object'].'">';
 				break;
 			case 'application/pdf':
-				$s3object = $this->get_object($this->_bucket, $this->format_dirpath($docs_details['a_docs_dir_dirpath'],$docs_details['a_docs_ver_filename']));
+				$s3object = $this->get_object($this->access_keys['s3_bucket'], $this->format_dirpath($docs_details['a_docs_dir_dirpath'],$docs_details['a_docs_ver_filename']));
 				$this->save_to_file($s3object->body, $docs_details['a_docs_id'].'.pdf');
 				break;
 		}
@@ -330,10 +317,10 @@ class Docs extends MY_Controller {
 		$filename = '._'.$ver_detail['a_docs_ver_filename'];
 		$values['a_docs_ver_filename'] = $this->check_filename($filename);
 
-		if (S3::copyObject($this->_bucket, $this->format_dirpath($dirpath['a_docs_dir_dirpath'],$ver_detail['a_docs_ver_filename']),
-			$this->_bucket, $this->format_dirpath($dirpath['a_docs_dir_dirpath'], $values['a_docs_ver_filename']), S3::ACL_PRIVATE)) {
+		if (S3::copyObject($this->access_keys['s3_bucket'], $this->format_dirpath($dirpath['a_docs_dir_dirpath'],$ver_detail['a_docs_ver_filename']),
+			$this->access_keys['s3_bucket'], $this->format_dirpath($dirpath['a_docs_dir_dirpath'], $values['a_docs_ver_filename']), S3::ACL_PRIVATE)) {
 			log_message('debug', 'Docs: Copied file to '. $this->format_dirpath($dirpath['a_docs_dir_dirpath'], $values['a_docs_ver_filename']));
-			if (S3::deleteObject($this->_bucket, $this->format_dirpath($dirpath['a_docs_dir_dirpath'],$ver_detail['a_docs_ver_filename']))) {
+			if (S3::deleteObject($this->access_keys['s3_bucket'], $this->format_dirpath($dirpath['a_docs_dir_dirpath'],$ver_detail['a_docs_ver_filename']))) {
 				log_message('debug', 'Docs: Removed old renamed file: '.$this->format_dirpath($dirpath['a_docs_dir_dirpath'],$ver_detail['a_docs_ver_filename']));
 			}
 			$this->DocsM->update_docs_ver($values);
@@ -365,7 +352,7 @@ class Docs extends MY_Controller {
 	function remove_old_file ($ver_id, $dirpath) {
 		$filename = $this->DocsM->get_file_name($ver_id);
 		$uri = $this->format_dirpath($dirpath['a_docs_dir_dirpath'], $filename['a_docs_ver_filename']);
-		if(S3::deleteObject($this->_bucket, $uri)) {
+		if(S3::deleteObject($this->access_keys['s3_bucket'], $uri)) {
 			log_message('debug', 'Docs: Removed old File:'.$uri);
 		} else {
 			log_message('debug', 'Docs: Error old File:'.$filename['a_docs_ver_filename']);
@@ -431,7 +418,7 @@ class Docs extends MY_Controller {
 		// Handle non multipart uploads older WebKit versions didn't support multipart in HTML5
 		if (strpos($contentType, "multipart") !== FALSE) {
 			if (isset($_FILES['file']['tmp_name']) && is_uploaded_file($_FILES['file']['tmp_name'])) {
-				if (S3::putObject(S3::inputFile($_FILES['file']['tmp_name']), $this->_bucket,
+				if (S3::putObject(S3::inputFile($_FILES['file']['tmp_name']), $this->access_keys['s3_bucket'],
 					$this->format_dirpath($dirpath['a_docs_dir_dirpath'], $filename), S3::ACL_PRIVATE)) {
 					$this->_upload_status = TRUE;
 					log_message('debug', 'Docs: Upload: '.$this->format_dirpath($dirpath['a_docs_dir_dirpath'], $filename));
@@ -670,20 +657,6 @@ class Docs extends MY_Controller {
 			}
 		}
 
-	}
-
-	private function _get_bucket(){
-		if (($contents = S3::getBucket($this->_bucket)) !== false) {
-			return TRUE;
-		}
-		return FALSE;
-	}
-
-	private function _create_bucket() {
-		if (S3::putBucket($this->_bucket, S3::ACL_PRIVATE, 'ap-southeast-1')) {
-			return TRUE;
-		}
-		return FALSE;
 	}
 
 	/** Old functions for Flexpaper flash **/

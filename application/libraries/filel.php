@@ -1,7 +1,7 @@
 <?php
 
-class filel {
-	private $_fs = '';
+class FileL {
+	private $filesystem = '';
 	private $_ci = '';
 	private $_bucket = '';
 	private $_upload_status = FALSE;
@@ -16,18 +16,15 @@ class filel {
 		$domain = explode('.', $_SERVER['SERVER_NAME']);
 		$domain = $domain[0];
 
-		$this->_bucket = 't-'.$domain;
-		if ( ! $this->_get_bucket($this->_bucket)) {
-			//$this->_create_bucket($this->_bucket);
-		}
+		$this->_bucket = $this->_ci->access_keys['s3_bucket'];
 
-		$this->_fs = 's3';
+		$this->filesystem = 's3';
 		create_dir($_SERVER['DOCUMENT_ROOT'].'/tmp/'.$domain.'/docs/files/upload/', 0777);
 		$this->_temp_dir = $_SERVER['DOCUMENT_ROOT'].'/tmp/'.$domain.'/docs/files/upload/';
 	}
 
-	function set_fs($fs) {
-		$this->_fs = $fs; return $this;
+	function set_filesystem($fs) {
+		$this->filesystem = $fs; return $this;
 	}
 
 	function set_bucket($bucket) {
@@ -35,12 +32,12 @@ class filel {
 	}
 
 	function read($filepath) {
-		if ($this->_fs === 's3') {
+		if ($this->filesystem === 's3') {
 			$object = S3::getObject($this->_bucket, $filepath, FALSE);
 			return $object;
 		}
 
-		if ($this->_fs === 'local') {
+		if ($this->filesystem === 'local') {
 
 		}
 	}
@@ -49,7 +46,7 @@ class filel {
 	function save_new(&$content, $path, $filename, $overwrite, $via) {
 		$this->_write_to_temp($content, $filename);
 
-		if ($this->_fs === 's3') {
+		if ($this->filesystem === 's3') {
 			$this->_check_folder($path);
 			$docs_id_n_path = $this->_upload_files($path, $filename, $overwrite, $via);
 			return $docs_id_n_path;
@@ -60,7 +57,7 @@ class filel {
 				: $this->_ci->output->set_output(json_encode(array('success'=>'0')));*/
 		}
 
-		if ($this->_fs === 'local') {
+		if ($this->filesystem === 'local') {
 
 		}
 	}
@@ -76,12 +73,12 @@ class filel {
 		$path = $path['a_docs_dir_dirpath'];
 		$this->_write_to_temp($content, $filename);
 
-		if ($this->_fs === 's3') {
+		if ($this->filesystem === 's3') {
 			$docs_id_n_path = $this->_upload_files_existing($path, $filename, $docs_id, $version, $via);
 			return $docs_id_n_path;
 		}
 
-		if ($this->_fs === 'local') {
+		if ($this->filesystem === 'local') {
 
 		}
 	}
@@ -150,7 +147,7 @@ class filel {
 			$filepath = '/';
 		}
 
-		if ($this->_fs === 's3') {
+		if ($this->filesystem === 's3') {
 			$file_exists = $this->_ci->DocsM->does_file_exists($filepath, $filename);
 			if ($file_exists) {
 				if (S3::deleteObject($this->_bucket, $this->_format_dirpath($filepath, $filename))) {
@@ -172,7 +169,7 @@ class filel {
 			return FALSE;
 		}
 
-		if ($this->_fs === 'local') {
+		if ($this->filesystem === 'local') {
 
 		}
 	} */
@@ -318,4 +315,17 @@ class filel {
 			return $path.'/'.$filename;
 		}
 	}
+
+	function create_folder($folder='') {
+		if ($this->filesystem == 's3') {
+			//ensure a / at the end to create a folder in AWS
+			if (substr($folder,-1) !== '/') $folder = $folder.'/';
+
+			return S3::putObject('', $this->_ci->access_keys['s3_bucket'], $folder);
+		}
+
+		if ($this->filesystem == 'local') {
+		}
+	}
+
 }

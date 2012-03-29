@@ -45,41 +45,24 @@ class S3 {
 
 	public static $use_ssl = false;
 	public static $verify_peer = true;
+	public static $bucket = true;
 
 	private static $__access_key = NULL; // AWS Access key
 	private static $__secret_key = NULL; // AWS Secret key
 
 	function __construct($config = array())
 	{
-		if ( ! empty($config))
-		{
-			$this->initialize($config);
-		}
+		$ci =& get_instance();
+
+		self::setAuth($ci->access_keys['s3_access_key'], $ci->access_keys['s3_secret_key']);
+		self::$use_ssl = $ci->access_keys['s3_use_ssl'];
+		self::$verify_peer = $ci->access_keys['s3_verify_peer'];
+		self::$bucket = $ci->access_keys['s3_bucket'];
 
 		log_message('debug', 'S3 Class Initialized');
 	}
 
 	// --------------------------------------------------------------------
-
-	/**
-	 * Initialize preferences
-	 *
-	 * @access	public
-	 * @param	array
-	 * @return	void
-	 */
-	function initialize($config = array())
-	{
-		extract($config);
-
-		if ( ! empty($access_key) AND ! empty($secret_key))
-		{
-			self::setAuth($access_key, $secret_key);
-		}
-
-		self::$use_ssl = $use_ssl;
-		self::$verify_peer = $verify_peer;
-	}
 
 	/**
 	 * Set AWS access key and secret key
@@ -147,8 +130,9 @@ class S3 {
 	 * @return array | false
 	 */
 
-	public static function getBucket($bucket, $prefix = null, $marker = null, $maxKeys = null, $delimiter = null, $returnCommonPrefixes = false)
+	public static function getBucket($bucket = '', $prefix = null, $marker = null, $maxKeys = null, $delimiter = null, $returnCommonPrefixes = false)
 	{
+		if ($bucket == '') $bucket = self::$bucket;
 		$rest = new S3Request('GET', $bucket, '');
 		if ($prefix !== null && $prefix !== '')
 			$rest->setParameter('prefix', $prefix);
@@ -238,8 +222,10 @@ class S3 {
 	 * @param string $location Set as "EU" to create buckets hosted in Europe
 	 * @return boolean
 	 */
-	public static function putBucket($bucket, $acl = self::ACL_PRIVATE, $location = false)
+	public static function putBucket($bucket='', $acl = self::ACL_PRIVATE, $location = false)
 	{
+		if ($bucket == '') $bucket = self::$bucket;
+
 		$rest = new S3Request('PUT', $bucket, '');
 		$rest->setAmzHeader('x-amz-acl', $acl);
 
@@ -340,6 +326,8 @@ class S3 {
 	 */
 	public static function putObject($input, $bucket, $uri, $acl = 'public-read', $metaHeaders = array(), $requestHeaders = array())
 	{
+		if ($bucket == '') $bucket = self::$bucket;
+
 		if ($input === false)
 			return false;
 		$rest = new S3Request('PUT', $bucket, $uri);
@@ -424,6 +412,8 @@ class S3 {
 	 */
 	public static function putObjectFile($file, $bucket, $uri, $acl = self::ACL_PRIVATE, $metaHeaders = array(), $contentType = null)
 	{
+		if ($bucket == '') $bucket = self::$bucket;
+
 		return self::putObject(self::inputFile($file), $bucket, $uri, $acl, $metaHeaders, $contentType);
 	}
 
@@ -440,6 +430,8 @@ class S3 {
 	 */
 	public static function putObjectString($string, $bucket, $uri, $acl = self::ACL_PRIVATE, $metaHeaders = array(), $contentType = 'text/plain')
 	{
+		if ($bucket == '') $bucket = self::$bucket;
+
 		return self::putObject($string, $bucket, $uri, $acl, $metaHeaders, $contentType);
 	}
 
@@ -453,6 +445,8 @@ class S3 {
 	 */
 	public static function getObject($bucket, $uri, $saveTo = false)
 	{
+		if ($bucket == '') $bucket = self::$bucket;
+
 		$rest = new S3Request('GET', $bucket, $uri);
 		if ($saveTo !== false)
 		{
@@ -488,6 +482,8 @@ class S3 {
 	 */
 	public static function getObjectInfo($bucket, $uri, $returnInfo = true)
 	{
+		if ($bucket == '') $bucket = self::$bucket;
+
 		$rest = new S3Request('HEAD', $bucket, $uri);
 		$rest = $rest->getResponse();
 		if ($rest->error === false && ($rest->code !== 200 && $rest->code !== 404))
@@ -515,6 +511,8 @@ class S3 {
 	 */
 	public static function copyObject($srcBucket, $srcUri, $bucket, $uri, $acl = self::ACL_PRIVATE, $metaHeaders = array(), $requestHeaders = array())
 	{
+		if ($bucket == '') $bucket = self::$bucket;
+
 		$rest = new S3Request('PUT', $bucket, $uri);
 		$rest->setHeader('Content-Length', 0);
 		foreach ($requestHeaders as $h => $v)
@@ -550,6 +548,8 @@ class S3 {
 	 */
 	public static function setBucketLogging($bucket, $targetBucket, $targetPrefix = null)
 	{
+		if ($bucket == '') $bucket = self::$bucket;
+
 		// The S3 log delivery group has to be added to the target bucket's ACP
 		if ($targetBucket !== null && ($acp = self::getAccessControlPolicy($targetBucket, '')) !== false)
 		{
@@ -617,8 +617,10 @@ class S3 {
 	 * @param string $bucket Bucket name
 	 * @return array | false
 	 */
-	public static function getBucketLogging($bucket)
+	public static function getBucketLogging($bucket='')
 	{
+		if ($bucket == '') $bucket = self::$bucket;
+
 		$rest = new S3Request('GET', $bucket, '');
 		$rest->setParameter('logging', null);
 		$rest = $rest->getResponse();
@@ -644,8 +646,10 @@ class S3 {
 	 * @param string $bucket Bucket name
 	 * @return boolean
 	 */
-	public static function disableBucketLogging($bucket)
+	public static function disableBucketLogging($bucket='')
 	{
+		if ($bucket == '') $bucket = self::$bucket;
+
 		return self::setBucketLogging($bucket, null);
 	}
 
@@ -655,8 +659,10 @@ class S3 {
 	 * @param string $bucket Bucket name
 	 * @return string | false
 	 */
-	public static function getBucketLocation($bucket)
+	public static function getBucketLocation($bucket='')
 	{
+		if ($bucket == '') $bucket = self::$bucket;
+
 		$rest = new S3Request('GET', $bucket, '');
 		$rest->setParameter('location', null);
 		$rest = $rest->getResponse();
@@ -679,8 +685,10 @@ class S3 {
 	 * @param array $acp Access Control Policy Data (same as the data returned from getAccessControlPolicy)
 	 * @return boolean
 	 */
-	public static function setAccessControlPolicy($bucket, $uri = '', $acp = array())
+	public static function setAccessControlPolicy($bucket='', $uri = '', $acp = array())
 	{
+		if ($bucket == '') $bucket = self::$bucket;
+
 		$dom = new DOMDocument;
 		$dom->formatOutput = true;
 		$accessControlPolicy = $dom->createElement('AccessControlPolicy');
@@ -744,8 +752,10 @@ class S3 {
 	 * @param string $uri Object URI
 	 * @return mixed | false
 	 */
-	public static function getAccessControlPolicy($bucket, $uri = '')
+	public static function getAccessControlPolicy($bucket='', $uri = '')
 	{
+		if ($bucket == '') $bucket = self::$bucket;
+
 		$rest = new S3Request('GET', $bucket, $uri);
 		$rest->setParameter('acl', null);
 		$rest = $rest->getResponse();
@@ -808,6 +818,8 @@ class S3 {
 	 */
 	public static function deleteObject($bucket, $uri)
 	{
+		if ($bucket == '') $bucket = self::$bucket;
+
 		$rest = new S3Request('DELETE', $bucket, $uri);
 		$rest = $rest->getResponse();
 		if ($rest->error === false && $rest->code !== 204)
@@ -833,6 +845,8 @@ class S3 {
 	 */
 	public static function getAuthenticatedURL($bucket, $uri, $lifetime, $hostBucket = false, $https = false)
 	{
+		if ($bucket == '') $bucket = self::$bucket;
+
 		$expires = time() + $lifetime;
 		$uri = str_replace('%2F', '/', rawurlencode($uri)); // URI should be encoded (thanks Sean O'Dea)
 		return sprintf(($https ? 'https' : 'http') . '://%s/%s?AWSAccessKeyId=%s&amp;Expires=%u&amp;Signature=%s',
@@ -856,6 +870,8 @@ class S3 {
 	 */
 	public static function getHttpUploadPostParams($bucket, $uriPrefix = '', $acl = self::ACL_PRIVATE, $lifetime = 3600, $maxFileSize = 5242880, $successRedirect = "201", $amzHeaders = array(), $headers = array(), $flashVars = false)
 	{
+		if ($bucket == '') $bucket = self::$bucket;
+
 		// Create policy object
 		$policy = new stdClass;
 		$policy->expiration = gmdate('Y-m-d\TH:i:s\Z', (time() + $lifetime));
@@ -916,8 +932,10 @@ class S3 {
 	 * @param string $comment Use the bucket name as the hostname
 	 * @return array | false
 	 */
-	public static function createDistribution($bucket, $enabled = true, $cnames = array(), $comment = '')
+	public static function createDistribution($bucket = '', $enabled = true, $cnames = array(), $comment = '')
 	{
+		if ($bucket == '') $bucket = self::$bucket;
+
 		self::$use_ssl = true; // CloudFront requires SSL
 		$rest = new S3Request('POST', '', '2008-06-30/distribution', 'cloudfront.amazonaws.com');
 		$rest->data = self::__getCloudFrontDistributionConfigXML($bucket . '.s3.amazonaws.com', $enabled, $comment, (string) microtime(true), $cnames);
@@ -1073,6 +1091,8 @@ class S3 {
 	 */
 	private static function __getCloudFrontDistributionConfigXML($bucket, $enabled, $comment, $callerReference = '0', $cnames = array())
 	{
+		if ($bucket == '') $bucket = self::$bucket;
+
 		$dom = new DOMDocument('1.0', 'UTF-8');
 		$dom->formatOutput = true;
 		$distributionConfig = $dom->createElement('DistributionConfig');

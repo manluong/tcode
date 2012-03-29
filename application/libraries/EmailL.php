@@ -33,6 +33,7 @@ class EmailL {
 
 		$this->_api_user = $this->_ci->access_keys['sendgrid_api_user'];
 		$this->_api_key = $this->_ci->access_keys['sendgrid_api_key'];
+		$this->_bucket = $this->_ci->access_keys['s3_bucket'];
 
 		$this->_ci->load->model('EmailM');
 		$this->_ci->load->model('DocsM');
@@ -41,10 +42,7 @@ class EmailL {
 
 		$domain = explode('.', $_SERVER['SERVER_NAME']);
 		$domain = $domain[0];
-		$this->_bucket = 't-'.$domain;
-		if ( ! $this->_get_bucket($this->_bucket)) {
-			//$this->_create_bucket($this->_bucket);
-		}
+
 		create_dir($_SERVER['DOCUMENT_ROOT'].'/tmp/'.$domain.'/', 0777);
 		$this->_temp_dir = $_SERVER['DOCUMENT_ROOT'].'/tmp/'.$domain.'/';
 	}
