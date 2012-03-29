@@ -61,6 +61,8 @@ class MY_Controller extends CI_Controller {
 	var $is_ajax = FALSE;
 	var $is_mobile_app = FALSE;
 
+	var $debug = array();
+
 	//valid subactions
 	var $subactions = array('a','v','e','d','l','s','as','es','ds');
 
@@ -116,8 +118,11 @@ class MY_Controller extends CI_Controller {
 		//if $this->url['action'] match a method in controller file, use it (including "index")
 		//"index" method will override default set in database
 		if (method_exists($this, $action)) {
+			$this->debug['controller_mode'] = 'file';
 			return call_user_func_array(array($this, $action), $params);
 		}
+
+		$this->debug['controller_mode'] = 'database';
 
 		if ($this->url['action']=='index') {
 			$this->AppM->load_default_actions();
@@ -171,12 +176,16 @@ class MY_Controller extends CI_Controller {
 			$this->domain = $domain[0];
 		}
 
+		$this->debug['environment'] = ENVIRONMENT;
+
 		//TBOSS - For internal use
 		//TSUB - Tenant software
 		if ($this->domain === 'my') {
 			define('APP_ROLE', 'TBOSS');
+			$this->debug['app_role'] = 'TBOSS';
 		} else {
 			define('APP_ROLE', 'TSUB');
+			$this->debug['app_role'] = 'TSUB';
 		}
 	}
 
@@ -197,6 +206,9 @@ class MY_Controller extends CI_Controller {
 		if (APP_ROLE == 'TBOSS' && ENVIRONMENT == 'testing') {
 			$config['database'] = 't_'.$this->domain.'2';
 		}
+
+		$this->debug['database'] = $config['database'];
+		$this->debug['database_username'] = $config['username'];
 
 		$this->load->database($config);
 	}
@@ -580,6 +592,7 @@ class MY_Controller extends CI_Controller {
 		if ($this->is_ajax) {
 			$this->load->view('/'.get_template().'/page_ajax', $pagedata);
 		} else {
+			$pagedata['debug'] = $this->debug;
 			$this->load->view('/'.get_template().'/page_full', $pagedata);
 		}
 
