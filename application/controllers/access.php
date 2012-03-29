@@ -21,18 +21,10 @@ class Access extends MY_Controller {
 
 		$data = array();
 		$data['html'] = $this->load->view('/'.get_template().'/access/login', $html, TRUE);
-		$data['outputdiv'] = 1;
-		$data['isdiv'] = TRUE;
-
-		$data['div']['title'] = 'Login';
-		$data['div']['element_name'] = 'loginwin';
-		$data['div']['element_id'] = 'divlogin';
 
 		$this->data[] = $data;
 
 		$this->LayoutM->load_format();
-
-		$this->layout['type'] = 'full';
 
 		$this->output();
 	}

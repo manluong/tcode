@@ -14,12 +14,6 @@ class Signup extends MY_Controller {
 
 		$data = array();
 		$data['html'] = $this->load->view(get_template().'/signup/index', $html, TRUE);
-		$data['outputdiv'] = 1;
-		$data['isdiv'] = TRUE;
-
-		$data['div']['title'] = '';
-		$data['div']['element_name'] = '';
-		$data['div']['element_id'] = '';
 
 		$this->data[] = $data;
 
@@ -52,12 +46,6 @@ class Signup extends MY_Controller {
 
 		$data = array();
 		$data['html'] = $this->load->view(get_template().'/signup/process', $signup_info, TRUE);
-		$data['outputdiv'] = 1;
-		$data['isdiv'] = TRUE;
-
-		$data['div']['title'] = '';
-		$data['div']['element_name'] = '';
-		$data['div']['element_id'] = '';
 
 		$this->data[] = $data;
 

@@ -612,7 +612,7 @@ class MY_Controller extends CI_Controller {
 		foreach ($this->data as $data) {
 			$view_data['data'] = $data;
 
-			if ($data['isdiv']) {
+			if (!isset($data['isdiv']) || $data['isdiv']===TRUE) {
 
 				if (isset($data['div']['divwh'])) {
 					$this_boxformat = $data['div']['divwh'];
