@@ -61,8 +61,8 @@ class Signup extends MY_Controller {
 		$result = $this->SignupM->setup_account($signup_info);
 		$messages = $this->SignupM->get_messages();
 
-		$this->load->library('S3');
-		S3::putBucket('t-'.$signup_info['domain'], S3::ACL_PRIVATE, 'ap-southeast-1');
+		$this->load->library('FileL');
+		$this->filel->create_folder('tenants/'.$signup_info['domain'].'/');
 
 		$welcome_message = '<p>You can now access your account at: <a href="http://'.$signup_info['domain'].'.8force.net/">http://'.$signup_info['domain'].'.8force.net/</a></p>';
 		$welcome_message .= '<p>Your username is: '.$signup_info['username'].'</p>';
