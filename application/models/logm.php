@@ -49,6 +49,11 @@ class LogM extends CI_Model {
 	}
 
 	private function _insert_log() {
+		$server_request_uri = ($this->input->is_cli_request())
+			? 'cli_request'
+			: $_SERVER['REQUEST_URI'];
+
+
         $data = array(
             'cardid' => isset($this->UserM->info['cardid']) ? $this->UserM->info['cardid'] : '',
             'gpmid' => isset($this->UserM->info['accessgp']) ? $this->UserM->info['accessgp'] : '',
@@ -58,12 +63,12 @@ class LogM extends CI_Model {
 			'stamp' => get_current_stamp(),
             'app_data_id' => $this->_url['id_plain'],
 			'app_data_id_uri' => $this->uri->segment(3),
-			'uri' => $_SERVER['REQUEST_URI'],
+			'uri' => $server_request_uri,
 			'saveid' => $this->_log_data['saveid'],
 			'ms' => '',
 			'stamp' => get_current_stamp(),
 			'load' => 1,
-			'xmsgid' => $_SERVER['REQUEST_URI'],
+			'xmsgid' => $server_request_uri,
             'loguid' => $this->UserM->get_loguid(),
         );
         $this->db->insert('log', $data);
