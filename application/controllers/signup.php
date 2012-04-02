@@ -55,31 +55,34 @@ class Signup extends MY_Controller {
 	}
 
 	function ajax_begin_setup() {
-		$signup_info = $this->session->userdata('signup_info');
 		$this->load->model('SignupM');
 
+		$signup_info = $this->session->userdata('signup_info');
+
 		$result = $this->SignupM->setup_account($signup_info);
-		$messages = $this->SignupM->get_messages();
 
-		$this->load->library('FileL');
-		$this->filel->create_folder('tenants/'.$signup_info['domain'].'/');
+		if ($result === true) {
+			//create folder in S3
+			$this->load->library('FileL');
+			$this->filel->create_folder('tenants/'.$signup_info['domain'].'/');
 
-		$welcome_message = '<p>You can now access your account at: <a href="http://'.$signup_info['domain'].'.8force.net/">http://'.$signup_info['domain'].'.8force.net/</a></p>';
-		$welcome_message .= '<p>Your username is: '.$signup_info['username'].'</p>';
+			//send welcome email
+			$welcome_message = '<p>You can now access your account at: <a href="http://'.$signup_info['domain'].'.8force.net/">http://'.$signup_info['domain'].'.8force.net/</a></p>';
+			$welcome_message .= '<p>Your username is: '.$signup_info['username'].'</p>';
+			$this->load->library('EmailL');
+			$this->emaill->set_to(array($signup_info['email']))
+					->set_toname(array($signup_info['name']))
+					->set_subject('Welcome to 8force')
+					->set_content($welcome_message)
+					->set_from('support@8force.com')
+					->set_fromname('8Force')
+					->send_email();
 
-		$this->load->library('EmailL');
-		$this->emaill->set_to(array($signup_info['email']))
-				->set_toname(array($signup_info['name']))
-				->set_subject('Welcome to 8force')
-				->set_content($welcome_message)
-				->set_from('support@8force.com')
-				->set_fromname('8Force')
-				->send_email();
-
-		$this->session->unset_userdata('signup_info');
+			$this->session->unset_userdata('signup_info');
+		}
 
 		$this->RespM->set_success($result)
-				->set_details($messages)
+				->set_details($this->SignupM->get_messages())
 				->output_json();
 	}
 }
