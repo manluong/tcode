@@ -175,10 +175,14 @@ class MY_Controller extends CI_Controller {
 
 		if ($this->re_url['app'] !== FALSE && $this->re_url['action'] !== FALSE) $this->has_return = TRUE;
 
-		if (ENVIRONMENT != 'development') {
-			$domain = explode('.', $_SERVER['SERVER_NAME']);
-			//if ($domain[1]!=='8force' || $domain[2]!=='net') die('There is a problem with the domain name.');
-			$this->domain = $domain[0];
+		if ($this->input->is_cli_request()) {
+			$this->domain = 'my';
+		} else {
+			if (ENVIRONMENT != 'development') {
+				$domain = explode('.', $_SERVER['SERVER_NAME']);
+				//if ($domain[1]!=='8force' || $domain[2]!=='net') die('There is a problem with the domain name.');
+				$this->domain = $domain[0];
+			}
 		}
 
 		$this->debug['environment'] = ENVIRONMENT;
@@ -228,6 +232,8 @@ class MY_Controller extends CI_Controller {
 	}
 
 	private function check_mobile_app() {
+		if ($this->input->is_cli_request()) return NULL;
+
 		//detect mobile app or not
 		$agent = trim($_SERVER['HTTP_USER_AGENT']);
 		$mobile_app_user_agents = array('8force-ios', '8force-and');
