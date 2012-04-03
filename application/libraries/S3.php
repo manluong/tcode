@@ -54,10 +54,10 @@ class S3 {
 	{
 		$ci =& get_instance();
 
-		self::setAuth($ci->access_keys['s3_access_key'], $ci->access_keys['s3_secret_key']);
-		self::$use_ssl = $ci->access_keys['s3_use_ssl'];
-		self::$verify_peer = $ci->access_keys['s3_verify_peer'];
-		self::$bucket = $ci->access_keys['s3_bucket'];
+		self::setAuth($ci->eightforce_config['s3_access_key'], $ci->eightforce_config['s3_secret_key']);
+		self::$use_ssl = $ci->eightforce_config['s3_use_ssl'];
+		self::$verify_peer = $ci->eightforce_config['s3_verify_peer'];
+		self::$bucket = $ci->eightforce_config['s3_bucket'];
 
 		log_message('debug', 'S3 Class Initialized');
 	}

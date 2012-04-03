@@ -2,6 +2,26 @@
 
 /*
 |--------------------------------------------------------------------------
+| 8force
+|--------------------------------------------------------------------------
+|
+| file_storage_system
+| S3 | local | network
+| S3 = Amazon S3, local = local folder, network = network folder
+|
+| temp_folder
+| store files temporary for parsing/uploading
+|
+| file_folder
+| if Local or Network folder is selected, enter the path to that folder
+|
+*/
+$config['file_storage_system'] = 'S3';
+$config['temp_folder'] = '../tcode-tmp/';
+$config['file_folder'] = 'file/';
+
+/*
+|--------------------------------------------------------------------------
 | Sendgrid
 |--------------------------------------------------------------------------
 |

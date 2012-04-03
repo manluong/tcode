@@ -47,8 +47,8 @@ class Email_send extends MY_Controller {
 
 	function test() {
 		$url = 'http://sendgrid.com/';
-		$user = $this->access_keys['sendgrid_api_user'];
-		$pass = $this->access_keys['sendgrid_api_key'];
+		$user = $this->eightforce_config['sendgrid_api_user'];
+		$pass = $this->eightforce_config['sendgrid_api_key'];
 
 		$fileName = 'gravatar-140.png';
 		//$filePath = dirname(__FILE__);

@@ -31,9 +31,9 @@ class EmailL {
 	function __construct($url = '') {
 		$this->_ci = & get_instance();
 
-		$this->_api_user = $this->_ci->access_keys['sendgrid_api_user'];
-		$this->_api_key = $this->_ci->access_keys['sendgrid_api_key'];
-		$this->_bucket = $this->_ci->access_keys['s3_bucket'];
+		$this->_api_user = $this->_ci->eightforce_config['sendgrid_api_user'];
+		$this->_api_key = $this->_ci->eightforce_config['sendgrid_api_key'];
+		$this->_bucket = $this->_ci->eightforce_config['s3_bucket'];
 
 		$this->_ci->load->model('EmailM');
 		$this->_ci->load->model('DocsM');
