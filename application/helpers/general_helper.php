@@ -366,3 +366,12 @@ function create_dir($path, $mode) {
 	}
 	return;
 }
+
+
+function get_file_extension($filename) {
+	return strrchr($filename, '.');
+}
+
+function generate_hash() {
+	return md5(uniqid(mt_rand().time()));
+}
