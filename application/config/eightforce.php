@@ -10,10 +10,10 @@
 | S3 = Amazon S3, local = local folder, network = network folder
 |
 | temp_folder
-| store files temporary for parsing/uploading
+| path to a folder to store files temporary for parsing/uploading, must end the path with a /
 |
 | file_folder
-| if Local or Network folder is selected, enter the path to that folder
+| if Local or Network folder is selected, enter the path to that folder, must end the path with a /
 |
 */
 $config['file_storage_system'] = 'S3';
