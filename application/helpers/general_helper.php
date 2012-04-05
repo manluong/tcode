@@ -372,6 +372,11 @@ function get_file_extension($filename) {
 	return strrchr($filename, '.');
 }
 
+function get_filename_without_extension($filename) {
+	$extension = get_file_extension($filename);
+	return str_replace($extension, '', $filename);
+}
+
 function generate_hash() {
 	return md5(uniqid(mt_rand().time()));
 }
