@@ -103,7 +103,7 @@ class MY_Controller extends CI_Controller {
 		$this->LicenseM->setup();
 
 		if ($this->AppM->must_disable_plain_id()) $this->ACLM->check_id_encryption();
-		$this->ACLM->check_app_access();
+		//$this->ACLM->check_app_access();
 
 
 		//if (!$this->is_ajax) $this->output->enable_profiler(true);
