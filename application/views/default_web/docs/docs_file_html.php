@@ -113,7 +113,7 @@ $(document).ready(function () {
 							<div id="documentViewer" class="viewer"></div>\
 						</div>\
 					');
-					var startDocument = doc_details['id'];
+					var startDocument = doc_details['hash'];
 					function getDocumentUrl(document){
 						return "/docs/pdfPreview?doc={doc}&format={format}&page={page}".replace("{doc}",document);
 					}

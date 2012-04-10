@@ -117,7 +117,7 @@ class Docs extends MY_Controller {
 		require_once('resources/addon/docs/AdaptiveUI1.3.5/swfrender_php5.php');
 
 		$doc 	= $_GET["doc"];
-		$pdfdoc 	= $doc . ".pdf";
+		$pdfdoc 	= $doc;
 		$configManager 	= new Config();
 
 		if(isset($_GET["page"])){$page = $_GET["page"];}else{$page = "";}
