@@ -109,7 +109,7 @@ $(document).ready(function () {
 				// Sets display
 				if (doc_details['mime'] === 'application/pdf') {
 					$('.preview-content .content').html('\
-						<div id="viewerPlaceHolder" style="width:660px;height:553px;display:block;position:relative;">\
+						<div id="viewerPlaceHolder" style="width:100%;height:553px;display:block;position:relative;">\
 							<div id="documentViewer" class="viewer"></div>\
 						</div>\
 					');
