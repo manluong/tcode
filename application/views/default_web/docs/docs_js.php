@@ -2,7 +2,7 @@
 	$(document).ready(function() {
 		$('#directory_contents').dataTable({
 				"bDestory": true,
-				"sAjaxSource": "/docs/get_dir_contents/<?php echo $url['id_encrypted']; ?>/v",
+				"sAjaxSource": "/docs/ajax_get_dir_contents/<?php echo $url['id_encrypted']; ?>/v",
 				"sDom": "<<'pull-right'p>>t<<'pull-right'p>li>",
 				"sPaginationType": "bootstrap",
 				"oLanguage": {
@@ -27,7 +27,7 @@
 		$("#uploader").pluploadQueue({
 			// General settings
 			runtimes : 'html5,flash',
-			url : '/docs/upload/<?php echo $url['id_encrypted'] ?>',
+			url : '/docs/ajax_upload/<?php echo $url['id_encrypted'] ?>',
 			max_file_size : '10mb',
 			unique_names : true,
 			multiple_queues : true,
@@ -52,7 +52,7 @@
 				FileUploaded: function() {
 					$('#directory_contents').dataTable({
 							"bDestroy": true,
-							"sAjaxSource": "/docs/get_dir_contents/<?php echo $url['id_encrypted']; ?>/v",
+							"sAjaxSource": "/docs/ajax_get_dir_contents/<?php echo $url['id_encrypted']; ?>/v",
 							"sDom": "<<'pull-right'p>f>t<<'pull-right'p>i>",
 							"sPaginationType": "bootstrap",
 							"oLanguage": {

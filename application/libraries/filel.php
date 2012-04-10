@@ -1,331 +1,183 @@
 <?php
 
 class FileL {
+	private $CI = '';
+
 	private $filesystem = '';
-	private $_ci = '';
-	private $_bucket = '';
-	private $_upload_status = FALSE;
-	private $_temp_dir = '';
-	private $_temp_file = '';
+	private $domain = '';
+
+	private $bucket = '';
+	private $s3_path = '';
+
+	private $temp_dir = '';
+
+	var $error_messages = array();
 
 	function __construct() {
-		$this->_ci = & get_instance();
-		$this->_ci->load->library('s3');
-		$this->_ci->load->Model('DocsM');
+		$this->CI = & get_instance();
+		$this->CI->load->library('s3');
+		$this->CI->load->Model('DocsM');
 
-		$domain = explode('.', $_SERVER['SERVER_NAME']);
-		$domain = $domain[0];
+		$this->filesystem = $this->CI->eightforce_config['file_storage_system'];
+		$this->domain = $this->CI->domain;
 
-		$this->_bucket = $this->_ci->access_keys['s3_bucket'];
+		if ($this->filesystem == 'S3') {
+			$this->bucket = $this->CI->eightforce_config['s3_bucket'];
+			$this->s3_path = 'tenants/'.$this->domain.'/';
+		}
 
-		$this->filesystem = 's3';
-		create_dir($_SERVER['DOCUMENT_ROOT'].'/tmp/'.$domain.'/docs/files/upload/', 0777);
-		$this->_temp_dir = $_SERVER['DOCUMENT_ROOT'].'/tmp/'.$domain.'/docs/files/upload/';
+		$this->temp_dir = $this->CI->eightforce_config['temp_folder'].$this->domain.'/';
+		if ( ! file_exists($this->temp_dir)) {
+			mkdir($this->temp_dir, 0777, true);
+		}
 	}
 
-	function set_filesystem($fs) {
-		$this->filesystem = $fs; return $this;
-	}
+	function read($hash_or_id) {
+		if ($hash_or_id == '') return FALSE;
 
-	function set_bucket($bucket) {
-		$this->_bucket = $bucket; return this;
-	}
+		$file = $this->CI->DocsM->get_detail($hash_or_id);
 
-	function read($filepath) {
-		if ($this->filesystem === 's3') {
-			$object = S3::getObject($this->_bucket, $filepath, FALSE);
-			return $object;
+		if ($file === FALSE) return FALSE;
+
+		if ($this->filesystem === 'S3') {
+			$file['contents'] = $this->read_from_s3($file['hash']);
 		}
 
 		if ($this->filesystem === 'local') {
 
 		}
+
+		return $file;
 	}
 
-	// Saves new content, creates a new docs_id
-	function save_new(&$content, $path, $filename, $overwrite, $via) {
-		$this->_write_to_temp($content, $filename);
+	function get_url($hash_or_id, $lifetime=3600) {
+		if ($hash_or_id == '') return FALSE;
 
-		if ($this->filesystem === 's3') {
-			$this->_check_folder($path);
-			$docs_id_n_path = $this->_upload_files($path, $filename, $overwrite, $via);
-			return $docs_id_n_path;
-			/*
-			$this->_ci->output->set_content_type('application/json');
-			($docs_id)
-				? $this->_ci->output->set_output(json_encode(array('success'=>'1', 'docs_id'=>$docs_id)))
-				: $this->_ci->output->set_output(json_encode(array('success'=>'0')));*/
+		$file = $this->CI->DocsM->get_detail($hash_or_id);
+
+		if ($this->filesystem === 'S3') {
+			$url = $this->url_from_s3($file['hash'], $lifetime);
 		}
 
 		if ($this->filesystem === 'local') {
 
 		}
+
+		return $url;
 	}
 
-	// Saves content over existing docs_id or creates a new ver for it.
-	function save_existing(&$content, $docs_id, $filename, $version, $via) {
-		$path = array();
-		$path = $this->_ci->DocsM->get_dirpath($docs_id);
-		if (empty($path)) {
-			log_message('debug', 'No records found for doc_id: '.$docs_id);
-			return;
-		}
-		$path = $path['a_docs_dir_dirpath'];
-		$this->_write_to_temp($content, $filename);
+	//all apps should use this function to store uploads from users
+	function save($form_field='userfile', $dir_id=0, $docs_id=FALSE, $overwrite='') {
+		$this->CI->load->library('Upload');
 
-		if ($this->filesystem === 's3') {
-			$docs_id_n_path = $this->_upload_files_existing($path, $filename, $docs_id, $version, $via);
-			return $docs_id_n_path;
-		}
+		//Configure CI's file upload
+		$config = array(
+			'upload_path' => $this->temp_dir,
+			'allowed_types' => '*',
+			'encrypt_name' => TRUE,
+		);
 
-		if ($this->filesystem === 'local') {
-
-		}
-	}
-
-	function del_by_id($docs_id, $all, $ver_id='') {
-		$path = $this->_ci->DocsM->get_dirpath($docs_id);
-		if (empty($path)) {
-			log_message('debug', 'Unable to get path to docs_id: '.$docs_id);
-			return;
-		}
-		$path = $path['a_docs_dir_dirpath'];
-		if ($all === '1') {
-			$versions = $this->_ci->DocsM->get_all_versions($docs_id);
-			$d = FALSE;
-			foreach ($versions as $version) {
-				if (S3::deleteObject($this->_bucket, $this->_format_dirpath($path, $version['a_docs_ver_filename']))) {
-					log_message('debug', 'Docs: Deleted '. $this->_format_dirpath($path, $version['a_docs_ver_filename']));
-					$d = TRUE;
-				}
-			}
-			$this->_ci->DocsM->delete_all_docs($docs_id);
-			return $d;
-		} elseif ($all === '0' && $ver_id !== '') {
-			$version = $this->_ci->DocsM->get_docs_ver_detail($docs_id, $ver_id);
-			if (S3::deleteObject($this->_bucket, $this->_format_dirpath($path, $version['a_docs_ver_filename']))) {
-				log_message('debug', 'Docs: Deleted '. $this->_format_dirpath($path, $version['a_docs_ver_filename']));
-				$this->_ci->DocsM->delete_single_ver($docs_id, $ver_id);
-
-				// Check if other versions exists, if not, remove the doc also
-				$i = array();
-				$i = $this->_ci->DocsM->get_all_versions($docs_id);
-				if (empty($i)) {
-					$this->_ci->DocsM->delete_docs($docs_id);
-				}
-				return TRUE;
-			}
-			return FALSE;
-		} else {
-			log_message('debug', 'Ver id cannot be empty');
-			return FALSE;
-		}
-	}
-
-	private function _get_bucket(){
-		if (($contents = S3::getBucket($this->_bucket)) !== false) {
-			return TRUE;
-		}
-		return FALSE;
-	}
-
-	private function _create_bucket() {
-		if (S3::putBucket($this->_bucket, S3::ACL_PRIVATE)) {
-			return TRUE;
-		}
-		return FALSE;
-	}
-
-	/* Unused, to delete by path
-	function delete($path) {
-		$filepath = explode('/',$path);
-		$filename = array_pop($filepath);
-		if ( ! empty($filepath)) {
-			$filepath = '/'.implode('/',$filepath);
-		}
-		else {
-			$filepath = '/';
+		//if Docs ID provided, load the existing file info
+		if ($docs_id !== FALSE) {
+			$existing_file_info = $this->CI->DocsM->get_detail($docs_id);
 		}
 
-		if ($this->filesystem === 's3') {
-			$file_exists = $this->_ci->DocsM->does_file_exists($filepath, $filename);
-			if ($file_exists) {
-				if (S3::deleteObject($this->_bucket, $this->_format_dirpath($filepath, $filename))) {
-					log_message('debug', 'FileL: Deleted '. $this->_format_dirpath($filepath, $filename));
-					$docs_id = $this->_ci->DocsM->get_docs_id_from_path($filepath, $filename);
-					// Check if this is the only version
-					$all_ver = $this->_ci->DocsM->get_all_versions($docs_id);
-					if (count($all_ver) > 1) {
-						// There are other versions, delete only current one.
+		//If overwrite not specified, get from the target directory's setting
+		if ($overwrite === '') {
+			if ($docs_id !== FALSE) $dir_id = $existing_file_info['dir_id'];
 
-					}
-					else {
-						// This is the only version, remove everything including docs_id
-						$this->_ci->DocsM->delete_docs($docs_id);
-					}
-				}
-				return TRUE;
-			}
+			$dir_info = $this->CI->DocsM->get_dir_detail($dir_id);
+			$overwrite = ($dir_info['has_versioning'] == 1);
+		}
+
+		//update CI file upload configuration
+		$config['overwrite'] = $overwrite;
+
+		//if Docs ID given and want to Overwrite, update CI file upload config to use filename same one has the existing file
+		if ($overwrite && $docs_id !== FALSE) {
+			$config['file_name'] = $existing_file_info['hash'];
+		}
+
+		$this->CI->upload->initialize($config);
+
+		//perform the upload
+		$result = $this->CI->upload->do_upload($form_field);
+		if ($result === FALSE) {
+			$this->error_messages = $this->CI->upload->display_errors();
 			return FALSE;
 		}
 
-		if ($this->filesystem === 'local') {
+		//data of the newly uploaded file
+		$new_file_data = $this->CI->upload->data();
+
+		//upload to S3 if needed
+		if ($this->filesystem === 'S3') {
+			$this->upload_to_s3($new_file_data['full_path'], $new_file_data['raw_name']);
+		} elseif ($this->filesystem === 'local') {
 
 		}
-	} */
 
-	private function _write_to_temp(&$content, $filename) {
-		$this->_temp_file = $this->_temp_dir.$filename;
-		$fp = fopen($this->_temp_file,'wb');
-		if ( ! fwrite($fp, $content)) {
-			fclose($fp);
-			log_message('debug', 'Error saving content to '.$this->_temp_file);
-			return;
-		}
-		fclose($fp);
-	}
+		//strip extension of file in the cache folder
+		rename($new_file_data['full_path'], $new_file_data['file_path'].$new_file_data['raw_name']);
 
-	private function _check_folder($path) {
-		if ( ! $this->_ci->DocsM->does_path_exists($path)) {
-			// Create folder
-			return;
-		}
-		return;
-	}
-
-	private function _upload_files_existing($path, $filename, $docs_id, $version, $via) {
-		if ($version === '1') {
-			$this->_rename_old_ver($docs_id);
-		}
-		$this->_s3_put_object($path, $filename);
-
-		$values = array();
-		if ($this->_upload_status) {
-			$docs_detail = $this->_ci->DocsM->get_docs_detail($docs_id);
-			$values['a_docs_ver_id'] = $docs_detail['a_docs_ver_id'];
-			$values['a_docs_ver_docsid'] = $docs_id;
-			$values['a_docs_ver_filename'] = $filename;
-			$values['a_docs_ver_uploadvia'] = $via;
-			$values['a_docs_ver_filesize'] = filesize($this->_temp_file);
-			$f = finfo_open(FILEINFO_MIME_TYPE);
-			$mime_type = finfo_file($f, $this->_temp_file);
-			finfo_close($f);
-			$values['a_docs_ver_mime'] = $mime_type;
-			$values['a_docs_ver_stamp'] = get_current_stamp();
-			if ($version === '0') { // Update version
-				$ver_id = $this->_ci->DocsM->get_current_ver_id($docs_id);
-				$this->_ci->DocsM->update_docs_ver($values);
-				return array('docs_id'=>$docs_id, 'path'=>$this->_format_dirpath($path, $filename));
-			}
-			$docs_id = $this->_ci->DocsM->insert_docs_ver($values); // else insert version
-			return array('docs_id'=>$docs_id, 'path'=>$this->_format_dirpath($path, $filename));
-		}
-	}
-
-	private function _rename_old_ver($docs_id) {
-		$docs_detail = $this->_ci->DocsM->get_docs_detail($docs_id);
-		$ver_detail = $this->_ci->DocsM->get_docs_ver_detail($docs_detail['a_docs_ver_id']);
-		$values['a_docs_ver_id'] = $ver_detail['a_docs_ver_id'];
-		$values['a_docs_ver_filename'] = '._'.$ver_detail['a_docs_ver_filename'];
-		if (S3::copyObject($this->_bucket, $this->_format_dirpath($docs_detail['a_docs_dir_dirpath'],$ver_detail['a_docs_ver_filename']),
-			$this->_bucket, $this->_format_dirpath($docs_detail['a_docs_dir_dirpath'], $values['a_docs_ver_filename']), S3::ACL_PRIVATE)) {
-			log_message('debug', 'Docs: Copied file to '. $this->_format_dirpath($docs_detail['a_docs_dir_dirpath'], $values['a_docs_ver_filename']));
-			if (S3::deleteObject($this->_bucket, $this->_format_dirpath($docs_detail['a_docs_dir_dirpath'],$ver_detail['a_docs_ver_filename']))) {
-				log_message('debug', 'Docs: Removed old renamed file: '.$this->_format_dirpath($docs_detail['a_docs_dir_dirpath'],$ver_detail['a_docs_ver_filename']));
-			}
-			$this->_ci->DocsM->update_docs_ver($values);
-		}
-	}
-
-	private function _upload_files($path, $filename, $overwrite, $via) {
-		if ($overwrite === '0') {
-			$filename = $this->_check_filename($filename);
-		}
-
-		$this->_s3_put_object($path, $filename);
-		$values = array();
-		if ($this->_upload_status) {
-			$dir_id = $this->_ci->DocsM->get_dir_id_from_path($path);
-			$values['a_docs_parentid'] = $dir_id;
-			$values['a_docs_ver_filename'] = $filename;
-			$values['a_docs_ver_uploadvia'] = $via;
-			$values['a_docs_ver_filesize'] = filesize($this->_temp_file);
-			$f = finfo_open(FILEINFO_MIME_TYPE);
-			$mime_type = finfo_file($f, $this->_temp_file);
-			finfo_close($f);
-			$values['a_docs_ver_mime'] = $mime_type;
-			$values['a_docs_ver_stamp'] = get_current_stamp();
-			$file_exists = $this->_ci->DocsM->does_file_exists($path, $filename);
-			if ($overwrite === '1') {
-				if ($file_exists) {
-					// Update current version
-					$docs_id = $this->_ci->DocsM->get_docs_id_from_path($path, $filename);
-					$ver_id = $this->_ci->DocsM->get_current_ver_id($docs_id);
-					$this->_ci->DocsM->update_docs_ver($values);
-					return array('docs_id'=>$docs_id, 'path'=>$this->_format_dirpath($path, $filename));
-				}
-			}
-			$docs_id = $this->_ci->DocsM->insert_docs($values);
-			return array('docs_id'=>$docs_id, 'path'=>$this->_format_dirpath($path, $filename));
-		}
-	}
-
-	private function _check_filename($filename) {
-		// Break filename into filename and extension
-		$_ext = substr(strrchr($filename, '.'), 0);
-		$_ext_length = strlen($_ext);
-		$old_filename = substr($filename,0,strlen($filename)-$_ext_length);
-
-		if ( ! $this->_does_file_exists($old_filename.$_ext)) {
-			return $filename;
+		//create DB entry
+		if ($docs_id !== FALSE) {
+			return $this->CI->DocsM->overwrite_file($docs_id, $new_file_data, $overwrite);
 		} else {
-			$new_filename = $old_filename.'_'.randStr(3).$_ext;
-			// Check if the generated name exists
-			if ($this->_does_file_exists($new_filename)) {
-				$this->_check_filename($filename);
-			}
-		}
-		return $new_filename;
-	}
-
-	private function _does_file_exists($filename) {
-		$i = $this->_ci->DocsM->search_filename($filename);
-		if ( ! empty ($i)) return TRUE;
-		return FALSE;
-	}
-
-	private function _s3_put_object($path, $filename) {
-		if (isset($this->_temp_file)) {
-			if (S3::putObject(S3::inputFile($this->_temp_file), $this->_bucket,
-				$this->_format_dirpath($path, $filename), S3::ACL_PRIVATE)) {
-				$this->_upload_status = TRUE;
-				log_message('debug', 'FileL: Upload: '.$this->_format_dirpath($path, $filename));
-			} else {
-				$this->_upload_status = FALSE;
-			}
-		}
-		// ----- end S3 code ---- /
-		return;
-	}
-
-	private function _format_dirpath($path, $filename) {
-		if ($path === '/') {
-			return $path.$filename;
-		} else {
-			return $path.'/'.$filename;
+			return $this->CI->DocsM->new_file_in_dir($new_file_data, $dir_id);
 		}
 	}
 
-	function create_folder($folder='') {
-		if ($this->filesystem == 's3') {
+	function delete($hash_or_id) {
+		return $this->CI->DocsM->delete($hash_or_id);
+	}
+
+	function delete_dir($dir_id) {
+		return $this->CI->DocsM->delete_dir_by_id($dir_id);
+	}
+
+	function create_physical_folder($folder='') {
+		if ($this->filesystem == 'S3') {
 			//ensure a / at the end to create a folder in AWS
 			if (substr($folder,-1) !== '/') $folder = $folder.'/';
 
-			return S3::putObject('', $this->_ci->access_keys['s3_bucket'], $folder);
+			return S3::putObject('', $this->CI->eightforce_config['s3_bucket'], $folder);
 		}
 
 		if ($this->filesystem == 'local') {
 		}
 	}
 
+	function delete_temp_file($filepath) {
+		return unlink($filepath);
+	}
+
+	function upload_to_s3($path_to_source, $filename) {
+		if ( S3::putObject(S3::inputFile($path_to_source), $this->bucket, $this->s3_path.$filename, S3::ACL_PRIVATE) ) {
+			log_message('debug', 'FileL: S3 Upload: '.$path_to_source);
+			return TRUE;
+		} else {
+			log_message('error', 'Unable to upload to S3');
+			return FALSE;
+		}
+	}
+
+	function read_from_s3($filename) {
+		$object = S3::getObject($this->bucket, $this->s3_path.$filename, FALSE);
+		return $object->body;
+	}
+
+	function url_from_s3($filename, $lifetime=3600) {
+		return S3::getAuthenticatedURL($this->bucket, $this->s3_path.$filename, $lifetime);
+	}
+
+	function delete_from_s3($filename) {
+		if ( S3::deleteObject($this->bucket, $this->s3_path.$filename) ) {
+			log_message('debug', 'FileL: S3 Delete: '.$this->s3_path.$filename);
+			return TRUE;
+		} else {
+			log_message('error', 'Unable to delete from S3');
+			return FALSE;
+		}
+	}
 }

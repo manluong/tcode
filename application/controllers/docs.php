@@ -1,18 +1,15 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Docs extends MY_Controller {
-	private $_views_data, $_dir_path = array();
+	private $_views_data = array();
 	private $_upload_status = FALSE;
-	private $_temp_dir = '';
-	private $_bucket = '';
 
 	function __construct() {
 		parent::__construct();
-		$this->load->library('fileL');
+		$this->load->library('FileL');
 		$this->load->library('CommentsL');
 
 		$this->load->model('DocsM');
-		$this->_temp_dir = $_SERVER['DOCUMENT_ROOT'].'/tmp/'.$this->domain.'/docs/files/';
 
 		$this->_views_data['folder_icon'] = '<img src="/resources/template/'.get_template().'/images/icons/16/folder-small-horizontal.png">';
 		$this->_views_data['docs_icon'] = '<img src="/resources/template/'.get_template().'/images/icons/16/document-small.png">';
@@ -22,159 +19,10 @@ class Docs extends MY_Controller {
 		$this->_views_data['error_icon'] = '<img src="/resources/template/'.get_template().'/images/icons/16/exclamation-red.png" style="display:none;" id="error-icon">';
 	}
 
-
-	function ajax_create_folder() {
-		$insert_id = $this->_create_folder($this->url['id_plain'], $this->input->post('cardid'), $this->input->post('name'));
-		$this->output->set_content_type('application/json');
-		($insert_id)
-			? $this->output->set_output(json_encode(array('success' => '1')))
-			: $this->output->set_output(json_encode(array('success' => '0')));
-	}
-
-	private function _create_folder($id, $cardid, $name) {
-		//dirpath finds the full directory patht to update
-		if ($name === 'root') {
-			$path = '/'.$this->domain;
-		} else {
-			$_dirpath = $this->DocsM->get_dirpath_dir($id);
-			$path = $this->format_dirpath($_dirpath['a_docs_dir_dirpath'], $name);
-		}
-
-		$data = array(
-			'a_docs_parentid' => $id,
-			'a_docs_isdir' => TRUE,
-			'a_docs_displayname' => $name,
-			'a_docs_desc' => '',
-			'a_docs_status' => '',
-			'a_docs_stamp' => get_current_stamp(),
-			'a_docs_app_data_id' => '',
-		);
-		$insert_id = $this->DocsM->insert_a_docs_entry($data);
-
-		$data = array(
-			'a_docs_dir_docs_id' => $insert_id,
-			'a_docs_dir_dirpath' => $path,
-			'a_docs_dir_cardid' => $cardid,
-			'a_docs_dir_dirtype' => '',
-			'a_docs_dir_hide' => '',
-			'a_docs_dir_nofile' => '',
-			'a_docs_dir_nodir' => '',
-			'a_docs_dir_filemaxsize' => '',
-			'a_docs_dir_dirmaxsize' => '',
-			'a_docs_dir_listmime' => '',
-			'a_docs_dir_listext' => '',
-			'a_docs_dir_listtype' => '',
-			'a_docs_dir_socialcomment' => '',
-			'a_docs_dir_sociallike' => '',
-			'a_docs_dir_socialstar' => '',
-			'a_docs_dir_socialack' => '',
-			'a_docs_dir_encrypt' => '',
-			'a_docs_dir_browsestyle' => '',
-			'a_docs_dir_app' => '',
-			'a_docs_dir_action' => '',
-			'a_docs_dir_subaction' => '',
-			'a_docs_dir_noocrindex' => '',
-		);
-		$insert_id = $this->DocsM->insert_a_docs_dir_entry($data);
-		return $insert_id;
-	}
-
-	// Removes files from server. No way to retrieve.
-	function delete_all_docs() {
-		$this->output->set_content_type('application/json');
-		$_obj_details = $this->DocsM->get_docs_detail($this->url['id_plain']);
-		if (empty($_obj_details)) {
-			return $this->output->set_header('HTTP/1.1 400');
-		}
-		$versions = $this->DocsM->get_all_versions($this->url['id_plain']);
-		foreach ($versions as $version) {
-			if (S3::deleteObject($this->access_keys['s3_bucket'], $this->format_dirpath($_obj_details['a_docs_dir_dirpath'], $version['a_docs_ver_filename']))) {
-				log_message('debug', 'Docs: Deleted '. $this->format_dirpath($_obj_details['a_docs_dir_dirpath'], $version['a_docs_ver_filename']));
-			}
-		}
-		$i = '';
-		$i = $this->DocsM->delete_all_docs($_obj_details['a_docs_id']);
-		($i)
-		 ? $this->output->set_output(json_encode(array('success' => '1')))
-		 : $this->output->set_output(json_encode(array('success' => '0')));
-	}
-
-	function delete_single_ver() {
-		// Usage /docs/delete_single_ver/:docs_id/d/:ver_id
-		$this->output->set_content_type('application/json');
-		$docs_id = $this->input->post('docs_id');
-		$ver_id = $this->input->post('ver_id');
-		$i = $this->filel->del_by_id($docs_id, '0', $ver_id);
-		($i)
-		? $this->output->set_output(json_encode(array('success' => '1')))
-		 : $this->output->set_output(json_encode(array('success' => '0')));
-	}
-
-	/*
-	function display_file_functions () {
-		$this->_views_data['root_dir'] = $this->DocsM->get_root_dir();
-		$this->_views_data['tree'] = $this->get_tree($this->_views_data['root_dir']['a_docs_id']);
-		$data = array();
-		$data['html'] = $this->load->view('/'.get_template().'/docs/docs_view_file_functions.php',$this->_views_data,TRUE);
-		$data['isoutput'] = 1;
-		$data['isdiv'] = 1;
-		return $data;
-	} */
-
-	function download_file() {
-		$i = $this->DocsM->get_docs_ver_detail($this->url['id_plain']);
-		if ( ! empty($i)) {
-			$uri = $this->format_dirpath($i['a_docs_dir_dirpath'], $i['a_docs_ver_filename']);
-			$_filecontent = $this->get_object($this->access_keys['s3_bucket'], $uri);
-			$this->output->set_content_type($i['a_docs_ver_mime']);
-			$this->output->set_header('Content-Disposition: attachment; filename="'.$i['a_docs_ver_filename'].'"');
-			$this->output->set_output($_filecontent->body);
-		}
-	}
-
-	// Helper function to format full path correctly
-	function format_dirpath($dirpath, $filename) {
-		if ($dirpath === '/') {
-			return $dirpath.$filename;
-		} else {
-			return $dirpath.'/'.$filename;
-		}
-	}
-
-	/*
-	function get_docs() {
-		$docs = $this->DocsM->get_docs($this->url['id_plain']);
-		if ( ! empty($docs)) {
-			$this->output->set_content_type('application/json');
-			return $this->output->set_output(json_encode($docs));
-		} else {
-			return $this->output->set_output(json_encode(array('message'=>'Your folder is empty.')));
-		}
-	}*/
-
+	//TODO: might be deleted
 	function get_object($uri) {
-		$object = S3::getObject($this->access_keys['s3_bucket'], $uri, FALSE);
+		$object = S3::getObject($this->eightforce_config['s3_bucket'], $uri, FALSE);
 		return $object;
-	}
-
-	function get_object_url($uri, $lifetime) {
-		return S3::getAuthenticatedURL($this->access_keys['s3_bucket'], $uri, $lifetime);
-	}
-
-	function json_tree() {
-		$tree = $this->_get_tree(1); //gets tree from root dir
-
-		$this->output->set_content_type('application/json')
-			->set_output(json_encode($tree));
-	}
-
-	private function _get_tree($a_docs_id) {
-		$i = $this->DocsM->get_sub_folders($a_docs_id);
-		foreach($i as &$sub_folder) {
-			$j = $this->_get_tree($sub_folder['a_docs_id']);
-			if ( ! empty($j)) $sub_folder['child'] = $j;
-		}
-		return $i;
 	}
 
 	/*
@@ -182,312 +30,21 @@ class Docs extends MY_Controller {
 		redirect('/docs/view/0/list-view');
 	}*/
 
-	function move_file() {
-		if ($this->input->post('folder_id')) {
-			$this->output->set_content_type('application/json');
-			$versions = $this->DocsM->get_all_versions($this->url['id_plain']);
-			$new_dir = $this->DocsM->get_dirpath_dir($this->input->post('folder_id'));
-			foreach ($versions as $version) {
-				if (S3::copyObject($this->access_keys['s3_bucket'], $this->format_dirpath($version['a_docs_dir_dirpath'],$version['a_docs_ver_filename']), $this->access_keys['s3_bucket'], $this->format_dirpath($new_dir['a_docs_dir_dirpath'], $version['a_docs_ver_filename']), S3::ACL_PRIVATE)) {
-					log_message('debug', 'Docs: Copied file '.$this->format_dirpath($version['a_docs_dir_dirpath'],$version['a_docs_ver_filename'].' to '.$this->format_dirpath($new_dir['a_docs_dir_dirpath'], $version['a_docs_ver_filename'])));
-					if (S3::deleteObject($this->access_keys['s3_bucket'], $this->format_dirpath($version['a_docs_dir_dirpath'],$version['a_docs_ver_filename']))) {
-						log_message('debug', 'Docs: Removed file '. $this->format_dirpath($version['a_docs_dir_dirpath'],$version['a_docs_ver_filename']));
-					}
-				}
-				$this->DocsM->update_docs_location($this->input->post('folder_id'), $this->url['id_plain']);
-				$this->output->set_output(json_encode(array('success'=>'1')));
-			}
-		} else {
-			$this->output->set_output(json_encode(array('success'=>'0')));
-		}
-	}
-
-	/**
-	 * Returns json details of document
-	 */
-	function get_file_details() {
-		if ($this->uri->segment(5)) {
-			$docs_details = $this->DocsM->get_docs_ver_detail($this->url['id_plain'], $this->uri->segment(5,0));
-		} else {
-			$docs_details = $this->DocsM->get_docs_detail($this->url['id_plain']);
-		}
-
-		if (empty($docs_details)) {
-			$this->output->set_content_type('application/json')
-				->set_output(json_encode(array('success'=>0, 'message'=>'No details found')));
-			return;
-		}
-		$past_versions = $this->DocsM->get_all_versions($this->url['id_plain']);
-		switch ($docs_details['a_docs_ver_mime']) {
-			case 'image/gif':
-			case 'image/jpeg':
-			case 'image/png':
-				$s3object = html_entity_decode($this->get_object_url($this->access_keys['s3_bucket'],$this->format_dirpath($docs_details['a_docs_dir_dirpath'],$docs_details['a_docs_ver_filename']), 3600));
-				//$s3object = '<img src="'.$this->_views_data['s3_object'].'">';
-				break;
-			case 'application/pdf':
-				$s3object = $this->get_object($this->access_keys['s3_bucket'], $this->format_dirpath($docs_details['a_docs_dir_dirpath'],$docs_details['a_docs_ver_filename']));
-				$this->save_to_file($s3object->body, $docs_details['a_docs_id'].'.pdf');
-				break;
-		}
-		$data = array('docs_details'=>$docs_details, 's3object'=>$s3object, 'versions'=>$past_versions);
-		$this->output->set_content_type('application/json')
-			->set_output(json_encode($data));
-
-		/*
-		$data = array();
-		$data['html'] = $this->load->view('/'.get_template().'/docs/docs_view_preview.php',$this->_views_data, TRUE);
-		$data['isoutput'] = 1;
-		$data['isdiv'] = 1;
-		return $data; */
-	}
-
-
-	function load_file_html() {
+	function file() {
 		$data = array();
 		$vars['url'] = $this->url;
-		$vars['page'] = '/'.get_template().'/docs/docs_file_html';
-		$data['html'] = $this->load->view('/'.get_template().'/docs/docs_view',$vars,TRUE);
+		$vars['page'] = get_template().'/docs/docs_file_html';
+		$data['html'] = $this->load->view(get_template().'/docs/docs_view',$vars,TRUE);
 		$data['isoutput'] = 1;
-		$data['isdiv'] = 1;
-		return $data;
-	}
 
-	function check_version_settings() {
-		// Check docs_dir and return, if not found default to docs_settings table
-		$dir_id = $this->DocsM->get_dir_id_from_docs_id($this->url['id_plain']);
-		if (! $dir_id) {
-			log_message('debug', 'Cannot locate dir_id of docs_id: '.$this->url['id_plain']);
-			return FALSE;
-		}
-		$_docs_dir_ver = $this->DocsM->get_docs_dir_ver($dir_id);
-		// 3 will take a_docs_setting's versioning
-		if ( ! empty($_docs_dir_ver) && $_docs_dir_ver['a_docs_dir_versioning'] !== '3') {
-			return $_docs_dir_ver['a_docs_dir_versioning'];
-		}
-		$_docs_app_ver = $this->DocsM->get_docs_settings();
-		return $_docs_app_ver['a_docs_setting_versioning'];
-	}
-
-	function upload() {
-		// Insert new doc entry for every upload
-		$filename = $this->check_filename($_FILES['file']['name']);
-		$this->put_object($this->url['id_plain'], $filename);
-	}
-
-	function upload_single() {
-		// eg http://apple.telcoson.local/docs/upload_single/:docs_id/upload/:ver_id
-		$_ver_setting = $this->check_version_settings();
-		$_filename = $this->check_filename($_FILES['file']['name']); // Get new filename if filename conflict
-		if ($_ver_setting !== '0') {
-			$this->create_new_ver($_filename, $this->uri->segment(5,0));
-			return TRUE;
-		}
-		$this->replace_file($this->url['id_plain'], $_filename, $this->uri->segment(5,0));
-	}
-
-	function create_new_ver($filename, $ver_id) {
-		$dirpath = $this->DocsM->get_dirpath($this->url['id_plain']);
-		$this->s3_put_object($dirpath, $filename);
-		if ($this->_upload_status) {
-			$values = array(
-				'a_docs_ver_docsid' => $this->url['id_plain'],
-				'a_docs_ver_uploadvia' => 'web',
-				'a_docs_ver_filename' => $filename,
-				'a_docs_ver_stamp'=> get_current_stamp(),
-				'a_docs_ver_filesize' => $_FILES['file']['size'],
-				'a_docs_ver_cardid' => $this->UserM->info['cardid'],
-				'a_docs_ver_mime'=> $_FILES['file']['type'],
-				'a_docs_ver_current_version' => 1,
-			);
-			$this->rename_old_ver($dirpath, $this->url['id_plain']);
-			$this->DocsM->set_all_current_ver($this->url['id_plain'], 0);
-			$this->DocsM->insert_docs_ver($values);
-			$this->output->set_content_type('application/json');
-			$this->output->set_output(json_encode(array('success'=>'1')));
-		} else {
-			$this->output->set_header('HTTP/1.1 500');exit();
-		}
-	}
-
-	function rename_old_ver(&$dirpath, &$docs_id) {
-		$ver_id = $this->DocsM->get_docs_detail($docs_id);
-		$ver_detail = $this->DocsM->get_docs_ver_detail($docs_id, $ver_id['a_docs_ver_id']);
-		$values['a_docs_ver_id'] = $ver_detail['a_docs_ver_id'];
-		$filename = '._'.$ver_detail['a_docs_ver_filename'];
-		$values['a_docs_ver_filename'] = $this->check_filename($filename);
-
-		if (S3::copyObject($this->access_keys['s3_bucket'], $this->format_dirpath($dirpath['a_docs_dir_dirpath'],$ver_detail['a_docs_ver_filename']),
-			$this->access_keys['s3_bucket'], $this->format_dirpath($dirpath['a_docs_dir_dirpath'], $values['a_docs_ver_filename']), S3::ACL_PRIVATE)) {
-			log_message('debug', 'Docs: Copied file to '. $this->format_dirpath($dirpath['a_docs_dir_dirpath'], $values['a_docs_ver_filename']));
-			if (S3::deleteObject($this->access_keys['s3_bucket'], $this->format_dirpath($dirpath['a_docs_dir_dirpath'],$ver_detail['a_docs_ver_filename']))) {
-				log_message('debug', 'Docs: Removed old renamed file: '.$this->format_dirpath($dirpath['a_docs_dir_dirpath'],$ver_detail['a_docs_ver_filename']));
-			}
-			$this->DocsM->update_docs_ver($values);
-		}
-	}
-
-	function replace_file($docs_id, $filename, $ver_id) {
-		$_dirpath = $this->DocsM->get_dirpath($docs_id);
-		$this->s3_put_object($_dirpath, $filename);
-		if ($this->_upload_status) {
-			$values['a_docs_ver_id'] = $ver_id;
-			$values['a_docs_ver_filename'] = $filename;
-			$values['a_docs_ver_stamp'] = get_current_stamp();
-			$values['a_docs_ver_mime'] = $_FILES['file']['type'];
-			$values['a_docs_ver_filesize'] = $_FILES['file']['size'];
-			$values['a_docs_ver_stamp'] = get_current_stamp();
-		} else {
-			log_message('debug', 'Docs: Error uploading File: '. $filename);exit();
-		}
-		$this->remove_old_file($ver_id, $_dirpath);
-		$this->DocsM->update_docs_ver($values);
-		$title = $this->_get_filename_wo_extension($filename);
-		$i = $this->DocsM->update_docs_display_name($title, $docs_id);
-		($i)
-		?log_message('debug', 'Updated display name')
-		:log_message('debug', 'Update display name failed');
-	}
-
-	function remove_old_file ($ver_id, $dirpath) {
-		$filename = $this->DocsM->get_file_name($ver_id);
-		$uri = $this->format_dirpath($dirpath['a_docs_dir_dirpath'], $filename['a_docs_ver_filename']);
-		if(S3::deleteObject($this->access_keys['s3_bucket'], $uri)) {
-			log_message('debug', 'Docs: Removed old File:'.$uri);
-		} else {
-			log_message('debug', 'Docs: Error old File:'.$filename['a_docs_ver_filename']);
-		}
-	}
-
-	function check_filename($filename, $i=0) {
-		$i++;
-		// Break filename into filename and extension
-		$_ext = substr(strrchr($filename, '.'), 0);
-		$_ext_length = strlen($_ext);
-		$_filename = substr($filename,0,strlen($filename)-$_ext_length);
-
-		if ( ! $this->is_file_exists($_filename.$_ext)) {
-			return $filename;
-		} else {
-			if ($this->is_file_exists($_filename.'_'.randStr(3).$_ext)) {
-				$this->check_filename($_filename, $i);
-			}
-		}
-		return $_filename.'_'.randStr(3).$_ext;
-	}
-
-	function is_file_exists($filename) {
-		$i = $this->DocsM->search_filename($filename);
-		if ( ! empty ($i)) return TRUE;
-		return FALSE;
-	}
-
-	// For Mass upload
-	function put_object($folder_id, $filename) {
-		$dirpath = $this->DocsM->get_dirpath_dir($folder_id);
-		$this->s3_put_object($dirpath, $filename);
-		if ($this->_upload_status) {
-			$values['a_docs_parentid'] = $folder_id;
-			$values['a_docs_displayname'] = $this->_get_filename_wo_extension($filename);
-			$values['a_docs_ver_filename'] = $filename;
-			$values['a_docs_ver_uploadvia'] = 'web';
-			$values['a_docs_ver_filesize'] = $_FILES['file']['size'];
-			$values['a_docs_ver_mime'] = $_FILES['file']['type'];
-			$values['a_docs_ver_current_version'] = 1;
-
-			$this->DocsM->insert_docs($values);exit();
-		}
-		$this->output->set_header('HTTP/1.1 500');
-		log_message('debug',"Docs: Upload failed.\n ".'Content-type:'.$contentType."\n");exit();
-	}
-
-	function _get_filename_wo_extension($filename) {
-		// Assuming all files are .xxx extension
-		return substr($filename, 0, -4);
-	}
-
-	function s3_put_object(&$dirpath, &$filename) {
-		// ----- S3 code ----
-		// Look for the content type header
-		if (isset($_SERVER["HTTP_CONTENT_TYPE"]))
-			$contentType = $_SERVER["HTTP_CONTENT_TYPE"];
-
-		if (isset($_SERVER["CONTENT_TYPE"]))
-			$contentType = $_SERVER["CONTENT_TYPE"];
-		log_message('debug','Content-type:'.$contentType."\n");
-		// Handle non multipart uploads older WebKit versions didn't support multipart in HTML5
-		if (strpos($contentType, "multipart") !== FALSE) {
-			if (isset($_FILES['file']['tmp_name']) && is_uploaded_file($_FILES['file']['tmp_name'])) {
-				if (S3::putObject(S3::inputFile($_FILES['file']['tmp_name']), $this->access_keys['s3_bucket'],
-					$this->format_dirpath($dirpath['a_docs_dir_dirpath'], $filename), S3::ACL_PRIVATE)) {
-					$this->_upload_status = TRUE;
-					log_message('debug', 'Docs: Upload: '.$this->format_dirpath($dirpath['a_docs_dir_dirpath'], $filename));
-				} else {
-					$this->_upload_status = FALSE;
-				}
-			}
-		}
-		// ----- end S3 code ---- /
-		return;
-	}
-
-	function save_to_file(&$binary, $filename){
-		// Create dir if it doesnt exist
-		if (! is_dir('tmp/'.$this->domain.'/docs/files/')) {
-			$oldumask = umask(0);
-			mkdir('tmp/'.$this->domain.'/docs/files/', 0777, true);
-			umask($oldumask);
-		}
-
-		$fp = fopen($this->_temp_dir.$filename, 'wb');
-		$r = fwrite($fp, $binary);
-		fclose($fp);
-	}
-
-	/**
-	 * Returns json contents of directory for datatable.
-	 */
-	function get_dir_contents() {
-		$rows = array();
-		$sub_folders = $this->DocsM->get_sub_folders($this->url['id_plain']);
-		if ($this->url['id_plain'] !== '1') {
-			$parent = $this->DocsM->get_parent_id($this->url['id_plain']);
-			$parent = anchor('/docs/view/'.encode_id($parent['a_docs_parentid']).'/list-view','prev', 'class="ajax"');
-			array_push($rows, array($parent,'--','--'));
-		}
-
-		$docs = $this->DocsM->get_docs($this->url['id_plain']);
-		foreach ($sub_folders as $subfolder) {
-			$name = anchor('/docs/view/'.encode_id($subfolder['a_docs_id']).'/list-view',$subfolder['a_docs_displayname'], 'class="ajax"');
-			array_push($rows, array($name, '--', '--'));
-		}
-		foreach ($docs as $doc) {
-			$name = ($doc['a_docs_displayname'] !== '') ? $doc['a_docs_displayname'] : $doc['a_docs_ver_filename'];
-			$link = anchor('/docs/file/'.encode_id($doc['a_docs_id']).'/v',$name, 'class="ajax"');
-
-			array_push($rows, array($link, byte_size($doc['a_docs_ver_filesize']), $doc['a_docs_stamp']));
-		}
-		$this->output->set_content_type('application/json')
-			->set_output(json_encode(array('aaData'=>$rows)));
-	}
-
-	/**
-	 * Returns raw json values of directory contents
-	 */
-	function get_dir_contents_raw() {
-		$sub_folders = $this->DocsM->get_sub_folders($this->url['id_plain']);
-		if ($this->url['id_plain'] !== '1') {
-			$parent = $this->DocsM->get_parent_id($this->url['id_plain']);
-		}
-		$docs = $this->DocsM->get_docs($this->url['id_plain']);
-		$json = array('parent' => isset($parent) ? $parent : '',
-			'sub_folder' => $sub_folders, 'docs' => $docs);
-		$this->output->set_content_type('application/json')
-			->set_output(json_encode($json));
+		$this->data[] = $data;
+		$this->LayoutM->load_format();
+		$this->output();
 	}
 
 	// Called by view in tbuilder
-	function load_html() {
+	function index() {
+		/*
 		if ($this->url['subaction'] === 'folder-view') {
 
 		} else {
@@ -506,30 +63,51 @@ class Docs extends MY_Controller {
 				}
 			}
 		}
+*/
 
 		$data = array();
 		$vars['url'] = $this->url;
-		$vars['page'] = '/'.get_template().'/docs/docs_view_html';
-		$data['html'] = $this->load->view('/'.get_template().'/docs/docs_view',$vars,TRUE);
+		$vars['page'] = get_template().'/docs/docs_view_html';
+		$data['html'] = $this->load->view(get_template().'/docs/docs_view', $vars, TRUE);
+
 		$data['isoutput'] = 1;
-		$data['isdiv'] = 1;
 
-		return($data);
+		$this->data[] = $data;
+
+		$this->LayoutM->load_format();
+
+		$this->output();
 	}
 
-	function update_docs_title() {
-		// /docs/update_docs_title/:docs_id/title
-		if ($this->input->post('title')) {
-			$i = $this->DocsM->update_docs_display_name($this->input->post('title'), $this->url['id_plain']);
-			$this->output->set_content_type('application/json');
-			($i)
-			? $this->output->set_output(json_encode(array('success'=>1)))
-			: $this->output->set_output(json_encode(array('success'=>0)));
-		} else {
-			log_message('debug', 'Missing title parameter');
+	function view() {
+		$data = array();
+		$vars['url'] = $this->url;
+		$vars['page'] = get_template().'/docs/docs_view_html';
+		$data['html'] = $this->load->view(get_template().'/docs/docs_view', $vars, TRUE);
+		$data['isoutput'] = 1;
+
+		$this->data[] = $data;
+		$this->LayoutM->load_format();
+		$this->output();
+	}
+
+	/**
+	 * Returns raw json values of directory contents
+	 */
+	//TODO: does not seem to be in use, possible to delete
+	function get_dir_contents_raw() {
+		$sub_folders = $this->DocsM->get_sub_folders($this->url['id_plain']);
+		if ($this->url['id_plain'] !== '1') {
+			$parent = $this->DocsM->get_parent_id($this->url['id_plain']);
 		}
-
+		$docs = $this->DocsM->get_docs($this->url['id_plain']);
+		$json = array('parent' => isset($parent) ? $parent : '',
+			'sub_folder' => $sub_folders, 'docs' => $docs);
+		$this->output->set_content_type('application/json')
+			->set_output(json_encode($json));
 	}
+
+
 
 
 	function pdfPreview() {
@@ -659,134 +237,190 @@ class Docs extends MY_Controller {
 
 	}
 
-	/** Old functions for Flexpaper flash **/
-	/*
-	case 'application/pdf':
 
-	$this->convert_to_swf($docs_details['a_docs_ver_filename']);
-	$s3object = $this->_temp_dir.$docs_details['a_docs_ver_filename'].'.swf';
-	break;
 
-	function convert_to_swf($filename) {
-		require_once('application/libraries/pdf2swf/common.php');
-		require_once("application/libraries/pdf2swf/pdf2swf_php5.php");
-		$page = '';
-		$configManager = new Config();
-		$swfFilePath = $configManager->getConfig('path.swf') . $filename  . $page. ".swf";
-		$pdfFilePath = $configManager->getConfig('path.pdf') . $filename;
+	// updated by erik
+	function ajax_create_folder() {
+		$folder = $this->input->post('name');
+		$parent_folder = $this->input->post('parent_folder');
 
-		if(	!validPdfParams($pdfFilePath,$filename,$page) )
-			echo "[Incorrect file specified]";
-		else{
-			$pdfconv=new pdf2swf();
-			$output=$pdfconv->convert($filename,$page);
+		$result = $this->DocsM->create_dir($folder, $parent_folder);
 
-			if(rtrim($output) === "[Converted]"){
+		$this->RespM->set_details($result)
+				->set_success(($result !== FALSE))
+				->output_json();
+	}
 
-			}else {
-				echo $output; //error messages etc
-			}
+	function ajax_delete_file() {
+		$result = $this->filel->delete($this->url['id_plain']);
+
+		$this->RespM->set_success($result)
+				->output_json();
+	}
+
+		/**
+	 * Returns json details of document
+	 */
+	function ajax_get_file_details() {
+		$docs_details = $this->DocsM->get_detail($this->url['id_plain']);
+
+		if (empty($docs_details)) {
+			$this->RespM->set_success(FALSE)
+					->set_message('No details found')
+					->output_json();
+			return;
 		}
-	}
 
-	function pdfPreview() {
-		require_once('application/libraries/pdf2swf/common.php');
-		require_once("application/libraries/pdf2swf/pdf2swf_php5.php");
-
-			$doc=$_GET["doc"];
-			$page = "";
-			if(isset($_GET["page"]))
-				$page = $_GET["page"];
-
-			$pos = strpos($doc, "/");
-			$configManager = new Config();
-			$swfFilePath = $configManager->getConfig('path.swf') . $doc  . $page. ".swf";
-			$pdfFilePath = $configManager->getConfig('path.pdf') . $doc;
-
-			if(	!validPdfParams($pdfFilePath,$doc,$page) )
-				echo "[Incorrect file specified]";
-			else{
-				$pdfconv=new pdf2swf();
-				$output=$pdfconv->convert($doc,$page);
-				if(rtrim($output) === "[Converted]"){
-
-					if($configManager->getConfig('allowcache')){
-						setCacheHeaders();
-					}
-
-					if(!$configManager->getConfig('allowcache') || ($configManager->getConfig('allowcache') && endOrRespond())){
-						header('Content-type: application/x-shockwave-flash');
-						header('Accept-Ranges: bytes');
-						header('Content-Length: ' . filesize($swfFilePath));
-
-						echo file_get_contents($swfFilePath);
-					}
-				}else
-					echo $output; //error messages etc
-			}
-	}*/
-
-	/*
-	function permission_form() {
-
-	}
-
-	// Called when versioning is enabled.
-	function replace_object() {
-
-	}
-
-
-	function delete_directory() {
-
-	}
-
-	function upload_form() {
-
-	}*/
-	/*
-	function get_dirpath($id) {
-		$_dirpath = array();
-		$_dirpath_str = '';
-		while ($i = $this->DocsM->get_dir_parent_id($id)) {
-			$_dirpath[] = $i[0];
-			$id = $i[0]['a_docs_parentid'];
-		};
-		if ( ! empty($_dirpath)) {
-			$_dirpath = array_reverse($_dirpath);
-			$_dirpath_html = '<ul class="apphead_title">';
-			foreach ($_dirpath as $path) {
-				if ($path['a_docs_displayname'] !== 'root') $_dirpath_str .= '/'. $path['a_docs_dir_name'];
-				$_dirpath_html .= '<li><a href="/docs/view/'.$path['a_docs_dir_id'].'/'
-					.$this->url['subaction'].'">'.$path['a_docs_dir_name'].'</a></li>';
-			}
-			$_dirpath_html .= '</ul>';
-			return array('dirpath_str'=>$_dirpath_str,
-					'dirpath_html'=>$_dirpath_html,
-				);
-		} else {
-			return array('dirpath_str'=>'/',
-					'dirpath_html'=>'',
-				);
+		/*
+		 * TODO: This block does not seem to server any purpose, delete after confirmation
+		switch ($docs_details['mime']) {
+			case 'image/gif':
+			case 'image/jpeg':
+			case 'image/png':
+				$s3object = html_entity_decode($this->filel->get_url($docs_details['hash']));
+				//$s3object = '<img src="'.$this->_views_data['s3_object'].'">';
+				break;
+			case 'application/pdf':
+				$s3object = $this->get_object($this->eightforce_config['s3_bucket'], $this->format_dirpath($docs_details['a_docs_dir_dirpath'],$docs_details['a_docs_ver_filename']));
+				$this->save_to_file($s3object->body, $docs_details['a_docs_id'].'.pdf');
+				break;
 		}
-	}*/
+		*/
 
-	/** Test functions **/
-	function test() {
-		$i = $this->_get_filename_wo_extension('something.else.jpg');
-		var_dump($i);
-		die();
+		$data = array(
+			'docs_details' => $docs_details,
+			'versions' => $this->DocsM->get_all_versions($docs_details['id'])
+		);
+
+		$this->RespM->set_success(TRUE)
+				->set_details($data)
+				->output_json();
 	}
 
-	function print_tree($tree, $html) {
-		$html .= '<ul>';
-		foreach ($tree as $folder) {
-			$html .= '<li>'.$folder['a_docs_displayname'].'</li>';
-			if (isset($folder['child'])) {
-				$html .= $this->print_tree($folder['child'], $html);
-			}
+	function ajax_move_file() {
+		$new_dir_id = $this->input->post('folder_id');
+		$docs_id = $this->url['id_plain'];
+
+		if ($new_dir_id === FALSE) {
+			$this->RespM->set_message('Invalid Folder ID')
+				->set_success(FALSE)
+				->output_json();
 		}
-		$html .= '</ul>';
-		return $html;
+
+		$result = $this->DocsM->move_file($docs_id, $new_dir_id);
+
+		$this->RespM->set_success($result)
+			->output_json();
 	}
+
+	//upload a new file
+	function ajax_upload() {
+		$success = TRUE;
+		$message = '';
+
+		$dir_id = $this->url['id_plain'];
+		$file_info = $this->filel->save('file', $dir_id);
+
+		if ($file_info === FALSE) {
+			$success = FALSE;
+			$message = $this->filel->error_messages;
+		}
+
+		$this->RespM->set_success($success)
+			->set_message($message)
+			->set_details($file_info)
+			->output_json();
+	}
+
+	function ajax_overwrite() {
+		$docs_id = $this->url['id_plain'];
+		$this->filel->save('file', 0, $docs_id);
+
+		//TODO: success is defaulted to TRUE, must check file_info
+		$this->RespM->set_success(TRUE)
+			->set_details($file_info)
+			->output_json();
+	}
+
+	function ajax_update_docs_display_name() {
+		// /docs/update_docs_title/:docs_id/title
+		$display_name = $this->input->post('title');
+		$docs_id = $this->url['id_plain'];
+
+		if ($display_name === FALSE) {
+			$this->RespM->set_success(FALSE)
+					->set_message('Please enter a document title')
+					->output_json();
+			return NULL;
+		}
+
+		if ($docs_id === FALSE) {
+			$this->RespM->set_success(FALSE)
+					->set_message('Invalid document ID')
+					->output_json();
+			return NULL;
+		}
+
+
+		$result = $this->DocsM->update_display_name($docs_id, $display_name);
+
+		$this->RespM->set_success($result)
+				->output_json();
+	}
+
+	function ajax_delete_version() {
+		$hash = $this->input->post('hash');
+		$result = $this->filel->delete($hash);
+
+		$this->RespM->set_success($result)
+				->output_json();
+	}
+
+	/**
+	 * Returns json contents of directory for datatable.
+	 */
+	function ajax_get_dir_contents() {
+		$rows = array();
+
+		if ($this->url['id_plain'] !== '0') {
+			$parent_id = $this->DocsM->get_dir_parent_id($this->url['id_plain']);
+			$parent = anchor('/docs/view/'.encode_id($parent_id).'/list-view', 'prev', 'class="ajax"');
+			array_push($rows, array($parent, '--', '--'));
+		}
+
+		$sub_folders = $this->DocsM->get_subdir($this->url['id_plain']);
+		foreach ($sub_folders as $subfolder) {
+			$name = anchor('/docs/view/'.encode_id($subfolder['id']).'/list-view', $subfolder['name'], 'class="ajax"');
+			array_push($rows, array($name, '--', '--'));
+		}
+
+		$docs = $this->DocsM->get_dir_contents($this->url['id_plain']);
+		foreach ($docs as $doc) {
+			$link = anchor('/docs/file/'.encode_id($doc['id']).'/v', $doc['display_name'], 'class="ajax"');
+			array_push($rows, array($link, byte_size($doc['file_size']), $doc['created_stamp']));
+		}
+
+		$this->output->set_content_type('application/json')
+			->set_output(json_encode(array('aaData'=>$rows)));
+	}
+
+	function ajax_dir_tree() {
+		$tree = $this->DocsM->get_subdir(0, TRUE); //gets tree from root dir
+
+		$this->output->set_content_type('application/json')
+			->set_output(json_encode($tree));
+	}
+
+	function download_file() {
+		$file = $this->filel->read($this->url['id_plain']);
+
+		if ($file === FALSE) return NULL;
+
+		$this->output->set_content_type($file['mime']);
+		$this->output->set_header('Content-Disposition: attachment; filename="'.$file['filename'].'"');
+		$this->output->set_output($file['content']);
+	}
+
+
+
 }

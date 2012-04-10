@@ -13,11 +13,11 @@ class Config{
 			 */
 		$domain = explode('.', $_SERVER['SERVER_NAME']);
 		$domain = $domain[0];
-		
+
 		$this->config['allowcache'] = true;
 		$this->config['splitmode'] = false;
-		$this->config['path.pdf'] = 'tmp/'.$domain.'/docs/files/';
-		$this->config['path.swf'] = 'tmp/'.$domain.'/docs/files/';
+		$this->config['path.pdf'] = '../tcode-tmp/'.$domain.'/';
+		$this->config['path.swf'] = '../tcode-tmp/'.$domain.'/';
 
 		///usr/local/bin/pdf2json
 		$this->config['cmd.conversion.singledoc'] = '/usr/bin/pdf2swf {path.pdf}{pdffile} -o {path.swf}{pdffile}.swf -f -T 9 -t -s storeallcharacters';

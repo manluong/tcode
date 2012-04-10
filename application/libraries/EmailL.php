@@ -31,9 +31,9 @@ class EmailL {
 	function __construct($url = '') {
 		$this->_ci = & get_instance();
 
-		$this->_api_user = $this->_ci->access_keys['sendgrid_api_user'];
-		$this->_api_key = $this->_ci->access_keys['sendgrid_api_key'];
-		$this->_bucket = $this->_ci->access_keys['s3_bucket'];
+		$this->_api_user = $this->_ci->eightforce_config['sendgrid_api_user'];
+		$this->_api_key = $this->_ci->eightforce_config['sendgrid_api_key'];
+		$this->_bucket = $this->_ci->eightforce_config['s3_bucket'];
 
 		$this->_ci->load->model('EmailM');
 		$this->_ci->load->model('DocsM');
@@ -183,7 +183,7 @@ class EmailL {
 			if ($ver_id !== '') {
 				$docs_detail = $this->_ci->DocsM->get_docs_ver_detail($ver_id);
 			} else {
-				$docs_detail = $this->_ci->DocsM->get_docs_detail($docs_id);
+				$docs_detail = $this->_ci->DocsM->get_detail($docs_id);
 			}
 
 			if (empty($docs_detail)) {
