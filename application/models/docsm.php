@@ -622,6 +622,35 @@ class docsM extends MY_Model {
 		return ($row['version']+1);
 	}
 
+	//Used when we delete a current version and want to automatically use the next latest version
+	function get_next_latest_version($docs_id) {
+		$rs = $this->db->select()
+				->from('a_docs_ver')
+				->order_by('version', 'DESC')
+				->where('docs_id', $docs_id)
+				->where('deleted', 0)
+				->limit(1)
+				->get();
+
+		if ($rs->num_rows() == 0) return FALSE;
+
+		return $rs->row_array();
+	}
+
+	function get_version_id_from_hash($hash) {
+		$rs = $this->db->select('id')
+				->from('a_docs_ver')
+				->where('hash', $hash)
+				->where('deleted', 0)
+				->limit(1)
+				->get();
+
+		if ($rs->num_rows() == 0) return FALSE;
+
+		$result = $rs->row_array();
+		return $result['id'];
+	}
+
 	function delete($hash_or_id) {
 		$data = array(
 			'modified_card_id' => $this->UserM->get_cardid(),
@@ -630,8 +659,41 @@ class docsM extends MY_Model {
 		);
 
 		if (strlen($hash_or_id)==32) {
+			//get docs version hash
+			$docs = $this->get_detail($hash_or_id);
+
+			//get versions of this doc
+			$versions = $this->get_all_versions($docs['id']);
+
+			//delete the hash
 			$this->db->where('hash', $hash_or_id)
-					->update('a_docs_ver', $data);
+				->update('a_docs_ver', $data);
+
+			if (count($versions) == 1) {
+				//if there's only 1 version, delete the doc as well
+
+				$this->db->where('id', $docs['id'])
+					->update('a_docs', $data);
+
+			} elseif (count($versions) > 1) {
+				//if there's more than 1 version
+				//
+				//if the deleted version is the same as the current version, find the next current version and update the doc
+				if ($docs['current_version_id'] == $this->get_version_id_from_hash($hash_or_id)) {
+					$next_version = $this->get_next_latest_version($docs['id']);
+
+					$update = array(
+						'current_version_id' => $next_version['id'],
+						'modified_card_id' => $this->UserM->get_cardid(),
+						'modified_stamp' => get_current_stamp(),
+					);
+
+					$this->db->where('id', $docs['id'])
+							->update('a_docs', $update);
+				}
+			}
+
+
 		} else {
 			$this->db->where('id', $hash_or_id)
 					->update('a_docs', $data);
