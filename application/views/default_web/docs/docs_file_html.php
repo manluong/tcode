@@ -100,20 +100,20 @@ $(document).ready(function () {
 					return null;
 				}
 				d.data = data;
-				var title_input_value = (data['docs_details']['a_docs_displayname'] !== '')
-				? data['docs_details']['a_docs_displayname']
-				: data['docs_details']['a_docs_ver_filename'];
+				var doc_details = data['details']['docs_details'];
+				var doc_versions = data['details']['versions'];
+				var title_input_value = doc_details['display_name'];
 
 				$('#title_input').attr('value', title_input_value);
 
 				// Sets display
-				if (data['docs_details']['a_docs_ver_mime'] === 'application/pdf') {
+				if (doc_details['mime'] === 'application/pdf') {
 					$('.preview-content .content').html('\
 						<div id="viewerPlaceHolder" style="width:660px;height:553px;display:block;position:relative;">\
 							<div id="documentViewer" class="viewer"></div>\
 						</div>\
 					');
-					var startDocument = data['docs_details']['a_docs_id'];
+					var startDocument = doc_details['id'];
 					function getDocumentUrl(document){
 						return "/docs/pdfPreview?doc={doc}&format={format}&page={page}".replace("{doc}",document);
 					}
@@ -147,33 +147,29 @@ $(document).ready(function () {
 							}});
 				}
 
-				if (data['docs_details']['a_docs_ver_mime'] === 'image/png'
-					|| data['docs_details']['a_docs_ver_mime'] === 'image/jpeg'
-					|| data['docs_details']['a_docs_ver_mime'] === 'image/gif'
-					) {
-					$('.preview-content .content').html('\
-							<img src="" id="image_placeholder">\
-						');
-
-					if (data['docs_details']['a_docs_dir_dirpath'] === '/') {
-						$('#image_placeholder').attr('src', '/file/read'+data['docs_details']['a_docs_dir_dirpath']+data['docs_details']['a_docs_ver_filename']);
-					} else {
-						$('#image_placeholder').attr('src', '/file/read'+data['docs_details']['a_docs_dir_dirpath']+'/'+data['docs_details']['a_docs_ver_filename']);
-					}
-
+				if (doc_details['mime'] === 'image/png' || doc_details['mime'] === 'image/jpeg' || doc_details['mime'] === 'image/gif' ) {
+					$('.preview-content .content').html('<img src="" id="image_placeholder">');
+					$('#image_placeholder').attr('src', '/file/read/'+doc_details['hash']);
 					$('#viewerPlaceHolder').hide();
 				}
 
-				$('#download').attr('href', '/docs/download_file/'+data['docs_details']['a_docs_ver_id']+'/download');
+				$('#download').attr('href', '/docs/download_file/'+doc_details['id']+'/download');
 				// File info
-				$('.filename').html(data['docs_details']['a_docs_ver_filename']);
-				$('.filesize').html(data['docs_details']['a_docs_ver_filesize']);
-				$('.date').html(data['docs_details']['a_docs_ver_stamp']);
-				$('.user-name').html(data['docs_details']['card_nick']);
+				$('.filename').html(doc_details['file_name']);
+				$('.filesize').html(doc_details['file_size']);
+				$('.date').html(doc_details['created_stamp']);
+				$('.user-name').html(doc_details['created_card_info']['card_fname']+' '+doc_details['created_card_info']['card_lname']);
 
 				var aaData = Array();
-				for (var i=0;i<data['versions'].length;i++) {
-					aaData[i] = ['<a href="#" docs_id="'+data['docs_details']['a_docs_id']+'" ver_id="'+data['versions'][i]['a_docs_ver_id']+'" class="old-ver">'+data['versions'][i]['a_docs_ver_filename']+'</a>',data['versions'][i]['a_docs_ver_filesize'],data['versions'][i]['a_docs_ver_stamp'], '<a class="btn btn-danger delete_ver" docs_id = "'+data['docs_details']['a_docs_id']+'" ver_id="'+data['versions'][i]['a_docs_ver_id']+'">Delete</a>'];
+				for (var i=0;i<doc_versions.length;i++) {
+					aaData[i] = [
+						'<a href="#" docs_id="'+doc_details['id']+'" hash="'+doc_versions[i]['hash']+'" class="old-ver">'
+							+ doc_versions[i]['file_name']
+							+ '</a>',
+						doc_versions[i]['file_size'],doc_versions[i]['created_stamp'],
+						'<a class="btn btn-danger delete_ver" docs_id = "'+doc_details['id']+'" hash="'+doc_versions[i]['hash']+'">\n\
+							Delete</a>'
+					];
 				}
 
 				$('#versions').dataTable({
@@ -204,28 +200,30 @@ $(document).ready(function () {
 				});
 
 				// Binds delete version button
-				$('.delete_ver').each(function() {
-					$(this).on('click', function () {
-						$.post('/docs/delete_single_ver/',
-							{docs_id: $(this).attr('docs_id'), ver_id:$(this).attr('ver_id')
-						}).success(function(){
-							console.log('ok');
-						});
-					});
+				$('.delete_ver').on('click', function () {
+					$.post('/docs/ajax_delete_version/',
+						{ hash:$(this).attr('hash') },
+						function(resp) {
+							if (resp.success) {
+								console.log('ok');
+							} else {
+								console.log('not ok');
+							}
+						},
+						'json'
+					);
 				});
 
 				// Bind old version displays
-				$('.old-ver').each(function() {
-					$(this).on('click', function() {
-						d.init('/docs/get_file_details/'+$(this).attr('docs_id')+'/v/'+$(this).attr('ver_id'));
-					});
+				$('.old-ver').on('click', function() {
+					d.init('/docs/ajax_get_file_details/'+$(this).attr('docs_id')+'/v/'+$(this).attr('hash'));
 				});
 
 				// bind upload
 				var uploader = new plupload.Uploader({
 					runtimes: "html5, flash",
 					browse_button: "upload",
-					url: "/docs/upload_single/"+data['docs_details']['a_docs_id']+"/upload/"+data['docs_details']['a_docs_ver_id'],
+					url: "/docs/ajax_overwrite/"+doc_details['id'],
 					filters: [
 						{title : "Image files", extensions : "jpg,gif,png"},
 						{title : "Zip files", extensions : "zip"},
@@ -246,7 +244,7 @@ $(document).ready(function () {
 				uploader.init();
 			});
 
-			$.get('/docs/json_tree/1/v').success(function (data) {
+			$.get('/docs/ajax_dir_tree/0/v').success(function (data) {
 				/* old tree
 				var html = '';
 				html += '<ul>';
@@ -278,7 +276,7 @@ $(document).ready(function () {
 				function generate_html(data, d, index){
 					depth = d;
 					for(var i=0;i<data.length;i++) {
-						html += '<option value="'+data[i]['a_docs_id']+'">'+hypen(depth)+data[i]['a_docs_displayname']+'</option>';
+						html += '<option value="'+data[i]['id']+'">'+hypen(depth)+data[i]['name']+'</option>';
 						if (data[i].hasOwnProperty('child')) {
 							depth++;
 							generate_html(data[i]['child'], depth, i);
@@ -305,10 +303,10 @@ $(document).ready(function () {
 
 
 				$('.move').on('click', function () {
-					/*$.post('/docs/move_file/<?php echo $url['id_encrypted']; ?>/',{folder_id: $(this).attr('folder_id')})
+					/*$.post('/docs/ajax_move_file/<?php echo $url['id_encrypted']; ?>/',{folder_id: $(this).attr('folder_id')})
 						.success(function(data) {});
 				});*/
-					$.post('/docs/move_file/<?php echo $url['id_encrypted']; ?>/',{folder_id: $('#dir_select').val()})
+					$.post('/docs/ajax_move_file/<?php echo $url['id_encrypted']; ?>/',{folder_id: $('#dir_select').val()})
 						.success(function(data) {});
 				});
 
@@ -319,7 +317,7 @@ $(document).ready(function () {
 					$('.alert').hide();
 				});
 				$('.confirm-delete').on('click', function() {
-					$.post('/docs/delete_all_docs/<?php echo $url['id_encrypted']; ?>').success(function() {
+					$.post('/docs/ajax_delete_file/<?php echo $url['id_encrypted']; ?>').success(function() {
 						$('.alert').hide();
 						//window.location = '/docs';
 					});
@@ -327,16 +325,25 @@ $(document).ready(function () {
 
 				$('.docs-title').on('keyup', function(e) {
 					if (e.keyCode === 13) {
-						$.post('/docs/update_docs_title/<?php echo $this->url['id_encrypted']; ?>',
-							{title:$('.docs-title').val()}
-						).success(function(data) {
-							console.log(data);
-						})
+						$.post(
+							'/docs/ajax_update_docs_display_name/<?php echo $this->url['id_encrypted']; ?>',
+							{
+								title: $('.docs-title').val()
+							},
+							function(resp) {
+								if (resp.success) {
+									//success
+								} else {
+
+								}
+							},
+							'json'
+						);
 					}
 				});
 			});
 		}
 	}
-	d.init('/docs/get_file_details/<?php echo $url['id_encrypted']; ?>/v');
+	d.init('/docs/ajax_get_file_details/<?php echo $url['id_encrypted']; ?>/v');
 });
 </script>

@@ -46,7 +46,7 @@
 	var uploader = new plupload.Uploader({
 		runtimes: "html5, flash",
 		browse_button: "upload",
-		url: "/docs/upload_single/<?php echo $docs_detail['a_docs_id'] ;?>/upload/<?php echo $docs_detail['a_docs_ver_id'] ;?>",
+		url: "/docs/ajax_overwrite/<?php echo $docs_detail['a_docs_id'] ;?>/upload/<?php echo $docs_detail['a_docs_ver_id'] ;?>",
 		filters: [
 			{title : "Image files", extensions : "jpg,gif,png"},
 			{title : "Zip files", extensions : "zip"},

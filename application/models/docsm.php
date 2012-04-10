@@ -1,29 +1,18 @@
 <?php if (!defined('BASEPATH')) exit('No direct access allowed.');
 
-class docsM extends My_Model {
+class docsM extends MY_Model {
+
+	var $upload_source = 'web';
 
 	function __construct() {
 		parent::__construct();
 	}
 
-	// Deletes all docs and ver
-	function delete_all_docs($docs_id) {
-		$this->db->delete('a_docs_ver', array('a_docs_ver_docsid'=>$docs_id));
-		$this->db->delete('a_docs', array('a_docs_id'=>$docs_id));
-		return ($this->db->affected_rows() > 0) ? TRUE : FALSE;
-	}
-
-	function delete_single_ver($docs_id, $ver_id) {
-		$this->db->delete('a_docs_ver', array('a_docs_ver_docsid'=>$docs_id, 'a_docs_ver_id'=>$ver_id));
-		return ($this->db->affected_rows() > 0) ? TRUE : FALSE;
-	}
 
 	function does_folder_exists($id) {
 		$query = $this->db->select()
 			->from('a_docs_dir')
-			->where(array('a_docs_dir_docs_id'=>$id,
-					'a_docs_dir_cardid'=>$this->UserM->info['cardid']
-				))
+			->where('id', $id)
 			->get();
 		return $query->row_array();
 	}
@@ -58,29 +47,6 @@ class docsM extends My_Model {
 		return FALSE;
 	}
 
-	// Pass in docs id. Return dirpath of doc
-	function get_dirpath($id) {
-		$query = $this->db->query('SELECT a_docs_dir_dirpath FROM a_docs_dir WHERE a_docs_dir_docs_id = (SELECT a_docs_parentid FROM a_docs WHERE a_docs_id = '.$id.')');
-		return $query->row_array();
-	}
-
-	/* Can remove if confirm not in use
-	// Gets the latest version
-	function get_current_ver_id($docs_id) {
-		// TODO: change to get from the current_ver column
-		$query = $this->db->select('a_docs_ver_id')
-			->from('a_docs_ver')
-			->where('a_docs_ver_docsid', $docs_id)
-			->order_by('a_docs_ver_id', 'desc')
-			->limit(1)
-			->get();
-		if ($query->num_rows()) {
-			$ver_id = $query->row_array();
-			return $ver_id['a_docs_ver_id'];
-		}
-		return FALSE;
-	}*/
-
 	function get_docs_id_from_path($path, $filename) {
 		// Similiar to does_file_exist
 		$i = $this->does_file_exist($path, $filename);
@@ -89,15 +55,7 @@ class docsM extends My_Model {
 
 
 
-	// Gets direct dirpath stored in a_docs_dir_dirpath
-	// Pass in docs_dir_id
-	function get_dirpath_dir($id) {
-		$query = $this->db->select()
-			->from('a_docs_dir')
-			->where('a_docs_dir_docs_id', $id)
-			->get();
-		return $query->row_array();
-	}
+
 
 	/* Previous version before implementing current_version
 	// Returns all docs in a dirid.
@@ -169,12 +127,7 @@ class docsM extends My_Model {
 		return $query->row_array();
 	}
 
-	function get_parent_id($id) {
-		$query = $this->db->select('a_docs_parentid')
-			->where(array('a_docs_id'=>$id))
-			->get('a_docs',1);
-		return $query->row_array();
-	}
+
 
 	function get_root_dir() {
 		$query = $this->db->select()
@@ -185,18 +138,7 @@ class docsM extends My_Model {
 		return $query->row_array();
 	}
 
-	function get_sub_folders($id) {
-		$query = $this->db->select('a_docs_id, a_docs_displayname')
-			->from('a_docs')
-			->join('a_docs_dir', 'a_docs_dir.a_docs_dir_docs_id = a_docs.a_docs_id')
-			->where(array('a_docs_dir_cardid' => $this->UserM->info['cardid'],
-					'a_docs_isdir <>' => '',
-					'a_docs_parentid' => $id,
-				))
-			->order_by('a_docs_displayname')
-			->get();
-		return $query->result_array();
-	}
+
 
 	function search_filename($filename) {
 		$query = $this->db->select('a_docs_ver_filename')
@@ -263,37 +205,6 @@ class docsM extends My_Model {
 		return $this->db->insert_id();
 	}
 
-	function insert_docs($values) {
-		//parentid == parentid for folders. and current dirid for docs
-		$data = array(
-			'a_docs_parentid' => $values['a_docs_parentid'],
-			'a_docs_isdir' => FALSE,
-			'a_docs_displayname' => isset($values['a_docs_displayname']) ? $values['a_docs_displayname'] : '',
-			'a_docs_desc' => isset($values['a_docs_desc']) ? $values['a_docs_desc'] : '',
-			'a_docs_status' => isset($values['a_docs_status']) ? $values['a_docs_status'] : '',
-			'a_docs_stamp' => get_current_stamp(),
-		);
-		if (isset($values['id'])) {
-			$this->db->update('a_docs', $data)
-				->where('a_docs_id', $values['id']);
-		} else {
-			$this->db->insert('a_docs', $data);
-		}
-		$values['a_docs_ver_docsid'] = $this->db->insert_id();
-		$this->insert_docs_ver($values);
-		return $values['a_docs_ver_docsid'];
-	}
-
-	// Pass in new parentid, ver_id
-	function update_docs_location($id, $docs_id) {
-		if (isset($id) && isset($docs_id)) {
-			$data = array(
-				'a_docs_parentid' => $id,
-			);
-			$this->db->where('a_docs_id', $docs_id)
-				->update('a_docs', $data);
-		}
-	}
 
 	function update_docs_ver($values) {
 		if (isset($values['a_docs_ver_id'])) {
@@ -335,40 +246,6 @@ class docsM extends My_Model {
 		return FALSE;
 	}
 
-	function insert_docs_ver($values) {
-		$data = array(
-			'a_docs_ver_docsid' => isset($values['a_docs_ver_docsid']) ? $values['a_docs_ver_docsid'] : '',
-			'a_docs_ver_filename' => isset($values['a_docs_ver_filename']) ? $values['a_docs_ver_filename'] : '',
-			'a_docs_ver_stamp' => get_current_stamp(),
-			'a_docs_ver_downloadhit' => isset($values['a_docs_ver_downloadhit']) ? $values['a_docs_ver_downloadhit'] : '',
-			'a_docs_ver_cardid' => $this->UserM->info['cardid'],
-			'a_docs_ver_uploadvia' => isset($values['a_docs_ver_uploadvia']) ? $values['a_docs_ver_uploadvia'] : '',
-			'a_docs_ver_filesize' => isset($values['a_docs_ver_filesize']) ? $values['a_docs_ver_filesize'] : '',
-			'a_docs_ver_mime' => isset($values['a_docs_ver_mime']) ? $values['a_docs_ver_mime'] : '',
-			'a_docs_ver_ocr' => isset($values['a_docs_ver_ocr']) ? $values['a_docs_ver_ocr'] : '',
-			'a_docs_ver_preview' => isset($values['a_docs_ver_preview']) ? $values['a_docs_ver_preview'] : '',
-			'a_docs_ver_encrypt' => isset($values['enca_docs_ver_encryptrypt']) ? $values['a_docs_ver_encrypt'] : '',
-			'a_docs_ver_encryptkeytype' => isset($values['a_docs_ver_encryptkeytype']) ? $values['a_docs_ver_encryptkeytype'] : '',
-			'a_docs_ver_current_version' => isset($values['a_docs_ver_current_version']) ? $values['a_docs_ver_current_version'] : '',
-		);
-		$this->db->insert('a_docs_ver', $data);
-		return;
-	}
-
-	function update_docs_display_name($title, $docs_id) {
-		$this->db->where('a_docs_id', $docs_id)
-			->update('a_docs',array('a_docs_displayname'=>$title));
-		if ($this->db->affected_rows() > 0) {
-			return TRUE;
-		}
-		return FALSE;
-	}
-
-	// Deletes doc entry in a_docs. Eg, when no versions exists, this entry should be removed too.
-	function delete_docs($docs_id) {
-		$this->db->delete('a_docs', array('a_docs_id'=>$docs_id));
-		return ($this->db->affected_rows() > 0) ? TRUE : FALSE;
-	}
 
 	/*
 	function update_docs_setting($values) {
@@ -427,34 +304,40 @@ class docsM extends My_Model {
 		return $row['filehash'];
 	}
 
-	function new_file($file_info, $full_path='') {
-		$path = explode('/', $full_path);
+	function new_file($file_info, $dir_path='') {
+		$path = explode('/', $dir_path);
 
 		if (count($path) == 1 && $path[0]==='') {
 			$dir_id = 0;
 		} else {
-			$dir_id = $this->create_dir($full_path);
+			$dir_id = $this->create_dir($dir_path);
 		}
 
+		return $this->new_file_in_dir($file_info, $dir_id);
+	}
+
+	function new_file_in_dir($file_info, $dir_id) {
 		$this->db->trans_start();
+
+		$filename_without_extension = get_filename_without_extension($file_info['orig_name']);
 
 		$data = array(
 			'dir_id' => $dir_id,
-			'display_name' => $file_info['filename'],
+			'display_name' => $filename_without_extension,
 			'created_card_id' => $this->UserM->get_cardid(),
 			'created_stamp' => get_current_stamp()
 		);
 		$this->db->insert('a_docs', $data);
 		$docs_id = $this->db->insert_id();
 
-		$hash = generate_hash();
 		$data = array(
 			'docs_id' => $docs_id,
-			'hash' => $hash,
-			'file_name' => $file_info['filename'],
-			'file_ext' => $file_info['extension'],
-			'file_size' => $file_info['filesize'],
-			'mime' => $file_info['mime'],
+			'hash' => $file_info['raw_name'],
+			'file_name' => $filename_without_extension,
+			'file_ext' => $file_info['file_ext'],
+			'file_size' => ($file_info['file_size']*1000),
+			'mime' => $file_info['file_type'],
+			'upload_source' => $this->upload_source,
 			'created_card_id' => $this->UserM->get_cardid(),
 			'created_stamp' => get_current_stamp()
 		);
@@ -471,7 +354,7 @@ class docsM extends My_Model {
 
 		return array(
 			'id' => $docs_id,
-			'hash' => $hash,
+			'hash' => $file_info['raw_name'],
 		);
 	}
 
@@ -483,20 +366,21 @@ class docsM extends My_Model {
 			$versioning = ($dir_info['has_versioning'] == 1);
 		}
 
+		$filename_without_extension = get_filename_without_extension($file_info['orig_name']);
+
 		$this->db->trans_start();
 
 		if ($versioning) {
-			$hash = generate_hash();
 			$docs_id = $existing_info['docs_id'];
 
 			$data = array(
 				'docs_id' => $docs_id,
 				'version' => $this->get_next_version($docs_id),
-				'hash' => $hash,
-				'file_name' => $file_info['filename'],
-				'file_ext' => $file_info['extension'],
-				'file_size' => $file_info['filesize'],
-				'mime' => $file_info['mime'],
+				'hash' => $file_info['raw_name'],
+				'file_name' => $filename_without_extension,
+				'file_ext' => $file_info['file_ext'],
+				'file_size' => ($file_info['file_size']*1000),
+				'mime' => $file_info['file_type'],
 				'created_card_id' => $this->UserM->get_cardid(),
 				'created_stamp' => get_current_stamp()
 			);
@@ -513,10 +397,10 @@ class docsM extends My_Model {
 			$ver_id = $existing_info['current_version_id'];
 
 			$data = array(
-				'file_name' => $file_info['filename'],
-				'file_ext' => $file_info['extension'],
-				'file_size' => $file_info['filesize'],
-				'mime' => $file_info['mime'],
+				'file_name' => $filename_without_extension,
+				'file_ext' => $file_info['file_ext'],
+				'file_size' => ($file_info['file_size']*1000),
+				'mime' => $file_info['file_type'],
 				'modified_card_id' => $this->UserM->get_cardid(),
 				'modified_stamp' => get_current_stamp()
 			);
@@ -532,6 +416,7 @@ class docsM extends My_Model {
 		);
 	}
 
+	//get directory ID by path
 	function get_dir_id($path, $parent_dir_id=0) {
 		$path = explode('/', $path);
 		$id = 0;
@@ -570,12 +455,39 @@ class docsM extends My_Model {
 		return $id;
 	}
 
+	// Get directory path by ID
+	function get_dir_path($dir_id=0) {
+		if ($dir_id == 0) return '';
+
+		$rs = $this->db->select('name, parent_id')
+			->from('a_docs_dir')
+			->where('id', $dir_id)
+			->where('deleted', 0)
+			->limit(1)
+			->get();
+
+		if ($rs->num_rows() == 0) return FALSE;
+
+		$result = $rs->row_array();
+
+		$path = $result['name'];
+
+		if ($result['parent_id'] !== 0) {
+			$path = $this->get_dir_path($result['parent_id']).'/'.$path;
+		}
+
+		return $path;
+	}
+
 	function get_subdir_ids($dir_ids, $recurse=FALSE) {
 		if (!is_array($dir_ids)) $dir_ids = array($dir_ids);
 		$results = array();
 
 		$rs = $this->db->select('id')
-				->where_in('parent_id', $dir_id);
+				->from('a_docs_dir')
+				->where_in('parent_id', $dir_id)
+				->where('deleted', 0)
+				->get();
 
 		if ($rs->num_rows() == 0) return array();
 
@@ -584,10 +496,60 @@ class docsM extends My_Model {
 		}
 
 		if ($recurse) {
-			$results = array_merge($results, $this->get_subdir_id($results, $recurse));
+			$results = array_merge($results, $this->get_subdir_ids($results, $recurse));
 		}
 
 		return $results;
+	}
+
+	function get_subdir($dir_id=0, $recurse=FALSE) {
+		$results = array();
+
+		$rs = $this->db->select('id, parent_id, name')
+				->from('a_docs_dir')
+				->where('parent_id', $dir_id)
+				->where('deleted', 0)
+				->get();
+
+		if ($rs->num_rows() == 0) return array();
+
+		foreach($rs->result_array() AS $r) {
+			$results[] = $r;
+		}
+
+		if ($recurse) {
+			foreach($results AS $key=>$r) {
+				$results[$key]['child'] = $this->get_subdir($r['id'], $recurse);
+			}
+		}
+
+		return $results;
+	}
+
+	function get_dir_contents($dir_id) {
+		$rs = $this->db->select('d.id, d.dir_id, d.display_name, d.description, d.status, d.created_card_id, d.created_stamp,
+				v.version, v.hash, v.file_name, v.file_ext, v.file_size, v.mime, v.download_hits, v.has_ocr, v.has_preview')
+			->from('a_docs AS d')
+			->join('a_docs_ver AS v', 'v.docs_id=d.id')
+			->where('d.dir_id', $dir_id)
+			->where('d.deleted', 0)
+			->order_by('d.display_name')
+			->get();
+
+		return $rs->result_array();
+	}
+
+	function get_dir_detail($dir_id) {
+		$rs = $this->db->select()
+				->from('a_docs_dir')
+				->where('id', $dir_id)
+				->where('deleted', 0)
+				->limit(1)
+				->get();
+
+		if ($rs->num_rows() == 0) return FALSE;
+
+		return $rs->row_array();
 	}
 
 	function get_doc_ids_in_dir_ids($dir_ids) {
@@ -632,7 +594,9 @@ class docsM extends My_Model {
 		foreach($path AS $i=>$p) {
 			if ($i==0 && $p=='') continue;
 
-			$dir_id = $parent_dir_id = $this->get_dir_id($p, $parent_dir_id);
+			$dir_id = $this->get_dir_id($p, $parent_dir_id);
+
+			if ($dir_id !== FALSE) $parent_dir_id = $dir_id;
 
 			if ($dir_id === FALSE) {
 				$dir_id = $parent_dir_id = $this->create_dir($p, $parent_dir_id);
@@ -713,25 +677,41 @@ class docsM extends My_Model {
 	function get_detail($hash_or_id) {
 		//since the id field in MySQL is only 10 characters long, we can assume it's a hash if it's 32 characters long.
 
+		$this->db->select('d.id, d.dir_id, d.display_name, d.description, d.status, d.created_card_id, d.created_stamp,
+			v.version, v.hash, v.file_name, v.file_ext, v.file_size, v.mime, v.download_hits, v.has_ocr, v.has_preview');
+
 		if (strlen($hash_or_id)==32) {
-			$query = $this->db->select()
-				->from('a_docs_ver')
-				->join('a_docs', 'a_docs_ver.docs_id=a_docs.id')
-				->where('a_docs_ver.hash', $hash_or_id)
-				->where('deleted', 0)
-				->limit(1)
-				->get();
+			$this->db->from('a_docs_ver AS v')
+				->join('a_docs AS d', 'v.docs_id=d.id')
+				->where('v.hash', $hash_or_id)
+				->where('v.deleted', 0);
 		} else {
-			$query = $this->db->select()
-				->from('a_docs')
-				->join('a_docs_ver', 'a_docs.current_version_id = a_docs_ver.id')
-				->where('a_docs.id', $hash_or_id)
-				->where('deleted', 0)
-				->limit(1)
-				->get();
+			$this->db->from('a_docs AS d')
+				->join('a_docs_ver AS v', 'd.current_version_id = v.id')
+				->where('d.id', $hash_or_id)
+				->where('d.deleted', 0);
 		}
 
-		return $query->row_array();
+		$query = $this->db->limit(1)
+					->get();
+
+		if ($query->num_rows() == 0) return FALSE;
+
+		$result = $query->row_array();
+
+		$this->fill_card_info($result);
+
+		return $result;
+	}
+
+	function update_display_name($docs_id, $display_name) {
+		$data = array(
+			'display_name' => $display_name,
+			'modified_card_id' => $this->UserM->get_cardid(),
+			'modified_stamp' => get_current_stamp()
+		);
+		return $this->db->where('id', $docs_id)
+				->update('a_docs', $data);
 	}
 
 	function get_all_versions($docs_id) {
@@ -745,5 +725,44 @@ class docsM extends My_Model {
 		if ($query->num_rows() == 0) return array();
 
 		return $query->result_array();
+	}
+
+	function move_file($docs_id, $dir_id) {
+		$data = array(
+			'dir_id' => $dir_id,
+			'modified_card_id' => $this->UserM->get_cardid(),
+			'modified_stamp' => get_current_stamp()
+		);
+
+		$this->db->where('id', $docs_id)
+			->update('a_docs', $data);
+	}
+
+	function get_doc_parent_id($id) {
+		$rs = $this->db->select('parent_id')
+					->from('a_docs')
+					->where('id', $id)
+					->where('deleted', 0)
+					->limit(1)
+					->get();
+
+		if ($rs->num_rows() == 0) return FALSE;
+
+		$row = $rs->row_array();
+		return $row['parent_id'];
+	}
+
+	function get_dir_parent_id($id) {
+		$rs = $this->db->select('parent_id')
+					->from('a_docs_dir')
+					->where('id', $id)
+					->where('deleted', 0)
+					->limit(1)
+					->get();
+
+		if ($rs->num_rows() == 0) return FALSE;
+
+		$row = $rs->row_array();
+		return $row['parent_id'];
 	}
 }

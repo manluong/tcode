@@ -62,9 +62,9 @@ class Signup extends MY_Controller {
 		$result = $this->SignupM->setup_account($signup_info);
 
 		if ($result === true) {
-			//create folder in S3
+			//create folder in storage system
 			$this->load->library('FileL');
-			$this->filel->create_folder('tenants/'.$signup_info['domain'].'/');
+			$this->filel->create_physical_folder('tenants/'.$signup_info['domain'].'/');
 
 			//send welcome email
 			$welcome_message = '<p>You can now access your account at: <a href="http://'.$signup_info['domain'].'.8force.net/">http://'.$signup_info['domain'].'.8force.net/</a></p>';
@@ -84,5 +84,36 @@ class Signup extends MY_Controller {
 		$this->RespM->set_success($result)
 				->set_details($this->SignupM->get_messages())
 				->output_json();
+	}
+
+	function test() {
+		$this->load->library('FileL');
+
+		$this->filel->save_new('contents of the first file', 'a/b', 'something1.txt');
+		$this->filel->save_new('contents of the second file', 'a/b', 'something2.txt');
+
+		echo 'done';
+	}
+
+	function read() {
+		$this->load->library('FileL');
+		$file = $this->filel->read(1);
+		echo '<pre>', print_r($file, TRUE), '</pre>';
+
+		$file = $this->filel->read(2);
+		echo '<pre>', print_r($file, TRUE), '</pre>';
+	}
+
+	function overwrite() {
+		$this->load->library('FileL');
+		$this->filel->save_existing('contents of the third file', 1, 'something3.txt');
+		$this->filel->save_existing('contents of the fourth file', 2, 'something4.txt', TRUE);
+	}
+
+	function dir_one() {
+		$this->load->model('DocsM');
+		$dir_id = $this->DocsM->create_dir('a/b/c/d/e/f/g');
+
+		echo $this->DocsM->get_dir_path($dir_id);
 	}
 }

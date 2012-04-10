@@ -183,7 +183,7 @@ class EmailL {
 			if ($ver_id !== '') {
 				$docs_detail = $this->_ci->DocsM->get_docs_ver_detail($ver_id);
 			} else {
-				$docs_detail = $this->_ci->DocsM->get_docs_detail($docs_id);
+				$docs_detail = $this->_ci->DocsM->get_detail($docs_id);
 			}
 
 			if (empty($docs_detail)) {

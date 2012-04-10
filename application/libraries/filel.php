@@ -11,6 +11,8 @@ class FileL {
 
 	private $temp_dir = '';
 
+	var $error_messages = array();
+
 	function __construct() {
 		$this->CI = & get_instance();
 		$this->CI->load->library('s3');
@@ -24,15 +26,18 @@ class FileL {
 			$this->s3_path = 'tenants/'.$this->domain.'/';
 		}
 
-		$this->temp_dir = $this->CI->eightforce_config['temp_folder'].$this->domain.'/docs/files/upload/';
-
+		$this->temp_dir = $this->CI->eightforce_config['temp_folder'].$this->domain.'/';
 		if ( ! file_exists($this->temp_dir)) {
 			mkdir($this->temp_dir, 0777, true);
 		}
 	}
 
 	function read($hash_or_id) {
+		if ($hash_or_id == '') return FALSE;
+
 		$file = $this->CI->DocsM->get_detail($hash_or_id);
+
+		if ($file === FALSE) return FALSE;
 
 		if ($this->filesystem === 'S3') {
 			$file['contents'] = $this->read_from_s3($file['hash']);
@@ -45,58 +50,90 @@ class FileL {
 		return $file;
 	}
 
-	// Saves new content, creates a new docs_id
-	// return: $file_id = array('id','hash');
-	function save_new($content, $path, $filename, $overwrite=FALSE, $via='') {
-		$file_info = $this->save_temp_file($content, $filename);
+	function get_url($hash_or_id, $lifetime=3600) {
+		if ($hash_or_id == '') return FALSE;
 
-		if ($file_info === FALSE) {
-			log_message('error', 'Unable to save to temp folder');
-			return FALSE;
-		}
-
-		$file_id = $this->CI->DocsM->new_file($file_info, $path);
+		$file = $this->CI->DocsM->get_detail($hash_or_id);
 
 		if ($this->filesystem === 'S3') {
-			$this->upload_to_s3($file_info['filepath'], $file_id['hash']);
+			$url = $this->url_from_s3($file['hash'], $lifetime);
 		}
 
 		if ($this->filesystem === 'local') {
 
 		}
 
-		$this->delete_temp_file($file_info['filepath']);
-
-		return $file_id;
+		return $url;
 	}
 
-	// Saves content over existing docs_id or creates a new ver for it.
-	// if $versioning is not set to TRUE or FALSE, it will take the versioning info from the directory it is saved to
-	function save_existing($content, $hash_or_id, $filename, $versioning='', $via='') {
-		$file_info = $this->save_temp_file($content, $filename);
+	//all apps should use this function to store uploads from users
+	function save($form_field='userfile', $dir_id=0, $docs_id=FALSE, $overwrite='') {
+		$this->CI->load->library('Upload');
 
-		if ($file_info === FALSE) {
-			log_message('error', 'Unable to save to temp folder');
+		//Configure CI's file upload
+		$config = array(
+			'upload_path' => $this->temp_dir,
+			'allowed_types' => '*',
+			'encrypt_name' => TRUE,
+		);
+
+		//if Docs ID provided, load the existing file info
+		if ($docs_id !== FALSE) {
+			$existing_file_info = $this->CI->DocsM->get_detail($docs_id);
+		}
+
+		//If overwrite not specified, get from the target directory's setting
+		if ($overwrite === '') {
+			if ($docs_id !== FALSE) $dir_id = $existing_file_info['dir_id'];
+
+			$dir_info = $this->CI->DocsM->get_dir_detail($dir_id);
+			$overwrite = ($dir_info['has_versioning'] == 1);
+		}
+
+		//update CI file upload configuration
+		$config['overwrite'] = $overwrite;
+
+		//if Docs ID given and want to Overwrite, update CI file upload config to use filename same one has the existing file
+		if ($overwrite && $docs_id !== FALSE) {
+			$config['file_name'] = $existing_file_info['hash'];
+		}
+
+		$this->CI->upload->initialize($config);
+
+		//perform the upload
+		$result = $this->CI->upload->do_upload($form_field);
+		if ($result === FALSE) {
+			$this->error_messages = $this->CI->upload->display_errors();
 			return FALSE;
 		}
 
-		$file_id = $this->CI->DocsM->overwrite_file($hash_or_id, $file_info, $versioning);
+		//data of the newly uploaded file
+		$new_file_data = $this->CI->upload->data();
 
+		//upload to S3 if needed
 		if ($this->filesystem === 'S3') {
-			$this->upload_to_s3($file_info['filepath'], $file_id['hash']);
-		}
-
-		if ($this->filesystem === 'local') {
+			$this->upload_to_s3($new_file_data['full_path'], $new_file_data['raw_name']);
+		} elseif ($this->filesystem === 'local') {
 
 		}
 
-		$this->delete_temp_file($file_info['filepath']);
+		//strip extension of file in the cache folder
+		rename($new_file_data['full_path'], $new_file_data['file_path'].$new_file_data['raw_name']);
 
-		return $file_id;
+		//create DB entry
+		if ($docs_id !== FALSE) {
+			return $this->CI->DocsM->overwrite_file($docs_id, $new_file_data, $overwrite);
+		} else {
+			return $this->CI->DocsM->new_file_in_dir($new_file_data, $dir_id);
+		}
 	}
 
 	function delete($hash_or_id) {
-		$this->CI->DocsM->delete($hash_or_id);
+		return $this->CI->DocsM->delete($hash_or_id);
+	}
+
+	function delete_dir($dir_id) {
+		return $this->CI->DocsM->delete_dir_by_id($dir_id);
 	}
 
 	function create_physical_folder($folder='') {
@@ -109,39 +146,6 @@ class FileL {
 
 		if ($this->filesystem == 'local') {
 		}
-	}
-
-	function save_temp_file(&$content, $filename) {
-		$filepath = $this->temp_dir.$filename;
-
-		$fp = fopen($filepath, 'wb');
-		if ($fp === FALSE) {
-			log_message('debug', 'Error saving to temp folder '.$filepath);
-			return FALSE;
-		}
-
-		if ( ! fwrite($fp, $content)) {
-			fclose($fp);
-			log_message('debug', 'Error saving content to '.$filepath);
-			return FALSE;
-		}
-		fclose($fp);
-
-		$f = finfo_open(FILEINFO_MIME_TYPE);
-		$mime_type = finfo_file($f, $filepath);
-		finfo_close($f);
-
-		$extension = get_file_extension($filename);
-
-		$fileinfo = array(
-			'filename' => str_replace($extension, '', $filename),
-			'filepath' => $filepath,
-			'mime' => $mime_type,
-			'extension' => $extension,
-			'filesize' => filesize($filepath)
-		);
-
-		return $fileinfo;
 	}
 
 	function delete_temp_file($filepath) {
@@ -161,6 +165,10 @@ class FileL {
 	function read_from_s3($filename) {
 		$object = S3::getObject($this->bucket, $this->s3_path.$filename, FALSE);
 		return $object->body;
+	}
+
+	function url_from_s3($filename, $lifetime=3600) {
+		return S3::getAuthenticatedURL($this->bucket, $this->s3_path.$filename, $lifetime);
 	}
 
 	function delete_from_s3($filename) {
