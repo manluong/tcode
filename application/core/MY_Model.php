@@ -122,10 +122,14 @@ class MY_Model extends CI_Model {
 			if (isset($data['created_card_id'])) $ids[] = $data['created_card_id'];
 			if (isset($data['modified_card_id'])) $ids[] = $data['modified_card_id'];
 
-			$cards = $this->UserM->get_batch($ids, TRUE);
+			if (count($ids) > 0) {
+				$cards = $this->UserM->get_batch($ids, TRUE);
+			} else {
+				return;
+			}
 
-			$data['created_card_info'] = $cards[$data['created_card_id']];
-			$data['modified_card_info'] = $cards[$data['modified_card_id']];
+			if (isset($data['created_card_id'])) $data['created_card_info'] = $cards[$data['created_card_id']];
+			if (isset($data['modified_card_id'])) $data['modified_card_info'] = $cards[$data['modified_card_id']];
 		} elseif ($mode == 'many') {
 			$ids = array_merge(extract_distinct_values($data, 'created_card_id'), extract_distinct_values($data, 'modified_card_id'));
 			$cards = $this->UserM->get_batch($ids, TRUE);
