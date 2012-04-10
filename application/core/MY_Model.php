@@ -117,13 +117,22 @@ class MY_Model extends CI_Model {
 
 	function fill_card_info(&$data, $mode='single') {
 		if ($mode == 'single') {
-			$data['card_info'] = $this->UserM->get($data['created_cardid']);
+			$ids = array();
+
+			if (isset($data['created_card_id'])) $ids[] = $data['created_card_id'];
+			if (isset($data['modified_card_id'])) $ids[] = $data['modified_card_id'];
+
+			$cards = $this->UserM->get_batch($ids, TRUE);
+
+			$data['created_card_info'] = $cards[$data['created_card_id']];
+			$data['modified_card_info'] = $cards[$data['modified_card_id']];
 		} elseif ($mode == 'many') {
-			$ids = extract_distinct_values($data, 'created_cardid');
+			$ids = array_merge(extract_distinct_values($data, 'created_card_id'), extract_distinct_values($data, 'modified_card_id'));
 			$cards = $this->UserM->get_batch($ids, TRUE);
 
 			foreach($data AS $k=>$v) {
-				$data[$k]['card_info'] = $cards[$v['created_cardid']];
+				$data[$k]['created_card_info'] = $cards[$v['created_card_id']];
+				$data[$k]['modified_card_info'] = $cards[$v['modified_card_id']];
 			}
 		}
 	}
