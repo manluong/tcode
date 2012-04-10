@@ -15,6 +15,7 @@ class MY_Lang extends CI_Lang {
 	}
 
 	function load($this_array){
+		if (!is_array($this->language) || !is_array($this_array)) return;
 		$this->language = array_merge($this->language, $this_array);
 	}
 
