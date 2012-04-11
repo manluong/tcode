@@ -268,7 +268,6 @@
 			if (data.length == 0) {
 				target.append('<option value="">&nbsp;</option>');
 			}
-			$.uniform.update();
 		}
 
 		function fnGetSelected( oTableLocal ) {
