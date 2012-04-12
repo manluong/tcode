@@ -8,6 +8,8 @@ class MY_Model extends CI_Model {
 	var $cache_enabled = FALSE;
 
 	var $where = array();
+	var $limit = 0;
+	var $offset = 0;
 
 	function __construct() {
 		parent::__construct();
@@ -156,6 +158,8 @@ class DatasetM extends CI_Model {
 
 	protected $where = array();
 	protected $search_where = array();
+	protected $offset = 0;
+	protected $limit = 0;
 
 	var $loaded = false;
 
@@ -188,6 +192,34 @@ class DatasetM extends CI_Model {
 
 		$this->loaded = true;
 
+		return $this;
+	}
+
+	function set_offset($offset) {
+		if (!is_numeric($offset)) return FALSE;
+
+		$this->offset = $offset;
+		return $this;
+	}
+
+	function set_limit($limit) {
+		if (!is_numeric($limit)) return FALSE;
+
+		$this->limit = $limit;
+		return $this;
+	}
+
+	function set_subaction($subaction) {
+		if (!in_array($subaction, array('a','v','e','d','l','s','es','as','q'))) return FALSE;
+
+		$this->subaction = $subaction;
+		return $this;
+	}
+
+	function set_id($id) {
+		if (!is_numeric($id)) return FALSE;
+
+		$this->id = $id;
 		return $this;
 	}
 
@@ -238,6 +270,20 @@ class DatasetM extends CI_Model {
 		}
 
 		return $fields;
+	}
+
+	function get_fields_with_data() {
+		if (!$this->loaded) die('No dataset loaded, please call $this->DatasetM->load($dataset_name) first.');
+
+		$this->load_data();
+
+		$fields = $this->get_fields();
+
+		foreach($fields AS $k=>$f) {
+			$fields[$k]['value'] = $this->data[$k];
+		}
+
+		return array_values($fields);
 	}
 
 	function get_list_ids() {
@@ -547,7 +593,7 @@ class DatasetM extends CI_Model {
 
 		//add where statement based on subaction
 		if ($this->subaction == 'l') {
-			if ($this->id!=0) $this->db->where($this->get_list_field(), $this->id);
+			if ($this->id != 0) $this->db->where($this->get_list_field(), $this->id);
 		} else {
 			$this->db->where($this->db_tables[0]['db_table'].'.'.$this->get_form_field($this->db_tables[0]['db_table']), $this->id);
 		}
@@ -559,6 +605,15 @@ class DatasetM extends CI_Model {
 
 		foreach($this->search_where AS $w) {
 			$this->db->or_where($w);
+		}
+
+		//set offset and limit
+		if ($this->limit > 0  && $this->offset > 0) {
+			$this->db->limit($this->limit, $this->offset);
+		} elseif ($this->limit > 0 && $this->offset == 0) {
+			$this->db->limit($this->limit);
+		} elseif ($this->limit == 0 && $this->offset > 0) {
+			$this->db->limit($this->limit, $this->offset);
 		}
 
 		//order by fields based on subaction
