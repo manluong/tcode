@@ -281,6 +281,7 @@ class DatasetM extends CI_Model {
 
 		foreach($fields AS $k=>$f) {
 			$fields[$k]['value'] = $this->data[$k];
+			$fields[$k]['name'] = $f['db_table'].'_'.$f['db_field'];
 		}
 
 		return array_values($fields);
@@ -409,6 +410,12 @@ class DatasetM extends CI_Model {
 		if (!$this->loaded) die('No dataset loaded, please call $this->DatasetM->load($dataset_name) first.');
 
 		$this->load_submit_data();
+
+		if ($this->id == '') {
+			$db_table = $this->db_tables[0]['db_table'];
+			$form_field = $this->get_form_field($db_table);
+			$this->id = $this->form_data[$db_table.'_'.$form_field];
+		}
 
 		if (!$this->verify_data()) return FALSE;
 
@@ -541,9 +548,13 @@ class DatasetM extends CI_Model {
 	}
 
 	protected function load_fields($ds) {
+		//SELECT core_dataset_fields.*, core_fields.*
+		// FROM global_setting.core_dataset_fields
+		// LEFT JOIN global_setting.core_fields ON core_dataset_fields.db_field=core_fields.name
+		// WHERE dataset_name='card_info'
 		$rs = $this->db->select('core_dataset_fields.*, core_fields.*')
 				->from('global_setting.core_dataset_fields')
-				->join('global_setting.core_fields', 'core_dataset_fields.db_field=core_fields.name', 'left')
+				->join('global_setting.core_fields', 'CONCAT(core_dataset_fields.db_table,\'-\',core_dataset_fields.db_field)=CONCAT(core_fields.db_table,\'-\',core_fields.name)', 'left')
 				->where('dataset_name', $ds)
 				->get();
 
@@ -705,11 +716,18 @@ class DatasetM extends CI_Model {
 				$select_options[] = $s['key'];
 			}
 
-			foreach($data AS $d) {
-				if (in_array($d, $select_options)) continue;
+			if (is_array($data)) {
+				foreach($data AS $d) {
+					if (in_array($d, $select_options)) continue;
 
-				$has_error = TRUE;
-				$this->data_errors[$key_field][] = 'Invalid selection detected: '.$d;
+					$has_error = TRUE;
+					$this->data_errors[$key_field][] = 'Invalid selection detected: '.$d;
+				}
+			} else {
+				if (!in_array($data, $select_options)) {
+					$has_error = TRUE;
+					$this->data_errors[$key_field][] = 'Invalid selection detected: '.$data;
+				}
 			}
 		}
 
