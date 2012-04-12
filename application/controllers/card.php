@@ -87,17 +87,54 @@ class Card extends MY_Controller {
 	function ajax_edit() {
 		$id = $this->input->post('id');
 
+		if ($id === FALSE) {
+			$this->RespM->set_message('Invalid ID')
+				->set_type('form')
+				->set_template('')
+				//->set_template('custom_viewcard')//custom template
+				->set_success(False)
+				->set_title('Card Info Dataset')
+				->set_details()
+				->output_json();
+			return;
+		}
+
 		$details['data'] = $this->DS_Card->set_subaction('v')
 				->set_id($id)
 				->get_fields_with_data();
 
+		$details['links'][] = array(
+			'type' => 'submit',
+			'url' => '/card/ajax_edit_save',
+			'target' => 'form',
+			'style' => 'primary',
+			'icon' => 'ok',
+			'text' => 'Save',
+		);
+
 		$this->RespM->set_message()
-				->set_type('view')
+				->set_type('form')
 				->set_template('')
 				//->set_template('custom_viewcard')//custom template
 				->set_success(true)
 				->set_title('Card Info Dataset')
 				->set_details($details)
+				->output_json();
+	}
+
+	function ajax_edit_save() {
+		$result = $this->DS_Card->set_subaction('e')
+					->save();
+
+		$message = $this->DS_Card->get_save_errors();
+
+		$this->RespM->set_message($message)
+				->set_type('form')
+				->set_template('')
+				//->set_template('custom_viewcard')//custom template
+				->set_success($result)
+				->set_title('Card Info Dataset')
+				->set_details()
 				->output_json();
 	}
 
