@@ -13,7 +13,7 @@ function core_app_userinfo($username){
 
     global $db;
 
-    $sql = "SELECT * FROM access_user LEFT JOIN card ON access_user.access_user_cardid = card.card_id WHERE access_user_username = '".$username."' LIMIT 1";
+    $sql = "SELECT * FROM access_user LEFT JOIN card ON access_user.access_user_cardid = card.id WHERE access_user_username = '".$username."' LIMIT 1";
     $result = $db->fetchRow($sql, 2);
 
     if ($result['card_fname']){
@@ -24,7 +24,7 @@ function core_app_userinfo($username){
     $thisresult['name'] = $result['card_orgname'];
     }
 
-    $thisresult['cardid'] = $result['card_id'];
+    $thisresult['cardid'] = $result['id'];
 
     $thisresult['subgp'] = core_app_getsubgp($thisresult['cardid']);
 
@@ -250,18 +250,18 @@ function core_app_id2name_sql($idtype){
         switch ($idtype){
 
         case "contactid":
-        $result['sql'] = "SELECT card_id,card_orgname,card_formatname,card_lname,card_fname FROM card ORDER BY card_fname,card_lname,card_orgname";
-        $result['this_name'] = "card_id";
+        $result['sql'] = "SELECT id,card_orgname,card_formatname,card_lname,card_fname FROM card ORDER BY card_fname,card_lname,card_orgname";
+        $result['this_name'] = "id";
         $result['this_name2'] = "card_orgname";
         $result['this_name3'] = "card_formatname";
         $result['this_name4'] = "card_lname";
         $result['this_name5'] = "card_fname";
-        $result['this_key'] = "card_id";
+        $result['this_key'] = "id";
         $result['formattype'] = 1;
         break;
 
         case "clientid":
-        $result['sql'] = "SELECT client.client_id,card.card_orgname,card.card_formatname,card.card_lname,card.card_fname FROM client LEFT JOIN `card` ON client.client_cardid  = card.card_id ORDER BY card_fname,card_lname,card_orgname";
+        $result['sql'] = "SELECT client.client_id,card.card_orgname,card.card_formatname,card.card_lname,card.card_fname FROM client LEFT JOIN `card` ON client.client_cardid  = card.id ORDER BY card_fname,card_lname,card_orgname";
         $result['this_name'] = "client_id";
         $result['this_name2'] = "card_orgname";
         $result['this_name3'] = "card_formatname";
@@ -272,7 +272,7 @@ function core_app_id2name_sql($idtype){
         break;
 
         case "vendorid":
-        $result['sql'] = "SELECT vendor.vendor_id,card.card_orgname,card.card_formatname,card.card_lname,card.card_fname FROM `vendor` LEFT JOIN `card` ON vendor.vendor_cardid  = card.card_id ORDER BY card_fname,card_lname,card_orgname";
+        $result['sql'] = "SELECT vendor.vendor_id,card.card_orgname,card.card_formatname,card.card_lname,card.card_fname FROM `vendor` LEFT JOIN `card` ON vendor.vendor_cardid  = card.id ORDER BY card_fname,card_lname,card_orgname";
         $result['this_name'] = "vendor_id";
         $result['this_name2'] = "card_orgname";
         $result['this_name3'] = "card_formatname";
@@ -283,7 +283,7 @@ function core_app_id2name_sql($idtype){
         break;
 
         case "staffid":
-        $result['sql'] = "SELECT staff.staff_id,card.card_orgname,card.card_formatname,card.card_lname,card.card_fname FROM staff LEFT JOIN `card` ON staff.staff_cardid  = card.card_id ORDER BY card_fname,card_lname";
+        $result['sql'] = "SELECT staff.staff_id,card.card_orgname,card.card_formatname,card.card_lname,card.card_fname FROM staff LEFT JOIN `card` ON staff.staff_cardid  = card.id ORDER BY card_fname,card_lname";
         $result['this_name'] = "staff_id";
         $result['this_name2'] = "card_orgname";
         $result['this_name3'] = "card_formatname";

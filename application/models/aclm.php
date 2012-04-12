@@ -525,7 +525,7 @@ class ACLM extends MY_Model {
 		$rs = $this->db->select('DISTINCT access_usergp.access_usergp_cardid, CONCAT(card.card_fname," ",card.card_lname) AS name', false)
 				->from('access_usergp')
 				->where_in('access_usergp.access_usergp_gpsub', $role_ids)
-				->join('card', 'card.card_id=access_usergp.access_usergp_cardid', 'left')
+				->join('card', 'card.id=access_usergp.access_usergp_cardid', 'left')
 				->get();
 
 		if ($rs->num_rows() == 0) return array();

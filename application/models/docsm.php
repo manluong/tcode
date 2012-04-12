@@ -85,7 +85,7 @@ class docsM extends MY_Model {
 			->from('a_docs')
 			->join('a_docs_ver', 'a_docs_ver.a_docs_ver_docsid = a_docs.a_docs_id')
 			->join('a_docs_dir', 'a_docs_dir.a_docs_dir_docs_id = a_docs.a_docs_parentid')
-			->join('card', 'a_docs_ver.a_docs_ver_cardid = card.card_id')
+			->join('card', 'a_docs_ver.a_docs_ver_cardid = card.id')
 			->where(array('a_docs_ver_id'=> $ver_id, 'a_docs_ver_docsid'=>$docs_id))
 			->limit(1)
 			->get();

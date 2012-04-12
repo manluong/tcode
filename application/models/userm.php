@@ -26,7 +26,7 @@ class UserM extends MY_Model {
 
 	function __construct() {
 		$this->table = 'card';
-		$this->id_field = 'card_id';
+		$this->id_field = 'id';
 		$this->cache_enabled = TRUE;
 
 		parent::__construct();
@@ -72,7 +72,7 @@ class UserM extends MY_Model {
 	public function get_data_name($cardid) {
 		$rs = $this->db->select('card_fname, card_mname, card_lname')
 				->from($this->table)
-				->where('card_id', $cardid)
+				->where('id', $cardid)
 				->limit(1)
 				->get();
 
@@ -209,7 +209,7 @@ class UserM extends MY_Model {
 
 	private function core_app_userinfo($username){
 		$rs = $this->db->select()
-				->join('card', 'access_user.access_user_cardid=card.card_id', 'left')
+				->join('card', 'access_user.access_user_cardid=card.id', 'left')
 				->where('access_user_username', $username)
 				->get('access_user', 1);
 		$result = $rs->row_array();
@@ -222,7 +222,7 @@ class UserM extends MY_Model {
 			$result['name'] = $result['card_orgname'];
 		}
 
-		$result['cardid'] = $result['card_id'];
+		$result['cardid'] = $result['id'];
 
 		$result['subgp'] = $this->core_app_getsubgp($result['cardid']);
 		$core_app_getaccessgp = $this->core_app_getaccessgp($result['cardid']);
