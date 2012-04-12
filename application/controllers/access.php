@@ -76,4 +76,15 @@ class Access extends MY_Controller {
 			->set_title('Login')
 			->output_json();
 	}
+
+	public function ajax_logout() {
+		$this->UserM->logout();
+
+		$this->RespM->set_message('You have been logged out.')
+			->set_type('view')
+			->set_template('')
+			->set_success(TRUE)
+			->set_title('Login')
+			->output_json();
+	}
 }

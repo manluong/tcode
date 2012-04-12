@@ -10,6 +10,23 @@ class Card extends MY_Controller {
 		$this->model =& $this->UserM;
 	}
 
+	function ajax_get_list() {
+		$limit = $this->input->post('limit');
+		$offset = $this->input->post('offset');
+
+		$list = $this->DS_Card->set_subaction('l')
+					->set_limit($limit)
+					->set_offset($offset)
+					->get_data();
+
+		$this->RespM->set_message()
+				->set_type('list')
+				->set_template('')
+				->set_success(true)
+				->set_title('Contacts List')
+				->set_details($list)
+				->output_json();
+	}
 	function x_card() {
 		$details = array(
 			'columns' => $this->DS_Card->get_datatable_fields(),
@@ -27,10 +44,10 @@ class Card extends MY_Controller {
 					'style' => 'default',
 					'icon' => '',
 				)
-			),			
+			),
 		);
 
-		$this->RespM->set_message($this->DS_Card->sql)
+		$this->RespM->set_message()
 				->set_type('list')
 				->set_template('')
 				->set_success(true)
@@ -38,9 +55,8 @@ class Card extends MY_Controller {
 				->set_details($details)
 				->output_json();
 	}
-	
-	function x_info() {
 
+	function x_info() {
 		$details = array(
 			'data' => $this->DS_Card->get_view_data(),
 			'links' => array(
@@ -58,7 +74,7 @@ class Card extends MY_Controller {
 			),
 		);
 
-		$this->RespM->set_message($this->DS_Card->sql)
+		$this->RespM->set_message()
 				->set_type('view')
 				->set_template('')
 				//->set_template('custom_viewcard')//custom template
@@ -67,30 +83,47 @@ class Card extends MY_Controller {
 				->set_details($details)
 				->output_json();
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-		
+
+	function ajax_edit() {
+		$id = $this->input->post('id');
+
+		$details['data'] = $this->DS_Card->set_subaction('v')
+				->set_id($id)
+				->get_fields_with_data();
+
+		$this->RespM->set_message()
+				->set_type('view')
+				->set_template('')
+				//->set_template('custom_viewcard')//custom template
+				->set_success(true)
+				->set_title('Card Info Dataset')
+				->set_details($details)
+				->output_json();
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }
