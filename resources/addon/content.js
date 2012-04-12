@@ -10,12 +10,12 @@ function ajax_content(url,divid) {
 	//load full page
 	//to fix with pjax
 	if (divid == "page"){
-		
+
 		$.pjax({
 			url: url,
 			container: '#content-container'
-		}); 		
-	
+		});
+
 	//append JavaScript
     }else if (jsCkStr.substring(0,4) == '//js'){
         //alert("is JS");
@@ -57,16 +57,16 @@ function ajax_content(url,divid) {
 
 }
 
-
 function ajax_content_json(jarray,divid) {
-	
-	var json = jQuery.parseJSON( jarray );
-	
+
+	//var json = jQuery.parseJSON( jarray );
+	var json = jarray;	//no need to parseJSON because jQuery already did it at $.get/$.post
+
 	var links = { html: '', bu: ''};
 	if (json['details']['links']){
-		links = ajax_content_links(json['details']['links'],divid);	
+		links = ajax_content_links(json['details']['links'],divid);
 	}
-		
+
 	switch (json['type']) {
 		case 'list':
 		ajax_content_list(json,divid,links);
@@ -85,13 +85,13 @@ function ajax_content_json(jarray,divid) {
 		break;
 
 	}
-		
+
 }
 
 function ajax_content_echo(json,divid,content){
 	var view = {title: json['title'], content: content};
 	if (!json['template']) {
-		document.getElementById(divid).innerHTML = Mustache.to_html(tpl_c_stdwidget, view);	
+		document.getElementById(divid).innerHTML = Mustache.to_html(tpl_c_stdwidget, view);
 	} else {
 		document.getElementById(divid).innerHTML = Mustache.to_html(window[json['template']], view);
 	}
@@ -105,7 +105,7 @@ function ajax_content_list(json,divid,links){
 	//if (json['details']['setting']['hidetitle'] == 1){
 
 	ajax_content_echo(json,divid,'<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="'+tableid+'"></table>'+links.html);
-	
+
 	if (json['details']['listlinks']){
 		lslink = ajax_content_links(json['details']['listlinks'],divid);
 		var cl = json['details']['columns'].length;
@@ -116,7 +116,7 @@ function ajax_content_list(json,divid,links){
 		}
 		json['details']['columns'][cl] = {sTitle: ''};
 	}
-	
+
 	$('#'+tableid).dataTable( {
 		"aoColumns": json['details']['columns'],
 		"aaData": json['details']['data'],
@@ -139,9 +139,9 @@ function ajax_content_list(json,divid,links){
 	        '<option value="50">50</option>'+
 	        '<option value="-1">All</option>'+
 	        '</select> Rows'
-      	
+
 		}
-	});		
+	});
 
 }
 
@@ -150,25 +150,25 @@ function ajax_content_view(json,divid,links){
 	var html = "";
 	var thisLength = json['details']['data'].length;
 	var jsonformat = {};
-	
+
 	for(var i = 0; i < thisLength; i++) {
 		var view = {label: json['details']['data'][i]['label'], value: json['details']['data'][i]['value'], fieldname: json['details']['data'][i]['fieldname']}
 		html = html + Mustache.to_html(tpl_content_view, view);
-		
+
 		jsonformat[json['details']['data'][i]['fieldname']+'_label'] = json['details']['data'][i]['label'];
 		jsonformat[json['details']['data'][i]['fieldname']+'_value'] = json['details']['data'][i]['value'];
-		
+
 	}
 
 	if (!json['template']) {
-		html = html + links.html;		
+		html = html + links.html;
 		var view = {content: html};
 		ajax_content_echo(json,divid,Mustache.to_html(tpl_content_viewwarp, view));
 	} else {
 		jsonformat['links'] = links.bu;
 		ajax_content_echo(json,divid,jsonformat);
 	}
-	
+
 }
 
 function ajax_content_form(json,divid,links){
@@ -179,49 +179,49 @@ function ajax_content_form(json,divid,links){
 	var addclass = "input-xlarge";
 
 	for(var i = 0; i < thisLength; i++) {
-		
+
 		//SET STYLE
 		json['details']['data'][i]['addclass'] = 'input-xlarge';
 		//json['details']['data'][i]['helpblk'] = 'help-block';
 		if (!json['details']['data'][i]['form_type']) json['details']['data'][i]['form_type'] = "text";
 		if (json['details']['data'][i]['required'] == "0") json['details']['data'][i]['required'] = null;
-						
+
 		template = tpl_form[json['details']['data'][i]['form_type']];
-		
+
 		switch (json['details']['data'][i]['form_type']) {
-			
+
 			case 'select':
 			if(json['details']['data'][i]['form_type'] == "select" && json['details']['data'][i]['value']){
-				var selLength = json['details']['data'][i]['select_options'].length;	
+				var selLength = json['details']['data'][i]['select_options'].length;
 				for(var si = 0; si < selLength; si++) {
 					if (json['details']['data'][i]['select_options'][si]['value'] == json['details']['data'][i]['value']){
-						json['details']['data'][i]['select_options'][si]['selected'] = ' SELECTED';	
+						json['details']['data'][i]['select_options'][si]['selected'] = ' SELECTED';
 					}
 				}
 			}
 			break;
-			
+
 		}
-		
+
 		if (!json['template']) {
 		jsonformat.items[i] = {control: Mustache.to_html(template, json['details']['data'][i]), fieldname: json['details']['data'][i]['name'], label: json['details']['data'][i]['label'], helptext: json['details']['data'][i]['helptext']};
 		} else {
 		jsonformat[json['details']['data'][i]['name']] = {control: Mustache.to_html(template, json['details']['data'][i]), fieldname: json['details']['data'][i]['name'], label: json['details']['data'][i]['label'], helptext: json['details']['data'][i]['helptext']};
 		}
 	}
-		
+
 
 	if (!json['template']) {
 		jsonformat.divid = divid;
 		jsonformat.links = links.html;
-		ajax_content_echo(json,divid,Mustache.to_html(tpl_form_ctlgroup, jsonformat));		
+		ajax_content_echo(json,divid,Mustache.to_html(tpl_form_ctlgroup, jsonformat));
 	} else {
 		jsonformat['links'] = links.bu;
 		ajax_content_echo(json,divid,jsonformat);
 	}
-	
-	
-	//post action after form is renden    
+
+
+	//post action after form is renden
 	for(var i = 0; i < thisLength; i++) {
 		switch (json['details']['data'][i]['form_type']) {
 
@@ -252,7 +252,7 @@ function ajax_content_form(json,divid,links){
 		//	dgroup_autocomplete(json['formsetup'][i]['field'],json['formsetup'][i]['autocomplete']);
 		//}
 
-	}		
+	}
 	ajax_content_errorstyle();
     ajax_content_submit(divid,links.submiturl,json);
 }
@@ -272,36 +272,39 @@ function ajax_content_submit(divid,submiturl,json){
 
 	  	// client-side validation OK.
 	  	if (!e.isDefaultPrevented()) {
+			// prevent default form submission logic
+			e.preventDefault();
 
-		// prevent default form submission logic
-		e.preventDefault();
-		
-		dhtmlxAjax.post(submiturl.url, form.serialize(),function(loader){
+			//dhtmlxAjax.post(submiturl.url, form.serialize(),function(loader){
+			$.post(
+				submiturl.url,
+				form.serialize(),
+				function(json) {
 
-			var json = jQuery.parseJSON(loader.xmlDoc.responseText);
+					if (json['success'] == 1)  {
 
-			if (json['success'] == 1)  {
-			
-				var buLength = json['details']['links'].length;
-				//auto redirect if there is only 1 button, auto go the the page in the button
-				if (buLength == 1){
-					if (json['details']['links'][0]['target'] == "") json['details']['links'][0]['target'] = divid;
-					ajax_content(json['details']['links'][0]['url'],json['details']['links'][0]['target']);
-					console.log(json['details']['links'][0]);
-				}
+						var buLength = json['details']['links'].length;
+						//auto redirect if there is only 1 button, auto go the the page in the button
+						if (buLength == 1){
+							if (json['details']['links'][0]['target'] == "") json['details']['links'][0]['target'] = divid;
+							ajax_content(json['details']['links'][0]['url'],json['details']['links'][0]['target']);
+							console.log(json['details']['links'][0]);
+						}
 
-			} else if (json['details']['data']) {
-				//server-side validation failed. use invalidate() to show errors
-				//return as {"fieldname":"message"}
-				//console.log(json['details']['data']);
-				form.data("validator").invalidate(json['details']['data']);
+					} else if (json['details']['data']) {
+						//server-side validation failed. use invalidate() to show errors
+						//return as {"fieldname":"message"}
+						//console.log(json['details']['data']);
+						form.data("validator").invalidate(json['details']['data']);
 
-			} else if (json['message']) {
+					} else if (json['message']) {
 
-			}
-		});
+					}
+				},
+				'json'
+			);
 
-	}
+		}
 
 	});
 
@@ -313,27 +316,27 @@ function ajax_content_links(links,divid){
 	var linkre = {};
 	var linkLength = links.length;
 	for(var iln = 0; iln < linkLength; iln++) {
-		
+
 		if (links[iln]['type'] == "ajax" && (links[iln]['target'] == "" || links[iln]['target'] == null)) {
 			links[iln]['target'] = divid;
 		}
-		
+
 		template = tpl_link[links[iln]['type']];
 		linkhtml = linkhtml + Mustache.to_html(template, links[iln]);
-		
+
 		//set submit url
 		if (links[iln]['type'] == "submit") {
 			linkre.submiturl = links[iln];
 		}
-		
+
 	}
 	//button only html
 	linkre.bu = linkhtml;
-	
+
 	//warp the button
 	var linkarray = {links: linkhtml}
 	linkre.html = Mustache.to_html(tpl_link.warp, linkarray);
-	
+
 	return linkre;
 }
 
@@ -355,23 +358,23 @@ function ajax_content_errorstyle(){
             var cont = find_container(input);
             cont.addClass(cls);
             input.addClass(cls);
-                
+
             if (caption) {
                 var msg = $('<span class="help-inline"/>');
                 msg.addClass(cls);
                 msg.text(caption);
                 input.after(msg);
-            }       
+            }
         }
         function remove_all_validation_markup(form) {
             $('.help-inline.error, .help-inline.success, .help-inline.warning',
-                form).remove(); 
+                form).remove();
             $('.error, .success, .warning', form)
                 .removeClass('error success warning');
-        }               
+        }
         $('form').each(function () {
             var form = $(this);
-                    
+
             form
                 .validator({
                 })
@@ -385,7 +388,7 @@ function ajax_content_errorstyle(){
                         // uncomment next line to highlight successfully
                         // validated fields in green
                         //add_validation_markup(input, 'success');
-                    }); 
+                    });
                 })
                 .bind('onFail', function (e, errors) {
                     $.each(errors, function() {
