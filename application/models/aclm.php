@@ -30,7 +30,14 @@ class ACLM extends MY_Model {
 		if (!id_is_encrypted($this->url['id'])) die('id must be encrypted');
 	}
 
-	function check_app_access() {
+	function check_app_access($mode='normal') {
+		if ($mode=='basic') {
+			if (!$this->UserM->is_logged_in() && !$this->AppM->has_public_access()) {
+				header( 'Location: /access/login/'.set_return_url(TRUE));
+				exit;
+			}
+		}
+
 		if (!$this->UserM->is_logged_in() && !$this->AppM->has_public_access()) {
 			header( 'Location: /access/login/'.set_return_url(TRUE));
 			exit;
