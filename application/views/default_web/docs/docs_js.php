@@ -1,6 +1,8 @@
 <script>
+	var directory_contents = '';
+
 	$(document).ready(function() {
-		$('#directory_contents').dataTable({
+		directory_contents = $('#directory_contents').dataTable({
 				"bDestory": true,
 				"sAjaxSource": "/docs/ajax_get_dir_contents/<?php echo $url['id_encrypted']; ?>/v",
 				"sDom": "<<'pull-right'p>>t<<'pull-right'p>li>",
@@ -50,29 +52,7 @@
 
 			init: {
 				FileUploaded: function() {
-					$('#directory_contents').dataTable({
-							"bDestroy": true,
-							"sAjaxSource": "/docs/ajax_get_dir_contents/<?php echo $url['id_encrypted']; ?>/v",
-							"sDom": "<<'pull-right'p>f>t<<'pull-right'p>i>",
-							"sPaginationType": "bootstrap",
-							"oLanguage": {
-								"sSearch" : "<div class=\"input-prepend\"><span class=\"add-on\"><i class=\"icon-search\"></i></span></i>_INPUT_</div>",
-								"sInfo": "Showing _START_ to _END_ of _TOTAL_",
-								"sLengthMenu": "_MENU_ Rows per Page",
-								"sInfoFiltered": " - filtering from _MAX_ records",
-								"oPaginate": {
-									"sPrevious": "Previous",
-									"sNext": "Next"
-								},
-								"sLengthMenu": '<select>'+
-								'<option value="10">10</option>'+
-								'<option value="20">20</option>'+
-								'<option value="30">30</option>'+
-								'<option value="40">40</option>'+
-								'<option value="50">50</option>'+
-								'<option value="-1">All</option>'+
-								'</select> Rows'}
-					});
+					directory_contents.fnReloadAjax();
 				}
 			}
 		});
@@ -106,11 +86,17 @@
 
 	$('#create-folder, #context-create-folder').click(function() {
 		if ($('#name').val() !== '') {
-			$.post('/docs/ajax_create_folder/<?php echo $url['id_encrypted']; ?>/',
+			$.post(
+				'/docs/ajax_create_folder/<?php echo $url['id_encrypted']; ?>/',
 				{
-				cardid: "<?php echo $this->UserM->info['cardid']; ?>",
-				name: $('#name').val()})
-				.success(function () {});
+					cardid: "<?php echo $this->UserM->info['cardid']; ?>",
+					name: $('#name').val(),
+				},
+				function(resp) {
+					directory_contents.fnReloadAjax();
+				},
+				'json'
+			);
 		}
 	});
 	/*
