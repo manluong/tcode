@@ -276,7 +276,7 @@ $(document).ready(function () {
 				function generate_html(data, d, index){
 					depth = d;
 					for(var i=0;i<data.length;i++) {
-						html += '<option value="'+data[i]['id']+'">'+hypen(depth)+data[i]['name']+'</option>';
+						html += '<option value="'+data[i]['id']+'">'+hypen(depth)+' '+data[i]['name']+'</option>';
 						if (data[i].hasOwnProperty('child')) {
 							depth++;
 							generate_html(data[i]['child'], depth, i);
@@ -299,7 +299,9 @@ $(document).ready(function () {
 					return html;
 				}*/
 				//old tree $('#tree').html(generate_html(data, 0));
-				$('#dir_select').html(generate_html(data,0, 0));
+				$('#dir_select')
+					.html('<option value="0">/</option>')
+					.append(generate_html(data,0, 0));
 
 
 				$('.move').on('click', function () {

@@ -519,7 +519,8 @@ class docsM extends MY_Model {
 
 		if ($recurse) {
 			foreach($results AS $key=>$r) {
-				$results[$key]['child'] = $this->get_subdir($r['id'], $recurse);
+				$subdir = $this->get_subdir($r['id'], $recurse);
+				if (count($subdir) > 0) $results[$key]['child'] = $subdir;
 			}
 		}
 
