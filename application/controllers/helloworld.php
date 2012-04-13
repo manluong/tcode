@@ -38,7 +38,7 @@ class Helloworld extends MY_Controller {
 	}
 
 	function sendjson_list() {
-		$this->DS_HelloWorld->subaction = 'l';
+		$this->DS_HelloWorld->set_subaction('l');
 
 		$details = array(
 			'columns' => $this->DS_HelloWorld->get_datatable_fields(),
@@ -59,11 +59,12 @@ class Helloworld extends MY_Controller {
 	}
 
 	function sendjson_view() {
-		$this->DS_HelloWorld->subaction = 'v';
-		$this->DS_HelloWorld->id = 150;
+		$data = $this->DS_HelloWorld->set_subaction('v')
+					->set_id(150)
+					->get_view_data();
 
 		$details = array(
-			'data' => $this->DS_HelloWorld->get_view_data(),
+			'data' => $data,
 			'links' => array(
 				array(
 					'target' => '',
@@ -129,11 +130,12 @@ class Helloworld extends MY_Controller {
 */
 
 
-		$this->DS_HelloWorld->subaction = 'e';
-		$this->DS_HelloWorld->id = 150;
+		$data = $this->DS_HelloWorld->set_subaction('e')
+					->set_id(150)
+					->get_form_data();
 
 		$details = array(
-			'data' => $this->DS_HelloWorld->get_form_data(),
+			'data' => $data,
 			'links' => array(
 				array(
 					'target' => '',
