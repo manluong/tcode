@@ -215,7 +215,12 @@ body {
 
 
 #popup_message {
-
+	position:fixed;
+	top: -50px;
+	left: 50%;
+	width: 500px;
+	margin-left: -250px;
+	z-index:15;
 }
 
 #content-container {

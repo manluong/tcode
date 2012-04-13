@@ -54,7 +54,7 @@
     <div class="container-full">
 		<?=$sidebar?>
 
-		<div id="popup_message" class="hide"></div>
+		<div id="popup_message" class="alert"></div>
 		<div id="content-container">
 			<?=$breadcrumb?>
 			<div id="content">
