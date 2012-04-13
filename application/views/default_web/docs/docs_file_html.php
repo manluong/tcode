@@ -3,7 +3,7 @@
 		<div class="span8">
 			<div class="preview-content">
 				<div class="title">
-					<input type="text" value="" id="title_input" class="docs-title"><br><span class="message" style="display:none;"></span>
+					<input type="text" value="" id="title_input" class="docs-title">
 				</div>
 				<div class="content">
 					<img src="" id="image_placeholder">
@@ -74,12 +74,14 @@
 				<h2>Versions</h2>
 				<table id="versions" class="table table-striped table-bordered table-condensed">
 					<thead>
-						<th>Name</th>
-						<th>Size</th>
-						<th>Last Modified</th>
-						<th>Action</th>
+						<tr>
+							<th>Name</th>
+							<th>Size</th>
+							<th>Last Modified</th>
+							<th>Action</th>
+						</tr>
 					</thead>
-					<td></td>
+					<tbody></tbody>
 				</table>
 
 				<h2>Comment</h2>
@@ -99,6 +101,7 @@ $(document).ready(function () {
 					$('.preview-content').html('No file found')
 					return null;
 				}
+
 				d.data = data;
 				var doc_details = data['details']['docs_details'];
 				var doc_versions = data['details']['versions'];
@@ -108,18 +111,15 @@ $(document).ready(function () {
 
 				// Sets display
 				if (doc_details['mime'] === 'application/pdf') {
-					$('.preview-content .content').html('\
-						<div id="viewerPlaceHolder" style="width:100%;height:553px;display:block;position:relative;">\
-							<div id="documentViewer" class="viewer"></div>\
-						</div>\
-					');
+					$('.preview-content .content').html(
+						'<div id="viewerPlaceHolder" style="width:100%;height:553px;display:block;position:relative;">'+
+							'<div id="documentViewer" class="viewer"></div>'+
+						'</div>'
+					);
 					var startDocument = doc_details['hash'];
-					function getDocumentUrl(document){
-						return "/docs/pdfPreview?doc={doc}&format={format}&page={page}".replace("{doc}",document);
-					}
 					var fp = new FlexPaperViewer(
-							'FlexPaperViewer',
-							'documentViewer', { config : {
+						'FlexPaperViewer',
+						'documentViewer', { config : {
 
 							DOC : escape(getDocumentUrl(startDocument)),
 							key : "@63fe01a5804d28236b8$bd56bc57d4f62cc10eb",
@@ -144,7 +144,8 @@ $(document).ready(function () {
 							SearchToolsVisible : true,
 
 							localeChain: 'en_US',
-							}});
+						}}
+					);
 				}
 
 				if (doc_details['mime'] === 'image/png' || doc_details['mime'] === 'image/jpeg' || doc_details['mime'] === 'image/gif' ) {
@@ -160,47 +161,18 @@ $(document).ready(function () {
 				$('.date').html(doc_details['created_stamp']);
 				$('.user-name').html(doc_details['created_card_info']['card_fname']+' '+doc_details['created_card_info']['card_lname']);
 
-				var aaData = Array();
+				$('#versions tbody tr').remove();
 				for (var i=0;i<doc_versions.length;i++) {
-					aaData[i] = [
-						'<a href="#" docs_id="'+doc_details['id']+'" hash="'+doc_versions[i]['hash']+'" class="old-ver">'
-							+ doc_versions[i]['file_name']
-							+ '</a>',
-						doc_versions[i]['file_size'],doc_versions[i]['created_stamp'],
-						'<a class="btn btn-danger delete_ver" docs_id = "'+doc_details['id']+'" hash="'+doc_versions[i]['hash']+'">\n\
-							Delete</a>'
-					];
+					$('#versions tbody').append(
+						'<tr><td><a href="#" docs_id="'+doc_details['id']+'" hash="'+doc_versions[i]['hash']+'" class="old-ver">' + doc_versions[i]['file_name'] + '</a></td>' +
+						'<td>'+doc_versions[i]['file_size']+'</td>' +
+						'<td>'+doc_versions[i]['created_stamp']+'</td>' +
+						'<td><a class="btn btn-mini btn-danger delete_ver" docs_id = "'+doc_details['id']+'" hash="'+doc_versions[i]['hash']+'">Delete</a></td></tr>'
+					);
 				}
 
-				$('#versions').dataTable({
-					"bDestroy" : true,
-					"bRetrieve" : true,
-					"aaData": aaData,
-					"sDom": "<<'pull-right'p>f>t<<'pull-right'p>li>",
-					"sPaginationType": "bootstrap",
-					"bJQueryUI": true,
-					"oLanguage": {
-							"sSearch" : "<div class=\"input-prepend\"><span class=\"add-on\"><i class=\"icon-search\"></i></span></i>_INPUT_</div>",
-							"sInfo": "Showing _START_ to _END_ of _TOTAL_",
-							"sLengthMenu": "_MENU_ Rows per Page",
-							"sInfoFiltered": " - filtering from _MAX_ records",
-							"oPaginate": {
-								"sPrevious": "Previous",
-								"sNext": "Next"
-							},
-							"sLengthMenu": '<select>'+
-							'<option value="10">10</option>'+
-							'<option value="20">20</option>'+
-							'<option value="30">30</option>'+
-							'<option value="40">40</option>'+
-							'<option value="50">50</option>'+
-							'<option value="-1">All</option>'+
-							'</select> Rows'
-						}
-				});
-
 				// Binds delete version button
-				$('.delete_ver').on('click', function () {
+				$('#versions').on('click', '.delete_ver', function () {
 					$.post('/docs/ajax_delete_version/',
 						{ hash:$(this).attr('hash') },
 						function(resp) {
@@ -245,69 +217,9 @@ $(document).ready(function () {
 			});
 
 			$.get('/docs/ajax_dir_tree/0/v').success(function (data) {
-				/* old tree
-				var html = '';
-				html += '<ul>';
-				html += '<li class="tree-folders">/<button class="btn-primary move" folder_id="1">Move</button></li>';
-				function generate_html(data, index) {
-					html += '<ul>';
-					for(var i=0;i<data.length;i++) {
-						html += '<li class="tree-folders">'+data[i].a_docs_displayname+'<button class="btn-primary move" folder_id="'+data[i].a_docs_id+'">Move</button></li>';
-						if (data[i].child !== undefined) {
-							generate_html(data[i].child, i);
-						}
-						else {
-							html += '</li>';
-							if (index !== 0 && data[index+1] !== undefined) generate_html(data[index+1], 0);
-						}
-					}
-					html += '</ul></ul>';
-					return html;
-				}*/
-				function hypen(depth) {
-					var hypen = '';
-					for(var i=0;i<depth;i++) {
-						hypen += '-';
-					}
-					return hypen;
-				}
-				var html = '';
-				var depth = '';
-				function generate_html(data, d, index){
-					depth = d;
-					for(var i=0;i<data.length;i++) {
-						html += '<option value="'+data[i]['id']+'">'+hypen(depth)+' '+data[i]['name']+'</option>';
-						if (data[i].hasOwnProperty('child')) {
-							depth++;
-							generate_html(data[i]['child'], depth, i);
-						} else {
-							depth = 0;
-						}
-					}
-					return html;
-				}
-				/*
-				function generate_child_html(html, data, depth) {
-					depth++;
-					for(var i=0;i<data.length;i++) {
-						html += '<option value="'+data[i]['a_docs_id']+'">'+hypen(depth) + data[i]['a_docs_displayname']+'</option>';
-
-						if (data[i].hasOwnProperty('child')) {
-							generate_child_html(html, data[i]['child'], depth);
-						}
-					}
-					return html;
-				}*/
-				//old tree $('#tree').html(generate_html(data, 0));
-				$('#dir_select')
-					.html('<option value="0">/</option>')
-					.append(generate_html(data,0, 0));
-
+				$('#dir_select').html('<option value="0">/</option>').append(generate_html(data,0, 0));
 
 				$('.move').on('click', function () {
-					/*$.post('/docs/ajax_move_file/<?php echo $url['id_encrypted']; ?>/',{folder_id: $(this).attr('folder_id')})
-						.success(function(data) {});
-				});*/
 					$.post('/docs/ajax_move_file/<?php echo $url['id_encrypted']; ?>/',{folder_id: $('#dir_select').val()})
 						.success(function(data) {});
 				});
@@ -325,18 +237,18 @@ $(document).ready(function () {
 					});
 				});
 
-				$('.docs-title').on('keyup', function(e) {
+				$('#title_input').on('keyup', function(e) {
 					if (e.keyCode === 13) {
 						$.post(
 							'/docs/ajax_update_docs_display_name/<?php echo $this->url['id_encrypted']; ?>',
 							{
-								title: $('.docs-title').val()
+								title: $('#title_input').val()
 							},
 							function(resp) {
 								if (resp.success) {
-									//success
+									show_popup_message('File name successfully updated.', 'success');
 								} else {
-
+									show_popup_message(resp.message, 'error');
 								}
 							},
 							'json'
@@ -344,8 +256,38 @@ $(document).ready(function () {
 					}
 				});
 			});
+
+
 		}
 	}
 	d.init('/docs/ajax_get_file_details/<?php echo $url['id_encrypted']; ?>/v');
 });
+
+function getDocumentUrl(document){
+	return "/docs/pdfPreview?doc={doc}&format={format}&page={page}".replace("{doc}",document);
+}
+
+function hypen(depth) {
+	var hypen = '';
+	for(var i=0;i<depth;i++) {
+		hypen += '-';
+	}
+	return hypen;
+}
+
+function generate_html(data, d) {
+	var depth = d;
+	var html = '';
+
+	for(var i=0;i<data.length;i++) {
+		html += '<option value="'+data[i]['id']+'">'+hypen(depth)+' '+data[i]['name']+'</option>';
+		if (data[i].hasOwnProperty('child')) {
+			depth++;
+			html += generate_html(data[i]['child'], depth);
+		} else {
+			depth = 0;
+		}
+	}
+	return html;
+}
 </script>
