@@ -58,9 +58,13 @@ function ajax_content(url,divid) {
 }
 
 function ajax_content_json(jarray,divid) {
+	var json = '';
 
-	//var json = jQuery.parseJSON( jarray );
-	var json = jarray;	//no need to parseJSON because jQuery already did it at $.get/$.post
+	if (typeof jarray != 'object') {
+		json = jQuery.parseJSON( jarray );
+	} else {
+		json = jarray;	//no need to parseJSON because jQuery already did it at $.get/$.post
+	}
 
 	var links = { html: '', bu: ''};
 	if (json['details']['links']){
