@@ -8,6 +8,17 @@ class Helloworld extends MY_Controller {
 		$this->load->model('DS_HelloWorld');
 	}
 
+	function index() {
+		$data = array();
+		$data['html'] = $this->load->view(get_template().'/helloworld/index', '', TRUE);
+
+		$this->data[] = $data;
+
+		$this->LayoutM->load_format();
+
+		$this->output();
+	}
+
 	function sendhtml() {
 		$data = array();
 		$data['html'] = "I am a some HTML";
