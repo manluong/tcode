@@ -4,7 +4,7 @@ class DS_HelloWorld extends DatasetM {
 	function __construct() {
 		parent::__construct();
 
-		$this->load('ds_address');
+		$this->load('ds_helloworld');
 	}
 
 }
