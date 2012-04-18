@@ -49,7 +49,8 @@ class Helloworld extends MY_Controller {
 	}
 
 	function sendjson_list() {
-		$this->DS_HelloWorld->set_subaction('l');
+		$this->DS_HelloWorld->set_subaction('l')
+		->set_id(150);
 
 		$details = array(
 			'columns' => $this->DS_HelloWorld->get_datatable_fields(),
