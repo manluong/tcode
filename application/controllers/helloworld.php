@@ -142,9 +142,9 @@ class Helloworld extends MY_Controller {
 */
 
 
-		$data = $this->DS_HelloWorld->set_subaction('e')
-					->set_id(150)
-					->get_form_data();
+		$data = $this->DS_HelloWorld->set_subaction('a');
+				//->set_id(150)
+				//	->get_form_data();
 
 		$details = array(
 			'data' => $data,
@@ -153,7 +153,7 @@ class Helloworld extends MY_Controller {
 					'target' => '',
 					'text' => 'Submit',
 					'type' => 'submit',
-					'url' => '/helloworld/sendjson_save/150/es',
+					'url' => '/helloworld/sendjson_save/150/as',
 					'style' => 'default',
 					'icon' => '',
 				),
@@ -199,8 +199,8 @@ class Helloworld extends MY_Controller {
 
 		return($data);
  */
-		$this->DS_HelloWorld->subaction = 'e';
-		$this->DS_HelloWorld->id = 150;
+		//$this->DS_HelloWorld->subaction = 'e';
+		//$this->DS_HelloWorld->id = 150;
 
 		$success = $this->DS_HelloWorld->save();
 
