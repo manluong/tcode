@@ -13,33 +13,39 @@
 
 
 <div style="padding:10px;">
-	<a href="#" id="view_permissions">Manage Permissions</a>
+	<a href="#" class="button" id="view_permissions" data-toggle="modal" href="#acl_summary">Manage Permissions</a>
 </div>
 
 
-<div id="acl_summary">
-	<table border="1" id="permissions_table" class="tpaneltable" width="100%" cellspacing="5" cellpadding="5">
-		<thead>
-			<tr>
-				<th>ID</th>
-				<th>Role/Group</th>
-				<th>Admin</th>
-				<th>Read</th>
-				<th>Write</th>
-			</tr>
-		</thead>
-		<tbody>
-		</tbody>
-	</table>
+<div id="acl_summary" class="modal hide">
+	<div class="modal-header">
+		<h3>Manage Permissions</h3>
+	</div>
 
-	<div class="ui-widget bu-div" style="margin-top:10px;">
-		<button type="button" id="add_acl_button" class="button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary" data-icon-primary="ui-icon-plus" role="button"><span class="ui-button-icon-primary ui-icon ui-icon-plus"></span><span class="ui-button-text">Add New Permission</span></button>
-		<button type="button" id="delete_acl_button" class="button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary" data-icon-primary="ui-icon-trash" role="button"><span class="ui-button-icon-primary ui-icon ui-icon-trash"></span><span class="ui-button-text">Delete Selected Row</span></button>
+	<div class="modal-body">
+		<table border="1" id="permissions_table" class="tpaneltable" width="100%" cellspacing="5" cellpadding="5">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Role/Group</th>
+					<th>Admin</th>
+					<th>Read</th>
+					<th>Write</th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+	</div>
+
+	<div class="modal-footer">
+		<button type="button" id="add_acl_button" class="btn btn-primary"><i class="icon-plus icon-white"></i> Add New Permission</button>
+		<button type="button" id="delete_acl_button" class="btn btn-danger"><i class="icon-trash icon-white"></i> Delete Selected Row</button>
 	</div>
 </div>
 
 
-<div id="acl_add">
+<div id="acl_add" class="hide">
 	<div id="acl_groups">
 		<ul>
 			<li><a href="#tab-groups">Groups</a></li>
@@ -129,10 +135,33 @@
 	var permissions_table = '';
 
 	$('document').ready(function() {
+		$('#acl_summary').modal({
+			show: false
+		});
 
+		$('#view_permissions').on('click', function() {
+			$('#acl_summary').modal('show');
+		})
 
-		$('#view_permissions').click(function() {
-			$('#acl_summary').dialog('open');
+		$('#acl_summary').on('show', function() {
+			if (permissions_table == '') {
+				permissions_table = $('#permissions_table').dataTable({
+					bJQueryUI: true,
+					bPaginate: false,
+					bFilter: false,
+					sAjaxDataProp: 'acl',
+					sAjaxSource: '/acl/ajax_get_acl/<?=$app?>/<?=$actiongp?>/<?=$app_data_id?>',
+					aoColumns: [
+						{ sTitle: 'ID', mDataProp: 'id' },
+						{ sTitle: 'Role / Group', mDataProp: 'name' },
+						{ sTitle: 'Admin', mDataProp: 'admin_display' },
+						{ sTitle: 'Read', mDataProp: 'read_display' },
+						{ sTitle: 'Write', mDataProp: 'write_display' }
+					]
+				});
+			} else {
+				permissions_table.fnReloadAjax();
+			}
 		});
 
 
@@ -178,32 +207,7 @@
 			);
 		});
 
-
-		$('#acl_summary').dialog({
-			title: 'Manage Permissions',
-			autoOpen:false,
-			modal:true,
-			width:800,
-			height:480
-		}).bind('dialogopen', function(event, ui) {
-			if (permissions_table == '') {
-				permissions_table = $('#permissions_table').dataTable({
-					bJQueryUI: true,
-					bPaginate: false,
-					bFilter: false,
-					sAjaxDataProp: 'acl',
-					sAjaxSource: '/acl/ajax_get_acl/<?=$app?>/<?=$actiongp?>/<?=$app_data_id?>',
-					aoColumns: [
-						{ sTitle: 'ID', mDataProp: 'id' },
-						{ sTitle: 'Role / Group', mDataProp: 'name' },
-						{ sTitle: 'Admin', mDataProp: 'admin_display' },
-						{ sTitle: 'Read', mDataProp: 'read_display' },
-						{ sTitle: 'Write', mDataProp: 'write_display' }
-					]
-				});
-			}
-		});
-
+/*
 		$('#add_acl_button').click(function() {
 			$('#acl_add').dialog('open');
 		});
@@ -256,8 +260,10 @@
 				'json'
 			);
 
+		}).bind('dialogclose', function() {
+			permissions_table.fnReloadAjax();
 		});
-
+*/
 
 		function update_select(form, data, name, value) {
 			var target = $(form);

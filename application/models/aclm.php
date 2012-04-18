@@ -237,14 +237,14 @@ class ACLM extends MY_Model {
 
 
 
-	function check($action='', $app_id='', $actiongp='', $app_data_id=0) {
-		$app = $this->AppM->get_name($app_id);
+	function check($action='', $app='', $actiongp='', $app_data_id=0) {
+		//$app = $this->AppM->get_name($app);
 
-		if ($app_id == '') $app_id = $this->url['app_id'];
+		if ($app == '') $app = $this->url['app'];
 		if ($actiongp == '') $actiongp = $this->url['actiongp'];
 		if ($app_data_id != 0) $app_data_id = array($app_data_id, 0);
 
-		$acl = $this->get_acl($app_id, $actiongp, $app_data_id);
+		$acl = $this->get_acl($app, $actiongp, $app_data_id);
 		$cardid = $this->UserM->get_cardid();
 		$subgp = $this->UserM->info['subgp'];
 		$mastergp = $this->UserM->info['accessgp'];
@@ -298,8 +298,8 @@ class ACLM extends MY_Model {
 		return FALSE;
 	}
 
-	function get_acl($app_id, $actiongp, $app_data_id=array(0)) {
-		$app = $this->AppM->get_name($app_id);
+	function get_acl($app, $actiongp, $app_data_id=array(0)) {
+		$app = $this->AppM->get_name($app);
 
 		if ($actiongp == '') $actiongp = $this->url['actiongp'];
 
@@ -308,7 +308,7 @@ class ACLM extends MY_Model {
 		$result = array();
 
 		foreach($app_data_id AS $k=>$adi) {
-			$key = $app_id.'_'.$actiongp.'_'.$adi;
+			$key = $app.'_'.$actiongp.'_'.$adi;
 			if (isset($this->cache_acl[$key])) {
 				$result += $this->cache_acl[$key];
 				unset($app_data_id[$k]);
@@ -319,7 +319,7 @@ class ACLM extends MY_Model {
 
 		$rs = $this->db->select()
 				->from('access_rights_new')
-				->where('app_id', $app_id)
+				->where('app', $app)
 				->where('actiongp', $actiongp)
 				->where_in('app_data_id', $app_data_id)
 				->order_by('role_type', 'ASC')
@@ -328,21 +328,21 @@ class ACLM extends MY_Model {
 		foreach($rs->result_array() AS $acl) {
 			$result[] = $acl;
 
-			$key = $acl['app_id'].'_'.$acl['actiongp'].'_'.$acl['app_data_id'];
+			$key = $acl['app'].'_'.$acl['actiongp'].'_'.$acl['app_data_id'];
 			$this->cache_acl[$key][] = $acl;
 		}
 
 		return $result;
 	}
 
-	function get_acl_app_ids() {
+	function get_acl_apps() {
 		$result = array();
 		$cardid = $this->UserM->get_cardid();
 		$subgp = $this->UserM->info['subgp'];
 		$mastergp = $this->UserM->info['accessgp'];
 		$case2_acl = array();
 
-		$rs = $this->db->select('DISTINCT app_id, role_type, role_id, `read`', FALSE)
+		$rs = $this->db->select('DISTINCT app, role_type, role_id, `read`', FALSE)
 				->from($this->table)
 				->where('actiongp', '')
 				->order_by('role_type', 'DESC')
@@ -355,7 +355,7 @@ class ACLM extends MY_Model {
 				case 3:	//mastergroup
 
 					if ($a['role_id'] == $mastergp) {
-						$result[$a['app_id']] = $a['read'];
+						$result[$a['app']] = $a['read'];
 					}
 
 					break;
@@ -373,19 +373,19 @@ class ACLM extends MY_Model {
 					//if there's any acl from case 2, consolidate them and return result
 					if (count($case2_acl) > 0) {
 						$case2_acl = $this->consolidate_acl($case2_acl);
-						$result[$a['app_id']] = $case2_acl['read'];
+						$result[$a['app']] = $case2_acl['read'];
 					}
 
 					if ($a['role_id'] == $cardid) {
-						$result[$a['app_id']] = $a['read'];
+						$result[$a['app']] = $a['read'];
 					}
 
 					break;
 			}
 		}
 
-		foreach($result AS $app_id => $access) {
-			if ($access == 0) unset($result[$app_id]);
+		foreach($result AS $app => $access) {
+			if ($access == 0) unset($result[$app]);
 		}
 
 		return array_keys($result);
