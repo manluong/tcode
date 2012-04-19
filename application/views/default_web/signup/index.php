@@ -1,5 +1,5 @@
 <?php
-	$fields = array('name', 'email', 'domain', 'username', 'password');
+	$fields = array('name', 'email', 'domain', 'password');
 	foreach($fields AS $f) {
 		if (isset($errors[$f]) && $errors[$f]!='') {
 			${$f.'_class'} = 'error';
@@ -30,28 +30,20 @@
 				<?=$email_message?>
 			</div>
 		</div>
+		
+		<div class="control-group <?=$password_class?>">
+			<label class="control-label">Password</label>
+			<div class="controls">
+				<input type="text" name="password" value="<?=(isset($signup['password'])?$signup['password']:'')?>" />
+				<?=$password_message?>
+			</div>
+		</div>
 
 		<div class="control-group <?=$domain_class?>">
 			<label class="control-label">Domain</label>
 			<div class="controls">
 				<input type="text" name="domain" value="<?=(isset($signup['domain'])?$signup['domain']:'')?>" />.8force.net
 				<?=$domain_message?>
-			</div>
-		</div>
-
-		<div class="control-group <?=$username_class?>">
-			<label class="control-label">Username</label>
-			<div class="controls">
-				<input type="text" name="username" value="<?=(isset($signup['username'])?$signup['username']:'')?>" />
-				<?=$username_message?>
-			</div>
-		</div>
-
-		<div class="control-group <?=$password_class?>">
-			<label class="control-label">Password</label>
-			<div class="controls">
-				<input type="text" name="password" value="<?=(isset($signup['password'])?$signup['password']:'')?>" />
-				<?=$password_message?>
 			</div>
 		</div>
 

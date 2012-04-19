@@ -324,7 +324,7 @@ class docsM extends MY_Model {
 		$data = array(
 			'dir_id' => $dir_id,
 			'display_name' => $filename_without_extension,
-			'created_card_id' => $this->UserM->get_cardid(),
+			'created_card_id' => $this->UserM->get_card_id(),
 			'created_stamp' => get_current_stamp()
 		);
 		$this->db->insert('a_docs', $data);
@@ -338,7 +338,7 @@ class docsM extends MY_Model {
 			'file_size' => ($file_info['file_size']*1000),
 			'mime' => $file_info['file_type'],
 			'upload_source' => $this->upload_source,
-			'created_card_id' => $this->UserM->get_cardid(),
+			'created_card_id' => $this->UserM->get_card_id(),
 			'created_stamp' => get_current_stamp()
 		);
 		$this->db->insert('a_docs_ver', $data);
@@ -381,7 +381,7 @@ class docsM extends MY_Model {
 				'file_ext' => $file_info['file_ext'],
 				'file_size' => ($file_info['file_size']*1000),
 				'mime' => $file_info['file_type'],
-				'created_card_id' => $this->UserM->get_cardid(),
+				'created_card_id' => $this->UserM->get_card_id(),
 				'created_stamp' => get_current_stamp()
 			);
 			$this->db->insert('a_docs_ver', $data);
@@ -401,7 +401,7 @@ class docsM extends MY_Model {
 				'file_ext' => $file_info['file_ext'],
 				'file_size' => ($file_info['file_size']*1000),
 				'mime' => $file_info['file_type'],
-				'modified_card_id' => $this->UserM->get_cardid(),
+				'modified_card_id' => $this->UserM->get_card_id(),
 				'modified_stamp' => get_current_stamp()
 			);
 			$this->db->where('id', $ver_id)
@@ -585,7 +585,7 @@ class docsM extends MY_Model {
 			$data = array(
 				'parent_id' => $parent_dir_id,
 				'name' => $path[0],
-				'created_card_id' => $this->UserM->get_cardid(),
+				'created_card_id' => $this->UserM->get_card_id(),
 				'created_stamp' => get_current_stamp()
 			);
 			$this->db->insert('a_docs_dir', $data);
@@ -654,7 +654,7 @@ class docsM extends MY_Model {
 
 	function delete($hash_or_id) {
 		$data = array(
-			'modified_card_id' => $this->UserM->get_cardid(),
+			'modified_card_id' => $this->UserM->get_card_id(),
 			'modified_stamp' => get_current_stamp(),
 			'deleted' => 1,
 		);
@@ -685,7 +685,7 @@ class docsM extends MY_Model {
 
 					$update = array(
 						'current_version_id' => $next_version['id'],
-						'modified_card_id' => $this->UserM->get_cardid(),
+						'modified_card_id' => $this->UserM->get_card_id(),
 						'modified_stamp' => get_current_stamp(),
 					);
 
@@ -715,7 +715,7 @@ class docsM extends MY_Model {
 		$dir_ids = array_merge($dir_id, $subdir_ids);
 
 		$data = array(
-			'modified_card_id' => $this->UserM->get_cardid(),
+			'modified_card_id' => $this->UserM->get_card_id(),
 			'modified_stamp' => get_current_stamp(),
 			'deleted' => 1,
 		);
@@ -770,7 +770,7 @@ class docsM extends MY_Model {
 	function update_display_name($docs_id, $display_name) {
 		$data = array(
 			'display_name' => $display_name,
-			'modified_card_id' => $this->UserM->get_cardid(),
+			'modified_card_id' => $this->UserM->get_card_id(),
 			'modified_stamp' => get_current_stamp()
 		);
 		return $this->db->where('id', $docs_id)
@@ -793,7 +793,7 @@ class docsM extends MY_Model {
 	function move_file($docs_id, $dir_id) {
 		$data = array(
 			'dir_id' => $dir_id,
-			'modified_card_id' => $this->UserM->get_cardid(),
+			'modified_card_id' => $this->UserM->get_card_id(),
 			'modified_stamp' => get_current_stamp()
 		);
 

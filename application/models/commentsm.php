@@ -223,7 +223,7 @@ class CommentsM extends MY_Model {
 	}
 
 	function save(&$data) {
-		$data['created_cardid'] = $this->UserM->get_cardid();
+		$data['created_cardid'] = $this->UserM->get_card_id();
 		$data['created_stamp'] = get_current_stamp();
 
 		$data['id'] = parent::save($data, 'id');
@@ -234,7 +234,7 @@ class CommentsM extends MY_Model {
 	}
 
 	function update_comment_stats($id) {
-		$modified_cardid = $this->UserM->get_cardid();
+		$modified_cardid = $this->UserM->get_card_id();
 		$modified_stamp = get_current_stamp();
 
 		$sql = "UPDATE ".$this->table." SET reply_count=reply_count+1, modified_cardid=?, modified_stamp=? WHERE id=?";

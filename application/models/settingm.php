@@ -26,7 +26,7 @@ class SettingM extends MY_Model {
 
 		$results = array();
 
-		$card_id = $this->UserM->get_cardid();
+		$card_id = $this->UserM->get_card_id();
 		$local = $this->get_local($app_id);
 		$global = $this->get_global($app_id);
 
@@ -69,7 +69,7 @@ class SettingM extends MY_Model {
 
 		$results = array();
 
-		$card_id = $this->UserM->get_cardid();
+		$card_id = $this->UserM->get_card_id();
 		$local = $this->get_local($app_id);
 		$global = $this->get_global($app_id);
 
@@ -114,7 +114,7 @@ class SettingM extends MY_Model {
 
 	function save($app_name) {
 		$app_id = $this->AppM->get_id($app_name);
-		$card_id = $this->UserM->get_cardid();
+		$card_id = $this->UserM->get_card_id();
 
 		if (APP_ROLE=='TBOSS' && $this->UserM->is_admin()) {
 			$data = array();

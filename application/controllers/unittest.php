@@ -16,7 +16,7 @@ class Unittest extends MY_Controller {
 	function acl() {
 		$sett_randomize_tests = TRUE;
 
-		$cuid = $this->UserM->get_cardid();
+		$cuid = $this->UserM->get_card_id();
 		echo 'Current User Card ID: '.$cuid.'<br />';
 		echo 'Current SubGroup: <pre>', print_r($this->UserM->info['subgp'], TRUE), '</pre><br />';
 		echo 'Current Master Group: <pre>', print_r($this->UserM->info['accessgp'], TRUE), '</pre><br />';

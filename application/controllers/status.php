@@ -32,7 +32,7 @@ class Status extends MY_Controller {
 
 	function ajax_update() {
 		$status = array(
-			'card_id' => $this->UserM->get_cardid(),
+			'card_id' => $this->UserM->get_card_id(),
 			'status_type_id' => $this->input->post('status_type_id'),
 			'message' => $this->input->post('message'),
 			'task_id' => $this->input->post('task_id'),
@@ -58,7 +58,7 @@ class Status extends MY_Controller {
 
 	function ajax_delete() {
 		$status_id = $this->input->post('status_id');
-		$card_id = $this->UserM->get_cardid();
+		$card_id = $this->UserM->get_card_id();
 
 		$this->StatusM->delete($status_id, $card_id);
 
