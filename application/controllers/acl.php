@@ -7,19 +7,19 @@ class ACL extends MY_Controller {
 	}
 
 
-	public function index($app='', $actiongp='', $app_data_id='')	{
+	public function index($app='', $action='', $app_data_id='')	{
 		if ($app == '') $app = $this->url['app'];
-		if ($actiongp == '') $actiongp = $this->AppM->get_group($this->url['app'], $this->url['action']);
+		if ($action == '') $action = $this->AppM->get_group($this->url['app'], $this->url['action']);
 		if ($app_data_id == '') $app_data_id = $this->url['id_plain'];
 
 		$app = 'client';
-		$actiongp = 'search';
+		$action = 'search';
 		$app_data_id = 12;
 
 		$html_data = array();
-		//$html_data['acl'] = $this->ACLM->get_acl($app, $actiongp, array($app_data_id));
+		//$html_data['acl'] = $this->ACLM->get_acl($app, $action, array($app_data_id));
 		$html_data['app'] = $app;
-		$html_data['actiongp'] = $actiongp;
+		$html_data['action'] = $action;
 		$html_data['app_data_id'] = $app_data_id;
 
 		//$this->ACLM->fill_acl_details($html_data['acl']);
@@ -41,13 +41,13 @@ class ACL extends MY_Controller {
 	}
 
 
-	function ajax_get_acl($app, $actiongp, $app_data_id) {
+	function ajax_get_acl($app, $action, $app_data_id) {
 		$html_data = array();
 		$html_data['app'] = $app;
-		$html_data['actiongp'] = $actiongp;
+		$html_data['action'] = $action;
 		$html_data['app_data_id'] = $app_data_id;
 
-		$acl = $this->ACLM->get_acl($app, $actiongp, array($app_data_id));
+		$acl = $this->ACLM->get_acl($app, $action, array($app_data_id));
 		$this->ACLM->fill_acl_details($acl);
 
 		$yn = array(
@@ -117,7 +117,7 @@ class ACL extends MY_Controller {
 		$has_error = FALSE;
 
 		$data['app'] = $this->input->post('app');
-		$data['actiongp'] = $this->input->post('actiongp');
+		$data['action'] = $this->input->post('action');
 		$data['app_data_id'] = $this->input->post('app_data_id');
 
 		if ($data['app_data_id'] === FALSE) $data['app_data_id'] = 0;

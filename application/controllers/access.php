@@ -20,7 +20,7 @@ class Access extends MY_Controller {
 		$html['company_name'] = 'Telcoson'; //TODO: This should be the company name of the tenant.
 
 		$data = array();
-		$data['html'] = $this->load->view('/'.get_template().'/access/login', $html, TRUE);
+		$data['html'] = $this->load->view(get_template().'/access/login', $html, TRUE);
 
 		$this->data[] = $data;
 
@@ -34,11 +34,11 @@ class Access extends MY_Controller {
 	}
 
 	public function login() {
-		$username = $this->input->post('access_user_username');
-		$password = $this->input->post('access_user_pw');
+		$email = $this->input->post('login_email');
+		$password = $this->input->post('login_password');
 
-		if ($this->UserM->is_valid_password($username, $password)) {
-			$this->UserM->login($username);
+		if ($this->UserM->is_valid_password($email, $password)) {
+			$this->UserM->login($email);
 			execute_return_url();
 			redirect('/dashboard');
 		}
@@ -59,13 +59,13 @@ class Access extends MY_Controller {
 	}
 
 	public function ajax_login() {
-		$username = $this->input->post('access_user_username');
-		$password = $this->input->post('access_user_pw');
+		$email = $this->input->post('login_email');
+		$password = $this->input->post('login_password');
 
 		$success = false;
 
-		if ($this->UserM->is_valid_password($username, $password)) {
-			$this->UserM->login($username);
+		if ($this->UserM->is_valid_password($email, $password)) {
+			$this->UserM->login($email);
 			$success = true;
 		}
 

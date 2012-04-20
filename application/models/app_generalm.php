@@ -9,93 +9,51 @@ class App_generalM extends CI_Model {
 	}
 
 
-function core_app_userinfo($username){
+//TODO: this function is a duplicate of UserM->get_info();
+function get_accessgp($card_id){
+	$rs = $this->db->select('role_id')
+			->from('access_user_role')
+			->where('card_id', $card_id)
+			->limit(1)
+			->get();
 
-    global $db;
+	$result = $rs->row_array();
 
-    $sql = "SELECT * FROM access_user LEFT JOIN card ON access_user.access_user_cardid = card.id WHERE access_user_username = '".$username."' LIMIT 1";
-    $result = $db->fetchRow($sql, 2);
-
-    if ($result['card_fname']){
-    $thisresult['name'] = $result['card_fname'];
-    }elseif ($result['card_lname']){
-    $thisresult['name'] = $result['card_lname'];
-    }elseif ($result['card_orgname']){
-    $thisresult['name'] = $result['card_orgname'];
-    }
-
-    $thisresult['cardid'] = $result['id'];
-
-    $thisresult['subgp'] = core_app_getsubgp($thisresult['cardid']);
-
-    $core_app_getaccessgp = core_app_getaccessgp($thisresult['cardid']);
-
-    $thisresult = array_merge($thisresult, $core_app_getaccessgp);
-
-return($thisresult);
-}
-
-function core_app_getsubgp($cardid){
-
-    global $db;
-
-    $sql1 = "SELECT access_usergp_gpsub FROM access_usergp WHERE access_usergp_cardid = '$cardid'";
-
-    $result1 = $db->fetchAll($sql1, 2);
-    if ($result1){
-        foreach ($result1 as $field1) {
-          $thisresult[] = $field1['access_usergp_gpsub'];
-        }
-    }
-
-return($thisresult);
-}
-
-function get_accessgp($cardid){
-
-    $sql = "SELECT access_link_gpmaster FROM access_link WHERE access_link_cardid = ".$cardid." LIMIT 1";
-	$result = $this->db->query($sql);
-	$result = $result->row_array(1);
-
-
-	$thisresult['accessgp'] = $result['access_link_gpmaster'];
-
-    switch($thisresult['accessgp']){
-    case "1":  break;
-    case "2":
-        //staff
-        $sql = "SELECT staff_id FROM staff WHERE staff_cardid = ".$cardid." LIMIT 1";
-        $result = $this->db->query($sql);
-        $result = $result->row_array(1);
-        if ($result) {
-        $thisresult["staffid"] = $result['staff_id'];
-        $thisresult["en"]["staffid"] = encode_id($result['staff_id']);
-        }
-        break;
-    case "3":
-        //client
-        $sql = "SELECT client_id FROM client WHERE client_cardid = ".$cardid." LIMIT 1";
-        $result = $this->db->query($sql);
-        $result = $result->row_array(1);
-        if ($result) {
-        $thisresult["clientid"] = $result['client_id'];
-        $thisresult["en"]["clientid"] = encode_id($result['client_id']);
-        }
-        break;
-    case "4":  break;
-    case "5":
-        //vendor
-        $sql = "SELECT vendor_id FROM vendor WHERE vendor_cardid = ".$cardid." LIMIT 1";
-		$result = $this->db->query($sql);
-		$result = $result->row_array(1);
-        if ($result) {
-        $thisresult["vendorid"] = $result['vendor_id'];
-        $thisresult["en"]["vendorid"] = encode_id($result['vendor_id']);
-        }
-        break;
-    case "6":  break;
-    case "7":  break;
-
+    switch ($result['role_id']) {
+		case "1":  break;
+		case "2":
+			//staff
+			$sql = "SELECT staff_id FROM staff WHERE staff_cardid = ".$cardid." LIMIT 1";
+			$result = $this->db->query($sql);
+			$result = $result->row_array(1);
+			if ($result) {
+			$thisresult["staffid"] = $result['staff_id'];
+			$thisresult["en"]["staffid"] = encode_id($result['staff_id']);
+			}
+			break;
+		case "3":
+			//client
+			$sql = "SELECT client_id FROM client WHERE client_cardid = ".$cardid." LIMIT 1";
+			$result = $this->db->query($sql);
+			$result = $result->row_array(1);
+			if ($result) {
+			$thisresult["clientid"] = $result['client_id'];
+			$thisresult["en"]["clientid"] = encode_id($result['client_id']);
+			}
+			break;
+		case "4":  break;
+		case "5":
+			//vendor
+			$sql = "SELECT vendor_id FROM vendor WHERE vendor_cardid = ".$cardid." LIMIT 1";
+			$result = $this->db->query($sql);
+			$result = $result->row_array(1);
+			if ($result) {
+			$thisresult["vendorid"] = $result['vendor_id'];
+			$thisresult["en"]["vendorid"] = encode_id($result['vendor_id']);
+			}
+			break;
+		case "6":  break;
+		case "7":  break;
     }
 
 return($thisresult);

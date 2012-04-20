@@ -9,14 +9,11 @@ class ACLM extends MY_Model {
 	);
 
 	function __construct() {
-		$this->table = 'access_rights_new';
+		$this->table = 'access_control';
 		$this->id_field = 'id';
 		$this->cache_enabled = TRUE;
 
 		parent::__construct();
-
-		$CI =& get_instance();
-		$this->url = $CI->url;
 
 		$this->verify_request();
 	}
@@ -60,183 +57,6 @@ class ACLM extends MY_Model {
 
 
 
-
-	//function to get rights from access_rights table
-	function get_rights(){
-		$apps_action = $this->AppM->actions;
-
-		$result = array();
-
-		$action_denied = FALSE;
-		$avedfield = '';
-
-		switch($this->url['subaction']){
-			case 'a':
-				$avedfield = 'access_rights_add';
-				if (!$apps_action['core_apps_action_add']) $action_denied = TRUE;
-				break;
-			case 'v':
-				$avedfield = 'access_rights_view';
-				if (!$apps_action['core_apps_action_view']) $action_denied = TRUE;
-				break;
-			case 'e':
-				$avedfield = 'access_rights_edit';
-				if (!$apps_action['core_apps_action_del']) $action_denied = TRUE;
-				break;
-			case 'd': $avedfield = 'access_rights_delete';
-				if (!$apps_action['core_apps_action_del']) $action_denied = TRUE;
-				break;
-			case 'l':
-				$avedfield = 'access_rights_list';
-				if (!$apps_action['core_apps_action_list']) $action_denied = TRUE;
-				break;
-			case 's':
-				$avedfield = 'access_rights_search';
-				if (!$apps_action['core_apps_action_search']) $action_denied = TRUE;
-				break;
-			case 'f':
-				$avedfield = 'access_rights_form';
-				if (!$apps_action['core_apps_action_form']) $action_denied = TRUE;
-				break;
-		}
-
-		if ($action_denied) {
-			$result['allow'] = 3;
-			return $result;
-		}
-
-		//get the table with exact mastergp+app+actiongp+cardid
-
-		$where = array();
-		$where['accessgp'] = "access_rights_gpmaster = '".$this->UserM->info['accessgp']."'";
-		$where['app'] = " AND access_rights_app = '".$this->url['app']."'";
-		$where['cardid'] = " AND access_rights_cardid = '".$this->UserM->info['cardid']."'";
-		$where['actiongp'] = " AND access_rights_actiongp = '".$apps_action['core_apps_action_gp']."'";
-
-		if ($this->UserM->info['subgp']) {
-			$subgp = join(',',$this->UserM->info['subgp']);
-			$where['subgp'] = " AND access_rights_gpsub IN ($subgp)";
-		}
-
-		$where['cardid_empty'] = " AND access_rights_cardid = ''";
-		$where['actiongp_empty'] = " AND access_rights_actiongp = ''";
-		$where['subgp_empty'] = " AND access_rights_gpsub = ''";
-
-		//sql check sqeunce
-		$sql = array();
-
-		//with acccessgp,app,actiongp,cardid + subgp
-		$sql[0] = $where['accessgp'];
-		$sql[0] .= $where['subgp'];
-		$sql[0] .= $where['app'];
-		$sql[0] .= $where['cardid'];
-		$sql[0] .= $where['actiongp'];
-
-		//with acccessgp,app,actiongp,cardid
-		$sql[1] = $where['accessgp'];
-		$sql[1] .= $where['subgp_empty'];
-		$sql[1] .= $where['app'];
-		$sql[1] .= $where['cardid'];
-		$sql[1] .= $where['actiongp'];
-
-
-		//with acccessgp,app,actiongp + subgp
-		$sql[2] = $where['accessgp'];
-		$sql[2] .= $where['subgp'];
-		$sql[2] .= $where['app'];
-		$sql[2] .= $where['cardid_empty'];
-		$sql[2] .= $where['actiongp'];
-
-		//with acccessgp,app,actiongp
-		$sql[3] = $where['accessgp'];
-		$sql[3] .= $where['subgp_empty'];
-		$sql[3] .= $where['app'];
-		$sql[3] .= $where['cardid_empty'];
-		$sql[3] .= $where['actiongp'];
-
-		//with acccessgp,app,cardid + subgp
-		$sql[4] = $where['accessgp'];
-		$sql[4] .= $where['subgp'];
-		$sql[4] .= $where['app'];
-		$sql[4] .= $where['cardid'];
-		$sql[4] .= $where['actiongp_empty'];
-
-		//with acccessgp,app,cardid
-		$sql[5] = $where['accessgp'];
-		$sql[5] .= $where['subgp_empty'];
-		$sql[5] .= $where['app'];
-		$sql[5] .= $where['cardid'];
-		$sql[5] .= $where['actiongp_empty'];
-
-		//with acccessgp,app + subgp
-		$sql[6] = $where['accessgp'];
-		$sql[6] .= $where['subgp'];
-		$sql[6] .= $where['app'];
-		$sql[6] .= $where['cardid_empty'];
-		$sql[6] .= $where['actiongp_empty'];
-
-		//with acccessgp,app
-		$sql[7] = $where['accessgp'];
-		$sql[7] .= $where['subgp_empty'];
-		$sql[7] .= $where['app'];
-		$sql[7] .= $where['cardid_empty'];
-		$sql[7] .= $where['actiongp_empty'];
-
-		$count = 0;
-		if (!$where['subgp']) $count++;
-
-		while (!$result && $sql[$count]){
-			$rs = $this->db->query('SELECT * FROM access_rights WHERE '.$sql[$count]);
-			if ($rs->num_rows()>0){
-				foreach ($rs->result_array() as $field) {
-					if (!isset($result['allow']) || $result['allow'] != 1){
-						$result['allow'] = $this->check_table_rights($field, $avedfield);
-						$result['typeid'] = $field['access_rights_id'];
-						$result['type'] = 'rightstable';
-					}
-				}
-			}
-			$count++;
-			if (!$where['subgp']) $count++;
-		}
-
-		return $result;
-	}
-
-
-	function check_table_rights($access,$avedfield){
-		$result = 0;
-
-		switch ($access['access_rights_type']){
-			case '1':
-				$result = 1;
-				break;
-
-			case '2':
-				$result = 2;
-				break;
-
-			case '3':
-				$result = ($access[$avedfield])
-							? 1
-							: 2;
-				break;
-		}
-
-		if ($result == 1 && $access['access_rights_matchthisid']) {
-			$result = ($this->url['id_plain']!=0 && $this->UserM->info[$access['access_rights_matchthisidtype']] == $this->url['plain_id'])
-				? 1
-				: 2;
-		}
-
-		return $result;
-	}
-
-
-
-
-
-
 	function check($action='', $app='', $actiongp='', $app_data_id=0) {
 		//$app = $this->AppM->get_name($app);
 
@@ -245,7 +65,7 @@ class ACLM extends MY_Model {
 		if ($app_data_id != 0) $app_data_id = array($app_data_id, 0);
 
 		$acl = $this->get_acl($app, $actiongp, $app_data_id);
-		$cardid = $this->UserM->get_cardid();
+		$cardid = $this->UserM->get_card_id();
 		$subgp = $this->UserM->info['subgp'];
 		$mastergp = $this->UserM->info['accessgp'];
 
@@ -301,7 +121,7 @@ class ACLM extends MY_Model {
 	function get_acl($app, $actiongp, $app_data_id=array(0)) {
 		$app = $this->AppM->get_name($app);
 
-		if ($actiongp == '') $actiongp = $this->url['actiongp'];
+		if ($actiongp == '') $actiongp = $this->url['action'];
 
 		if (!is_array($app_data_id)) $app_data_id = array($app_data_id);
 
@@ -318,9 +138,9 @@ class ACLM extends MY_Model {
 		if (count($app_data_id) == 0) return $result;
 
 		$rs = $this->db->select()
-				->from('access_rights_new')
+				->from($this->table)
 				->where('app', $app)
-				->where('actiongp', $actiongp)
+				->where('action', $actiongp)
 				->where_in('app_data_id', $app_data_id)
 				->order_by('role_type', 'ASC')
 				->get();
@@ -328,7 +148,7 @@ class ACLM extends MY_Model {
 		foreach($rs->result_array() AS $acl) {
 			$result[] = $acl;
 
-			$key = $acl['app'].'_'.$acl['actiongp'].'_'.$acl['app_data_id'];
+			$key = $acl['app'].'_'.$acl['action'].'_'.$acl['app_data_id'];
 			$this->cache_acl[$key][] = $acl;
 		}
 
@@ -337,14 +157,14 @@ class ACLM extends MY_Model {
 
 	function get_acl_apps() {
 		$result = array();
-		$cardid = $this->UserM->get_cardid();
+		$cardid = $this->UserM->get_card_id();
 		$subgp = $this->UserM->info['subgp'];
 		$mastergp = $this->UserM->info['accessgp'];
 		$case2_acl = array();
 
 		$rs = $this->db->select('DISTINCT app, role_type, role_id, `read`', FALSE)
 				->from($this->table)
-				->where('actiongp', '')
+				->where('action', '')
 				->order_by('role_type', 'DESC')
 				->get();
 
@@ -391,25 +211,46 @@ class ACLM extends MY_Model {
 		return array_keys($result);
 	}
 
-	private function consolidate_acl($acl) {
-		$result = array(
-			'admin' => 1,
-			'read' => 1,
-			'list' => 1,
-			'search' => 1,
-			'copy' => 1,
-			'download' => 1,
-			'write' => 1,
-			'add' => 1,
-			'move' => 1,
-			'rename' => 1,
-			'delete' => 1
-		);
+	private function consolidate_acl($acl, $default_priority='allow') {
+		if ($default_priority == 'allow') {
+			$result = array(
+				'admin' => 1,
+				'read' => 1,
+				'list' => 1,
+				'search' => 1,
+				'copy' => 1,
+				'download' => 1,
+				'write' => 1,
+				'add' => 1,
+				'move' => 1,
+				'rename' => 1,
+				'delete' => 1
+			);
+		} else {
+			$result = array(
+				'admin' => 0,
+				'read' => 0,
+				'list' => 0,
+				'search' => 0,
+				'copy' => 0,
+				'download' => 0,
+				'write' => 0,
+				'add' => 0,
+				'move' => 0,
+				'rename' => 0,
+				'delete' => 0
+			);
+		}
 
 		foreach($acl AS $a) {
 			foreach ($result AS $act=>$val) {
 				if (!isset($a[$act])) continue;
-				if ($a[$act] < $val) $result[$act] = $a[$act];
+
+				if ($default_priority == 'allow') {
+					if ($a[$act] < $val) $result[$act] = $a[$act];
+				} else {
+					if ($a[$act] > $val) $result[$act] = $a[$act];
+				}
 			}
 		}
 
@@ -437,7 +278,7 @@ class ACLM extends MY_Model {
 
 		$subgp_details = $this->get_subgp_batch($subgp_ids, TRUE);
 		foreach($subgp_details AS $s) {
-			$gp_ids[] = $s['access_gpsub_gpmaster'];
+			$gp_ids[] = $s['role_id'];
 		}
 
 		$gp_details = $this->get_gp_batch($gp_ids, TRUE);
@@ -452,7 +293,7 @@ class ACLM extends MY_Model {
 					$acl[$k]['name'] = $gp_details[$gp_id]['access_gpmaster_name'].' - '.$subgp_details[$a['role_id']]['access_gpsub_name'];
 					break;
 				case 3:
-					$acl[$k]['name'] = $gp_details[$a['role_id']]['access_gpmaster_name'];
+					$acl[$k]['name'] = $gp_details[$a['role_id']]['name'];
 					break;
 			}
 		}
@@ -464,8 +305,8 @@ class ACLM extends MY_Model {
 		$temp_tb = $this->table;
 		$temp_id = $this->id_field;
 
-		$this->table = 'access_gpsub';
-		$this->id_field = 'access_gpsub_id';
+		$this->table = 'access_roles_sub';
+		$this->id_field = 'id';
 
 		$results = parent::get_batch($ids, $id_as_key);
 
@@ -479,8 +320,8 @@ class ACLM extends MY_Model {
 		$temp_tb = $this->table;
 		$temp_id = $this->id_field;
 
-		$this->table = 'global_setting.access_gpmaster';
-		$this->id_field = 'access_gpmaster_code';
+		$this->table = 'global_setting.access_roles';
+		$this->id_field = 'code';
 
 		$results = parent::get_batch($ids, $id_as_key);
 
@@ -494,8 +335,8 @@ class ACLM extends MY_Model {
 		$temp_tb = $this->table;
 		$temp_id = $this->id_field;
 
-		$this->table = 'global_setting.access_gpmaster';
-		$this->id_field = 'access_gpmaster_code';
+		$this->table = 'global_setting.access_roles';
+		$this->id_field = 'code';
 
 		$results = parent::get_list();
 
@@ -507,9 +348,9 @@ class ACLM extends MY_Model {
 
 	function get_subgp($gp='') {
 		$this->db->select()
-			->from('access_gpsub');
+			->from('access_roles_sub');
 
-		if ($gp != '') $this->db->where('access_gpsub_gpmaster', $gp);
+		if ($gp != '') $this->db->where('role_id', $gp);
 
 		$rs = $this->db->get();
 
@@ -519,31 +360,29 @@ class ACLM extends MY_Model {
 	}
 
 	function get_users($gp='') {
-		$roles = $this->get_subgp($gp);
+		$subroles = $this->get_subgp($gp);
 
-		$role_ids = array();
+		$subrole_ids = array();
 
-		foreach($roles AS $r) {
-			$role_ids[] = $r['access_gpsub_id'];
+		foreach($subroles AS $r) {
+			$subrole_ids[] = $r['id'];
 		}
 
-		if (count($role_ids) == 0) return array();
+		if (count($subrole_ids) == 0) return array();
 
-		$rs = $this->db->select('DISTINCT access_usergp.access_usergp_cardid, CONCAT(card.card_fname," ",card.card_lname) AS name', false)
-				->from('access_usergp')
-				->where_in('access_usergp.access_usergp_gpsub', $role_ids)
-				->join('card', 'card.id=access_usergp.access_usergp_cardid', 'left')
+		$rs = $this->db->select('DISTINCT ur.card_id, CONCAT(c.card_fname," ",c.card_lname) AS name', false)
+				->from('access_user_role AS ur')
+				->where_in('ur.roles_sub_id', $subrole_ids)
+				->join('card AS c', 'c.id=ur.card_id', 'left')
 				->get();
 
 		if ($rs->num_rows() == 0) return array();
-
-
 
 		return $rs->result_array();
 	}
 
 	function save_acl($data) {
-		$data['created_cardid'] = $this->UserM->get_cardid();
+		$data['created_card_id'] = $this->UserM->get_card_id();
 		$data['created_stamp'] = get_current_stamp();
 
 		parent::save($data, $this->id_field);
