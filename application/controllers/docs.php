@@ -65,16 +65,10 @@ class Docs extends MY_Controller {
 		}
 */
 
-		$data = array();
+
 		$vars['url'] = $this->url;
 		$vars['page'] = get_template().'/docs/docs_view_html';
-		$data['html'] = $this->load->view(get_template().'/docs/docs_view', $vars, TRUE);
-
-		$data['isoutput'] = 1;
-
-		$this->data[] = $data;
-
-		$this->LayoutM->load_format();
+		$this->data['content'] = $this->load->view(get_template().'/docs/docs_view', $vars, TRUE);
 
 		$this->output();
 	}

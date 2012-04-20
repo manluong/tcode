@@ -37,7 +37,7 @@ class Setting extends MY_Controller {
 
 		$data = array();
 		$data['html'] = $this->load->view(get_template().'/element/content_layout_left', $html, TRUE);
-		if ($this->is_ajax) {
+		if ($this->is_pjax) {
 			echo $data['html'];
 			return;
 		}
@@ -73,7 +73,7 @@ class Setting extends MY_Controller {
 
 		$data = array();
 		$data['html'] = $this->load->view(get_template().'/element/content_layout_left', $html, TRUE);
-		if ($this->is_ajax) {
+		if ($this->is_pjax) {
 			echo $data['html'];
 			return;
 		}

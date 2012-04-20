@@ -89,7 +89,7 @@
 			$.post(
 				'/docs/ajax_create_folder/<?php echo $url['id_encrypted']; ?>/',
 				{
-					cardid: "<?php echo $this->UserM->info['cardid']; ?>",
+					cardid: "<?php echo $this->UserM->get_card_id(); ?>",
 					name: $('#name').val(),
 				},
 				function(resp) {
