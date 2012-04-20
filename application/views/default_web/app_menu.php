@@ -1,4 +1,5 @@
 <?php
+/*
 	if (!isset($appmenu_gp)) $appmenu_gp = '';
 
 	if (isset($style)) {
@@ -6,10 +7,13 @@
 	} else {
 		echo '<div id="appmenu_',$appmenu_gp,'" class="appsubmenu pull-left">';
 	}
+	*/
 ?>
-
+<div class="appsubmenu pull-left">
     <ul class="nav nav-pills">
 <?php
+
+/*
 	if ($appmenu && $button['top']) {
 		$menu = '';
 
@@ -58,6 +62,8 @@
 
 		echo $menu;
     } //end if menu
+ *
+ */
 ?>
 	</ul>
 

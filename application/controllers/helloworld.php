@@ -256,4 +256,8 @@ class Helloworld extends MY_Controller {
 
 	}
 
+	function test_url() {
+		echo '<pre>', print_r($this->url, TRUE), '</pre>';
+	}
+
 }

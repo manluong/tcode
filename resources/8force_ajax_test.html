@@ -29,15 +29,15 @@
 						<h3>Login</h3>
 						<form class="form-vertical" method="post" action="/access/ajax_login" data-callback="access_login">
 							<div class="control-group">
-								<div class="control-label">Username:</div>
+								<div class="control-label">Email</div>
 								<div class="controls">
-									<input type="text" class="" name="access_user_username" value="admin" />
+									<input type="text" class="" name="login_email" value="admin@8force.net" />
 								</div>
 							</div>
 							<div class="control-group">
 								<div class="control-label">Password:</div>
 								<div class="controls">
-									<input type="text" name="access_user_pw" value="6543210" />
+									<input type="text" name="login_password" value="6543210" />
 								</div>
 							</div>
 							<div class="control-group">
@@ -76,6 +76,10 @@
 									$('#panel-modules div').slideUp();
 									$('#panel-links').slideUp();
 									$('#panel-login').slideDown();
+									$('#list tr').remove();
+									$('#list').off()
+									$('#form').html('');
+									$('#form').off();
 								}
 							}
 						</script>

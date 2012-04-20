@@ -13,12 +13,13 @@
 
 
 <div style="padding:10px;">
-	<a href="#" class="button" id="view_permissions" data-toggle="modal" href="#acl_summary">Manage Permissions</a>
+	<a href="#" class="btn" id="view_permissions" data-toggle="modal" href="#acl_summary">Manage Permissions</a>
 </div>
 
 
 <div id="acl_summary" class="modal hide">
 	<div class="modal-header">
+		<a class="close" data-dismiss="modal">×</a>
 		<h3>Manage Permissions</h3>
 	</div>
 
@@ -45,89 +46,89 @@
 </div>
 
 
-<div id="acl_add" class="hide">
-	<div id="acl_groups">
-		<ul>
-			<li><a href="#tab-groups">Groups</a></li>
-			<li><a href="#tab-roles">Roles</a></li>
-			<li><a href="#tab-users">Users</a></li>
-		</ul>
-
-		<div id="tab-groups" data-tab="groups">
-			<form>
-				<input type="hidden" name="acl_type" value="groups" />
-				<input type="hidden" name="app" value="<?=$app?>" />
-				<input type="hidden" name="actiongp" value="<?=$actiongp?>" />
-				<input type="hidden" name="app_data_id" value="<?=$app_data_id?>" />
-				<select name="groups" class="groups" id="g-groups">
-					<option value="">Select Group</option>
-				</select>
-				<p><input type="checkbox" name="admin" id="g-admin" value="1" /> <label for="g-admin">Admin</label></p>
-				<p><input type="checkbox" name="write" id="g-write" value="1" /> <label for="g-write">Write</label></p>
-				<p><input type="checkbox" name="read" id="g-read" value="1" /> <label for="g-read">Read</label></p>
-				<p><input type="button" name="save" value="Save" class="save-button" /></p>
-				<div class="ui-widget message" style="display:none;">
-					<div class="ui-corner-all">
-						<p>
-							<div class="message-content"></div>
-						</p>
-					</div>
-				</div>
-			</form>
-		</div>
-
-		<div id="tab-roles" data-tab="roles">
-			<form>
-				<input type="hidden" name="acl_type" value="roles" />
-				<input type="hidden" name="app" value="<?=$app?>" />
-				<input type="hidden" name="actiongp" value="<?=$actiongp?>" />
-				<input type="hidden" name="app_data_id" value="<?=$app_data_id?>" />
-				<select name="groups" class="groups" id="r-groups">
-					<option value="">Select Group</option>
-				</select>
-				<p><select name="roles" class="roles" id="r-roles">
-					<option>Select Role</option>
-				</select></p>
-				<p><input type="checkbox" name="admin" id="r-admin" value="1" /> <label for="r-admin">Admin</label></p>
-				<p><input type="checkbox" name="write" id="r-write" value="1" /> <label for="r-write">Write</label></p>
-				<p><input type="checkbox" name="read" id="r-read" value="1" /> <label for="r-read">Read</label></p>
-				<p><input type="button" name="save" value="Save" class="save-button" /></p>
-				<div class="ui-widget message" style="display:none;">
-					<div class="ui-corner-all">
-						<p>
-							<div class="message-content"></div>
-						</p>
-					</div>
-				</div>
-			</form>
-		</div>
-
-		<div id="tab-users" data-tab="users">
-			<form>
-				<input type="hidden" name="acl_type" value="users" />
-				<input type="hidden" name="app" value="<?=$app?>" />
-				<input type="hidden" name="actiongp" value="<?=$actiongp?>" />
-				<input type="hidden" name="app_data_id" value="<?=$app_data_id?>" />
-				<select name="groups" class="groups" id="u-groups">
-					<option value="">Select Group</option>
-				</select>
-				<p><select name="users" class="users" id="u-users">
-					<option>Select User</option>
-				</select></p>
-				<p><input type="checkbox" name="admin" id="u-admin" value="1" /> <label for="u-admin">Admin</label></p>
-				<p><input type="checkbox" name="write" id="u-write" value="1" /> <label for="u-write">Write</label></p>
-				<p><input type="checkbox" name="read" id="u-read" value="1" /> <label for="u-read">Read</label></p>
-				<p><input type="button" name="save" value="Save" class="save-button" /></p>
-				<div class="ui-widget message" style="display:none;">
-					<div class="ui-corner-all">
-						<p>
-							<div class="message-content"></div>
-						</p>
-					</div>
-				</div>
-			</form>
-		</div>
+<div id="acl_add" class="modal hide">
+	<div class="modal-header">
+		<a class="close" data-dismiss="modal">×</a>
+		<h3>Add Permissions</h3>
 	</div>
+
+	<div class="modal-body">
+		<div id="acl_groups">
+			<ul class="nav nav-tabs">
+				<li class="active"><a href="#tab-groups" data-toggle="tab">Groups</a></li>
+				<li><a href="#tab-roles" data-toggle="tab">Roles</a></li>
+				<li><a href="#tab-users" data-toggle="tab">Users</a></li>
+			</ul>
+
+			<div class="tab-content">
+				<div id="tab-groups" class="tab-pane active" data-tab="groups">
+					<form>
+						<input type="hidden" name="acl_type" value="groups" />
+						<input type="hidden" name="app" value="<?=$app?>" />
+						<input type="hidden" name="action" value="<?=$action?>" />
+						<input type="hidden" name="app_data_id" value="<?=$app_data_id?>" />
+						<select name="groups" class="groups" id="g-groups">
+							<option value="">Select Group</option>
+						</select>
+						<p><input type="checkbox" name="admin" id="g-admin" value="1" /> <label for="g-admin">Admin</label></p>
+						<p><input type="checkbox" name="write" id="g-write" value="1" /> <label for="g-write">Write</label></p>
+						<p><input type="checkbox" name="read" id="g-read" value="1" /> <label for="g-read">Read</label></p>
+						<p><input type="button" name="save" value="Save" class="save-button btn btn-primary" /></p>
+						<div class="alert message" style="display:none;">
+							<div class="message-content"></div>
+						</div>
+					</form>
+				</div>
+
+				<div id="tab-roles" class="tab-pane" data-tab="roles">
+					<form>
+						<input type="hidden" name="acl_type" value="roles" />
+						<input type="hidden" name="app" value="<?=$app?>" />
+						<input type="hidden" name="action" value="<?=$action?>" />
+						<input type="hidden" name="app_data_id" value="<?=$app_data_id?>" />
+						<select name="groups" class="groups" id="r-groups">
+							<option value="">Select Group</option>
+						</select>
+						<p><select name="roles" class="roles" id="r-roles">
+							<option>Select Role</option>
+						</select></p>
+						<p><input type="checkbox" name="admin" id="r-admin" value="1" /> <label for="r-admin">Admin</label></p>
+						<p><input type="checkbox" name="write" id="r-write" value="1" /> <label for="r-write">Write</label></p>
+						<p><input type="checkbox" name="read" id="r-read" value="1" /> <label for="r-read">Read</label></p>
+						<p><input type="button" name="save" value="Save" class="save-button btn btn-primary" /></p>
+						<div class="alert message" style="display:none;">
+							<div class="message-content"></div>
+						</div>
+					</form>
+				</div>
+
+				<div id="tab-users" class="tab-pane" data-tab="users">
+					<form>
+						<input type="hidden" name="acl_type" value="users" />
+						<input type="hidden" name="app" value="<?=$app?>" />
+						<input type="hidden" name="action" value="<?=$action?>" />
+						<input type="hidden" name="app_data_id" value="<?=$app_data_id?>" />
+						<select name="groups" class="groups" id="u-groups">
+							<option value="">Select Group</option>
+						</select>
+						<p><select name="users" class="users" id="u-users">
+							<option>Select User</option>
+						</select></p>
+						<p><input type="checkbox" name="admin" id="u-admin" value="1" /> <label for="u-admin">Admin</label></p>
+						<p><input type="checkbox" name="write" id="u-write" value="1" /> <label for="u-write">Write</label></p>
+						<p><input type="checkbox" name="read" id="u-read" value="1" /> <label for="u-read">Read</label></p>
+						<p><input type="button" name="save" value="Save" class="save-button btn btn-primary" /></p>
+						<div class="alert message" style="display:none;">
+							<div class="message-content"></div>
+						</div>
+					</form>
+				</div>
+
+			</div>
+		</div>
+
+	</div>
+
 </div>
 
 
@@ -136,7 +137,25 @@
 
 	$('document').ready(function() {
 		$('#acl_summary').modal({
-			show: false
+			show: false,
+			backdrop: false
+		});
+
+		$('#acl_add').modal({
+			show: false,
+			backdrop: false
+		}).on('show', function() {
+			//$('#acl_groups').tab('show);
+			$.post(
+				'/acl/ajax_get_groups',
+				{},
+				function(resp) {
+					update_select('.groups', resp.data, 'name', 'code');
+				},
+				'json'
+			);
+		}).on('hide', function() {
+			permissions_table.fnReloadAjax();
 		});
 
 		$('#view_permissions').on('click', function() {
@@ -150,7 +169,7 @@
 					bPaginate: false,
 					bFilter: false,
 					sAjaxDataProp: 'acl',
-					sAjaxSource: '/acl/ajax_get_acl/<?=$app?>/<?=$actiongp?>/<?=$app_data_id?>',
+					sAjaxSource: '/acl/ajax_get_acl/<?=$app?>/<?=$action?>/<?=$app_data_id?>',
 					aoColumns: [
 						{ sTitle: 'ID', mDataProp: 'id' },
 						{ sTitle: 'Role / Group', mDataProp: 'name' },
@@ -207,9 +226,9 @@
 			);
 		});
 
-/*
+
 		$('#add_acl_button').click(function() {
-			$('#acl_add').dialog('open');
+			$('#acl_add').modal('show');
 		});
 
 
@@ -239,31 +258,6 @@
 			);
 		});
 
-
-
-		$('#acl_add').dialog({
-			title: 'Add Permissions',
-			autoOpen:false,
-			modal:true,
-			width:640
-		}).bind('dialogopen', function(event, ui) {
-			$('#acl_groups').tabs();
-
-			var groups = new Array();
-
-			$.post(
-				'/acl/ajax_get_groups',
-				{},
-				function(resp) {
-					update_select('.groups', resp.data, 'access_gpmaster_name', 'access_gpmaster_code');
-				},
-				'json'
-			);
-
-		}).bind('dialogclose', function() {
-			permissions_table.fnReloadAjax();
-		});
-*/
 
 		function update_select(form, data, name, value) {
 			var target = $(form);

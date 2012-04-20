@@ -55,8 +55,8 @@ class LogM extends CI_Model {
 
 
         $data = array(
-            'cardid' => isset($this->UserM->info['cardid']) ? $this->UserM->info['cardid'] : '',
-            'gpmid' => isset($this->UserM->info['accessgp']) ? $this->UserM->info['accessgp'] : '',
+            'cardid' => $this->UserM->get_card_id(),
+            'gpmid' => isset($this->UserM->info['role']['role_id']) ? $this->UserM->info['role']['role_id'] : '',
             'app' => $this->url['app'],
             'action' => $this->url['action'],
             'subaction' => $this->url['subaction'],
@@ -133,9 +133,9 @@ class LogM extends CI_Model {
 			'app_id' => $this->_url['app_id'],
 			'app_data_id' => $this->url['id_plain'],
 			'saveid' => $this->_log_data['saveid'],
-			'card_id' => $this->UserM->info['cardid'],
+			'card_id' => $this->UserM->get_card_id(),
 			'type' => 'standard',
-			'gpmid' => $this->UserM->info['accessgp'],
+			'gpmid' => $this->UserM->info['role']['role_id'],
 			'timeline' => $this->_log_data['log_type']['timeline'],
 			'stamp' => get_current_stamp(),
 			'lastupdate' => get_current_stamp(),
@@ -150,13 +150,13 @@ class LogM extends CI_Model {
 			'app_id' => $this->_url['app_id'],
 			'app_data_id' => $this->url['id_plain'],
 			'saveid' => $this->_log_data['saveid'],
-			'card_id' => $this->UserM->get_cardid(),
+			'card_id' => $this->UserM->get_card_id(),
 			'sub_group' => '',
 			'type' => 'text',
 			'applink' => '',
 			'msg' => $text,
 			'html' => '',
-			'gpmid' => $this->UserM->info['accessgp'],
+			'gpmid' => $this->UserM->info['role']['role_id'],
 			'timeline' => $this->_log_data['log_type']['timeline'],
 			'stamp' => get_current_stamp(),
 			'lastupdate' => get_current_stamp(),
@@ -208,7 +208,7 @@ class LogM extends CI_Model {
 			}
 			$data = array(
 				'log_type_id' => $this->_log_data['log_type']['id'],
-				'cardid' => $this->UserM->info['cardid'],
+				'cardid' => $this->UserM->get_card_id(),
 				'text' => (isset($text)) ? $text : '',
 				'furi' => $_SERVER['REQUEST_URI'],
 				'stamp' => get_current_stamp(),
@@ -232,7 +232,7 @@ class LogM extends CI_Model {
 	private function _remove_extra_history() {
 		$query = $this->db->select()
 				->from('log_history')
-				->where('cardid', $this->UserM->info['cardid'])
+				->where('cardid', $this->UserM->get_card_id())
 				->order_by('stamp', 'desc')
 				->limit(10,10)
 				->get();
@@ -258,7 +258,7 @@ class LogM extends CI_Model {
 		$replacements = array();
 		$replacements[0] = $this->_url['id_plain'];
 		$replacements[1] = $this->lang->line('coreapptitle_'.$this->_url['app']);
-		$replacements[2] = $this->App_generalM->core_app_id2name('card',$this->UserM->info['cardid'],0);
+		$replacements[2] = $this->App_generalM->core_app_id2name('card',$this->UserM->get_card_id(),0);
 		$replacements[3] = '';//$this->App_generalM->core_app_id2name("card",app_convertid("emailid","cardid",$field1['tid']),0);
 		$replacements[4] = parse_stamp(get_current_stamp());
 		return preg_replace($patterns, $replacements, $msg);
@@ -289,7 +289,7 @@ class LogM extends CI_Model {
 	private function _get_old_history() {
 		$query = $this->db->select('id, furi, text')
 				->from('log_history')
-				->where(array('id'=>$this->UserM->info['cardid'],
+				->where(array('id'=>$this->UserM->get_card_id(),
 						'furi'=>$_SERVER['REQUEST_URI'],
 					))
 				->get();
@@ -357,7 +357,7 @@ class LogM extends CI_Model {
 	function get_history(&$limit = 10) {
 		$query = $this->db->select()
 			->from('log_history')
-			->where('cardid', $this->UserM->info['cardid'])
+			->where('cardid', $this->UserM->get_card_id())
 			->limit($limit)
 			->order_by('stamp', 'desc')
 			->get();

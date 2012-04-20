@@ -7,22 +7,7 @@ class Dashboard extends MY_Controller {
 	}
 
 	function index() {
-		$html = array();
-
-		$data = array();
-		$data['html'] = $this->load->view('/'.get_template().'/dashboard/index', $html, TRUE);
-		$data['outputdiv'] = 0;
-		$data['isdiv'] = TRUE;
-
-		$data['div']['title'] = 'Wall';
-		$data['div']['element_name'] = 'wall';
-		$data['div']['element_id'] = 'wall';
-
-		$this->data[] = $data;
-
-		$this->LayoutM->load_format();
-
-		$this->layout['type'] = 'full';
+		$this->data['content'] = $this->load->view(get_template().'/dashboard/index', '', TRUE);
 
 		$this->output();
 	}
@@ -61,7 +46,7 @@ class Dashboard extends MY_Controller {
 		$post = $this->LogM->insert_wall_post($text);
 		$post['comment_count'] = 0;
 
-		if ($this->is_ajax) {
+		if ($this->input->is_ajax_request()) {
 			$this->RespM->set_message('')
 				->set_type('list')
 				->set_template('wall')
