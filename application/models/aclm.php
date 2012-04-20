@@ -29,16 +29,16 @@ class ACLM extends MY_Model {
 
 	function check_app_access($mode='normal') {
 		if ($mode=='basic') {
-			if (!$this->UserM->is_logged_in() && !$this->AppM->has_public_access()) {
+			if (!$this->UserM->is_logged_in() && !$this->allow_unauthed_access) {
 				header( 'Location: /access/login/'.set_return_url(TRUE));
 				exit;
 			}
 		}
 
-		if (!$this->UserM->is_logged_in() && !$this->AppM->has_public_access()) {
+		if (!$this->UserM->is_logged_in() && !$this->allow_unauthed_access) {
 			header( 'Location: /access/login/'.set_return_url(TRUE));
 			exit;
-		} elseif ($this->UserM->is_logged_in() && !$this->UserM->is_admin() && !$this->AppM->has_public_access()) {
+		} elseif ($this->UserM->is_logged_in() && !$this->UserM->is_admin() && !$this->allow_unauthed_access) {
 			$app_access_rights_table = $this->get_rights();
 
 			if ($app_access_rights_table['allow'] == 3) {

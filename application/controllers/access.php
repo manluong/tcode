@@ -11,6 +11,12 @@ class Access extends MY_Controller {
 			7 => 'username not activated',
 		);
 
+	function __construct() {
+		$this->allow_unauthed_access = TRUE;
+		
+		parent::__construct();
+	}
+
 	public function index()	{
 		if ($this->UserM->is_logged_in()) redirect('/dashboard');
 
@@ -19,12 +25,7 @@ class Access extends MY_Controller {
 		$html['status'] = $this->UserM->status;
 		$html['company_name'] = 'Telcoson'; //TODO: This should be the company name of the tenant.
 
-		$data = array();
-		$data['html'] = $this->load->view(get_template().'/access/login', $html, TRUE);
-
-		$this->data[] = $data;
-
-		$this->LayoutM->load_format();
+		$this->data['content'] = $this->load->view(get_template().'/access/login', $html, TRUE);
 
 		$this->output();
 	}
