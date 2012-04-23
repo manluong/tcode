@@ -39,6 +39,7 @@ class ACLM extends MY_Model {
 			header( 'Location: /access/login/'.set_return_url(TRUE));
 			exit;
 		} elseif ($this->UserM->is_logged_in() && !$this->UserM->is_admin() && !$this->allow_unauthed_access) {
+			/*
 			$app_access_rights_table = $this->get_rights();
 
 			if ($app_access_rights_table['allow'] == 3) {
@@ -51,6 +52,7 @@ class ACLM extends MY_Model {
 				//not permission is set to allow access, minimum set a Allow all rule for a App for each master group (except Admin)
 				meg(999, 'Access Rights Permission Not Allow. - No Permission');
 			}
+			 */
 		}
 	}
 
