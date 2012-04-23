@@ -29,15 +29,15 @@
 						<h3>Login</h3>
 						<form class="form-vertical" method="post" action="/access/ajax_login" data-callback="access_login">
 							<div class="control-group">
-								<div class="control-label">Username:</div>
+								<div class="control-label">Email</div>
 								<div class="controls">
-									<input type="text" class="" name="access_user_username" value="admin" />
+									<input type="text" class="" name="login_email" value="admin@8force.net" />
 								</div>
 							</div>
 							<div class="control-group">
 								<div class="control-label">Password:</div>
 								<div class="controls">
-									<input type="text" name="access_user_pw" value="6543210" />
+									<input type="text" name="login_password" value="6543210" />
 								</div>
 							</div>
 							<div class="control-group">
@@ -63,6 +63,8 @@
 						<h3>Links</h3>
 
 						<p><a href="#" data-module="users_list">Users List</a></p>
+						<p><a href="#" data-module="card_tel_list">Card Tel List</a></p>
+						<p><a href="#" data-module="card_email_list">Card Email List</a></p>
 
 
 
@@ -76,6 +78,10 @@
 									$('#panel-modules div').slideUp();
 									$('#panel-links').slideUp();
 									$('#panel-login').slideDown();
+									$('#list tr').remove();
+									$('#list').off()
+									$('#form').html('');
+									$('#form').off();
 								}
 							}
 						</script>
@@ -123,6 +129,96 @@
 								});
 							}
 							var users_edit = function(resp) {
+								ajax_content_json(resp, 'form');
+							}
+						</script>
+					</div>
+					<div id="module-card_tel_list" class="hide">
+						<h4>Card Tel List</h4>
+						<p>Available parameters:</p>
+						<form class="form-vertical" method="post" action="/card_tel/ajax_get_list" data-callback="card_tel_list">
+							<div class="control-group">
+								<div class="control-label">Limit</div>
+								<div class="controls">
+									<input type="text" name="limit" value="10" />
+								</div>
+							</div>
+							<div class="control-group">
+								<div class="control-label">Offset</div>
+								<div class="controls">
+									<input type="text" name="offset" value="0" />
+								</div>
+							</div>
+							<button class="btn run_query">Query</button>
+						</form>
+						<script>
+							var card_tel_list = function(resp) {
+								$('#list tr').remove();
+								$('#list').off().append(
+									'<tr><th>Card Tel ID</th><th>Name</th><th>Company</th><th>Actions</th></tr>'
+								);
+								//$(resp.details).each(function(key, val) {
+								//	$('#list').append(
+								//		'<tr><td>'+val['card_id']+'</td>'+
+								//		'<td>'+val['card_card_fname']+' '+val['card_card_lname']+'</td>'+
+								//		'<td>'+val['card_card_orgname']+'</td>'+
+								//		'<td>'+
+								//		'<form action="/card_tel/ajax_edit" data-callback="users_edit">'+
+								//		'<input type="hidden" name="id" value="'+val['card_id']+'" />'+
+								//		'<button class="btn run_query">Edit</button>'+
+								//		'</form>'+
+								//		'</td>'+
+								//		'</tr>'
+								//	);
+								//});
+							}
+							var users_edit = function(resp) {
+								ajax_content_json(resp, 'form');
+							}
+						</script>
+					</div>
+					<div id="module-card_email_list" class="hide">
+						<h4>Card Email List</h4>
+						<p>Available parameters:</p>
+						<form class="form-vertical" method="post" action="/card_email/ajax_get_list" data-callback="card_email_list">
+							<div class="control-group">
+								<div class="control-label">Limit</div>
+								<div class="controls">
+									<input type="text" name="limit" value="10" />
+								</div>
+							</div>
+							<div class="control-group">
+								<div class="control-label">Offset</div>
+								<div class="controls">
+									<input type="text" name="offset" value="0" />
+								</div>
+							</div>
+							<button class="btn run_query">Query</button>
+						</form>
+						<script>
+							var card_email_list = function(resp) {
+								$('#list tr').remove();
+								$('#list').off().append(
+									'<tr><th>ID</th><th>Card Id</th><th>Email</th><th>Type</th><th>Is Default</th><th>Actions</th></tr>'
+								);
+								$(resp.details).each(function(key, val) {
+									$('#list').append(
+										'<tr><td>'+val['card_email_id']+'</td>'+
+										'<td>'+val['card_email_card_id']+'</td>'+
+										'<td>'+val['card_email_email']+'</td>'+
+										'<td>'+val['card_email_type']+'</td>'+
+										'<td>'+val['card_email_is_default']+'</td>'+
+										'<td>'+
+										'<form action="/card_email/ajax_edit" data-callback="card_email_edit">'+
+										'<input type="hidden" name="id" value="'+val['card_email_id']+'" />'+
+										'<button class="btn run_query">Edit</button>'+
+										'</form>'+
+										'</td>'+
+										'</tr>'
+									);
+								});
+							}
+							var card_email_edit = function(resp) {
 								ajax_content_json(resp, 'form');
 							}
 						</script>
