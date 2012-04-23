@@ -31,14 +31,11 @@ class Docs extends MY_Controller {
 	}*/
 
 	function file() {
-		$data = array();
 		$vars['url'] = $this->url;
 		$vars['page'] = get_template().'/docs/docs_file_html';
-		$data['html'] = $this->load->view(get_template().'/docs/docs_view',$vars,TRUE);
-		$data['isoutput'] = 1;
 
-		$this->data[] = $data;
-		$this->LayoutM->load_format();
+		$this->data['content'] = $this->load->view(get_template().'/docs/docs_view',$vars,TRUE);
+
 		$this->output();
 	}
 
@@ -74,14 +71,11 @@ class Docs extends MY_Controller {
 	}
 
 	function view() {
-		$data = array();
 		$vars['url'] = $this->url;
 		$vars['page'] = get_template().'/docs/docs_view_html';
-		$data['html'] = $this->load->view(get_template().'/docs/docs_view', $vars, TRUE);
-		$data['isoutput'] = 1;
 
-		$this->data[] = $data;
-		$this->LayoutM->load_format();
+		$this->data['content'] = $this->load->view(get_template().'/docs/docs_view', $vars, TRUE);
+
 		$this->output();
 	}
 

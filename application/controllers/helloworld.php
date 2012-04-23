@@ -9,12 +9,7 @@ class Helloworld extends MY_Controller {
 	}
 
 	function index() {
-		$data = array();
-		$data['html'] = $this->load->view(get_template().'/helloworld/index', '', TRUE);
-
-		$this->data[] = $data;
-
-		$this->LayoutM->load_format();
+		$this->data['content'] = $this->load->view(get_template().'/helloworld/index', '', TRUE);
 
 		$this->output();
 	}

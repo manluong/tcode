@@ -9,6 +9,7 @@ class File extends MY_Controller{
 	}
 
 	function read($hash_or_id) {
+		//TODO: Check logged-in user's credentials
 		$file = $this->filel->read($hash_or_id);
 
 		$this->output->set_header('Content-type: '.$file['mime'].';');

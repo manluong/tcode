@@ -28,29 +28,11 @@ class Setting extends MY_Controller {
 	}
 
 	function index() {
-		$html = array();
-
 		$app_list['list'] = $this->app_list;
-		$html['col_2'] = $this->load->view(get_template().'/setting/app_list', $app_list, TRUE);
+		$this->data['content_left'] = $this->load->view(get_template().'/setting/app_list', $app_list, TRUE);
+		$this->data['content_right'] = 'Begin by selecting an application from the list on the left.';
 
-		$html['col_1'] = 'Begin by selecting an application from the list on the left.';
-
-		$data = array();
-		$data['html'] = $this->load->view(get_template().'/element/content_layout_left', $html, TRUE);
-		if ($this->is_pjax) {
-			echo $data['html'];
-			return;
-		}
-		$data['outputdiv'] = 1;
-		$data['isdiv'] = TRUE;
-
-		$data['div']['title'] = 'Comments';
-		$data['div']['element_name'] = 'loginwin';
-		$data['div']['element_id'] = 'divlogin';
-
-		$this->data[] = $data;
-
-		$this->LayoutM->load_format();
+		$this->layout['type'] = 'right';
 
 		$this->output();
 	}
@@ -58,35 +40,18 @@ class Setting extends MY_Controller {
 	function configure($app_name) {
 		$this->verify_app($app_name);
 
-		$html = array();
-
 		$app_list['list'] = $this->app_list;
 		$app_list['selected'] = $app_name;
-		$html['col_2'] = $this->load->view(get_template().'/setting/app_list', $app_list, TRUE);
+		$this->data['content_left'] = $this->load->view(get_template().'/setting/app_list', $app_list, TRUE);
 
 		//load the view file that has the configuration options
 		$data_configure['app_name'] = $app_name;
 		$data_configure['is_admin'] = $this->UserM->is_admin();
 		$data_configure['settings'] = $this->SettingM->get_for_configuration($app_name);
 		$data_configure['override_options'] = $this->override;
-		$html['col_1'] = $this->load->view(get_template().'/setting/configure_'.$app_name, $data_configure, TRUE);
+		$this->data['content_right'] = $this->load->view(get_template().'/setting/configure_'.$app_name, $data_configure, TRUE);
 
-		$data = array();
-		$data['html'] = $this->load->view(get_template().'/element/content_layout_left', $html, TRUE);
-		if ($this->is_pjax) {
-			echo $data['html'];
-			return;
-		}
-		$data['outputdiv'] = 1;
-		$data['isdiv'] = TRUE;
-
-		$data['div']['title'] = 'Comments';
-		$data['div']['element_name'] = 'loginwin';
-		$data['div']['element_id'] = 'divlogin';
-
-		$this->data[] = $data;
-
-		$this->LayoutM->load_format();
+		$this->layout['type'] = 'right';
 
 		$this->output();
 	}
