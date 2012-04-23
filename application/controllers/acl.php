@@ -9,7 +9,7 @@ class ACL extends MY_Controller {
 
 	public function index($app='', $action='', $app_data_id='')	{
 		if ($app == '') $app = $this->url['app'];
-		if ($action == '') $action = $this->AppM->get_group($this->url['app'], $this->url['action']);
+		//if ($action == '') $action = $this->AppM->get_group($this->url['app'], $this->url['action']);
 		if ($app_data_id == '') $app_data_id = $this->url['id_plain'];
 
 		$app = 'client';
@@ -24,18 +24,7 @@ class ACL extends MY_Controller {
 
 		//$this->ACLM->fill_acl_details($html_data['acl']);
 
-		$data = array();
-		$data['html'] = $this->load->view(get_template().'/acl/view', $html_data, TRUE);
-		$data['outputdiv'] = 1;
-		$data['isdiv'] = TRUE;
-
-		$data['div']['title'] = 'Permissions';
-		$data['div']['element_name'] = 'winpermissions';
-		$data['div']['element_id'] = 'divpermissions';
-
-		$this->data[] = $data;
-
-		$this->LayoutM->load_format();
+		$this->data['content'] = $this->load->view(get_template().'/acl/view', $html_data, TRUE);
 
 		$this->output();
 	}

@@ -18,8 +18,6 @@ class Unittest extends MY_Controller {
 
 		$cuid = $this->UserM->get_card_id();
 		echo 'Current User Card ID: '.$cuid.'<br />';
-		echo 'Current SubGroup: <pre>', print_r($this->UserM->info['subgp'], TRUE), '</pre><br />';
-		echo 'Current Master Group: <pre>', print_r($this->UserM->info['accessgp'], TRUE), '</pre><br />';
 
 		$tests = array(
 			1 => array(

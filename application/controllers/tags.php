@@ -14,18 +14,7 @@ class Tags extends MY_Controller {
 		$html = array();
 		$html['search'] = $this->input->get('search');
 
-		$data = array();
-		$data['html'] = $this->load->view(get_template().'/tags/search', $html, TRUE);
-		$data['outputdiv'] = 1;
-		$data['isdiv'] = TRUE;
-
-		$data['div']['title'] = 'Tags';
-		$data['div']['element_name'] = 'tagwin';
-		$data['div']['element_id'] = 'divtag';
-
-		$this->data[] = $data;
-
-		$this->LayoutM->load_format();
+		$this->data['content'] = $this->load->view(get_template().'/tags/search', $html, TRUE);
 
 		$this->output();
 	}
@@ -37,18 +26,7 @@ class Tags extends MY_Controller {
 		$this->tagsl->app_id = 10;
 		$this->tagsl->app_data_id = 1;
 
-		$data = array();
-		$data['html'] = $this->tagsl->get_html();
-		$data['outputdiv'] = 1;
-		$data['isdiv'] = TRUE;
-
-		$data['div']['title'] = 'Tags';
-		$data['div']['element_name'] = 'tagwin';
-		$data['div']['element_id'] = 'divtag';
-
-		$this->data[] = $data;
-
-		$this->LayoutM->load_format();
+		$this->data['content'] = $this->tagsl->get_html();
 
 		$this->output();
 	}
@@ -59,18 +37,7 @@ class Tags extends MY_Controller {
 		$this->tagsl->app_id = 1001;
 		$this->tagsl->app_data_id = 1;
 
-		$data = array();
-		$data['html'] = $this->tagsl->get_cloud_html();
-		$data['outputdiv'] = 1;
-		$data['isdiv'] = TRUE;
-
-		$data['div']['title'] = 'Tag Cloud';
-		$data['div']['element_name'] = 'tagwin';
-		$data['div']['element_id'] = 'divtag';
-
-		$this->data[] = $data;
-
-		$this->LayoutM->load_format();
+		$this->data['content'] = $this->tagsl->get_cloud_html();
 
 		$this->output();
 	}

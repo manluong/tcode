@@ -12,12 +12,7 @@ class Signup extends MY_Controller {
 		$html['errors'] = $this->session->flashdata('signup_errors');
 		$html['signup'] = $this->session->userdata('signup_info');
 
-		$data = array();
-		$data['html'] = $this->load->view(get_template().'/signup/index', $html, TRUE);
-
-		$this->data[] = $data;
-
-		$this->LayoutM->load_format();
+		$this->data['content'] = $this->load->view(get_template().'/signup/index', $html, TRUE);
 
 		$this->output();
 	}
@@ -43,12 +38,7 @@ class Signup extends MY_Controller {
 	function step3() {
 		$signup_info = $this->session->userdata('signup_info');
 
-		$data = array();
-		$data['html'] = $this->load->view(get_template().'/signup/process', $signup_info, TRUE);
-
-		$this->data[] = $data;
-
-		$this->LayoutM->load_format();
+		$this->data['content'] = $this->load->view(get_template().'/signup/process', $signup_info, TRUE);
 
 		$this->output();
 	}

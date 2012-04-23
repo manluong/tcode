@@ -14,19 +14,7 @@ class Calendar extends MY_Controller {
 		$html_data['calendars'] = $this->CalendarM->get_user_calendars($this->UserM->get_card_id());
 		$html_data['cuid'] = $this->UserM->get_card_id();
 
-		$data = array();
-		$data['html'] = $this->load->view('/'.get_template().'/calendar/view', $html_data, TRUE);
-		$data['outputdiv'] = 1;
-		$data['isdiv'] = TRUE;
-
-		$data['div']['title'] = 'Calendar';
-		$data['div']['element_name'] = 'wincalendar';
-		$data['div']['element_id'] = 'divcalendar';
-
-		$this->data[] = $data;
-
-		$this->LayoutM->load_format();
-
+		$this->data['content'] = $this->load->view('/'.get_template().'/calendar/view', $html_data, TRUE);
 		$this->output();
 	}
 

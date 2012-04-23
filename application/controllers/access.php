@@ -13,7 +13,7 @@ class Access extends MY_Controller {
 
 	function __construct() {
 		$this->allow_unauthed_access = TRUE;
-		
+
 		parent::__construct();
 	}
 
@@ -50,13 +50,6 @@ class Access extends MY_Controller {
 	public function logout() {
 		$this->UserM->logout();
 		redirect('/');
-	}
-
-	public function test($id='none') {
-		if (ENVIRONMENT == 'production') return FALSE;
-
-		echo 'main test id:',$id,'<br />';
-		echo '<pre>',print_r($this->ACLM->url,true),'</pre>';
 	}
 
 	public function ajax_login() {

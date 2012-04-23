@@ -14,18 +14,7 @@ class Comments extends MY_Controller {
 		$this->commentsl->app_id = 1000;
 		$this->commentsl->app_data_id = 1;
 
-		$data = array();
-		$data['html'] = $this->commentsl->get_lite_html();
-		$data['outputdiv'] = 1;
-		$data['isdiv'] = TRUE;
-
-		$data['div']['title'] = 'Comments';
-		$data['div']['element_name'] = 'loginwin';
-		$data['div']['element_id'] = 'divlogin';
-
-		$this->data[] = $data;
-
-		$this->LayoutM->load_format();
+		$this->data['content'] = $this->commentsl->get_lite_html();
 
 		$this->output();
 	}
