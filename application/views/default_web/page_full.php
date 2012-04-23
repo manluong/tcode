@@ -32,21 +32,20 @@
 	<!-- Docs -->
 		<!-- plupload -->
 		<script type="text/javascript" src="http://bp.yahooapis.com/2.4.21/browserplus-min.js"></script>
-	<script type="text/javascript" src="/resources/addon/plupload/js/plupload.full.js"></script>
+		<script type="text/javascript" src="/resources/addon/plupload/js/plupload.full.js"></script>
 		<script type="text/javascript" src="/resources/addon/plupload/js/jquery.plupload.queue/jquery.plupload.queue.js"></script>
 		<link href="/resources/addon/plupload/js/jquery.plupload.queue/css/jquery.plupload.queue.css" media="screen" rel="stylesheet" type="text/css" />
 		<!-- end plupload -->
 
 		<!-- Adaptive ui -->
 		<link rel="stylesheet" type="text/css" href="/resources/addon/docs/flexpaper.css" />
-		<!-- <script type="text/javascript" src="/resources/addon/jquery.min.js"></script> -->
 		<script type="text/javascript" src="/resources/addon/jquery.extensions.min.js"></script>
 		<script type="text/javascript" src="/resources/addon/docs/flexpaper.js"></script>
 		<script type="text/javascript" src="/resources/addon/docs/flexpaper_handlers.js"></script>
 		<!-- end adaptive ui -->
 	<!-- end Docs -->
 
-	<?=$head?>
+	<?//=$head?>
 
 </head>
 
@@ -64,7 +63,6 @@
 				<?=$app_menu?>
 				<?php echo '<div class="pull-right" style="padding:5px;">env: ',ENVIRONMENT,' - role: ',APP_ROLE,' - db: ',$debug['database'],'</div>'; ?>
 			</div>
-			<?=$jsonload?>
 		</div>
 
 	</div>

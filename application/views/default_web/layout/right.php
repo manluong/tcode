@@ -1,10 +1,10 @@
 <div class="container-fluid">
 	<div class="row-fluid">
-		<div class="span8">
-			<?=$col_1?>
-		</div>
 		<div class="span4">
-			<?=$col_2?>
+			<?=$content_left?>
+		</div>
+		<div class="span8">
+			<?=$content_right?>
 		</div>
 	</div>
 </div>

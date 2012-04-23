@@ -11,7 +11,7 @@ class StatusM extends MY_Model {
 
 
 	function get_user_current($card_id='') {
-		if ($card_id == '') $card_id = $this->UserM->get_cardid();
+		if ($card_id == '') $card_id = $this->UserM->get_card_id();
 
 		//, tasks.name AS task
 		$rs = $this->db->select('status.*, locations.name AS location, status_types.name AS status_type, status_types.availability AS availability')

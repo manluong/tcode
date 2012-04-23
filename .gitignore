@@ -15,3 +15,4 @@ application/config/config.php
 /index.php
 tmp/*
 application/logs/*
+/nbproject/private/

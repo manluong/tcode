@@ -1,66 +1,31 @@
 function ajax_content(url,divid) {
+    $.get(
+		url,
+		function(loader) {
+			//load full page
+			//to fix with pjax
+			if (divid == "page"){
+				$.pjax({
+					url: url,
+					container: '#content-container'
+				});
+			} else {
+				ajax_content_json(loader, divid);
+			}
 
-	//temp
-	//to change to Jquery ajax function
-    dhtmlxAjax.get("/"+url, function(loader) {
-
-    jsCkStr = loader.xmlDoc.responseText.substring(0,60)
-    console.log(url);
-	console.log(loader.xmlDoc.responseText);
-	//load full page
-	//to fix with pjax
-	if (divid == "page"){
-
-		$.pjax({
-			url: url,
-			container: '#content-container'
-		});
-
-	//append JavaScript
-    }else if (jsCkStr.substring(0,4) == '//js'){
-        //alert("is JS");
-        jsCkFu = jsCkStr.split("//",3)
-        //alert(jsCkFu[2]);
-
-        if(typeof window[jsCkFu[2]] !== 'function'){
-
-          var head= document.getElementsByTagName('head')[0];
-          var script= document.createElement('script');
-          script.type= "text/javascript";script.text= loader.xmlDoc.responseText;
-          head.appendChild(script);
-          if (jsCkFu[2]) eval(jsCkFu[2]+"('"+url+"');");
-
-        }else if(jsCkFu[2]) {
-          eval(jsCkFu[2]+"('"+url+"');");
-
-        }
-
-	//this is JSON respond
-    }else if (jsCkStr.substring(0,2) == '{"'){
-
-			ajax_content_json(loader.xmlDoc.responseText,divid);
-
-	//this is just Plain HTML
-    }else{
-
-          document.getElementById(divid).innerHTML = loader.xmlDoc.responseText;
-
-          if (jsCkStr.substring(0,12) == '<!-- //jsrun'){
-            jsCkFu = jsCkStr.split("//",3)
-            eval(jsCkFu[2]);
-          }
-
-    }
-
-    });
-
-
+		},
+		'json'
+	);
 }
 
 function ajax_content_json(jarray,divid) {
+	var json = '';
 
-	//var json = jQuery.parseJSON( jarray );
-	var json = jarray;	//no need to parseJSON because jQuery already did it at $.get/$.post
+	if (typeof jarray != 'object') {
+		json = jQuery.parseJSON( jarray );
+	} else {
+		json = jarray;	//no need to parseJSON because jQuery already did it at $.get/$.post
+	}
 
 	var links = { html: '', bu: ''};
 	if (json['details']['links']){

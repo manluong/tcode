@@ -1,8 +1,8 @@
 <?php if (!defined('BASEPATH')) exit('No direct access allowed.');
 
 class UserM extends MY_Model {
-	var $id = array();
-	var $username = '';
+	var $id = 0;
+	var $email = '';
 
 	var $status = 5;
 	// status:
@@ -15,7 +15,7 @@ class UserM extends MY_Model {
 		// 6=login and failed no such username
 		// 7=login and failed user not active
 
-	var $info = array('cardid'=>0);
+	var $info = array();
 
 	//var $info = array();
 
@@ -36,7 +36,7 @@ class UserM extends MY_Model {
 
 	public function debug() {
 		echo '<p>';
-		echo 'username: ',$this->username,'<br />';
+		echo 'email: ',$this->email,'<br />';
 		echo 'loguid: ',$this->loguid,'<br />';
 		echo 'admin: ',$this->admin,'<br />';
 		echo 'info: <pre>',print_r($this->info, true),'</pre>';
@@ -55,8 +55,8 @@ class UserM extends MY_Model {
 		return $this->loguid;
 	}
 
-	public function get_cardid() {
-		return $this->info['cardid'];
+	public function get_card_id() {
+		return $this->id;
 	}
 
 	public function get_timezone() {
@@ -64,15 +64,17 @@ class UserM extends MY_Model {
 	}
 
 	public function get_name() {
-		return ($this->logged_in)
-			? $this->info['card_fname'].' '.$this->info['card_lname']
-			: '';
+		if (!$this->logged_in) return '';
+
+		if ($this->id == 0) return 'system';
+
+		return $this->info['card_fname'].' '.$this->info['card_lname'];
 	}
 
-	public function get_data_name($cardid) {
+	public function get_data_name($card_id) {
 		$rs = $this->db->select('card_fname, card_mname, card_lname')
 				->from($this->table)
-				->where('id', $cardid)
+				->where('id', $card_id)
 				->limit(1)
 				->get();
 
@@ -85,23 +87,43 @@ class UserM extends MY_Model {
 		return implode(' ', $name);
 	}
 
-	public function get_username($cardid) {
-		$rs = $this->db->select('access_user_username')
-				->from('access_user')
-				->where('access_user_cardid', $cardid)
-				->limit(1)
-				->get();
+	//$type = primary | secondary | all
+	public function get_email($card_id, $type='primary') {
+		$this->db->select('email')
+			->from('card_email')
+			->where('card_id', $card_id);
+
+		if ($type == 'primary') {
+			$this->db->where('is_default', 1)
+					->limit(1);
+		} elseif ($type == 'secondary') {
+			$this->db->where('is_default', 0);
+		}
+
+		$rs = $this->db->get();
 
 		if ($rs->num_rows() == 0) return FALSE;
 
-		$result = $rs->row_array();
-		return $result['access_user_username'];
+		if ($type == 'primary') {
+			$r = $rs->row_array();
+			$results = $r['email'];
+		} else {
+			$results = array();
+			foreach($rs->result_array() AS $r) {
+				$results[] = $r['email'];
+			}
+		}
+
+		return $results;
 	}
 
-	public function is_valid_password($username, $password) {
+	public function is_valid_password($email, $password) {
 		$rs = $this->db->select()
-				->where('access_user_username', $username)
-				->get('access_user', 1);
+				->from('access_user AS u')
+				->join('card_email AS e', 'e.card_id=u.card_id')
+				->where('e.email', $email)
+				->limit(1)
+				->get();
 
 		//no username
 		if ($rs->num_rows()==0) {
@@ -112,18 +134,22 @@ class UserM extends MY_Model {
 		$access_user = $rs->row_array();
 
 		//got username but not active
-		if ($access_user['access_user_status'] != '1') {
+		if ($access_user['status'] != '1') {
 			$this->status = 7;
 			return FALSE;
 		}
 
-		$password = f_password_encrypt($password);
-		$rs = $this->db->select()
-				->where('access_p_uid', $access_user['access_user_id'])
-				->where('access_p_p', $password)
-				->get('access_p', 1);
+		//login has expired
+		if ($access_user['expire_stamp'] !== NULL) {
+			if (strtotime($access_user['expire_stamp']) < time()) {
+				$this->status = 7;
+				return FALSE;
+			}
+		}
 
-		if ($rs->num_rows()==0) {
+		//if password mismatch
+		$password = f_password_encrypt($password);
+		if ($password !== $access_user['password']) {
 			$this->status = 3;
 			return FALSE;
 		}
@@ -131,87 +157,62 @@ class UserM extends MY_Model {
 		return TRUE;
 	}
 
-	public function login($username) {
-		$rs = $this->db->select()
-				->where('access_user_username', $username)
-				->get('access_user', 1);
+	public function login($email) {
+		$rs = $this->db->select('card_id')
+				->from('card_email')
+				->where('email', $email)
+				->where('is_default', 1)
+				->limit(1)
+				->get();
+
 		$access_user = $rs->row_array();
 
-		$this->id = $access_user['access_user_id'];
-		$this->username = $access_user['access_user_username'];
+		$this->id = $access_user['card_id'];
+
 		$this->status = 2;
+		$this->info = $this->get_info($access_user['card_id']);
 		$this->logged_in = TRUE;
-
-		$core_app_userinfo = $this->core_app_userinfo($username);
-
-		//echo 'startt<pre>',print_r($core_app_userinfo,true),'</pre>endd';
-		//die();
-
-		/*
-		$this->info['name'] = $core_app_userinfo['name'];
-		$this->info['cardid'] = $core_app_userinfo['cardid'];
-		$this->info['accessgp'] = $core_app_userinfo['accessgp'];
-		$this->info['clientid'] = $core_app_userinfo['clientid'];
-		$this->info['staffid'] = $core_app_userinfo['staffid'];
-		$this->info['vendorid'] = $core_app_userinfo['vendorid'];
-		$this->info['memberid'] = $core_app_userinfo['memberid'];
-		$this->info['subgp'] = $core_app_userinfo['subgp'];
-		 */
-		$this->info = $core_app_userinfo;
-
-		$this->admin = ($this->info['accessgp']==1);
-		/*
-		//platform
-		if ($this->platform == "1" || $this->platform == "2" || $this->platform == "3") {
-			$this->platform = $platform;
-		} else {
-			//go detect platform
-			$sess_userdata['platform'] = $this->platform;
-		}
-		*/
+		$this->admin = ($this->info['role']['name'] == 'Admin');
 
 		$this->session->set_userdata('id', $this->id);
-		$this->session->set_userdata('username', $this->username);
 		$this->session->set_userdata('user_info', $this->info);
-	}
-
-	public function load_info($cardid) {
-		$username = $this->get_username($cardid);
-		$this->info = $this->core_app_userinfo($username);
 	}
 
 	public function logout() {
 		$this->session->sess_destroy();
 		$this->status = 4;
+		return TRUE;
 	}
 
+	//refresh current user's info. used when he updates his particulars
+	public function refresh_info() {
+		if ($this->id === FALSE) return FALSE;
 
-	private function setup_loguid() {
-		$this->loguid = $this->session->userdata('loguid');
-		if ($this->loguid==0) {
-			$this->loguid = time().rand(1000, 9999);
-			$this->session->set_userdata('loguid', $this->loguid);
-		}
+		$this->info = $this->get_info($this->id);
+		$this->session->set_userdata('user_info', $this->info);
 	}
 
+	//setup current user's info
 	public function setup() {
 		// Already Login
 		$this->id = $this->session->userdata('id');
-		$this->username = $this->session->userdata('username');
 
-		if ($this->id) {
-			$this->status = 1;
-			$this->info = $this->session->userdata('user_info');
-			$this->logged_in = TRUE;
-			$this->admin = ($this->info['accessgp']==1);
-		}
+		if ($this->id === FALSE) return FALSE;
+
+		$this->status = 1;
+		$this->info = $this->session->userdata('user_info');
+		$this->logged_in = TRUE;
+		$this->admin = ($this->info['role']['name'] == 'Admin');
 	}
 
-	private function core_app_userinfo($username){
+	//gets a user's card details and it's roles and subroles
+	public function get_info($card_id){
 		$rs = $this->db->select()
-				->join('card', 'access_user.access_user_cardid=card.id', 'left')
-				->where('access_user_username', $username)
-				->get('access_user', 1);
+				->from('card')
+				->where('id', $card_id)
+				->limit(1)
+				->get();
+
 		$result = $rs->row_array();
 
 		if ($result['card_fname']){
@@ -222,91 +223,87 @@ class UserM extends MY_Model {
 			$result['name'] = $result['card_orgname'];
 		}
 
-		$result['cardid'] = $result['id'];
-
-		$result['subgp'] = $this->core_app_getsubgp($result['cardid']);
-		$core_app_getaccessgp = $this->core_app_getaccessgp($result['cardid']);
-
-		$result = array_merge($result, $core_app_getaccessgp);
+		$result['sub_roles'] = $this->get_subroles($card_id);
+		$result['role'] = $this->get_role_info($card_id);
 
 		return $result;
 	}
 
-	private function core_app_getsubgp($cardid){
-		$rs = $this->db->select('access_usergp_gpsub')
-				->where('access_usergp_cardid', $cardid)
-				->get('access_usergp');
+	private function get_subroles($card_id){
+		$rs = $this->db->select('roles_sub_id')
+				->from('access_user_role_sub')
+				->where('card_id', $card_id)
+				->get();
+
+		if ($rs->num_rows() == 0) return array();
 
 		$result = array();
-		if ($rs->num_rows()>0){
-			foreach ($rs->result_array() as $field1) {
-				$result[] = $field1['access_usergp_gpsub'];
-			}
+		foreach ($rs->result_array() as $r) {
+			$result[] = $r['roles_sub_id'];
 		}
 
 		return $result;
 	}
 
-	private function core_app_getaccessgp($cardid){
-		$rs = $this->db->select('access_link_gpmaster')
-				->where('access_link_cardid', $cardid)
-				->get('access_link', 1);
+	//get this user's role ID, name, and the relevant role data id.
+	private function get_role_info($card_id){
+		$rs = $this->db->select('ur.role_id, r.name')
+				->from('access_user_role AS ur')
+				->join('global_setting.access_roles AS r', 'r.code=ur.role_id')
+				->where('ur.card_id', $card_id)
+				->limit(1)
+				->get();
+
+		if ($rs->num_rows() == 0) {
+			if (ENVIRONMENT == 'development') {
+				echo $this->db->last_query();
+			}
+
+			die('error loading role info.');
+		}
 
 		$result = array();
 		$temp = $rs->row_array();
-		$result['accessgp'] = $temp['access_link_gpmaster'];
+		$result['name'] = $temp['name'];
+		$result['role_id'] = $temp['role_id'];
 
-		switch($result['accessgp']){
-			case '1':  break;
+		if (in_array($temp['role_id'], array(1,4,6,7))) return $result;
+
+		switch($temp['role_id']){
 			case '2':
-				//staff
-				$rs = $this->db->select('staff_id')
-						->where('staff_cardid', $cardid)
-						->get('staff', 1);
-				if ($rs->num_rows()>0) {
-					$temp = $rs->row_array();
-					$result['staffid'] = $temp['staff_id'];
-					$result['en']['staffid'] = encode_id($temp['staff_id']);
-				}
+				$this->db->select('staff_id AS role_data_id')
+					->from('staff')
+					->where('staff_cardid', $card_id);
 				break;
 			case '3':
-				//client
-				$rs = $this->db->select('client_id')
-						->where('client_cardid', $cardid)
-						->get('client', 1);
-				if ($rs->num_rows()>0) {
-					$temp = $rs->row_array();
-					$result['clientid'] = $temp['client_id'];
-					$result['en']['clientid'] = encode_id($temp['client_id']);
-				}
+				$this->db->select('client_id AS role_data_id')
+					->from('client')
+					->where('client_cardid', $card_id);
 				break;
-			case "4":  break;
-			case "5":
-				//vendor
-				$rs = $this->db->select('vendor_id')
-						->where('vendor_cardid', $cardid)
-						->get('vendor', 1);
-				if ($rs->num_rows()>0) {
-					$temp = $rs->row_array();
-					$result['vendorid'] = $temp['vendor_id'];
-					$result['en']['vendorid'] = encode_id($temp['vendor_id']);
-				}
+			case '5':
+				$this->db->select('vendor_id AS role_data_id')
+					->from('vendor')
+					->where('vendor_cardid', $card_id);
 				break;
-			case "6":  break;
-			case "7":  break;
-			case "8":
-				$rs = $this->db->select('spu_id')
-						->where('spu_cardid', $cardid)
-						->get('spu', 1);
-				if ($rs->num_rows()>0) {
-					$temp = $rs->row_array();
-					$result['spuid'] = $temp['spu_id'];
-					$result['en']['spuid'] = encode_id($temp['spu_id']);
-				}
-				break;
+		}
+
+		$rs = $this->db->limit(1)
+				->get();
+
+		if ($rs->num_rows()>0) {
+			$temp = $rs->row_array();
+			$result['role_data_id'] = $temp['role_data_id'];
+			$result['role_data_id_encoded'] = encode_id($temp['role_data_id']);
 		}
 
 		return $result;
 	}
 
+	private function setup_loguid() {
+		$this->loguid = $this->session->userdata('loguid');
+		if ($this->loguid==0) {
+			$this->loguid = time().rand(1000, 9999);
+			$this->session->set_userdata('loguid', $this->loguid);
+		}
+	}
 }

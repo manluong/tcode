@@ -220,8 +220,10 @@ function megshow(){
 
 
 
-
+//TODO: Read template details from somewhere
 function get_template() {
+	return 'default_web';
+
 	$CI =& get_instance();
 	return $CI->layout['name'];
 }

@@ -14,6 +14,7 @@ class SignupM extends CI_Model {
 
 	//create a tenant record in the t_my database
 		//save card details
+		//TODO: save domain to another table
 		$name = explode(' ', $info['name']);
 		$data = array(
 			'card_nick' => '',
@@ -33,28 +34,21 @@ class SignupM extends CI_Model {
 
 		//allow login
 		$data = array(
-			'access_user_username' => $info['username'],
-			'access_user_cardid' => $card_id,
-			'access_user_status' => 1,
-			'access_user_datecreate' => get_current_stamp(),
-			'access_user_dateactive' => get_current_stamp(),
+			'card_id' => $card_id,
+			'password' => f_password_encrypt($info['password']),
+			'status' => 1,
+			'created_stamp' => get_current_stamp(),
+			'active_stamp' => get_current_stamp(),
 		);
 		if ( ! $this->db->insert('access_user', $data) ) $this->messages[] = 'Unable to create tenant login record';
 		$user_id = $this->db->insert_id();
 
 		//assign to client group
 		$data = array(
-			'access_link_cardid' => $card_id,
-			'access_link_gpmaster' => 3,
+			'card_id' => $card_id,
+			'role_id' => 3,
 		);
-		if ( ! $this->db->insert('access_link', $data) ) $this->messages[] = 'Unable to assign to client group';
-
-		//create password
-		$data = array(
-			'access_p_uid' => $user_id,
-			'access_p_p' => f_password_encrypt($info['password']),
-		);
-		if ( ! $this->db->insert('access_p', $data) ) $this->messages[] = 'Unable to create tenant password';
+		if ( ! $this->db->insert('access_user_role', $data) ) $this->messages[] = 'Unable to assign to client group';
 
 	//create database and db user accounts, grant neccessary permissions.
 		$db_name = 't_'.$info['domain'];
@@ -104,28 +98,21 @@ class SignupM extends CI_Model {
 
 		//allow login
 		$data = array(
-			'access_user_username' => $info['username'],
-			'access_user_cardid' => $card_id,
-			'access_user_status' => 1,
-			'access_user_datecreate' => get_current_stamp(),
-			'access_user_dateactive' => get_current_stamp(),
+			'card_id' => $card_id,
+			'password' => f_password_encrypt($info['password']),
+			'status' => 1,
+			'created_stamp' => get_current_stamp(),
+			'active_stamp' => get_current_stamp(),
 		);
 		if ( ! $this->db->insert($db_name.'.access_user', $data) ) $this->messages[] = 'Unable to create login record';
 		$user_id = $this->db->insert_id();
 
 		//assign to admin group
 		$data = array(
-			'access_link_cardid' => $card_id,
-			'access_link_gpmaster' => 1,
+			'card_id' => $card_id,
+			'role_id' => 1,
 		);
 		if ( ! $this->db->insert($db_name.'.access_link', $data) ) $this->messages[] = 'Unable to assign to admin group';
-
-		//save password
-		$data = array(
-			'access_p_uid' => $user_id,
-			'access_p_p' => f_password_encrypt($info['password']),
-		);
-		if ( ! $this->db->insert($db_name.'.access_p', $data) ) $this->messages[] = 'Unable to create password';
 
 		$this->db->trans_complete();
 
@@ -135,7 +122,7 @@ class SignupM extends CI_Model {
 	function validate_details($info) {
 		$result = TRUE;
 
-		$fields = array('name', 'email', 'domain', 'username', 'password');
+		$fields = array('name', 'email', 'domain', 'password');
 
 		foreach($fields AS $f) {
 			if (!isset($info[$f]) || $info[$f] === FALSE || strlen($info[$f])==0) {
@@ -152,6 +139,7 @@ class SignupM extends CI_Model {
 		return $result;
 	}
 
+	//TODO: there's a table for this.
 	function domain_exists($domain) {
 		$rs = $this->db->select('card_orgname')
 				->from('card')
