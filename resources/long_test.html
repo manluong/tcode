@@ -136,7 +136,7 @@
 					<div id="module-card_tel_list" class="hide">
 						<h4>Card Tel List</h4>
 						<p>Available parameters:</p>
-						<form class="form-vertical" method="post" action="/card_tel/ajax_get_list" data-callback="card_tel_list">
+						<form class="form-vertical" method="post" action="/card/card_tel_ajax_get_list" data-callback="card_tel_list">
 							<div class="control-group">
 								<div class="control-label">Limit</div>
 								<div class="controls">
@@ -163,7 +163,7 @@
 								//		'<td>'+val['card_card_fname']+' '+val['card_card_lname']+'</td>'+
 								//		'<td>'+val['card_card_orgname']+'</td>'+
 								//		'<td>'+
-								//		'<form action="/card_tel/ajax_edit" data-callback="users_edit">'+
+								//		'<form action="/card/card_tel_ajax_edit" data-callback="users_edit">'+
 								//		'<input type="hidden" name="id" value="'+val['card_id']+'" />'+
 								//		'<button class="btn run_query">Edit</button>'+
 								//		'</form>'+
@@ -180,7 +180,7 @@
 					<div id="module-card_email_list" class="hide">
 						<h4>Card Email List</h4>
 						<p>Available parameters:</p>
-						<form class="form-vertical" method="post" action="/card_email/ajax_get_list" data-callback="card_email_list">
+						<form class="form-vertical" method="post" action="/card/card_email_ajax_get_list" data-callback="card_email_list">
 							<div class="control-group">
 								<div class="control-label">Limit</div>
 								<div class="controls">
@@ -209,7 +209,7 @@
 										'<td>'+val['card_email_type']+'</td>'+
 										'<td>'+val['card_email_is_default']+'</td>'+
 										'<td>'+
-										'<form action="/card_email/ajax_edit" data-callback="card_email_edit">'+
+										'<form action="/card/card_email_ajax_edit" data-callback="card_email_edit">'+
 										'<input type="hidden" name="id" value="'+val['card_email_id']+'" />'+
 										'<button class="btn run_query">Edit</button>'+
 										'</form>'+
