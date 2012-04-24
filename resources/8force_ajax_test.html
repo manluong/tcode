@@ -116,8 +116,8 @@
 								$(resp.details).each(function(key, val) {
 									$('#list').append(
 										'<tr><td>'+val['card_id']+'</td>'+
-										'<td>'+val['card_card_fname']+' '+val['card_card_lname']+'</td>'+
-										'<td>'+val['card_card_orgname']+'</td>'+
+										'<td>'+val['card_first_name']+' '+val['card_last_name']+'</td>'+
+										'<td>'+val['card_organization_name']+'</td>'+
 										'<td>'+
 										'<form action="/card/ajax_edit" data-callback="users_edit">'+
 										'<input type="hidden" name="id" value="'+val['card_id']+'" />'+

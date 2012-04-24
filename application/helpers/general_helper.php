@@ -307,6 +307,7 @@ function parse_timestamp($timestamp, $format='ISO') {
 function extract_distinct_values($data, $key) {
 	$result = array();
 	foreach($data AS $d) {
+		if (!isset($d[$key])) continue;
 		$result[$d[$key]] = '';
 	}
 	return array_keys($result);
