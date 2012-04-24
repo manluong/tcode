@@ -60,7 +60,7 @@ class UserM extends MY_Model {
 	}
 
 	public function get_timezone() {
-		return $this->info['card_timezone'];
+		return $this->info['timezone'];
 	}
 
 	public function get_name() {
@@ -68,11 +68,11 @@ class UserM extends MY_Model {
 
 		if ($this->id == 0) return 'system';
 
-		return $this->info['card_fname'].' '.$this->info['card_lname'];
+		return $this->info['first_name'].' '.$this->info['last_name'];
 	}
 
 	public function get_data_name($card_id) {
-		$rs = $this->db->select('card_fname, card_mname, card_lname')
+		$rs = $this->db->select('first_name, middle_name, last_name')
 				->from($this->table)
 				->where('id', $card_id)
 				->limit(1)
@@ -215,12 +215,12 @@ class UserM extends MY_Model {
 
 		$result = $rs->row_array();
 
-		if ($result['card_fname']){
-			$result['name'] = $result['card_fname'];
-		} elseif ($result['card_lname']){
-			$result['name'] = $result['card_lname'];
-		} elseif ($result['card_orgname']){
-			$result['name'] = $result['card_orgname'];
+		if ($result['first_name']){
+			$result['name'] = $result['first_name'];
+		} elseif ($result['last_name']){
+			$result['name'] = $result['last_name'];
+		} elseif ($result['organization_name']){
+			$result['name'] = $result['organization_name'];
 		}
 
 		$result['sub_roles'] = $this->get_subroles($card_id);
@@ -269,31 +269,29 @@ class UserM extends MY_Model {
 
 		if (in_array($temp['role_id'], array(1,4,6,7))) return $result;
 
+		$this->db->select();
+
 		switch($temp['role_id']){
 			case '2':
-				$this->db->select('staff_id AS role_data_id')
-					->from('staff')
-					->where('staff_cardid', $card_id);
+				$this->db->from('staff');
 				break;
 			case '3':
-				$this->db->select('client_id AS role_data_id')
-					->from('client')
-					->where('client_cardid', $card_id);
+				$this->db->from('client');
 				break;
 			case '5':
-				$this->db->select('vendor_id AS role_data_id')
-					->from('vendor')
-					->where('vendor_cardid', $card_id);
+				$this->db->from('vendor');
 				break;
 		}
 
-		$rs = $this->db->limit(1)
+		$rs = $this->db->where('card_id', $card_id)
+				->limit(1)
 				->get();
 
 		if ($rs->num_rows()>0) {
 			$temp = $rs->row_array();
-			$result['role_data_id'] = $temp['role_data_id'];
-			$result['role_data_id_encoded'] = encode_id($temp['role_data_id']);
+			$result['role_data_id'] = $temp['id'];
+			$result['role_data_id_encoded'] = encode_id($temp['id']);
+			$result['details'] = $temp;
 		}
 
 		return $result;
