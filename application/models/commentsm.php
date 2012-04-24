@@ -223,7 +223,7 @@ class CommentsM extends MY_Model {
 	}
 
 	function save(&$data) {
-		$data['created_cardid'] = $this->UserM->get_card_id();
+		$data['created_card_id'] = $this->UserM->get_card_id();
 		$data['created_stamp'] = get_current_stamp();
 
 		$data['id'] = parent::save($data, 'id');
@@ -234,11 +234,11 @@ class CommentsM extends MY_Model {
 	}
 
 	function update_comment_stats($id) {
-		$modified_cardid = $this->UserM->get_card_id();
+		$modified_card_id = $this->UserM->get_card_id();
 		$modified_stamp = get_current_stamp();
 
-		$sql = "UPDATE ".$this->table." SET reply_count=reply_count+1, modified_cardid=?, modified_stamp=? WHERE id=?";
-		$this->db->query($sql, array($modified_cardid, $modified_stamp, $id));
+		$sql = "UPDATE ".$this->table." SET reply_count=reply_count+1, modified_card_id=?, modified_stamp=? WHERE id=?";
+		$this->db->query($sql, array($modified_card_id, $modified_stamp, $id));
 	}
 
 	function get_comment_count($app_id, $app_data_id) {
@@ -253,14 +253,14 @@ class CommentsM extends MY_Model {
 	}
 
 	function get_reply_to_name($id) {
-		$rs = $this->db->select('created_cardid')
+		$rs = $this->db->select('created_card_id')
 				->from('mod_comments')
 				->where('id', $id)
 				->get();
 
 		$result = $rs->row_array();
 
-		return $this->UserM->get_data_name($result['created_cardid']);
+		return $this->UserM->get_data_name($result['created_card_id']);
 	}
 
 	function insert_timeago_stamp(&$result) {

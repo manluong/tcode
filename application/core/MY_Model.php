@@ -137,8 +137,8 @@ class MY_Model extends CI_Model {
 			$cards = $this->UserM->get_batch($ids, TRUE);
 
 			foreach($data AS $k=>$v) {
-				$data[$k]['created_card_info'] = $cards[$v['created_card_id']];
-				$data[$k]['modified_card_info'] = $cards[$v['modified_card_id']];
+				if (isset($v['created_card_id'])) $data[$k]['created_card_info'] = $cards[$v['created_card_id']];
+				if (isset($v['modified_card_id'])) $data[$k]['modified_card_info'] = $cards[$v['modified_card_id']];
 			}
 		}
 	}
