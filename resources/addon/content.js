@@ -12,7 +12,6 @@ function ajax_content(url,divid) {
 			} else {
 				ajax_content_json(loader, divid);
 			}
-
 		},
 		'json'
 	);

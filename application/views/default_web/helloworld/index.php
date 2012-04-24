@@ -9,8 +9,8 @@
 
 <script>
 	$(document).ready(function() {
-		ajax_content('/helloworld/sendjson_list', 'helloworld_list');
-		ajax_content('/helloworld/sendjson_view', 'helloworld_view');
-		ajax_content('/helloworld/sendjson_form', 'helloworld_form');
+		ajax_content('http://apple.local.net/tcode/helloworld/sendjson_list', 'helloworld_list');
+		ajax_content('http://apple.local.net/tcode/helloworld/sendjson_view', 'helloworld_view');
+		ajax_content('http://apple.local.net/tcode/helloworld/sendjson_form', 'helloworld_form');
 	});
 </script>
