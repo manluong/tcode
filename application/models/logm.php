@@ -258,7 +258,7 @@ class LogM extends CI_Model {
 		$replacements = array();
 		$replacements[0] = $this->_url['id_plain'];
 		$replacements[1] = $this->lang->line('coreapptitle_'.$this->_url['app']);
-		$replacements[2] = $this->App_generalM->core_app_id2name('card',$this->UserM->get_card_id(),0);
+		$replacements[2] = '';//TODO: check this function-> $this->App_generalM->core_app_id2name('card',$this->UserM->get_card_id(),0);
 		$replacements[3] = '';//$this->App_generalM->core_app_id2name("card",app_convertid("emailid","cardid",$field1['tid']),0);
 		$replacements[4] = parse_stamp(get_current_stamp());
 		return preg_replace($patterns, $replacements, $msg);
