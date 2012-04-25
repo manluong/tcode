@@ -188,7 +188,8 @@ class DatasetM extends CI_Model {
 		$this->load_tables($ds);
 		$this->load_fields($ds);
 
-		$this->id = $this->url['id_plain'];
+		//NOTE: This works if we use the old format URL, but it doesn't work when we use the new API way. 2012-04-25
+		//$this->id = $this->url['id_plain'];
 
 		$this->loaded = true;
 
@@ -790,6 +791,7 @@ class DatasetM extends CI_Model {
 		return $fields;
 	}
 
+	//get DB table's app name
 	protected function get_table_app_name($table) {
 		foreach($this->db_tables AS $t) {
 			if ($t['db_table'] != $table) continue;
