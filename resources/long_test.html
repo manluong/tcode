@@ -443,9 +443,6 @@
 							</div>
 							<button class="btn run_query">Query</button>
 						</form>
-						<form action="/api/add/card_notes" data-callback="card_notes_edit">
-							<button class="btn run_query">Add</button>
-						</form>
 						<script>
 							var card_notes_list = function(resp) {
 								$('#list tr').remove();
@@ -453,6 +450,7 @@
 									'<tr><th>ID</th><th>Card ID</th><th>Note</th><th>Actions</th></tr>'
 								);
 								$(resp.details).each(function(key, val) {
+									console.log(val);
 									$('#list').append(
 										'<tr>'+
 										'<td>'+val['card_notes_id']+'</td>'+
