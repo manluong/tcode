@@ -137,8 +137,8 @@ class Helloworld extends MY_Controller {
 
 
 		$data = $this->DS_HelloWorld->set_subaction('e')
-					->set_id(150)
-					->get_form_data();
+					 ->set_id(150)
+					 ->get_form_data();
 
 		$details = array(
 			'data' => $data,
