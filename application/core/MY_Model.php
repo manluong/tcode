@@ -541,8 +541,6 @@ class DatasetM extends CI_Model {
 		foreach($rs->result_array() AS $t) {
 			if (isset($this->db_tables[$t['sort']])) die('More than 1 tables have the same sort number');
 			$this->db_tables[$t['sort']] = $t;
-			//load the language for each table
-			$this->lang->load($this->LangM->get_array($t['app_name'], $this->lang->lang_use));
 		}
 
 		if (!isset($this->db_tables[0])) die('Primary table not set. It must have a sort order of 0.');
@@ -563,8 +561,7 @@ class DatasetM extends CI_Model {
 
 		foreach($rs->result_array() AS $r) {
 			//fill in label
-			$db_table_app_name = $this->get_table_app_name($r['db_table']);
-			$r['label'] = $this->lang->line($db_table_app_name.'_'.$r['db_field']);
+			$r['label'] = $this->lang->line($r['db_table'].'-'.$r['db_field']);
 
 			//fill in select_options
 			if ($r['form_type'] == 'select') $r['select_options'] = $this->get_select_options($r);
