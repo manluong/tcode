@@ -4,7 +4,7 @@ class DS_Helpdesk extends DatasetM {
 	function __construct() {
 		parent::__construct();
 
-		$this->load('ds_helpdesk');
+		$this->load('ds_address');
 	}
 
 }
