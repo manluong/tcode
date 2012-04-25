@@ -7,12 +7,12 @@ class Card extends MY_Controller {
 		$this->load->model('UserM');
 		$this->load->model('DS_Card');
 		$this->load->model('DS_Card_Address');
-		//$this->load->model('DS_Card_Associate');
-		//$this->load->model('DS_Card_Bank');
+		$this->load->model('DS_Card_Associate');
+		$this->load->model('DS_Card_Bank');
 		$this->load->model('DS_Card_Email');
 		$this->load->model('DS_Card_Extra');
-		//$this->load->model('DS_Card_Name');
-		//$this->load->model('DS_Card_Notes');
+		$this->load->model('DS_Card_Name');
+		$this->load->model('DS_Card_Notes');
 		$this->load->model('DS_Card_Social');
 		$this->load->model('DS_Card_Tel');
 

@@ -99,7 +99,7 @@
 					<div id="module-users_list" class="hide">
 						<h4>Users List</h4>
 						<p>Available parameters:</p>
-						<form class="form-vertical" method="post" action="/card/ajax_get_list" data-callback="users_list">
+						<form class="form-vertical" method="post" action="/api/get_list/card" data-callback="users_list">
 							<div class="control-group">
 								<div class="control-label">Limit</div>
 								<div class="controls">
@@ -126,7 +126,7 @@
 										'<td>'+val['card_first_name']+' '+val['card_last_name']+'</td>'+
 										'<td>'+val['card_organization_name']+'</td>'+
 										'<td>'+
-										'<form action="/card/ajax_edit" data-callback="users_edit">'+
+										'<form action="/api/edit/card" data-callback="users_edit">'+
 										'<input type="hidden" name="id" value="'+val['card_id']+'" />'+
 										'<button class="btn run_query">Edit</button>'+
 										'</form>'+
@@ -143,7 +143,7 @@
 					<div id="module-card_address_list" class="hide">
 						<h4>Card Address List</h4>
 						<p>Available parameters:</p>
-						<form class="form-vertical" method="post" action="/card/card_address_ajax_get_list" data-callback="card_address_list">
+						<form class="form-vertical" method="post" action="/api/get_list/card_address" data-callback="card_address_list">
 							<div class="control-group">
 								<div class="control-label">Limit</div>
 								<div class="controls">
@@ -171,7 +171,7 @@
 										'<td>'+val['card_address_card_id']+'</td>'+
 										'<td>'+val['card_address_organization_id']+'</td>'+
 										'<td>'+
-										'<form action="/card/card_address_ajax_edit" data-callback="card_address_edit">'+
+										'<form action="/api/edit/card_address" data-callback="card_address_edit">'+
 										'<input type="hidden" name="id" value="'+val['card_address_id']+'" />'+
 										'<button class="btn run_query">Edit</button>'+
 										'</form>'+
@@ -188,7 +188,7 @@
 					<div id="module-card_associate_list" class="hide">
 						<h4>Card Associate List</h4>
 						<p>Available parameters:</p>
-						<form class="form-vertical" method="post" action="/card/card_associate_ajax_get_list" data-callback="card_associate_list">
+						<form class="form-vertical" method="post" action="/api/get_list/card_associate" data-callback="card_associate_list">
 							<div class="control-group">
 								<div class="control-label">Limit</div>
 								<div class="controls">
@@ -207,16 +207,18 @@
 							var card_associate_list = function(resp) {
 								$('#list tr').remove();
 								$('#list').off().append(
-									'<tr><th>ID</th><th>Name</th><th>Company</th><th>Actions</th></tr>'
+									'<tr><th>ID</th><th>Card ID</th><th>Type</th><th>Associate Card ID</th><th>Actions</th></tr>'
 								);
 								$(resp.details).each(function(key, val) {
 									$('#list').append(
-										'<tr><td>'+val['card_id']+'</td>'+
-										'<td>'+val['card_card_fname']+' '+val['card_card_lname']+'</td>'+
-										'<td>'+val['card_card_orgname']+'</td>'+
+										'<tr>'+
+										'<td>'+val['card_associate_id']+'</td>'+
+										'<td>'+val['card_associate_card_id']+'</td>'+
+										'<td>'+val['card_associate_type']+'</td>'+
+										'<td>'+val['card_associate_associate_card_id']+'</td>'+
 										'<td>'+
-										'<form action="/card/card_associate_ajax_edit" data-callback="card_associate_edit">'+
-										'<input type="hidden" name="id" value="'+val['card_id']+'" />'+
+										'<form action="/api/edit/card_associate" data-callback="card_associate_edit">'+
+										'<input type="hidden" name="id" value="'+val['card_associate_id']+'" />'+
 										'<button class="btn run_query">Edit</button>'+
 										'</form>'+
 										'</td>'+
@@ -232,7 +234,7 @@
 					<div id="module-card_bank_list" class="hide">
 						<h4>Card Bank List</h4>
 						<p>Available parameters:</p>
-						<form class="form-vertical" method="post" action="/card/card_bank_ajax_get_list" data-callback="card_bank_list">
+						<form class="form-vertical" method="post" action="/api/get_list/card_bank" data-callback="card_bank_list">
 							<div class="control-group">
 								<div class="control-label">Limit</div>
 								<div class="controls">
@@ -251,16 +253,20 @@
 							var card_bank_list = function(resp) {
 								$('#list tr').remove();
 								$('#list').off().append(
-									'<tr><th>ID</th><th>Name</th><th>Company</th><th>Actions</th></tr>'
+									'<tr><th>ID</th><th>Name</th><th>Account Number</th><th>Sort Code</th><th>Swift</th><th>IBank</th><th>Actions</th></tr>'
 								);
 								$(resp.details).each(function(key, val) {
 									$('#list').append(
-										'<tr><td>'+val['card_id']+'</td>'+
-										'<td>'+val['card_card_fname']+' '+val['card_card_lname']+'</td>'+
-										'<td>'+val['card_card_orgname']+'</td>'+
+										'<tr>'+
+										'<td>'+val['card_bank_id']+'</td>'+
+										'<td>'+val['card_bank_name']+'</td>'+
+										'<td>'+val['card_bank_account_number']+'</td>'+
+										'<td>'+val['card_bank_sort_code']+'</td>'+
+										'<td>'+val['card_bank_swift']+'</td>'+
+										'<td>'+val['card_bank_ibank']+'</td>'+
 										'<td>'+
-										'<form action="/card/card_bank_ajax_edit" data-callback="card_bank_edit">'+
-										'<input type="hidden" name="id" value="'+val['card_id']+'" />'+
+										'<form action="/api/edit/card_bank" data-callback="card_bank_edit">'+
+										'<input type="hidden" name="id" value="'+val['card_bank_id']+'" />'+
 										'<button class="btn run_query">Edit</button>'+
 										'</form>'+
 										'</td>'+
@@ -276,7 +282,7 @@
 					<div id="module-card_email_list" class="hide">
 						<h4>Card Email List</h4>
 						<p>Available parameters:</p>
-						<form class="form-vertical" method="post" action="/card/card_email_ajax_get_list" data-callback="card_email_list">
+						<form class="form-vertical" method="post" action="/api/get_list/card_email" data-callback="card_email_list">
 							<div class="control-group">
 								<div class="control-label">Limit</div>
 								<div class="controls">
@@ -306,7 +312,7 @@
 										'<td>'+val['card_email_type']+'</td>'+
 										'<td>'+val['card_email_is_default']+'</td>'+
 										'<td>'+
-										'<form action="/card/card_email_ajax_edit" data-callback="card_email_edit">'+
+										'<form action="/api/edit/card_email" data-callback="card_email_edit">'+
 										'<input type="hidden" name="id" value="'+val['card_email_id']+'" />'+
 										'<button class="btn run_query">Edit</button>'+
 										'</form>'+
@@ -323,7 +329,7 @@
 					<div id="module-card_extra_list" class="hide">
 						<h4>Card Extra List</h4>
 						<p>Available parameters:</p>
-						<form class="form-vertical" method="post" action="/card/card_extra_ajax_get_list" data-callback="card_extra_list">
+						<form class="form-vertical" method="post" action="/api/get_list/card_extra" data-callback="card_extra_list">
 							<div class="control-group">
 								<div class="control-label">Limit</div>
 								<div class="controls">
@@ -356,7 +362,7 @@
 										'<td>'+val['card_extra_photo']+'</td>'+
 										'<td>'+val['card_extra_url']+'</td>'+
 										'<td>'+
-										'<form action="/card/card_extra_ajax_edit" data-callback="card_extra_edit">'+
+										'<form action="/api/edit/card_extra" data-callback="card_extra_edit">'+
 										'<input type="hidden" name="id" value="'+val['card_extra_id']+'" />'+
 										'<button class="btn run_query">Edit</button>'+
 										'</form>'+
@@ -373,7 +379,7 @@
 					<div id="module-card_name_list" class="hide">
 						<h4>Card Name List</h4>
 						<p>Available parameters:</p>
-						<form class="form-vertical" method="post" action="/card/card_name_ajax_get_list" data-callback="card_name_list">
+						<form class="form-vertical" method="post" action="/api/get_list/card_name" data-callback="card_name_list">
 							<div class="control-group">
 								<div class="control-label">Limit</div>
 								<div class="controls">
@@ -392,16 +398,21 @@
 							var card_name_list = function(resp) {
 								$('#list tr').remove();
 								$('#list').off().append(
-									'<tr><th>ID</th><th>Name</th><th>Company</th><th>Actions</th></tr>'
+									'<tr><th>ID</th><th>Card ID</th><th>First Name</th><th>Middle Name</th><th>Last Name</th><th>Title</th><th>Suffix</th><th>Actions</th></tr>'
 								);
 								$(resp.details).each(function(key, val) {
 									$('#list').append(
-										'<tr><td>'+val['card_id']+'</td>'+
-										'<td>'+val['card_card_fname']+' '+val['card_card_lname']+'</td>'+
-										'<td>'+val['card_card_orgname']+'</td>'+
+										'<tr>'+
+										'<td>'+val['card_name_id']+'</td>'+
+										'<td>'+val['card_name_card_id']+'</td>'+
+										'<td>'+val['card_name_first_name']+'</td>'+
+										'<td>'+val['card_name_middle_name']+'</td>'+
+										'<td>'+val['card_name_last_name']+'</td>'+
+										'<td>'+val['card_name_title']+'</td>'+
+										'<td>'+val['card_name_suffix']+'</td>'+
 										'<td>'+
-										'<form action="/card/card_name_ajax_edit" data-callback="card_name_edit">'+
-										'<input type="hidden" name="id" value="'+val['card_id']+'" />'+
+										'<form action="/api/edit/card_name" data-callback="card_name_edit">'+
+										'<input type="hidden" name="id" value="'+val['card_name_id']+'" />'+
 										'<button class="btn run_query">Edit</button>'+
 										'</form>'+
 										'</td>'+
@@ -417,7 +428,7 @@
 					<div id="module-card_notes_list" class="hide">
 						<h4>Card Notes List</h4>
 						<p>Available parameters:</p>
-						<form class="form-vertical" method="post" action="/card/card_notes_ajax_get_list" data-callback="card_notes_list">
+						<form class="form-vertical" method="post" action="/api/get_list/card_notes" data-callback="card_notes_list">
 							<div class="control-group">
 								<div class="control-label">Limit</div>
 								<div class="controls">
@@ -432,20 +443,24 @@
 							</div>
 							<button class="btn run_query">Query</button>
 						</form>
+						<form action="/api/add/card_notes" data-callback="card_notes_edit">
+							<button class="btn run_query">Add</button>
+						</form>
 						<script>
 							var card_notes_list = function(resp) {
 								$('#list tr').remove();
 								$('#list').off().append(
-									'<tr><th>ID</th><th>Name</th><th>Company</th><th>Actions</th></tr>'
+									'<tr><th>ID</th><th>Card ID</th><th>Note</th><th>Actions</th></tr>'
 								);
 								$(resp.details).each(function(key, val) {
 									$('#list').append(
-										'<tr><td>'+val['card_id']+'</td>'+
-										'<td>'+val['card_card_fname']+' '+val['card_card_lname']+'</td>'+
-										'<td>'+val['card_card_orgname']+'</td>'+
+										'<tr>'+
+										'<td>'+val['card_notes_id']+'</td>'+
+										'<td>'+val['card_notes_card_id']+'</td>'+
+										'<td>'+val['card_notes_note']+'</td>'+
 										'<td>'+
-										'<form action="/card/card_notes_ajax_edit" data-callback="card_notes_edit">'+
-										'<input type="hidden" name="id" value="'+val['card_id']+'" />'+
+										'<form action="/api/edit/card_notes" data-callback="card_notes_edit">'+
+										'<input type="hidden" name="id" value="'+val['card_notes_id']+'" />'+
 										'<button class="btn run_query">Edit</button>'+
 										'</form>'+
 										'</td>'+
@@ -461,7 +476,7 @@
 					<div id="module-card_social_list" class="hide">
 						<h4>Card Social List</h4>
 						<p>Available parameters:</p>
-						<form class="form-vertical" method="post" action="/card/card_social_ajax_get_list" data-callback="card_social_list">
+						<form class="form-vertical" method="post" action="/api/get_list/card_social" data-callback="card_social_list">
 							<div class="control-group">
 								<div class="control-label">Limit</div>
 								<div class="controls">
@@ -490,7 +505,7 @@
 										'<td>'+val['card_social_type']+'</td>'+
 										'<td>'+val['card_social_name_id']+'</td>'+
 										'<td>'+
-										'<form action="/card/card_social_ajax_edit" data-callback="card_social_edit">'+
+										'<form action="/api/edit/card_social" data-callback="card_social_edit">'+
 										'<input type="hidden" name="id" value="'+val['card_social_id']+'" />'+
 										'<button class="btn run_query">Edit</button>'+
 										'</form>'+
@@ -507,7 +522,7 @@
 					<div id="module-card_tel_list" class="hide">
 						<h4>Card Tel List</h4>
 						<p>Available parameters:</p>
-						<form class="form-vertical" method="post" action="/card/card_tel_ajax_get_list" data-callback="card_tel_list">
+						<form class="form-vertical" method="post" action="/api/get_list/card_tel" data-callback="card_tel_list">
 							<div class="control-group">
 								<div class="control-label">Limit</div>
 								<div class="controls">
@@ -539,7 +554,7 @@
 										'<td>'+val['card_tel_area']+'</td>'+
 										'<td>'+val['card_tel_extension']+'</td>'+
 										'<td>'+
-										'<form action="/card/card_tel_ajax_edit" data-callback="card_tel_edit">'+
+										'<form action="/api/edit/card_tel" data-callback="card_tel_edit">'+
 										'<input type="hidden" name="id" value="'+val['card_tel_id']+'" />'+
 										'<button class="btn run_query">Edit</button>'+
 										'</form>'+
