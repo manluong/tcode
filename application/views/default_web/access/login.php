@@ -19,16 +19,16 @@
 			<?=reset_return_url_form();?>
 
 			<div class="control-group">
-				<label class="control-label" for="login_email"><?=lang('access_login_email')?></label>
+				<label class="control-label" for="login_email"><?=lang('login_email')?></label>
 				<input type="text" id="login_email" name="login_email" maxlength="50" />
 			</div>
 
 			<div class="control-group">
-				<label class="control-label" for="login_password"><?=lang('access_login_password')?></label>
+				<label class="control-label" for="login_password"><?=lang('login_password')?></label>
 				<input type="password" id="login_password" name="login_password" maxlength="50" />
 			</div>
 
-			<button type="submit" class="btn btn-primary"><i class="icon-lock icon-white"></i> <?=lang('access_button_login')?></button>
+			<button type="submit" class="btn btn-primary"><i class="icon-lock icon-white"></i> <?=lang('button_login')?></button>
 		</form>
 	</div>
 </div>

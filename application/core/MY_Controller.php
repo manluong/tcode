@@ -2,6 +2,7 @@
 
 class MY_Controller extends CI_Controller {
 	var $domain = '';
+	var $language = 'english';
 
 	var $url = array(
 		'app' => '',
@@ -218,10 +219,30 @@ class MY_Controller extends CI_Controller {
 
 
 	private function setup_language() {
+		/*
 		$this->load->model('LangM');
 		$this->lang->initialise($this->LangM->active);
 		$this->lang->load($this->LangM->get_array('core', $this->lang->lang_use));
 		$this->lang->load($this->LangM->get_array($this->url['app'], $this->lang->lang_use));
+		 */
+
+		//Notes
+		//1 Default english
+		//2 if user is logged out check if there's a language setting cookie and use that lang
+		//
+		//3 if user is logged in, load his preferences and use that lang setting
+		//
+		//4 if the lang preferences differ from the setting in step2, update/create lang cookie
+		//
+		//5 load the language based on the final setting after going through the above steps
+		//6 if user is logged in, check for any custom labels and load them over the default loaded language labels
+
+		//get the default language specified in the config/config.php file
+		$this->language = $this->config->item('language');
+
+		//load the language file based on the final setting
+		$this->lang->load('eightforce', $this->language);
+
 	}
 
 	private function check_mobile_app() {
