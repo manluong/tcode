@@ -14,7 +14,7 @@ class Signup extends MY_Controller {
 
 		$this->data['content'] = $this->load->view(get_template().'/signup/index', $html, TRUE);
 
-		$this->output();
+		$this->_output();
 	}
 
 	function step2() {
@@ -40,7 +40,7 @@ class Signup extends MY_Controller {
 
 		$this->data['content'] = $this->load->view(get_template().'/signup/process', $signup_info, TRUE);
 
-		$this->output();
+		$this->_output();
 	}
 
 	function ajax_begin_setup() {

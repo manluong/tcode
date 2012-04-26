@@ -27,7 +27,7 @@ class Access extends MY_Controller {
 
 		$this->data['content'] = $this->load->view(get_template().'/access/login', $html, TRUE);
 
-		$this->output();
+		$this->_output();
 	}
 
 	public function about() {

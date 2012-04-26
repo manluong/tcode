@@ -16,7 +16,7 @@ class Comments extends MY_Controller {
 
 		$this->data['content'] = $this->commentsl->get_lite_html();
 
-		$this->output();
+		$this->_output();
 	}
 
 	function save() {

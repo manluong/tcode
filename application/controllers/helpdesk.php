@@ -11,7 +11,7 @@ class Helpdesk extends MY_Controller {
 	function index() {
 		$this->data['content'] = $this->load->view(get_template().'/helpdesk/index', '', TRUE);
 
-		$this->output();
+		$this->_output();
 	}
 
 	function sendhtml() {

@@ -16,7 +16,7 @@ class Tags extends MY_Controller {
 
 		$this->data['content'] = $this->load->view(get_template().'/tags/search', $html, TRUE);
 
-		$this->output();
+		$this->_output();
 	}
 
 
@@ -28,7 +28,7 @@ class Tags extends MY_Controller {
 
 		$this->data['content'] = $this->tagsl->get_html();
 
-		$this->output();
+		$this->_output();
 	}
 
 	function test_cloud() {
@@ -39,7 +39,7 @@ class Tags extends MY_Controller {
 
 		$this->data['content'] = $this->tagsl->get_cloud_html();
 
-		$this->output();
+		$this->_output();
 	}
 
 	function ajax_add() {
