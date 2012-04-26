@@ -14,6 +14,8 @@ class UserM extends MY_Model {
 
 		// 6=login and failed no such username
 		// 7=login and failed user not active
+		// 8=session timeout
+		// 9=user account expired
 
 	var $info = array();
 
@@ -142,7 +144,7 @@ class UserM extends MY_Model {
 		//login has expired
 		if ($access_user['expire_stamp'] !== NULL) {
 			if (strtotime($access_user['expire_stamp']) < time()) {
-				$this->status = 7;
+				$this->status = 9;
 				return FALSE;
 			}
 		}
@@ -197,7 +199,13 @@ class UserM extends MY_Model {
 		// Already Login
 		$this->id = $this->session->userdata('id');
 
-		if ($this->id === FALSE) return FALSE;
+		if ($this->id === FALSE) {
+			if ($this->input->cookie('ci_session') && $this->has_return) {
+				$this->status = 8;
+			}
+
+			return FALSE;
+		}
 
 		$this->status = 1;
 		$this->info = $this->session->userdata('user_info');

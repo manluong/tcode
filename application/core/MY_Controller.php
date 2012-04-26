@@ -104,7 +104,7 @@ class MY_Controller extends CI_Controller {
 		$this->setup_output();
 
 		if ($this->AppM->must_disable_plain_id()) $this->ACLM->check_id_encryption();
-		$this->ACLM->check_app_access('basic');
+		$this->ACLM->check_app_access();
 		if (APP_ROLE == 'TSUB') {
 			if ($this->LicenseM->has_restriction($this->url['app_id'], $this->url['actiongp'], 'access')) {
 				$access = $this->LicenseM->get_restriction($this->url['app_id'], $this->url['actiongp'], 'access');
@@ -119,6 +119,7 @@ class MY_Controller extends CI_Controller {
 	private function setup_output() {
 		$this->data['current_user'] = $this->UserM->info;
 		$this->data['title'] = '8Force';
+		$this->data['tenant'] = array();
 
 		$this->data['app_list'] = $this->AppM->get_apps();
 	}

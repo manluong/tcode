@@ -301,12 +301,13 @@ $lang['core_select-select-access_usergroup_type-member'] = 'Member';
 $lang['core_select-select-access_rights_type-Allow_All'] = 'Allow All';
 $lang['core_select-select-access_rights_type-Deny_All'] = 'Deny All';
 $lang['core_select-select-access_rights_type-Custom'] = 'Custom';
-$lang['-access_user_username'] = 'Username';
-$lang['-access_user_pw'] = 'Password';
+
 $lang['button_login'] = 'Login';
-$lang['-login_status_3'] = 'Wrong Password';
-$lang['-login_status_6'] = 'Username does not exist';
-$lang['-login_status_7'] = 'User account has been disabled';
+$lang['access-login_status-3'] = 'Wrong Password';
+$lang['access-login_status-6'] = 'Email does not exist';
+$lang['access-login_status-7'] = 'This user account has been disabled';
+$lang['access-login_status-8'] = 'You have been logged out due to a long period of inactivity.';
+$lang['access-logout-success'] = 'You have logged out successfully.';
 $lang['login_email'] = 'Email Address';
 $lang['login_password'] = 'Password';
 
