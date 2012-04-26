@@ -204,6 +204,7 @@ $lang['core_apps-name-helloworld'] = 'Helloworld';
 $lang['core_apps-name-docs'] = 'Documents';
 $lang['core_apps-name-core'] = 'Core';
 $lang['core_apps-name-helpdesk'] = 'Helpdesk';
+$lang['core_apps-name-calendar'] = 'Calendar';
 
 $lang['core_apps_menu-appmenu_rights'] = 'Rights';
 $lang['core_apps_menu-appmenu_listuser'] = 'Listuser';
