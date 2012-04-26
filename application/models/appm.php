@@ -214,14 +214,18 @@ class AppM extends MY_Model {
 	//Get list of Apps, with License restrictions applied.
 	//TODO: add ACL restriction.
 	function get_apps() {
+		//cannot call $this->db separately or it will break the chain.
+		if (APP_ROLE == 'TSUB' && $this->UserM->is_logged_in()) {
+			$accessible_app_ids = $this->LicenseM->get_accessible_app_ids();
+		}
+
 		$this->db->select('name')
 			->from('global_setting.core_apps')
 			->where('status', 1)
 			->where('display', 1)
 			->order_by('sort_order', 'ASC');
 
-		if (APP_ROLE == 'TSUB' && ENVIRONMENT == 'production' && $this->UserM->is_logged_in()) {
-			$accessible_app_ids = $this->LicenseM->get_accessible_app_ids();
+		if (APP_ROLE == 'TSUB' && $this->UserM->is_logged_in()) {
 			if (count($accessible_app_ids) == 0) return array();
 			$this->db->where_in('id', $accessible_app_ids);
 		}

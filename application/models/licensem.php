@@ -110,7 +110,7 @@ class LicenseM extends MY_Model {
 				->get();
 
 		foreach($rs->result_array() AS $r) {
-			$this->rules[$r['app_id']][$r['actiongp']][$r['rule_type']] = array(
+			$this->rules[$r['app_id']][$r['rule_type']] = array(
 				'value' => $r['rule_value'],
 				'db_table' => $r['db_table'],
 				'db_field' => $r['db_field']
@@ -129,7 +129,7 @@ class LicenseM extends MY_Model {
 	function get_accessible_app_ids() {
 		$rs = $this->db->select('app_id')
 				->from('tenant_license_rules')
-				->where('rule_type', 1)
+				->where('rule_type', 'access')
 				->where('rule_value', 1)
 				->get();
 
@@ -149,14 +149,14 @@ class LicenseM extends MY_Model {
 		$result = array();
 
 		foreach($rules AS $r) {
-			if (isset($result[$r['app_id']][$r['actiongp']][$r['rule_type']])) {
-				$result[$r['app_id']][$r['actiongp']][$r['rule_type']] = array(
+			if (!isset($result[$r['app_id']][$r['rule_type']])) {
+				$result[$r['app_id']][$r['rule_type']] = array(
 					'value' => $r['rule_value'],
 					'db_table' => $r['db_table'],
 					'db_field' => $r['db_field']
 				);
 			} else {
-				$result[$r['app_id']][$r['actiongp']][$r['rule_type']]['value'] += $r['rule_value'];
+				$result[$r['app_id']][$r['rule_type']]['value'] += $r['rule_value'];
 			}
 		}
 
