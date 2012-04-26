@@ -14,6 +14,12 @@ class Helpdesk extends MY_Controller {
 		$this->_output();
 	}
 
+	function content_list() {
+		$this->data['content'] = $this->load->view(get_template().'/helpdesk/list', '', TRUE);
+
+		$this->output();
+	}
+	
 	function sendhtml() {
 		$data = array();
 		$data['html'] = "I am a some HTML";
@@ -59,14 +65,14 @@ class Helpdesk extends MY_Controller {
 				->set_type('list')
 				->set_template('')
 				->set_success(true)
-				->set_title('HelpDesk List')
+				->set_title('Helpdesk List')
 				->set_details($details)
 				->output_json();
 	}
 
 	function sendjson_view() {
 		$data = $this->DS_Helpdesk->set_subaction('v')
-					->set_id(2)
+					->set_id(1)
 					->get_view_data();
 
 		$details = array(
@@ -76,7 +82,7 @@ class Helpdesk extends MY_Controller {
 					'target' => '',
 					'text' => 'Edit',
 					'type' => 'ajax',
-					'url' => '/helpdesk/contact/1/as',
+					'url' => '/helpdesk/sendjson_form/as',
 					'style' => 'default',
 					'icon' => '',
 				),
@@ -99,7 +105,7 @@ class Helpdesk extends MY_Controller {
 				->set_template('')
 				//->set_template('custom_viewcard')//custom template
 				->set_success(true)
-				->set_title('Helpdesk Module')
+				->set_title('Helpdesk Edit')
 				->set_details($details)
 				->output_json();
 	}
@@ -107,7 +113,7 @@ class Helpdesk extends MY_Controller {
 	function sendjson_form() {
 
 		$data = $this->DS_Helpdesk->set_subaction('e')
-					->set_id(2)
+					->set_id(1)
 					->get_form_data();
 
 		$details = array(
@@ -117,7 +123,7 @@ class Helpdesk extends MY_Controller {
 					'target' => '',
 					'text' => 'Submit',
 					'type' => 'submit',
-					'url' => '/helpdesk/sendjson_save/150/es',
+					'url' => '/helpdesk/sendjson_save/1/es',
 					'style' => 'default',
 					'icon' => '',
 				),
@@ -140,11 +146,10 @@ class Helpdesk extends MY_Controller {
 				->set_template('')
 				//->set_template('custom_editcard')//custom template
 				->set_success(true)
-				->set_title('Helpdesk Module')
+				->set_title('Helpdesk Edit')
 				->set_details($details)
 				->output_json();
 	}
-
 
 	function sendjson_save() {
 /*
@@ -164,7 +169,7 @@ class Helpdesk extends MY_Controller {
 		return($data);
  */
 		$this->DS_Helpdesk->subaction = 'e';
-		$this->DS_Helpdesk->id = 150;
+		$this->DS_Helpdesk->id = 1;
 
 		$success = $this->DS_Helpdesk->save();
 
@@ -172,7 +177,7 @@ class Helpdesk extends MY_Controller {
 			$details['links'] = array(
 				array(
 				'type' => 'ajax',
-				'url' => '/helloworld/returnjson_view',
+				'url' => '/helpdesk/returnjson_view',
 				'target' => '',
 				'text' => ''
 				)

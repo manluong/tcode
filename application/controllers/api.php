@@ -26,6 +26,35 @@ class Api extends MY_Controller {
 				->output_json();
 	}
 
+	function view($name) {
+		$ds = $this->get_dataset($name);
+
+		$id = $this->input->post('id');
+
+		if ($id === false) {
+			$this->RespM->set_message('Invalid ID')
+				->set_type('view')
+				->set_template('')
+				->set_success(false)
+				->set_title('Dataset')
+				->set_details()
+				->output_json();
+			return;
+		}
+
+		$details['data'] = $ds->set_subaction('v')
+				->set_id($id)
+				->get_view_data();
+
+		$this->RespM->set_message()
+				->set_type('view')
+				->set_template('')
+				->set_success(true)
+				->set_title('Dataset')
+				->set_details($details)
+				->output_json();
+	}
+
 	function add($name) {
 		$ds = $this->get_dataset($name);
 
@@ -59,7 +88,7 @@ class Api extends MY_Controller {
 		$message = $ds->get_save_errors();
 
 		$this->RespM->set_message($message)
-				->set_type('view')
+				->set_type('form')
 				->set_template('')
 				->set_success($result)
 				->set_title('Dataset')
@@ -72,18 +101,18 @@ class Api extends MY_Controller {
 
 		$id = $this->input->post('id');
 
-		if ($id === FALSE) {
+		if ($id === false) {
 			$this->RespM->set_message('Invalid ID')
 				->set_type('form')
 				->set_template('')
-				->set_success(False)
+				->set_success(false)
 				->set_title('Dataset')
 				->set_details()
 				->output_json();
 			return;
 		}
 
-		$details['data'] = $ds->set_subaction('v')
+		$details['data'] = $ds->set_subaction('e')
 				->set_id($id)
 				->get_fields_with_data();
 
@@ -114,7 +143,7 @@ class Api extends MY_Controller {
 		$message = $ds->get_save_errors();
 
 		$this->RespM->set_message($message)
-				->set_type('view')
+				->set_type('form')
 				->set_template('')
 				->set_success($result)
 				->set_title('Dataset')
