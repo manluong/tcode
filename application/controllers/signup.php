@@ -3,6 +3,8 @@
 class Signup extends MY_Controller {
 
 	function __construct() {
+		$this->allow_unauthed_access = TRUE;
+		
 		parent::__construct();
 
 		//if (APP_ROLE!='TBOSS') redirect('http://my.8force.net/signup');

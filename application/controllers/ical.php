@@ -3,6 +3,8 @@
 class ical extends MY_Controller {
 
 	function __construct() {
+		$this->allow_unauthed_access = TRUE;
+		
 		parent::__construct();
 
 		$this->load->model('CalendarM');
