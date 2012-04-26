@@ -84,10 +84,10 @@ class LicenseM extends MY_Model {
 		if (APP_ROLE != 'TBOSS') return FALSE;
 
 		$rs = $this->db->select()
-				->from('license_rules')
-				->join('license', 'license.id=license_rules.license_id')
-				->join('tenant_license', 'tenant_license.license_id=license.id')
-				->where('tenant_license.tenant_id', $tenant_id)
+				->from('license_rules AS r')
+				->join('license AS l', 'l.id=r.license_id')
+				->join('tenant_license AS tl', 'tl.license_id=l.id')
+				->where('tl.tenant_id', $tenant_id)
 				->get();
 
 		if ($rs->num_rows() == 0) return FALSE;
@@ -135,7 +135,12 @@ class LicenseM extends MY_Model {
 
 		if ($rs->num_rows == 0) return array();
 
-		return $rs->result_array();
+		$results = array();
+		foreach($rs->result_array() AS $row) {
+			$results[] = $row['app_id'];
+		}
+
+		return $results;
 	}
 
 
