@@ -123,7 +123,7 @@ class MY_Controller extends CI_Controller {
 		$this->data['app_list'] = $this->AppM->get_apps();
 	}
 
-	function _output() {
+	function _do_output() {
 		$this->data['layout'] = $this->layout;
 
 		$html = array();

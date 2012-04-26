@@ -11,7 +11,7 @@ class Helloworld extends MY_Controller {
 	function index() {
 		$this->data['content'] = $this->load->view(get_template().'/helloworld/index', '', TRUE);
 
-		$this->_output();
+		$this->_do_output();
 	}
 
 	function sendhtml() {

@@ -4,7 +4,7 @@ class Signup extends MY_Controller {
 
 	function __construct() {
 		$this->allow_unauthed_access = TRUE;
-		
+
 		parent::__construct();
 
 		//if (APP_ROLE!='TBOSS') redirect('http://my.8force.net/signup');
@@ -16,7 +16,7 @@ class Signup extends MY_Controller {
 
 		$this->data['content'] = $this->load->view(get_template().'/signup/index', $html, TRUE);
 
-		$this->_output();
+		$this->_do_output();
 	}
 
 	function step2() {
@@ -42,7 +42,7 @@ class Signup extends MY_Controller {
 
 		$this->data['content'] = $this->load->view(get_template().'/signup/process', $signup_info, TRUE);
 
-		$this->_output();
+		$this->_do_output();
 	}
 
 	function ajax_begin_setup() {

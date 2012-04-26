@@ -11,15 +11,15 @@ class Helpdesk extends MY_Controller {
 	function index() {
 		$this->data['content'] = $this->load->view(get_template().'/helpdesk/index', '', TRUE);
 
-		$this->_output();
+		$this->_do_output();
 	}
 
 	function content_list() {
 		$this->data['content'] = $this->load->view(get_template().'/helpdesk/list', '', TRUE);
 
-		$this->output();
+		$this->_do_output();
 	}
-	
+
 	function sendhtml() {
 		$data = array();
 		$data['html'] = "I am a some HTML";

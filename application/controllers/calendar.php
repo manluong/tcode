@@ -15,7 +15,7 @@ class Calendar extends MY_Controller {
 		$html_data['cuid'] = $this->UserM->get_card_id();
 
 		$this->data['content'] = $this->load->view('/'.get_template().'/calendar/view', $html_data, TRUE);
-		$this->_output();
+		$this->_do_output();
 	}
 
 

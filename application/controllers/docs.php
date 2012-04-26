@@ -36,7 +36,7 @@ class Docs extends MY_Controller {
 
 		$this->data['content'] = $this->load->view(get_template().'/docs/docs_view',$vars,TRUE);
 
-		$this->_output();
+		$this->_do_output();
 	}
 
 	// Called by view in tbuilder
@@ -67,7 +67,7 @@ class Docs extends MY_Controller {
 		$vars['page'] = get_template().'/docs/docs_view_html';
 		$this->data['content'] = $this->load->view(get_template().'/docs/docs_view', $vars, TRUE);
 
-		$this->_output();
+		$this->_do_output();
 	}
 
 	function view() {
@@ -76,7 +76,7 @@ class Docs extends MY_Controller {
 
 		$this->data['content'] = $this->load->view(get_template().'/docs/docs_view', $vars, TRUE);
 
-		$this->_output();
+		$this->_do_output();
 	}
 
 	/**
