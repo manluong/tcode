@@ -179,31 +179,32 @@ $lang['lang-note'] = 'Note';
 
 
 // core
-$lang['core_apps-apptitle_client'] = 'Client';
-$lang['core_apps-apptitle_card'] = 'Card';
-$lang['core_apps-apptitle_demo'] = 'Demo';
-$lang['core_apps-apptitle_access'] = 'Access';
-$lang['core_apps-apptitle_staff'] = 'Staff';
-$lang['core_apps-apptitle_product'] = 'Product';
-$lang['core_apps-apptitle_resources'] = 'Resources';
-$lang['core_apps-apptitle_subscription'] = 'Subscription';
-$lang['core_apps-apptitle_invoice'] = 'Invoice';
-$lang['core_apps-apptitle_setting'] = 'Setting';
-$lang['core_apps-apptitle_lang'] = 'Lang';
-$lang['core_apps-apptitle_dashboard'] = 'Dashboard';
-$lang['core_apps-apptitle_core_shared'] = 'Core Shared';
-$lang['core_apps-apptitle_vendor'] = 'Vendor';
-$lang['core_apps-apptitle_member'] = 'Member';
-$lang['core_apps-apptitle_po'] = 'Po';
-$lang['core_apps-apptitle_poadmin'] = 'Poadmin';
-$lang['core_apps-apptitle_license'] = 'License';
-$lang['core_apps-apptitle_tcs'] = 'Tcs';
-$lang['core_apps-apptitle_isp'] = 'Isp';
-$lang['core_apps-apptitle_builder'] = 'Builder';
-$lang['core_apps-apptitle_helloworld'] = 'Helloworld';
-$lang['core_apps-apptitle_docs'] = 'Docs';
-$lang['core_apps-apptitle_roy'] = 'Roy';
-$lang['core_apps-apptitle_core'] = 'Core';
+$lang['core_apps-name-client'] = 'Client';
+$lang['core_apps-name-card'] = 'Card';
+$lang['core_apps-name-demo'] = 'Demo';
+$lang['core_apps-name-access'] = 'Access';
+$lang['core_apps-name-staff'] = 'Staff';
+$lang['core_apps-name-product'] = 'Product';
+$lang['core_apps-name-resources'] = 'Resources';
+$lang['core_apps-name-subscription'] = 'Subscription';
+$lang['core_apps-name-invoice'] = 'Invoice';
+$lang['core_apps-name-setting'] = 'Setting';
+$lang['core_apps-name-lang'] = 'Lang';
+$lang['core_apps-name-dashboard'] = 'Dashboard';
+$lang['core_apps-name-core_shared'] = 'Core Shared';
+$lang['core_apps-name-vendor'] = 'Vendor';
+$lang['core_apps-name-member'] = 'Member';
+$lang['core_apps-name-po'] = 'Po';
+$lang['core_apps-name-poadmin'] = 'Poadmin';
+$lang['core_apps-name-license'] = 'License';
+$lang['core_apps-name-tcs'] = 'Tcs';
+$lang['core_apps-name-isp'] = 'Isp';
+$lang['core_apps-name-builder'] = 'Builder';
+$lang['core_apps-name-helloworld'] = 'Helloworld';
+$lang['core_apps-name-docs'] = 'Documents';
+$lang['core_apps-name-core'] = 'Core';
+$lang['core_apps-name-helpdesk'] = 'Helpdesk';
+
 $lang['core_apps_menu-appmenu_rights'] = 'Rights';
 $lang['core_apps_menu-appmenu_listuser'] = 'Listuser';
 $lang['core_apps_menu-appmenu_adduser'] = 'Adduser';
@@ -290,7 +291,7 @@ $lang['core_select-select-unit-month'] = 'Month';
 $lang['core_select-select-unit-year'] = 'Year';
 $lang['core_select-select-unit-minute'] = 'Minute';
 $lang['core_select-select-unit-hour'] = 'Hour';
-$lang['core_apps-apptitle_helpdesk'] = 'Helpdesk';
+
 
 
 // access

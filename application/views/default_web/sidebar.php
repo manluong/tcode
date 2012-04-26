@@ -242,16 +242,14 @@
 	<div id="nav">
 		<ul class="unstyled">
 		<?php
-			foreach ($app_list as $field1) {
-				$langname = 'apptitle_'.$field1['core_apps_name'];
-				$icon = '';
+			foreach ($app_list as $app) {
 		?>
 			<li>
-				<a href="<?=base_url().$field1['core_apps_name']?>" data-app_name="<?=$field1['core_apps_name']?>" class="ajax">
-					<span class="app-icon" title="<?=$this->lang->line('core_'.$langname)?>">
-						<img src="/resources/images/appicons/30/<?=$field1['core_apps_name']?>.png" />
+				<a href="<?=base_url().$app?>" data-app_name="<?=$app?>" class="ajax">
+					<span class="app-icon" title="<?=$this->lang->line($langname)?>">
+						<img src="/resources/images/appicons/30/<?=$app?>.png" />
 					</span>
-					<span class="app-name"><?=$this->lang->line('core_'.$langname)?></span>
+					<span class="app-name"><?=$this->lang->line('core_apps-name-'.$app)?></span>
 				</a>
 			</li>
 		<?php

@@ -4,8 +4,6 @@ class AppM extends MY_Model {
 	var $url = array();
 	var $actions = array();
 
-	var $public_apps = array('access', 'ical', 'unittest', 'callback_sendgrid', 'email_send', 'signup');
-
 	var $app_cache = array(
 		0 => 'general',
 		'general' => 0,
@@ -13,7 +11,7 @@ class AppM extends MY_Model {
 
 	function __construct() {
 		$this->table = 'global_setting.core_apps';
-		$this->id_field = 'core_apps_id';
+		$this->id_field = 'id';
 
 		parent::__construct();
 
@@ -36,30 +34,24 @@ class AppM extends MY_Model {
 		return ($this->actions['core_apps_action_disableplainid'] == 1);
 	}
 
-	function has_public_access() {
-		if (in_array($this->url['app'], $this->public_apps)) return TRUE;
-
-		return ($this->actions['core_apps_action_public'] == 1);
-	}
-
 	function get_status($app) {
-		$rs = $this->db->select('core_apps_status')
-				->where('core_apps_name', $app)
-				->where('core_apps_status', 1)
+		$rs = $this->db->select('status')
+				->where('name', $app)
+				->where('status', 1)
 				->get($this->table, 1);
 
 		if ($rs->num_rows()==0) return 0;
 
 		$result = $rs->row_array();
-		return $result['core_apps_status'];
+		return $result['status'];
 	}
 
 	function get_id($app_name) {
 		if (isset($this->app_cache[$app_name])) return $this->app_cache[$app_name];
 
-		$rs = $this->db->select('core_apps_id')
+		$rs = $this->db->select('id')
 				->from($this->table)
-				->where('core_apps_name', $app_name)
+				->where('name', $app_name)
 				->limit(1)
 				->get();
 
@@ -67,17 +59,17 @@ class AppM extends MY_Model {
 
 		$result = $rs->row_array();
 
-		$this->app_cache[$app_name] = $result['core_apps_id'];
+		$this->app_cache[$app_name] = $result['id'];
 
-		return $result['core_apps_id'];
+		return $result['id'];
 	}
 
 	function get_name($app_id) {
 		if (isset($this->app_cache[$app_id])) return $this->app_cache[$app_id];
 
-		$rs = $this->db->select('core_apps_name')
+		$rs = $this->db->select('name')
 				->from($this->table)
-				->where('core_apps_id', $app_id)
+				->where('id', $app_id)
 				->limit(1)
 				->get();
 
@@ -85,9 +77,9 @@ class AppM extends MY_Model {
 
 		$result = $rs->row_array();
 
-		$this->app_cache[$app_id] = $result['core_apps_name'];
+		$this->app_cache[$app_id] = $result['name'];
 
-		return $result['core_apps_name'];
+		return $result['name'];
 	}
 
 	function get_group($app, $action) {
@@ -222,23 +214,28 @@ class AppM extends MY_Model {
 	//Get list of Apps, with License restrictions applied.
 	//TODO: add ACL restriction.
 	function get_apps() {
-		$this->db->select('core_apps_name')
+		$this->db->select('name')
 			->from('global_setting.core_apps')
-			->where('core_apps_status', 1)
-			->where('core_apps_showmenu', 1)
-			->order_by('core_apps_menusort');
+			->where('status', 1)
+			->where('display', 1)
+			->order_by('sort_order', 'ASC');
 
 		if (APP_ROLE == 'TSUB' && ENVIRONMENT == 'production' && $this->UserM->is_logged_in()) {
 			$accessible_app_ids = $this->LicenseM->get_accessible_app_ids();
-			if (count($accessible_app_ids) ==0) return array();
-			$this->db->where_in('core_apps_id', $accessible_app_ids);
+			if (count($accessible_app_ids) == 0) return array();
+			$this->db->where_in('id', $accessible_app_ids);
 		}
 
 		$rs = $this->db->get();
 
 		if ($rs->num_rows() == 0) return array();
 
-		return $rs->result_array();
+		$results = array();
+		foreach($rs->result_array() AS $row) {
+			$results[] = $row['name'];
+		}
+
+		return $results;
 	}
 
 	/*
