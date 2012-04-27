@@ -1,16 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Access extends MY_Controller {
-	var $statuses = array(
-			1 => 'return user',
-			2 => 'login ok',
-			3 => 'wrong password',
-			4 => 'logout',
-			5 => 'you must be new here, log in!',
-			6 => 'no such username',
-			7 => 'username not activated',
-		);
-
 	function __construct() {
 		$this->allow_unauthed_access = TRUE;
 
@@ -21,13 +11,11 @@ class Access extends MY_Controller {
 		if ($this->UserM->is_logged_in()) redirect('/dashboard');
 
 		$html = array();
-		$html['status_message'] = $this->statuses[$this->UserM->status];
 		$html['status'] = $this->UserM->status;
-		$html['company_name'] = 'Telcoson'; //TODO: This should be the company name of the tenant.
 
 		$this->data['content'] = $this->load->view(get_template().'/access/login', $html, TRUE);
 
-		$this->output();
+		$this->_do_output();
 	}
 
 	public function about() {
@@ -63,7 +51,7 @@ class Access extends MY_Controller {
 			$success = true;
 		}
 
-		$this->RespM->set_message($this->statuses[$this->UserM->status])
+		$this->RespM->set_message($this->lang->line('access-login_status-'.$this->UserM->status))
 			->set_type('view')
 			->set_template('')
 			->set_success($success)
@@ -74,7 +62,7 @@ class Access extends MY_Controller {
 	public function ajax_logout() {
 		$this->UserM->logout();
 
-		$this->RespM->set_message('You have been logged out.')
+		$this->RespM->set_message($this->lang->line('access-logout-success'))
 			->set_type('view')
 			->set_template('')
 			->set_success(TRUE)

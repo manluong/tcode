@@ -9,7 +9,7 @@ class Dashboard extends MY_Controller {
 	function index() {
 		$this->data['content'] = $this->load->view(get_template().'/dashboard/index', '', TRUE);
 
-		$this->output();
+		$this->_do_output();
 	}
 
 	function ajax_wall($id='') {

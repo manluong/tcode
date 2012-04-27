@@ -27,16 +27,9 @@ class ACLM extends MY_Model {
 		if (!id_is_encrypted($this->url['id'])) die('id must be encrypted');
 	}
 
-	function check_app_access($mode='normal') {
-		if ($mode=='basic') {
-			if (!$this->UserM->is_logged_in() && !$this->allow_unauthed_access) {
-				header( 'Location: /access/login/'.set_return_url(TRUE));
-				exit;
-			}
-		}
-
+	function check_app_access() {
 		if (!$this->UserM->is_logged_in() && !$this->allow_unauthed_access) {
-			header( 'Location: /access/login/'.set_return_url(TRUE));
+			header( 'Location: /access/'.set_return_url(TRUE));
 			exit;
 		} elseif ($this->UserM->is_logged_in() && !$this->UserM->is_admin() && !$this->allow_unauthed_access) {
 			/*

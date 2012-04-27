@@ -1,18 +1,19 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Helpdesk extends MY_Controller {
+class Helloworld extends MY_Controller {
 
 	function __construct() {
 		parent::__construct();
 
-		$this->load->model('DS_Helpdesk');
+		$this->load->model('DS_HelloWorld');
 	}
 
 	function index() {
-		$this->data['content'] = $this->load->view(get_template().'/helpdesk/index', '', TRUE);
-		$this->output();
+		$this->data['content'] = $this->load->view(get_template().'/helloworld/index', '', TRUE);
+
+		$this->_do_output();
 	}
-	
+
 	function sendhtml() {
 		$data = array();
 		$data['html'] = "I am a some HTML";
@@ -33,8 +34,9 @@ class Helpdesk extends MY_Controller {
 
 	function sendjs() {
 		$data = array();
-		$data['json'] = '//js';
-		//alert("Hello JS");
+		$data['json'] = '//js
+
+		';//alert("Hello JS");
 		$data['isoutput'] = 1;
 		$data['isdiv'] = 0;
 
@@ -42,12 +44,12 @@ class Helpdesk extends MY_Controller {
 	}
 
 	function sendjson_list() {
-		$this->DS_Helpdesk->set_subaction('l');
+		$this->DS_HelloWorld->set_subaction('l');
 
 		$details = array(
-			'columns' => $this->DS_Helpdesk->get_datatable_fields(),
-			'data' => $this->DS_Helpdesk->get_datatable_data(),
-			'ids' => $this->DS_Helpdesk->get_list_ids(),
+			'columns' => $this->DS_HelloWorld->get_datatable_fields(),
+			'data' => $this->DS_HelloWorld->get_datatable_data(),
+			'ids' => $this->DS_HelloWorld->get_list_ids(),
 			'setting' => array(
 				'hidetitle' => 0,
 			),
@@ -57,14 +59,14 @@ class Helpdesk extends MY_Controller {
 				->set_type('list')
 				->set_template('')
 				->set_success(true)
-				->set_title('Helpdesk List')
+				->set_title('Hello Dataset')
 				->set_details($details)
 				->output_json();
 	}
 
 	function sendjson_view() {
-		$data = $this->DS_Helpdesk->set_subaction('v')
-					->set_id(1)
+		$data = $this->DS_HelloWorld->set_subaction('v')
+					->set_id(150)
 					->get_view_data();
 
 		$details = array(
@@ -74,7 +76,7 @@ class Helpdesk extends MY_Controller {
 					'target' => '',
 					'text' => 'Edit',
 					'type' => 'ajax',
-					'url' => '/helpdesk/sendjson_form/as',
+					'url' => '/helloworld/contact/1/as',
 					'style' => 'default',
 					'icon' => '',
 				),
@@ -82,7 +84,7 @@ class Helpdesk extends MY_Controller {
 					'target' => '',
 					'text' => 'Cancel',
 					'type' => 'ajax',
-					'url' => '/helpdesk/contact/1/v',
+					'url' => '/helloworld/contact/1/v',
 					'style' => 'warning',
 					'icon' => 'trash',
 				)
@@ -97,16 +99,46 @@ class Helpdesk extends MY_Controller {
 				->set_template('')
 				//->set_template('custom_viewcard')//custom template
 				->set_success(true)
-				->set_title('Helpdesk Edit')
+				->set_title('Hello Dataset')
 				->set_details($details)
 				->output_json();
 	}
 
-	function helpdesk_edit($id) {
+	function sendjson_form() {
+/*
+		$data = array();
 
-		$data = $this->DS_Helpdesk->set_subaction('e')
-					->set_id($id)
-					->get_form_data();
+		$links = ',"links":[{"type":"submit","url":"/helloworld/returnjson_save/1/es","target":"","text":"Submit"},{"type":"ajax","url":"/helloworld/contact/1/v","target":"","text":"Cancel"}]';
+
+		$the_dataarray = '{"label":"First Name","value":"Anthony","form_type":"text","name":"firstname","required":"1","min":"","max":"","validate":"","pattern":"","chk_name0":"","chk_name1":"","date_showformat":"","sel_multiple":"","select_options":[{"key":"Option 1","value":"1"},{"key":"Option 1","value":"1"}],"helptext":"help me text"}';
+		$the_dataarray .= ',{"label":"Last Name","value":"Andy","form_type":"text","name":"lastname","required":"","min":"","max":"","validate":"","pattern":"","chk_name0":"","chk_name1":"","date_showformat":"","sel_multiple":"","select_options":[{"key":"Option 1","value":"1"},{"key":"Option 1","value":"1"}],"helptext":"help me text"}';
+		$the_dataarray .= ',{"label":"Email","value":"ea@abc.com","form_type":"email","name":"email","required":"","min":"","max":"","validate":"","pattern":"","chk_name0":"","chk_name1":"","date_showformat":"","sel_multiple":"","select_options":[{"key":"Option 1","value":"1"},{"key":"Option 1","value":"1"}],"helptext":"help me text"}';
+		$the_dataarray .= ',{"label":"Number","value":"32.10","form_type":"number","name":"number","required":"","min":"","max":"","validate":"","pattern":"","chk_name0":"","chk_name1":"","date_showformat":"","sel_multiple":"","select_options":[{"key":"Option 1","value":"1"},{"key":"Option 1","value":"1"}],"helptext":"help me text"}';
+		$the_dataarray .= ',{"label":"Phone","value":"65-0-96369636","form_type":"phone","name":"phone","required":"","min":"","max":"","validate":"","pattern":"","chk_name0":"","chk_name1":"","date_showformat":"","sel_multiple":"","select_options":[{"key":"Option 1","value":"1"},{"key":"Option 1","value":"1"}],"helptext":"help me text"}';
+		$the_dataarray .= ',{"label":"URL","value":"http://www.telcson.com","form_type":"url","name":"url","required":"","min":"","max":"","validate":"","pattern":"","chk_name0":"","chk_name1":"","date_showformat":"","sel_multiple":"","select_options":[{"key":"Option 1","value":"1"},{"key":"Option 1","value":"1"}],"helptext":"help me text"}';
+		$the_dataarray .= ',{"label":"Checkbox","value":"1","form_type":"checkbox","name":"chkbox","required":"","min":"","max":"","validate":"","pattern":"","chk_name0":"No","chk_name1":"Yes","date_showformat":"","sel_multiple":"","select_options":[{"key":"Option 1","value":"1"},{"key":"Option 1","value":"1"}],"helptext":"help me text"}';
+		$the_dataarray .= ',{"label":"Date","value":"2012-02-01","form_type":"date","name":"date","required":"","min":"","max":"","validate":"","pattern":"","chk_name0":"","chk_name1":"","date_showformat":"ISO_DATE","sel_multiple":"","select_options":[{"key":"Option 1","value":"1"},{"key":"Option 1","value":"1"}],"helptext":"help me text"}';
+		$the_dataarray .= ',{"label":"DateTime","value":"2011-01-01 12:00:00","form_type":"datetime","name":"datetime","required":"","min":"","max":"","validate":"","pattern":"","chk_name0":"","chk_name1":"","date_showformat":"ISO","sel_multiple":"","select_options":[{"key":"Option 1","value":"1"},{"key":"Option 1","value":"1"}],"helptext":"help me text"}';
+		$the_dataarray .= ',{"label":"Time","value":"13:00:00","form_type":"time","name":"tine","required":"","min":"","max":"","validate":"","pattern":"","chk_name0":"","chk_name1":"","date_showformat":"ISO_TIME","sel_multiple":"","select_options":[{"key":"Option 1","value":"1"},{"key":"Option 1","value":"1"}],"helptext":"help me text"}';
+		$the_dataarray .= ',{"label":"Select","value":"2","form_type":"select","name":"select","required":"","min":"","max":"","validate":"","pattern":"","chk_name0":"","chk_name1":"","date_showformat":"","sel_multiple":"","select_options":[{"key":"Option 1","value":"1"},{"key":"Option 2","value":"2"}],"helptext":"help me text"}';
+		$the_dataarray .= ',{"label":"Select Switch","2":"Anthony","form_type":"select_switch","name":"selectswitch","required":"","min":"","max":"","validate":"","pattern":"","chk_name0":"","chk_name1":"","date_showformat":"","sel_multiple":"","select_options":[{"key":"Option 1","value":"1"},{"key":"Option 2","value":"2"}],"helptext":"help me text"}';
+		$the_dataarray .= ',{"label":"Password","value":"***","form_type":"password","name":"password","required":"","min":"","max":"","validate":"","pattern":"","chk_name0":"","chk_name1":"","date_showformat":"","sel_multiple":"","select_options":[{"key":"Option 1","value":"1"},{"key":"Option 1","value":"1"}],"helptext":"help me text"}';
+		$the_dataarray .= ',{"label":"File","value":"","form_type":"file","name":"file","required":"","min":"","max":"","validate":"","pattern":"","chk_name0":"","chk_name1":"","date_showformat":"","sel_multiple":"","select_options":[{"key":"Option 1","value":"1"},{"key":"Option 1","value":"1"}],"helptext":"help me text"}';
+		$the_dataarray .= ',{"label":"Text Area","value":"Something to go here!","form_type":"textarea","name":"textarea","required":"","min":"","max":"","validate":"","pattern":"","chk_name0":"","chk_name1":"","date_showformat":"","sel_multiple":"","select_options":[{"key":"Option 1","value":"1"},{"key":"Option 1","value":"1"}],"helptext":"help me text"}';
+		$the_dataarray .= ',{"label":"Hidden","value":"secret hidden text","form_type":"hidden","name":"hidden","required":"","min":"","max":"","validate":"","pattern":"","chk_name0":"","chk_name1":"","date_showformat":"","sel_multiple":"","select_options":[{"key":"Option 1","value":"1"},{"key":"Option 1","value":"1"}],"helptext":"help me text"}';
+
+		$data['json'] = '{"success":"1","message":"1","template":"1","title":"Title","type":"form","details":{"setting":{"hidelabel":"0"},"data":['.$the_dataarray.']'.$links.'}}';
+
+		$data['isoutput'] = 1;
+		$data['isdiv'] = 0;
+
+		return($data);
+*/
+
+
+		$data = $this->DS_HelloWorld->set_subaction('e')
+					 ->set_id(150)
+					 ->get_form_data();
 
 		$details = array(
 			'data' => $data,
@@ -115,7 +147,7 @@ class Helpdesk extends MY_Controller {
 					'target' => '',
 					'text' => 'Submit',
 					'type' => 'submit',
-					'url' => '/helpdesk/sendjson_save/'.$id.'/es',
+					'url' => '/helloworld/sendjson_save/150/es',
 					'style' => 'default',
 					'icon' => '',
 				),
@@ -123,7 +155,7 @@ class Helpdesk extends MY_Controller {
 					'target' => '',
 					'text' => 'Cancel',
 					'type' => 'ajax',
-					'url' => '/helpdesk/contact/'.$id.'/v',
+					'url' => '/helloworld/contact/1/v',
 					'style' => 'warning',
 					'icon' => 'trash',
 				)
@@ -133,15 +165,16 @@ class Helpdesk extends MY_Controller {
 			)
 		);
 
-		$this->RespM->set_message('helpdesk_edit')
+		$this->RespM->set_message('sendjson_form')
 				->set_type('form')
 				->set_template('')
 				//->set_template('custom_editcard')//custom template
 				->set_success(true)
-				->set_title('Helpdesk Edit')
+				->set_title('Hello Dataset')
 				->set_details($details)
 				->output_json();
 	}
+
 
 	function sendjson_save() {
 /*
@@ -160,23 +193,23 @@ class Helpdesk extends MY_Controller {
 
 		return($data);
  */
-		$this->DS_Helpdesk->subaction = 'e';
-		$this->DS_Helpdesk->id = 1;
+		$this->DS_HelloWorld->subaction = 'e';
+		$this->DS_HelloWorld->id = 150;
 
-		$success = $this->DS_Helpdesk->save();
+		$success = $this->DS_HelloWorld->save();
 
 		if ($success) {
 			$details['links'] = array(
 				array(
 				'type' => 'ajax',
-				'url' => '/helpdesk/returnjson_view',
+				'url' => '/helloworld/returnjson_view',
 				'target' => '',
 				'text' => ''
 				)
 			);
 			$message = 'Data saved.';
 		} else {
-			$details['data'] = $this->DS_Helpdesk->get_save_errors();
+			$details['data'] = $this->DS_HelloWorld->get_save_errors();
 			$message = 'There was an error saving your data';
 		}
 
@@ -184,16 +217,16 @@ class Helpdesk extends MY_Controller {
 				->set_type('')
 				->set_template('')
 				->set_success($success)
-				->set_title('Save Helpdesk Module')
+				->set_title('Save Hello Dataset')
 				->set_details($details)
 				->output_json();
 	}
 
 	function show_data() {
-		$this->DS_Helpdesk->subaction = 'e';
-		$this->DS_Helpdesk->id = 150;
+		$this->DS_HelloWorld->subaction = 'e';
+		$this->DS_HelloWorld->id = 150;
 
-		$data = $this->DS_Helpdesk->get_form_data();
+		$data = $this->DS_HelloWorld->get_form_data();
 
 		echo '<pre>', print_r($data, TRUE), '</pre>';
 	}

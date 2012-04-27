@@ -84,10 +84,10 @@ class LicenseM extends MY_Model {
 		if (APP_ROLE != 'TBOSS') return FALSE;
 
 		$rs = $this->db->select()
-				->from('license_rules')
-				->join('license', 'license.id=license_rules.license_id')
-				->join('tenant_license', 'tenant_license.license_id=license.id')
-				->where('tenant_license.tenant_id', $tenant_id)
+				->from('license_rules AS r')
+				->join('license AS l', 'l.id=r.license_id')
+				->join('tenant_license AS tl', 'tl.license_id=l.id')
+				->where('tl.tenant_id', $tenant_id)
 				->get();
 
 		if ($rs->num_rows() == 0) return FALSE;
@@ -110,7 +110,7 @@ class LicenseM extends MY_Model {
 				->get();
 
 		foreach($rs->result_array() AS $r) {
-			$this->rules[$r['app_id']][$r['actiongp']][$r['rule_type']] = array(
+			$this->rules[$r['app_id']][$r['rule_type']] = array(
 				'value' => $r['rule_value'],
 				'db_table' => $r['db_table'],
 				'db_field' => $r['db_field']
@@ -118,24 +118,29 @@ class LicenseM extends MY_Model {
 		}
 	}
 
-	function has_restriction($app_id, $actiongp, $rule_type) {
-		return (isset($this->rules[$app_id][$actiongp][$rule_type]));
+	function has_restriction($app_id, $rule_type) {
+		return (isset($this->rules[$app_id][$rule_type]));
 	}
 
-	function get_restriction($app_id, $actiongp, $rule_type) {
-		return $this->rules[$app_id][$actiongp][$rule_type];
+	function get_restriction($app_id, $rule_type) {
+		return $this->rules[$app_id][$rule_type];
 	}
 
 	function get_accessible_app_ids() {
 		$rs = $this->db->select('app_id')
 				->from('tenant_license_rules')
-				->where('rule_type', 1)
+				->where('rule_type', 'access')
 				->where('rule_value', 1)
 				->get();
 
 		if ($rs->num_rows == 0) return array();
 
-		return $rs->result_array();
+		$results = array();
+		foreach($rs->result_array() AS $row) {
+			$results[] = $row['app_id'];
+		}
+
+		return $results;
 	}
 
 
@@ -144,14 +149,14 @@ class LicenseM extends MY_Model {
 		$result = array();
 
 		foreach($rules AS $r) {
-			if (isset($result[$r['app_id']][$r['actiongp']][$r['rule_type']])) {
-				$result[$r['app_id']][$r['actiongp']][$r['rule_type']] = array(
+			if (!isset($result[$r['app_id']][$r['rule_type']])) {
+				$result[$r['app_id']][$r['rule_type']] = array(
 					'value' => $r['rule_value'],
 					'db_table' => $r['db_table'],
 					'db_field' => $r['db_field']
 				);
 			} else {
-				$result[$r['app_id']][$r['actiongp']][$r['rule_type']]['value'] += $r['rule_value'];
+				$result[$r['app_id']][$r['rule_type']]['value'] += $r['rule_value'];
 			}
 		}
 

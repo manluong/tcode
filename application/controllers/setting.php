@@ -34,7 +34,7 @@ class Setting extends MY_Controller {
 
 		$this->layout['type'] = 'right';
 
-		$this->output();
+		$this->_do_output();
 	}
 
 	function configure($app_name) {
@@ -53,7 +53,7 @@ class Setting extends MY_Controller {
 
 		$this->layout['type'] = 'right';
 
-		$this->output();
+		$this->_do_output();
 	}
 
 	function save($app_name) {

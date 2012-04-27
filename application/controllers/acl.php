@@ -26,7 +26,7 @@ class ACL extends MY_Controller {
 
 		$this->data['content'] = $this->load->view(get_template().'/acl/view', $html_data, TRUE);
 
-		$this->output();
+		$this->_do_output();
 	}
 
 

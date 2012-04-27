@@ -2,6 +2,8 @@
 
 class Email_send extends MY_Controller {
 	function __construct() {
+		$this->allow_unauthed_access = TRUE;
+		
 		parent::__construct();
 		$this->load->library('EmailL');
 	}

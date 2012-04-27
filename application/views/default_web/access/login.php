@@ -2,15 +2,15 @@
 
 <div class="widget span6 offset3">
 	<div class="widget-header">
-		<h4><?=$company_name?></h4>
+		<h4>Login</h4>
 	</div>
 	<div class="widget-body">
 		<?php
-		if (isset($status) && in_array($status, array(3,6,7))) {
+		if (isset($status) && in_array($status, array(3,6,7,8))) {
 		echo '
 			<div class="alert alert-error">
 				<i class="icon-exclamation-sign"></i>
-				<strong>'.lang('access_login_status_'.$status).'</strong>
+				<strong>'.lang('access-login_status-'.$status).'</strong>
 			</div>
 		';
 		}

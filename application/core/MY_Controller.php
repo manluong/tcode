@@ -101,9 +101,10 @@ class MY_Controller extends CI_Controller {
 		$this->LogM->start_log();
 		$this->AppM->setup();
 		$this->LicenseM->setup();
+		$this->setup_output();
 
 		if ($this->AppM->must_disable_plain_id()) $this->ACLM->check_id_encryption();
-		$this->ACLM->check_app_access('basic');
+		$this->ACLM->check_app_access();
 		if (APP_ROLE == 'TSUB') {
 			if ($this->LicenseM->has_restriction($this->url['app_id'], $this->url['actiongp'], 'access')) {
 				$access = $this->LicenseM->get_restriction($this->url['app_id'], $this->url['actiongp'], 'access');
@@ -115,12 +116,15 @@ class MY_Controller extends CI_Controller {
 		//if (!$this->is_pjax) $this->output->enable_profiler(true);
 	}
 
-	function output() {
-		//tasks to be performed before the app's controller file
+	private function setup_output() {
 		$this->data['current_user'] = $this->UserM->info;
-		$this->data['app_list'] = array();
 		$this->data['title'] = '8Force';
+		$this->data['tenant'] = array();
 
+		$this->data['app_list'] = $this->AppM->get_apps();
+	}
+
+	function _do_output() {
 		$this->data['layout'] = $this->layout;
 
 		$html = array();
@@ -261,32 +265,5 @@ class MY_Controller extends CI_Controller {
 			$this->session->sess_expire_on_close = FALSE;
 		}
 	}
-
-
-	//basic API functions for all controllers
-	function api_get() {
-		$data = $this->model->get($this->url['id_plain']);
-
-		$resp = array(
-			'success' => TRUE,
-			'data' => $data
-		);
-
-		echo json_encode($resp);
-	}
-
-
-	function api_list() {
-		$data = $this->model->get_list();
-
-		$resp = array(
-			'success' => TRUE,
-			'data' => $data
-		);
-
-		echo json_encode($resp);
-	}
-
-
 
 }

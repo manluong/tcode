@@ -3,6 +3,8 @@
 class Callback_sendgrid extends MY_Controller {
 
 	function __construct() {
+		$this->allow_unauthed_access = TRUE;
+		
 		parent::__construct();
 		$this->setup_db();
 		$this->load->spark('curl/1.2.0');
