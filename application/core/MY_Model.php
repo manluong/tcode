@@ -235,14 +235,12 @@ class DatasetM extends CI_Model {
 			foreach($this->data AS $order=>$row) {
 				foreach($row AS $key_field => $data) {
 					if ($this->fields[$key_field][$this->subaction] == 0) continue;
-
 					$result[$order][$key_field] = $data;
 				}
 			}
 		} else {
 			foreach($this->data AS $key_field=>$data) {
 				if ($this->fields[$key_field][$this->subaction] == 0) continue;
-
 				$result[$key_field] = $data;
 			}
 		}

@@ -10,13 +10,6 @@ class Helpdesk extends MY_Controller {
 
 	function index() {
 		$this->data['content'] = $this->load->view(get_template().'/helpdesk/index', '', TRUE);
-
-		$this->output();
-	}
-
-	function content_list() {
-		$this->data['content'] = $this->load->view(get_template().'/helpdesk/list', '', TRUE);
-
 		$this->output();
 	}
 	
@@ -40,9 +33,8 @@ class Helpdesk extends MY_Controller {
 
 	function sendjs() {
 		$data = array();
-		$data['json'] = '//js
-
-		';//alert("Hello JS");
+		$data['json'] = '//js';
+		//alert("Hello JS");
 		$data['isoutput'] = 1;
 		$data['isdiv'] = 0;
 
@@ -110,10 +102,10 @@ class Helpdesk extends MY_Controller {
 				->output_json();
 	}
 
-	function sendjson_form() {
+	function helpdesk_edit($id) {
 
 		$data = $this->DS_Helpdesk->set_subaction('e')
-					->set_id(1)
+					->set_id($id)
 					->get_form_data();
 
 		$details = array(
@@ -123,7 +115,7 @@ class Helpdesk extends MY_Controller {
 					'target' => '',
 					'text' => 'Submit',
 					'type' => 'submit',
-					'url' => '/helpdesk/sendjson_save/1/es',
+					'url' => '/helpdesk/sendjson_save/'.$id.'/es',
 					'style' => 'default',
 					'icon' => '',
 				),
@@ -131,7 +123,7 @@ class Helpdesk extends MY_Controller {
 					'target' => '',
 					'text' => 'Cancel',
 					'type' => 'ajax',
-					'url' => '/helpdesk/contact/1/v',
+					'url' => '/helpdesk/contact/'.$id.'/v',
 					'style' => 'warning',
 					'icon' => 'trash',
 				)
@@ -141,7 +133,7 @@ class Helpdesk extends MY_Controller {
 			)
 		);
 
-		$this->RespM->set_message('sendjson_form')
+		$this->RespM->set_message('helpdesk_edit')
 				->set_type('form')
 				->set_template('')
 				//->set_template('custom_editcard')//custom template

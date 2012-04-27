@@ -9,7 +9,7 @@
 
 <script>
 	$(document).ready(function() {
-		ajax_content('/helpdesk/sendjson_list', 'helloworld_list');
-		ajax_content('/helpdesk/sendjson_form', 'helloworld_form');
+		helpdesk_ajax_content('/tcode/helpdesk/sendjson_list', 'helloworld_list');
+		helpdesk_ajax_content('/tcode/helpdesk/sendjson_form', 'helloworld_form');
 	});
 </script>
