@@ -818,6 +818,8 @@ class DatasetM extends CI_Model {
 			$val_field = $field['sel_sqlname'];
 		}
 
+		if ($rs->num_rows() == 0) return array();
+
 		foreach($rs->result_array() AS $r) {
 			$result[] = array(
 				'key' => $r[$key_field],
