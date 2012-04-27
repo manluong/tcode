@@ -118,12 +118,12 @@ class LicenseM extends MY_Model {
 		}
 	}
 
-	function has_restriction($app_id, $actiongp, $rule_type) {
-		return (isset($this->rules[$app_id][$actiongp][$rule_type]));
+	function has_restriction($app_id, $rule_type) {
+		return (isset($this->rules[$app_id][$rule_type]));
 	}
 
-	function get_restriction($app_id, $actiongp, $rule_type) {
-		return $this->rules[$app_id][$actiongp][$rule_type];
+	function get_restriction($app_id, $rule_type) {
+		return $this->rules[$app_id][$rule_type];
 	}
 
 	function get_accessible_app_ids() {
