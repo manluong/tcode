@@ -52,17 +52,17 @@ class ACLM extends MY_Model {
 
 
 
-	function check($action='', $app='', $actiongp='', $app_data_id=0) {
+	function check($acl_action='', $app='', $action='', $app_data_id=0) {
 		//$app = $this->AppM->get_name($app);
 
 		if ($app == '') $app = $this->url['app'];
-		if ($actiongp == '') $actiongp = $this->url['actiongp'];
+		if ($action == '') $action = $this->url['actiongp'];
 		if ($app_data_id != 0) $app_data_id = array($app_data_id, 0);
 
-		$acl = $this->get_acl($app, $actiongp, $app_data_id);
+		$acl = $this->get_acl($app, $action, $app_data_id);
 		$cardid = $this->UserM->get_card_id();
-		$subgp = $this->UserM->info['subgp'];
-		$mastergp = $this->UserM->info['accessgp'];
+		$subrole_ids = $this->UserM->info['sub_roles'];
+		$role_id = $this->UserM->info['role']['role_id'];
 
 		foreach($app_data_id AS $adi) {
 			$case2_acl = array();
@@ -76,14 +76,14 @@ class ACLM extends MY_Model {
 
 						if ($a['role_id'] == $cardid) {
 							$this->unit_test['triggered_rule'][] = $a['id'];
-							return ($a[$action] == 1);
+							return ($a[$acl_action] == 1);
 						}
 
 						break;
 
 					case 2: //subgroup
 
-						if (in_array($a['role_id'], $subgp)) {
+						if (in_array($a['role_id'], $subrole_ids)) {
 							$this->unit_test['triggered_rule'][] = $a['id'];
 							$case2_acl[] = $a;
 						}
@@ -95,14 +95,14 @@ class ACLM extends MY_Model {
 						//if there's any acl from case 2, consolidate them and return result
 						if (count($case2_acl) > 0) {
 							$case2_acl = $this->consolidate_acl($case2_acl);
-							return ($case2_acl[$action] == 1);
+							return ($case2_acl[$acl_action] == 1);
 						}
 
 						$this->unit_test['triggered_rule'] = array();
 
-						if ($a['role_id'] == $mastergp) {
+						if ($a['role_id'] == $role_id) {
 							$this->unit_test['triggered_rule'][] = $a['id'];
-							return ($a[$action] == 1);
+							return ($a[$acl_action] == 1);
 						}
 
 						break;
@@ -281,11 +281,11 @@ class ACLM extends MY_Model {
 		foreach($acl AS $k=>$a) {
 			switch($a['role_type']) {
 				case 1:
-					$acl[$k]['name'] = $card_details[$a['role_id']]['card_fname'].' '.$card_details[$a['role_id']]['card_lname'];
+					$acl[$k]['name'] = $card_details[$a['role_id']]['first_name'].' '.$card_details[$a['role_id']]['last_name'];
 					break;
 				case 2:
-					$gp_id = $subgp_details[$a['role_id']]['access_gpsub_gpmaster'];
-					$acl[$k]['name'] = $gp_details[$gp_id]['access_gpmaster_name'].' - '.$subgp_details[$a['role_id']]['access_gpsub_name'];
+					$gp_id = $subgp_details[$a['role_id']]['role_id'];
+					$acl[$k]['name'] = $gp_details[$gp_id]['name'].' - '.$subgp_details[$a['role_id']]['name'];
 					break;
 				case 3:
 					$acl[$k]['name'] = $gp_details[$a['role_id']]['name'];
