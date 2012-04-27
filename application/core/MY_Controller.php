@@ -106,8 +106,8 @@ class MY_Controller extends CI_Controller {
 		if ($this->AppM->must_disable_plain_id()) $this->ACLM->check_id_encryption();
 		$this->ACLM->check_app_access();
 		if (APP_ROLE == 'TSUB') {
-			if ($this->LicenseM->has_restriction($this->url['app_id'], $this->url['actiongp'], 'access')) {
-				$access = $this->LicenseM->get_restriction($this->url['app_id'], $this->url['actiongp'], 'access');
+			if ($this->LicenseM->has_restriction($this->url['app_id'], 'access')) {
+				$access = $this->LicenseM->get_restriction($this->url['app_id'], 'access');
 				if ($access == 0) die('Your license does not permit you to use this application.');
 			}
 		}
