@@ -107,7 +107,7 @@ class Helpdesk extends MY_Controller {
 	function sendjson_form() {
 		$id = $this->input->post('id');
 		$data = $this->DS_Helpdesk->set_subaction('e')
-					 //->set_id(1)
+					 ->set_id(150)
 					 ->get_form_data();
 
 		$details = array(
