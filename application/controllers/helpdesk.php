@@ -76,7 +76,7 @@ class Helpdesk extends MY_Controller {
 					'target' => '',
 					'text' => 'Edit',
 					'type' => 'ajax',
-					'url' => '/tcode/helpdesk/sendjson_form/1/as',
+					'url' => '/helpdesk/sendjson_form/1/as',
 					'style' => 'default',
 					'icon' => '',
 				),
@@ -117,7 +117,7 @@ class Helpdesk extends MY_Controller {
 					'target' => '',
 					'text' => 'Submit',
 					'type' => 'submit',
-					'url' => '/tcode/helpdesk/sendjson_save/1/es',
+					'url' => '/helpdesk/sendjson_save/1/es',
 					'style' => 'default',
 					'icon' => '',
 				)
@@ -148,7 +148,7 @@ class Helpdesk extends MY_Controller {
 					'target' => '',
 					'text' => 'Submit',
 					'type' => 'submit',
-					'url' => '/tcode/helpdesk/sendjson_save/es',
+					'url' => '/helpdesk/sendjson_save/es',
 					'style' => 'default',
 					'icon' => '',
 				)
@@ -178,7 +178,7 @@ class Helpdesk extends MY_Controller {
 			$details['links'] = array(
 				array(
 				'type' => 'ajax',
-				'url' => '/tcode/helpdesk/returnjson_view',
+				'url' => '/helpdesk/returnjson_view',
 				'target' => '',
 				'text' => ''
 				)
