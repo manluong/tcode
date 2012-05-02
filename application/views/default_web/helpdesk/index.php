@@ -1,4 +1,4 @@
-<script type="text/javascript" src="/tcode/resources/addon/helpdesk.js"></script>
+<script type="text/javascript" src="/resources/addon/helpdesk.js"></script>
 
 <div id="helpdesk_list">
 </div>
@@ -10,8 +10,8 @@
 </div>
 <script>
 	$(document).ready(function() {
-		helpdesk_ajax_content('/<?=PATH_URL?>/helpdesk/sendjson_list', 'helpdesk_list');
-		helpdesk_ajax_content('/<?=PATH_URL?>/helpdesk/helpdesk_insert', 'helpdesk_form');
-		helpdesk_ajax_content('/<?=PATH_URL?>/helpdesk/sendjson_view', 'helpdesk_view');
+		helpdesk_ajax_content('/helpdesk/sendjson_list', 'helpdesk_list');
+		helpdesk_ajax_content('/helpdesk/helpdesk_insert', 'helpdesk_form');
+		helpdesk_ajax_content('/helpdesk/sendjson_view', 'helpdesk_view');
 	});
 </script>
