@@ -20,7 +20,7 @@
 	<script type="text/javascript" src="/resources/addon/tpanel.js"></script>
 	<script type="text/javascript" src="/resources/addon/jquery-ui-timepicker-addon.js"></script>
 	
-	<script type="text/javascript" src="/tcode/resources/addon/helpdesk.js"></script>
+	<script type="text/javascript" src="/resources/addon/helpdesk.js"></script>
 	
 	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/dataTables.bootstrap-paging.js"></script>
