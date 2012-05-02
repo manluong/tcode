@@ -69,6 +69,7 @@ class Helloworld extends MY_Controller {
 					->set_id(150)
 					->get_view_data();
 
+
 		$details = array(
 			'data' => $data,
 			'links' => array(
