@@ -436,6 +436,8 @@ $lang['a_helpdesk-created_card_id'] = 'Created Card Id';
 $lang['a_helpdesk-cc_email'] = 'Cc Email';
 $lang['a_helpdesk-modified_card_id'] = 'Modified card id';
 $lang['a_helpdesk-assign_id'] = 'Assigned';
+// Invoice
+$lang['a_invoice-a_invoice_id'] = 'Id';
 
 
 //buttons
