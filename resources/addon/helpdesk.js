@@ -37,6 +37,7 @@ function helpdesk_ajax_content_json(jarray,divid) {
 		helpdesk_ajax_content_list(json,divid,links);
 		insert_edit_button();
 		insert_comment_button();
+		add_btn_insert();
 		break;
 
 		case 'view':
@@ -56,6 +57,14 @@ function helpdesk_ajax_content_json(jarray,divid) {
 
 }
 
+function add_btn_insert(){
+	$('#helpdesk_list_table_filter').append('<div style="padding-bottom:5px;"><a onclick="load_insert_form()","helpdesk_view");" href="#" class="btn btn-default">Insert helpdesk</a></div>');
+}
+
+function load_insert_form(){
+	helpdesk_ajax_content('/helpdesk/sendjson_insert_form', 'helpdesk_list');
+}
+
 function insert_edit_button(){
 	$('<th class="sorting" rowspan="1" colspan="1" style="width: 45px;">Order</th>').insertAfter('.sorting:last');
 	$.each($("tbody tr"),function(index,value){
@@ -73,11 +82,11 @@ function insert_comment_button(){
 }
 
 function load_edit_form(id){
-	helpdesk_ajax_content('/helpdesk/sendjson_form/'+id, 'helpdesk_view');
+	helpdesk_ajax_content('/helpdesk/sendjson_form/'+id, 'helpdesk_list');
 }
 
 function load_comment_form(id){
-	helpdesk_ajax_content('/helpdesk/sendjson_comment_form/'+id, 'comment_view');
+	helpdesk_ajax_content('/helpdesk/sendjson_comment_form/'+id, 'helpdesk_list');
 }
 
 function helpdesk_ajax_content_echo(json,divid,content){

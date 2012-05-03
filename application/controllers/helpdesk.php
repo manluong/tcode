@@ -180,7 +180,7 @@ class Helpdesk extends MY_Controller {
 					'target' => '',
 					'text' => 'Submit',
 					'type' => 'submit',
-					'url' => '/helpdesk/helpdesk_insert/a',
+					'url' => '/helpdesk/comment_insert/a',
 					'style' => 'default',
 					'icon' => '',
 				)
@@ -210,7 +210,7 @@ class Helpdesk extends MY_Controller {
 			$details['links'] = array(
 				array(
 				'type' => 'ajax',
-				'url' => '/helpdesk/returnjson_view',
+				'url' => '/helpdesk/sendjson_list',
 				'target' => '',
 				'text' => ''
 				)
@@ -218,6 +218,36 @@ class Helpdesk extends MY_Controller {
 			$message = 'Data saved.';
 		} else {
 			$details['data'] = $this->DS_Helpdesk->get_save_errors();
+			$message = 'There was an error saving your data';
+		}
+
+		$this->RespM->set_message($message)
+				->set_type('')
+				->set_template('')
+				->set_success($success)
+				->set_title('Save Hello Dataset')
+				->set_details($details)
+				->output_json();
+	}
+	
+	function comment_insert() {
+
+		$this->DS_Comment->subaction = 'a';
+		//$this->DS_Helpdesk->id = 1;
+		$success = $this->DS_Comment->save();
+
+		if ($success) {
+			$details['links'] = array(
+				array(
+				'type' => 'ajax',
+				'url' => '/helpdesk/sendjson_list',
+				'target' => '',
+				'text' => ''
+				)
+			);
+			$message = 'Data saved.';
+		} else {
+			$details['data'] = $this->DS_Comment->get_save_errors();
 			$message = 'There was an error saving your data';
 		}
 
@@ -273,7 +303,7 @@ class Helpdesk extends MY_Controller {
 			$details['links'] = array(
 				array(
 				'type' => 'ajax',
-				'url' => '/helpdesk/sendjson_form/'.$id,
+				'url' => '/helpdesk/sendjson_list',
 				'target' => '',
 				'text' => ''
 				)
