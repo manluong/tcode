@@ -67,7 +67,7 @@ class Api extends MY_Controller {
 			'target' => 'form',
 			'style' => 'primary',
 			'icon' => 'ok',
-			'text' => 'Save',
+			'text' => $this->lang->line('button_save'),
 		);
 
 		$this->RespM->set_message()
@@ -122,7 +122,7 @@ class Api extends MY_Controller {
 			'target' => 'form',
 			'style' => 'primary',
 			'icon' => 'ok',
-			'text' => 'Save',
+			'text' => $this->lang->line('button_save'),
 		);
 
 		$this->RespM->set_message()

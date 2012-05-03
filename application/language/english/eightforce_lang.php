@@ -303,7 +303,6 @@ $lang['core_select-select-access_rights_type-Allow_All'] = 'Allow All';
 $lang['core_select-select-access_rights_type-Deny_All'] = 'Deny All';
 $lang['core_select-select-access_rights_type-Custom'] = 'Custom';
 
-$lang['button_login'] = 'Login';
 $lang['access-login_status-3'] = 'Wrong Password';
 $lang['access-login_status-6'] = 'Email does not exist';
 $lang['access-login_status-7'] = 'This user account has been disabled';
@@ -437,6 +436,8 @@ $lang['a_helpdesk-created_card_id'] = 'Created Card Id';
 $lang['a_helpdesk-cc_email'] = 'Cc Email';
 $lang['a_helpdesk-modified_card_id'] = 'Modified card id';
 $lang['a_helpdesk-assign_id'] = 'Assigned';
+// Invoice
+$lang['a_invoice-a_invoice_id'] = 'Id';
 
 // comment
 $lang['a_helpdesk_comment-id'] = 'Id';
@@ -454,3 +455,7 @@ $lang['a_helpdesk_comment-modified_stamp'] = 'Modified Stamp';
 $lang['a_helpdesk_comment-created_card_id'] = 'Created Card Id';
 $lang['a_helpdesk_comment-created_stamp'] = 'Created Stamp';
 
+//buttons
+$lang['button_login'] = 'Login';
+$lang['button_edit'] = 'Edit';
+$lang['button_save'] = 'Save';
