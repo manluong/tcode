@@ -6,6 +6,7 @@ class Helpdesk extends MY_Controller {
 		parent::__construct();
 
 		$this->load->model('DS_Helpdesk');
+		$this->load->model('DS_Comment');
 	}
 
 	function index() {
@@ -66,7 +67,7 @@ class Helpdesk extends MY_Controller {
 
 	function sendjson_view() {
 		$data = $this->DS_Helpdesk->set_subaction('v')
-					->set_id(1)
+					->set_id(2)
 					->get_view_data();
 
 		$details = array(
@@ -76,7 +77,7 @@ class Helpdesk extends MY_Controller {
 					'target' => '',
 					'text' => 'Edit',
 					'type' => 'ajax',
-					'url' => '/helpdesk/sendjson_form/1/as',
+					'url' => '/helpdesk/sendjson_form/2/as',
 					'style' => 'default',
 					'icon' => '',
 				),
@@ -103,11 +104,9 @@ class Helpdesk extends MY_Controller {
 				->set_details($details)
 				->output_json();
 	}
-
-	function sendjson_form() {
-		$id = $this->input->post('id');
-		$data = $this->DS_Helpdesk->set_subaction('e')
-					 ->set_id(1)
+	
+	function sendjson_insert_form() {
+		$data = $this->DS_Helpdesk->set_subaction('a')
 					 ->get_form_data();
 
 		$details = array(
@@ -117,38 +116,7 @@ class Helpdesk extends MY_Controller {
 					'target' => '',
 					'text' => 'Submit',
 					'type' => 'submit',
-					'url' => '/helpdesk/sendjson_save/1/es',
-					'style' => 'default',
-					'icon' => '',
-				)
-			),
-			'setting' => array(
-				'hidelabel' => 0,
-			)
-		);
-
-		$this->RespM->set_message('sendjson_form')
-				->set_type('form')
-				->set_template('')
-				//->set_template('custom_editcard')//custom template
-				->set_success(true)
-				->set_title('HelpDesk Edit')
-				->set_details($details)
-				->output_json();
-	}
-
-	function helpdesk_insert() {
-		$data = $this->DS_Helpdesk->set_subaction('e')
-					 ->get_form_data();
-
-		$details = array(
-			'data' => $data,
-			'links' => array(
-				array(
-					'target' => '',
-					'text' => 'Submit',
-					'type' => 'submit',
-					'url' => '/helpdesk/sendjson_save/es',
+					'url' => '/helpdesk/helpdesk_insert/a',
 					'style' => 'default',
 					'icon' => '',
 				)
@@ -168,17 +136,174 @@ class Helpdesk extends MY_Controller {
 				->output_json();
 	}
 	
-	function sendjson_save() {
+	function sendjson_form($id) {
+		$data = $this->DS_Helpdesk->set_subaction('e')
+					 ->set_id($id)
+					 ->get_form_data();
 
-		$this->DS_Helpdesk->subaction = 'e';
-		$this->DS_Helpdesk->id = 1;
+		$details = array(
+			'data' => $data,
+			'links' => array(
+				array(
+					'target' => '',
+					'text' => 'Submit',
+					'type' => 'submit',
+					'url' => '/helpdesk/sendjson_save/'.$id.'/es',
+					'style' => 'default',
+					'icon' => '',
+				)
+			),
+			'setting' => array(
+				'hidelabel' => 0,
+			)
+		);
+
+		$this->RespM->set_message('sendjson_form')
+				->set_type('form')
+				->set_template('')
+				//->set_template('custom_editcard')//custom template
+				->set_success(true)
+				->set_title('HelpDesk Edit')
+				->set_details($details)
+				->output_json();
+	}
+
+	function sendjson_comment_form($id) {
+		
+		$data = $this->DS_Comment->set_subaction('a')
+					 ->get_form_data();
+
+		$details = array(
+			'data' => $data,
+			'links' => array(
+				array(
+					'target' => '',
+					'text' => 'Submit',
+					'type' => 'submit',
+					'url' => '/helpdesk/comment_insert/a',
+					'style' => 'default',
+					'icon' => '',
+				)
+			),
+			'setting' => array(
+				'hidelabel' => 0,
+			)
+		);
+
+		$this->RespM->set_message('sendjson_form')
+				->set_type('form')
+				->set_template('')
+				//->set_template('custom_editcard')//custom template
+				->set_success(true)
+				->set_title('Comment Insert')
+				->set_details($details)
+				->output_json();
+	}
+	
+	function helpdesk_insert() {
+
+		$this->DS_Helpdesk->subaction = 'a';
+		//$this->DS_Helpdesk->id = 1;
 		$success = $this->DS_Helpdesk->save();
 
 		if ($success) {
 			$details['links'] = array(
 				array(
 				'type' => 'ajax',
-				'url' => '/helpdesk/returnjson_view',
+				'url' => '/helpdesk/sendjson_list',
+				'target' => '',
+				'text' => ''
+				)
+			);
+			$message = 'Data saved.';
+		} else {
+			$details['data'] = $this->DS_Helpdesk->get_save_errors();
+			$message = 'There was an error saving your data';
+		}
+
+		$this->RespM->set_message($message)
+				->set_type('')
+				->set_template('')
+				->set_success($success)
+				->set_title('Save Hello Dataset')
+				->set_details($details)
+				->output_json();
+	}
+	
+	function comment_insert() {
+
+		$this->DS_Comment->subaction = 'a';
+		//$this->DS_Helpdesk->id = 1;
+		$success = $this->DS_Comment->save();
+
+		if ($success) {
+			$details['links'] = array(
+				array(
+				'type' => 'ajax',
+				'url' => '/helpdesk/sendjson_list',
+				'target' => '',
+				'text' => ''
+				)
+			);
+			$message = 'Data saved.';
+		} else {
+			$details['data'] = $this->DS_Comment->get_save_errors();
+			$message = 'There was an error saving your data';
+		}
+
+		$this->RespM->set_message($message)
+				->set_type('')
+				->set_template('')
+				->set_success($success)
+				->set_title('Save Hello Dataset')
+				->set_details($details)
+				->output_json();
+	}
+	
+	/*
+	function helpdesk_insert() {
+		$data = $this->DS_Helpdesk->set_subaction('a')
+					 ->get_form_data();
+
+		$details = array(
+			'data' => $data,
+			'links' => array(
+				array(
+					'target' => '',
+					'text' => 'Submit',
+					'type' => 'submit',
+					'url' => '/helpdesk/helpdesk_insert/a',
+					'style' => 'default',
+					'icon' => '',
+				)
+			),
+			'setting' => array(
+				'hidelabel' => 0,
+			)
+		);
+
+		$this->RespM->set_message('sendjson_form')
+				->set_type('form')
+				->set_template('')
+				//->set_template('custom_editcard')//custom template
+				->set_success(true)
+				->set_title('HelpDesk Insert')
+				->set_details($details)
+				->output_json();
+	}
+	*/
+	
+	function sendjson_save($id) {
+
+		$this->DS_Helpdesk->subaction = 'e';
+		$this->DS_Helpdesk->id = $id;
+		$success = $this->DS_Helpdesk->save();
+
+		if ($success) {
+			$details['links'] = array(
+				array(
+				'type' => 'ajax',
+				'url' => '/helpdesk/sendjson_list',
 				'target' => '',
 				'text' => ''
 				)
