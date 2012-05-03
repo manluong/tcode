@@ -14,35 +14,6 @@ class Invoice extends MY_Controller {
 		$this->_do_output();
 	}
 
-	function sendhtml() {
-		$data = array();
-		$data['html'] = "I am a some HTML";
-		$data['isoutput'] = 1;
-		$data['isdiv'] = 0;
-		echo $data['html'];
-		return($data);
-	}
-
-	function sendjson() {
-		$data = array();
-		$data['json'] = '{"element_type":"helloworld","message":"Hello World!"}';
-		$data['isoutput'] = 1;
-		$data['isdiv'] = 0;
-
-		return($data);
-	}
-
-	function sendjs() {
-		$data = array();
-		$data['json'] = '//js
-
-		';//alert("Hello JS");
-		$data['isoutput'] = 1;
-		$data['isdiv'] = 0;
-
-		return($data);
-	}
-
 	function sendjson_list() {
 		$this->DS_Invoice->set_subaction('l');
 
@@ -64,9 +35,9 @@ class Invoice extends MY_Controller {
 				->output_json();
 	}
 
-	function sendjson_view() {
+	function sendjson_view($id) {
 		$data = $this->DS_Invoice->set_subaction('v')
-					->set_id(1)
+					->set_id($id)
 					->get_view_data();
 
 		$details = array(
@@ -76,17 +47,9 @@ class Invoice extends MY_Controller {
 					'target' => '',
 					'text' => 'Edit',
 					'type' => 'ajax',
-					'url' => '/invoice/sendjson_form/1/as',
+					'url' => '/invoice/sendjson_edit/'.$id,
 					'style' => 'default',
 					'icon' => '',
-				),
-				array(
-					'target' => '',
-					'text' => 'Cancel',
-					'type' => 'ajax',
-					'url' => '/invoice/contact/1/v',
-					'style' => 'warning',
-					'icon' => 'trash',
 				)
 			),
 			'setting' => array(
@@ -97,18 +60,16 @@ class Invoice extends MY_Controller {
 		$this->RespM->set_message('sendjson_view')
 				->set_type('view')
 				->set_template('')
-				//->set_template('custom_viewcard')//custom template
 				->set_success(true)
-				->set_title('HelpDesk View')
+				->set_title('Invoice View')
 				->set_details($details)
 				->output_json();
 	}
 
-	function sendjson_form() {
-		$id = $this->input->post('id');
-		$data = $this->DS_Helpdesk->set_subaction('e')
-					 ->set_id(1)
-					 ->get_form_data();
+	function sendjson_edit($id) {
+		$data = $this->DS_Invoice->set_subaction('e')
+					->set_id($id)
+					->get_form_data();
 
 		$details = array(
 			'data' => $data,
@@ -117,40 +78,17 @@ class Invoice extends MY_Controller {
 					'target' => '',
 					'text' => 'Submit',
 					'type' => 'submit',
-					'url' => '/helpdesk/sendjson_save/1/es',
+					'url' => '/invoice/sendjson_save_edit/'.$id,
 					'style' => 'default',
 					'icon' => '',
-				)
-			),
-			'setting' => array(
-				'hidelabel' => 0,
-			)
-		);
-
-		$this->RespM->set_message('sendjson_form')
-				->set_type('form')
-				->set_template('')
-				//->set_template('custom_editcard')//custom template
-				->set_success(true)
-				->set_title('HelpDesk Edit')
-				->set_details($details)
-				->output_json();
-	}
-
-	function helpdesk_insert() {
-		$data = $this->DS_Helpdesk->set_subaction('e')
-					 ->get_form_data();
-
-		$details = array(
-			'data' => $data,
-			'links' => array(
+				),
 				array(
 					'target' => '',
-					'text' => 'Submit',
-					'type' => 'submit',
-					'url' => '/helpdesk/sendjson_save/es',
-					'style' => 'default',
-					'icon' => '',
+					'text' => 'Cancel',
+					'type' => 'ajax',
+					'url' => '/invoice/sendjson_view/'.$id,
+					'style' => 'warning',
+					'icon' => 'trash',
 				)
 			),
 			'setting' => array(
@@ -158,34 +96,31 @@ class Invoice extends MY_Controller {
 			)
 		);
 
-		$this->RespM->set_message('sendjson_form')
+		$this->RespM->set_message('sendjson_edit')
 				->set_type('form')
 				->set_template('')
-				//->set_template('custom_editcard')//custom template
 				->set_success(true)
-				->set_title('HelpDesk Insert')
+				->set_title('Invoice Edit')
 				->set_details($details)
 				->output_json();
 	}
 
-	function sendjson_save() {
-
-		$this->DS_Helpdesk->subaction = 'e';
-		$this->DS_Helpdesk->id = 1;
-		$success = $this->DS_Helpdesk->save();
+	function sendjson_save_edit($id) {
+		$success = $this->DS_Invoice->set_subaction('e')
+						->set_id($id)->save();
 
 		if ($success) {
 			$details['links'] = array(
 				array(
-				'type' => 'ajax',
-				'url' => '/helpdesk/returnjson_view',
-				'target' => '',
-				'text' => ''
+					'type' => 'ajax',
+					'url' => '/invoice/sendjson_view/'.$id,
+					'target' => '',
+					'text' => ''
 				)
 			);
 			$message = 'Data saved.';
 		} else {
-			$details['data'] = $this->DS_Helpdesk->get_save_errors();
+			$details['data'] = $this->DS_Invoice->get_save_errors();
 			$message = 'There was an error saving your data';
 		}
 
@@ -193,42 +128,66 @@ class Invoice extends MY_Controller {
 				->set_type('')
 				->set_template('')
 				->set_success($success)
-				->set_title('Save Hello Dataset')
+				->set_title('Invoice Save')
 				->set_details($details)
 				->output_json();
 	}
 
-	function show_data() {
-		$this->DS_Helpdesk->subaction = 'e';
-		$this->DS_Helpdesk->id = 150;
+	function sendjson_new() {
+		$data = $this->DS_Invoice->set_subaction('a')
+					->get_form_data();
 
-		$data = $this->DS_Helpdesk->get_form_data();
+		$details = array(
+			'data' => $data,
+			'links' => array(
+				array(
+					'target' => '',
+					'text' => 'Submit',
+					'type' => 'submit',
+					'url' => '/invoice/sendjson_save_new',
+					'style' => 'default',
+					'icon' => '',
+				)
+			),
+			'setting' => array(
+				'hidelabel' => 0,
+			)
+		);
 
-		echo '<pre>', print_r($data, TRUE), '</pre>';
+		$this->RespM->set_message('sendjson_new')
+				->set_type('form')
+				->set_template('')
+				->set_success(true)
+				->set_title('Invoice Insert')
+				->set_details($details)
+				->output_json();
 	}
 
-	function sendjson_sample(){
+	function sendjson_save_new() {
+		$success = $this->DS_Invoice->set_subaction('a')
+						->save();
 
-		//sample json respond
-		//for testing
+		if ($success) {
+			$details['links'] = array(
+				array(
+					'type' => 'ajax',
+					'url' => '/invoice/sendjson_list',
+					'target' => '',
+					'text' => ''
+				)
+			);
+			$message = 'Data saved.';
+		} else {
+			$details['data'] = $this->DS_Invoice->get_save_errors();
+			$message = 'There was an error saving your data';
+		}
 
-		$data = array();
-		$links = ',"links":[{"type":"submit","url":"/helloworld/returnjson_save/1/es","target":"","text":"Submit"},{"type":"ajax","url":"/helloworld/contact/1/v","target":"","text":"Cancel","style":"","icon":""}]';
-
-		//for list
-		$data['json'] = '{"success":"1","message":"1","template":"1","title":"Title","type":"view","details":{"setting":{"hidelabel":"0"}'.$links.',"data":[{"fieldname":"firstname","label":"First Name","value":"Anthony"},{"fieldname":"lastname","label":"Last Name","value":"Andy"}]}}';
-
-		//for view
-		$data['json'] = '{"success":"1","message":"1","template":"1","title":"Title","type":"list","details":{"columns":[{"sTitle":null},{"sTitle":null},{"sTitle":null},{"sTitle":null},{"sTitle":null},{"sTitle":""}],"data":[["3","Willson","W.","Willson","Intern7","<div class=\"ar bu-div\"><button type=\"button\" class=\"btn\" onclick=\"ajax_content(\'\/staff\/viewstaff\/nttpw%3D%3D\/v\',\'page\');\"><\/button><\/div>"],["4","John","J.","Jo","","<div class=\"ar bu-div\"><button type=\"button\" class=\"btn\" onclick=\"apps_action_pageload(\'\/staff\/viewstaff\/nttqA%3D%3D\/v\');\"><\/button><\/div>"]],"setting":{"hidetitle":"0"}'.$links.'}}';
-
-		$data['isoutput'] = 1;
-		$data['isdiv'] = 0;
-		return($data);
-
+		$this->RespM->set_message($message)
+				->set_type('')
+				->set_template('')
+				->set_success($success)
+				->set_title('Invoice Save')
+				->set_details($details)
+				->output_json();
 	}
-
-	function test_url() {
-		echo '<pre>', print_r($this->url, TRUE), '</pre>';
-	}
-
 }
