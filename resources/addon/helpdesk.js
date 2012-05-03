@@ -1,3 +1,4 @@
+
 function helpdesk_ajax_content(url,divid) {
     $.get(
 		url,
@@ -34,6 +35,8 @@ function helpdesk_ajax_content_json(jarray,divid) {
 	switch (json['type']) {
 		case 'list':
 		helpdesk_ajax_content_list(json,divid,links);
+		insert_edit_button();
+		insert_comment_button();
 		break;
 
 		case 'view':
@@ -42,6 +45,7 @@ function helpdesk_ajax_content_json(jarray,divid) {
 
 		case 'form':
 		helpdesk_ajax_content_form(json,divid,links);
+		$('#form_a_helpdesk_created_stamp').parent().parent().hide();
 		break;
 
 		case 'save':
@@ -50,6 +54,30 @@ function helpdesk_ajax_content_json(jarray,divid) {
 
 	}
 
+}
+
+function insert_edit_button(){
+	$('<th class="sorting" rowspan="1" colspan="1" style="width: 45px;">Order</th>').insertAfter('.sorting:last');
+	$.each($("tbody tr"),function(index,value){
+		var i = $(this).children(":first-child").html();
+		$(this).append('<td><a onclick="load_edit_form('+i+')","helpdesk_view");" href="#" class="btn btn-default">Edit</a></td>');
+	})
+}
+
+function insert_comment_button(){
+	$('<th class="sorting" rowspan="1" colspan="1" style="width: 45px;">Comment</th>').insertAfter('.sorting:last');
+	$.each($("tbody tr"),function(index,value){
+		var i = $(this).children(":first-child").html();
+		$(this).append('<td><a onclick="load_comment_form('+i+')","helpdesk_view");" href="#" class="btn btn-default">Comment</a></td>');
+	})
+}
+
+function load_edit_form(id){
+	helpdesk_ajax_content('/helpdesk/sendjson_form/'+id, 'helpdesk_view');
+}
+
+function load_comment_form(id){
+	helpdesk_ajax_content('/helpdesk/sendjson_comment_form/'+id, 'comment_view');
 }
 
 function helpdesk_ajax_content_echo(json,divid,content){
