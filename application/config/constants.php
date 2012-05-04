@@ -41,5 +41,8 @@ define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 define('DOCUMENT_ROOT',		'.');
 
 
+define('SINGLE_DATA', 'single');
+define('MULTIPLE_DATA', 'multiple');
+
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */
