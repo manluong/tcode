@@ -367,4 +367,60 @@ function invoice_ajax_content_errorstyle(){
 }
 
 
+function add_row(object) {
+	var html = '' +
+		'<tr>' +
+		'<td><a href="#" class="add">+</a></td>' +
+		'<td><input type="text" class="input_table"></td>' +
+		'<td><input type="text" class="input_table"></td>' +
+		'<td><input type="text" class="input_table"></td>' +
+		'<td><input type="text" class="input_table"></td>' +
+		'<td><input type="text" class="input_table"></td>' +
+		'<td><input type="text" class="input_table"></td>' +
+		'<td><input type="text" class="input_table"></td>' +
+		'<td><a href="#" class="remove">x</a></td>' +
+		'</tr>';
+	
+	if ($(object).prop('nodeName').toLowerCase() == 'table') {
+		$(object).append(html);
+	} else {
+		var tr = $(object).closest('tr');
+		$(tr).after(html);
+	}
+}
 
+function remove_row(object) {
+	var tr = $(object).closest('tr');
+	var table = $(tr).closest('table');
+	
+	tr.remove();
+	
+	if ($(table).find('tr').length == 1) {
+		add_row(table);
+	}
+}
+
+$(document).ready(function() {
+	$('.datepicker').datetimepicker();
+	$('a.add').live('click', function(e) {
+		e.preventDefault();
+		add_row(this);
+	});
+	$('a.remove').live('click', function(e) {
+		e.preventDefault();
+		remove_row(this);
+	});
+	
+	//$('#submit_btn').click(function() {
+	//	$.ajax({
+	//		type: "POST",
+	//		url: $('#invoice_form').attr('action'),
+	//		data: $("#invoice_form").serialize(),
+	//		success: function(resp) {
+	//			console.log(resp);
+	//		}
+	//	});
+	//
+	//	return false;
+	//});
+});
