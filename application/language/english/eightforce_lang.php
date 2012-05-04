@@ -436,8 +436,21 @@ $lang['a_helpdesk-created_card_id'] = 'Created Card Id';
 $lang['a_helpdesk-cc_email'] = 'Cc Email';
 $lang['a_helpdesk-modified_card_id'] = 'Modified card id';
 $lang['a_helpdesk-assign_id'] = 'Assigned';
+
+
 // Invoice
 $lang['a_invoice-a_invoice_id'] = 'Id';
+$lang['a_invoice-a_invoice_customer_card_id'] = 'Customer Card Id';
+$lang['a_invoice-a_invoice_invoice_stamp'] = 'Invoice Stamp';
+$lang['a_invoice-a_invoice_payment_due_stamp'] = 'Payment Due Stamp';
+$lang['a_invoice-a_invoice_currency'] = 'Currency';
+$lang['a_invoice-a_invoice_tax_id'] = 'Tax Id';
+$lang['a_invoice-a_invoice_custpo'] = 'Custpo';
+$lang['a_invoice-a_invoice_acc_code'] = 'Acc Code';
+$lang['a_invoice-a_invoice_modified_card_id'] = 'Modified Card Id';
+$lang['a_invoice-a_invoice_modified_stamp'] = 'Modified Stamp';
+$lang['a_invoice-a_invoice_created_card_id'] = 'Created Card Id';
+$lang['a_invoice-a_invoice_created_stamp'] = 'Created Stamp';
 
 // comment
 $lang['a_helpdesk_comment-id'] = 'Id';

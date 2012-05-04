@@ -1,25 +1,25 @@
-function ajax_content(url, divid) {
+function invoice_ajax_content(url,divid) {
     $.get(
 		url,
 		function(loader) {
 			//load full page
 			//to fix with pjax
-			if (divid == 'page'){
+			if (divid == "page"){
 				$.pjax({
 					url: url,
 					container: '#content-container'
 				});
 			} else {
-				ajax_content_json(loader, divid);
+				invoice_ajax_content_json(loader, divid);
 			}
 		},
 		'json'
 	);
 }
 
-function ajax_content_json(jarray,divid) {
+function invoice_ajax_content_json(jarray,divid) {
 	var json = '';
-
+	
 	if (typeof jarray != 'object') {
 		json = jQuery.parseJSON( jarray );
 	} else {
@@ -28,31 +28,31 @@ function ajax_content_json(jarray,divid) {
 
 	var links = { html: '', bu: ''};
 	if (json['details']['links']){
-		links = ajax_content_links(json['details']['links'],divid);
+		links = invoice_ajax_content_links(json['details']['links'],divid);
 	}
 
 	switch (json['type']) {
 		case 'list':
-		ajax_content_list(json,divid,links);
+		invoice_ajax_content_list(json,divid,links);
 		break;
 
 		case 'view':
-		ajax_content_view(json,divid,links);
+		invoice_ajax_content_view(json,divid,links);
 		break;
 
 		case 'form':
-		ajax_content_form(json,divid,links);
+		invoice_ajax_content_form(json,divid,links);
 		break;
 
 		case 'save':
-		ajax_content_save(json,divid,links);
+		invoice_ajax_content_save(json,divid,links);
 		break;
 
 	}
 
 }
 
-function ajax_content_echo(json,divid,content){
+function invoice_ajax_content_echo(json,divid,content){
 	var view = {title: json['title'], content: content};
 	if (!json['template']) {
 		document.getElementById(divid).innerHTML = Mustache.to_html(tpl_c_stdwidget, view);
@@ -62,13 +62,12 @@ function ajax_content_echo(json,divid,content){
 }
 
 
-function ajax_content_list(json,divid,links){
-
+function invoice_ajax_content_list(json,divid,links){
 	var tableid = divid+"_table";
 	var thisid = "";
 	//if (json['details']['setting']['hidetitle'] == 1){
 
-	ajax_content_echo(json,divid,'<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="'+tableid+'"></table>'+links.html);
+	invoice_ajax_content_echo(json,divid,'<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="'+tableid+'"></table>'+links.html);
 
 	if (json['details']['listlinks']){
 		lslink = ajax_content_links(json['details']['listlinks'],divid);
@@ -80,7 +79,7 @@ function ajax_content_list(json,divid,links){
 		}
 		json['details']['columns'][cl] = {sTitle: ''};
 	}
-
+	
 	$('#'+tableid).dataTable( {
 		"aoColumns": json['details']['columns'],
 		"aaData": json['details']['data'],
@@ -109,7 +108,7 @@ function ajax_content_list(json,divid,links){
 
 }
 
-function ajax_content_view(json,divid,links){
+function invoice_ajax_content_view(json,divid,links){
 
 	var html = "";
 	var thisLength = json['details']['data'].length;
@@ -127,15 +126,15 @@ function ajax_content_view(json,divid,links){
 	if (!json['template']) {
 		html = html + links.html;
 		var view = {content: html};
-		ajax_content_echo(json,divid,Mustache.to_html(tpl_content_viewwarp, view));
+		invoice_ajax_content_echo(json,divid,Mustache.to_html(tpl_content_viewwarp, view));
 	} else {
 		jsonformat['links'] = links.bu;
-		ajax_content_echo(json,divid,jsonformat);
+		invoice_ajax_content_echo(json,divid,jsonformat);
 	}
 
 }
 
-function ajax_content_form(json,divid,links){
+function invoice_ajax_content_form(json,divid,links){
 
 	var html = "";
 	var thisLength = json['details']['data'].length;
@@ -178,10 +177,10 @@ function ajax_content_form(json,divid,links){
 	if (!json['template']) {
 		jsonformat.divid = divid;
 		jsonformat.links = links.html;
-		ajax_content_echo(json,divid,Mustache.to_html(tpl_form_ctlgroup, jsonformat));
+		invoice_ajax_content_echo(json,divid,Mustache.to_html(tpl_form_ctlgroup, jsonformat));
 	} else {
 		jsonformat['links'] = links.bu;
-		ajax_content_echo(json,divid,jsonformat);
+		invoice_ajax_content_echo(json,divid,jsonformat);
 	}
 
 
@@ -217,11 +216,11 @@ function ajax_content_form(json,divid,links){
 		//}
 
 	}
-	ajax_content_errorstyle();
-    ajax_content_submit(divid,links.submiturl,json);
+	invoice_ajax_content_errorstyle();
+    invoice_ajax_content_submit(divid,links.submiturl,json);
 }
 
-function ajax_content_submit(divid,submiturl,json){
+function invoice_ajax_content_submit(divid,submiturl,json){
 
 	//formui_removeerrmeg('formid_'+element_id);
 
@@ -251,14 +250,12 @@ function ajax_content_submit(divid,submiturl,json){
 						//auto redirect if there is only 1 button, auto go the the page in the button
 						if (buLength == 1){
 							if (json['details']['links'][0]['target'] == "") json['details']['links'][0]['target'] = divid;
-							ajax_content(json['details']['links'][0]['url'],json['details']['links'][0]['target']);
-							console.log(json['details']['links'][0]);
+							invoice_ajax_content(json['details']['links'][0]['url'],json['details']['links'][0]['target']);
 						}
 
 					} else if (json['details']['data']) {
 						//server-side validation failed. use invalidate() to show errors
 						//return as {"fieldname":"message"}
-						//console.log(json['details']['data']);
 						form.data("validator").invalidate(json['details']['data']);
 
 					} else if (json['message']) {
@@ -274,7 +271,7 @@ function ajax_content_submit(divid,submiturl,json){
 
 }
 
-function ajax_content_links(links,divid){
+function invoice_ajax_content_links(links,divid){
 
 	var linkhtml = "";
 	var linkre = {};
@@ -305,7 +302,7 @@ function ajax_content_links(links,divid){
 }
 
 
-function ajax_content_errorstyle(){
+function invoice_ajax_content_errorstyle(){
 // Replace Jquery Tool error message style with twitter-bootstrap, directly cut and paste code from:
 // http://wezfurlong.org/blog/2011/dec/jquery-tools-form-validator-and-twitter-bootstrap/
     $(function () {
