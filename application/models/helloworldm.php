@@ -45,7 +45,6 @@ class HelloworldM extends MY_Model {
 
 	function __construct() {
 		$this->table = 'card';
-		$this->id_field = 'id';
 		$this->cache_enabled = TRUE;
 
 		parent::__construct();
