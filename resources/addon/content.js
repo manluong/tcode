@@ -1,10 +1,10 @@
-function ajax_content(url,divid) {
+function ajax_content(url, divid) {
     $.get(
 		url,
 		function(loader) {
 			//load full page
 			//to fix with pjax
-			if (divid == "page"){
+			if (divid == 'page'){
 				$.pjax({
 					url: url,
 					container: '#content-container'
