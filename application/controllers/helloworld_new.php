@@ -9,8 +9,7 @@ class Helloworld_new extends MY_Controller {
 	}
 
 	function index() {
-		$this->HelloworldM->limit = 5;
-		$view_data['list'] = $this->HelloworldM->get_list();
+		$view_data['list'] = $this->HelloworldM->get($this->UserM->get_card_id());
 		$this->data['content'] = $this->load->view(get_template().'/helloworld_new/index', $view_data, TRUE);
 
 		$this->_do_output();
