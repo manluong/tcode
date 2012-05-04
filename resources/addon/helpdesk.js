@@ -86,7 +86,15 @@ function load_edit_form(id){
 }
 
 function load_comment_form(id){
-	helpdesk_ajax_content('/helpdesk/sendjson_comment_form/'+id, 'helpdesk_list');
+	var url = '/helpdesk/sendjson_comment_form/';
+	$.post(url,{
+				id: id
+			},function(data){
+				$('#helpdesk_list').html(data);
+			}
+		);
+		
+	//helpdesk_ajax_content('/helpdesk/sendjson_comment_form/'+id, 'helpdesk_list');
 }
 
 function helpdesk_ajax_content_echo(json,divid,content){

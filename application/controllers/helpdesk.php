@@ -168,36 +168,44 @@ class Helpdesk extends MY_Controller {
 				->output_json();
 	}
 
-	function sendjson_comment_form($id) {
+	function sendjson_comment_form() {
+
+		$data = array(
+			'id' => $this->input->post('id'),
+			'group' =>  $this->DS_Comment->getGroup(),
+			'status' => $this->DS_Comment->getStatus(),
+			'priority' => $this->DS_Comment->getPriority(),
+			'type' => $this->DS_Comment->getType(),
+			'comment' => $this->DS_Comment->getContent($this->input->post('id')),
+		);	
 		
-		$data = $this->DS_Comment->set_subaction('a')
-					 ->get_form_data();
-
-		$details = array(
-			'data' => $data,
-			'links' => array(
-				array(
-					'target' => '',
-					'text' => 'Submit',
-					'type' => 'submit',
-					'url' => '/helpdesk/comment_insert/a',
-					'style' => 'default',
-					'icon' => '',
-				)
-			),
-			'setting' => array(
-				'hidelabel' => 0,
-			)
+		/*
+		echo '<pre>';
+		print_r($content);
+		echo '</pre>';
+		exit;
+		*/
+		$content = $this->load->view(get_template().'/helpdesk/comment',$data ,true);
+		echo $content;
+			
+	}
+	
+	function save_comment(){
+		$id_helpdesk = $this->input->post('id');
+		$data = array(
+			'group' => $this->input->post('group'),
+			'status' => $this->input->post('status'),
+			'type' => $this->input->post('type'),
+			'priority' => $this->input->post('priority'),
+			'comment' => $this->input->post('comment'),
+			'private' => $this->input->post('pri'),
+			'helpdesk_id' => $id_helpdesk ,
 		);
-
-		$this->RespM->set_message('sendjson_form')
-				->set_type('form')
-				->set_template('')
-				//->set_template('custom_editcard')//custom template
-				->set_success(true)
-				->set_title('Comment Insert')
-				->set_details($details)
-				->output_json();
+		$insert_id = $this->DS_Comment->save($data);
+		
+		$data_ajax['comment'] = $this->DS_Comment->getContent($id_helpdesk);
+		$ajax_content = $this->load->view(get_template().'/helpdesk/ajax_updateComment',$data_ajax ,true);
+		echo $ajax_content;
 	}
 	
 	function helpdesk_insert() {

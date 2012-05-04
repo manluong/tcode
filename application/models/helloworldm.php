@@ -42,7 +42,7 @@ class HelloworldM extends MY_Model {
 
 	);
 
-
+	
 	function __construct() {
 		$this->table = 'card';
 		$this->cache_enabled = TRUE;

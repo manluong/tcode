@@ -35,16 +35,15 @@ function show_form_show(){
 		}
 	);
 	
-	
 }
 
 function submit_comment(){
-	var comment = $('#comment').val();
+	var comment = $('#a_helpdesk_comment_comment').val();
 	var id = $('#hiddenIdAdmincp').val();
-	var group = $('#group').val();
-	var status = $('#status_helpdesk').val();
-	var type = $('#type').val();
-	var priority = $('#priority').val();
+	var group = $('#a_helpdesk_comment_group').val();
+	var status = $('#a_helpdesk_comment_status').val();
+	var type = $('#a_helpdesk_comment_type').val();
+	var priority = $('#a_helpdesk_comment_priority').val();
 	if($('#private').is(':checked')){
 		var pri = 1;
 	}else{
@@ -54,7 +53,7 @@ function submit_comment(){
 		alert('Please input comment !');
 		return false;
 	}
-	var url = '<?=PATH_URL?>/helpdesk/ajaxUpdateComment/';
+	var url = 'helpdesk/save_comment/';
 	$.post(url,{
 			id : id,
 			comment: comment,
@@ -64,6 +63,7 @@ function submit_comment(){
 			type:type,
 			priority:priority,
 		},function(data){
+			alert(data);
 			$('#ajax_comment_left').html(data);
 			$('#comment').attr('value','');
 		}
@@ -71,7 +71,8 @@ function submit_comment(){
 	
 }
 </script>
-<div class="table">
+
+<div class="table" style="width:1096px;">
 	<div class="head_table">
 		<div class="head_title_edit"><?=$module?></div>
 		<div class="top_menu">
@@ -119,7 +120,7 @@ function submit_comment(){
 		<ul>
 			<li class="controls">
 				<label class="control-label" for="select01">Group\Department</label>
-				<select  name="group" id="group">
+				<select  name="a_helpdesk_comment_group" id="a_helpdesk_comment_group">
 					<option value="">something</option>
 					<?php if(!empty($group)){
 							if(!empty($result->group)){
@@ -135,7 +136,7 @@ function submit_comment(){
 			</li>
 			<li class="controls">
 				<label class="control-label" for="select01">Status</label>
-				<select  id="status_helpdesk" name="status">
+				<select  id="a_helpdesk_comment_status" name="a_helpdesk_comment_status">
 					<option value="">something</option>
 					<?php if(!empty($status)){
 							if(!empty($result->status)){
@@ -151,7 +152,7 @@ function submit_comment(){
 			</li>
 			<li class="controls">
 				<label class="control-label" for="select01">Type</label>
-				<select  id="type" name="type">
+				<select  id="a_helpdesk_comment_type" name="a_helpdesk_comment_type">
 					<option value="">something</option>
 					<?php if(!empty($type)){
 							if(!empty($result->type)){
@@ -167,7 +168,7 @@ function submit_comment(){
 			</li>
 			<li class="controls">
 				<label class="control-label" for="select01">Priority</label>
-				<select id="priority" name="priority">
+				<select id="a_helpdesk_comment_priority" name="a_helpdesk_comment_priority">
 					<option value="">something</option>
 					<?php if(!empty($pri)){
 							if(!empty($result->priority)){
@@ -183,7 +184,7 @@ function submit_comment(){
 			</li>
 
 			<li class="controls" style="width:100%;">
-				<textarea rows="3" id="comment" value="" class="input-xlarge"></textarea>
+				<textarea rows="3" id="a_helpdesk_comment_comment" value="" class="input-xlarge"></textarea>
 			</li>
 			<li class="controls" style="width:100%;">
 				<label class="checkbox">
@@ -208,7 +209,7 @@ function submit_comment(){
 				?>
 				<div id="comment_content_left">
 					<div id="wap_comment_left">
-						<div id="wap_icon_mail"><image src="/resources/template/<?=get_template()?>/images/mail.png" /></div>
+						<div id="wap_icon_mail"><image src="/resources/template/<?=get_template()?>/img/mail.png" /></div>
 						<div id="comment_name">Andy<br/><a href="#">Company A</a></div>
 						<div id="comment_time"><?=$date?></div>
 					</div>
