@@ -138,9 +138,9 @@ class Helpdesk extends MY_Controller {
 	
 	function sendjson_form($id) {
 		$data = $this->DS_Helpdesk->set_subaction('e')
-					 ->set_id($id)
+					 ->set_id(1)
 					 ->get_form_data();
-
+		
 		$details = array(
 			'data' => $data,
 			'links' => array(
@@ -354,6 +354,10 @@ class Helpdesk extends MY_Controller {
 
 	function test_url() {
 		echo '<pre>', print_r($this->url, TRUE), '</pre>';
+	}
+	
+	function comment_view(){
+		$this->load->view(get_template().'/helpdesk/comment');
 	}
 
 }

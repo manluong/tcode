@@ -1,0 +1,220 @@
+img{
+	border:0px;
+}
+
+a{
+	text-decoration: none;
+}
+
+a:hover{
+	text-decoration: underline;
+}
+
+*{
+	margin: 0px;
+	padding: 0px;
+	outline: 0 none;
+}
+
+
+ul {
+    list-style: none outside none;
+}
+ul li{
+	list-style:none;
+}
+.clearAll{ clear: both; font-size: 0px; width: 0px; height: 0px; }
+
+html, body{
+	margin: 0px;
+	padding: 0px;
+	font-family: Arial;
+	font-size: 12px;
+}
+
+/* CSS Phân trang */
+
+.pag_active{
+	margin: 0 3px;
+	border: 1px solid #D2147F;
+	padding: 2px 5px;
+	color: #D2147F;
+}
+
+.pag_link{
+	margin: 0 3px;
+	border: 1px solid #000;
+	padding: 2px 5px;
+	color: #000;
+}
+
+.pag_link:hover{
+	border: 1px solid #D2147F;
+	color: #D2147F;
+	text-decoration: none;
+}
+
+.pag_first{
+	margin: 0 3px;
+	border: 1px solid #000;
+	padding: 2px 5px;
+	color: #000;
+}
+
+.pag_first:hover{
+	border: 1px solid #D2147F;
+	color: #D2147F;
+	text-decoration: none;
+}
+
+.last_first{
+	margin: 0 3px;
+	border: 1px solid #000;
+	padding: 2px 5px;
+	color: #000;
+}
+
+.last_first:hover{
+	border: 1px solid #D2147F;
+	color: #D2147F;
+	text-decoration: none;
+}
+/* End CSS Phân trang */
+
+/* CSS HelpDesk */
+.top_menu{
+	float:right;
+	color:#424242;
+	font-family:'Cuprum',Arial;
+	font-size:16px;
+	padding:9px 35px 0 0 ;
+}
+.top_menu ul li {
+	float:left;
+	margin-left:20px;
+	display:inline;
+}
+.head_helpdesk{
+	width:100%;
+	height:60px;
+	padding-top:20px;
+	font-weight:bold;
+}
+.head_helpdesk #content_left{
+	float:left;
+	margin-left:35px;
+	display:inline;
+}
+#content_right{
+	float:right;
+	padding-right:35px;
+}
+#time_curent{
+	float:right;
+}
+#time_update{
+	font-style:italic;
+	font-weight:normal;
+}
+#helpdesk_info{
+	margin-left:35px;
+	height:220px;
+	background-color: #EEEEEE;
+    background-image: -moz-linear-gradient(center top , #F5F5F5 0%, #EEEEEE 100%);
+    background-repeat: repeat-x;
+    border: 1px solid #E5E5E5;
+    border-radius: 4px 4px 4px 4px;
+	width:900px;
+}
+#helpdesk_info #form_show li{
+	margin-top:20px;
+	float:left;
+	width:100%;
+}
+#helpdesk_info #form_change  li{
+	margin-top:16px;
+	float:left;
+	width:100%;
+}
+.input_change{
+	float: left;
+    margin-top: -8px;
+}
+
+#helpdesk_select{
+	padding:20px 0 0 10px;
+	height:280px;
+}
+#helpdesk_select ul li{
+	float:left;
+	margin-right:20px;
+}
+.helpdesk_info_span{
+	width:70px;
+	margin-left:0px !important;
+}
+/* CSS HelpDesk */
+#main{
+	width: 960px;
+	margin: 0 auto;
+}
+#comment_info{
+	padding-left:35px;
+}
+#comment_h1{
+	font-size:20px;
+	width:130px;
+	float:left;
+	height:50px;
+}
+#comment_title{
+	height:50px;
+}
+#comment_content_left_1{
+	float:left;
+}
+#wap_icon_mail{
+	float:left;
+}
+#comment_name{
+	padding:6px 0 0 10px;
+	float:left;
+	width:125px;
+}
+#comment_content_left{
+	width:650px;
+	padding-top:20px;
+	float:left;
+}
+#comment_time{
+	float:left;
+	padding-top:10px;
+	margin-left:-49px;
+}
+	
+#wap_comment_left{
+	width:185px;
+	float:left;
+	height:60px;
+}
+#comment_content_right{
+	width:525px;
+	float:left;
+	margin-left:185px;
+}
+#comment_content{
+	padding-bottom:20px;
+}
+#info_comment p{
+	line-height:10px;
+}
+#info_comment{
+	height:150px;
+}
+.input-xlarge{
+	width:660px !important;
+	height:100px !important;
+}
+select{
+	width:150px !important;
+}
