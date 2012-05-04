@@ -1,15 +1,17 @@
 <?php if (!defined('BASEPATH')) exit('No direct access allowed.');
 
 class MY_Model extends CI_Model {
-	var $table = '';
-	var $id_field = '';
+	public $table = '';
+	public $id_field = '';
+	public $data_fields = array();
 
-	var $cache = array();
-	var $cache_enabled = FALSE;
+	public $cache = array();
+	public $cache_enabled = FALSE;
 
-	var $where = array();
-	var $limit = 0;
-	var $offset = 0;
+	public $where = array();
+	public $order_by = array();
+	public $limit = 0;
+	public $offset = 0;
 
 	function __construct() {
 		parent::__construct();
@@ -39,10 +41,12 @@ class MY_Model extends CI_Model {
 
 		if ($this->cache_enabled) $this->cache[$this->table][$result[$this->id_field]] = $result;
 
+		$this->fill_labels($result, TRUE);
+
 		return $result;
 	}
 
-	function get_list($limit=0, $offset=0) {
+	function get_list() {
 		$this->db->select()
 			->from($this->table);
 
@@ -52,9 +56,25 @@ class MY_Model extends CI_Model {
 			}
 		}
 
+		if (count($this->order_by) > 0) {
+			foreach($this->order_by AS $w) {
+				$this->db->order_by($w);
+			}
+		}
+
+		if ($this->limit > 0  && $this->offset > 0) {
+			$this->db->limit($this->limit, $this->offset);
+		} elseif ($this->limit > 0 && $this->offset == 0) {
+			$this->db->limit($this->limit);
+		} elseif ($this->limit == 0 && $this->offset > 0) {
+			$this->db->limit($this->limit, $this->offset);
+		}
+
 		$rs = $this->db->get();
 
 		$results = $rs->result_array();
+
+		$this->fill_labels($results);
 
 		return $results;
 	}
@@ -141,6 +161,95 @@ class MY_Model extends CI_Model {
 				if (isset($v['modified_card_id'])) $data[$k]['modified_card_info'] = $cards[$v['modified_card_id']];
 			}
 		}
+
+		/*
+		//end if there's no data
+		if (count($data) == 0) return;
+
+		//gather fields that have card_id inside, together with the values
+		$card_id_fields = array();
+		$card_ids = array();
+		if ($mode == 'single') {
+			foreach($data AS $k=>$v) {
+				if (strpos($k, 'card_id') !== FALSE) {
+					$card_id_fields[] = $k;
+					$card_ids[$v] = '';	//store ID as key so duplicate card_ids will be ignored
+				}
+			}
+		} else {
+			foreach($data AS $k=>$row) {
+				//on first loop, gather the card_id fields
+				if ($k == 0) {
+					foreach($row AS $sk=>$sv) {
+						if (strpos($sk, 'card_id') !== FALSE) $card_id_fields[] = $sk;
+					}
+				}
+
+				//on first loop and next, gather the card_id based on the fields gathered in first loop
+				foreach($card_id_fields AS $field) {
+					$card_ids[$row[$field]] = '';	//store ID as key so duplicate card_ids will be ignored
+				}
+			}
+		}
+		$card_ids = array_keys($card_ids);	//the card_ids were stored as array keys, so put them back into array values
+
+		//fetch card info based on gathered keys
+		$cards = $this->UserM->get_batch($card_ids, TRUE);
+
+		if ($this->single_data) {
+			foreach($card_id_fields AS $field) {
+				//create a new field_name
+				$card_field_name = str_replace($field, 'card_id', 'card_info');
+				if (isset($cards[$data[$field]])) {
+					//save the card_info to $this->data inside this new field name.
+					$data[$card_field_name] = $cards[$this->data[$field]];
+				} else {
+					$data[$card_field_name] = 'No card info for this card_id: '.$data[$field];
+				}
+			}
+		} else {
+			foreach($data AS $k=>$v) {
+				foreach($card_id_fields AS $field) {
+					$card_field_name = str_replace($field, 'card_id', 'card_info');
+					if (isset($cards[$v[$field]])) {
+						$data[$k][$card_field_name] = $cards[$v[$field]];
+					} else {
+						$data[$k][$card_field_name] = 'No card info for this card_id: '.$v[$field];
+					}
+				}
+			}
+		}
+
+		*/
+	}
+
+	function fill_labels(&$data,$single=false) {
+		$df = $this->data_fields;
+
+		//echo 'fill start<pre>',print_r($data,true),'</pre>';
+		if ($single) {
+			$temp = array();
+			foreach($data AS $k=>$v) {
+				if (isset($df[$k])) $temp[$k.'_label'] = $this->lang->line($this->table.'-'.$k);
+				if (isset($df[$k]['options'])) $temp[$k.'_options'] = $df[$k]['options'];
+			}
+			foreach($temp AS $sk=>$sv) {
+				$data[$sk] = $sv;
+			}
+		} else {
+			foreach($data AS $k=>$v) {
+				$temp = array();
+				foreach($v AS $sk=>$sv) {
+					if (isset($df[$sk])) $temp[$sk.'_label'] = $this->lang->line($this->table.'-'.$k);
+					if (isset($df[$sk]['options'])) $temp[$sk.'_options'] = $df[$sk]['options'];
+				}
+
+				foreach($temp AS $sk=>$sv) {
+					$data[$k][$sk] = $sv;
+				}
+			}
+		}
+		//echo 'fill end<pre>',print_r($data,true),'</pre>';
 	}
 
 }
