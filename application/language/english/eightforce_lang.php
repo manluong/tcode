@@ -472,3 +472,12 @@ $lang['a_helpdesk_comment-created_stamp'] = 'Created Stamp';
 $lang['button_login'] = 'Login';
 $lang['button_edit'] = 'Edit';
 $lang['button_save'] = 'Save';
+
+
+//error messages
+$lang['error-cannot_be_blank'] = 'This field must be filled in';
+$lang['error-required_field'] = 'This is a required field';
+$lang['error-not_numeric_field'] = 'This field can only contain numbers';
+$lang['error-invalid_option'] = 'The option you selected is invalid';
+$lang['error-invalid_email'] = 'The email address you entered is invalid';
+$lang['error-regex_failed'] = 'The content you entered failed to match a specific pattern';

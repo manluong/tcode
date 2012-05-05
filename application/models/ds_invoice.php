@@ -6,5 +6,4 @@ class DS_Invoice extends DatasetM {
 
 		$this->load('ds_invoice');
 	}
-
 }

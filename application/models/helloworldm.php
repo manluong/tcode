@@ -3,41 +3,29 @@
 class HelloworldM extends MY_Model {
 	public $data_fields = array(
 		'avatar' => array(
-			'type'=>'text',
-			'required'=>false,
-			'default'=>'',
 		),
 		'nickname' => array(
-			'type'=>'text',
-			'required'=>false,
-			'default'=>'',
 		),
 		'title' => array(
 			'type'=>'selection',
-			'required'=>false,
 			'default'=>0,
 			'options'=>array(
 				0 => '',
-				1 => 'Mr.',
-				2 => 'Ms.',
-				3 => 'Mrs.',
-				4 => 'Dr.',
+				1 => 'core_select-select-cardtitle-Mr.',
+				2 => 'core_select-select-cardtitle-Miss.',
+				3 => 'core_select-select-cardtitle-Mrs.',
+				4 => 'core_select-select-cardtitle-Dr.',
 			),
 		),
 		'first_name' => array(
-			'type'=>'text',
 			'required'=>true,
-			'default'=>'',
+			'allow_blank' => false,
 		),
 		'middle_name' => array(
-			'type'=>'text',
-			'required'=>false,
-			'default'=>'',
 		),
 		'last_name' => array(
-			'type'=>'text',
 			'required'=>true,
-			'default'=>'',
+			'allow_blank' => false,
 		),
 
 	);

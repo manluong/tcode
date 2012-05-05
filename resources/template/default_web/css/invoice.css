@@ -1,0 +1,106 @@
+.left {
+	float: left;
+}
+.right {
+	float: right;
+}
+.clear {
+	clear: both;
+}
+img {
+	border: 0 none;
+}
+a {
+	text-decoration: none;
+}
+a:hover {
+	text-decoration: underline;
+}
+* {
+	margin: 0;
+	outline: 0 none;
+	padding: 0;
+}
+ul {
+	list-style: none outside none;
+}
+#invoice_nav {
+	margin: 15px 0 30px 0;
+	padding-bottom: 10px;
+}
+#invoice_nav ul.nav_left {
+	margin: 0;
+}
+#invoice_nav ul.nav_left li {
+	float: left;
+	margin: 0 0 0 5px;
+}
+#invoice_nav li.main {
+	font-size: 220%;
+	font-weight: bold;
+}
+#invoice_nav ul.nav_right {
+	float: right;
+}
+#invoice_nav ul.nav_right li {
+	float: left;
+	margin-left: 20px;
+	font-size: 150%;
+}
+#invoice_info {
+	background-color: #EEEEEE;
+	background-image: -moz-linear-gradient(center top , #F5F5F5 0%, #EEEEEE 100%);
+	background-repeat: repeat-x;
+	border: 1px solid #E5E5E5;
+	border-radius: 4px 4px 4px 4px;
+	height: 205px;
+	margin: 20px 0;
+	width: 100%;
+}
+#invoice_info #form_show li {
+	float: left;
+	margin-top: 10px;
+	width: 100%;
+}
+#invoice_info #form_change li {
+	float: left;
+	margin-top: 16px;
+	width: 100%;
+}
+.input_table {
+	width: 100%;
+}
+#invoice_select {
+	height: 280px;
+	padding: 20px 0 0 10px;
+}
+#invoice_select ul li {
+	float: left;
+	margin-right: 20px;
+}
+.invoice_info_span {
+	margin-left: 0 !important;
+	min-height: 22px;
+	width: 100px !important;
+}
+.invoice_info_link {
+	float: right;
+	margin-right: 25px;
+}
+#total {
+	margin: 20px 0;
+}
+#total span {
+	margin-right: 250px;
+}
+#terms {
+	width: 480px;
+}
+#terms span{
+	height: 28px;
+	margin-bottom: 20px;
+}
+#terms textarea{
+	height: 200px;
+	width: 100%;
+}

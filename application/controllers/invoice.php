@@ -6,12 +6,46 @@ class Invoice extends MY_Controller {
 		parent::__construct();
 
 		$this->load->model('DS_Invoice');
+		$this->load->model('InvoiceM');
 	}
 
 	function index() {
 		$this->data['content'] = $this->load->view(get_template().'/invoice/index', '', TRUE);
 
 		$this->_do_output();
+	}
+
+	function edit($id) {
+		$this->data['content'] = $this->load->view(get_template().'/invoice/edit', '', TRUE);
+
+		$this->_do_output();
+	}
+
+	function add() {
+		$data['customer'] = $this->InvoiceM->getCustomer();
+		$this->data['content'] = $this->load->view(get_template().'/invoice/new', $data, TRUE);
+
+		$this->_do_output();
+	}
+
+	function add_save() {
+		$data['a_invoice_customer_card_id'] = $this->input->post('customer_id');
+		$success = $this->InvoiceM->save($data);
+
+		if ($success) {
+			redirect('/invoice/edit/'.$success);
+		} else {
+			$details['data'] = $this->DS_Invoice->get_save_errors();
+			$message = 'There was an error saving your data';
+		}
+
+		$this->RespM->set_message($message)
+				->set_type('')
+				->set_template('')
+				->set_success($success)
+				->set_title('Invoice Save')
+				->set_details($details)
+				->output_json();
 	}
 
 	function sendjson_list() {

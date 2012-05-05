@@ -2,19 +2,54 @@
 
 class MY_Model extends CI_Model {
 	public $table = '';
-	public $id_field = '';
-	public $data_fields = array();
+	public $id_field = 'id';
 
 	public $cache = array();
 	public $cache_enabled = FALSE;
+
+	public $errors = array();
+	public $field_errors = array();
 
 	public $where = array();
 	public $order_by = array();
 	public $limit = 0;
 	public $offset = 0;
 
+	public $sett_filter_deleted = TRUE;
+	public $sett_has_system_fields = TRUE;
+	public $sett_fill_card_info = FALSE;
+	public $sett_fill_details = TRUE;
+	public $sett_skip_validation = FALSE;
+
+	public $data_fields = array();
+	public $system_fields = array(
+		'id'=>array(
+			'type' => 'id',
+		),
+		'modified_stamp'=>array(
+			'type' => 'datetime',
+		),
+		'modified_card_id'=>array(
+			'type' => 'id',
+		),
+		'created_stamp'=>array(
+			'type' => 'datetime',
+		),
+		'created_card_id'=>array(
+			'type' => 'id',
+		),
+		'deleted'=>array(
+			'type' => 'boolean',
+			'default' => 0,
+		),
+	);
+
+	private $CI;
+
 	function __construct() {
 		parent::__construct();
+
+		$this->CI =& get_instance();
 	}
 
 
@@ -41,7 +76,8 @@ class MY_Model extends CI_Model {
 
 		if ($this->cache_enabled) $this->cache[$this->table][$result[$this->id_field]] = $result;
 
-		$this->fill_labels($result, TRUE);
+		if ($this->sett_fill_details) $this->fill_details($result, SINGLE_DATA);
+		if ($this->sett_fill_card_info) $this->fill_card_info($result, SINGLE_DATA);
 
 		return $result;
 	}
@@ -74,7 +110,8 @@ class MY_Model extends CI_Model {
 
 		$results = $rs->result_array();
 
-		$this->fill_labels($results);
+		if ($this->sett_fill_details) $this->fill_details($results, MULTIPLE_DATA);
+		if ($this->sett_fill_card_info) $this->fill_card_info($results, MULTIPLE_DATA);
 
 		return $results;
 	}
@@ -119,137 +156,217 @@ class MY_Model extends CI_Model {
 			}
 		}
 
+		if ($this->sett_fill_details) $this->fill_details($results, MULTIPLE_DATA);
+		if ($this->sett_fill_card_info) $this->fill_card_info($results, MULTIPLE_DATA);
+
 		return $results;
 	}
 
+	function validate(&$data) {
+		$is_new = !(isset($data[$this->id_field]) && $data[$this->id_field] !== FALSE);
+		$has_error = FALSE;
 
-	function save($data, $id_field='') {
-		if ($id_field == '' || !isset($data[$id_field])) {
+		if (!$is_new) {
+			$existing_data = $this->get($data[$this->id_field]);
+		}
+
+		foreach($this->data_fields AS $field=>$field_detail) {
+			if ($is_new && isset($d['db_save_skip']) && $d['db_save_skip']===TRUE) continue;
+			if (!$is_new && isset($d['db_edit_skip']) && $d['db_edit_skip']===TRUE) continue;
+
+			if (isset($data[$field])) { //data_field exists in form data
+				if (isset($field_detail['allow_blank']) && $field_detail['allow_blank']===FALSE && strlen($data[$field])==0) {
+					$this->errors[] = $this->lang->line('error-cannot_be_blank').' : '.$this->lang->line($this->table.'-'.$field);
+					$this->field_errors[$field] = $this->lang->line('error-cannot_be_blank');
+					$has_error = TRUE;
+				}
+
+				switch($field_detail['type']) {
+					case 'id':
+					case 'text':
+						break;
+					case 'numeric':
+						if (!is_numeric($data[$field])) {
+							$this->errors[] = $this->lang->line('error-not_numeric_field').' : '.$this->lang->line($this->table.'-'.$field);
+							$this->field_errors[$field] = $this->lang->line('error-not_numeric_field');
+							$has_error = TRUE;
+						}
+						break;
+					case 'date':
+						//TODO: date validation
+						break;
+					case 'datetime':
+						//TODO: datetime validation
+						break;
+					case 'selection':
+						if (!in_array($data[$field], $field_detail['options'])) {
+							$this->errors[] = $this->lang->line('error-invalid_option').' : '.$this->lang->line($this->table.'-'.$field);
+							$this->field_errors[$field] = $this->lang->line('error-invalid_option');
+							$has_error = TRUE;
+						}
+						break;
+					case 'boolen':
+						//TODO: bool validation. use is_bool?
+						break;
+					case 'email':
+						$result = preg_match('/^[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}/i', $data[$field]);
+						if ($result === 0 || $result === FALSE) {
+							$this->errors[] = $this->lang->line('error-invalid_email').' : '.$this->lang->line($this->table.'-'.$field);
+							$this->field_errors[$field] = $this->lang->line('error-invalid_email');
+							$has_error = TRUE;
+						}
+						break;
+				}
+
+				if (isset($field_detail['regex_validation']) && $field_detail['regex_validation']!=='') {
+					$result = preg_match($field_detail['regex_validation'], $data[$field]);
+					if ($result === 0 || $result === FALSE) {
+						$this->errors[] = $this->lang->line('error-regex_failed').' : '.$this->lang->line($this->table.'-'.$field);
+						$this->field_errors[$field] = $this->lang->line('error-regex_failed');
+						$has_error = TRUE;
+					}
+				}
+			} else { //data_field not in form data
+				if (isset($field_detail['required']) && $field_detail['required']===TRUE) {
+					if ($is_new) {
+						$this->errors[] = $this->lang->line('error-required_field').' : '.$this->lang->line($this->table.'-'.$field);
+						$this->field_errors[$field] = $this->lang->line('error-required_field');
+						$has_error = TRUE;
+					} else {
+						if (isset($existing_data[$field])) continue;
+					}
+				}
+			}
+		}
+
+		return !$has_error;
+	}
+
+
+	function save($data=FALSE) {
+		//get data from POST based on data_fields
+		if ($data === FALSE) $data = $this->get_form_data();
+
+		$is_new = !(isset($data[$this->id_field]) && $data[$this->id_field] !== FALSE);
+
+		//perform validation
+		if ($this->sett_skip_validation) {
+			$is_valid = TRUE;
+		} else {
+			$is_valid = $this->validate($data);
+		}
+
+		//if all ok, proceed to save/update
+		if (!$is_valid) return FALSE;
+
+		if ($is_new) {
+			if ($this->sett_has_system_fields) {
+				$data['created_stamp'] = get_current_stamp();
+				$data['created_card_id'] = $this->CI->UserM->get_card_id();
+			}
+
 			$rs = $this->db->insert($this->table, $data);
 			return $this->db->insert_id();
 		} else {
+			if ($this->sett_has_system_fields) {
+				$data['modified_stamp'] = get_current_stamp();
+				$data['modified_card_id'] = $this->CI->UserM->get_card_id();
+			}
+
 			$rs = $this->db->where($id_field, $data[$id_field])
 					->update($this->table, $data);
 			return $data[$id_field];
 		}
-
 	}
 
 
 
-	function fill_card_info(&$data, $mode='single') {
-		if ($mode == 'single') {
-			$ids = array();
-
-			if (isset($data['created_card_id'])) $ids[] = $data['created_card_id'];
-			if (isset($data['modified_card_id'])) $ids[] = $data['modified_card_id'];
-
-			if (count($ids) > 0) {
-				$cards = $this->UserM->get_batch($ids, TRUE);
-			} else {
-				return;
-			}
-
-			if (isset($data['created_card_id'])) $data['created_card_info'] = $cards[$data['created_card_id']];
-			if (isset($data['modified_card_id'])) $data['modified_card_info'] = $cards[$data['modified_card_id']];
-		} elseif ($mode == 'many') {
-			$ids = array_merge(extract_distinct_values($data, 'created_card_id'), extract_distinct_values($data, 'modified_card_id'));
-			$cards = $this->UserM->get_batch($ids, TRUE);
-
-			foreach($data AS $k=>$v) {
-				if (isset($v['created_card_id'])) $data[$k]['created_card_info'] = $cards[$v['created_card_id']];
-				if (isset($v['modified_card_id'])) $data[$k]['modified_card_info'] = $cards[$v['modified_card_id']];
-			}
-		}
-
-		/*
+	function fill_card_info(&$data, $mode=SINGLE_DATA) {
 		//end if there's no data
 		if (count($data) == 0) return;
 
-		//gather fields that have card_id inside, together with the values
 		$card_id_fields = array();
 		$card_ids = array();
-		if ($mode == 'single') {
-			foreach($data AS $k=>$v) {
-				if (strpos($k, 'card_id') !== FALSE) {
-					$card_id_fields[] = $k;
-					$card_ids[$v] = '';	//store ID as key so duplicate card_ids will be ignored
+
+		if ($mode == SINGLE_DATA) $data = array($data);
+
+		//gather fields that have card_id inside, together with the values
+		foreach($data AS $k=>$row) {
+			//on first loop, gather the card_id fields
+			if ($k == 0) {
+				foreach($row AS $sk=>$sv) {
+					if (strpos($sk, 'card_id') !== FALSE) $card_id_fields[] = $sk;
 				}
 			}
-		} else {
-			foreach($data AS $k=>$row) {
-				//on first loop, gather the card_id fields
-				if ($k == 0) {
-					foreach($row AS $sk=>$sv) {
-						if (strpos($sk, 'card_id') !== FALSE) $card_id_fields[] = $sk;
-					}
-				}
 
-				//on first loop and next, gather the card_id based on the fields gathered in first loop
-				foreach($card_id_fields AS $field) {
-					$card_ids[$row[$field]] = '';	//store ID as key so duplicate card_ids will be ignored
-				}
+			//on first loop and next, gather the card_id based on the fields gathered in first loop
+			foreach($card_id_fields AS $field) {
+				$card_ids[$row[$field]] = '';	//store ID as key so duplicate card_ids will be ignored
 			}
 		}
+
 		$card_ids = array_keys($card_ids);	//the card_ids were stored as array keys, so put them back into array values
 
 		//fetch card info based on gathered keys
-		$cards = $this->UserM->get_batch($card_ids, TRUE);
+		$cards = $this->CI->UserM->get_batch($card_ids, TRUE);
 
-		if ($this->single_data) {
+		foreach($data AS $k=>$v) {
 			foreach($card_id_fields AS $field) {
-				//create a new field_name
 				$card_field_name = str_replace($field, 'card_id', 'card_info');
-				if (isset($cards[$data[$field]])) {
-					//save the card_info to $this->data inside this new field name.
-					$data[$card_field_name] = $cards[$this->data[$field]];
+				if (isset($cards[$v[$field]])) {
+					$data[$k][$card_field_name] = $cards[$v[$field]];
 				} else {
-					$data[$card_field_name] = 'No card info for this card_id: '.$data[$field];
-				}
-			}
-		} else {
-			foreach($data AS $k=>$v) {
-				foreach($card_id_fields AS $field) {
-					$card_field_name = str_replace($field, 'card_id', 'card_info');
-					if (isset($cards[$v[$field]])) {
-						$data[$k][$card_field_name] = $cards[$v[$field]];
-					} else {
-						$data[$k][$card_field_name] = 'No card info for this card_id: '.$v[$field];
-					}
+					$data[$k][$card_field_name] = 'No card info for this card_id: '.$v[$field];
 				}
 			}
 		}
 
-		*/
+		if ($mode == SINGLE_DATA) $data = $data[0];
 	}
 
-	function fill_labels(&$data,$single=false) {
+	function fill_details(&$data, $mode=SINGLE_DATA) {
 		$df = $this->data_fields;
 
 		//echo 'fill start<pre>',print_r($data,true),'</pre>';
-		if ($single) {
-			$temp = array();
-			foreach($data AS $k=>$v) {
-				if (isset($df[$k])) $temp[$k.'_label'] = $this->lang->line($this->table.'-'.$k);
-				if (isset($df[$k]['options'])) $temp[$k.'_options'] = $df[$k]['options'];
-			}
-			foreach($temp AS $sk=>$sv) {
-				$data[$sk] = $sv;
-			}
-		} else {
-			foreach($data AS $k=>$v) {
-				$temp = array();
-				foreach($v AS $sk=>$sv) {
-					if (isset($df[$sk])) $temp[$sk.'_label'] = $this->lang->line($this->table.'-'.$k);
-					if (isset($df[$sk]['options'])) $temp[$sk.'_options'] = $df[$sk]['options'];
-				}
+		if ($mode == SINGLE_DATA) $data = array($data);
 
-				foreach($temp AS $sk=>$sv) {
-					$data[$k][$sk] = $sv;
+		foreach($data AS $k=>$v) {
+			$temp = array();
+			foreach($v AS $sk=>$sv) {
+				if (isset($df[$sk])) $temp[$sk.'_label'] = $this->lang->line($this->table.'-'.$sk);
+				if (isset($df[$sk]['options'])) {
+					$temp_options = array();
+					foreach($df[$sk]['options'] AS $ok=>$ov) {
+						$temp_options[$ok] = $this->lang->line($ov);
+					}
+					$temp[$sk.'_options'] = $temp_options;
 				}
+			}
+
+			foreach($temp AS $sk=>$sv) {
+				$data[$k][$sk] = $sv;
 			}
 		}
+
+		if ($mode == SINGLE_DATA) $data = $data[0];
 		//echo 'fill end<pre>',print_r($data,true),'</pre>';
+	}
+
+	function get_form_data() {
+		$data = array();
+
+		$data[$this->id_field] = $this->input->post($this->id_field);
+
+		$is_new = ($data[$this->id_field] === FALSE);
+
+		foreach($this->data_fields AS $f => $d) {
+			if ($is_new && isset($d['db_save_skip']) && $d['db_save_skip']===TRUE) continue;
+			if (!$is_new && isset($d['db_edit_skip']) && $d['db_edit_skip']===TRUE) continue;
+
+			$data[$f] = $this->input->post($f);
+		}
+
+		return $data;
 	}
 
 }
