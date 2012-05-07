@@ -20,7 +20,7 @@ function show_form_change(){
 
 function show_form_show(){
 	var subject = $('#subject').val();
-	var assign = $().val('#assign');
+	var assign = $('#assign').val();
 	var cc_email = $('#cc_email').val();
 	var id = $('#hiddenIdAdmincp').val();
 	

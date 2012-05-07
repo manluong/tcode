@@ -237,21 +237,24 @@ class Helpdesk extends MY_Controller {
 	}
 	
 	function ajaxChangeInfoHelpDesk(){
-		$id = $this->input->post('id'),
+		$id = $this->input->post('id');
 		$data = array(
-			'id' = $id ,
+			'id'=>$id,
 			'subject' => $this->input->post('subject'),
 			'assign_id' => $this->input->post('assign'),
 			'cc_email' => $this->input->post('cc_email'),
 			'modified_stamp' => date('Y-m-d H:i:s',time()),
 		);
-		$this->DS_Helpdesk_Nodataset->save($data);
+		$edit_id = $this->DS_Helpdesk_Nodataset->save($data);
+		echo $edit_id;
+		exit;
 		
 		$content = array (
-			'info' =>$this->DS_Helpdesk_Nodataset->getDetailManagement($id),
+			'info' => $this->DS_Helpdesk_Nodataset->get($id),
 		);
 
-		$this->load->view('BACKEND/ajax_updateInfoHelpdesk',$data);
+		$ajax_content = $this->load->view(get_template().'/helpdesk/ajax_updateInfoHelpdesk',$content ,true);
+		echo $ajax_content;
 	}
 	
 	function helpdesk_insert() {
