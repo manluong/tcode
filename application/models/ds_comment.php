@@ -52,10 +52,33 @@ class DS_Comment extends MY_Model {
 		}
 	}
 	
+	function getAssign(){
+		$this->db->select('id,nickname');
+		$query = $this->db->get('card');
+
+		if($query->result()){
+			return $query->result();
+		}else{
+			return false;
+		}
+	}
+	
 	function getContent($id){
 		$this->db->select('*');
 		$this->db->where('helpdesk_id',$id);
 		$query = $this->db->get($this->table);
+
+		if($query->result()){
+			return $query->result();
+		}else{
+			return false;
+		}
+	}
+	
+	function getContentHelpdesk($id){
+		$this->db->select('*');
+		$this->db->where('id',$id);
+		$query = $this->db->get('a_helpdesk');
 
 		if($query->result()){
 			return $query->result();
