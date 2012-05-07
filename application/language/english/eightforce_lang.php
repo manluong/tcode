@@ -308,7 +308,7 @@ $lang['access-login_status-6'] = 'Email does not exist';
 $lang['access-login_status-7'] = 'This user account has been disabled';
 $lang['access-login_status-8'] = 'You have been logged out due to a long period of inactivity.';
 $lang['access-logout-success'] = 'You have logged out successfully.';
-$lang['login_email'] = 'Email Address2';
+$lang['login_email'] = 'Email Address';
 $lang['login_password'] = 'Password';
 
 
