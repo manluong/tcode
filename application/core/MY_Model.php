@@ -177,7 +177,7 @@ class MY_Model extends CI_Model {
 			if (isset($data[$field])) { //data_field exists in form data
 				if (isset($field_detail['allow_blank']) && $field_detail['allow_blank']===FALSE && strlen($data[$field])==0) {
 					$this->errors[] = $this->lang->line('error-cannot_be_blank').' : '.$this->lang->line($this->table.'-'.$field);
-					$this->field_errors[$field] = $this->lang->line('error-cannot_be_blank');
+					$this->field_errors[$field][] = $this->lang->line('error-cannot_be_blank');
 					$has_error = TRUE;
 				}
 
@@ -188,7 +188,7 @@ class MY_Model extends CI_Model {
 					case 'numeric':
 						if (!is_numeric($data[$field])) {
 							$this->errors[] = $this->lang->line('error-not_numeric_field').' : '.$this->lang->line($this->table.'-'.$field);
-							$this->field_errors[$field] = $this->lang->line('error-not_numeric_field');
+							$this->field_errors[$field][] = $this->lang->line('error-not_numeric_field');
 							$has_error = TRUE;
 						}
 						break;
@@ -201,7 +201,7 @@ class MY_Model extends CI_Model {
 					case 'selection':
 						if (!in_array($data[$field], $field_detail['options'])) {
 							$this->errors[] = $this->lang->line('error-invalid_option').' : '.$this->lang->line($this->table.'-'.$field);
-							$this->field_errors[$field] = $this->lang->line('error-invalid_option');
+							$this->field_errors[$field][] = $this->lang->line('error-invalid_option');
 							$has_error = TRUE;
 						}
 						break;
@@ -212,7 +212,7 @@ class MY_Model extends CI_Model {
 						$result = preg_match('/^[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}/i', $data[$field]);
 						if ($result === 0 || $result === FALSE) {
 							$this->errors[] = $this->lang->line('error-invalid_email').' : '.$this->lang->line($this->table.'-'.$field);
-							$this->field_errors[$field] = $this->lang->line('error-invalid_email');
+							$this->field_errors[$field][] = $this->lang->line('error-invalid_email');
 							$has_error = TRUE;
 						}
 						break;
@@ -222,7 +222,7 @@ class MY_Model extends CI_Model {
 					$result = preg_match($field_detail['regex_validation'], $data[$field]);
 					if ($result === 0 || $result === FALSE) {
 						$this->errors[] = $this->lang->line('error-regex_failed').' : '.$this->lang->line($this->table.'-'.$field);
-						$this->field_errors[$field] = $this->lang->line('error-regex_failed');
+						$this->field_errors[$field][] = $this->lang->line('error-regex_failed');
 						$has_error = TRUE;
 					}
 				}
@@ -230,7 +230,7 @@ class MY_Model extends CI_Model {
 				if (isset($field_detail['required']) && $field_detail['required']===TRUE) {
 					if ($is_new) {
 						$this->errors[] = $this->lang->line('error-required_field').' : '.$this->lang->line($this->table.'-'.$field);
-						$this->field_errors[$field] = $this->lang->line('error-required_field');
+						$this->field_errors[$field][] = $this->lang->line('error-required_field');
 						$has_error = TRUE;
 					} else {
 						if (isset($existing_data[$field])) continue;
