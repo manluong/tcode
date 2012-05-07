@@ -371,13 +371,13 @@ function add_row(object) {
 	var html = '' +
 		'<tr>' +
 		'<td><a href="#" class="add">+</a></td>' +
-		'<td><input type="text" class="input_table"></td>' +
-		'<td><input type="text" class="input_table"></td>' +
-		'<td><input type="text" class="input_table"></td>' +
-		'<td><input type="text" class="input_table"></td>' +
-		'<td><input type="text" class="input_table"></td>' +
-		'<td><input type="text" class="input_table"></td>' +
-		'<td><input type="text" class="input_table"></td>' +
+		'<td><input type="text" name="product[]" class="input_table"></td>' +
+		'<td><input type="text" name="description[]" class="input_table"></td>' +
+		'<td><input type="text" name="unit_price[]" class="input_table"></td>' +
+		'<td><input type="text" name="qty[]" class="input_table"></td>' +
+		'<td><input type="text" name="discount[]" class="input_table"></td>' +
+		'<td><input type="text" name="tax[]" class="input_table"></td>' +
+		'<td><input type="text" name="total[]" class="input_table"></td>' +
 		'<td><a href="#" class="remove">x</a></td>' +
 		'</tr>';
 	

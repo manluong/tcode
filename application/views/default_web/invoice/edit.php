@@ -1,4 +1,5 @@
 <link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/invoice.css" />
+<link rel="stylesheet" href="/resources/addon/jqueryui/aristo/ui.css" />
 <script type="text/javascript" src="/resources/addon/invoice.js"></script>
 
 <div id="invoice_nav">
@@ -7,77 +8,84 @@
 		<li>&gt; Edit</li>
 	</ul>
 	<ul class="nav_right">
+		<li><a href="#">Dashboard</a></li>
 		<li><a href="/invoice">List</a></li>
 		<li><a href="/invoice/add">New</a></li>
 	</ul>
 </div>
 
+<form id="invoice_form" action="/invoice/edit_save" method="post">
+<input type="hidden" name="invoice_id" value="<?php echo $invoice['id'] ?>" />
 <div id="invoice_info">
 	<ul id="form_show">
-		<li><span class="invoice_info_span">Customer</span><a href="#">Customer A</a></li>
-		<li><span class="invoice_info_span">Date of Issue</span>05 03 2012</li>
-		<li><span class="invoice_info_span">Due Date</span>25 03 2012</li>
-		<li><span class="invoice_info_span">PO Number</span></li>
-		<li><a class="invoice_info_link" href="#">Change</a></li>
+		<li>
+			<span class="invoice_info_span">Customer</span>
+			<select name="customer_id">
+				<option value="">---- Select ----</option>
+				<?php foreach ($customer as $id => $name): ?>
+				<option value="<?php echo $id ?>"<?php echo ($id == $invoice['customer_card_id']) ? ' selected="selected"' : '' ?>><?php echo $name ?></option>
+				<?php endforeach ?>
+			</select>
+		</li>
+		<li>
+			<span class="invoice_info_span">Date of Issue</span>
+			<input type="text" name="issue_date" value="<?php echo $invoice['invoice_stamp'] ?>" class="datepicker" style="width: 200px" />
+		</li>
+		<li>
+			<span class="invoice_info_span">Due Date</span>
+			<input type="text" name="due_date" value="<?php echo $invoice['payment_due_stamp'] ?>" class="datepicker" style="width: 200px" />
+		</li>
+		<li>
+			<span class="invoice_info_span">PO Number</span>
+			<input type="text" name="po_number" value="<?php echo $invoice['custpo'] ?>" />
+		</li>
+		<li>
+			<span class="invoice_info_span">Tax</span>
+			<select name="tax_id">
+				<option value="">---- Select ----</option>
+				<?php foreach ($tax as $id => $name): ?>
+				<option value="<?php echo $id ?>"<?php echo ($id == $invoice['tax_id']) ? ' selected="selected"' : '' ?>><?php echo $name ?></option>
+				<?php endforeach ?>
+			</select>
+		</li>
+		<li>
+			<span class="invoice_info_span">Currency</span>
+			<input type="text" name="currency" value="<?php echo $invoice['currency'] ?>" />
+		</li>
 	</ul>
-
-	<!-- <ul style="" id="form_change">
-		<li><span class="invoice_info_span">Subject</span> <span class="input_change">: <input type="text" id="subject" name="subject" value="aaaaa"></span></li>
-		<li><span class="invoice_info_span">Creator</span> : <a href="#">Customer A</a></li>
-		<li><span class="invoice_info_span">Assigned</span> : <a href="#">Staff A</a></li>
-		<li><span class="invoice_info_span">CC</span> <span class="input_change">: <input type="text" id="cc_email" value="aaaa" name="cc_email"></span></li>
-		<li><div href="#" class="btn btn-inverse" onclick="return show_form_show();">Save</div></li>
-	</ul> -->
 </div>
 
 <table class="table">
 <thead>
 	<tr>
-		<th></th>
-		<th>Product</th>
-		<th>Description</th>
-		<th>Unit Price</th>
-		<th>Qty</th>
-		<th>Discount</th>
-		<th>Tax</th>
-		<th>Total</th>
-		<th></th>
+		<th style="width: 5%"></th>
+		<th style="width: 10%">Product</th>
+		<th style="width: 30%">Description</th>
+		<th style="width: 10%">Unit Price</th>
+		<th style="width: 10%">Qty</th>
+		<th style="width: 10%">Discount</th>
+		<th style="width: 10%">Tax</th>
+		<th style="width: 10%">Total</th>
+		<th style="width: 5%"></th>
 	</tr>
 </thead>
 <tbody>
+	<?php foreach ($invoice_items as $invoice_item): ?>
 	<tr>
 		<td><a href="#" class="add">+</a></td>
-		<td>iPhone Case</td>
-		<td>Xxxxo okoaoxa kokoxax</td>
-		<td>$5</td>
-		<td>100</td>
-		<td></td>
-		<td>GST</td>
-		<td>$500</td>
+		<td>
+			<input type="hidden" name="invoice_item_id[]" value="<?php echo $invoice_item->id ?>" class="input_table">
+			<input type="text" name="product[]" value="<?php echo $invoice_item->product_id ?>" class="input_table">
+		</td>
+		<td><input type="text" name="description[]" value="<?php echo $invoice_item->description ?>" class="input_table"></td>
+		<td><input type="text" name="unit_price[]" value="<?php echo $invoice_item->unit_price ?>" class="input_table"></td>
+		<td><input type="text" name="qty[]" value="<?php echo $invoice_item->quantity ?>" class="input_table"></td>
+		<td><input type="text" name="discount[]" value="<?php echo $invoice_item->discount ?>" class="input_table"></td>
+		<td><input type="text" name="tax[]" value="<?php echo $invoice_item->tax_id ?>" class="input_table"></td>
+		<td><input type="text" name="total[]" value="<?php echo $invoice_item->total ?>" class="input_table"></td>
 		<td><a href="#" class="remove">x</a></td>
 	</tr>
-	<tr>
-		<td><a href="#" class="add">+</a></td>
-		<td>iPhone Case</td>
-		<td>Xxxxo okoaoxa kokoxax</td>
-		<td>$5</td>
-		<td>100</td>
-		<td></td>
-		<td>GST</td>
-		<td>$500</td>
-		<td><a href="#" class="remove">x</a></td>
-	</tr>
-	<tr>
-		<td><a href="#" class="add">+</a></td>
-		<td>News Paper</td>
-		<td>Xxxxo okoaoxa kokoxax</td>
-		<td>$5</td>
-		<td>100</td>
-		<td></td>
-		<td>GST</td>
-		<td>$500</td>
-		<td><a href="#" class="remove">x</a></td>
-	</tr>
+	<?php endforeach ?>
 	<!-- <tr>
 		<td></td>
 		<td colspan="3">
@@ -104,17 +112,6 @@
 		<td></td>
 		<td></td>
 	</tr> -->
-	<tr>
-		<td><a href="#" class="add">+</a></td>
-		<td>iPhone Case</td>
-		<td>Xxxxo okoaoxa kokoxax</td>
-		<td>$5</td>
-		<td>100</td>
-		<td></td>
-		<td>GST</td>
-		<td>$500</td>
-		<td><a href="#" class="remove">x</a></td>
-	</tr>
 </tbody>
 </table>
 
@@ -146,4 +143,5 @@
 	<br />
 	<textarea></textarea>
 </div>
-<input type="submit" class="btn" value="Submit" />
+<input id="submit_btn" type="submit" class="btn" value="Submit" />
+</form>

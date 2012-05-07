@@ -13,10 +13,23 @@ class InvoiceM extends MY_Model {
 		$query = $this->db->get('card');
 
 		$results = array();
-		$results[0] = '---- Select ----';
 		foreach ($query->result() as $r) {
 			$results[$r->id] = $r->nickname;
 		}
+
+		return $results;
+	}
+
+	function getTax() {
+		//$this->db->select('id, nickname');
+		//$query = $this->db->get('card');
+
+		$results = array();
+		$results[1] = 1;
+		$results[2] = 2;
+		//foreach ($query->result() as $r) {
+		//	$results[$r->id] = $r->nickname;
+		//}
 
 		return $results;
 	}
