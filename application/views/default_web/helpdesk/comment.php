@@ -63,9 +63,8 @@ function submit_comment(){
 			type:type,
 			priority:priority,
 		},function(data){
-			alert(data);
 			$('#ajax_comment_left').html(data);
-			$('#comment').attr('value','');
+			$('#a_helpdesk_comment_comment').attr('value','');
 		}
 	);
 	
@@ -170,13 +169,13 @@ function submit_comment(){
 				<label class="control-label" for="select01">Priority</label>
 				<select id="a_helpdesk_comment_priority" name="a_helpdesk_comment_priority">
 					<option value="">something</option>
-					<?php if(!empty($pri)){
+					<?php if(!empty($priority)){
 							if(!empty($result->priority)){
 								$value_pri = $result->priority;
 							}else{
 								$value_pri= 0;
 							}
-							foreach($pri as $k){
+							foreach($priority as $k){
 					?>
 					<option <?=($value_pri == $k->id?'selected=selected':'' )?> value="<?=$k->id?>"><?=$k->name?></option>
 					<?php }}?>

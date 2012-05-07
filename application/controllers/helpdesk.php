@@ -169,22 +169,20 @@ class Helpdesk extends MY_Controller {
 	}
 
 	function sendjson_comment_form() {
-
+		$id = $this->input->post('id');
+		$result[0] = array();
+		if($id!=0){
+			$result = $this->DS_Comment->getContentHelpdesk($id);
+		}
 		$data = array(
-			'id' => $this->input->post('id'),
+			'id' => $id,
 			'group' =>  $this->DS_Comment->getGroup(),
 			'status' => $this->DS_Comment->getStatus(),
 			'priority' => $this->DS_Comment->getPriority(),
 			'type' => $this->DS_Comment->getType(),
-			'comment' => $this->DS_Comment->getContent($this->input->post('id')),
+			'comment' => $this->DS_Comment->getContent($id),
+			'result' => $result[0],
 		);	
-		
-		/*
-		echo '<pre>';
-		print_r($content);
-		echo '</pre>';
-		exit;
-		*/
 		$content = $this->load->view(get_template().'/helpdesk/comment',$data ,true);
 		echo $content;
 			
@@ -200,6 +198,7 @@ class Helpdesk extends MY_Controller {
 			'comment' => $this->input->post('comment'),
 			'private' => $this->input->post('pri'),
 			'helpdesk_id' => $id_helpdesk ,
+			'created_stamp' => date('Y-m-d H:i:s',time()),
 		);
 		$insert_id = $this->DS_Comment->save($data);
 		

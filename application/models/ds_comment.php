@@ -63,4 +63,16 @@ class DS_Comment extends MY_Model {
 			return false;
 		}
 	}
+	
+	function getContentHelpdesk($id){
+		$this->db->select('*');
+		$this->db->where('id',$id);
+		$query = $this->db->get('a_helpdesk');
+
+		if($query->result()){
+			return $query->result();
+		}else{
+			return false;
+		}
+	}
 }

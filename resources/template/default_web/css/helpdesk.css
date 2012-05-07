@@ -150,7 +150,7 @@ html, body{
 	margin-right:20px;
 }
 .helpdesk_info_span{
-	width:70px;
+	width:70px !important;
 	margin-left:0px !important;
 }
 /* CSS HelpDesk */
