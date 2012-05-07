@@ -52,6 +52,17 @@ class DS_Comment extends MY_Model {
 		}
 	}
 	
+	function getAssign(){
+		$this->db->select('id,nickname');
+		$query = $this->db->get('card');
+
+		if($query->result()){
+			return $query->result();
+		}else{
+			return false;
+		}
+	}
+	
 	function getContent($id){
 		$this->db->select('*');
 		$this->db->where('helpdesk_id',$id);

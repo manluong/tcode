@@ -7,6 +7,8 @@ class Helpdesk extends MY_Controller {
 
 		$this->load->model('DS_Helpdesk');
 		$this->load->model('DS_Comment');
+		$this->load->model('DS_Helpdesk_Nodataset');
+		
 	}
 
 	function index() {
@@ -182,10 +184,22 @@ class Helpdesk extends MY_Controller {
 			'type' => $this->DS_Comment->getType(),
 			'comment' => $this->DS_Comment->getContent($id),
 			'result' => $result[0],
+			'assign' => $this->DS_Comment->getAssign(),
 		);	
 		$content = $this->load->view(get_template().'/helpdesk/comment',$data ,true);
 		echo $content;
-			
+	}
+	
+	function insert_helpdesk_form() {
+		$data = array(
+			'group' =>  $this->DS_Comment->getGroup(),
+			'status' => $this->DS_Comment->getStatus(),
+			'priority' => $this->DS_Comment->getPriority(),
+			'type' => $this->DS_Comment->getType(),
+			'assign' => $this->DS_Comment->getAssign(),
+		);	
+		$content = $this->load->view(get_template().'/helpdesk/helpdesk_insert',$data ,true);
+		echo $content;
 	}
 	
 	function save_comment(){
@@ -205,6 +219,39 @@ class Helpdesk extends MY_Controller {
 		$data_ajax['comment'] = $this->DS_Comment->getContent($id_helpdesk);
 		$ajax_content = $this->load->view(get_template().'/helpdesk/ajax_updateComment',$data_ajax ,true);
 		echo $ajax_content;
+	}
+	
+	function save_insert_helpdesk(){
+		$data = array(
+			'subject' => $this->input->post('subject'),
+			'assign_id' => $this->input->post('assign'),
+			'cc_email' => $this->input->post('cc_email'),
+			'group' => $this->input->post('group'),
+			'status' => $this->input->post('status'),
+			'type' => $this->input->post('type'),
+			'priority' => $this->input->post('priority'),
+			'created_stamp' => date('Y-m-d H:i:s',time()),
+		);
+		$insert_id = $this->DS_Helpdesk_Nodataset->save($data);
+		echo $insert_id;
+	}
+	
+	function ajaxChangeInfoHelpDesk(){
+		$id = $this->input->post('id'),
+		$data = array(
+			'id' = $id ,
+			'subject' => $this->input->post('subject'),
+			'assign_id' => $this->input->post('assign'),
+			'cc_email' => $this->input->post('cc_email'),
+			'modified_stamp' => date('Y-m-d H:i:s',time()),
+		);
+		$this->DS_Helpdesk_Nodataset->save($data);
+		
+		$content = array (
+			'info' =>$this->DS_Helpdesk_Nodataset->getDetailManagement($id),
+		);
+
+		$this->load->view('BACKEND/ajax_updateInfoHelpdesk',$data);
 	}
 	
 	function helpdesk_insert() {
