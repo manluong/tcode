@@ -299,9 +299,9 @@ class MY_Model extends CI_Model {
 				$data['modified_card_id'] = $this->CI->UserM->get_card_id();
 			}
 
-			$rs = $this->db->where($id_field, $data[$id_field])
+			$rs = $this->db->where($this->id_field, $data[$this->id_field])
 					->update($this->table, $data);
-			return $data[$id_field];
+			return $data[$this->id_field];
 		}
 	}
 
