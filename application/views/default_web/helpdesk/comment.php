@@ -43,10 +43,8 @@ function show_form_show(){
 function submit_comment(){
 	var comment = $('#a_helpdesk_comment_comment').val();
 	var id = $('#hiddenIdAdmincp').val();
-	var group = $('#a_helpdesk_comment_group').val();
-	var status = $('#a_helpdesk_comment_status').val();
-	var type = $('#a_helpdesk_comment_type').val();
 	var priority = $('#a_helpdesk_comment_priority').val();
+
 	if($('#private').is(':checked')){
 		var pri = 1;
 	}else{
@@ -61,10 +59,11 @@ function submit_comment(){
 			id : id,
 			comment: comment,
 			pri: pri,
-			group:group,
-			status:status,
-			type:type,
-			priority:priority,
+			group : group,
+			status : status,
+			type : type,
+			priority : priority,
+			
 		},function(data){
 			$('#ajax_comment_left').html(data);
 			$('#a_helpdesk_comment_comment').attr('value','');
@@ -80,9 +79,9 @@ function submit_comment(){
 		<div id="content_left">HelpDesk Case #<?=$id?></div>
 		
 		<div id="content_right">
-			<div id="time_curent"><?=date('F d Y g:i A',strtotime($result->stamp))?></div>
-			<?php if(!empty($result->stamp_update)){
-				$update_time = time() - strtotime($result->stamp_update);
+			<div id="time_curent"><?=date('F d Y g:i A',strtotime($result->created_stamp))?></div>
+			<?php if(!empty($result->modified_stamp)){
+				$update_time = time() - strtotime($result->modified_stamp);
 				$update_time = intval($update_time /1200);
 			?>
 			<div id="time_update">Update by Staff <?=$update_time ?> hours ago</div>
@@ -94,7 +93,7 @@ function submit_comment(){
 		<ul id="form_show">
 			<li><span class="helpdesk_info_span">Subject</span> : <?=$result->subject?></li>
 			<li><span class="helpdesk_info_span">Creator</span> : <a href="#">Customer A</a></li>
-			<li><span class="helpdesk_info_span">Assigned</span> : <a href="#">Staff A</a></li>
+			<li><span class="helpdesk_info_span">Assigned</span> : <?=$this->DS_Helpdesk_Nodataset->getAssignName($result->assign_id)?></li>
 			<li><span class="helpdesk_info_span">CC</span> : <?=$result->cc_email?></li>
 			<li><div onclick="return show_form_change();" class="btn btn-inverse" href="#">Change</div></li>
 		</ul>
@@ -209,7 +208,7 @@ function submit_comment(){
 			<div id="ajax_comment_left">
 				<?php if(!empty($comment)){
 					foreach($comment as $k){
-					$date = date('F d Y g:i A',strtotime($k->stamp));
+					$date = date('F d Y g:i A',strtotime($k->created_stamp));
 				?>
 				<div id="comment_content_left">
 					<div id="wap_comment_left">

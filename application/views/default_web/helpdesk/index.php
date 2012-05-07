@@ -1,7 +1,6 @@
 
 <div id="helpdesk_list"></div>
 
-<div id="comment_view"></div>
 <div id="helpdesk_view"></div>
 
 <div id="helpdesk_form"></div>

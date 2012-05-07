@@ -246,11 +246,9 @@ class Helpdesk extends MY_Controller {
 			'modified_stamp' => date('Y-m-d H:i:s',time()),
 		);
 		$edit_id = $this->DS_Helpdesk_Nodataset->save($data);
-		echo $edit_id;
-		exit;
-		
+
 		$content = array (
-			'info' => $this->DS_Helpdesk_Nodataset->get($id),
+			'info' => $this->DS_Helpdesk_Nodataset->getContent($id),
 		);
 
 		$ajax_content = $this->load->view(get_template().'/helpdesk/ajax_updateInfoHelpdesk',$content ,true);

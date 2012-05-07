@@ -47,15 +47,7 @@ function submit_insert_helpdesk(){
 	<div class="head_helpdesk">
 		<div id="content_left">HelpDesk Insert</div>
 		
-		<div id="content_right">
-			<div id="time_curent"><?=date('F d Y g:i A',strtotime($result->stamp))?></div>
-			<?php if(!empty($result->stamp_update)){
-				$update_time = time() - strtotime($result->stamp_update);
-				$update_time = intval($update_time /1200);
-			?>
-			<div id="time_update">Update by Staff <?=$update_time ?> hours ago</div>
-			<?php }?>
-		</div>
+		
 	</div>
 	<form id="frmManagement" action="<?=PATH_URL.'admincp/'.$module.'/save/'?>" method="post" enctype="multipart/form-data">
 	<div id="helpdesk_info" style="height:200px;">
