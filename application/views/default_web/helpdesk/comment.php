@@ -96,7 +96,7 @@ function submit_comment(){
 		<ul id="form_show">
 			<li><span class="helpdesk_info_span">Subject</span> : <?=$result->subject?></li>
 			<li><span class="helpdesk_info_span">Creator</span> : <a href="#">Customer A</a></li>
-			<li><span class="helpdesk_info_span">Assigned</span> : <?=$this->DS_Helpdesk_Nodataset->getAssignName($result->assign_id)?></li>
+			<li><span class="helpdesk_info_span">Assigned</span> : <?=$this->DS_CommentM->get_assigname($result->assign_id)?></li>
 			<li><span class="helpdesk_info_span">CC</span> : <?=$result->cc_email?></li>
 			<li><div onclick="return show_form_change();" class="btn btn-inverse" href="#">Change</div></li>
 		</ul>
@@ -109,9 +109,14 @@ function submit_comment(){
 				<select  name="assign" id="assign">
 					<option value="">something</option>
 					<?php if(!empty($assign)){
+							if(!empty($result->assign_id)){
+								$value_assign = $result->assign_id;
+							}else{
+								$value_assign = 0;
+							}
 							foreach($assign as $k){
 					?>
-					<option value="<?=$k->id?>"><?=$k->nickname?></option>
+					<option <?=($value_assign == $k->id?'selected=selected':'' )?> value="<?=$k->id?>"><?=$k->nickname?></option>
 					<?php }}?>
 				</select>
 			</li>

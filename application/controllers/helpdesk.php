@@ -6,8 +6,8 @@ class Helpdesk extends MY_Controller {
 		parent::__construct();
 
 		$this->load->model('DS_Helpdesk');
-		$this->load->model('DS_Comment');
-		$this->load->model('DS_Helpdesk_Nodataset');
+		$this->load->model('DS_CommentM');
+		$this->load->model('DS_Helpdesk_NodatasetM');
 		
 	}
 
@@ -174,17 +174,17 @@ class Helpdesk extends MY_Controller {
 		$id = $this->input->post('id');
 		$result[0] = array();
 		if($id!=0){
-			$result = $this->DS_Comment->getContentHelpdesk($id);
+			$result = $this->DS_CommentM->get_content_helpdesk($id);
 		}
 		$data = array(
 			'id' => $id,
-			'group' =>  $this->DS_Comment->getGroup(),
-			'status' => $this->DS_Comment->getStatus(),
-			'priority' => $this->DS_Comment->getPriority(),
-			'type' => $this->DS_Comment->getType(),
-			'comment' => $this->DS_Comment->getContent($id),
+			'group' =>  $this->DS_CommentM->get_group(),
+			'status' => $this->DS_CommentM->get_status(),
+			'priority' => $this->DS_CommentM->get_priority(),
+			'type' => $this->DS_CommentM->get_type(),
+			'comment' => $this->DS_CommentM->get_content($id),
 			'result' => $result[0],
-			'assign' => $this->DS_Comment->getAssign(),
+			'assign' => $this->DS_CommentM->get_assign(),
 		);	
 		$content = $this->load->view(get_template().'/helpdesk/comment',$data ,true);
 		echo $content;
@@ -192,11 +192,11 @@ class Helpdesk extends MY_Controller {
 	
 	function insert_helpdesk_form() {
 		$data = array(
-			'group' =>  $this->DS_Comment->getGroup(),
-			'status' => $this->DS_Comment->getStatus(),
-			'priority' => $this->DS_Comment->getPriority(),
-			'type' => $this->DS_Comment->getType(),
-			'assign' => $this->DS_Comment->getAssign(),
+			'group' =>  $this->DS_CommentM->get_group(),
+			'status' => $this->DS_CommentM->get_status(),
+			'priority' => $this->DS_CommentM->get_priority(),
+			'type' => $this->DS_CommentM->get_type(),
+			'assign' => $this->DS_CommentM->get_assign(),
 		);	
 		$content = $this->load->view(get_template().'/helpdesk/helpdesk_insert',$data ,true);
 		echo $content;
@@ -212,11 +212,11 @@ class Helpdesk extends MY_Controller {
 			'comment' => $this->input->post('comment'),
 			'private' => $this->input->post('pri'),
 			'helpdesk_id' => $id_helpdesk ,
-			//'created_stamp' => date('Y-m-d H:i:s',time()),
+			'created_stamp' => date('Y-m-d H:i:s',time()),
 		);
-		$insert_id = $this->DS_Comment->save($data);
+		$insert_id = $this->DS_CommentM->save($data);
 		
-		$data_ajax['comment'] = $this->DS_Comment->getContent($id_helpdesk);
+		$data_ajax['comment'] = $this->DS_CommentM->get_content($id_helpdesk);
 		$ajax_content = $this->load->view(get_template().'/helpdesk/ajax_updateComment',$data_ajax ,true);
 		echo $ajax_content;
 	}
@@ -232,7 +232,7 @@ class Helpdesk extends MY_Controller {
 			'priority' => $this->input->post('priority'),
 			//'created_stamp' => date('Y-m-d H:i:s',time()),
 		);
-		$insert_id = $this->DS_Helpdesk_Nodataset->save($data);
+		$insert_id = $this->DS_Helpdesk_NodatasetM->save($data);
 		echo $insert_id;
 	}
 	
@@ -244,10 +244,10 @@ class Helpdesk extends MY_Controller {
 			'assign_id' => $this->input->post('assign'),
 			'cc_email' => $this->input->post('cc_email'),
 		);
-		$edit_id = $this->DS_Helpdesk_Nodataset->save($data);
+		$edit_id = $this->DS_Helpdesk_NodatasetM->save($data);
 
 		$content = array (
-			'info' => $this->DS_Helpdesk_Nodataset->getContent($id),
+			'info' => $this->DS_Helpdesk_NodatasetM->get_content($id),
 		);
 
 		$ajax_content = $this->load->view(get_template().'/helpdesk/ajax_updateInfoHelpdesk',$content ,true);
@@ -286,9 +286,9 @@ class Helpdesk extends MY_Controller {
 	
 	function comment_insert() {
 
-		$this->DS_Comment->subaction = 'a';
+		$this->DS_CommentM->subaction = 'a';
 		//$this->DS_Helpdesk->id = 1;
-		$success = $this->DS_Comment->save();
+		$success = $this->DS_CommentM->save();
 
 		if ($success) {
 			$details['links'] = array(
@@ -301,7 +301,7 @@ class Helpdesk extends MY_Controller {
 			);
 			$message = 'Data saved.';
 		} else {
-			$details['data'] = $this->DS_Comment->get_save_errors();
+			$details['data'] = $this->DS_CommentM->get_save_errors();
 			$message = 'There was an error saving your data';
 		}
 
