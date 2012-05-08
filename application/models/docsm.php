@@ -502,15 +502,18 @@ class docsM extends MY_Model {
 		return $path;
 	}
 
-	function get_subdir_ids($dir_ids, $recurse=FALSE) {
+	function get_subdir_ids($dir_ids, $recurse=FALSE, $include_hidden=FALSE) {
 		if (!is_array($dir_ids)) $dir_ids = array($dir_ids);
 		$results = array();
 
-		$rs = $this->db->select('id')
-				->from('a_docs_dir')
-				->where_in('parent_id', $dir_id)
-				->where('deleted', 0)
-				->get();
+		$this->db->select('id')
+			->from('a_docs_dir')
+			->where_in('parent_id', $dir_id);
+
+		if (!$include_hidden) $this->db->where('hidden', 0);
+		$this->db->where('deleted', 0);
+
+		$rs = $this->db->get();
 
 		if ($rs->num_rows() == 0) return array();
 
@@ -519,20 +522,23 @@ class docsM extends MY_Model {
 		}
 
 		if ($recurse) {
-			$results = array_merge($results, $this->get_subdir_ids($results, $recurse));
+			$results = array_merge($results, $this->get_subdir_ids($results, $recurse, $include_hidden));
 		}
 
 		return $results;
 	}
 
-	function get_subdir($dir_id=0, $recurse=FALSE) {
+	function get_subdir($dir_id=0, $recurse=FALSE, $include_hidden=FALSE) {
 		$results = array();
 
-		$rs = $this->db->select('id, parent_id, name')
+		$this->db->select('id, parent_id, name')
 				->from('a_docs_dir')
-				->where('parent_id', $dir_id)
-				->where('deleted', 0)
-				->get();
+				->where('parent_id', $dir_id);
+
+		if (!$include_hidden) $this->db->where('hidden', 0);
+		$this->db->where('deleted', 0);
+
+		$rs = $this->db->get();
 
 		if ($rs->num_rows() == 0) return array();
 
@@ -542,7 +548,7 @@ class docsM extends MY_Model {
 
 		if ($recurse) {
 			foreach($results AS $key=>$r) {
-				$subdir = $this->get_subdir($r['id'], $recurse);
+				$subdir = $this->get_subdir($r['id'], $recurse, $include_hidden);
 				if (count($subdir) > 0) $results[$key]['child'] = $subdir;
 			}
 		}
