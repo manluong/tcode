@@ -57,6 +57,8 @@ class docsM extends MY_Model {
 
 
 
+
+
 	/* Previous version before implementing current_version
 	// Returns all docs in a dirid.
 	// Presents the latest ver id as link
@@ -316,7 +318,13 @@ class docsM extends MY_Model {
 		return $this->new_file_in_dir($file_info, $dir_id);
 	}
 
-	function new_file_in_dir($file_info, $dir_id) {
+	function new_file_in_dir($file_info, $dir_id_or_name) {
+		if (!is_numeric($dir_id_or_name)) {
+			$dir_id = $this->get_dir_id_by_name ($dir_id_or_name);
+		} else {
+			$dir_id = $dir_id_or_name;
+		}
+
 		$this->db->trans_start();
 
 		$filename_without_extension = get_filename_without_extension($file_info['orig_name']);
@@ -455,6 +463,21 @@ class docsM extends MY_Model {
 		return $id;
 	}
 
+	function get_dir_id_by_name($name, $parent_folder_id=1) {
+		$rs = $this->db->select('id')
+				->from('a_docs_dir')
+				->where('name', $name)
+				->where('parent_id', $parent_folder_id)
+				->where('deleted', 0)
+				->limit(1)
+				->get();
+
+		if ($rs->num_rows() == 0) return FALSE;
+
+		$result = $rs->row_array();
+		return $result['id'];
+	}
+
 	// Get directory path by ID
 	function get_dir_path($dir_id=0) {
 		if ($dir_id == 0) return '';
@@ -540,13 +563,23 @@ class docsM extends MY_Model {
 		return $rs->result_array();
 	}
 
-	function get_dir_detail($dir_id) {
-		$rs = $this->db->select()
-				->from('a_docs_dir')
-				->where('id', $dir_id)
-				->where('deleted', 0)
-				->limit(1)
-				->get();
+	function get_dir_detail($dir_id_or_name) {
+		if (is_numeric($dir_id_or_name)) {
+			$rs = $this->db->select()
+					->from('a_docs_dir')
+					->where('id', $dir_id_or_name)
+					->where('deleted', 0)
+					->limit(1)
+					->get();
+		} else {
+			$rs = $this->db->select()
+					->from('a_docs_dir')
+					->where('name', $dir_id_or_name)
+					->where('parent_id', 1)	//APPS folder
+					->where('deleted', 0)
+					->limit(1)
+					->get();
+		}
 
 		if ($rs->num_rows() == 0) return FALSE;
 

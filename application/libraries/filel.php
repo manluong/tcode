@@ -67,7 +67,7 @@ class FileL {
 	}
 
 	//all apps should use this function to store uploads from users
-	function save($form_field='userfile', $dir_id=0, $docs_id=FALSE, $overwrite='') {
+	function save($form_field='userfile', $dir_id_or_name=0, $docs_id=FALSE, $overwrite='') {
 		$this->CI->load->library('Upload');
 
 		//Configure CI's file upload
@@ -86,7 +86,7 @@ class FileL {
 		if ($overwrite === '') {
 			if ($docs_id !== FALSE) $dir_id = $existing_file_info['dir_id'];
 
-			$dir_info = $this->CI->DocsM->get_dir_detail($dir_id);
+			$dir_info = $this->CI->DocsM->get_dir_detail($dir_id_or_name);
 			$overwrite = ($dir_info['has_versioning'] == 1);
 		}
 
@@ -124,7 +124,7 @@ class FileL {
 		if ($docs_id !== FALSE) {
 			return $this->CI->DocsM->overwrite_file($docs_id, $new_file_data, $overwrite);
 		} else {
-			return $this->CI->DocsM->new_file_in_dir($new_file_data, $dir_id);
+			return $this->CI->DocsM->new_file_in_dir($new_file_data, $dir_id_or_name);
 		}
 	}
 
