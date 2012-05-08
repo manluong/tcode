@@ -12,12 +12,7 @@ class InvoiceM extends MY_Model {
 		$this->db->select('id, nickname');
 		$query = $this->db->get('card');
 
-		$results = array();
-		foreach ($query->result() as $r) {
-			$results[$r->id] = $r->nickname;
-		}
-
-		return $results;
+		return $query->result();
 	}
 
 	function getTax() {
@@ -32,5 +27,12 @@ class InvoiceM extends MY_Model {
 		//}
 
 		return $results;
+	}
+
+	function getTerms() {
+		$this->db->select('id, name, content');
+		$query = $this->db->get('a_invoice_terms');
+
+		return $query->result();
 	}
 }

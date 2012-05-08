@@ -22,8 +22,8 @@
 			<span class="invoice_info_span">Customer</span>
 			<select name="customer_id">
 				<option value="">---- Select ----</option>
-				<?php foreach ($customer as $id => $name): ?>
-				<option value="<?php echo $id ?>"<?php echo ($id == $invoice['customer_card_id']) ? ' selected="selected"' : '' ?>><?php echo $name ?></option>
+				<?php foreach ($customer as $r): ?>
+				<option value="<?php echo $r->id ?>"<?php echo ($r->id == $invoice['customer_card_id']) ? ' selected="selected"' : '' ?>><?php echo $r->nickname ?></option>
 				<?php endforeach ?>
 			</select>
 		</li>
@@ -37,7 +37,7 @@
 		</li>
 		<li>
 			<span class="invoice_info_span">PO Number</span>
-			<input type="text" name="po_number" value="<?php echo $invoice['custpo'] ?>" />
+			<input type="text" name="po_number" value="<?php echo $invoice['purchase_order_number'] ?>" />
 		</li>
 		<li>
 			<span class="invoice_info_span">Tax</span>
@@ -199,7 +199,6 @@
 	</div>
 </div>
 
-<div class="clear"></div>
 <div id="total" class="right">
 	<span>Sub Total</span>
 	<br />
@@ -213,20 +212,28 @@
 	<br />
 	<span>Balance</span>
 </div>
-<div class="clear"></div>
-<div id="terms" class="left">
-	<span>Terms</span>
-	<select class="right">
-		<option>Pre Define Terms</option>
-	</select>
-	<br />
-	<div class="clear"></div>
-	<textarea></textarea>
+
+<div class="clear">
+	<div class="terms left">
+		<span>Terms</span>
+		<select name="terms_id" class="right">
+			<option>Pre Define Terms</option>
+			<?php foreach ($terms as $r): ?>
+			<option value="<?php echo $r->id ?>"<?php echo ($r->id == $invoice['terms_id']) ? ' selected="selected"' : '' ?>><?php echo $r->name ?></option>
+			<?php endforeach ?>
+		</select>
+		<br />
+		<div class="clear"></div>
+		<textarea name="terms_content"></textarea>
+	</div>
+	<div class="terms right">
+		<span>Notes for Customer</span>
+		<br />
+		<textarea name="notes" class="notes"></textarea>
+	</div>
 </div>
-<div id="terms" class="right">
-	<span>Notes for Customer</span>
-	<br />
-	<textarea></textarea>
+
+<div class="div_btn clear">
+	<input id="submit_btn" type="submit" class="btn" value="Submit" />
 </div>
-<input id="submit_btn" type="submit" class="btn" value="Submit" />
 </form>

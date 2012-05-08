@@ -21,8 +21,8 @@
 			<span class="invoice_info_span">Customer</span>
 			<select name="customer_id">
 				<option value="">---- Select ----</option>
-				<?php foreach ($customer as $id => $name): ?>
-				<option value="<?php echo $id ?>"><?php echo $name ?></option>
+				<?php foreach ($customer as $r): ?>
+				<option value="<?php echo $r->id ?>"><?php echo $r->nickname ?></option>
 				<?php endforeach ?>
 			</select>
 		</li>
@@ -164,20 +164,28 @@
 	<br />
 	<span>Balance</span>
 </div>
-<div class="clear"></div>
-<div id="terms" class="left">
-	<span>Terms</span>
-	<select class="right">
-		<option>Pre Define Terms</option>
-	</select>
-	<br />
-	<div class="clear"></div>
-	<textarea></textarea>
+
+<div class="clear">
+	<div class="terms left">
+		<span>Terms</span>
+		<select name="terms_id" class="right">
+			<option>Pre Define Terms</option>
+			<?php foreach ($terms as $r): ?>
+			<option value="<?php echo $r->id ?>"><?php echo $r->name ?></option>
+			<?php endforeach ?>
+		</select>
+		<br />
+		<div class="clear"></div>
+		<textarea name="terms_content"></textarea>
+	</div>
+	<div class="terms right">
+		<span>Notes for Customer</span>
+		<br />
+		<textarea name="notes" class="notes"></textarea>
+	</div>
 </div>
-<div id="terms" class="right">
-	<span>Notes for Customer</span>
-	<br />
-	<textarea></textarea>
+
+<div class="div_btn clear">
+	<input id="submit_btn" type="submit" class="btn" value="Submit" />
 </div>
-<input id="submit_btn" type="submit" class="btn" value="Submit" />
 </form>

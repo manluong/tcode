@@ -32,7 +32,8 @@ class Invoice extends MY_Controller {
 			'invoice' => $this->InvoiceM->get($id),
 			'invoice_items' => $this->InvoiceItemM->getByInvoiceId($id),
 			'customer' => $this->InvoiceM->getCustomer(),
-			'tax' => $this->InvoiceM->getTax()
+			'tax' => $this->InvoiceM->getTax(),
+			'terms' => $this->InvoiceM->getTerms()
 		);
 
 		$this->data['content'] = $this->load->view(get_template().'/invoice/edit', $data, TRUE);
@@ -47,9 +48,12 @@ class Invoice extends MY_Controller {
 			'customer_card_id' => $this->input->post('customer_id'),
 			'invoice_stamp' => date('Y-m-d', strtotime($this->input->post('issue_date'))),
 			'payment_due_stamp' => date('Y-m-d', strtotime($this->input->post('due_date'))),
-			'custpo' => $this->input->post('po_number'),
+			'purchase_order_number' => $this->input->post('po_number'),
 			'tax_id' => $this->input->post('tax_id'),
-			'currency' => $this->input->post('currency')
+			'currency' => $this->input->post('currency'),
+			'terms_id' => $this->input->post('terms_id'),
+			'terms_content' => $this->input->post('terms_content'),
+			'memo' => $this->input->post('notes')
 		);
 
 		$this->InvoiceM->save($data);
@@ -108,7 +112,8 @@ class Invoice extends MY_Controller {
 	function add() {
 		$data = array(
 			'customer' => $this->InvoiceM->getCustomer(),
-			'tax' => $this->InvoiceM->getTax()
+			'tax' => $this->InvoiceM->getTax(),
+			'terms' => $this->InvoiceM->getTerms()
 		);
 
 		$this->data['content'] = $this->load->view(get_template().'/invoice/new', $data, TRUE);
@@ -121,9 +126,12 @@ class Invoice extends MY_Controller {
 			'customer_card_id' => $this->input->post('customer_id'),
 			'invoice_stamp' => date('Y-m-d', strtotime($this->input->post('issue_date'))),
 			'payment_due_stamp' => date('Y-m-d', strtotime($this->input->post('due_date'))),
-			'custpo' => $this->input->post('po_number'),
+			'purchase_order_number' => $this->input->post('po_number'),
 			'tax_id' => $this->input->post('tax_id'),
-			'currency' => $this->input->post('currency')
+			'currency' => $this->input->post('currency'),
+			'terms_id' => $this->input->post('terms_id'),
+			'terms_content' => $this->input->post('terms_content'),
+			'memo' => $this->input->post('notes')
 		);
 
 		$invoice_id = $this->InvoiceM->save($data);
