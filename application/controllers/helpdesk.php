@@ -222,6 +222,8 @@ class Helpdesk extends MY_Controller {
 	}
 	
 	function save_insert_helpdesk(){
+		//$this->load->library('FileL');
+		//$this->filel->save('attach_file', $dir_id);
 		$data = array(
 			'subject' => $this->input->post('subject'),
 			'assign_id' => $this->input->post('assign'),
@@ -233,7 +235,10 @@ class Helpdesk extends MY_Controller {
 			//'created_stamp' => date('Y-m-d H:i:s',time()),
 		);
 		$insert_id = $this->DS_Helpdesk_NodatasetM->save($data);
-		echo $insert_id;
+		if($insert_id !=''){
+			echo $insert_id;
+			Header("Location: http://apple.local.net/helpdesk");
+		}
 	}
 	
 	function ajaxChangeInfoHelpDesk(){

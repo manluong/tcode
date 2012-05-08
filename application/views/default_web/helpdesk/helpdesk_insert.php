@@ -7,7 +7,24 @@
 <link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/bootstrap.min.css" />
 <link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/bootstrap-responsive.min.css" />
 
+<style>
+.file-wrapper {
+cursor: pointer;
+display: inline-block;
+overflow: hidden;
+position: relative;
+}
 
+.file-wrapper input {
+    opacity: 0.01;
+	cursor: pointer;
+    height: 100%;
+    position: absolute;
+    right: 0;
+    top: 0;
+	width:84px;
+}
+</style>
 <script type="text/javascript">
 function showRequest(formData, jqForm, options) {
 	var form = jqForm[0];
@@ -21,24 +38,8 @@ function submit_insert_helpdesk(){
 	var status = $('#a_helpdesk_comment_status').val();
 	var type = $('#a_helpdesk_comment_type').val();
 	var priority = $('#a_helpdesk_comment_priority').val();
-	
-	var url = 'helpdesk/save_insert_helpdesk/';
-	$.post(url,{
-			subject : subject,
-			assign: assign,
-			cc_email: cc_email,
-			group:group,
-			status:status,
-			type:type,
-			priority:priority,
-		},function(data){
-			if(data != ''){
-				helpdesk_ajax_content('/helpdesk/sendjson_list', 'helpdesk_list');
-			}else{
-				alert('Insert unsucessfull !');
-			}
-		}
-	);
+	 
+	 $('#frmManagement').submit();
 	
 }
 </script>
@@ -49,7 +50,7 @@ function submit_insert_helpdesk(){
 		
 		
 	</div>
-	<form id="frmManagement" action="<?=PATH_URL.'admincp/'.$module.'/save/'?>" method="post" enctype="multipart/form-data">
+	<form id="frmManagement" action="helpdesk/save_insert_helpdesk/" method="post" enctype="multipart/form-data">
 	<div id="helpdesk_info" style="height:200px;">
 		<ul id="form_change" >
 			<li><span class="helpdesk_info_span">Subject</span> <span class="input_change">: <input value="" type="text" name="subject" id="subject" /></span></li>
@@ -138,8 +139,11 @@ function submit_insert_helpdesk(){
 				</select>
 			</li>
 			
-			<li class="controls">
-				<span style="width:577px;float:left;"><button  class="btn" type="submit">Attach File</button></span>
+			<li class="controls" style="width:577px;">
+				<span class="file-wrapper">
+					<input  name="attach_file" id="attach_file" type="file"/>
+					<span style="cursor:pointer;" class="btn" >Attach File</span>
+				</span>
 			</li>
 			
 			<li class="controls" >

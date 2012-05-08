@@ -37,6 +37,7 @@ function helpdesk_ajax_content_json(jarray,divid) {
 		helpdesk_ajax_content_list(json,divid,links);
 		insert_edit_button();
 		add_btn_insert();
+		insert_fillter();
 		break;
 
 		case 'view':
@@ -92,6 +93,20 @@ function load_insert_helpdesk_form(){
 				$('#helpdesk_list').html(data);
 			}
 		);
+}
+
+function insert_fillter(){
+	$('#helpdesk_list_table_filter').append(
+		'<li class="controls">'+
+		'<label style="padding-right:5px;" class="control-label" for="select01">Fillter</label>'+
+		'<select id="helpdesk_fillter" name="helpdesk_fillter">'+
+			'<option value="">Group</option>'+
+			'<option value="">Status</option>'+
+			'<option value="">Type</option>'+
+			'<option value="">Priority</option>'+
+		'</select>'+
+		'</li>'
+	);
 }
 
 function helpdesk_ajax_content_echo(json,divid,content){
