@@ -5,7 +5,7 @@
 <div id="invoice_nav">
 	<ul class="nav_left">
 		<li class="main">Invoice</li>
-		<li>&gt; New</li>
+		<li>&gt; View</li>
 	</ul>
 	<ul class="nav_right">
 		<li><a href="#">Dashboard</a></li>
@@ -14,44 +14,40 @@
 	</ul>
 </div>
 
-<form id="invoice_form" action="/invoice/add_save" method="post">
+<div>
+	<?php echo '#'.$invoice['id'] ?>
+	<a href="#" >Pay</a>
+	<a href="/invoice/edit/<?php echo $invoice['id']?>" >Edit</a>
+	<a href="#" >Send</a>
+	<a href="#" >PDF</a>
+	<a href="#" >Print</a>
+</div>
+
 <div id="invoice_info">
 	<ul id="form_show">
 		<li>
 			<span class="invoice_info_span">Customer</span>
-			<select name="customer_id">
-				<option value="">---- Select ----</option>
-				<?php foreach ($customer as $id => $name): ?>
-				<option value="<?php echo $id ?>"><?php echo $name ?></option>
-				<?php endforeach ?>
-			</select>
+			<?php echo $invoice['customer_card_id'] ?>
 		</li>
 		<li>
 			<span class="invoice_info_span">Date of Issue</span>
-			<input type="text" name="issue_date" class="datepicker" style="width: 200px" />
+			<?php echo $invoice['invoice_stamp'] ?>
 		</li>
 		<li>
 			<span class="invoice_info_span">Due Date</span>
-			<input type="text" name="due_date" class="datepicker" style="width: 200px" />
+			<?php echo $invoice['payment_due_stamp'] ?>
 		</li>
 		<li>
 			<span class="invoice_info_span">PO Number</span>
-			<input type="text" name="po_number" />
+			<?php echo $invoice['custpo'] ?>
 		</li>
 		<li>
 			<span class="invoice_info_span">Tax</span>
-			<select name="tax_id">
-				<option value="">---- Select ----</option>
-				<option value="1">1</option>
-				<option value="2">2</option>
-				<?php foreach ($tax as $id => $name): ?>
-				<option value="<?php echo $id ?>"><?php echo $name ?></option>
-				<?php endforeach ?>
-			</select>
+			<?php echo $invoice['tax_id'] ?>
 		</li>
 		<li>
 			<span class="invoice_info_span">Currency</span>
-			<input type="text" name="currency" value="USD" />
+			<?php echo $invoice['currency'] ?>
 		</li>
 	</ul>
 </div>
@@ -59,7 +55,6 @@
 <table class="table">
 <thead>
 	<tr>
-		<th style="width: 5%"></th>
 		<th style="width: 10%">Product</th>
 		<th style="width: 30%">Description</th>
 		<th style="width: 10%">Unit Price</th>
@@ -67,21 +62,20 @@
 		<th style="width: 10%">Discount</th>
 		<th style="width: 10%">Tax</th>
 		<th style="width: 10%">Total</th>
-		<th style="width: 5%"></th>
 	</tr>
 </thead>
 <tbody>
+	<?php foreach ($invoice_items as $invoice_item): ?>
 	<tr>
-		<td><a href="#" class="add">+</a></td>
-		<td><input type="text" name="product[]" class="input_table"></td>
-		<td><input type="text" name="description[]" class="input_table"></td>
-		<td><input type="text" name="unit_price[]" class="input_table"></td>
-		<td><input type="text" name="qty[]" class="input_table"></td>
-		<td><input type="text" name="discount[]" class="input_table"></td>
-		<td><input type="text" name="tax[]" class="input_table"></td>
-		<td><input type="text" name="total[]" class="input_table"></td>
-		<td><a href="#" class="remove">x</a></td>
+		<td><?php echo $invoice_item->product_id ?></td>
+		<td><?php echo $invoice_item->description ?></td>
+		<td><?php echo $invoice_item->unit_price ?></td>
+		<td><?php echo $invoice_item->quantity ?></td>
+		<td><?php echo $invoice_item->discount ?></td>
+		<td><?php echo $invoice_item->tax_id ?></td>
+		<td><?php echo $invoice_item->total ?></td>
 	</tr>
+	<?php endforeach ?>
 	<!-- <tr>
 		<td></td>
 		<td colspan="3">
@@ -127,17 +121,11 @@
 <div class="clear"></div>
 <div id="terms" class="left">
 	<span>Terms</span>
-	<select class="right">
-		<option>Pre Define Terms</option>
-	</select>
 	<br />
-	<div class="clear"></div>
-	<textarea></textarea>
+	aaaaaaaaaaaaaaaaaaaaaaaaa
 </div>
 <div id="terms" class="right">
 	<span>Notes for Customer</span>
 	<br />
-	<textarea></textarea>
+	bbbbbbbbbbbbbbbbbbbbbbbbb
 </div>
-<input id="submit_btn" type="submit" class="btn" value="Submit" />
-</form>

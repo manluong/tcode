@@ -7,6 +7,7 @@ class Invoice extends MY_Controller {
 
 		$this->load->model('DS_Invoice');
 		$this->load->model('InvoiceM');
+		$this->load->model('InvoiceItemM');
 	}
 
 	function index() {
@@ -15,27 +16,141 @@ class Invoice extends MY_Controller {
 		$this->_do_output();
 	}
 
-	function edit($id) {
-		$this->data['content'] = $this->load->view(get_template().'/invoice/edit', '', TRUE);
+	function view($id) {
+		$data = array(
+			'invoice' => $this->InvoiceM->get($id),
+			'invoice_items' => $this->InvoiceItemM->getByInvoiceId($id)
+		);
+
+		$this->data['content'] = $this->load->view(get_template().'/invoice/view', $data, TRUE);
 
 		$this->_do_output();
 	}
 
+	function edit($id) {
+		$data = array(
+			'invoice' => $this->InvoiceM->get($id),
+			'invoice_items' => $this->InvoiceItemM->getByInvoiceId($id),
+			'customer' => $this->InvoiceM->getCustomer(),
+			'tax' => $this->InvoiceM->getTax()
+		);
+
+		$this->data['content'] = $this->load->view(get_template().'/invoice/edit', $data, TRUE);
+
+		$this->_do_output();
+	}
+
+	function edit_save() {
+		$invoice_id = $this->input->post('invoice_id');
+		$data = array(
+			'id' => $invoice_id,
+			'customer_card_id' => $this->input->post('customer_id'),
+			'invoice_stamp' => $this->input->post('issue_date'),
+			'payment_due_stamp' => $this->input->post('due_date'),
+			'custpo' => $this->input->post('po_number'),
+			'tax_id' => $this->input->post('tax_id'),
+			'currency' => $this->input->post('currency'),
+			'created_card_id' => 1,
+			'created_stamp' => date()
+		);
+
+		$this->InvoiceM->save($data);
+
+		$product = $this->input->post('product');
+		$description = $this->input->post('description');
+		$unit_price = $this->input->post('unit_price');
+		$qty = $this->input->post('qty');
+		$discount = $this->input->post('discount');
+		$tax = $this->input->post('tax');
+		$total = $this->input->post('total');
+
+		foreach ($product as $index => $value) {
+			$data = array(
+				'invoice_id' => $invoice_id,
+				'product_id' => $product[$index],
+				'description' => $description[$index],
+				'unit_price' => $unit_price[$index],
+				'quantity' => $qty[$index],
+				'discount' => $discount[$index],
+				'tax_id' => $tax[$index],
+				'total' => $total[$index],
+				'created_card_id' => 1,
+				'created_stamp' => date()
+			);
+
+			$invoice_item_id = $this->InvoiceItemM->save($data);
+		}
+
+		if ($invoice_id) {
+			redirect('/invoice/view/'.$invoice_id);
+		} else {
+			$details['data'] = $this->InvoiceM->get_save_errors();
+			$message = 'There was an error saving your data';
+		}
+
+		$this->RespM->set_message($message)
+				->set_type('')
+				->set_template('')
+				->set_success($success)
+				->set_title('Invoice Save')
+				->set_details($details)
+				->output_json();
+	}
+
 	function add() {
-		$data['customer'] = $this->InvoiceM->getCustomer();
+		$data = array(
+			'customer' => $this->InvoiceM->getCustomer(),
+			'tax' => $this->InvoiceM->getTax()
+		);
+
 		$this->data['content'] = $this->load->view(get_template().'/invoice/new', $data, TRUE);
 
 		$this->_do_output();
 	}
 
 	function add_save() {
-		$data['a_invoice_customer_card_id'] = $this->input->post('customer_id');
-		$success = $this->InvoiceM->save($data);
+		$data = array(
+			'customer_card_id' => $this->input->post('customer_id'),
+			'invoice_stamp' => $this->input->post('issue_date'),
+			'payment_due_stamp' => $this->input->post('due_date'),
+			'custpo' => $this->input->post('po_number'),
+			'tax_id' => $this->input->post('tax_id'),
+			'currency' => $this->input->post('currency'),
+			'created_card_id' => 1,
+			'created_stamp' => date()
+		);
 
-		if ($success) {
-			redirect('/invoice/edit/'.$success);
+		$invoice_id = $this->InvoiceM->save($data);
+
+		$product = $this->input->post('product');
+		$description = $this->input->post('description');
+		$unit_price = $this->input->post('unit_price');
+		$qty = $this->input->post('qty');
+		$discount = $this->input->post('discount');
+		$tax = $this->input->post('tax');
+		$total = $this->input->post('total');
+
+		foreach ($product as $index => $value) {
+			$data = array(
+				'invoice_id' => $invoice_id,
+				'product_id' => $product[$index],
+				'description' => $description[$index],
+				'unit_price' => $unit_price[$index],
+				'quantity' => $qty[$index],
+				'discount' => $discount[$index],
+				'tax_id' => $tax[$index],
+				'total' => $total[$index],
+				'created_card_id' => 1,
+				'created_stamp' => date()
+			);
+
+			$invoice_item_id = $this->InvoiceItemM->save($data);
+		}
+
+		if ($invoice_id) {
+			redirect('/invoice/view/'.$invoice_id);
 		} else {
-			$details['data'] = $this->DS_Invoice->get_save_errors();
+			$details['data'] = $this->InvoiceM->get_save_errors();
 			$message = 'There was an error saving your data';
 		}
 

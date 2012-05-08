@@ -438,19 +438,20 @@ $lang['a_helpdesk-modified_card_id'] = 'Modified card id';
 $lang['a_helpdesk-assign_id'] = 'Assigned';
 
 
-// Invoice
-$lang['a_invoice-a_invoice_id'] = 'Id';
-$lang['a_invoice-a_invoice_customer_card_id'] = 'Customer Card Id';
-$lang['a_invoice-a_invoice_invoice_stamp'] = 'Invoice Stamp';
-$lang['a_invoice-a_invoice_payment_due_stamp'] = 'Payment Due Stamp';
-$lang['a_invoice-a_invoice_currency'] = 'Currency';
-$lang['a_invoice-a_invoice_tax_id'] = 'Tax Id';
-$lang['a_invoice-a_invoice_custpo'] = 'Custpo';
-$lang['a_invoice-a_invoice_acc_code'] = 'Acc Code';
-$lang['a_invoice-a_invoice_modified_card_id'] = 'Modified Card Id';
-$lang['a_invoice-a_invoice_modified_stamp'] = 'Modified Stamp';
-$lang['a_invoice-a_invoice_created_card_id'] = 'Created Card Id';
-$lang['a_invoice-a_invoice_created_stamp'] = 'Created Stamp';
+// invoice
+$lang['a_invoice-id'] = 'Id';
+$lang['a_invoice-customer_card_id'] = 'Customer Card Id';
+$lang['a_invoice-invoice_stamp'] = 'Invoice Stamp';
+$lang['a_invoice-payment_due_stamp'] = 'Payment Due Stamp';
+$lang['a_invoice-currency'] = 'Currency';
+$lang['a_invoice-tax_id'] = 'Tax Id';
+$lang['a_invoice-custpo'] = 'Custpo';
+$lang['a_invoice-acc_code'] = 'Acc Code';
+$lang['a_invoice-modified_card_id'] = 'Modified Card Id';
+$lang['a_invoice-modified_stamp'] = 'Modified Stamp';
+$lang['a_invoice-created_card_id'] = 'Created Card Id';
+$lang['a_invoice-created_stamp'] = 'Created Stamp';
+
 
 // comment
 $lang['a_helpdesk_comment-id'] = 'Id';
@@ -481,3 +482,4 @@ $lang['error-not_numeric_field'] = 'This field can only contain numbers';
 $lang['error-invalid_option'] = 'The option you selected is invalid';
 $lang['error-invalid_email'] = 'The email address you entered is invalid';
 $lang['error-regex_failed'] = 'The content you entered failed to match a specific pattern';
+$lang['error-no_save_data'] = 'There is no data to be saved';

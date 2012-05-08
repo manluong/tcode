@@ -7,6 +7,7 @@
 		<li>&gt; List</li>
 	</ul>
 	<ul class="nav_right">
+		<li><a href="#">Dashboard</a></li>
 		<li><a href="/invoice">List</a></li>
 		<li><a href="/invoice/add">New</a></li>
 	</ul>

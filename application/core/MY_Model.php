@@ -69,6 +69,10 @@ class MY_Model extends CI_Model {
 			}
 		}
 
+		if ($this->sett_has_system_fields && $this->sett_filter_deleted) {
+			$this->db->where('deleted', 0);
+		}
+
 		$rs = $this->db->get();
 		if ($rs->num_rows() == 0) return FALSE;
 
@@ -92,6 +96,10 @@ class MY_Model extends CI_Model {
 			}
 		}
 
+		if ($this->sett_has_system_fields && $this->sett_filter_deleted) {
+			$this->db->where('deleted', 0);
+		}
+
 		if (count($this->order_by) > 0) {
 			foreach($this->order_by AS $w) {
 				$this->db->order_by($w);
@@ -107,6 +115,8 @@ class MY_Model extends CI_Model {
 		}
 
 		$rs = $this->db->get();
+
+		if ($rs->num_rows() == 0) return FALSE;
 
 		$results = $rs->result_array();
 
@@ -131,10 +141,17 @@ class MY_Model extends CI_Model {
 		}
 
 		if (count($ids)>0) {
-			$rs = $this->db->select()
-					->from($this->table)
-					->where_in($this->id_field, $ids)
-					->get();
+			$this->db->select()
+				->from($this->table)
+				->where_in($this->id_field, $ids);
+
+			if ($this->sett_has_system_fields && $this->sett_filter_deleted) {
+				$this->db->where('deleted', 0);
+			}
+
+			$rs = $this->db->get();
+
+			if ($rs->num_rows() == 0) return FALSE;
 
 			$temp = $rs->result_array();
 
@@ -162,7 +179,11 @@ class MY_Model extends CI_Model {
 		return $results;
 	}
 
-	function validate(&$data) {
+	function get_error_string() {
+		return implode("\n", $this->errors);
+	}
+
+	function is_valid(&$data) {
 		$is_new = !(isset($data[$this->id_field]) && $data[$this->id_field] !== FALSE);
 		$has_error = FALSE;
 
@@ -245,7 +266,12 @@ class MY_Model extends CI_Model {
 
 	function save($data=FALSE) {
 		//get data from POST based on data_fields
-		if ($data === FALSE) $data = $this->get_form_data();
+		if ($data === FALSE) {
+			$data = $this->get_form_data();
+			$this->errors[] = $this->lang->line('error-no_save_data');
+			$this->field_errors[$this->id_field][] = $this->lang->line('error-no_save_data');
+			if ($data === FALSE) return FALSE;
+		}
 
 		$is_new = !(isset($data[$this->id_field]) && $data[$this->id_field] !== FALSE);
 
@@ -253,7 +279,7 @@ class MY_Model extends CI_Model {
 		if ($this->sett_skip_validation) {
 			$is_valid = TRUE;
 		} else {
-			$is_valid = $this->validate($data);
+			$is_valid = $this->is_valid($data);
 		}
 
 		//if all ok, proceed to save/update
@@ -275,8 +301,29 @@ class MY_Model extends CI_Model {
 
 			$rs = $this->db->where($this->id_field, $data[$this->id_field])
 					->update($this->table, $data);
-			return $data[$id_field];
+			return $data[$this->id_field];
 		}
+	}
+
+	function delete($id, $actual_delete=FALSE) {
+		if ($this->sett_has_system_fields && $actual_delete===FALSE) {
+			$data = array(
+				'modified_stamp' => get_current_stamp(),
+				'modified_card_id' => $this->CI->UserM->get_card_id(),
+				'deleted' => 1,
+			);
+			$rs = $this->db->where($this->id_field, $id)
+					->limit(1)
+					->update($this->table, $data);
+		} else {
+			$rs = $this->db->where($this->id_field, $id)
+					->limit(1)
+					->delete($this->table);
+		}
+
+		if ($rs === FALSE) $this->errors[] = $this->db->_error_message();
+
+		return $rs;
 	}
 
 
@@ -365,6 +412,8 @@ class MY_Model extends CI_Model {
 
 			$data[$f] = $this->input->post($f);
 		}
+
+		if (count($data) == 0) return FALSE;
 
 		return $data;
 	}
