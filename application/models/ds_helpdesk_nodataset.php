@@ -3,11 +3,12 @@
 class DS_Helpdesk_Nodataset extends MY_Model {
 	function __construct() {
 		parent::__construct();
-		
+
 		$this->table = 'a_helpdesk';
 		$this->cache_enabled = TRUE;
+		$this->sett_filter_deleted = FALSE;
 	}
-	
+
 	function getContent($id){
 		$this->db->select('*');
 		$this->db->where('id',$id);
@@ -19,7 +20,7 @@ class DS_Helpdesk_Nodataset extends MY_Model {
 			return false;
 		}
 	}
-	
+
 	function getAssignName($id){
 		$this->db->select('nickname');
 		$this->db->where('id',$id);
@@ -36,5 +37,5 @@ class DS_Helpdesk_Nodataset extends MY_Model {
 			return false;
 		}
 	}
-	
+
 }
