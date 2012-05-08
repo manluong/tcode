@@ -37,7 +37,7 @@
 		</li>
 		<li>
 			<span class="invoice_info_span">PO Number</span>
-			<input type="text" name="po_number" value="<?php echo $invoice['custpo'] ?>" />
+			<input type="text" name="po_number" value="<?php echo $invoice['purchase_order_number'] ?>" />
 		</li>
 		<li>
 			<span class="invoice_info_span">Tax</span>

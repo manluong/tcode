@@ -39,7 +39,7 @@
 		</li>
 		<li>
 			<span class="invoice_info_span">PO Number</span>
-			<?php echo $invoice['custpo'] ?>
+			<?php echo $invoice['purchase_order_number'] ?>
 		</li>
 		<li>
 			<span class="invoice_info_span">Tax</span>
