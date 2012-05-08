@@ -15,7 +15,7 @@ class MY_Model extends CI_Model {
 	public $limit = 0;
 	public $offset = 0;
 
-	public $sett_filter_deleted = TRUE;
+	public $sett_filter_deleted = FALSE;
 	public $sett_has_system_fields = TRUE;
 	public $sett_fill_card_info = FALSE;
 	public $sett_fill_details = TRUE;
