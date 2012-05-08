@@ -44,7 +44,10 @@ function submit_comment(){
 	var comment = $('#a_helpdesk_comment_comment').val();
 	var id = $('#hiddenIdAdmincp').val();
 	var priority = $('#a_helpdesk_comment_priority').val();
-
+	var group = $('#a_helpdesk_comment_group').val();
+	var status = $('#a_helpdesk_comment_status').val();
+	var type = $('#a_helpdesk_comment_type').val();
+	
 	if($('#private').is(':checked')){
 		var pri = 1;
 	}else{

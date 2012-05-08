@@ -212,7 +212,7 @@ class Helpdesk extends MY_Controller {
 			'comment' => $this->input->post('comment'),
 			'private' => $this->input->post('pri'),
 			'helpdesk_id' => $id_helpdesk ,
-			'created_stamp' => date('Y-m-d H:i:s',time()),
+			//'created_stamp' => date('Y-m-d H:i:s',time()),
 		);
 		$insert_id = $this->DS_Comment->save($data);
 		
@@ -230,7 +230,7 @@ class Helpdesk extends MY_Controller {
 			'status' => $this->input->post('status'),
 			'type' => $this->input->post('type'),
 			'priority' => $this->input->post('priority'),
-			'created_stamp' => date('Y-m-d H:i:s',time()),
+			//'created_stamp' => date('Y-m-d H:i:s',time()),
 		);
 		$insert_id = $this->DS_Helpdesk_Nodataset->save($data);
 		echo $insert_id;
@@ -243,7 +243,6 @@ class Helpdesk extends MY_Controller {
 			'subject' => $this->input->post('subject'),
 			'assign_id' => $this->input->post('assign'),
 			'cc_email' => $this->input->post('cc_email'),
-			'modified_stamp' => date('Y-m-d H:i:s',time()),
 		);
 		$edit_id = $this->DS_Helpdesk_Nodataset->save($data);
 
