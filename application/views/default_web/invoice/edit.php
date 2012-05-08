@@ -29,11 +29,11 @@
 		</li>
 		<li>
 			<span class="invoice_info_span">Date of Issue</span>
-			<input type="text" name="issue_date" value="<?php echo $invoice['invoice_stamp'] ?>" class="datepicker" style="width: 200px" />
+			<input type="text" name="issue_date" value="<?php echo date('Y-m-d', strtotime($invoice['invoice_stamp'])) ?>" class="datepicker" style="width: 200px" />
 		</li>
 		<li>
 			<span class="invoice_info_span">Due Date</span>
-			<input type="text" name="due_date" value="<?php echo $invoice['payment_due_stamp'] ?>" class="datepicker" style="width: 200px" />
+			<input type="text" name="due_date" value="<?php echo date('Y-m-d', strtotime($invoice['payment_due_stamp'])) ?>" class="datepicker" style="width: 200px" />
 		</li>
 		<li>
 			<span class="invoice_info_span">PO Number</span>
@@ -55,7 +55,7 @@
 	</ul>
 </div>
 
-<table class="table">
+<!-- <table class="table">
 <thead>
 	<tr>
 		<th style="width: 5%"></th>
@@ -74,19 +74,30 @@
 	<tr>
 		<td><a href="#" class="add">+</a></td>
 		<td>
-			<input type="hidden" name="invoice_item_id[]" value="<?php echo $invoice_item->id ?>" class="input_table">
-			<input type="text" name="product[]" value="<?php echo $invoice_item->product_id ?>" class="input_table">
+			<input type="hidden" name="invoice_item_id[]" value="<?php echo $invoice_item->id ?>" class="input_table" />
+			<input type="text" name="product[]" value="<?php echo $invoice_item->product_id ?>" class="input_table" />
 		</td>
-		<td><input type="text" name="description[]" value="<?php echo $invoice_item->description ?>" class="input_table"></td>
-		<td><input type="text" name="unit_price[]" value="<?php echo $invoice_item->unit_price ?>" class="input_table"></td>
-		<td><input type="text" name="qty[]" value="<?php echo $invoice_item->quantity ?>" class="input_table"></td>
-		<td><input type="text" name="discount[]" value="<?php echo $invoice_item->discount ?>" class="input_table"></td>
-		<td><input type="text" name="tax[]" value="<?php echo $invoice_item->tax_id ?>" class="input_table"></td>
-		<td><input type="text" name="total[]" value="<?php echo $invoice_item->total ?>" class="input_table"></td>
+		<td><input type="text" name="description[]" value="<?php echo $invoice_item->description ?>" class="input_table" /></td>
+		<td><input type="text" name="unit_price[]" value="<?php echo $invoice_item->unit_price ?>" class="input_table" /></td>
+		<td><input type="text" name="qty[]" value="<?php echo $invoice_item->quantity ?>" class="input_table" /></td>
+		<td><input type="text" name="discount[]" value="<?php echo $invoice_item->discount ?>" class="input_table" /></td>
+		<td><input type="text" name="tax[]" value="<?php echo $invoice_item->tax_id ?>" class="input_table" /></td>
+		<td><input type="text" name="total[]" value="<?php echo $invoice_item->total ?>" class="input_table" /></td>
 		<td><a href="#" class="remove">x</a></td>
 	</tr>
 	<?php endforeach ?>
-	<!-- <tr>
+	<tr>
+		<td><a href="#" class="add">+</a></td>
+		<td><input type="text" name="product[]" class="input_table" /></td>
+		<td><input type="text" name="description[]" class="input_table" /></td>
+		<td><input type="text" name="unit_price[]" class="input_table" /></td>
+		<td><input type="text" name="qty[]" class="input_table" /></td>
+		<td><input type="text" name="discount[]" class="input_table" /></td>
+		<td><input type="text" name="tax[]" class="input_table" /></td>
+		<td><input type="text" name="total[]" class="input_table" /></td>
+		<td><a href="#" class="remove">x</a></td>
+	</tr>
+	<tr>
 		<td></td>
 		<td colspan="3">
 			<table class="default">
@@ -111,10 +122,84 @@
 		<td></td>
 		<td></td>
 		<td></td>
-	</tr> -->
+	</tr>
 </tbody>
-</table>
+</table> -->
 
+<div id="invoice_item_list">
+	<div class="invoice_item header clear">
+		<div><span>Product</span></div>
+		<div class="desc"><span>Description</span></div>
+		<div><span>Unit Price</span></div>
+		<div><span>Qty</span></div>
+		<div><span>Discount</span></div>
+		<div><span>Tax</span></div>
+		<div><span>Total</span></div>
+		<div class="act"></div>
+	</div>
+	<?php foreach ($invoice_items as $invoice_item): ?>
+	<div class="invoice_item clear">
+		<div>
+			<input type="hidden" name="invoice_item_id[]" value="<?php echo $invoice_item->id ?>" class="input_table" />
+			<input type="text" name="product[]" value="<?php echo $invoice_item->product_id ?>" class="input_table" />
+		</div>
+		<div class="desc"><input type="text" name="description[]" value="<?php echo $invoice_item->description ?>" class="input_table" /></div>
+		<div><input type="text" name="unit_price[]" value="<?php echo $invoice_item->unit_price ?>" class="input_table" /></div>
+		<div><input type="text" name="qty[]" value="<?php echo $invoice_item->quantity ?>" class="input_table" /></div>
+		<div><input type="text" name="discount[]" value="<?php echo $invoice_item->discount ?>" class="input_table" /></div>
+		<div><input type="text" name="tax[]" value="<?php echo $invoice_item->tax_id ?>" class="input_table" /></div>
+		<div><input type="text" name="total[]" value="<?php echo $invoice_item->total ?>" class="input_table" /></div>
+		<div class="act">
+			<a href="#" class="more">m</a>
+			<a href="#" class="add">+</a>
+			<a href="#" class="remove">x</a>
+		</div>
+		<div class="invoice_item_sub header clear"<?php echo ($invoice_item->price_type) ? '' : ' style="display: none;"' ?>>
+			<div><span>Price Type</span></div>
+			<div><span>From</span></div>
+			<div><span>To</span></div>
+			<div><span>Duration</span></div>
+		</div>
+		<div class="invoice_item_sub clear"<?php echo ($invoice_item->price_type) ? '' : ' style="display: none;"' ?>>
+			<div><input type="text" name="price_type[]" value="<?php echo $invoice_item->price_type ?>" class="input_table" /></div>
+			<div><input type="text" name="from[]" value="<?php echo date('Y-m-d', strtotime($invoice_item->subscription_start_stamp)) ?>" class="datepicker input_table" /></div>
+			<div><input type="text" name="to[]" value="<?php echo date('Y-m-d', strtotime($invoice_item->subscription_end_stamp)) ?>" class="datepicker input_table" /></div>
+			<div><input type="text" name="duration[]" value="<?php echo $invoice_item->duration_type ?>" class="input_table" /></div>
+		</div>
+	</div>
+	<?php endforeach ?>
+</div>
+
+<div id="invoice_item_template" style="display: none;">
+	<div class="invoice_item clear">
+		<div><input type="text" name="product[]" class="input_table" /></div>
+		<div class="desc"><input type="text" name="description[]" class="input_table" /></div>
+		<div><input type="text" name="unit_price[]" class="input_table" /></div>
+		<div><input type="text" name="qty[]" class="input_table" /></div>
+		<div><input type="text" name="discount[]" class="input_table" /></div>
+		<div><input type="text" name="tax[]" class="input_table" /></div>
+		<div><input type="text" name="total[]" class="input_table" /></div>
+		<div class="act">
+			<a href="#" class="more">m</a>
+			<a href="#" class="add">+</a>
+			<a href="#" class="remove">x</a>
+		</div>
+		<div class="invoice_item_sub header clear" style="display: none;">
+			<div><span>Price Type</span></div>
+			<div><span>From</span></div>
+			<div><span>To</span></div>
+			<div><span>Duration</span></div>
+		</div>
+		<div class="invoice_item_sub clear" style="display: none;">
+			<div><input type="text" name="price_type[]" class="input_table" /></div>
+			<div><input type="text" name="from[]" class="datepicker_temp input_table" /></div>
+			<div><input type="text" name="to[]" class="datepicker_temp input_table" /></div>
+			<div><input type="text" name="duration[]" class="input_table" /></div>
+		</div>
+	</div>
+</div>
+
+<div class="clear"></div>
 <div id="total" class="right">
 	<span>Sub Total</span>
 	<br />
