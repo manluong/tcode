@@ -10,12 +10,14 @@ class Helpdesk extends MY_Controller {
 		$this->load->model('Helpdesk_NodatasetM');
 	}
 
-	function index() {
-		$this->data['content'] = $this->load->view(get_template().'/helpdesk/index', '', TRUE);
-
+	function index(){
+		$content = array(
+			'result' => $this->Helpdesk_NodatasetM->get_list(),
+		);
+		$this->data['content'] = $this->load->view(get_template().'/helpdesk/index',$content, TRUE);
 		$this->_do_output();
 	}
-
+	
 	function sendhtml() {
 		$data = array();
 		$data['html'] = "I am a some HTML";
@@ -226,7 +228,7 @@ class Helpdesk extends MY_Controller {
 	}
 	
 	function save_insert_helpdesk(){
-		$this->load->library('FileL');
+		$this->CI->load->library('FileL');
 		$this->filel->save('attach_file', 'Helpdesk');
 		$data = array(
 			'subject' => $this->input->post('subject'),
@@ -236,11 +238,9 @@ class Helpdesk extends MY_Controller {
 			'status' => $this->input->post('status'),
 			'type' => $this->input->post('type'),
 			'priority' => $this->input->post('priority'),
-			//'created_stamp' => date('Y-m-d H:i:s',time()),
 		);
 		$insert_id = $this->Helpdesk_NodatasetM->save($data);
 
-		echo $insert_id;
 		if($insert_id !=''){
 			echo $insert_id;
 			//Header("Location: /helpdesk/index");
@@ -294,72 +294,6 @@ class Helpdesk extends MY_Controller {
 				->set_details($details)
 				->output_json();
 	}
-	
-	function comment_insert() {
-
-		$this->Helpdesk_CommentM->subaction = 'a';
-
-		//$this->DS_Helpdesk->id = 1;
-		$success = $this->Helpdesk_CommentM->save();
-
-
-		if ($success) {
-			$details['links'] = array(
-				array(
-				'type' => 'ajax',
-				'url' => '/helpdesk/sendjson_list',
-				'target' => '',
-				'text' => ''
-				)
-			);
-			$message = 'Data saved.';
-		} else {
-			$details['data'] = $this->Helpdesk_CommentM->get_save_errors();
-
-			$message = 'There was an error saving your data';
-		}
-
-		$this->RespM->set_message($message)
-				->set_type('')
-				->set_template('')
-				->set_success($success)
-				->set_title('Save Hello Dataset')
-				->set_details($details)
-				->output_json();
-	}
-	
-	/*
-	function helpdesk_insert() {
-		$data = $this->DS_Helpdesk->set_subaction('a')
-					 ->get_form_data();
-
-		$details = array(
-			'data' => $data,
-			'links' => array(
-				array(
-					'target' => '',
-					'text' => 'Submit',
-					'type' => 'submit',
-					'url' => '/helpdesk/helpdesk_insert/a',
-					'style' => 'default',
-					'icon' => '',
-				)
-			),
-			'setting' => array(
-				'hidelabel' => 0,
-			)
-		);
-
-		$this->RespM->set_message('sendjson_form')
-				->set_type('form')
-				->set_template('')
-				//->set_template('custom_editcard')//custom template
-				->set_success(true)
-				->set_title('HelpDesk Insert')
-				->set_details($details)
-				->output_json();
-	}
-	*/
 	
 	function sendjson_save($id) {
 

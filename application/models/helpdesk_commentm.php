@@ -8,6 +8,17 @@ class Helpdesk_CommentM extends MY_Model {
 		$this->cache_enabled = TRUE;
 	}
 	
+	function get_list(){
+		$this->db->select('*');
+		$query = $this->db->get('a_helpdesk');
+
+		if($query->result()){
+			return $query->result();
+		}else{
+			return false;
+		}
+	}
+	
 	function get_group(){
 		$this->db->select('*');
 		$query = $this->db->get('a_access_gpsub');
