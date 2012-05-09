@@ -9,7 +9,6 @@
 
 <style>
 .file-wrapper {
-cursor: pointer;
 display: inline-block;
 overflow: hidden;
 position: relative;
@@ -17,12 +16,12 @@ position: relative;
 
 .file-wrapper input {
     opacity: 0.01;
-	cursor: pointer;
     height: 100%;
     position: absolute;
-    right: 0;
+    left: -131px;
     top: 0;
 	width:84px;
+	cursor:pointer;
 }
 </style>
 <script type="text/javascript">
@@ -67,7 +66,7 @@ function submit_insert_helpdesk(){
 				</select>
 			</li>
 			
-			<li><span class="helpdesk_info_span">CC</span> <span class="input_change">: <input name="cc_email" value="" type="text" id="cc_email" /></span></li>
+			<li><span class="helpdesk_info_span">CC Mail</span> <span class="input_change">: <input name="cc_email" value="" type="text" id="cc_email" /></span></li>
 		</ul>
 	</div>
 	

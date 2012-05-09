@@ -96,10 +96,17 @@ function load_insert_helpdesk_form(){
 }
 
 function insert_fillter(){
-	$('#helpdesk_list_table_filter').append(
-		'<li class="controls">'+
+	$('#helpdesk_list_table_filter').html(
+		'<div class="input-prepend" style="float:left;">'+
+			'<span class="add-on">'+
+				'<i class="icon-search"></i>'+
+			'</span>'+
+			'<input type="text">'+
+		'</div>'+
+		'<li style="float:left;margin-left:20px;" class="controls">'+
 		'<label style="padding-right:5px;" class="control-label" for="select01">Fillter</label>'+
 		'<select id="helpdesk_fillter" name="helpdesk_fillter">'+
+			'<option value="">All</option>'+
 			'<option value="">Group</option>'+
 			'<option value="">Status</option>'+
 			'<option value="">Type</option>'+

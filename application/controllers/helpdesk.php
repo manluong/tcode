@@ -6,11 +6,8 @@ class Helpdesk extends MY_Controller {
 		parent::__construct();
 
 		$this->load->model('DS_Helpdesk');
-		$this->load->model('DS_CommentM');
-		$this->load->model('DS_Helpdesk_NodatasetM');
-
-
-		
+		$this->load->model('Helpdesk_CommentM');
+		$this->load->model('Helpdesk_NodatasetM');
 	}
 
 	function index() {
@@ -176,23 +173,18 @@ class Helpdesk extends MY_Controller {
 		$id = $this->input->post('id');
 		$result[0] = array();
 		if($id!=0){
-			$result = $this->DS_CommentM->get_content_helpdesk($id);
+			$result = $this->Helpdesk_CommentM->get_content_helpdesk($id);
 
 		}
 		$data = array(
 			'id' => $id,
-			'group' =>  $this->DS_CommentM->get_group(),
-			'status' => $this->DS_CommentM->get_status(),
-			'priority' => $this->DS_CommentM->get_priority(),
-			'type' => $this->DS_CommentM->get_type(),
-			'comment' => $this->DS_CommentM->get_content($id),
-
-
-
-
-
+			'group' =>  $this->Helpdesk_CommentM->get_group(),
+			'status' => $this->Helpdesk_CommentM->get_status(),
+			'priority' => $this->Helpdesk_CommentM->get_priority(),
+			'type' => $this->Helpdesk_CommentM->get_type(),
+			'comment' => $this->Helpdesk_CommentM->get_content($id),
 			'result' => $result[0],
-			'assign' => $this->DS_CommentM->get_assign(),
+			'assign' => $this->Helpdesk_CommentM->get_assign(),
 
 		);	
 		$content = $this->load->view(get_template().'/helpdesk/comment',$data ,true);
@@ -201,16 +193,11 @@ class Helpdesk extends MY_Controller {
 	
 	function insert_helpdesk_form() {
 		$data = array(
-			'group' =>  $this->DS_CommentM->get_group(),
-			'status' => $this->DS_CommentM->get_status(),
-			'priority' => $this->DS_CommentM->get_priority(),
-			'type' => $this->DS_CommentM->get_type(),
-			'assign' => $this->DS_CommentM->get_assign(),
-
-
-
-
-
+			'group' =>  $this->Helpdesk_CommentM->get_group(),
+			'status' => $this->Helpdesk_CommentM->get_status(),
+			'priority' => $this->Helpdesk_CommentM->get_priority(),
+			'type' => $this->Helpdesk_CommentM->get_type(),
+			'assign' => $this->Helpdesk_CommentM->get_assign(),
 		);	
 		$content = $this->load->view(get_template().'/helpdesk/helpdesk_insert',$data ,true);
 		echo $content;
@@ -229,18 +216,18 @@ class Helpdesk extends MY_Controller {
 			'created_stamp' => date('Y-m-d H:i:s',time()),
 
 		);
-		$insert_id = $this->DS_CommentM->save($data);
+		$insert_id = $this->Helpdesk_CommentM->save($data);
 
 		
-		$data_ajax['comment'] = $this->DS_CommentM->get_content($id_helpdesk);
+		$data_ajax['comment'] = $this->Helpdesk_CommentM->get_content($id_helpdesk);
 
 		$ajax_content = $this->load->view(get_template().'/helpdesk/ajax_updateComment',$data_ajax ,true);
 		echo $ajax_content;
 	}
 	
 	function save_insert_helpdesk(){
-		//$this->load->library('FileL');
-		//$this->filel->save('attach_file', $dir_id);
+		$this->load->library('FileL');
+		$this->filel->save('attach_file', 'Helpdesk');
 		$data = array(
 			'subject' => $this->input->post('subject'),
 			'assign_id' => $this->input->post('assign'),
@@ -251,12 +238,12 @@ class Helpdesk extends MY_Controller {
 			'priority' => $this->input->post('priority'),
 			//'created_stamp' => date('Y-m-d H:i:s',time()),
 		);
-		$insert_id = $this->DS_Helpdesk_NodatasetM->save($data);
+		$insert_id = $this->Helpdesk_NodatasetM->save($data);
 
 		echo $insert_id;
 		if($insert_id !=''){
 			echo $insert_id;
-			Header("Location: http://apple.local.net/helpdesk");
+			//Header("Location: /helpdesk/index");
 		}
 	}
 	
@@ -268,11 +255,9 @@ class Helpdesk extends MY_Controller {
 			'assign_id' => $this->input->post('assign'),
 			'cc_email' => $this->input->post('cc_email'),
 		);
-		$edit_id = $this->DS_Helpdesk_NodatasetM->save($data);
-
-
+		$edit_id = $this->Helpdesk_NodatasetM->save($data);
 		$content = array (
-			'info' => $this->DS_Helpdesk_NodatasetM->get_content($id),
+			'info' => $this->Helpdesk_NodatasetM->get_content($id),
 
 		);
 
@@ -312,10 +297,10 @@ class Helpdesk extends MY_Controller {
 	
 	function comment_insert() {
 
-		$this->DS_CommentM->subaction = 'a';
+		$this->Helpdesk_CommentM->subaction = 'a';
 
 		//$this->DS_Helpdesk->id = 1;
-		$success = $this->DS_CommentM->save();
+		$success = $this->Helpdesk_CommentM->save();
 
 
 		if ($success) {
@@ -329,7 +314,7 @@ class Helpdesk extends MY_Controller {
 			);
 			$message = 'Data saved.';
 		} else {
-			$details['data'] = $this->DS_CommentM->get_save_errors();
+			$details['data'] = $this->Helpdesk_CommentM->get_save_errors();
 
 			$message = 'There was an error saving your data';
 		}
