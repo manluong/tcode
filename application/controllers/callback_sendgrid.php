@@ -4,39 +4,11 @@ class Callback_sendgrid extends MY_Controller {
 
 	function __construct() {
 		$this->allow_unauthed_access = TRUE;
-		
+
 		parent::__construct();
-		$this->setup_db();
 		$this->load->spark('curl/1.2.0');
 		$this->load->library('EmailL');
 		$this->load->model('EmailM');
-	}
-
-	private function setup_db() {
-		if (ENVIRONMENT != 'development') {
-			$domain = explode('.', $_SERVER['SERVER_NAME']);
-			//if ($domain[1]!=='8force' || $domain[2]!=='net') die('There is a problem with the domain name.');
-			$this->domain = $domain[0];
-		}
-
-		if (ENVIRONMENT == 'development') return NULL;
-
-		//load the default db settings in the configuration files
-		include(APPPATH.'config/'.ENVIRONMENT.'/database.php');
-		$config = $db['default'];
-
-		//subdomain defines database table to use
-		$config['database'] = 't_'.$this->domain;
-
-		if (APP_ROLE == 'TSUB') {
-			$config['username'] = 't_'.$this->domain;
-		}
-
-		if (APP_ROLE == 'TBOSS' && ENVIRONMENT == 'testing') {
-			$config['database'] = 't_'.$this->domain.'2';
-		}
-
-		$this->load->database($config);
 	}
 
 	// Updates email result in serailized array
