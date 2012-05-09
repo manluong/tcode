@@ -9,7 +9,6 @@ class MY_Controller extends CI_Controller {
 		'app_id' => '',
 
 		'action' => '',
-		'actiongp' => '',
 
 		'id_plain' => 0,
 		'id_encrypted' => 0,
@@ -93,17 +92,17 @@ class MY_Controller extends CI_Controller {
 		$this->load->model('LicenseM');
 		$this->load->model('RespM');
 
+		$this->AppM->setup();
+		
 		$this->url['app_id'] = $this->AppM->get_id($this->url['app']);
-		$this->url['actiongp'] = $this->AppM->get_group($this->url['app'], $this->url['action']);
 
 		$this->UserM->setup();
 		$this->setup_language();
 		$this->LogM->start_log();
-		$this->AppM->setup();
 		$this->LicenseM->setup();
 		$this->setup_output();
 
-		if ($this->AppM->must_disable_plain_id()) $this->ACLM->check_id_encryption();
+		if ($this->AppM->must_disable_plain_id($this->url['app'])) $this->ACLM->check_id_encryption();
 		$this->ACLM->check_app_access();
 		if (APP_ROLE == 'TSUB') {
 			if ($this->LicenseM->has_restriction($this->url['app_id'], 'access')) {
