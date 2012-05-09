@@ -31,11 +31,11 @@
 		</li>
 		<li>
 			<span class="invoice_info_span">Date of Issue</span>
-			<?php echo $invoice['invoice_stamp'] ?>
+			<?php echo date('Y-m-d', strtotime($invoice['invoice_stamp'])) ?>
 		</li>
 		<li>
 			<span class="invoice_info_span">Due Date</span>
-			<?php echo $invoice['payment_due_stamp'] ?>
+			<?php echo date('Y-m-d', strtotime($invoice['payment_due_stamp'])) ?>
 		</li>
 		<li>
 			<span class="invoice_info_span">PO Number</span>
@@ -52,7 +52,7 @@
 	</ul>
 </div>
 
-<table class="table">
+<!-- <table class="table">
 <thead>
 	<tr>
 		<th style="width: 10%">Product</th>
@@ -76,7 +76,7 @@
 		<td><?php echo $invoice_item->total ?></td>
 	</tr>
 	<?php endforeach ?>
-	<!-- <tr>
+	<tr>
 		<td></td>
 		<td colspan="3">
 			<table class="default">
@@ -101,9 +101,45 @@
 		<td></td>
 		<td></td>
 		<td></td>
-	</tr> -->
+	</tr>
 </tbody>
-</table>
+</table> -->
+
+<div id="invoice_item_list">
+	<div class="invoice_item header clear">
+		<div><span>Product</span></div>
+		<div class="desc"><span>Description</span></div>
+		<div><span>Unit Price</span></div>
+		<div><span>Qty</span></div>
+		<div><span>Discount</span></div>
+		<div><span>Tax</span></div>
+		<div><span>Total</span></div>
+		<div class="act"></div>
+	</div>
+	<?php foreach ($invoice_items as $invoice_item): ?>
+	<div class="invoice_item clear">
+		<div><?php echo $invoice_item->product_id ?></div>
+		<div class="desc"><?php echo $invoice_item->description ?></div>
+		<div><?php echo $invoice_item->unit_price ?></div>
+		<div><?php echo $invoice_item->quantity ?></div>
+		<div><?php echo $invoice_item->discount ?></div>
+		<div><?php echo $invoice_item->tax_id ?></div>
+		<div><?php echo $invoice_item->total ?></div>
+		<div class="invoice_item_sub header clear"<?php echo ($invoice_item->price_type) ? '' : ' style="display: none;"' ?>>
+			<div><span>Price Type</span></div>
+			<div><span>From</span></div>
+			<div><span>To</span></div>
+			<div><span>Duration</span></div>
+		</div>
+		<div class="invoice_item_sub clear"<?php echo ($invoice_item->price_type) ? '' : ' style="display: none;"' ?>>
+			<div><?php echo $invoice_item->price_type ?></div>
+			<div><?php echo date('Y-m-d', strtotime($invoice_item->subscription_start_stamp)) ?></div>
+			<div><?php echo date('Y-m-d', strtotime($invoice_item->subscription_end_stamp)) ?></div>
+			<div><?php echo $invoice_item->duration_type ?></div>
+		</div>
+	</div>
+	<?php endforeach ?>
+</div>
 
 <div id="total" class="right">
 	<span>Sub Total</span>

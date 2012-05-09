@@ -7,9 +7,6 @@
 .clear {
 	clear: both;
 }
-img {
-	border: 0 none;
-}
 a {
 	text-decoration: none;
 }
@@ -88,19 +85,73 @@ ul {
 	margin-right: 25px;
 }
 #total {
-	margin: 20px 0;
+	margin: 20px 0 40px 0;
 }
 #total span {
 	margin-right: 250px;
 }
-#terms {
+.terms {
 	width: 480px;
+	margin-right: 10px;
 }
-#terms span{
+.terms span {
 	height: 28px;
-	margin-bottom: 20px;
 }
-#terms textarea{
-	height: 200px;
+.terms textarea {
+	height: 150px;
 	width: 100%;
 }
+.terms textarea.notes {
+	margin-top: 19px;
+}
+.invoice_item div {
+	float: left;
+	margin-left: 5px;
+	padding: 0 5px;
+	width: 100px;
+}
+div.invoice_item_sub {
+	margin-left: 150px;
+	width: 100%;
+}
+.invoice_item_sub div {
+	float: left;
+	margin-left: 5px;
+	padding: 0 5px;
+	width: 100px;
+}
+.header span {
+	font-weight: bold;
+}
+div.act {
+	width: 40px;
+}
+div.desc {
+	width: 300px;
+}
+.div_btn {
+	margin: 0 auto;
+	padding: 10px 0 50px 0;
+	text-align: center;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

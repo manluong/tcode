@@ -32,7 +32,8 @@ class Invoice extends MY_Controller {
 			'invoice' => $this->InvoiceM->get($id),
 			'invoice_items' => $this->InvoiceItemM->getByInvoiceId($id),
 			'customer' => $this->InvoiceM->getCustomer(),
-			'tax' => $this->InvoiceM->getTax()
+			'tax' => $this->InvoiceM->getTax(),
+			'terms' => $this->InvoiceM->getTerms()
 		);
 
 		$this->data['content'] = $this->load->view(get_template().'/invoice/edit', $data, TRUE);
@@ -45,13 +46,14 @@ class Invoice extends MY_Controller {
 		$data = array(
 			'id' => $invoice_id,
 			'customer_card_id' => $this->input->post('customer_id'),
-			'invoice_stamp' => $this->input->post('issue_date'),
-			'payment_due_stamp' => $this->input->post('due_date'),
+			'invoice_stamp' => date('Y-m-d', strtotime($this->input->post('issue_date'))),
+			'payment_due_stamp' => date('Y-m-d', strtotime($this->input->post('due_date'))),
 			'purchase_order_number' => $this->input->post('po_number'),
 			'tax_id' => $this->input->post('tax_id'),
 			'currency' => $this->input->post('currency'),
-			'created_card_id' => 1,
-			'created_stamp' => date()
+			'terms_id' => $this->input->post('terms_id'),
+			'terms_content' => $this->input->post('terms_content'),
+			'memo' => $this->input->post('notes')
 		);
 
 		$this->InvoiceM->save($data);
@@ -63,22 +65,32 @@ class Invoice extends MY_Controller {
 		$discount = $this->input->post('discount');
 		$tax = $this->input->post('tax');
 		$total = $this->input->post('total');
+		$price_type = $this->input->post('price_type');
+		$from = $this->input->post('from');
+		$to = $this->input->post('to');
+		$duration = $this->input->post('duration');
+
+		$this->InvoiceItemM->deleteByInvoiceId($invoice_id);
 
 		foreach ($product as $index => $value) {
-			$data = array(
-				'invoice_id' => $invoice_id,
-				'product_id' => $product[$index],
-				'description' => $description[$index],
-				'unit_price' => $unit_price[$index],
-				'quantity' => $qty[$index],
-				'discount' => $discount[$index],
-				'tax_id' => $tax[$index],
-				'total' => $total[$index],
-				'created_card_id' => 1,
-				'created_stamp' => date()
-			);
+			if ($product[$index]) {
+				$data = array(
+					'invoice_id' => $invoice_id,
+					'product_id' => $product[$index],
+					'description' => $description[$index],
+					'unit_price' => $unit_price[$index],
+					'quantity' => $qty[$index],
+					'discount' => $discount[$index],
+					'tax_id' => $tax[$index],
+					'total' => $total[$index],
+					'price_type' => $price_type[$index],
+					'subscription_start_stamp' => date('Y-m-d', strtotime($from[$index])),
+					'subscription_end_stamp' => date('Y-m-d', strtotime($to[$index])),
+					'duration_type' => $duration[$index]
+				);
 
-			$invoice_item_id = $this->InvoiceItemM->save($data);
+				$invoice_item_id = $this->InvoiceItemM->save($data);
+			}
 		}
 
 		if ($invoice_id) {
@@ -100,7 +112,8 @@ class Invoice extends MY_Controller {
 	function add() {
 		$data = array(
 			'customer' => $this->InvoiceM->getCustomer(),
-			'tax' => $this->InvoiceM->getTax()
+			'tax' => $this->InvoiceM->getTax(),
+			'terms' => $this->InvoiceM->getTerms()
 		);
 
 		$this->data['content'] = $this->load->view(get_template().'/invoice/new', $data, TRUE);
@@ -111,13 +124,14 @@ class Invoice extends MY_Controller {
 	function add_save() {
 		$data = array(
 			'customer_card_id' => $this->input->post('customer_id'),
-			'invoice_stamp' => $this->input->post('issue_date'),
-			'payment_due_stamp' => $this->input->post('due_date'),
+			'invoice_stamp' => date('Y-m-d', strtotime($this->input->post('issue_date'))),
+			'payment_due_stamp' => date('Y-m-d', strtotime($this->input->post('due_date'))),
 			'purchase_order_number' => $this->input->post('po_number'),
 			'tax_id' => $this->input->post('tax_id'),
 			'currency' => $this->input->post('currency'),
-			'created_card_id' => 1,
-			'created_stamp' => date()
+			'terms_id' => $this->input->post('terms_id'),
+			'terms_content' => $this->input->post('terms_content'),
+			'memo' => $this->input->post('notes')
 		);
 
 		$invoice_id = $this->InvoiceM->save($data);
@@ -129,22 +143,30 @@ class Invoice extends MY_Controller {
 		$discount = $this->input->post('discount');
 		$tax = $this->input->post('tax');
 		$total = $this->input->post('total');
+		$price_type = $this->input->post('price_type');
+		$from = $this->input->post('from');
+		$to = $this->input->post('to');
+		$duration = $this->input->post('duration');
 
 		foreach ($product as $index => $value) {
-			$data = array(
-				'invoice_id' => $invoice_id,
-				'product_id' => $product[$index],
-				'description' => $description[$index],
-				'unit_price' => $unit_price[$index],
-				'quantity' => $qty[$index],
-				'discount' => $discount[$index],
-				'tax_id' => $tax[$index],
-				'total' => $total[$index],
-				'created_card_id' => 1,
-				'created_stamp' => date()
-			);
+			if ($product[$index]) {
+				$data = array(
+					'invoice_id' => $invoice_id,
+					'product_id' => $product[$index],
+					'description' => $description[$index],
+					'unit_price' => $unit_price[$index],
+					'quantity' => $qty[$index],
+					'discount' => $discount[$index],
+					'tax_id' => $tax[$index],
+					'total' => $total[$index],
+					'price_type' => $price_type[$index],
+					'subscription_start_stamp' => date('Y-m-d', strtotime($from[$index])),
+					'subscription_end_stamp' => date('Y-m-d', strtotime($to[$index])),
+					'duration_type' => $duration[$index]
+				);
 
-			$invoice_item_id = $this->InvoiceItemM->save($data);
+				$invoice_item_id = $this->InvoiceItemM->save($data);
+			}
 		}
 
 		if ($invoice_id) {

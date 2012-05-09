@@ -1,6 +1,6 @@
 <?php if (!defined('BASEPATH')) exit('No direct access allowed.');
 
-class DS_CommentM extends MY_Model {
+class DS_Comment extends MY_Model {
 	function __construct() {
 		parent::__construct();
 		
@@ -8,7 +8,7 @@ class DS_CommentM extends MY_Model {
 		$this->cache_enabled = TRUE;
 	}
 	
-	function get_group(){
+	function getGroup(){
 		$this->db->select('*');
 		$query = $this->db->get('a_access_gpsub');
 
@@ -19,7 +19,7 @@ class DS_CommentM extends MY_Model {
 		}
 	}
 	
-	function get_status(){
+	function getStatus(){
 		$this->db->select('*');
 		$query = $this->db->get('a_status');
 
@@ -30,7 +30,7 @@ class DS_CommentM extends MY_Model {
 		}
 	}
 	
-	function get_type(){
+	function getType(){
 		$this->db->select('*');
 		$query = $this->db->get('a_type');
 
@@ -41,7 +41,7 @@ class DS_CommentM extends MY_Model {
 		}
 	}
 	
-	function get_priority(){
+	function getPriority(){
 		$this->db->select('*');
 		$query = $this->db->get('a_priority');
 
@@ -52,7 +52,7 @@ class DS_CommentM extends MY_Model {
 		}
 	}
 	
-	function get_assign(){
+	function getAssign(){
 		$this->db->select('id,nickname');
 		$query = $this->db->get('card');
 
@@ -63,7 +63,7 @@ class DS_CommentM extends MY_Model {
 		}
 	}
 	
-	function get_content($id){
+	function getContent($id){
 		$this->db->select('*');
 		$this->db->where('helpdesk_id',$id);
 		$query = $this->db->get($this->table);
@@ -75,7 +75,7 @@ class DS_CommentM extends MY_Model {
 		}
 	}
 	
-	function get_content_helpdesk($id){
+	function getContentHelpdesk($id){
 		$this->db->select('*');
 		$this->db->where('id',$id);
 		$query = $this->db->get('a_helpdesk');
@@ -86,22 +86,4 @@ class DS_CommentM extends MY_Model {
 			return false;
 		}
 	}
-	
-	function get_assigname($id){
-		$this->db->select('nickname');
-		$this->db->where('id',$id);
-		$query = $this->db->get('card');
-
-		if($query->result()){
-			$tmp = $query->result();
-			if(!empty($tmp)){
-				foreach($tmp as $k){
-					return $k->nickname;
-				}
-			}
-		}else{
-			return false;
-		}
-	}
-
 }

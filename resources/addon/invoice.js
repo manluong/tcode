@@ -115,7 +115,7 @@ function invoice_ajax_content_view(json,divid,links){
 	var jsonformat = {};
 
 	for(var i = 0; i < thisLength; i++) {
-		var view = {label: json['details']['data'][i]['label'], value: json['details']['data'][i]['value'], fieldname: json['details']['data'][i]['fieldname']}
+		var view = {label: json['details']['data'][i]['label'], value: json['details']['data'][i]['value'], fieldname: json['details']['data'][i]['fieldname']};
 		html = html + Mustache.to_html(tpl_content_view, view);
 
 		jsonformat[json['details']['data'][i]['fieldname']+'_label'] = json['details']['data'][i]['label'];
@@ -295,7 +295,7 @@ function invoice_ajax_content_links(links,divid){
 	linkre.bu = linkhtml;
 
 	//warp the button
-	var linkarray = {links: linkhtml}
+	var linkarray = {links: linkhtml};
 	linkre.html = Mustache.to_html(tpl_link.warp, linkarray);
 
 	return linkre;
@@ -367,7 +367,7 @@ function invoice_ajax_content_errorstyle(){
 }
 
 
-function add_row(object) {
+/*function add_row(object) {
 	var html = '' +
 		'<tr>' +
 		'<td><a href="#" class="add">+</a></td>' +
@@ -398,10 +398,50 @@ function remove_row(object) {
 	if ($(table).find('tr').length == 1) {
 		add_row(table);
 	}
+}*/
+
+function add_new_row() {
+	var html = $('#invoice_item_template').html();
+	$('#invoice_item_list').append(html);
+	add_datetimepicker();
+}
+
+function add_row(object) {
+	var item = $(object).closest('div.invoice_item');
+	var html = $('#invoice_item_template').html();
+	$(item).after(html);
+	add_datetimepicker();
+}
+
+function remove_row(object) {
+	var item = $(object).closest('div.invoice_item');
+	item.remove();
+	
+	if ($('#invoice_item_list div.invoice_item').length == 1) {
+		add_new_row();
+	}
+}
+
+function more(object) {
+	var item = $(object).closest('div.invoice_item');
+	item.find('div.invoice_item_sub').toggle();
+}
+
+function add_datetimepicker() {
+	$('#invoice_item_list .datepicker_temp')
+		.removeClass('.datepicker_temp')
+		.addClass('datepicker')
+		.datetimepicker({
+			showTimepicker: false,
+			dateFormat: 'yy-mm-dd'
+	});
 }
 
 $(document).ready(function() {
-	$('.datepicker').datetimepicker();
+	$('.datepicker').datetimepicker({
+		showTimepicker: false,
+		dateFormat: 'yy-mm-dd'
+	});
 	$('a.add').live('click', function(e) {
 		e.preventDefault();
 		add_row(this);
@@ -410,6 +450,11 @@ $(document).ready(function() {
 		e.preventDefault();
 		remove_row(this);
 	});
+	$('a.more').live('click', function(e) {
+		e.preventDefault();
+		more(this);
+	});
+	add_new_row();
 	
 	//$('#submit_btn').click(function() {
 	//	$.ajax({
