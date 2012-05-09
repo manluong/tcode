@@ -1,9 +1,70 @@
+<script type="text/javascript" >
+	$(document).ready(function(){
+
+	});
+
+	function ajax_search(){
+		var value = $('#helpdesk_search').val();
+		
+		var url = 'helpdesk/ajax_search/';
+		$.post(url,{
+				value : value
+			},function(data){
+				$('#helpdesk_datalist').html(data);
+			}
+		);
+	}
+	
+	function group_fillter(){
+		var value = $('#helpdesk_group').val();
+		var url = 'helpdesk/group_fillter/';
+		$.post(url,{
+				value : value
+			},function(data){
+				$('#helpdesk_datalist').html(data);
+			}
+		);
+	}
+	
+	function status_fillter(){
+		var value = $('#helpdesk_status').val();
+		var url = 'helpdesk/status_fillter/';
+		$.post(url,{
+				value : value
+			},function(data){
+				$('#helpdesk_datalist').html(data);
+			}
+		);
+	}
+	
+	function type_fillter(){
+		var value = $('#helpdesk_type').val();
+		var url = 'helpdesk/type_fillter/';
+		$.post(url,{
+				value : value
+			},function(data){
+				$('#helpdesk_datalist').html(data);
+			}
+		);
+	}
+	
+	function priority_fillter(){
+		var value = $('#helpdesk_prioruty').val();
+		var url = 'helpdesk/priority_fillter/';
+		$.post(url,{
+				value : value
+			},function(data){
+				$('#helpdesk_datalist').html(data);
+			}
+		);
+	}
+</script>
 <div id="helpdesk_list">
 	<div class="widget">
 		<div class="widget-header">
 			<h4>
 				<div style="float:left;width:1010px;height:10px;">HelpDesk List</div>
-				<div><span onclick="load_insert_helpdesk_form()">New</span></div>
+				<div><a href="#" onclick="load_insert_helpdesk_form()">New</a></div>
 			</h4>
 		</div>
 		
@@ -23,20 +84,62 @@
 					</div>
 				</div>
 				<div class="dataTables_filter" id="helpdesk_list_table_filter">
-					<div style="float:left;" class="input-prepend">
-						<span class="add-on"><i class="icon-search"></i></span>
-						<input type="text">
+					<div style="width:700px;" class="input-prepend">
+						<span class="add-on" onclick="return ajax_search();"><i style="cursor:pointer;" class="icon-search"></i></span>
+						<input onchange="return ajax_search();" type="text" id="helpdesk_search" name="helpdesk_search">
 					</div>
-					<li class="controls" style="float:left;margin-left:20px;">
-						<label for="select01" class="control-label" style="padding-right:5px;">Fillter</label>
-						<select name="helpdesk_fillter" id="helpdesk_fillter">
-							<option value="">All</option>
-							<option value="">Group</option>
-							<option value="">Status</option>
-							<option value="">Type</option>
-							<option value="">Priority</option>
-						</select>
-					</li>
+					<!--FILLTER-->
+					<ul style="margin:15px 0 7px 0px;">
+						<!--GROUP FILLTER-->
+						<li class="fillter">
+							<label class="control-label" for="select01">Group</label>
+							<select  onchange="group_fillter()" name="helpdesk_group" id="helpdesk_group">
+								<option value="">Fillter</option>
+								<?php if(!empty($group)){
+										foreach($group as $k){
+								?>
+								<option value="<?=$k->access_gpsub_id?>"><?=$k->access_gpsub_name?></option>
+								<?php }}?>
+							</select>
+						</li>
+						<!--STATUS FILLTER-->
+						<li class="fillter">
+							<label class="control-label" for="select01">Status</label>
+							<select  onchange="status_fillter()" id="helpdesk_status" name="helpdesk_status">
+								<option value="">Fillter</option>
+								<?php if(!empty($status)){
+										foreach($status as $k){
+								?>
+								<option value="<?=$k->id?>"><?=$k->name?></option>
+								<?php }}?>
+							</select>
+						</li>
+						<!--TYPE FILLTER-->
+						<li class="fillter">
+							<label class="control-label" for="select01">Type</label>
+							<select  onchange="type_fillter()" id="helpdesk_type" name="helpdesk_type">
+								<option value="">Fillter</option>
+								<?php if(!empty($type)){
+										foreach($type as $k){
+								?>
+								<option value="<?=$k->id?>"><?=$k->name?></option>
+								<?php }}?>
+							</select>
+						</li>
+						<!--PRIORITY FILLTER-->
+						<li class="controls">
+							<label class="control-label" for="select01">Priority</label>
+							<select onchange="priority_fillter()" id="helpdesk_priority" name="helpdesk_priority">
+								<option value="">Fillter</option>
+								<?php if(!empty($priority)){
+										foreach($priority as $k){
+								?>
+								<option value="<?=$k->id?>"><?=$k->name?></option>
+								<?php }}?>
+							</select>
+						</li>
+					</ul>
+					<!--END FILLTER-->
 				</div>
 			</div>
 			
@@ -52,7 +155,7 @@
 					</tr>
 				</thead>
 				
-				<tbody>
+				<tbody id="helpdesk_datalist">
 					<?php if(!empty($result)){
 							for($i = 0 ; $i < count($result) ; $i++){
 					?>

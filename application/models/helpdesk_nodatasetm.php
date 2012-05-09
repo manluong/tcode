@@ -21,4 +21,65 @@ class Helpdesk_NodatasetM extends MY_Model {
 		}
 	}
 	
+	function search_content($value='',$limit=10){
+		$this->db->select('*');
+		if($value !=''){
+			$this->db->like('subject',$value);
+		}
+		$this->db->limit($limit);
+		$query = $this->db->get($this->table);
+		if($query->result()){
+			return $query->result();
+		}else{
+			return false;
+		}
+	}
+	
+	function group_fillter($value){
+		$this->db->select('*');
+		$this->db->where('group',$value);
+		$query = $this->db->get($this->table);
+
+		if($query->result()){
+			return $query->result();
+		}else{
+			return false;
+		}
+	}
+	
+	function status_fillter($value){
+		$this->db->select('*');
+		$this->db->where('status',$value);
+		$query = $this->db->get($this->table);
+
+		if($query->result()){
+			return $query->result();
+		}else{
+			return false;
+		}
+	}
+	
+	function type_fillter($value){
+		$this->db->select('*');
+		$this->db->where('type',$value);
+		$query = $this->db->get($this->table);
+
+		if($query->result()){
+			return $query->result();
+		}else{
+			return false;
+		}
+	}
+	
+	function priority_fillter($value){
+		$this->db->select('*');
+		$this->db->where('priority',$value);
+		$query = $this->db->get($this->table);
+
+		if($query->result()){
+			return $query->result();
+		}else{
+			return false;
+		}
+	}
 }

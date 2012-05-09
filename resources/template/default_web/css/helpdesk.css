@@ -221,3 +221,8 @@ select{
 #form_show li span{
 	width:70px;
 }
+.fillter{
+	width:200px;
+	float:left;
+	margin-right:16px;
+}
