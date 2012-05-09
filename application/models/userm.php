@@ -33,7 +33,7 @@ class UserM extends MY_Model {
 
 		parent::__construct();
 
-		$this->setup_loguid();
+		if (!$this->is_cli) $this->setup_loguid();
 	}
 
 	public function debug() {

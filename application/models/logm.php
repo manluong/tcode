@@ -116,6 +116,8 @@ class LogM extends CI_Model {
 	}
 
 	private function _update_log($total_time) {
+		if ($this->is_cli) return;
+		
 		$data = array(
 			'app_data_id' => $this->_url['id_plain'],
 			'saveid' => $this->_log_data['saveid'],
