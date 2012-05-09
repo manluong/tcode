@@ -96,7 +96,7 @@ function submit_comment(){
 		<ul id="form_show">
 			<li><span class="helpdesk_info_span">Subject</span> : <?=$result->subject?></li>
 			<li><span class="helpdesk_info_span">Creator</span> : <a href="#">Customer A</a></li>
-			<li><span class="helpdesk_info_span">Assigned</span> : <?=$this->DS_Helpdesk_Nodataset->getAssignName($result->assign_id)?></li>
+			<li><span class="helpdesk_info_span">Assigned</span> : <?=$this->Helpdesk_CommentM->get_assigname($result->assign_id)?></li>
 			<li><span class="helpdesk_info_span">CC</span> : <?=$result->cc_email?></li>
 			<li><div onclick="return show_form_change();" class="btn btn-inverse" href="#">Change</div></li>
 		</ul>
