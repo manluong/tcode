@@ -11,6 +11,7 @@ class Helpdesk extends MY_Controller {
 	}
 
 	function index(){
+		$this->Helpdesk_NodatasetM->limit = 10;
 		$content = array(
 			'result' => $this->Helpdesk_NodatasetM->get_list(),
 			'group' =>  $this->Helpdesk_CommentM->get_group(),
@@ -20,6 +21,14 @@ class Helpdesk extends MY_Controller {
 		);
 		$this->data['content'] = $this->load->view(get_template().'/helpdesk/index',$content, TRUE);
 		$this->_do_output();
+	}
+	
+	function fillter_record(){
+		$this->Helpdesk_NodatasetM->limit = $this->input->post('value');
+		$data = array(
+			'result' =>  $this->Helpdesk_NodatasetM->get_list(),
+		);
+		$this->load->view(get_template().'/helpdesk/ajax_fillter_list',$data);
 	}
 	
 	//ajax_search
