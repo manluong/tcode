@@ -168,15 +168,15 @@
 <div class="clear">
 	<div class="terms left">
 		<span>Terms</span>
-		<select name="terms_id" class="right">
-			<option>Pre Define Terms</option>
+		<select id="terms_id" name="terms_id" class="right">
+			<option value="">Pre Define Terms</option>
 			<?php foreach ($terms as $r): ?>
 			<option value="<?php echo $r->id ?>"><?php echo $r->name ?></option>
 			<?php endforeach ?>
 		</select>
 		<br />
 		<div class="clear"></div>
-		<textarea name="terms_content"></textarea>
+		<textarea id="terms_content" name="terms_content"></textarea>
 	</div>
 	<div class="terms right">
 		<span>Notes for Customer</span>

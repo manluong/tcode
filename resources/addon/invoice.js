@@ -61,7 +61,6 @@ function invoice_ajax_content_echo(json,divid,content){
 	}
 }
 
-
 function invoice_ajax_content_list(json,divid,links){
 	var tableid = divid+"_table";
 	var thisid = "";
@@ -301,7 +300,6 @@ function invoice_ajax_content_links(links,divid){
 	return linkre;
 }
 
-
 function invoice_ajax_content_errorstyle(){
 // Replace Jquery Tool error message style with twitter-bootstrap, directly cut and paste code from:
 // http://wezfurlong.org/blog/2011/dec/jquery-tools-form-validator-and-twitter-bootstrap/
@@ -365,7 +363,6 @@ function invoice_ajax_content_errorstyle(){
     });
 //end Replace Jquery Tool error message style
 }
-
 
 /*function add_row(object) {
 	var html = '' +
@@ -438,22 +435,81 @@ function add_datetimepicker() {
 }
 
 $(document).ready(function() {
+	$('#customer_name').autocomplete({
+		source: '/invoice/get_customer',
+		minLength: 2,
+		select: function(e, ui) {
+			$('#customer_id').val(ui.item.id);
+		}
+	});
+	$('#customer_name').on('change', function(e) {
+		$('#customer_id').val('');
+	});
+	
+	$('#slider').slider({
+		range: true,
+		min: 0,
+		max: 500,
+		values: [0, 500],
+		slide: function( event, ui ) {
+			$('#total_min').val(ui.values[0]);
+			$('#total_max').val(ui.values[1]);
+		}
+	});
+	$('#total_min').val($('#slider-range').slider('values', 0));
+	$('#total_max').val($('#slider-range').slider('values', 1));
+	
+	$('#more_options').on('click', function(e) {
+		$('#search_more table').toggle();
+		if (!$('#search_more table').is(":visible")) {
+			$('#search_more input').val('');
+		}
+	});
+	$('#search_btn').on('click', function(e) {
+		$.ajax({
+			type: "POST",
+			url: $('#frm_search').attr('action'),
+			data: $('#frm_search').serialize(),
+			success: function(resp) {
+				$('#invoice_list').html(resp);
+			}
+		});
+		return false;
+	});
+	
 	$('.datepicker').datetimepicker({
 		showTimepicker: false,
 		dateFormat: 'yy-mm-dd'
 	});
+	
 	$('a.add').live('click', function(e) {
 		e.preventDefault();
 		add_row(this);
-	});
+	});	
 	$('a.remove').live('click', function(e) {
 		e.preventDefault();
 		remove_row(this);
-	});
+	});	
 	$('a.more').live('click', function(e) {
 		e.preventDefault();
 		more(this);
+	});	
+	$('#terms_id').on('change', function(e) {
+		var id = $(this).val();
+		if (id) {
+			$.ajax({
+				type: "GET",
+				url: '/invoice/get_terms/'+id,
+				success: function(resp) {
+					$('#terms_content').val(resp);
+				}
+			});
+		}
 	});
+	$('#terms_content').on('change', function(e) {
+		$('#terms_id').val('');
+	});
+	
 	add_new_row();
 	
 	//$('#submit_btn').click(function() {

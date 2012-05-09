@@ -27,7 +27,7 @@
 	<ul id="form_show">
 		<li>
 			<span class="invoice_info_span">Customer</span>
-			<?php echo $invoice['customer_card_id'] ?>
+			<?php echo $customer_name ?>
 		</li>
 		<li>
 			<span class="invoice_info_span">Date of Issue</span>
@@ -154,14 +154,19 @@
 	<br />
 	<span>Balance</span>
 </div>
-<div class="clear"></div>
-<div id="terms" class="left">
-	<span>Terms</span>
-	<br />
-	aaaaaaaaaaaaaaaaaaaaaaaaa
+
+<div class="clear">
+	<div class="terms left">
+		<span>Terms</span>
+		<br />
+		<?php echo $invoice_terms ?>
+	</div>
+	<div class="terms right">
+		<span>Notes for Customer</span>
+		<br />
+		<?php echo $invoice['memo'] ?>
+	</div>
 </div>
-<div id="terms" class="right">
-	<span>Notes for Customer</span>
-	<br />
-	bbbbbbbbbbbbbbbbbbbbbbbbb
+
+<div class="div_btn clear">
 </div>

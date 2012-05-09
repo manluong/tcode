@@ -7,17 +7,59 @@
 .clear {
 	clear: both;
 }
+
+* {
+	margin: 0;
+	outline: 0 none;
+	padding: 0;
+}
+
 a {
 	text-decoration: none;
 }
 a:hover {
 	text-decoration: underline;
 }
-* {
-	margin: 0;
-	outline: 0 none;
-	padding: 0;
+
+#search_main div {
+	float: left;
+	margin-right: 20px;
 }
+#search_main span {
+	margin-right: 5px;
+}
+#search_main .block {
+	display: block;
+}
+#search_customer input {
+	margin-top: 18px;
+	width: 220px;
+}
+#search_date_range select {
+	margin-top: 18px;
+	width: 120px;
+}
+#search_date_range input {
+	margin-top: 18px;
+	width: 100px;
+}
+#search_invoice_range input {
+	margin-top: 5px;
+}
+#search_more td.first {
+	width: 120px;
+}
+#slider {
+	margin-top: 15px;
+	width: 90%;
+}
+#more_options {
+	margin: 10px 0 0 785px;
+}
+#search_btn {
+	margin: 20px 0 0 120px;
+}
+
 ul {
 	list-style: none outside none;
 }
