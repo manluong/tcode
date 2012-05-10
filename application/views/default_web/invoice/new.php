@@ -54,61 +54,6 @@
 	</ul>
 </div>
 
-<!-- <table class="table">
-<thead>
-	<tr>
-		<th style="width: 5%"></th>
-		<th style="width: 10%">Product</th>
-		<th style="width: 30%">Description</th>
-		<th style="width: 10%">Unit Price</th>
-		<th style="width: 10%">Qty</th>
-		<th style="width: 10%">Discount</th>
-		<th style="width: 10%">Tax</th>
-		<th style="width: 10%">Total</th>
-		<th style="width: 5%"></th>
-	</tr>
-</thead>
-<tbody>
-	<tr>
-		<td><a href="#" class="add">+</a></td>
-		<td><input type="text" name="product[]" class="input_table" /></td>
-		<td><input type="text" name="description[]" class="input_table" /></td>
-		<td><input type="text" name="unit_price[]" class="input_table" /></td>
-		<td><input type="text" name="qty[]" class="input_table" /></td>
-		<td><input type="text" name="discount[]" class="input_table" /></td>
-		<td><input type="text" name="tax[]" class="input_table" /></td>
-		<td><input type="text" name="total[]" class="input_table" /></td>
-		<td><a href="#" class="remove">x</a></td>
-	</tr>
-	<tr>
-		<td></td>
-		<td colspan="3">
-			<table class="default">
-				<thead>
-					<tr>
-						<td>Price Type</td>
-						<td>From</td>
-						<td>To</td>
-						<td>Duration</td>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>Monthly Recur</td>
-						<td>1 July 2012</td>
-						<td>31 July 2012</td>
-						<td>1 Month</td>
-					</tr>
-				</tbody>
-			</table>
-		</td>
-		<td></td>
-		<td></td>
-		<td></td>
-	</tr>
-</tbody>
-</table> -->
-
 <div id="invoice_item_list">
 	<div class="invoice_item header clear">
 		<div><span>Product</span></div>
@@ -123,14 +68,18 @@
 </div>
 
 <div id="invoice_item_template" style="display: none;">
-	<div class="invoice_item clear">
-		<div><input type="text" name="product[]" class="input_table" /></div>
-		<div class="desc"><input type="text" name="description[]" class="input_table" /></div>
-		<div><input type="text" name="unit_price[]" class="input_table" /></div>
-		<div><input type="text" name="qty[]" class="input_table" /></div>
-		<div><input type="text" name="discount[]" class="input_table" /></div>
-		<div><input type="text" name="tax[]" class="input_table" /></div>
-		<div><input type="text" name="total[]" class="input_table" /></div>
+	<div class="invoice_item temp clear">
+		<div>
+			<input type="hidden" name="invoice_item_id[]" />
+			<input type="hidden" name="product_id[]" class="product_id" />
+			<input type="text" name="product_name[]" class="product_name" />
+		</div>
+		<div class="desc"><input type="text" name="description[]" /></div>
+		<div><input type="text" name="unit_price[]" class="unit_price cal" /></div>
+		<div><input type="text" name="qty[]" class="qty cal" /></div>
+		<div><input type="text" name="discount[]" class="discount cal" /></div>
+		<div><input type="text" name="tax[]" class="tax cal" /></div>
+		<div><input type="text" name="total[]" class="item_total" /></div>
 		<div class="act">
 			<a href="#" class="more">m</a>
 			<a href="#" class="add">+</a>
@@ -143,26 +92,26 @@
 			<div><span>Duration</span></div>
 		</div>
 		<div class="invoice_item_sub clear" style="display: none;">
-			<div><input type="text" name="price_type[]" class="input_table" /></div>
-			<div><input type="text" name="from[]" class="datepicker_temp input_table" /></div>
-			<div><input type="text" name="to[]" class="datepicker_temp input_table" /></div>
-			<div><input type="text" name="duration[]" class="input_table" /></div>
+			<div><input type="text" name="price_type[]" /></div>
+			<div><input type="text" name="from[]" class="item_datepicker" /></div>
+			<div><input type="text" name="to[]" class="item_datepicker" /></div>
+			<div><input type="text" name="duration[]" /></div>
 		</div>
 	</div>
 </div>
 
 <div id="total" class="right">
-	<span>Sub Total</span>
+	<span class="left">Sub Total</span><span id="sub_total" class="right"></span>
 	<br />
-	<span>Tax Total</span>
-	<br />
-	<br />
-	<span>Invoice Total</span>
-	<br />
-	<span>Paid</span>
+	<span class="left">Tax Total</span><span id="tax_total" class="right"></span>
 	<br />
 	<br />
-	<span>Balance</span>
+	<span class="left">Invoice Total</span><span id="invoice_total" class="right"></span>
+	<br />
+	<span class="left">Paid</span>
+	<br />
+	<br />
+	<span class="left">Balance</span>
 </div>
 
 <div class="clear">
@@ -187,5 +136,6 @@
 
 <div class="div_btn clear">
 	<input id="submit_btn" type="submit" class="btn" value="Submit" />
+	<a href="/invoice"><input type="button" class="btn" value="Cancel" /></a>
 </div>
 </form>

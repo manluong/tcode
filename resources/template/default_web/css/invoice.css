@@ -106,6 +106,9 @@ ul {
 	margin-top: 16px;
 	width: 100%;
 }
+#invoice_item_list input{
+	width: 100%;
+}
 .input_table {
 	width: 100%;
 }
@@ -127,10 +130,14 @@ ul {
 	margin-right: 25px;
 }
 #total {
-	margin: 20px 0 40px 0;
+	margin: 20px 100px 40px 0;
+	width: 200px;
 }
 #total span {
-	margin-right: 250px;
+	width: 100px;
+}
+#total .right {
+	text-align: right;
 }
 .terms {
 	width: 480px;
@@ -176,6 +183,21 @@ div.desc {
 	padding: 10px 0 50px 0;
 	text-align: center;
 }
+
+#view_header {
+	height: 30px;
+	margin-bottom: 20px;
+}
+
+#view_header span {
+	font-size: 20px;
+}
+	
+#view_header button {
+	margin-left: 10px;
+	width: 80px;
+}
+
 
 
 

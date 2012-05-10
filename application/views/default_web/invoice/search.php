@@ -16,13 +16,13 @@
 		<?php foreach ($invoice_list as $invoice): ?>
 		<tr>
 			<td></td>
-			<td><?php echo $invoice['customer_card_id'] ?></td>
-			<td><a href="/invoice/view/<?php echo $invoice['id'] ?>"><?php echo $invoice['id'] ?></a></td>
-			<td><?php echo date('Y-m-d', strtotime($invoice['payment_due_stamp'])) ?></td>
+			<td><?php echo $invoice->nickname ?></td>
+			<td><a href="/invoice/view/<?php echo $invoice->id ?>"><?php echo $invoice->id ?></a></td>
+			<td><?php echo date('Y-m-d', strtotime($invoice->payment_due_stamp)) ?></td>
+			<td style="text-align: right;"><?php echo $invoice->total ?></td>
 			<td></td>
 			<td></td>
-			<td></td>
-			<td><a href="/invoice/edit/<?php echo $invoice['id'] ?>">Edit</a></td>
+			<td><a href="/invoice/edit/<?php echo $invoice->id ?>">Edit</a></td>
 		</tr>
 		<?php endforeach ?>
 	</tbody>

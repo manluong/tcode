@@ -111,7 +111,9 @@ class Invoice extends MY_Controller {
 
 		$this->InvoiceM->save($data);
 
-		$product = $this->input->post('product');
+		$invoice_item_id = $this->input->post('invoice_item_id');
+		$product_id = $this->input->post('product_id');
+		$product_name = $this->input->post('product_name');
 		$description = $this->input->post('description');
 		$unit_price = $this->input->post('unit_price');
 		$qty = $this->input->post('qty');
@@ -125,11 +127,11 @@ class Invoice extends MY_Controller {
 
 		$this->InvoiceItemM->deleteByInvoiceId($invoice_id);
 
-		foreach ($product as $index => $value) {
-			if ($product[$index]) {
+		foreach ($product_name as $index => $value) {
+			if ($product_name[$index]) {
 				$data = array(
 					'invoice_id' => $invoice_id,
-					'product_id' => $product[$index],
+					'product_id' => $product_id[$index],
 					'description' => $description[$index],
 					'unit_price' => $unit_price[$index],
 					'quantity' => $qty[$index],
@@ -195,7 +197,8 @@ class Invoice extends MY_Controller {
 
 		$invoice_id = $this->InvoiceM->save($data);
 
-		$product = $this->input->post('product');
+		$product_id = $this->input->post('product_id');
+		$product_name = $this->input->post('product_name');
 		$description = $this->input->post('description');
 		$unit_price = $this->input->post('unit_price');
 		$qty = $this->input->post('qty');
@@ -207,11 +210,11 @@ class Invoice extends MY_Controller {
 		$to = $this->input->post('to');
 		$duration = $this->input->post('duration');
 
-		foreach ($product as $index => $value) {
-			if ($product[$index]) {
+		foreach ($product_name as $index => $value) {
+			if ($product_name[$index]) {
 				$data = array(
 					'invoice_id' => $invoice_id,
-					'product_id' => $product[$index],
+					'product_id' => $product_id[$index],
 					'description' => $description[$index],
 					'unit_price' => $unit_price[$index],
 					'quantity' => $qty[$index],
@@ -441,6 +444,27 @@ class Invoice extends MY_Controller {
 					'id' => $customer->id,
 					'label' => $customer->nickname,
 					'value' => $customer->nickname,
+				);
+			}
+		}
+
+		echo json_encode($content);
+	}
+
+	function get_product() {
+		$term = $this->input->get('term');
+		$product_list = $this->InvoiceM->getProductByName($term);
+
+		$content = array();
+		if ($product_list) {
+			foreach ($product_list as $product) {
+				$content[] = array(
+					'product' => array(
+						'id' => $product->a_product_id,
+						'price' => $product->a_product_price_price
+					),
+					'label' => $product->a_product_name,
+					'value' => $product->a_product_name
 				);
 			}
 		}
