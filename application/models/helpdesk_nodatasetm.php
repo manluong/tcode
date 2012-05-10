@@ -8,7 +8,21 @@ class Helpdesk_NodatasetM extends MY_Model {
 		$this->cache_enabled = TRUE;
 		$this->sett_filter_deleted = FALSE;
 	}
+	
+	function getTotalRecord(){
+		$this->db->select('id');
+		$query = $this->db->get($this->table);
 
+		foreach ($query->result() as $row){
+			$result[] = $row;
+		}
+		
+		if(!empty($result)){
+			return count($result);
+		}else{
+			return false;
+		}
+	}
 	function get_content($id){
 		$this->db->select('*');
 		$this->db->where('id',$id);

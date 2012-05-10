@@ -226,3 +226,6 @@ select{
 	float:left;
 	margin-right:16px;
 }
+.ul_pagination li{
+	cursor:pointer;
+}

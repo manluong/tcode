@@ -11,8 +11,11 @@ class Helpdesk extends MY_Controller {
 	}
 
 	function index(){
+		$this->Helpdesk_NodatasetM->offset = 0;
 		$this->Helpdesk_NodatasetM->limit = 10;
+		
 		$content = array(
+			'total' => $this->Helpdesk_NodatasetM->getTotalRecord(),
 			'result' => $this->Helpdesk_NodatasetM->get_list(),
 			'group' =>  $this->Helpdesk_CommentM->get_group(),
 			'status' => $this->Helpdesk_CommentM->get_status(),
@@ -21,6 +24,17 @@ class Helpdesk extends MY_Controller {
 		);
 		$this->data['content'] = $this->load->view(get_template().'/helpdesk/index',$content, TRUE);
 		$this->_do_output();
+	}
+	
+	function ajax_pagination(){
+		$this->Helpdesk_NodatasetM->offset = $this->input->post('offset');
+		$this->Helpdesk_NodatasetM->limit = 10;
+		
+		$data = array(
+			'total' => $this->Helpdesk_NodatasetM->getTotalRecord(),
+			'result' => $this->Helpdesk_NodatasetM->get_list(),
+		);
+		$this->load->view(get_template().'/helpdesk/ajax_fillter_list',$data);
 	}
 	
 	function fillter_record(){
