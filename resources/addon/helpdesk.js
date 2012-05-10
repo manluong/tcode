@@ -90,9 +90,9 @@ function load_comment_form(id){
 function load_insert_helpdesk_form(){
 	var url = '/helpdesk/insert_helpdesk_form/';
 	$.post(url,function(data){
-				$('#helpdesk_list').html(data);
-			}
-		);
+			$('#helpdesk_list').html(data);
+		}
+	);
 }
 
 function insert_fillter(){

@@ -22,6 +22,12 @@
 		}else{
 			$('.prev').removeClass('disabled');
 		}
+		if((parseInt(offset)+10) > total){
+			$('.next').addClass('disabled');
+		}else{
+			$('.next').removeClass('disabled');
+		}
+		
 		$('.page_active_top').removeClass('active');
 		$('.page_active_bottom').removeClass('active');
 		$('#page_top'+offset).addClass("active");
@@ -137,7 +143,7 @@
 		<div class="widget-header">
 			<h4>
 				<div style="float:left;width:1010px;height:10px;">HelpDesk List</div>
-				<div><a href="#" onclick="load_insert_helpdesk_form()">New</a></div>
+				<div><a href="javascript:;" onclick="load_insert_helpdesk_form()">New</a></div>
 			</h4>
 		</div>
 		

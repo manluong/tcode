@@ -1,11 +1,3 @@
-<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/main.css" />
-<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/jquery.fancybox-1.3.4.css" />
-<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/style_caledar.css" />
-<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/styles.css" />
-<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/helpdesk.css" />
-<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/base.css" />
-<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/bootstrap.min.css" />
-<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/bootstrap-responsive.min.css" />
 
 <style>
 .file-wrapper {
@@ -24,6 +16,7 @@ position: relative;
 	cursor:pointer;
 }
 </style>
+
 <script type="text/javascript">
 function showRequest(formData, jqForm, options) {
 	var form = jqForm[0];
@@ -39,7 +32,6 @@ function submit_insert_helpdesk(){
 	var priority = $('#a_helpdesk_comment_priority').val();
 	 
 	 $('#frmManagement').submit();
-	
 }
 </script>
 
@@ -139,10 +131,17 @@ function submit_insert_helpdesk(){
 			</li>
 			
 			<li class="controls" style="width:577px;">
-				<span class="file-wrapper">
-					<input  name="attach_file" id="attach_file" type="file"/>
-					<span style="cursor:pointer;" class="btn" >Attach File</span>
-				</span>
+				
+				<!-- PLUpload-->
+				<h1 style="display:none;">Custom example</h1>
+				<p style="display:none;">Shows you how to use the core plupload API.</p>
+
+				<div id="container" >
+					<a class="btn" id="pickfiles" href="javascript:;">Attach files</a> 
+					<a style="text-decoration:none;" id="uploadfiles" href="javascript:;">[Upload files]</a>
+					<div id="filelist" style="margin-top:5px;"></div>
+				</div>
+
 			</li>
 			
 			<li class="controls" >
@@ -154,3 +153,43 @@ function submit_insert_helpdesk(){
 	
 	<div class="clearAll"></div>
 </div>
+
+<script type="text/javascript">
+// Custom example logic
+function $(id) {
+	return document.getElementById(id);	
+}
+
+
+var uploader = new plupload.Uploader({
+	runtimes : 'gears,html5,flash,silverlight,browserplus',
+	browse_button : 'pickfiles',
+	container: 'container',
+	max_file_size : '10mb',
+	url : '/resources/addon/plupload/helpdesk_upload.php',
+	//resize : {width : 320, height : 240, quality : 90},
+	//flash_swf_url : '../js/plupload.flash.swf',
+	//silverlight_xap_url : '../js/plupload.silverlight.xap',
+	filters : [
+		{title : "Image files", extensions : "jpg,gif,png"},
+		{title : "Zip files", extensions : "zip"}
+	]
+});
+
+uploader.bind('FilesAdded', function(up, files) {
+	for (var i in files) {
+		$('filelist').innerHTML += '<div id="' + files[i].id + '">' + files[i].name + ' (' + plupload.formatSize(files[i].size) + ') <b></b></div>';
+	}
+});
+
+uploader.bind('UploadProgress', function(up, file) {
+	$(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
+});
+
+$('uploadfiles').onclick = function() {
+	uploader.start();
+	return false;
+};
+
+uploader.init();
+</script>

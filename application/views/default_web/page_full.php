@@ -19,7 +19,6 @@
 	<script type="text/javascript" src="/resources/addon/content.js"></script>
 	<script type="text/javascript" src="/resources/addon/tpanel.js"></script>
 	<script type="text/javascript" src="/resources/addon/jquery-ui-timepicker-addon.js"></script>
-	
 	<script type="text/javascript" src="/resources/addon/helpdesk.js"></script>
 	
 	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/bootstrap.min.js"></script>
@@ -34,10 +33,23 @@
 
 	<!-- Docs -->
 		<!-- plupload -->
+		
 		<script type="text/javascript" src="http://bp.yahooapis.com/2.4.21/browserplus-min.js"></script>
 		<script type="text/javascript" src="/resources/addon/plupload/js/plupload.full.js"></script>
 		<script type="text/javascript" src="/resources/addon/plupload/js/jquery.plupload.queue/jquery.plupload.queue.js"></script>
 		<link href="/resources/addon/plupload/js/jquery.plupload.queue/css/jquery.plupload.queue.css" media="screen" rel="stylesheet" type="text/css" />
+		
+		<!--
+		<script type="text/javascript" src="http://bp.yahooapis.com/2.4.21/browserplus-min.js"></script>
+
+		<script type="text/javascript" src="/resources/addon/plupload/test/plupload.js"></script>
+		<script type="text/javascript" src="/resources/addon/plupload/test/plupload.gears.js"></script>
+		<script type="text/javascript" src="/resources/addon/plupload/test/plupload.silverlight.js"></script>
+		<script type="text/javascript" src="/resources/addon/plupload/test/plupload.flash.js"></script>
+		<script type="text/javascript" src="/resources/addon/plupload/test/plupload.browserplus.js"></script>
+		<script type="text/javascript" src="/resources/addon/plupload/test/plupload.html4.js"></script>
+		<script type="text/javascript" src="/resources/addon/plupload/test/plupload.html5.js"></script>
+		-->
 		<!-- end plupload -->
 
 		<!-- Adaptive ui -->
@@ -80,13 +92,13 @@
 		$(window).resize(function(){
 			setTimeout('resize_nav()', 1000);
 		});
-
+		/*
 		$('#content-container').on('click', function() {
 			$('#status-update').slideUp(300);
 			$('#global-search-options').slideUp(300);
 			setTimeout('resize_nav()', 400);
 		});
-
+		*/
 		function resize_nav() {
 			var sidebar_height = $('#sidebar').outerHeight();
 			sidebar_height -= $('#company-logo').outerHeight();
