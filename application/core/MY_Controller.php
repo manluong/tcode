@@ -60,6 +60,7 @@ class MY_Controller extends CI_Controller {
 	var $model = '';
 
 	var $is_pjax = FALSE;
+	var $is_cli = FALSE;
 	var $is_mobile_app = FALSE;
 	var $allow_unauthed_access = FALSE;
 
@@ -74,16 +75,20 @@ class MY_Controller extends CI_Controller {
 		parent::__construct();
 
 		if ($this->input->get_request_header('X-PJAX', TRUE) !== FALSE) $this->is_pjax = TRUE;
+		$this->is_cli = $this->input->is_cli_request();
 
 		$this->load->config('eightforce', TRUE);
 		$this->eightforce_config = $this->config->item('eightforce');
 
 		$this->setup_url();
-		$this->setup_db();
 
-		$this->check_mobile_app();
+		if (!$this->is_cli) {
+			$this->_setup_db();
 
-		$this->load->library('session');
+			$this->check_mobile_app();
+
+			$this->load->library('session');
+		}
 
 		$this->load->model('UserM');
 		$this->load->model('ACLM');
@@ -92,25 +97,27 @@ class MY_Controller extends CI_Controller {
 		$this->load->model('LicenseM');
 		$this->load->model('RespM');
 
-		$this->AppM->setup();
-		
-		$this->url['app_id'] = $this->AppM->get_id($this->url['app']);
+		if (!$this->is_cli) {
+			$this->AppM->setup();
 
-		$this->UserM->setup();
-		$this->setup_language();
-		$this->LogM->start_log();
-		$this->LicenseM->setup();
-		$this->setup_output();
+			$this->url['app_id'] = $this->AppM->get_id($this->url['app']);
 
-		if ($this->AppM->must_disable_plain_id($this->url['app'])) $this->ACLM->check_id_encryption();
-		$this->ACLM->check_app_access();
-		if (APP_ROLE == 'TSUB') {
-			if ($this->LicenseM->has_restriction($this->url['app_id'], 'access')) {
-				$access = $this->LicenseM->get_restriction($this->url['app_id'], 'access');
-				if ($access == 0) die('Your license does not permit you to use this application.');
+			$this->UserM->setup();
+			$this->setup_language();
+			$this->LogM->start_log();
+			$this->LicenseM->setup();
+			$this->setup_output();
+
+
+			if ($this->AppM->must_disable_plain_id($this->url['app'])) $this->ACLM->check_id_encryption();
+			$this->ACLM->check_app_access();
+			if (APP_ROLE == 'TSUB') {
+				if ($this->LicenseM->has_restriction($this->url['app_id'], 'access')) {
+					$access = $this->LicenseM->get_restriction($this->url['app_id'], 'access');
+					if ($access == 0) die('Your license does not permit you to use this application.');
+				}
 			}
 		}
-
 
 		//if (!$this->is_pjax) $this->output->enable_profiler(true);
 	}
@@ -172,7 +179,7 @@ class MY_Controller extends CI_Controller {
 
 		if ($this->re_url['app'] !== FALSE && $this->re_url['action'] !== FALSE) $this->has_return = TRUE;
 
-		if ($this->input->is_cli_request()) {
+		if ($this->is_cli) {
 			$this->domain = 'my';
 		} else {
 			if (ENVIRONMENT != 'development') {
@@ -195,22 +202,24 @@ class MY_Controller extends CI_Controller {
 		}
 	}
 
-	private function setup_db() {
+	function _setup_db($domain='') {
 		if (ENVIRONMENT == 'development') return NULL;
+
+		if ($domain == '') $domain = $this->domain;
 
 		//load the default db settings in the configuration files
 		include(APPPATH.'config/'.ENVIRONMENT.'/database.php');
 		$config = $db['default'];
 
 		//subdomain defines database table to use
-		$config['database'] = 't_'.$this->domain;
+		$config['database'] = 't_'.$domain;
 
 		if (APP_ROLE == 'TSUB') {
-			$config['username'] = 't_'.$this->domain;
+			$config['username'] = 't_'.$domain;
 		}
 
-		if (APP_ROLE == 'TBOSS' && ENVIRONMENT == 'testing') {
-			$config['database'] = 't_'.$this->domain.'2';
+		if (APP_ROLE == 'TBOSS' && ENVIRONMENT == 'testing' && !$this->is_cli) {
+			$config['database'] = 't_'.$domain.'2';
 		}
 
 		$this->debug['database'] = $config['database'];

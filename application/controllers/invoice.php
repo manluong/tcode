@@ -16,11 +16,47 @@ class Invoice extends MY_Controller {
 		$this->_do_output();
 	}
 
-	function view($id) {
-		$data = array(
-			'invoice' => $this->InvoiceM->get($id),
-			'invoice_items' => $this->InvoiceItemM->getByInvoiceId($id)
+	function search() {
+		$search_param = array(
+			'customer_id' => $this->input->post('customer_id'),
+			'customer_name' => $this->input->post('customer_name'),
+			'date_range' => $this->input->post('date_range'),
+			'date_range_from' => $this->format_date($this->input->post('date_range_from')),
+			'date_range_to' => $this->format_date($this->input->post('date_range_to')),
+			'invoice_id' => $this->input->post('invoice_id'),
+			'po_number' => $this->input->post('po_number'),
+			'notes' => $this->input->post('notes')
 		);
+
+		$data['invoice_list'] = $this->InvoiceM->search($search_param);
+		$content = $this->load->view(get_template().'/invoice/search', $data, TRUE);
+		echo $content;
+	}
+
+	function view($id) {
+		$invoice = $this->InvoiceM->get($id);
+		$data = array(
+			'invoice' => $invoice,
+			'invoice_items' => $this->InvoiceItemM->getByInvoiceId($id),
+			'customer_name' => '',
+			'invoice_terms' => ''
+		);
+
+		if ($invoice['customer_card_id']) {
+			$customer = $this->InvoiceM->getCustomerById($invoice['customer_card_id']);
+			if ($customer) {
+				$data['customer_name'] = $customer->nickname;
+			}
+		}
+
+		if ($invoice['terms_id']) {
+			$terms = $this->InvoiceM->getTermsById($invoice['terms_id']);
+			if ($terms) {
+				$data['invoice_terms'] = $terms->content;
+			}
+		} else {
+			$data['invoice_terms'] = $invoice['terms_content'];
+		}
 
 		$this->data['content'] = $this->load->view(get_template().'/invoice/view', $data, TRUE);
 
@@ -28,13 +64,24 @@ class Invoice extends MY_Controller {
 	}
 
 	function edit($id) {
+		$invoice = $this->InvoiceM->get($id);
 		$data = array(
-			'invoice' => $this->InvoiceM->get($id),
+			'invoice' => $invoice,
 			'invoice_items' => $this->InvoiceItemM->getByInvoiceId($id),
 			'customer' => $this->InvoiceM->getCustomer(),
 			'tax' => $this->InvoiceM->getTax(),
-			'terms' => $this->InvoiceM->getTerms()
+			'terms' => $this->InvoiceM->getTerms(),
+			'invoice_terms' => ''
 		);
+
+		if ($invoice['terms_id']) {
+			$terms = $this->InvoiceM->getTermsById($invoice['terms_id']);
+			if ($terms) {
+				$data['invoice_terms'] = $terms->content;
+			}
+		} else {
+			$data['invoice_terms'] = $invoice['terms_content'];
+		}
 
 		$this->data['content'] = $this->load->view(get_template().'/invoice/edit', $data, TRUE);
 
@@ -46,15 +93,21 @@ class Invoice extends MY_Controller {
 		$data = array(
 			'id' => $invoice_id,
 			'customer_card_id' => $this->input->post('customer_id'),
-			'invoice_stamp' => date('Y-m-d', strtotime($this->input->post('issue_date'))),
-			'payment_due_stamp' => date('Y-m-d', strtotime($this->input->post('due_date'))),
+			'invoice_stamp' => $this->format_date($this->input->post('issue_date')),
+			'payment_due_stamp' => $this->format_date($this->input->post('due_date')),
 			'purchase_order_number' => $this->input->post('po_number'),
 			'tax_id' => $this->input->post('tax_id'),
 			'currency' => $this->input->post('currency'),
-			'terms_id' => $this->input->post('terms_id'),
-			'terms_content' => $this->input->post('terms_content'),
 			'memo' => $this->input->post('notes')
 		);
+
+		if ($this->input->post('terms_id')) {
+			$data['terms_id'] = $this->input->post('terms_id');
+			$data['terms_content'] = null;
+		} else {
+			$data['terms_id'] = null;
+			$data['terms_content'] = $this->input->post('terms_content');
+		}
 
 		$this->InvoiceM->save($data);
 
@@ -84,8 +137,8 @@ class Invoice extends MY_Controller {
 					'tax_id' => $tax[$index],
 					'total' => $total[$index],
 					'price_type' => $price_type[$index],
-					'subscription_start_stamp' => date('Y-m-d', strtotime($from[$index])),
-					'subscription_end_stamp' => date('Y-m-d', strtotime($to[$index])),
+					'subscription_start_stamp' => $this->format_date($from[$index]),
+					'subscription_end_stamp' => $this->format_date($to[$index]),
 					'duration_type' => $duration[$index]
 				);
 
@@ -124,15 +177,21 @@ class Invoice extends MY_Controller {
 	function add_save() {
 		$data = array(
 			'customer_card_id' => $this->input->post('customer_id'),
-			'invoice_stamp' => date('Y-m-d', strtotime($this->input->post('issue_date'))),
-			'payment_due_stamp' => date('Y-m-d', strtotime($this->input->post('due_date'))),
+			'invoice_stamp' => $this->format_date($this->input->post('issue_date')),
+			'payment_due_stamp' => $this->format_date($this->input->post('due_date')),
 			'purchase_order_number' => $this->input->post('po_number'),
 			'tax_id' => $this->input->post('tax_id'),
 			'currency' => $this->input->post('currency'),
-			'terms_id' => $this->input->post('terms_id'),
-			'terms_content' => $this->input->post('terms_content'),
 			'memo' => $this->input->post('notes')
 		);
+
+		if ($this->input->post('terms_id')) {
+			$data['terms_id'] = $this->input->post('terms_id');
+			$data['terms_content'] = null;
+		} else {
+			$data['terms_id'] = null;
+			$data['terms_content'] = $this->input->post('terms_content');
+		}
 
 		$invoice_id = $this->InvoiceM->save($data);
 
@@ -160,8 +219,8 @@ class Invoice extends MY_Controller {
 					'tax_id' => $tax[$index],
 					'total' => $total[$index],
 					'price_type' => $price_type[$index],
-					'subscription_start_stamp' => date('Y-m-d', strtotime($from[$index])),
-					'subscription_end_stamp' => date('Y-m-d', strtotime($to[$index])),
+					'subscription_start_stamp' => $this->format_date($from[$index]),
+					'subscription_end_stamp' => $this->format_date($to[$index]),
 					'duration_type' => $duration[$index]
 				);
 
@@ -360,5 +419,40 @@ class Invoice extends MY_Controller {
 				->set_title('Invoice Save')
 				->set_details($details)
 				->output_json();
+	}
+
+	function get_terms($id) {
+		$content = '';
+		$terms = $this->InvoiceM->getTermsById($id);
+		if ($terms) {
+			$content = $terms->content;
+		}
+		echo $content;
+	}
+
+	function get_customer() {
+		$term = $this->input->get('term');
+		$customer_list = $this->InvoiceM->getCustomerByName($term);
+
+		$content = array();
+		if ($customer_list) {
+			foreach ($customer_list as $customer) {
+				$content[] = array(
+					'id' => $customer->id,
+					'label' => $customer->nickname,
+					'value' => $customer->nickname,
+				);
+			}
+		}
+
+		echo json_encode($content);
+	}
+
+	private function format_date($date) {
+		if (empty($date)) {
+			return '';
+		} else {
+			return date('Y-m-d', strtotime($date));
+		}
 	}
 }

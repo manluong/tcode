@@ -445,12 +445,16 @@ $lang['a_invoice-invoice_stamp'] = 'Invoice Stamp';
 $lang['a_invoice-payment_due_stamp'] = 'Payment Due Stamp';
 $lang['a_invoice-currency'] = 'Currency';
 $lang['a_invoice-tax_id'] = 'Tax Id';
-$lang['a_invoice-custpo'] = 'Custpo';
+$lang['a_invoice-purchase_order_number'] = 'Purchase Order Number';
+$lang['a_invoice-memo'] = 'Memo';
+$lang['a_invoice-terms_id'] = 'Terms Id';
+$lang['a_invoice-terms_content'] = 'Terms Content';
 $lang['a_invoice-acc_code'] = 'Acc Code';
 $lang['a_invoice-modified_card_id'] = 'Modified Card Id';
 $lang['a_invoice-modified_stamp'] = 'Modified Stamp';
 $lang['a_invoice-created_card_id'] = 'Created Card Id';
 $lang['a_invoice-created_stamp'] = 'Created Stamp';
+$lang['a_invoice-deleted'] = 'Deleted';
 
 
 // comment
