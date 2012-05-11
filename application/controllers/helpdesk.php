@@ -5,18 +5,18 @@ class Helpdesk extends MY_Controller {
 	function __construct() {
 		parent::__construct();
 
-		$this->load->model('DS_Helpdesk');
+		//$this->load->model('DS_Helpdesk');
 		$this->load->model('Helpdesk_CommentM');
-		$this->load->model('Helpdesk_NodatasetM');
+		$this->load->model('HelpdeskM');
 	}
 
 	function index(){
-		$this->Helpdesk_NodatasetM->offset = 0;
-		$this->Helpdesk_NodatasetM->limit = 10;
+		$this->HelpdeskM->offset = 0;
+		$this->HelpdeskM->limit = 10;
 		
 		$content = array(
-			'total' => $this->Helpdesk_NodatasetM->getTotalRecord(),
-			'result' => $this->Helpdesk_NodatasetM->get_list(),
+			'total' => $this->HelpdeskM->getTotalRecord(),
+			'result' => $this->HelpdeskM->get_list(),
 			'group' =>  $this->Helpdesk_CommentM->get_group(),
 			'status' => $this->Helpdesk_CommentM->get_status(),
 			'priority' => $this->Helpdesk_CommentM->get_priority(),
@@ -27,20 +27,20 @@ class Helpdesk extends MY_Controller {
 	}
 	
 	function ajax_pagination(){
-		$this->Helpdesk_NodatasetM->offset = $this->input->post('offset');
-		$this->Helpdesk_NodatasetM->limit = 10;
+		$this->HelpdeskM->offset = $this->input->post('offset');
+		$this->HelpdeskM->limit = 10;
 		
 		$data = array(
-			'total' => $this->Helpdesk_NodatasetM->getTotalRecord(),
-			'result' => $this->Helpdesk_NodatasetM->get_list(),
+			'total' => $this->HelpdeskM->getTotalRecord(),
+			'result' => $this->HelpdeskM->get_list(),
 		);
 		$this->load->view(get_template().'/helpdesk/ajax_fillter_list',$data);
 	}
 	
 	function fillter_record(){
-		$this->Helpdesk_NodatasetM->limit = $this->input->post('value');
+		$this->HelpdeskM->limit = $this->input->post('value');
 		$data = array(
-			'result' =>  $this->Helpdesk_NodatasetM->get_list(),
+			'result' =>  $this->HelpdeskM->get_list(),
 		);
 		$this->load->view(get_template().'/helpdesk/ajax_fillter_list',$data);
 	}
@@ -49,7 +49,7 @@ class Helpdesk extends MY_Controller {
 	function ajax_search(){
 		$value = $this->input->post('value');
 		$data = array(
-			'result' => $this->Helpdesk_NodatasetM->search_content($value),
+			'result' => $this->HelpdeskM->search_content($value),
 		);
 		$this->load->view(get_template().'/helpdesk/ajax_helpdesk_list',$data);
 	}
@@ -58,7 +58,7 @@ class Helpdesk extends MY_Controller {
 	function group_fillter(){
 		$value = $this->input->post('value');
 		$data = array(
-			'result' => $this->Helpdesk_NodatasetM->group_fillter($value),
+			'result' => $this->HelpdeskM->group_fillter($value),
 		);
 		$this->load->view(get_template().'/helpdesk/ajax_helpdesk_list',$data);
 	}
@@ -66,7 +66,7 @@ class Helpdesk extends MY_Controller {
 	function status_fillter(){
 		$value = $this->input->post('value');
 		$data = array(
-			'result' => $this->Helpdesk_NodatasetM->status_fillter($value),
+			'result' => $this->HelpdeskM->status_fillter($value),
 		);
 		$this->load->view(get_template().'/helpdesk/ajax_helpdesk_list',$data);
 	}
@@ -74,7 +74,7 @@ class Helpdesk extends MY_Controller {
 	function type_fillter(){
 		$value = $this->input->post('value');
 		$data = array(
-			'result' => $this->Helpdesk_NodatasetM->type_fillter($value),
+			'result' => $this->HelpdeskM->type_fillter($value),
 		);
 		$this->load->view(get_template().'/helpdesk/ajax_helpdesk_list',$data);
 	}
@@ -82,7 +82,7 @@ class Helpdesk extends MY_Controller {
 	function priority_fillter(){
 		$value = $this->input->post('value');
 		$data = array(
-			'result' => $this->Helpdesk_NodatasetM->priority_fillter($value),
+			'result' => $this->HelpdeskM->priority_fillter($value),
 		);
 		$this->load->view(get_template().'/helpdesk/ajax_helpdesk_list',$data);
 	}
@@ -143,8 +143,8 @@ class Helpdesk extends MY_Controller {
 	}
 	
 	function save_insert_helpdesk(){
-		$this->CI->load->library('FileL');
-		$this->filel->save('attach_file', 'Helpdesk');
+		//$this->CI->load->library('FileL');
+		//$this->filel->save('attach_file', 'Helpdesk');
 		$data = array(
 			'subject' => $this->input->post('subject'),
 			'assign_id' => $this->input->post('assign'),
@@ -154,7 +154,7 @@ class Helpdesk extends MY_Controller {
 			'type' => $this->input->post('type'),
 			'priority' => $this->input->post('priority'),
 		);
-		$insert_id = $this->Helpdesk_NodatasetM->save($data);
+		$insert_id = $this->HelpdeskM->save($data);
 
 		if($insert_id !=''){
 			echo $insert_id;
@@ -170,9 +170,9 @@ class Helpdesk extends MY_Controller {
 			'assign_id' => $this->input->post('assign'),
 			'cc_email' => $this->input->post('cc_email'),
 		);
-		$edit_id = $this->Helpdesk_NodatasetM->save($data);
+		$edit_id = $this->HelpdeskM->save($data);
 		$content = array (
-			'info' => $this->Helpdesk_NodatasetM->get_content($id),
+			'info' => $this->HelpdeskM->get_content($id),
 
 		);
 

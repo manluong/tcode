@@ -30,15 +30,28 @@ function submit_insert_helpdesk(){
 	var status = $('#a_helpdesk_comment_status').val();
 	var type = $('#a_helpdesk_comment_type').val();
 	var priority = $('#a_helpdesk_comment_priority').val();
-	 
-	 $('#frmManagement').submit();
+	
+	var url = 'helpdesk/fillter_record/';
+	$.post(url,{
+			subject : subject,
+			assign : assign,
+			cc_email : cc_email,
+			group : group,
+			status : status,
+			type : type,
+			priority : priority,
+		},function(data){
+			$('#helpdesk_datalist').html(data);
+		}
+	);
+		
+	//$('#frmManagement').submit();
 }
 </script>
 
 <div class="table" style="width:1096px;">
 	<div class="head_helpdesk">
 		<div id="content_left">HelpDesk Insert</div>
-		
 		
 	</div>
 	<form id="frmManagement" action="helpdesk/save_insert_helpdesk/" method="post" enctype="multipart/form-data">

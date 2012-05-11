@@ -27,6 +27,7 @@
 		}else{
 			$('.next').removeClass('disabled');
 		}
+		$('#helpdesk_list_table_info').html('Showing 1 to'+offset+' of '+total);
 		
 		$('.page_active_top').removeClass('active');
 		$('.page_active_bottom').removeClass('active');

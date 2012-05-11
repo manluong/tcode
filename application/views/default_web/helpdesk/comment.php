@@ -199,7 +199,7 @@ function submit_comment(){
 				</label>
 			</li>
 			<li class="controls">
-				<span style="width:597px;float:left;"><button  class="btn" type="submit">Attach File</button></span>
+				<span style="width:597px;float:left;"><a  href="" class="btn" type="submit">Download Attach File</a></span>
 				<div onclick="return submit_comment();" class="btn" >Submit</div>
 			</li>
 		</ul>

@@ -1,6 +1,6 @@
 <?php if (!defined('BASEPATH')) exit('No direct access allowed.');
 
-class Helpdesk_NodatasetM extends MY_Model {
+class HelpdeskM extends MY_Model {
 	function __construct() {
 		parent::__construct();
 
@@ -23,6 +23,7 @@ class Helpdesk_NodatasetM extends MY_Model {
 			return false;
 		}
 	}
+	
 	function get_content($id){
 		$this->db->select('*');
 		$this->db->where('id',$id);
