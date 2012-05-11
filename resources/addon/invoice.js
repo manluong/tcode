@@ -396,10 +396,10 @@ function remove_row(object) {
 
 function cal_item_total(object) {
 	var item = $(object).closest('div.invoice_item');
-	var price = parseFloat(item.find('.unit_price').val());
-	var qty = parseInt(item.find('.qty').val());
-	var discount = parseInt(item.find('.discount').val());
-	var tax = parseInt(item.find('.tax').val());
+	var price = parseFloat(item.find('.unit_price').val()) || 0;
+	var qty = parseInt(item.find('.qty').val()) || 0;
+	var discount = parseInt(item.find('.discount').val()) || 0;
+	var tax = parseInt(item.find('.tax').val()) || 0;
 	item.find('.item_total').val((price*qty-discount)*(100+tax)/100);
 	
 	cal_invoice_total();
@@ -410,16 +410,14 @@ function cal_invoice_total() {
 	var tax_total = 0;
 	var invoice_total = 0;
 	$('#invoice_item_list .invoice_item').not('.header').each(function(index, item) {
-		if (index != $('#invoice_item_list .invoice_item').length-2) {
-			var price = parseFloat($(item).find('.unit_price').val());
-			var qty = parseInt($(item).find('.qty').val());
-			var discount = parseInt($(item).find('.discount').val());
-			var tax = parseInt($(item).find('.tax').val());
+		var price = parseFloat($(item).find('.unit_price').val()) || 0;
+		var qty = parseInt($(item).find('.qty').val()) || 0;
+		var discount = parseInt($(item).find('.discount').val()) || 0;
+		var tax = parseInt($(item).find('.tax').val()) || 0;
 		
-			sub_total += (price*qty-discount)*(100+tax)/100;
-			tax_total += (price*qty-discount)*tax/100;
-			invoice_total += price*qty-discount;
-		}
+		sub_total += price*qty-discount;
+		tax_total += (price*qty-discount)*tax/100;
+		invoice_total += (price*qty-discount)*(100+tax)/100;
 	});
 	
 	$('#sub_total').html(sub_total);
@@ -469,16 +467,17 @@ $(document).ready(function() {
 	
 	$('#slider').slider({
 		range: true,
-		min: 0,
-		max: 500,
-		values: [0, 500],
+		min: $('#total_default_min').val(),
+		max: $('#total_default_max').val(),
+		values: [$('#total_default_min').val(), $('#total_default_max').val()],
 		slide: function( event, ui ) {
 			$('#total_min').val(ui.values[0]);
 			$('#total_max').val(ui.values[1]);
+			$('#lbl_total').html(ui.values[0]+' - '+ui.values[1]);
 		}
 	});
-	$('#total_min').val($('#slider-range').slider('values', 0));
-	$('#total_max').val($('#slider-range').slider('values', 1));
+	$('#total_min').val($('#slider').slider('values', 0));
+	$('#total_max').val($('#slider').slider('values', 1));
 	
 	$('#more_options').on('click', function(e) {
 		$('#search_more table').toggle();

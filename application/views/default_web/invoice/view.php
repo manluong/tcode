@@ -74,13 +74,13 @@
 	</div>
 	<?php foreach ($invoice_items as $invoice_item): ?>
 	<div class="invoice_item clear">
-		<div><?php echo $invoice_item->product_id ?></div>
+		<div><?php echo $invoice_item->a_product_name ?></div>
 		<div class="desc"><?php echo $invoice_item->description ?></div>
-		<div><?php echo $invoice_item->unit_price ?></div>
+		<div><?php echo (float)$invoice_item->unit_price ?></div>
 		<div><?php echo $invoice_item->quantity ?></div>
 		<div><?php echo $invoice_item->discount ?></div>
 		<div><?php echo $invoice_item->tax_id ?></div>
-		<div><?php echo $invoice_item->total ?></div>
+		<div><?php echo (float)$invoice_item->total ?></div>
 		<div class="invoice_item_sub header clear"<?php echo ($invoice_item->price_type) ? '' : ' style="display: none;"' ?>>
 			<div><span>Price Type</span></div>
 			<div><span>From</span></div>
