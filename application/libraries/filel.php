@@ -39,13 +39,15 @@ class FileL {
 
 		if ($file === FALSE) return FALSE;
 
+		if (file_exists($this->temp_dir.$file['hash'])) {
+			$file['contents'] = file_get_contents($this->temp_dir.$file['hash']);
+		}
+
 		if ($this->filesystem === 'S3') {
 			$file['contents'] = $this->read_from_s3($file['hash']);
 		}
 
-		if ($this->filesystem === 'local') {
-
-		}
+		if (strlen($file['contents']) == 0) return FALSE;
 
 		return $file;
 	}
@@ -84,7 +86,7 @@ class FileL {
 
 		//If overwrite not specified, get from the target directory's setting
 		if ($overwrite === '') {
-			if ($docs_id !== FALSE) $dir_id = $existing_file_info['dir_id'];
+			if ($docs_id !== FALSE) $dir_id_or_name = $existing_file_info['dir_id'];
 
 			$dir_info = $this->CI->DocsM->get_dir_detail($dir_id_or_name);
 			$overwrite = ($dir_info['has_versioning'] == 1);
@@ -119,6 +121,61 @@ class FileL {
 
 		//strip extension of file in the cache folder
 		rename($new_file_data['full_path'], $new_file_data['file_path'].$new_file_data['raw_name']);
+
+		//create DB entry
+		if ($docs_id !== FALSE) {
+			return $this->CI->DocsM->overwrite_file($docs_id, $new_file_data, $overwrite);
+		} else {
+			return $this->CI->DocsM->new_file_in_dir($new_file_data, $dir_id_or_name);
+		}
+	}
+
+	function save_raw($content, $filename='', $dir_id_or_name=0, $docs_id=FALSE, $overwrite='') {
+		$filehash = generate_hash();
+
+		//if Docs ID provided, load the existing file info
+		if ($docs_id !== FALSE) {
+			$existing_file_info = $this->CI->DocsM->get_detail($docs_id);
+		}
+
+		//If overwrite not specified, get from the target directory's setting
+		if ($overwrite === '') {
+			if ($docs_id !== FALSE) $dir_id_or_name = $existing_file_info['dir_id'];
+
+			$dir_info = $this->CI->DocsM->get_dir_detail($dir_id_or_name);
+			$overwrite = ($dir_info['has_versioning'] == 1);
+		}
+
+		//update CI file upload configuration
+		$config['overwrite'] = $overwrite;
+
+		//if Docs ID given and want to Overwrite, update CI file upload config to use filename same one has the existing file
+		if ($overwrite && $docs_id !== FALSE) {
+			$config['file_name'] = $existing_file_info['hash'];
+		}
+
+
+		//save to temp
+		$filepath = $this->write_to_temp($content, $filehash);
+
+		$this->load->helper('file');
+		//data of the newly uploaded file
+		$new_file_data = array(
+			'file_name' => $filename,
+			'file_type' => get_mime_by_extension($filename),
+			'file_path' => $this->temp_dir,
+			'full_path' => $filepath,
+			'raw_name' => $filehash,
+			'orig_name' => $filename,
+			'client_name' => $filename,
+			'file_ext' => '.'.get_file_extension($filename),
+			'file_size' => strlen($content)/1000
+		);
+
+		//upload to S3 if needed
+		if ($this->filesystem === 'S3') {
+			$this->upload_to_s3($new_file_data['full_path'], $new_file_data['raw_name']);
+		}
 
 		//create DB entry
 		if ($docs_id !== FALSE) {
@@ -179,5 +236,19 @@ class FileL {
 			log_message('error', 'Unable to delete from S3');
 			return FALSE;
 		}
+	}
+
+	private function write_to_temp(&$content, $filename) {
+		$filepath = $this->_temp_dir.$filename;
+		$fp = fopen($filepath, 'wb');
+
+		if ( ! fwrite($fp, $content)) {
+			fclose($fp);
+			log_message('debug', 'Error saving content to '.$filepath);
+			return FALSE;
+		}
+		fclose($fp);
+
+		return $filepath;
 	}
 }
