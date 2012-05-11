@@ -20,45 +20,18 @@
 	<script type="text/javascript" src="/resources/addon/tpanel.js"></script>
 	<script type="text/javascript" src="/resources/addon/jquery-ui-timepicker-addon.js"></script>
 	<script type="text/javascript" src="/resources/addon/helpdesk.js"></script>
-	
+
 	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/dataTables.bootstrap-paging.js"></script>
 	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/jquery.cookie.js"></script>
 	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/theme-global.js"></script>
-	
+
 	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/helpdesk.css" />
 	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/base.css" />
 	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/bootstrap.min.css" />
 	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/bootstrap-responsive.min.css" />
 
-	<!-- Docs -->
-		<!-- plupload -->
-		
-		<script type="text/javascript" src="http://bp.yahooapis.com/2.4.21/browserplus-min.js"></script>
-		<script type="text/javascript" src="/resources/addon/plupload/js/plupload.full.js"></script>
-		<script type="text/javascript" src="/resources/addon/plupload/js/jquery.plupload.queue/jquery.plupload.queue.js"></script>
-		<link href="/resources/addon/plupload/js/jquery.plupload.queue/css/jquery.plupload.queue.css" media="screen" rel="stylesheet" type="text/css" />
-		
-		<!--
-		<script type="text/javascript" src="http://bp.yahooapis.com/2.4.21/browserplus-min.js"></script>
-
-		<script type="text/javascript" src="/resources/addon/plupload/test/plupload.js"></script>
-		<script type="text/javascript" src="/resources/addon/plupload/test/plupload.gears.js"></script>
-		<script type="text/javascript" src="/resources/addon/plupload/test/plupload.silverlight.js"></script>
-		<script type="text/javascript" src="/resources/addon/plupload/test/plupload.flash.js"></script>
-		<script type="text/javascript" src="/resources/addon/plupload/test/plupload.browserplus.js"></script>
-		<script type="text/javascript" src="/resources/addon/plupload/test/plupload.html4.js"></script>
-		<script type="text/javascript" src="/resources/addon/plupload/test/plupload.html5.js"></script>
-		-->
-		<!-- end plupload -->
-
-		<!-- Adaptive ui -->
-		<link rel="stylesheet" type="text/css" href="/resources/addon/docs/flexpaper.css" />
-		<script type="text/javascript" src="/resources/addon/jquery.extensions.min.js"></script>
-		<script type="text/javascript" src="/resources/addon/docs/flexpaper.js"></script>
-		<script type="text/javascript" src="/resources/addon/docs/flexpaper_handlers.js"></script>
-		<!-- end adaptive ui -->
-	<!-- end Docs -->
+	
 
 	<?//=$head?>
 

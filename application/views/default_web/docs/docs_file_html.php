@@ -1,3 +1,8 @@
+<link rel="stylesheet" type="text/css" href="/resources/addon/docs/flexpaper.css" />
+<script type="text/javascript" src="/resources/addon/jquery.extensions.min.js"></script>
+<script type="text/javascript" src="/resources/addon/docs/flexpaper.js"></script>
+<script type="text/javascript" src="/resources/addon/docs/flexpaper_handlers.js"></script>
+
 <div class="container-fluid">
 	<div class="row-fluid">
 		<div class="span8">
