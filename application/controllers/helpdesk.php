@@ -180,7 +180,12 @@ class Helpdesk extends MY_Controller {
 		echo $ajax_content;
 	}
         function upload(){
-            echo 'hehe';
+           $this->load->library('fileL');
+           $file = $this->filel->save('file', 'Helpdesk');
+           echo 'http://apple.8force.net/file/read/'.$file['hash'];
+        }
+        function delete(){
+            $this->filel->delete('0d8fdff33eca87240f19988b56fbf7de');
         }
 	
 }
