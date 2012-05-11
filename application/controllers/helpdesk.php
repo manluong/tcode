@@ -178,12 +178,6 @@ class Helpdesk extends MY_Controller {
 	}
 	
 	function upload(){
-	   $this->load->library('fileL');
-	   $file = $this->filel->save('file', 'Helpdesk');
-	   echo 'http://apple.8force.net/file/read/'.$file['hash'];
-	}
-	
-	function uploada(){
 	   $this->load->library('filel');
 	   $file = $this->filel->save('file', 'Helpdesk');
 	   
