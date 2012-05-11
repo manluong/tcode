@@ -179,5 +179,8 @@ class Helpdesk extends MY_Controller {
 		$ajax_content = $this->load->view(get_template().'/helpdesk/ajax_updateInfoHelpdesk',$content ,true);
 		echo $ajax_content;
 	}
+        function upload(){
+            echo 'hehe';
+        }
 	
 }

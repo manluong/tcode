@@ -166,7 +166,7 @@ var uploader = new plupload.Uploader({
 	browse_button : 'pickfiles',
 	container: 'container',
 	max_file_size : '10mb',
-	url : '/resources/addon/plupload/helpdesk_upload.php',
+	url : '/helpdesk/upload',
 	//resize : {width : 320, height : 240, quality : 90},
 	//flash_swf_url : '../js/plupload.flash.swf',
 	//silverlight_xap_url : '../js/plupload.silverlight.xap',
