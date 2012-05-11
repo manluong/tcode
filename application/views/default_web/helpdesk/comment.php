@@ -1,11 +1,9 @@
-<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/main.css" />
-<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/jquery.fancybox-1.3.4.css" />
-<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/style_caledar.css" />
-<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/styles.css" />
+<script type="text/javascript" src="/resources/addon/helpdesk.js"></script>		
+<script type="text/javascript" src="http://bp.yahooapis.com/2.4.21/browserplus-min.js"></script>
+<script type="text/javascript" src="/resources/addon/plupload/js/plupload.full.js"></script>
+<script type="text/javascript" src="/resources/addon/plupload/js/jquery.plupload.queue/jquery.plupload.queue.js"></script>
+<link href="/resources/addon/plupload/js/jquery.plupload.queue/css/jquery.plupload.queue.css" media="screen" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/helpdesk.css" />
-<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/base.css" />
-<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/bootstrap.min.css" />
-<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/bootstrap-responsive.min.css" />
 
 
 <script type="text/javascript">

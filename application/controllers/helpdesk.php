@@ -170,7 +170,6 @@ class Helpdesk extends MY_Controller {
 		$edit_id = $this->HelpdeskM->save($data);
 		$content = array (
 			'info' => $this->HelpdeskM->get_content($id),
-
 		);
 
 		$ajax_content = $this->load->view(get_template().'/helpdesk/ajax_updateInfoHelpdesk',$content ,true);

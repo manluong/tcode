@@ -1,3 +1,10 @@
+<script type="text/javascript" src="/resources/addon/helpdesk.js"></script>		
+<script type="text/javascript" src="http://bp.yahooapis.com/2.4.21/browserplus-min.js"></script>
+<script type="text/javascript" src="/resources/addon/plupload/js/plupload.full.js"></script>
+<script type="text/javascript" src="/resources/addon/plupload/js/jquery.plupload.queue/jquery.plupload.queue.js"></script>
+<link href="/resources/addon/plupload/js/jquery.plupload.queue/css/jquery.plupload.queue.css" media="screen" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/helpdesk.css" />
+
 <script type="text/javascript" >
 	var total = <?php echo $total?>;
 	$(document).ready(function(){
@@ -170,7 +177,7 @@
 					</div>
 				</div>
 				<div class="dataTables_filter" id="helpdesk_list_table_filter">
-					<div style="width:700px;" class="input-prepend">
+					<div style="width:650px;" class="input-prepend">
 						<span class="add-on" onclick="return ajax_search();"><i style="cursor:pointer;" class="icon-search"></i></span>
 						<input onchange="return ajax_search();" type="text" id="helpdesk_search" name="helpdesk_search">
 					</div>
