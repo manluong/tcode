@@ -91,7 +91,7 @@ function submit_comment(){
 			<?php }?>
 		</div>
 	</div>
-	<form id="frmManagement" action="<?=PATH_URL.'admincp/'.$module.'/save/'?>" method="post" enctype="multipart/form-data">
+	<form id="frmManagement" action="" method="post" enctype="multipart/form-data">
 	<div id="helpdesk_info">
 		<ul id="form_show">
 			<li><span class="helpdesk_info_span">Subject</span> : <?=$result->subject?></li>
@@ -109,9 +109,14 @@ function submit_comment(){
 				<select  name="assign" id="assign">
 					<option value="">something</option>
 					<?php if(!empty($assign)){
+							if(!empty($result->assign_id)){
+								$value_assign = $result->assign_id;
+							}else{
+								$value_assign = 0;
+							}
 							foreach($assign as $k){
 					?>
-					<option value="<?=$k->id?>"><?=$k->nickname?></option>
+					<option <?=($value_assign == $k->id?'selected=selected':'' )?> value="<?=$k->id?>"><?=$k->nickname?></option>
 					<?php }}?>
 				</select>
 			</li>

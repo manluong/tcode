@@ -18,11 +18,8 @@ position: relative;
 </style>
 
 <script type="text/javascript">
-function showRequest(formData, jqForm, options) {
-	var form = jqForm[0];
-}
-
 function submit_insert_helpdesk(){
+
 	var subject = $('#subject').val();
 	var assign = $('#assign').val();
 	var cc_email = $('#cc_email').val();
@@ -31,7 +28,7 @@ function submit_insert_helpdesk(){
 	var type = $('#a_helpdesk_comment_type').val();
 	var priority = $('#a_helpdesk_comment_priority').val();
 	
-	var url = 'helpdesk/fillter_record/';
+	var url = 'helpdesk/save_insert_helpdesk/';
 	$.post(url,{
 			subject : subject,
 			assign : assign,
@@ -41,10 +38,10 @@ function submit_insert_helpdesk(){
 			type : type,
 			priority : priority,
 		},function(data){
-			$('#helpdesk_datalist').html(data);
+			window.location="helpdesk/index";
 		}
 	);
-		
+
 	//$('#frmManagement').submit();
 }
 </script>
@@ -52,8 +49,8 @@ function submit_insert_helpdesk(){
 <div class="table" style="width:1096px;">
 	<div class="head_helpdesk">
 		<div id="content_left">HelpDesk Insert</div>
-		
 	</div>
+	
 	<form id="frmManagement" action="helpdesk/save_insert_helpdesk/" method="post" enctype="multipart/form-data">
 	<div id="helpdesk_info" style="height:200px;">
 		<ul id="form_change" >
@@ -144,7 +141,6 @@ function submit_insert_helpdesk(){
 			</li>
 			
 			<li class="controls" style="width:577px;">
-				
 				<!-- PLUpload-->
 				<h1 style="display:none;">Custom example</h1>
 				<p style="display:none;">Shows you how to use the core plupload API.</p>
@@ -154,11 +150,10 @@ function submit_insert_helpdesk(){
 					<a style="text-decoration:none;" id="uploadfiles" href="javascript:;">[Upload files]</a>
 					<div id="filelist" style="margin-top:5px;"></div>
 				</div>
-
 			</li>
 			
 			<li class="controls" >
-				<div onclick="return submit_insert_helpdesk();" class="btn" >Submit</div>
+				<div onclick="submit_insert_helpdesk()" class="btn">Submit</div>
 			</li>
 		</ul>
 	</div>
@@ -173,16 +168,13 @@ function $(id) {
 	return document.getElementById(id);	
 }
 
-
 var uploader = new plupload.Uploader({
 	runtimes : 'gears,html5,flash,silverlight,browserplus',
 	browse_button : 'pickfiles',
 	container: 'container',
 	max_file_size : '10mb',
-	url : '/resources/addon/plupload/helpdesk_upload.php',
-	//resize : {width : 320, height : 240, quality : 90},
-	//flash_swf_url : '../js/plupload.flash.swf',
-	//silverlight_xap_url : '../js/plupload.silverlight.xap',
+	url : '/helpdesk/upload/',
+
 	filters : [
 		{title : "Image files", extensions : "jpg,gif,png"},
 		{title : "Zip files", extensions : "zip"}

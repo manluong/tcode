@@ -27,7 +27,9 @@
 		}else{
 			$('.next').removeClass('disabled');
 		}
-		$('#helpdesk_list_table_info').html('Showing 1 to'+offset+' of '+total);
+		var to = parseInt(offset) + 1;
+		var from = parseInt(offset) + 10;
+		$('#helpdesk_list_table_info').html('Showing '+to+' to '+from+' of '+total);
 		
 		$('.page_active_top').removeClass('active');
 		$('.page_active_bottom').removeClass('active');

@@ -5,7 +5,7 @@ class Helpdesk extends MY_Controller {
 	function __construct() {
 		parent::__construct();
 
-		//$this->load->model('DS_Helpdesk');
+		$this->load->model('DS_Helpdesk');
 		$this->load->model('Helpdesk_CommentM');
 		$this->load->model('HelpdeskM');
 	}
@@ -143,8 +143,6 @@ class Helpdesk extends MY_Controller {
 	}
 	
 	function save_insert_helpdesk(){
-		//$this->CI->load->library('FileL');
-		//$this->filel->save('attach_file', 'Helpdesk');
 		$data = array(
 			'subject' => $this->input->post('subject'),
 			'assign_id' => $this->input->post('assign'),
@@ -158,7 +156,6 @@ class Helpdesk extends MY_Controller {
 
 		if($insert_id !=''){
 			echo $insert_id;
-			//Header("Location: /helpdesk/index");
 		}
 	}
 	
@@ -178,6 +175,37 @@ class Helpdesk extends MY_Controller {
 
 		$ajax_content = $this->load->view(get_template().'/helpdesk/ajax_updateInfoHelpdesk',$content ,true);
 		echo $ajax_content;
+	}
+	
+	function upload(){
+	   $this->load->library('fileL');
+	   $file = $this->filel->save('file', 'Helpdesk');
+	   echo 'http://apple.8force.net/file/read/'.$file['hash'];
+	}
+	
+	function uploada(){
+	   $this->load->library('filel');
+	   $file = $this->filel->save('file', 'Helpdesk');
+	   echo 'http://apple.local.net/file/read/'.$file['hash'];
+	   die;
+	   
+	   $data = array(
+			'subject' => '',
+			'assign_id' => '',
+			'cc_email' => '',
+			'group' => '',
+			'status' => '',
+			'type' => '',
+			'priority' => '',
+		);
+		
+	   $helpdesk_id = $this->HelpdeskM->save($data);
+	   $insert_id = $this->HelpdeskM->insert_upload_file($file['hash'],$helpdesk_id);
+		echo $insert_id ;
+	}
+	
+	function delete($hash){
+		$this->filel->delete($hash);
 	}
 	
 }

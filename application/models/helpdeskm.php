@@ -97,4 +97,16 @@ class HelpdeskM extends MY_Model {
 			return false;
 		}
 	}
+	
+	function insert_upload_file($filename , $id_helpdesk){
+		$data = array (
+			'filename' => $filename,
+			'id_helpdesk' => $id_helpdesk
+		);
+		if($this->db->insert('a_helpdesk_file',$data)){
+			return $this->db->insert_id();
+		}else{
+			return 0;
+		}
+	}
 }
