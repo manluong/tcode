@@ -72,6 +72,7 @@
 	</div>
 
 	<script>
+		/*
 		$(document).ready(function() {
 			resize_nav();
 
@@ -81,13 +82,13 @@
 		$(window).resize(function(){
 			setTimeout('resize_nav()', 1000);
 		});
-		/*
+		
 		$('#content-container').on('click', function() {
 			$('#status-update').slideUp(300);
 			$('#global-search-options').slideUp(300);
 			setTimeout('resize_nav()', 400);
 		});
-		*/
+		
 		function resize_nav() {
 			var sidebar_height = $('#sidebar').outerHeight();
 			sidebar_height -= $('#company-logo').outerHeight();
@@ -97,6 +98,7 @@
 
 			$('#nav').outerHeight(sidebar_height);
 		}
+		*/
 	</script>
 
 </body>

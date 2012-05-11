@@ -29,6 +29,9 @@
 		}
 		var to = parseInt(offset) + 1;
 		var from = parseInt(offset) + 10;
+		if(from > total){
+			from = total;
+		}
 		$('#helpdesk_list_table_info').html('Showing '+to+' to '+from+' of '+total);
 		
 		$('.page_active_top').removeClass('active');
@@ -282,7 +285,7 @@
 			</label>
 		</div>
 		
-		<div class="dataTables_info" id="helpdesk_list_table_info">Showing 1 to 10 of 56</div>
+		<div class="dataTables_info" id="helpdesk_list_table_info">Showing 1 to 10 of <?=$total?></div>
 		</div>
 	</div>
 </div>

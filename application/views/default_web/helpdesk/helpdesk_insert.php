@@ -21,6 +21,7 @@ position: relative;
 function submit_insert_helpdesk(){
 
 	var subject = $('#subject').val();
+
 	var assign = $('#assign').val();
 	var cc_email = $('#cc_email').val();
 	var group = $('#a_helpdesk_comment_group').val();
@@ -38,11 +39,9 @@ function submit_insert_helpdesk(){
 			type : type,
 			priority : priority,
 		},function(data){
-			window.location="helpdesk/index";
+			window.location="helpdesk";
 		}
 	);
-
-	//$('#frmManagement').submit();
 }
 </script>
 
@@ -67,12 +66,11 @@ function submit_insert_helpdesk(){
 					<?php }}?>
 				</select>
 			</li>
-			
 			<li><span class="helpdesk_info_span">CC Mail</span> <span class="input_change">: <input name="cc_email" value="" type="text" id="cc_email" /></span></li>
 		</ul>
 	</div>
 	
-	<input type="hidden" value="<?=$id?>" name="hiddenIdAdmincp" id="hiddenIdAdmincp" />
+	<input type="hidden" value="" name="hiddenIdAdmincp" id="hiddenIdAdmincp" />
 	<div id="helpdesk_select">
 		<ul>
 			<li class="controls">
@@ -163,8 +161,9 @@ function submit_insert_helpdesk(){
 </div>
 
 <script type="text/javascript">
+
 // Custom example logic
-function $(id) {
+function getid(id) {
 	return document.getElementById(id);	
 }
 
@@ -173,7 +172,7 @@ var uploader = new plupload.Uploader({
 	browse_button : 'pickfiles',
 	container: 'container',
 	max_file_size : '10mb',
-	url : '/helpdesk/upload/',
+	url : '/helpdesk/uploada/',
 
 	filters : [
 		{title : "Image files", extensions : "jpg,gif,png"},
@@ -183,18 +182,19 @@ var uploader = new plupload.Uploader({
 
 uploader.bind('FilesAdded', function(up, files) {
 	for (var i in files) {
-		$('filelist').innerHTML += '<div id="' + files[i].id + '">' + files[i].name + ' (' + plupload.formatSize(files[i].size) + ') <b></b></div>';
+		getid('filelist').innerHTML += '<div id="' + files[i].id + '">' + files[i].name + ' (' + plupload.formatSize(files[i].size) + ') <b></b></div>';
 	}
 });
 
 uploader.bind('UploadProgress', function(up, file) {
-	$(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
+	getid(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
 });
 
-$('uploadfiles').onclick = function() {
+getid('uploadfiles').onclick = function() {
 	uploader.start();
 	return false;
 };
 
 uploader.init();
+
 </script>

@@ -186,8 +186,6 @@ class Helpdesk extends MY_Controller {
 	function uploada(){
 	   $this->load->library('filel');
 	   $file = $this->filel->save('file', 'Helpdesk');
-	   echo 'http://apple.local.net/file/read/'.$file['hash'];
-	   die;
 	   
 	   $data = array(
 			'subject' => '',
