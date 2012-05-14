@@ -22,7 +22,7 @@ function show_form_show(){
 	var cc_email = $('#cc_email').val();
 	var id = $('#hiddenIdAdmincp').val();
 	
-	var url = 'helpdesk/ajaxChangeInfoHelpDesk/';
+	var url = '<?=site_url('helpdesk/ajaxChangeInfoHelpDesk');?>';
 	
 	$.post(url,{
 			id : id,
@@ -55,7 +55,8 @@ function submit_comment(){
 		alert('Please input comment !');
 		return false;
 	}
-	var url = 'helpdesk/save_comment/';
+	var url = '<?=site_url('helpdesk/save_comment');?>';
+	
 	$.post(url,{
 			id : id,
 			comment: comment,
@@ -70,7 +71,6 @@ function submit_comment(){
 			$('#a_helpdesk_comment_comment').attr('value','');
 		}
 	);
-	
 }
 </script>
 
@@ -203,7 +203,7 @@ function submit_comment(){
 			</li>
 			<li class="controls">
 				<span style="width:597px;float:left;">
-					<?php if(!empty($file_attach))
+					<?php if(!empty($file_attach)){
 							foreach($file_attach as $k){
 					?>
 					<a href="http://apple.8force.net/file/read/<?=$k->filename?>" class="btn" target="_blank">File Attach</a>

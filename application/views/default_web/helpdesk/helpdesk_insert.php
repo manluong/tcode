@@ -28,7 +28,7 @@ position: relative;
 <script type="text/javascript">
 
 function submit_insert_helpdesk(){
-
+	var comment = $('#a_helpdesk_comment_comment').val();
 	var subject = $('#subject').val();
 	var id = $('#hiddenIdAdmincp').attr('value');
 	var assign = $('#assign').val();
@@ -38,7 +38,8 @@ function submit_insert_helpdesk(){
 	var type = $('#a_helpdesk_comment_type').val();
 	var priority = $('#a_helpdesk_comment_priority').val();
 	
-	var url = 'helpdesk/save_insert_helpdesk/';
+	var url = '<?=site_url('helpdesk/save_insert_helpdesk');?>';
+
 	$.post(url,{
 			id : id,
 			subject : subject,
@@ -49,7 +50,44 @@ function submit_insert_helpdesk(){
 			type : type,
 			priority : priority,
 		},function(data){
-			window.location="helpdesk";
+			if(comment != ''){
+				submit_comment();
+			}else{
+				window.location='<?=site_url('helpdesk');?>';
+			}
+			
+		}
+	);
+}
+
+function submit_comment(){
+	var comment = $('#a_helpdesk_comment_comment').val();
+	var id_helpdesk = $('#hiddenIdAdmincp').attr('value');
+	var priority_helpdesk = $('#a_helpdesk_comment_priority').val();
+	var group_helpdesk = $('#a_helpdesk_comment_group').val();
+	var status_helpdesk = $('#a_helpdesk_comment_status').val();
+	var type_helpdesk = $('#a_helpdesk_comment_type').val();
+	
+	if($('#private').is(':checked')){
+		var pri = 1;
+	}else{
+		var pri = 0	;
+	}
+	
+	var url_comment = '<?=site_url('helpdesk/save_comment');?>';
+	
+	$.post(url_comment,{
+			id : id_helpdesk,
+			comment: comment,
+			pri: pri,
+			group : group_helpdesk,
+			status : status_helpdesk,
+			type : type_helpdesk,
+			priority : priority_helpdesk,
+		},function(data){
+			if(data == 'success'){
+				window.location='<?=site_url('helpdesk');?>';
+			}
 		}
 	);
 }
@@ -60,7 +98,7 @@ function submit_insert_helpdesk(){
 		<div id="content_left">HelpDesk Insert</div>
 	</div>
 	
-	<form id="frmManagement" action="helpdesk/save_insert_helpdesk/" method="post" enctype="multipart/form-data">
+	<form id="frmManagement" action="" method="post" enctype="multipart/form-data">
 	<div id="helpdesk_info" style="height:200px;">
 		<ul id="form_change" >
 			<li><span class="helpdesk_info_span">Subject</span> <span class="input_change">: <input value="" type="text" name="subject" id="subject" /></span></li>
@@ -148,6 +186,17 @@ function submit_insert_helpdesk(){
 				</select>
 			</li>
 			
+			<li class="controls" style="width:100%;">
+				<textarea rows="3" id="a_helpdesk_comment_comment" value="" class="input-xlarge"></textarea>
+			</li>
+			
+			<li class="controls" style="width:100%;">
+				<label class="checkbox">
+                <input type="checkbox" value="" id="private">
+                Private comments (Only staff see this comments)
+				</label>
+			</li>
+			
 			<li class="controls" style="width:577px;">
 				<!-- PLUpload-->
 				<h1 style="display:none;">Custom example</h1>
@@ -173,39 +222,37 @@ function submit_insert_helpdesk(){
 <script type="text/javascript">
 
 // Custom example logic
-function getid(id) {
-	return document.getElementById(id);	
-}
-
-var uploader = new plupload.Uploader({
-	runtimes : 'gears,html5,flash,silverlight,browserplus',
-	browse_button : 'pickfiles',
-	container: 'container',
-	max_file_size : '10mb',
-	url : '/helpdesk/upload/'+$('#hiddenIdAdmincp').attr('value'),
-
-	filters : [
-		{title : "Image files", extensions : "jpg,gif,png"},
-		{title : "Zip files", extensions : "zip"}
-	]
-});
-
-uploader.bind('FilesAdded', function(up, files) {
-	for (var i in files) {
-		getid('filelist').innerHTML += '<div id="' + files[i].id + '">' + files[i].name + ' (' + plupload.formatSize(files[i].size) + ') <b></b></div>';
+	function getid(id) {
+		return document.getElementById(id);	
 	}
-});
 
-uploader.bind('UploadProgress', function(up, file) {
-	getid(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
-});
+	var uploader = new plupload.Uploader({
+		runtimes : 'gears,html5,flash,silverlight,browserplus',
+		browse_button : 'pickfiles',
+		container: 'container',
+		max_file_size : '10mb',
+		url : '/helpdesk/upload/'+$('#hiddenIdAdmincp').attr('value'),
 
-getid('uploadfiles').onclick = function() {
-	uploader.start();
-	return false;
-};
+		filters : [
+			{title : "Image files", extensions : "jpg,gif,png"},
+			{title : "Zip files", extensions : "zip"}
+		]
+	});
 
+	uploader.bind('FilesAdded', function(up, files) {
+		for (var i in files) {
+			getid('filelist').innerHTML += '<div id="' + files[i].id + '">' + files[i].name + ' (' + plupload.formatSize(files[i].size) + ') <b></b></div>';
+		}
+	});
 
-uploader.init();
+	uploader.bind('UploadProgress', function(up, file) {
+		getid(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
+	});
 
+	getid('uploadfiles').onclick = function() {
+		uploader.start();
+		return false;
+	};
+	
+	uploader.init();
 </script>
