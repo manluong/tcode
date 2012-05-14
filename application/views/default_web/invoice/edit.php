@@ -71,14 +71,14 @@
 		<div>
 			<input type="hidden" name="invoice_item_id[]" value="<?php echo $invoice_item->id ?>" />
 			<input type="hidden" name="product_id[]" value="<?php echo $invoice_item->product_id ?>" class="product_id" />
-			<input type="text" name="product_name[]" value="<?php echo $invoice_item->product_id ?>" class="product_name" />
+			<input type="text" name="product_name[]" value="<?php echo $invoice_item->a_product_name ?>" class="product_name" />
 		</div>
 		<div class="desc"><input type="text" name="description[]" value="<?php echo $invoice_item->description ?>" /></div>
-		<div><input type="text" name="unit_price[]" value="<?php echo $invoice_item->unit_price ?>" class="unit_price cal" /></div>
+		<div><input type="text" name="unit_price[]" value="<?php echo (float)$invoice_item->unit_price ?>" class="unit_price cal" /></div>
 		<div><input type="text" name="qty[]" value="<?php echo $invoice_item->quantity ?>" class="qty cal" /></div>
 		<div><input type="text" name="discount[]" value="<?php echo $invoice_item->discount ?>" class="discount cal" /></div>
 		<div><input type="text" name="tax[]" value="<?php echo $invoice_item->tax_id ?>" class="tax cal" /></div>
-		<div><input type="text" name="total[]" value="<?php echo $invoice_item->total ?>" class="item_total" /></div>
+		<div><input type="text" name="total[]" value="<?php echo (float)$invoice_item->total ?>" class="item_total" /></div>
 		<div class="act">
 			<a href="#" class="more">m</a>
 			<a href="#" class="add">+</a>

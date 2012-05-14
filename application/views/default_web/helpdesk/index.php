@@ -1,3 +1,10 @@
+<script type="text/javascript" src="/resources/addon/helpdesk.js"></script>		
+<script type="text/javascript" src="http://bp.yahooapis.com/2.4.21/browserplus-min.js"></script>
+<script type="text/javascript" src="/resources/addon/plupload/js/plupload.full.js"></script>
+<script type="text/javascript" src="/resources/addon/plupload/js/jquery.plupload.queue/jquery.plupload.queue.js"></script>
+<link href="/resources/addon/plupload/js/jquery.plupload.queue/css/jquery.plupload.queue.css" media="screen" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/helpdesk.css" />
+
 <script type="text/javascript" >
 	var total = <?php echo $total?>;
 	$(document).ready(function(){
@@ -7,7 +14,7 @@
 
 	function ajax_pagination(offset){
 		set_active_page(offset);
-		var url = 'helpdesk/ajax_pagination/';
+		var url = '<?=site_url('helpdesk/ajax_pagination');?>';
 		$.post(url,{
 				offset : offset
 			},function(data){
@@ -27,6 +34,12 @@
 		}else{
 			$('.next').removeClass('disabled');
 		}
+		var to = parseInt(offset) + 1;
+		var from = parseInt(offset) + 10;
+		if(from > total){
+			from = total;
+		}
+		$('#helpdesk_list_table_info').html('Showing '+to+' to '+from+' of '+total);
 		
 		$('.page_active_top').removeClass('active');
 		$('.page_active_bottom').removeClass('active');
@@ -44,7 +57,7 @@
 		
 		set_active_page(offset);
 		
-		var url = 'helpdesk/ajax_pagination/';
+		var url = '<?=site_url('helpdesk/ajax_pagination');?>';
 		$.post(url,{
 				offset : offset
 			},function(data){
@@ -62,7 +75,8 @@
 		}
 		set_active_page(offset);
 		
-		var url = 'helpdesk/ajax_pagination/';
+		var url = '<?=site_url('helpdesk/ajax_pagination');?>';
+		
 		$.post(url,{
 				offset : offset
 			},function(data){
@@ -74,7 +88,8 @@
 	function ajax_search(){
 		var value = $('#helpdesk_search').val();
 		
-		var url = 'helpdesk/ajax_search/';
+		var url = '<?=site_url('helpdesk/ajax_search');?>';
+		
 		$.post(url,{
 				value : value
 			},function(data){
@@ -85,7 +100,8 @@
 	
 	function group_fillter(){
 		var value = $('#helpdesk_group').val();
-		var url = 'helpdesk/group_fillter/';
+		var url = '<?=site_url('helpdesk/group_fillter');?>';
+		
 		$.post(url,{
 				value : value
 			},function(data){
@@ -96,7 +112,8 @@
 	
 	function status_fillter(){
 		var value = $('#helpdesk_status').val();
-		var url = 'helpdesk/status_fillter/';
+		var url = '<?=site_url('helpdesk/status_fillter');?>';
+		
 		$.post(url,{
 				value : value
 			},function(data){
@@ -107,7 +124,8 @@
 	
 	function type_fillter(){
 		var value = $('#helpdesk_type').val();
-		var url = 'helpdesk/type_fillter/';
+		var url = '<?=site_url('helpdesk/type_fillter');?>';
+		
 		$.post(url,{
 				value : value
 			},function(data){
@@ -118,7 +136,8 @@
 	
 	function priority_fillter(){
 		var value = $('#helpdesk_prioruty').val();
-		var url = 'helpdesk/priority_fillter/';
+		var url = '<?=site_url('helpdesk/priority_fillter');?>';
+		
 		$.post(url,{
 				value : value
 			},function(data){
@@ -129,7 +148,7 @@
 	
 	function fillter_record(){
 		var value = $('#fillter_record').val();
-		var url = 'helpdesk/fillter_record/';
+		var url = '<?=site_url('helpdesk/fillter_record');?>';
 		$.post(url,{
 				value : value
 			},function(data){
@@ -143,7 +162,7 @@
 		<div class="widget-header">
 			<h4>
 				<div style="float:left;width:1010px;height:10px;">HelpDesk List</div>
-				<div><a href="javascript:;" onclick="load_insert_helpdesk_form()">New</a></div>
+				<div><a href="<?=site_url('helpdesk/add');?>">New</a></div>
 			</h4>
 		</div>
 		
@@ -164,7 +183,7 @@
 					</div>
 				</div>
 				<div class="dataTables_filter" id="helpdesk_list_table_filter">
-					<div style="width:700px;" class="input-prepend">
+					<div style="width:650px;" class="input-prepend">
 						<span class="add-on" onclick="return ajax_search();"><i style="cursor:pointer;" class="icon-search"></i></span>
 						<input onchange="return ajax_search();" type="text" id="helpdesk_search" name="helpdesk_search">
 					</div>
@@ -245,7 +264,8 @@
 						<td><?=$result[$i][created_stamp]?></td>
 						<td><?=$result[$i][modified_stamp]?></td>
 						<td><?=$this->Helpdesk_CommentM->get_assigname($result[$i][assign_id])?></td>
-						<td><span class="btn btn-default" onclick="load_comment_form(<?=$result[$i][id]?>)">Edit</span>
+						<td><a href="<?=site_url('helpdesk/edit');?>/<?=$result[$i][id]?>" class="btn btn-default">Edit</a>
+						
 						</td>
 					</tr>
 					<?php }}?>
@@ -279,7 +299,7 @@
 			</label>
 		</div>
 		
-		<div class="dataTables_info" id="helpdesk_list_table_info">Showing 1 to 10 of 56</div>
+		<div class="dataTables_info" id="helpdesk_list_table_info">Showing 1 to 10 of <?=$total?></div>
 		</div>
 	</div>
 </div>

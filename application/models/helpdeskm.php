@@ -1,6 +1,6 @@
 <?php if (!defined('BASEPATH')) exit('No direct access allowed.');
 
-class Helpdesk_NodatasetM extends MY_Model {
+class HelpdeskM extends MY_Model {
 	function __construct() {
 		parent::__construct();
 
@@ -23,6 +23,7 @@ class Helpdesk_NodatasetM extends MY_Model {
 			return false;
 		}
 	}
+	
 	function get_content($id){
 		$this->db->select('*');
 		$this->db->where('id',$id);
@@ -95,5 +96,46 @@ class Helpdesk_NodatasetM extends MY_Model {
 		}else{
 			return false;
 		}
+	}
+	
+	function insert_upload_file($filename , $id_helpdesk){
+		$data = array (
+			'filename' => $filename,
+			'id_helpdesk' => $id_helpdesk
+		);
+		if($this->db->insert('a_helpdesk_file',$data)){
+			return $this->db->insert_id();
+		}else{
+			return 0;
+		}
+	}
+	
+	function get_helpdesk_not_use(){
+		$this->db->select('id');
+		$this->db->where('active',1);
+		$query = $this->db->get($this->table);
+
+		if($query->result()){
+			return $query->result();
+		}else{
+			return false;
+		}
+	}
+	
+	function get_helpdesk_files($id){
+		$this->db->select('*');
+		$this->db->where('id_helpdesk',$id);
+		$query = $this->db->get('a_helpdesk_file');
+
+		if($query->result()){
+			return $query->result();
+		}else{
+			return false;
+		}
+	}
+	
+	function delete_files_not_use($id){
+		$this->db->where('id', $id);
+		$this->db->delete('a_helpdesk_file');
 	}
 }

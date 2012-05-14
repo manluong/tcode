@@ -1,11 +1,9 @@
-<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/main.css" />
-<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/jquery.fancybox-1.3.4.css" />
-<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/style_caledar.css" />
-<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/styles.css" />
+<script type="text/javascript" src="/resources/addon/helpdesk.js"></script>		
+<script type="text/javascript" src="http://bp.yahooapis.com/2.4.21/browserplus-min.js"></script>
+<script type="text/javascript" src="/resources/addon/plupload/js/plupload.full.js"></script>
+<script type="text/javascript" src="/resources/addon/plupload/js/jquery.plupload.queue/jquery.plupload.queue.js"></script>
+<link href="/resources/addon/plupload/js/jquery.plupload.queue/css/jquery.plupload.queue.css" media="screen" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/helpdesk.css" />
-<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/base.css" />
-<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/bootstrap.min.css" />
-<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/bootstrap-responsive.min.css" />
 
 
 <script type="text/javascript">
@@ -24,7 +22,7 @@ function show_form_show(){
 	var cc_email = $('#cc_email').val();
 	var id = $('#hiddenIdAdmincp').val();
 	
-	var url = 'helpdesk/ajaxChangeInfoHelpDesk/';
+	var url = '<?=site_url('helpdesk/ajaxChangeInfoHelpDesk');?>';
 	
 	$.post(url,{
 			id : id,
@@ -57,7 +55,8 @@ function submit_comment(){
 		alert('Please input comment !');
 		return false;
 	}
-	var url = 'helpdesk/save_comment/';
+	var url = '<?=site_url('helpdesk/save_comment');?>';
+	
 	$.post(url,{
 			id : id,
 			comment: comment,
@@ -72,7 +71,6 @@ function submit_comment(){
 			$('#a_helpdesk_comment_comment').attr('value','');
 		}
 	);
-	
 }
 </script>
 
@@ -91,7 +89,7 @@ function submit_comment(){
 			<?php }?>
 		</div>
 	</div>
-	<form id="frmManagement" action="<?=PATH_URL.'admincp/'.$module.'/save/'?>" method="post" enctype="multipart/form-data">
+	<form id="frmManagement" action="" method="post" enctype="multipart/form-data">
 	<div id="helpdesk_info">
 		<ul id="form_show">
 			<li><span class="helpdesk_info_span">Subject</span> : <?=$result->subject?></li>
@@ -109,9 +107,14 @@ function submit_comment(){
 				<select  name="assign" id="assign">
 					<option value="">something</option>
 					<?php if(!empty($assign)){
+							if(!empty($result->assign_id)){
+								$value_assign = $result->assign_id;
+							}else{
+								$value_assign = 0;
+							}
 							foreach($assign as $k){
 					?>
-					<option value="<?=$k->id?>"><?=$k->nickname?></option>
+					<option <?=($value_assign == $k->id?'selected=selected':'' )?> value="<?=$k->id?>"><?=$k->nickname?></option>
 					<?php }}?>
 				</select>
 			</li>
@@ -199,7 +202,13 @@ function submit_comment(){
 				</label>
 			</li>
 			<li class="controls">
-				<span style="width:597px;float:left;"><button  class="btn" type="submit">Attach File</button></span>
+				<span style="width:597px;float:left;">
+					<?php if(!empty($file_attach)){
+							foreach($file_attach as $k){
+					?>
+					<a href="http://apple.8force.net/file/read/<?=$k->filename?>" class="btn" target="_blank">File Attach</a>
+					<?php }}?>
+				</span>
 				<div onclick="return submit_comment();" class="btn" >Submit</div>
 			</li>
 		</ul>

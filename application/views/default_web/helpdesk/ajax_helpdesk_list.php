@@ -7,7 +7,7 @@
 	<td><?=$result[$i]->created_stamp?></td>
 	<td><?=$result[$i]->modified_stamp?></td>
 	<td><?=$this->Helpdesk_CommentM->get_assigname($result[$i]->assign_id)?></td>
-	<td><span class="btn btn-default" onclick="load_comment_form(<?=$result[$i]->id?>)">Edit</span>
+	<td><a href="<?=site_url('helpdesk/edit');?>/<?=$result[$i][id]?>" class="btn btn-default">Edit</a>
 	</td>
 </tr>
 <?php }}?>
