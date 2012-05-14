@@ -103,7 +103,7 @@ class Helpdesk extends MY_Controller {
 			'comment' => $this->Helpdesk_CommentM->get_content($id),
 			'result' => $result[0],
 			'assign' => $this->Helpdesk_CommentM->get_assign(),
-
+			'file_attach' => $this->HelpdeskM->get_files_attach($id),
 		);	
 		$content = $this->load->view(get_template().'/helpdesk/comment',$data ,true);
 		echo $content;
@@ -210,7 +210,7 @@ class Helpdesk extends MY_Controller {
 		if(!empty($result)){
 			foreach($result as $k){
 				$this->HelpdeskM->delete($k->id,TRUE);
-				$file = $this->HelpdeskM->get_files_of_helpdesk_not_use($k->id);
+				$file = $this->HelpdeskM->get_helpdesk_files($k->id);
 				if(!empty($file)){
 					foreach($file as $v){
 						$this->filel->delete($v->filename);

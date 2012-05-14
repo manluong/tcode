@@ -122,9 +122,9 @@ class HelpdeskM extends MY_Model {
 		}
 	}
 	
-	function get_files_of_helpdesk_not_use(){
+	function get_helpdesk_files($id){
 		$this->db->select('*');
-		$this->db->where('active',1);
+		$this->db->where('id_helpdesk',$id);
 		$query = $this->db->get('a_helpdesk_file');
 
 		if($query->result()){

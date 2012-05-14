@@ -202,7 +202,13 @@ function submit_comment(){
 				</label>
 			</li>
 			<li class="controls">
-				<span style="width:597px;float:left;"><a  href="" class="btn" type="submit">Download Attach File</a></span>
+				<span style="width:597px;float:left;">
+					<?php if(!empty($file_attach))
+							foreach($file_attach as $k){
+					?>
+					<a href="http://apple.8force.net/file/read/<?=$k->filename?>" class="btn" target="_blank">File Attach</a>
+					<?php }}?>
+				</span>
 				<div onclick="return submit_comment();" class="btn" >Submit</div>
 			</li>
 		</ul>
