@@ -26,7 +26,10 @@ position: relative;
 </style>
 
 <script type="text/javascript">
-
+$(document).ready(function(){
+	var helpdesk_id = $('#hiddenIdAdmincp').attr('value');
+	alert(helpdesk_id);
+});
 function submit_insert_helpdesk(){
 
 	var subject = $('#subject').val();
@@ -79,7 +82,7 @@ function submit_insert_helpdesk(){
 		</ul>
 	</div>
 	
-	<input type="hidden" value="" name="hiddenIdAdmincp" id="hiddenIdAdmincp" />
+	<input type="hidden" value="<?=(!empty($helpdesk_id)? $helpdesk_id : '0')?>" name="hiddenIdAdmincp" id="hiddenIdAdmincp" />
 	<div id="helpdesk_select">
 		<ul>
 			<li class="controls">
@@ -181,7 +184,7 @@ var uploader = new plupload.Uploader({
 	browse_button : 'pickfiles',
 	container: 'container',
 	max_file_size : '10mb',
-	url : '/helpdesk/upload/',
+	url : '/helpdesk/upload/'+helpdesk_id,
 
 	filters : [
 		{title : "Image files", extensions : "jpg,gif,png"},

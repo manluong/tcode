@@ -110,7 +110,21 @@ class Helpdesk extends MY_Controller {
 	}
 	
 	function insert_helpdesk_form() {
+		$helpdesk_data = array(
+			'subject' => '',
+			'assign_id' => '',
+			'cc_email' => '',
+			'group' => '',
+			'status' => '',
+			'type' => '',
+			'priority' => '',
+			'active' => 1,
+		);
+		
+	   $helpdesk_id = $this->HelpdeskM->save($helpdesk_data);
+	   
 		$data = array(
+			'helpdesk_id' => $helpdesk_id,
 			'group' =>  $this->Helpdesk_CommentM->get_group(),
 			'status' => $this->Helpdesk_CommentM->get_status(),
 			'priority' => $this->Helpdesk_CommentM->get_priority(),
@@ -176,23 +190,12 @@ class Helpdesk extends MY_Controller {
 		echo $ajax_content;
 	}
 	
-	function upload(){
+	function upload($helpdesk_id){
 	   $this->load->library('filel');
 	   $file = $this->filel->save('file', 'Helpdesk');
-	   
-	   $data = array(
-			'subject' => '',
-			'assign_id' => '',
-			'cc_email' => '',
-			'group' => '',
-			'status' => '',
-			'type' => '',
-			'priority' => '',
-		);
-		
-	   $helpdesk_id = $this->HelpdeskM->save($data);
+	  
 	   $insert_id = $this->HelpdeskM->insert_upload_file($file['hash'],$helpdesk_id);
-	   echo $helpdesk_id;
+	   echo $insert_id;
 	}
 	
 	function delete($hash){
