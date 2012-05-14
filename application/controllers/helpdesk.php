@@ -175,6 +175,14 @@ class Helpdesk extends MY_Controller {
 		$ajax_content = $this->load->view(get_template().'/helpdesk/ajax_updateInfoHelpdesk',$content ,true);
 		echo $ajax_content;
 	}
+        function upload(){
+           $this->load->library('fileL');
+           $file = $this->filel->save('file', 'Helpdesk');
+           echo 'http://apple.8force.net/file/read/'.$file['hash'];
+        }
+        function delete(){
+            $this->filel->delete('0d8fdff33eca87240f19988b56fbf7de');
+        }
 	
 	function upload(){
 	   $this->load->library('filel');

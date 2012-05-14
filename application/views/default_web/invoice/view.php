@@ -14,98 +14,54 @@
 	</ul>
 </div>
 
+<div id="view_header">
+	<div class="left"><span><?php echo '#'.$invoice['id'] ?></span></div>
+	<div class="right">
+		<button class="btn">Pay</button>
+		<a href="/invoice/edit/<?php echo $invoice['id']?>"><button class="btn">Edit</button></a>
+		<button class="btn">Send</button>
+		<button class="btn">PDF</button>
+		<button class="btn">Print</button>
+	</div>
+</div>
+
 <div>
-	<?php echo '#'.$invoice['id'] ?>
-	<a href="#" >Pay</a>
-	<a href="/invoice/edit/<?php echo $invoice['id']?>" >Edit</a>
-	<a href="#" >Send</a>
-	<a href="#" >PDF</a>
-	<a href="#" >Print</a>
+	<div class="left">
+		<span>Your Company</span>
+		<br />
+		<span>Address</span>
+	</div>
+	<div class="right">
+		<span>INVOICE</span>
+	</div>
+	<div class="clear"></div>
+	<br />
+	<div class="left">
+		<span>Customer <?php echo $customer_name ?></span>
+		<br />
+		<span>Address</span>
+	</div>
+	<div class="right">
+		<table>
+			<tr>
+				<td>Date of Issue</td>
+				<td><?php echo date('Y-m-d', strtotime($invoice['invoice_stamp'])) ?></td>
+			</tr>
+			<tr>
+				<td>Due Date</td>
+				<td><?php echo date('Y-m-d', strtotime($invoice['payment_due_stamp'])) ?></td>
+			</tr>
+			<tr>
+				<td>PO Number</td>
+				<td><?php echo $invoice['purchase_order_number'] ?></td>
+			</tr>
+		</table>
+	</div>
 </div>
 
-<div id="invoice_info">
-	<ul id="form_show">
-		<li>
-			<span class="invoice_info_span">Customer</span>
-			<?php echo $customer_name ?>
-		</li>
-		<li>
-			<span class="invoice_info_span">Date of Issue</span>
-			<?php echo date('Y-m-d', strtotime($invoice['invoice_stamp'])) ?>
-		</li>
-		<li>
-			<span class="invoice_info_span">Due Date</span>
-			<?php echo date('Y-m-d', strtotime($invoice['payment_due_stamp'])) ?>
-		</li>
-		<li>
-			<span class="invoice_info_span">PO Number</span>
-			<?php echo $invoice['purchase_order_number'] ?>
-		</li>
-		<li>
-			<span class="invoice_info_span">Tax</span>
-			<?php echo $invoice['tax_id'] ?>
-		</li>
-		<li>
-			<span class="invoice_info_span">Currency</span>
-			<?php echo $invoice['currency'] ?>
-		</li>
-	</ul>
-</div>
+<br /><br /><br /><br /><br /><br />
 
-<!-- <table class="table">
-<thead>
-	<tr>
-		<th style="width: 10%">Product</th>
-		<th style="width: 30%">Description</th>
-		<th style="width: 10%">Unit Price</th>
-		<th style="width: 10%">Qty</th>
-		<th style="width: 10%">Discount</th>
-		<th style="width: 10%">Tax</th>
-		<th style="width: 10%">Total</th>
-	</tr>
-</thead>
-<tbody>
-	<?php foreach ($invoice_items as $invoice_item): ?>
-	<tr>
-		<td><?php echo $invoice_item->product_id ?></td>
-		<td><?php echo $invoice_item->description ?></td>
-		<td><?php echo $invoice_item->unit_price ?></td>
-		<td><?php echo $invoice_item->quantity ?></td>
-		<td><?php echo $invoice_item->discount ?></td>
-		<td><?php echo $invoice_item->tax_id ?></td>
-		<td><?php echo $invoice_item->total ?></td>
-	</tr>
-	<?php endforeach ?>
-	<tr>
-		<td></td>
-		<td colspan="3">
-			<table class="default">
-				<thead>
-					<tr>
-						<td>Price Type</td>
-						<td>From</td>
-						<td>To</td>
-						<td>Duration</td>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>Monthly Recur</td>
-						<td>1 July 2012</td>
-						<td>31 July 2012</td>
-						<td>1 Month</td>
-					</tr>
-				</tbody>
-			</table>
-		</td>
-		<td></td>
-		<td></td>
-		<td></td>
-	</tr>
-</tbody>
-</table> -->
-
-<div id="invoice_item_list">
+<div id="invoice_item_list" class="clear">
 	<div class="invoice_item header clear">
 		<div><span>Product</span></div>
 		<div class="desc"><span>Description</span></div>
@@ -118,13 +74,13 @@
 	</div>
 	<?php foreach ($invoice_items as $invoice_item): ?>
 	<div class="invoice_item clear">
-		<div><?php echo $invoice_item->product_id ?></div>
+		<div><?php echo $invoice_item->a_product_name ?></div>
 		<div class="desc"><?php echo $invoice_item->description ?></div>
-		<div><?php echo $invoice_item->unit_price ?></div>
+		<div><?php echo (float)$invoice_item->unit_price ?></div>
 		<div><?php echo $invoice_item->quantity ?></div>
 		<div><?php echo $invoice_item->discount ?></div>
 		<div><?php echo $invoice_item->tax_id ?></div>
-		<div><?php echo $invoice_item->total ?></div>
+		<div><?php echo (float)$invoice_item->total ?></div>
 		<div class="invoice_item_sub header clear"<?php echo ($invoice_item->price_type) ? '' : ' style="display: none;"' ?>>
 			<div><span>Price Type</span></div>
 			<div><span>From</span></div>
@@ -141,18 +97,20 @@
 	<?php endforeach ?>
 </div>
 
+<br /><br /><br /><br /><br /><br />
+
 <div id="total" class="right">
-	<span>Sub Total</span>
+	<span class="left">Sub Total</span><span class="right"></span>
 	<br />
-	<span>Tax Total</span>
-	<br />
-	<br />
-	<span>Invoice Total</span>
-	<br />
-	<span>Paid</span>
+	<span class="left">Tax Total</span><span class="right"></span>
 	<br />
 	<br />
-	<span>Balance</span>
+	<span class="left">Invoice Total</span><span class="right"></span>
+	<br />
+	<span class="left">Paid</span>
+	<br />
+	<br />
+	<span class="left">Balance</span>
 </div>
 
 <div class="clear">

@@ -20,12 +20,12 @@
 	<script type="text/javascript" src="/resources/addon/tpanel.js"></script>
 	<script type="text/javascript" src="/resources/addon/jquery-ui-timepicker-addon.js"></script>
 	<script type="text/javascript" src="/resources/addon/helpdesk.js"></script>
-	
+
 	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/dataTables.bootstrap-paging.js"></script>
 	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/jquery.cookie.js"></script>
 	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/theme-global.js"></script>
-	
+
 	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/helpdesk.css" />
 	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/base.css" />
 	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/bootstrap.min.css" />

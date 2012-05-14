@@ -364,50 +364,23 @@ function invoice_ajax_content_errorstyle(){
 //end Replace Jquery Tool error message style
 }
 
-/*function add_row(object) {
-	var html = '' +
-		'<tr>' +
-		'<td><a href="#" class="add">+</a></td>' +
-		'<td><input type="text" name="product[]" class="input_table"></td>' +
-		'<td><input type="text" name="description[]" class="input_table"></td>' +
-		'<td><input type="text" name="unit_price[]" class="input_table"></td>' +
-		'<td><input type="text" name="qty[]" class="input_table"></td>' +
-		'<td><input type="text" name="discount[]" class="input_table"></td>' +
-		'<td><input type="text" name="tax[]" class="input_table"></td>' +
-		'<td><input type="text" name="total[]" class="input_table"></td>' +
-		'<td><a href="#" class="remove">x</a></td>' +
-		'</tr>';
-	
-	if ($(object).prop('nodeName').toLowerCase() == 'table') {
-		$(object).append(html);
-	} else {
-		var tr = $(object).closest('tr');
-		$(tr).after(html);
-	}
-}
-
-function remove_row(object) {
-	var tr = $(object).closest('tr');
-	var table = $(tr).closest('table');
-	
-	tr.remove();
-	
-	if ($(table).find('tr').length == 1) {
-		add_row(table);
-	}
-}*/
-
-function add_new_row() {
+function add_last_row() {
 	var html = $('#invoice_item_template').html();
 	$('#invoice_item_list').append(html);
-	add_datetimepicker();
+	
+	var new_item = $('#invoice_item_list .temp');
+	new_item.removeClass('temp');
+	bind_event_row(new_item);
 }
 
 function add_row(object) {
-	var item = $(object).closest('div.invoice_item');
 	var html = $('#invoice_item_template').html();
+	var item = $(object).closest('div.invoice_item');
 	$(item).after(html);
-	add_datetimepicker();
+	
+	var new_item = $('#invoice_item_list .temp');
+	new_item.removeClass('temp');
+	bind_event_row(new_item);
 }
 
 function remove_row(object) {
@@ -415,23 +388,69 @@ function remove_row(object) {
 	item.remove();
 	
 	if ($('#invoice_item_list div.invoice_item').length == 1) {
-		add_new_row();
+		add_last_row();
 	}
+	
+	cal_invoice_total();
+}
+
+function cal_item_total(object) {
+	var item = $(object).closest('div.invoice_item');
+	var price = parseFloat(item.find('.unit_price').val()) || 0;
+	var qty = parseInt(item.find('.qty').val()) || 0;
+	var discount = parseInt(item.find('.discount').val()) || 0;
+	var tax = parseInt(item.find('.tax').val()) || 0;
+	item.find('.item_total').val((price*qty-discount)*(100+tax)/100);
+	
+	cal_invoice_total();
+}
+
+function cal_invoice_total() {
+	var sub_total = 0;
+	var tax_total = 0;
+	var invoice_total = 0;
+	$('#invoice_item_list .invoice_item').not('.header').each(function(index, item) {
+		var price = parseFloat($(item).find('.unit_price').val()) || 0;
+		var qty = parseInt($(item).find('.qty').val()) || 0;
+		var discount = parseInt($(item).find('.discount').val()) || 0;
+		var tax = parseInt($(item).find('.tax').val()) || 0;
+		
+		sub_total += price*qty-discount;
+		tax_total += (price*qty-discount)*tax/100;
+		invoice_total += (price*qty-discount)*(100+tax)/100;
+	});
+	
+	$('#sub_total').html(sub_total);
+	$('#tax_total').html(tax_total);
+	$('#invoice_total').html(invoice_total);
+}
+
+function bind_event_row(item) {
+	$(item).find('.item_datepicker').datetimepicker({
+		showTimepicker: false,
+		dateFormat: 'yy-mm-dd'
+	});
+
+	$(item).find('.product_name').autocomplete({
+		source: '/invoice/get_product',
+		minLength: 2,
+		select: function(e, ui) {
+			var item = $(this).closest('div.invoice_item');
+			item.find('.product_id').val(ui.item.product.id);
+			item.find('.unit_price').val(ui.item.product.price).change();
+		}
+	});
+	
+	$(item).find('.cal').on('change', function() {
+		var val = parseFloat($(this).val()) || 0;
+		$(this).val(val);
+		cal_item_total(this);
+	});
 }
 
 function more(object) {
 	var item = $(object).closest('div.invoice_item');
 	item.find('div.invoice_item_sub').toggle();
-}
-
-function add_datetimepicker() {
-	$('#invoice_item_list .datepicker_temp')
-		.removeClass('.datepicker_temp')
-		.addClass('datepicker')
-		.datetimepicker({
-			showTimepicker: false,
-			dateFormat: 'yy-mm-dd'
-	});
 }
 
 $(document).ready(function() {
@@ -448,16 +467,17 @@ $(document).ready(function() {
 	
 	$('#slider').slider({
 		range: true,
-		min: 0,
-		max: 500,
-		values: [0, 500],
+		min: $('#total_default_min').val(),
+		max: $('#total_default_max').val(),
+		values: [$('#total_default_min').val(), $('#total_default_max').val()],
 		slide: function( event, ui ) {
 			$('#total_min').val(ui.values[0]);
 			$('#total_max').val(ui.values[1]);
+			$('#lbl_total').html(ui.values[0]+' - '+ui.values[1]);
 		}
 	});
-	$('#total_min').val($('#slider-range').slider('values', 0));
-	$('#total_max').val($('#slider-range').slider('values', 1));
+	$('#total_min').val($('#slider').slider('values', 0));
+	$('#total_max').val($('#slider').slider('values', 1));
 	
 	$('#more_options').on('click', function(e) {
 		$('#search_more table').toggle();
@@ -465,6 +485,7 @@ $(document).ready(function() {
 			$('#search_more input').val('');
 		}
 	});
+	
 	$('#search_btn').on('click', function(e) {
 		$.ajax({
 			type: "POST",
@@ -493,7 +514,8 @@ $(document).ready(function() {
 	$('a.more').live('click', function(e) {
 		e.preventDefault();
 		more(this);
-	});	
+	});
+	
 	$('#terms_id').on('change', function(e) {
 		var id = $(this).val();
 		if (id) {
@@ -510,18 +532,9 @@ $(document).ready(function() {
 		$('#terms_id').val('');
 	});
 	
-	add_new_row();
-	
-	//$('#submit_btn').click(function() {
-	//	$.ajax({
-	//		type: "POST",
-	//		url: $('#invoice_form').attr('action'),
-	//		data: $("#invoice_form").serialize(),
-	//		success: function(resp) {
-	//			console.log(resp);
-	//		}
-	//	});
-	//
-	//	return false;
-	//});
+	$('#invoice_item_list .invoice_item').not('.header').each(function(index, item) {
+		bind_event_row(item);
+	});
+	add_last_row();
+	cal_invoice_total();
 });

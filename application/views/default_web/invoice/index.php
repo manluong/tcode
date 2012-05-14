@@ -35,9 +35,12 @@
 		<input type="button" class="btn" value="All" />
 		<input type="button" class="btn" value="Paid" />
 		<input type="button" class="btn" value="Unpaid" />
+		<input type="hidden" id="total_default_min" value="<?php echo $total_min ?>" />
+		<input type="hidden" id="total_default_max" value="<?php echo $total_max ?>" />
 		<input type="hidden" id="total_min" name="total_min" />
 		<input type="hidden" id="total_max" name="total_max" />
 		<div id="slider" class="clear"></div>
+		<label id="lbl_total"><?php echo $total_min.' - '.$total_max ?></label>
 	</div>
 </div>
 

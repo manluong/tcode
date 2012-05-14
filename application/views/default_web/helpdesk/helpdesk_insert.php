@@ -26,6 +26,7 @@ position: relative;
 </style>
 
 <script type="text/javascript">
+
 function submit_insert_helpdesk(){
 
 	var subject = $('#subject').val();
