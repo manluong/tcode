@@ -14,6 +14,7 @@
 	</ul>
 </div>
 
+<div id="invoice_detail">
 <div id="view_header">
 	<div class="left"><span><?php echo '#'.$invoice['id'] ?></span></div>
 	<div class="right">
@@ -21,7 +22,7 @@
 		<a href="/invoice/edit/<?php echo $invoice['id']?>"><button class="btn">Edit</button></a>
 		<button class="btn">Send</button>
 		<button class="btn">PDF</button>
-		<button class="btn">Print</button>
+		<button id="invoice_print" class="btn">Print</button>
 	</div>
 </div>
 
@@ -127,4 +128,5 @@
 </div>
 
 <div class="div_btn clear">
+</div>
 </div>

@@ -493,9 +493,29 @@ $(document).ready(function() {
 			data: $('#frm_search').serialize(),
 			success: function(resp) {
 				$('#invoice_list').html(resp);
+				$('#page').val(1);
 			}
 		});
 		return false;
+	});
+	
+	$('.pagination a').live('click', function(e) {
+		e.preventDefault();
+		var li = $(this).closest('li');
+		if (!$(li).hasClass('disabled') && !$(li).hasClass('active')) {
+			$('#page').val($(this).data('page'));
+			$('#search_btn').click();
+		}
+	});
+	
+	$('#invoice_list_table_length select').live('change', function(e) {
+		$('#row_per_page').val($(this).val());
+		$('#page').val(1);
+		$('#search_btn').click();
+	});
+		
+	$('#invoice_print').on('click', function(e) {
+		window.print();
 	});
 	
 	$('.datepicker').datetimepicker({
@@ -537,4 +557,5 @@ $(document).ready(function() {
 	});
 	add_last_row();
 	cal_invoice_total();
+	$('#search_btn').click();
 });

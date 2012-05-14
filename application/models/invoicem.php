@@ -9,7 +9,7 @@ class InvoiceM extends MY_Model {
 		$this->cache_enabled = TRUE;
 	}
 
-	function search($param) {
+	function search($param, $count = false) {
 		if (array_key_exists('customer_id', $param) && $param['customer_id']) {
 			$this->db->where('customer_card_id =', $param['customer_id']);
 		} else {
@@ -44,9 +44,20 @@ class InvoiceM extends MY_Model {
 		$this->db->join('card', 'a_invoice.customer_card_id = card.id', 'left');
 		$this->db->join('(SELECT invoice_id, SUM(total) AS total FROM a_invoice_item GROUP BY invoice_id) invoice_total', 'a_invoice.id = invoice_total.invoice_id', 'left');
 		$this->db->where('a_invoice.deleted', 0);
-		$query = $this->db->get();
 
-		return $query->result();
+		if ($count) {
+			return $this->db->count_all_results();
+		} else {
+			if (array_key_exists('row_per_page', $param) && $param['row_per_page']) {
+				if ($param['row_per_page'] != '-1') {
+					$this->db->limit($param['row_per_page'], ($param['page']-1)*$param['row_per_page']);
+				}
+			}
+
+			$query = $this->db->get();
+
+			return $query->result();
+		}
 	}
 
 	function get_customer() {
@@ -67,6 +78,20 @@ class InvoiceM extends MY_Model {
 		$results[2] = 2;
 
 		return $results;
+	}
+
+	function get_price_type() {
+		$this->db->select('*');
+		$query = $this->db->get('a_product_pricetype');
+
+		return $query->result();
+	}
+
+	function get_duration_type() {
+		$this->db->select('*');
+		$query = $this->db->get('a_product_durationtype');
+
+		return $query->result();
 	}
 
 	function get_terms() {

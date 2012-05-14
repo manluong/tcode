@@ -22,6 +22,9 @@ class Invoice extends MY_Controller {
 	}
 
 	function search() {
+		$page = $this->input->post('page') ? $this->input->post('page') : 1;
+		$row_per_page = $this->input->post('row_per_page') ? $this->input->post('row_per_page') : 10;
+
 		$search_param = array(
 			'customer_id' => $this->input->post('customer_id'),
 			'customer_name' => $this->input->post('customer_name'),
@@ -32,10 +35,20 @@ class Invoice extends MY_Controller {
 			'total_max' => $this->input->post('total_max'),
 			'invoice_id' => $this->input->post('invoice_id'),
 			'po_number' => $this->input->post('po_number'),
-			'notes' => $this->input->post('notes')
+			'notes' => $this->input->post('notes'),
+			'page' => $page,
+			'row_per_page' => $row_per_page
 		);
 
-		$data['invoice_list'] = $this->InvoiceM->search($search_param);
+		$total_record = $this->InvoiceM->search($search_param, true);
+		$data = array(
+			'invoice_list' => $this->InvoiceM->search($search_param),
+			'total_record' => $total_record,
+			'current_page' => $page,
+			'row_per_page' => $row_per_page,
+			'max_page' => ($row_per_page == -1) ? 1 : ceil($total_record/$row_per_page)
+		);
+
 		$content = $this->load->view(get_template().'/invoice/search', $data, TRUE);
 		echo $content;
 	}
@@ -77,6 +90,8 @@ class Invoice extends MY_Controller {
 			'invoice_items' => $this->InvoiceItemM->get_by_invoice_id($id),
 			'customer' => $this->InvoiceM->get_customer(),
 			'tax' => $this->InvoiceM->get_tax(),
+			'price_type' => $this->InvoiceM->get_price_type(),
+			'duration_type' => $this->InvoiceM->get_duration_type(),
 			'terms' => $this->InvoiceM->get_terms(),
 			'invoice_terms' => ''
 		);
@@ -163,6 +178,8 @@ class Invoice extends MY_Controller {
 		$data = array(
 			'customer' => $this->InvoiceM->get_customer(),
 			'tax' => $this->InvoiceM->get_tax(),
+			'price_type' => $this->InvoiceM->get_price_type(),
+			'duration_type' => $this->InvoiceM->get_duration_type(),
 			'terms' => $this->InvoiceM->get_terms()
 		);
 
