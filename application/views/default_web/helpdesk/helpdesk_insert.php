@@ -181,7 +181,7 @@ var uploader = new plupload.Uploader({
 	browse_button : 'pickfiles',
 	container: 'container',
 	max_file_size : '10mb',
-	url : '/helpdesk/uploada/',
+	url : '/helpdesk/upload/',
 
 	filters : [
 		{title : "Image files", extensions : "jpg,gif,png"},
@@ -197,6 +197,10 @@ uploader.bind('FilesAdded', function(up, files) {
 
 uploader.bind('UploadProgress', function(up, file) {
 	getid(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
+});
+
+uploader.bind('FileUploaded', function(up, file) {
+	alert(up+'__'+file);
 });
 
 getid('uploadfiles').onclick = function() {
