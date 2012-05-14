@@ -204,6 +204,7 @@ getid('uploadfiles').onclick = function() {
 	return false;
 };
 
+
 uploader.init();
 
 </script>

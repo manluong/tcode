@@ -177,12 +177,6 @@ class Helpdesk extends MY_Controller {
 	}
 	
 	function upload(){
-	   $this->load->library('FileL');
-	   $file = $this->filel->save('file', 'Helpdesk');
-	   echo 'http://apple.8force.net/file/read/'.$file['hash'];
-	}
-	
-	function uploada(){
 	   $this->load->library('filel');
 	   $file = $this->filel->save('file', 'Helpdesk');
 	   
@@ -198,7 +192,12 @@ class Helpdesk extends MY_Controller {
 		
 	   $helpdesk_id = $this->HelpdeskM->save($data);
 	   $insert_id = $this->HelpdeskM->insert_upload_file($file['hash'],$helpdesk_id);
-		echo $insert_id ;
+	   ?>
+		<script type="text/javascript">
+			$('#hiddenIdAdmincp').attr('value',<?=$helpdesk_id?>);
+			alert('susscess');
+		</script>
+	   <?
 	}
 	
 	function delete($hash){
