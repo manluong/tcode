@@ -158,8 +158,9 @@ class Helpdesk extends MY_Controller {
 		$data_ajax['comment'] = $this->Helpdesk_CommentM->get_content($id_helpdesk);
 
 		$ajax_content = $this->load->view(get_template().'/helpdesk/ajax_updateComment',$data_ajax ,true);
-		echo 'success';
+		echo $ajax_content ;
 	}
+	
 	
 	function save_insert_helpdesk(){
 		$data = array(

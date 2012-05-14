@@ -85,7 +85,7 @@ function submit_comment(){
 			type : type_helpdesk,
 			priority : priority_helpdesk,
 		},function(data){
-			if(data == 'success'){
+			if(data != ''){
 				window.location='<?=site_url('helpdesk');?>';
 			}
 		}
