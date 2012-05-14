@@ -181,7 +181,7 @@ var uploader = new plupload.Uploader({
 	browse_button : 'pickfiles',
 	container: 'container',
 	max_file_size : '10mb',
-	url : '/helpdesk/upload/',
+	url : '/helpdesk/uploada/',
 
 	filters : [
 		{title : "Image files", extensions : "jpg,gif,png"},
