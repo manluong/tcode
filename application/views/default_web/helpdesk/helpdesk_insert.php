@@ -26,10 +26,7 @@ position: relative;
 </style>
 
 <script type="text/javascript">
-$(document).ready(function(){
-	var helpdesk_id = $('#hiddenIdAdmincp').attr('value');
-	alert(helpdesk_id);
-});
+
 function submit_insert_helpdesk(){
 
 	var subject = $('#subject').val();
@@ -184,7 +181,7 @@ var uploader = new plupload.Uploader({
 	browse_button : 'pickfiles',
 	container: 'container',
 	max_file_size : '10mb',
-	url : '/helpdesk/upload/'+helpdesk_id,
+	url : '/helpdesk/upload/'+$('#hiddenIdAdmincp').attr('value'),
 
 	filters : [
 		{title : "Image files", extensions : "jpg,gif,png"},
@@ -200,10 +197,6 @@ uploader.bind('FilesAdded', function(up, files) {
 
 uploader.bind('UploadProgress', function(up, file) {
 	getid(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
-});
-
-uploader.bind('FileUploaded', function(up, file) {
-	alert(up+'__'+file);
 });
 
 getid('uploadfiles').onclick = function() {

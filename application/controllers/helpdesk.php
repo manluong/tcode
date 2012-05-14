@@ -191,11 +191,13 @@ class Helpdesk extends MY_Controller {
 	}
 	
 	function upload($helpdesk_id){
+		
 	   $this->load->library('filel');
 	   $file = $this->filel->save('file', 'Helpdesk');
-	  
-	   $insert_id = $this->HelpdeskM->insert_upload_file($file['hash'],$helpdesk_id);
-	   echo $insert_id;
+		if($helpdesk_id != 0){
+		   $insert_id = $this->HelpdeskM->insert_upload_file($file['hash'],$helpdesk_id);
+		   echo $insert_id;
+		}
 	}
 	
 	function delete($hash){
