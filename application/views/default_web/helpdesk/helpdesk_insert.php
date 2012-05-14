@@ -30,7 +30,7 @@ position: relative;
 function submit_insert_helpdesk(){
 
 	var subject = $('#subject').val();
-
+	var id = $('#hiddenIdAdmincp').attr('value');
 	var assign = $('#assign').val();
 	var cc_email = $('#cc_email').val();
 	var group = $('#a_helpdesk_comment_group').val();
@@ -40,6 +40,7 @@ function submit_insert_helpdesk(){
 	
 	var url = 'helpdesk/save_insert_helpdesk/';
 	$.post(url,{
+			id : id,
 			subject : subject,
 			assign : assign,
 			cc_email : cc_email,

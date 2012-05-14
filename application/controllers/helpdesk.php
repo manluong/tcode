@@ -110,6 +110,8 @@ class Helpdesk extends MY_Controller {
 	}
 	
 	function insert_helpdesk_form() {
+		$this->delete_helpdesk();
+		
 		$helpdesk_data = array(
 			'subject' => '',
 			'assign_id' => '',
@@ -158,6 +160,7 @@ class Helpdesk extends MY_Controller {
 	
 	function save_insert_helpdesk(){
 		$data = array(
+			'id' => $this->input->post('id'),
 			'subject' => $this->input->post('subject'),
 			'assign_id' => $this->input->post('assign'),
 			'cc_email' => $this->input->post('cc_email'),
@@ -165,12 +168,9 @@ class Helpdesk extends MY_Controller {
 			'status' => $this->input->post('status'),
 			'type' => $this->input->post('type'),
 			'priority' => $this->input->post('priority'),
+			'active' => 0,
 		);
-		$insert_id = $this->HelpdeskM->save($data);
-
-		if($insert_id !=''){
-			echo $insert_id;
-		}
+		$this->HelpdeskM->save($data);
 	}
 	
 	function ajaxChangeInfoHelpDesk(){
@@ -202,6 +202,23 @@ class Helpdesk extends MY_Controller {
 	
 	function delete($hash){
 		$this->filel->delete($hash);
+	}
+	
+	function delete_helpdesk(){
+		$this->load->library('filel');
+		$result = $this->HelpdeskM->get_helpdesk_not_use();
+		if(!empty($result)){
+			foreach($result as $k){
+				$this->HelpdeskM->delete($k->id,TRUE);
+				$file = $this->HelpdeskM->get_files_of_helpdesk_not_use($k->id);
+				if(!empty($file)){
+					foreach($file as $v){
+						$this->filel->delete($v->filename);
+						$this->HelpdeskM->delete_files_not_use($v->id);
+					}
+				}
+			}
+		}
 	}
 	
 }

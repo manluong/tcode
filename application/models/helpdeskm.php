@@ -109,4 +109,33 @@ class HelpdeskM extends MY_Model {
 			return 0;
 		}
 	}
+	
+	function get_helpdesk_not_use(){
+		$this->db->select('id');
+		$this->db->where('active',1);
+		$query = $this->db->get($this->table);
+
+		if($query->result()){
+			return $query->result();
+		}else{
+			return false;
+		}
+	}
+	
+	function get_files_of_helpdesk_not_use(){
+		$this->db->select('*');
+		$this->db->where('active',1);
+		$query = $this->db->get('a_helpdesk_file');
+
+		if($query->result()){
+			return $query->result();
+		}else{
+			return false;
+		}
+	}
+	
+	function delete_files_not_use($id){
+		$this->db->where('id', $id);
+		$this->db->delete('a_helpdesk_file');
+	}
 }
