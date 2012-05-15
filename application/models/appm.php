@@ -9,14 +9,17 @@ class AppM extends MY_Model {
 		'general' => 0,
 	);
 
+	var $acl_app_list = array(); //An ACL/Licensed controlled App List
+
 	function __construct() {
 		$this->table = 'global_setting.core_apps';
+		$this->sett_has_system_fields = FALSE;
 
 		parent::__construct();
 	}
 
 	function setup() {
-
+		$this->acl_app_list = $this->get_apps(TRUE);
 	}
 
 	function get($app_id_or_name) {
@@ -84,8 +87,6 @@ class AppM extends MY_Model {
 		if (APP_ROLE == 'TSUB') {
 			$accessible_app_ids = $this->LicenseM->get_accessible_app_ids();
 			if (count($accessible_app_ids) == 0) return array();
-
-			//if user is not admin, check ACL for accessible apps.
 		}
 
 		$this->db->select()

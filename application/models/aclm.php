@@ -36,6 +36,17 @@ class ACLM extends MY_Model {
 		}
 	}
 
+	function get_app_list($show_hidden_apps=FALSE) {
+		$apps = $this->AppM->get_apps($show_hidden_apps);
+
+		//TODO: This is a simple but ineffecient solution.
+		foreach($apps AS $k=>$v) {
+			if (!$this->check($v)) unset($apps[$k]);
+		}
+
+		return $apps;
+	}
+
 	function get_subroles_batch($ids, $id_as_key=FALSE) {
 		$temp_tb = $this->table;
 		$temp_id = $this->id_field;
@@ -727,7 +738,7 @@ class ACLM extends MY_Model {
 
 	function install() {
 		// ===================================================================== INSTALLTING CO
-		$apps = array(
+		$tables = array(
 			'card' => array(
 				'card',
 				'card_address',
@@ -777,20 +788,24 @@ class ACLM extends MY_Model {
 			)
 		);
 
-		foreach($apps AS $app=>$tables) {
+		$apps = $this->AppM->get_list();
+
+		foreach($apps AS $app) {
 			$data = array(
-				'name' => $app,
+				'name' => $app['name'],
 			);
 			$parent_id = $this->create_node(1, $data, 'co');
 
-			$data = array();
-			foreach($tables AS $t) {
-				$data[] = array(
-					'parent_id' => $parent_id,
-					'name' => $t,
-				);
+			if (isset($tables[$app['name']])) {
+				$data = array();
+				foreach($tables[$app['name']] AS $t) {
+					$data[] = array(
+						'parent_id' => $parent_id,
+						'name' => $t,
+					);
+				}
+				if (count($data) > 0) $this->create_nodes($parent_id, $data, 'co');
 			}
-			if (count($data) > 0) $this->create_nodes($parent_id, $data, 'co');
 		}
 
 		// ===================================================================== INSTALLTING RO
