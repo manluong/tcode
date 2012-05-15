@@ -137,8 +137,7 @@ class Helpdesk extends MY_Controller {
 		$data = array(
 			'result' => $this->HelpdeskM->priority_fillter($value),
 		);
-		echo 'hehe';
-		die;
+	
 		$this->load->view(get_template().'/helpdesk/ajax_helpdesk_list',$data);
 	}
 	
