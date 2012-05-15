@@ -467,9 +467,9 @@ $(document).ready(function() {
 	
 	$('#slider').slider({
 		range: true,
-		min: $('#total_default_min').val(),
-		max: $('#total_default_max').val(),
-		values: [$('#total_default_min').val(), $('#total_default_max').val()],
+		min: parseInt($('#total_default_min').val()),
+		max: parseInt($('#total_default_max').val()),
+		values: [parseInt($('#total_default_min').val()), parseInt($('#total_default_max').val())],
 		slide: function( event, ui ) {
 			$('#total_min').val(ui.values[0]);
 			$('#total_max').val(ui.values[1]);

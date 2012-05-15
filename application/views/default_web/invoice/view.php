@@ -89,10 +89,10 @@
 			<div><span>Duration</span></div>
 		</div>
 		<div class="invoice_item_sub clear"<?php echo ($invoice_item->price_type) ? '' : ' style="display: none;"' ?>>
-			<div><?php echo $invoice_item->price_type ?></div>
+			<div><?php echo $invoice_item->a_product_pricetype_name ?></div>
 			<div><?php echo date('Y-m-d', strtotime($invoice_item->subscription_start_stamp)) ?></div>
 			<div><?php echo date('Y-m-d', strtotime($invoice_item->subscription_end_stamp)) ?></div>
-			<div><?php echo $invoice_item->duration_type ?></div>
+			<div><?php echo $invoice_item->a_product_durationtype_name ?></div>
 		</div>
 	</div>
 	<?php endforeach ?>

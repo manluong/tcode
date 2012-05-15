@@ -1,4 +1,11 @@
 <?php if ($invoice_list): ?>
+<?php
+	$min = max(1, $current_page - 2);
+	$max = min($max_page, $min + 4);
+	if ($max - $min < 4) {
+		$min = ($max_page < 5) ? 1 : $max - 4;
+	}
+?>
 <div class="widget">
 	<div class="widget-body">
 		<div class="dataTables_wrapper form-inline" id="invoice_list_table_wrapper">
@@ -7,7 +14,7 @@
 					<div class="dataTables_paginate paging_bootstrap pagination">
 						<ul>
 							<li class="prev<?php echo ($current_page == 1) ? ' disabled' : '' ?>"><a href="#" data-page="<?php echo $current_page - 1 ?>">Previous</a></li>
-							<?php for ($i = 1; $i <= $max_page; $i++): ?>
+							<?php for ($i = $min; $i <= $max; $i++): ?>
 							<li<?php echo ($i == $current_page) ? ' class="active"' : '' ?>><a href="#" data-page="<?php echo $i ?>"><?php echo $i ?></a></li>
 							<?php endfor; ?>
 							<li class="next<?php echo ($current_page == $max_page) ? ' disabled' : '' ?>"><a href="#" data-page="<?php echo $current_page + 1 ?>">Next</a></li>
@@ -46,7 +53,7 @@
 					<div class="dataTables_paginate paging_bootstrap pagination">
 						<ul>
 							<li class="prev<?php echo ($current_page == 1) ? ' disabled' : '' ?>"><a href="#" data-page="<?php echo $current_page - 1 ?>">Previous</a></li>
-							<?php for ($i = 1; $i <= $max_page; $i++): ?>
+							<?php for ($i = $min; $i <= $max; $i++): ?>
 							<li<?php echo ($i == $current_page) ? ' class="active"' : '' ?>><a href="#" data-page="<?php echo $i ?>"><?php echo $i ?></a></li>
 							<?php endfor; ?>
 							<li class="next<?php echo ($current_page == $max_page) ? ' disabled' : '' ?>"><a href="#" data-page="<?php echo $current_page + 1 ?>">Next</a></li>
@@ -56,11 +63,11 @@
 				<div id="invoice_list_table_length" class="dataTables_length">
 					<label>
 						<select>
-							<option value="1"<?php echo ($row_per_page == 1) ? ' selected="selected"' : '' ?>>10</option>
-							<option value="2"<?php echo ($row_per_page == 2) ? ' selected="selected"' : '' ?>>20</option>
-							<option value="3"<?php echo ($row_per_page == 3) ? ' selected="selected"' : '' ?>>30</option>
-							<option value="4"<?php echo ($row_per_page == 4) ? ' selected="selected"' : '' ?>>40</option>
-							<option value="5"<?php echo ($row_per_page == 5) ? ' selected="selected"' : '' ?>>50</option>
+							<option value="1"<?php echo ($row_per_page == 1) ? ' selected="selected"' : '' ?>>1</option>
+							<option value="2"<?php echo ($row_per_page == 2) ? ' selected="selected"' : '' ?>>2</option>
+							<option value="3"<?php echo ($row_per_page == 3) ? ' selected="selected"' : '' ?>>3</option>
+							<option value="4"<?php echo ($row_per_page == 4) ? ' selected="selected"' : '' ?>>4</option>
+							<option value="5"<?php echo ($row_per_page == 5) ? ' selected="selected"' : '' ?>>5</option>
 							<option value="-1"<?php echo ($row_per_page == -1) ? ' selected="selected"' : '' ?>">All</option>
 						</select> Rows
 					</label>

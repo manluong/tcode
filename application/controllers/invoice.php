@@ -13,8 +13,8 @@ class Invoice extends MY_Controller {
 	function index() {
 		$total = $this->InvoiceM->get_min_max_invoice_total();
 		$data = array(
-			'total_min' => $total['min'],
-			'total_max' => $total['max']
+			'total_min' => floor($total['min']),
+			'total_max' => ceil($total['max'])
 		);
 		$this->data['content'] = $this->load->view(get_template().'/invoice/index', $data, TRUE);
 
