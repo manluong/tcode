@@ -1,9 +1,3 @@
-<script type="text/javascript" src="/resources/addon/helpdesk.js"></script>		
-<script type="text/javascript" src="http://bp.yahooapis.com/2.4.21/browserplus-min.js"></script>
-<script type="text/javascript" src="/resources/addon/plupload/js/plupload.full.js"></script>
-<script type="text/javascript" src="/resources/addon/plupload/js/jquery.plupload.queue/jquery.plupload.queue.js"></script>
-<link href="/resources/addon/plupload/js/jquery.plupload.queue/css/jquery.plupload.queue.css" media="screen" rel="stylesheet" type="text/css" />
-<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/helpdesk.css" />
 
 <script type="text/javascript" >
 	var total = <?php echo $total?>;
@@ -11,7 +5,7 @@
 		$('.page_active_top:first').addClass('active');
 		$('.page_active_bottom:first').addClass('active');
 	});
-
+	
 	function ajax_pagination(offset){
 		set_active_page(offset);
 		var url = '<?=site_url('helpdesk/ajax_pagination');?>';
@@ -24,6 +18,9 @@
 	}
 	
 	function set_active_page(offset){
+		var current_page = parseInt(offset)/10 + 1;
+		show_curren_page(current_page);
+		
 		if(offset == 0){
 			$('.prev').addClass('disabled');
 		}else{
@@ -45,6 +42,58 @@
 		$('.page_active_bottom').removeClass('active');
 		$('#page_top'+offset).addClass("active");
 		$('#page_bottom'+offset).addClass("active");
+	}
+	
+	function show_curren_page(current_page){
+		$('.page_active_top ').removeClass('hide_page');
+		$('.page_active_bottom ').removeClass('hide_page');
+		if(current_page == 1){//first page
+			for(var i = 50 ; i <= total ; i+=10){
+				$('#page_top'+i).addClass('hide_page');
+				$('#page_bottom'+i).addClass('hide_page');
+			}
+		}else{
+			if((current_page*10) >= total){//last page
+				for (var i = (current_page*10) - 60; i >= 0 ; i -=10){
+					$('#page_top'+i).addClass('hide_page');
+					$('#page_bottom'+i).addClass('hide_page');
+				}
+			}else{
+				if(current_page - 1 == 1){//right first page
+					for (i = (current_page*10) + 30 ; i <= total ; i+=10){
+						$('#page_top'+i).addClass('hide_page');
+						$('#page_bottom'+i).addClass('hide_page');
+					}
+					
+					for (i = (current_page*10) - 40 ; i >= 0 ; i-=10){
+						$('#page_top'+i).addClass('hide_page');
+						$('#page_bottom'+i).addClass('hide_page');
+					}
+				}else{
+					if((current_page*10)+10 >= total){//left last page
+						for (i = (current_page*10) + 20 ; i <= total ; i+=10){
+							$('#page_top'+i).addClass('hide_page');
+							$('#page_bottom'+i).addClass('hide_page');
+						}
+						
+						for (i = (current_page*10) - 50 ; i >= 0 ; i-=10){
+							$('#page_top'+i).addClass('hide_page');
+							$('#page_bottom'+i).addClass('hide_page');
+						}
+					}else{//between
+						for (i = (current_page*10) + 20 ; i <= total ; i+=10){
+							$('#page_top'+i).addClass('hide_page');
+							$('#page_bottom'+i).addClass('hide_page');
+						}
+						
+						for (i = (current_page*10) - 40 ; i >= 0 ; i-=10){
+							$('#page_top'+i).addClass('hide_page');
+							$('#page_bottom'+i).addClass('hide_page');
+						}
+					}
+				}
+			}
+		}
 	}
 	
 	function ajax_pre(){
@@ -176,7 +225,7 @@
 							for($i = 0 ; $i < $total ; $i+=10){
 								$j = $i/10 + 1 ;
 							?>
-							<li id="page_top<?=$i?>" is_active="<?=$i?>" class="page_active_top"><a  onclick="ajax_pagination(<?=$i?>)"><?=$j?></a></li>
+							<li id="page_top<?=$i?>" is_active="<?=$i?>" class="page_active_top <?=($j>5?'hide_page':'')?>"><a  onclick="ajax_pagination(<?=$i?>)"><?=$j?></a></li>
 							<?php }}?>
 							<li class="next"><a onclick="ajax_next()" href="#">Next</a></li>
 						</ul>
@@ -281,7 +330,7 @@
 					for($i = 0 ; $i < $total ; $i+=10){
 						$j = $i/10 + 1 ;
 					?>
-					<li id="page_bottom<?=$i?>" class="page_active_bottom"><a  onclick="ajax_pagination(<?=$i?>)"><?=$j?></a></li>
+					<li id="page_bottom<?=$i?>" class="page_active_bottom <?=($j>5?'hide_page':'')?>"><a  onclick="ajax_pagination(<?=$i?>)"><?=$j?></a></li>
 					<?php }}?>
 					<li class="next"><a onclick="ajax_next()" href="#">Next</a></li>
 				</ul>
