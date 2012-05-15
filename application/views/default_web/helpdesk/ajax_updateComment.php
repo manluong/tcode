@@ -1,6 +1,6 @@
 <?php if(!empty($comment)){
 		foreach($comment as $k){
-		$date = date('F d Y g:iA',strtotime($k->stamp));
+		$date = date('F d Y g:iA',strtotime($k->created_stamp));
 ?>
 <div id="comment_content_left">
 	<div id="wap_comment_left">

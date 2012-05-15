@@ -150,8 +150,6 @@ class Helpdesk extends MY_Controller {
 			'comment' => $this->input->post('comment'),
 			'private' => $this->input->post('pri'),
 			'helpdesk_id' => $id_helpdesk ,
-			'created_stamp' => date('Y-m-d H:i:s',time()),
-
 		);
 		$insert_id = $this->Helpdesk_CommentM->save($data);
 		
