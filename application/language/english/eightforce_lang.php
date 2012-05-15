@@ -487,3 +487,5 @@ $lang['error-invalid_option'] = 'The option you selected is invalid';
 $lang['error-invalid_email'] = 'The email address you entered is invalid';
 $lang['error-regex_failed'] = 'The content you entered failed to match a specific pattern';
 $lang['error-no_save_data'] = 'There is no data to be saved';
+$lang['error-min_length'] = 'You must enter at least #char# characters.';
+$lang['error-max_length'] = 'You cannot enter more than #char# characters.';

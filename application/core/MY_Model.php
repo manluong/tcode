@@ -270,6 +270,24 @@ class MY_Model extends CI_Model {
 						$has_error = TRUE;
 					}
 				}
+
+				if (isset($field_detail['min_length']) && is_numeric($field_detail['min_length'])) {
+					if (strlen($data[$field]) < $field_detail['min_length']) {
+						$error_string = str_replace('#char#', $field_detail['min_length'], $this->lang->line('error-min_length'));
+						$this->errors[] = $error_string.' : '.$this->lang->line($this->table.'-'.$field);
+						$this->field_errors[$field][] = $error_string;
+						$has_error = TRUE;
+					}
+				}
+
+				if (isset($field_detail['max_length']) && is_numeric($field_detail['max_length'])) {
+					if (strlen($data[$field]) > $field_detail['max_length']) {
+						$error_string = str_replace('#char#', $field_detail['max_length'], $this->lang->line('error-max_length'));
+						$this->errors[] = $error_string.' : '.$this->lang->line($this->table.'-'.$field);
+						$this->field_errors[$field][] = $error_string;
+						$has_error = TRUE;
+					}
+				}
 			} else { //data_field not in form data
 				if (isset($field_detail['required']) && $field_detail['required']===TRUE) {
 					if ($is_new) {
