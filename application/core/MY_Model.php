@@ -198,6 +198,10 @@ class MY_Model extends CI_Model {
 		return $rs->num_rows();
 	}
 
+	function get_errors() {
+		return $this->errors;
+	}
+
 	function get_error_string() {
 		return implode("\n", $this->errors);
 	}
