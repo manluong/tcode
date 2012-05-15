@@ -14,7 +14,7 @@ class Helpdesk extends MY_Controller {
 		$this->HelpdeskM->limit = 10;
 
 		$content = array(
-			'total' => $this->HelpdeskM->get_total_record(),
+			'total' => $this->HelpdeskM->get_total_records(),
 			'result' => $this->HelpdeskM->get_list(),
 			'group' =>  $this->Helpdesk_CommentM->get_group(),
 			'status' => $this->Helpdesk_CommentM->get_status(),
@@ -83,7 +83,7 @@ class Helpdesk extends MY_Controller {
 		$this->HelpdeskM->limit = 10;
 
 		$data = array(
-			'total' => $this->HelpdeskM->get_total_record(),
+			'total' => $this->HelpdeskM->get_total_records(),
 			'result' => $this->HelpdeskM->get_list(),
 		);
 		$this->load->view(get_template().'/helpdesk/ajax_fillter_list',$data);

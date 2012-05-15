@@ -9,13 +9,6 @@ class HelpdeskM extends MY_Model {
 		$this->sett_filter_deleted = FALSE;
 	}
 
-	function get_total_record() {
-		$this->db->select('id');
-		$query = $this->db->get($this->table);
-
-		return $query->num_rows();
-	}
-
 	function get_content($id) {
 		return $this->get($id);
 	}
@@ -94,7 +87,7 @@ class HelpdeskM extends MY_Model {
 		$query = $this->db->get($this->table);
 
 		if ($query->num_rows() == 0) return FALSE;
-		
+
 		return $query->result();
 	}
 
