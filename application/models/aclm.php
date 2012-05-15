@@ -1,26 +1,17 @@
 <?php if (!defined('BASEPATH')) exit('No direct access allowed.');
 
 class ACLM extends MY_Model {
-	var $url = array();
-
 	var $cache_acl = array();
 	var $unit_test = array(
 		'triggered_rule' => array(),
 	);
 
 	function __construct() {
-		$this->table = 'access_control';
-		$this->id_field = 'id';
+		$this->table = 'access_ro_co';
 		$this->cache_enabled = TRUE;
+		$this->sett_has_system_fields = FALSE;
 
 		parent::__construct();
-
-		$this->verify_request();
-	}
-
-	//check if $app, $an, etc are authorized or not
-	function verify_request() {
-
 	}
 
 	function check_id_encryption() {
@@ -32,271 +23,20 @@ class ACLM extends MY_Model {
 			header( 'Location: /access/'.set_return_url(TRUE));
 			exit;
 		} elseif ($this->UserM->is_logged_in() && !$this->UserM->is_admin() && !$this->allow_unauthed_access) {
-			/*
-			$app_access_rights_table = $this->get_rights();
-
-			if ($app_access_rights_table['allow'] == 3) {
-				//requestion aved is not allowed/set in AN
-				meg(999, 'AN Permission Not Allow. - '.$this->url['subaction']);
-			} elseif ($app_access_rights_table['allow'] == 2) {
-				//the access is denied by an entry in the access_rights table
-				meg(999, 'Access Rights Permission Not Allow. - '.$app_access_rights_table['typeid']);
-			} elseif ($app_access_rights_table['allow'] != 1) {
-				//not permission is set to allow access, minimum set a Allow all rule for a App for each master group (except Admin)
-				meg(999, 'Access Rights Permission Not Allow. - No Permission');
+			$app_id = $this->url['app_id'];
+			$acl_app_list = $this->AppM->acl_app_list;
+			$has_access = FALSE;
+			foreach($acl_app_list AS $app) {
+				if ($app['id'] == $app_id) $has_access = TRUE;
 			}
-			 */
-		}
-	}
-
-
-
-
-	function check($acl_action='', $app='', $action='', $app_data_id=0) {
-		//$app = $this->AppM->get_name($app);
-
-		if ($app == '') $app = $this->url['app'];
-		if ($action == '') $action = $this->url['actiongp'];
-		if ($app_data_id != 0) $app_data_id = array($app_data_id, 0);
-
-		$acl = $this->get_acl($app, $action, $app_data_id);
-		$cardid = $this->UserM->get_card_id();
-		$subrole_ids = $this->UserM->info['sub_roles'];
-		$role_id = $this->UserM->info['role']['role_id'];
-
-		foreach($app_data_id AS $adi) {
-			$case2_acl = array();
-			$this->unit_test['triggered_rule'] = array();
-
-			foreach($acl AS $a) {
-				if ($a['app_data_id'] != $adi) continue;
-
-				switch($a['role_type']) {
-					case 1:	//card
-
-						if ($a['role_id'] == $cardid) {
-							$this->unit_test['triggered_rule'][] = $a['id'];
-							return ($a[$acl_action] == 1);
-						}
-
-						break;
-
-					case 2: //subgroup
-
-						if (in_array($a['role_id'], $subrole_ids)) {
-							$this->unit_test['triggered_rule'][] = $a['id'];
-							$case2_acl[] = $a;
-						}
-
-						break;
-
-					case 3: //mastergroup
-
-						//if there's any acl from case 2, consolidate them and return result
-						if (count($case2_acl) > 0) {
-							$case2_acl = $this->consolidate_acl($case2_acl);
-							return ($case2_acl[$acl_action] == 1);
-						}
-
-						$this->unit_test['triggered_rule'] = array();
-
-						if ($a['role_id'] == $role_id) {
-							$this->unit_test['triggered_rule'][] = $a['id'];
-							return ($a[$acl_action] == 1);
-						}
-
-						break;
-				}
-			}
-		}
-
-		return FALSE;
-	}
-
-	function get_acl($app, $actiongp, $app_data_id=array(0)) {
-		$app = $this->AppM->get_name($app);
-
-		if ($actiongp == '') $actiongp = $this->url['action'];
-
-		if (!is_array($app_data_id)) $app_data_id = array($app_data_id);
-
-		$result = array();
-
-		foreach($app_data_id AS $k=>$adi) {
-			$key = $app.'_'.$actiongp.'_'.$adi;
-			if (isset($this->cache_acl[$key])) {
-				$result += $this->cache_acl[$key];
-				unset($app_data_id[$k]);
-			}
-		}
-
-		if (count($app_data_id) == 0) return $result;
-
-		$rs = $this->db->select()
-				->from($this->table)
-				->where('app', $app)
-				->where('action', $actiongp)
-				->where_in('app_data_id', $app_data_id)
-				->order_by('role_type', 'ASC')
-				->get();
-
-		foreach($rs->result_array() AS $acl) {
-			$result[] = $acl;
-
-			$key = $acl['app'].'_'.$acl['action'].'_'.$acl['app_data_id'];
-			$this->cache_acl[$key][] = $acl;
-		}
-
-		return $result;
-	}
-
-	function get_acl_apps() {
-		$result = array();
-		$cardid = $this->UserM->get_card_id();
-		$subgp = $this->UserM->info['subgp'];
-		$mastergp = $this->UserM->info['accessgp'];
-		$case2_acl = array();
-
-		$rs = $this->db->select('DISTINCT app, role_type, role_id, `read`', FALSE)
-				->from($this->table)
-				->where('action', '')
-				->order_by('role_type', 'DESC')
-				->get();
-
-		$acls = $rs->result_array();
-
-		foreach($acls AS $a) {
-			switch($a['role_type']) {
-				case 3:	//mastergroup
-
-					if ($a['role_id'] == $mastergp) {
-						$result[$a['app']] = $a['read'];
-					}
-
-					break;
-
-				case 2: //subgroup
-
-					if (in_array($a['role_id'], $subgp)) {
-						$case2_acl[] = $a;
-					}
-
-					break;
-
-				case 1: //card
-
-					//if there's any acl from case 2, consolidate them and return result
-					if (count($case2_acl) > 0) {
-						$case2_acl = $this->consolidate_acl($case2_acl);
-						$result[$a['app']] = $case2_acl['read'];
-					}
-
-					if ($a['role_id'] == $cardid) {
-						$result[$a['app']] = $a['read'];
-					}
-
-					break;
-			}
-		}
-
-		foreach($result AS $app => $access) {
-			if ($access == 0) unset($result[$app]);
-		}
-
-		return array_keys($result);
-	}
-
-	private function consolidate_acl($acl, $default_priority='allow') {
-		if ($default_priority == 'allow') {
-			$result = array(
-				'admin' => 1,
-				'read' => 1,
-				'list' => 1,
-				'search' => 1,
-				'copy' => 1,
-				'download' => 1,
-				'write' => 1,
-				'add' => 1,
-				'move' => 1,
-				'rename' => 1,
-				'delete' => 1
-			);
-		} else {
-			$result = array(
-				'admin' => 0,
-				'read' => 0,
-				'list' => 0,
-				'search' => 0,
-				'copy' => 0,
-				'download' => 0,
-				'write' => 0,
-				'add' => 0,
-				'move' => 0,
-				'rename' => 0,
-				'delete' => 0
-			);
-		}
-
-		foreach($acl AS $a) {
-			foreach ($result AS $act=>$val) {
-				if (!isset($a[$act])) continue;
-
-				if ($default_priority == 'allow') {
-					if ($a[$act] < $val) $result[$act] = $a[$act];
-				} else {
-					if ($a[$act] > $val) $result[$act] = $a[$act];
-				}
-			}
-		}
-
-		return $result;
-	}
-
-	function fill_acl_details(&$acl) {
-		$card_ids = $subgp_ids = $gp_ids = array();
-
-		foreach($acl AS $a) {
-			switch($a['role_type']) {
-				case 1:
-					$card_ids[] = $a['role_id'];
-					break;
-				case 2:
-					$subgp_ids[] = $a['role_id'];
-					break;
-				case 3:
-					$gp_ids[] = $a['role_id'];
-					break;
-			}
-		}
-
-		$card_details = $this->UserM->get_batch($card_ids, TRUE);
-
-		$subgp_details = $this->get_subgp_batch($subgp_ids, TRUE);
-		foreach($subgp_details AS $s) {
-			$gp_ids[] = $s['role_id'];
-		}
-
-		$gp_details = $this->get_gp_batch($gp_ids, TRUE);
-
-		foreach($acl AS $k=>$a) {
-			switch($a['role_type']) {
-				case 1:
-					$acl[$k]['name'] = $card_details[$a['role_id']]['first_name'].' '.$card_details[$a['role_id']]['last_name'];
-					break;
-				case 2:
-					$gp_id = $subgp_details[$a['role_id']]['role_id'];
-					$acl[$k]['name'] = $gp_details[$gp_id]['name'].' - '.$subgp_details[$a['role_id']]['name'];
-					break;
-				case 3:
-					$acl[$k]['name'] = $gp_details[$a['role_id']]['name'];
-					break;
+			if (!$has_access) {
+				die('You do not have the permissions to access this app');
+				//TODO: change to 404 error?
 			}
 		}
 	}
 
-
-
-	function get_subgp_batch($ids, $id_as_key=FALSE) {
+	function get_subroles_batch($ids, $id_as_key=FALSE) {
 		$temp_tb = $this->table;
 		$temp_id = $this->id_field;
 
@@ -311,7 +51,7 @@ class ACLM extends MY_Model {
 		return $results;
 	}
 
-	function get_gp_batch($ids, $id_as_key=FALSE) {
+	function get_roles_batch($ids, $id_as_key=FALSE) {
 		$temp_tb = $this->table;
 		$temp_id = $this->id_field;
 
@@ -326,7 +66,7 @@ class ACLM extends MY_Model {
 		return $results;
 	}
 
-	function get_gp_list() {
+	function get_roles_list() {
 		$temp_tb = $this->table;
 		$temp_id = $this->id_field;
 
@@ -341,11 +81,11 @@ class ACLM extends MY_Model {
 		return $results;
 	}
 
-	function get_subgp($gp='') {
+	function get_subroles($role_id='') {
 		$this->db->select()
 			->from('access_roles_sub');
 
-		if ($gp != '') $this->db->where('role_id', $gp);
+		if ($role_id != '') $this->db->where('role_id', $role_id);
 
 		$rs = $this->db->get();
 
@@ -354,8 +94,8 @@ class ACLM extends MY_Model {
 		return $rs->result_array();
 	}
 
-	function get_users($gp='') {
-		$subroles = $this->get_subgp($gp);
+	function get_users($role_id='') {
+		$subroles = $this->get_subroles($role_id);
 
 		$subrole_ids = array();
 
@@ -376,16 +116,734 @@ class ACLM extends MY_Model {
 		return $rs->result_array();
 	}
 
-	function save_acl($data) {
-		$data['created_card_id'] = $this->UserM->get_card_id();
-		$data['created_stamp'] = get_current_stamp();
 
-		parent::save($data, $this->id_field);
+
+	function check($name='', $foreign_key=0, $action='access', $card_id='', $priority='allow') {
+		if ($name == '') $name = $this->url['app'];
+		if ($card_id == '') $card_id = $this->UserM->get_card_id();
+
+		$ro = array(
+			'name' => 'card',
+			'foreign_key' => $card_id,
+		);
+		$ro_id = $this->get_ro_id($ro);
+
+		$co = array(
+			'name' => $name,
+			'foreign_key' => $foreign_key,
+		);
+		$co_id = $this->get_co_id($co);
+
+		if (is_array($ro_id)) {
+			//This happens if the card_id is in more than 1 sub role
+			$ros = array();
+			foreach($ro_id AS $id) {
+				$ros[] = $this->get_ro_tiered($id);
+			}
+		} else {
+			$ros = $this->get_ro_tiered($ro_id);
+		}
+
+		$cos = $this->get_co_tiered($co_id);
+
+		$co_ids = array();
+		foreach($cos AS $c) {
+			$co_ids[] = $c['id'];
+		}
+
+		if (is_array($ro_id)) {
+			//This happens if the card_id is in more than 1 sub role
+			foreach($ros AS $x=>$sub_ros) {
+
+				$break = FALSE;
+				$result[$x] = 0;
+
+				foreach($sub_ros AS $r) {
+					$rules = $this->get_rocos($r['id'], $co_ids);
+
+					if ($rules === FALSE) continue;
+
+					foreach($rules AS $rule) {
+						if ($break) continue;
+
+						switch($rule['action_'.$action]) {
+							case -1:
+								$result[$x] = -1;
+								$break = TRUE;
+								break;
+							case 0:
+								continue;
+								break;
+							case 1:
+								$result[$x] = 1;
+								$break = TRUE;
+								break;
+						}
+					}
+				}
+			}
+
+			$result = array_unique($result);
+			if (count($result) == 1) {
+				return ($result[0] == 1);
+			} else {
+				return ($priority == 'allow');
+			}
+		} else {
+			foreach($ros AS $r) {
+				$rules = $this->get_rocos($r['id'], $co_ids);
+
+				if ($rules === FALSE) continue;
+
+				foreach($rules AS $rule) {
+					switch($rule['action_'.$action]) {
+						case -1:
+							return FALSE;
+							break;
+						case 0:
+							continue;
+							break;
+						case 1:
+							return TRUE;
+							break;
+					}
+				}
+			}
+		}
+
+		return FALSE;
 	}
 
-	function delete_acl($id) {
-		$this->db->where('id', $id)
+	function rebuild($type='co', $parent_id=1, $left='1') {
+		$right = $left+1;
+
+		$rs = $this->db->select()
+				->from('access_'.$type)
+				->where('parent_id', $parent_id)
+				->get();
+
+		foreach($rs->result_array() AS $r) {
+			$right = $this->rebuild($type, $r['id'], $right);
+		}
+
+		$this->db->query("UPDATE access_$type SET lft='$left', rght='$right' WHERE id=$parent_id");
+
+		return $right+1;
+	}
+
+	function reset() {
+		$this->db->query('DELETE FROM access_ro WHERE id!=1');
+		$this->db->query('ALTER TABLE access_ro AUTO_INCREMENT=2');
+		$this->db->query('UPDATE access_ro SET rght=2 WHERE id=1');
+
+		$this->db->query('DELETE FROM access_co WHERE id!=1');
+		$this->db->query('ALTER TABLE access_co AUTO_INCREMENT=2');
+		$this->db->query('UPDATE access_co SET rght=2 WHERE id=1');
+
+		$this->db->query('DELETE FROM access_ro_co WHERE id!=1');
+		$this->db->query('ALTER TABLE access_ro_co AUTO_INCREMENT=2');
+	}
+
+	/*  $nodes = array(
+	 *    'name' => '',
+	 *    'foreign_key' => ''
+	 *  );
+	 * assume all nodes belong to a single parent.
+	 */
+	function create_nodes($parent_id, $nodes, $type) {
+		$this->check_type($type);
+
+		$parent_lftrght = $this->get_lftrght($parent_id, $type);
+		$rght = $parent_lftrght['rght'];
+
+		foreach($nodes AS $k=>$n) {
+			$nodes[$k]['parent_id'] = $parent_id;
+
+			$nodes[$k]['lft'] = $rght;
+			$rght++;
+			$nodes[$k]['rght'] = $rght;
+			$rght++;
+		}
+
+		$increment = count($nodes)*2;
+
+		$this->db->trans_start();
+		$this->db->query('UPDATE access_'.$type.' SET lft=lft+'.$increment.' WHERE lft>='.$parent_lftrght['rght']);
+		$this->db->query('UPDATE access_'.$type.' SET rght=rght+'.$increment.' WHERE rght>='.$parent_lftrght['rght']);
+
+		$this->db->insert_batch('access_'.$type, $nodes);
+		$this->db->trans_complete();
+
+		if ($this->db->trans_status() === FALSE) {
+			log_message('error', 'Unable to save nodes');
+		}
+	}
+
+	function create_node($parent_id, $node, $type) {
+		$this->check_type($type);
+
+		$parent_lftrght = $this->get_lftrght($parent_id, $type);
+		$rght = $parent_lftrght['rght'];
+
+		$data = array(
+			'parent_id' => $parent_id,
+			'name' => $node['name'],
+			'lft' => $rght,
+			'rght' => $rght+1,
+		);
+
+		if (isset($node['foreign_key'])) $data['foreign_key'] = $node['foreign_key'];
+
+		$this->db->trans_start();
+		$this->db->query('UPDATE access_'.$type.' SET lft=lft+2 WHERE lft>='.$parent_lftrght['rght']);
+		$this->db->query('UPDATE access_'.$type.' SET rght=rght+2 WHERE rght>='.$parent_lftrght['rght']);
+
+		$this->db->insert('access_'.$type, $data);
+		$new_id = $this->db->insert_id();
+		$this->db->trans_complete();
+
+		if ($this->db->trans_status() === FALSE) {
+			log_message('error', 'Unable to save node');
+		}
+
+		return $new_id;
+	}
+
+	//$type = co|ro
+	function get_lftrght($id, $type) {
+		$this->check_type($type);
+
+		$rs = $this->db->select('lft, rght')
+				->from('access_'.$type)
+				->where('id', $id)
 				->limit(1)
-				->delete($this->table);
+				->get();
+
+		if ($rs->num_rows() == 0) return FALSE;
+
+		$row = $rs->row_array();
+		return $row;
+	}
+
+
+	function grant($ro, $co, $action='*') {
+		$ro_id = $this->get_ro_id($ro);
+		$co_id = $this->get_co_id($co);
+
+		if ($ro_id === FALSE) die('Invalid user or user does not have RO created. Card ID: '.$ro['foreign_key']);
+		if ($co_id === FALSE) {
+			if (is_array($co)) {
+				if (!isset($co['parent_id'])) {
+					$parent_id = $this->find_co_parent_id($co);
+				} else {
+					$parent_id = $co['parent_id'];
+				}
+			} elseif(is_string($co)) {
+				$temp = explode('/', $co);
+				if (count($temp) == 1) return FALSE;
+
+				$co = array();
+				if (is_numeric($temp[count($temp)-1])) {
+					$co['foreign_key'] = array_pop($temp);
+				}
+				$co['name'] = array_pop($temp);
+
+				$parent_co = array(
+					'name' => array_pop($temp)
+				);
+				$parent_id = $this->get_co_id($parent_co);
+			}
+
+			$co_id = $this->create_node($parent_id, $co, 'co');
+		}
+
+		$fields = $this->db->list_fields('access_ro_co');
+		if ($action!='*' && !in_array('action_'.$action, $fields)) die('Invalid Action: '.$action);
+
+		$roco = $this->get_roco($ro_id, $co_id);
+
+		if ($roco !== FALSE) {
+			if ($action == '*') {
+				foreach($fields AS $f) {
+					if (strpos($f, 'action_') === FALSE) continue;
+					$roco[$f] = 1;
+				}
+			} else {
+				$roco['action_'.$action] = 1;
+			}
+			$roco['modified_card_id'] = $this->UserM->get_card_id();
+			$roco['modified_stamp'] = get_current_stamp();
+
+			$this->db->where('id', $roco['id'])
+				->update('access_ro_co', $roco);
+		} else {
+			$roco = array(
+				'ro_id' => $ro_id,
+				'co_id' => $co_id,
+				'created_card_id' => $this->UserM->get_card_id(),
+				'created_stamp' => get_current_stamp(),
+			);
+
+			if ($action == '*') {
+				foreach($fields AS $f) {
+					if (strpos($f, 'action_') === FALSE) continue;
+					$roco[$f] = 1;
+				}
+			} else {
+				$roco['action_'.$action] = 1;
+			}
+
+			$this->db->insert('access_ro_co', $roco);
+		}
+
+		return TRUE;
+	}
+
+
+	function deny($ro, $co, $action='*') {
+		$ro_id = $this->get_ro_id($ro);
+		$co_id = $this->get_co_id($co);
+
+		if ($ro_id === FALSE) die('Invalid user or user does not have RO created. Card ID: '.$ro['foreign_key']);
+		if ($co_id === FALSE) {
+			if (is_array($co)) {
+				if (!isset($co['parent_id'])) {
+					$parent_id = $this->find_co_parent_id($co);
+				} else {
+					$parent_id = $co['parent_id'];
+				}
+			} elseif(is_string($co)) {
+				$temp = explode('/', $co);
+				if (count($temp) == 1) return FALSE;
+
+				$co = array();
+				if (is_numeric($temp[count($temp)-1])) {
+					$co['foreign_key'] = array_pop($temp);
+				}
+				$co['name'] = array_pop($temp);
+
+				$parent_co = array(
+					'name' => array_pop($temp)
+				);
+				$parent_id = $this->get_co_id($parent_co);
+			}
+
+			$co_id = $this->create_node($parent_id, $co, 'co');
+		}
+
+		$fields = $this->db->list_fields('access_ro_co');
+		if ($action!='*' && !in_array('action_'.$action, $fields)) die('Invalid Action: '.$action);
+
+		$roco = $this->get_roco($ro_id, $co_id);
+
+		if ($roco !== FALSE) {
+			if ($action == '*') {
+				foreach($fields AS $f) {
+					if (strpos($f, 'action_') === FALSE) continue;
+					$roco[$f] = -1;
+				}
+			} else {
+				$roco['action_'.$action] = -1;
+			}
+			$roco['modified_card_id'] = $this->UserM->get_card_id();
+			$roco['modified_stamp'] = get_current_stamp();
+
+			$this->db->where('id', $roco['id'])
+				->update('access_ro_co', $roco);
+		} else {
+			$roco = array(
+				'ro_id' => $ro_id,
+				'co_id' => $co_id,
+				'created_card_id' => $this->UserM->get_card_id(),
+				'created_stamp' => get_current_stamp(),
+			);
+
+			if ($action == '*') {
+				foreach($fields AS $f) {
+					if (strpos($f, 'action_') === FALSE) continue;
+					$roco[$f] = -1;
+				}
+			} else {
+				$roco['action_'.$action] = -1;
+			}
+
+			$this->db->insert('access_ro_co', $roco);
+		}
+
+		return TRUE;
+	}
+
+	/*
+	 * If assigning by individual person,
+	 * $ro = array('name'=>'card', 'foreign_key'=>'<card_id>');
+	 *
+	 * If assigning by role,
+	 * $ro = array('name'=>'<role_name>');
+	 */
+	function get_ro_id($ro) {
+		if (is_numeric($ro)) {
+			return $ro;
+		} elseif (is_string($ro)) {
+			return $this->get_id_by_path($ro, 'ro');
+		} elseif (is_array($ro)) {
+			if (!isset($ro['foreign_key'])) $ro['foreign_key'] = 0;
+
+			$rs = $this->db->select('id')
+					->from('access_ro')
+					->where('name', $ro['name'])
+					->where('foreign_key', $ro['foreign_key'])
+					->get();
+
+			if ($rs->num_rows() == 0) return FALSE;
+
+			if ($rs->num_rows() == 1) {
+				$result = $rs->row_array();
+				return $result['id'];
+			} else {
+				$results = array();
+				foreach($rs->result_array() AS $r) {
+					$results[] = $r['id'];
+				}
+				return $results;
+			}
+		}
+	}
+
+	//Get an RO object
+	function get_ro($ro_id) {
+		$rs = $this->db->select()
+				->from('access_ro')
+				->where('id', $ro_id)
+				->limit(1)
+				->get();
+
+		if ($rs->num_rows() == 0) return FALSE;
+
+		return $rs->row_array();
+	}
+
+	//Get an RO object with it's parents
+	function get_ro_tiered($ro_id) {
+		$ro = $this->get_ro($ro_id);
+
+		if ($ro === FALSE) die('Cannot find RO object for: '.$ro_id);
+
+		$rs = $this->db->select()
+				->from('access_ro')
+				->where('lft <=', $ro['lft'])
+				->where('rght >=', $ro['rght'])
+				->order_by('lft', 'DESC')
+				->get();
+
+		if ($rs->num_rows() == 0) return FALSE;
+
+		return $rs->result_array();
+	}
+
+	/*
+	 * If co is an APP
+	 * $co = array('name'=>'<app_name>', 'parent_id'=>1);
+	 *
+	 * If co is a table
+	 * $co = array('name'=>'<table_name>');
+	 *
+	 * If co is an individual record
+	 * $co = array('name'=>'<table_name>', foreign_key'=>'123456');
+	 */
+	function get_co_id($co) {
+
+		if (is_numeric($co)) {
+			return $co;
+		} elseif (is_string($co)) {
+			return $this->get_id_by_path($co, 'co');
+		} elseif (is_array($co)) {
+			if (!isset($co['foreign_key'])) $co['foreign_key'] = 0;
+
+			if (!isset($co['parent_id']) && $co['foreign_key'] == 0) {
+				$co['parent_id'] = 1;
+			}
+
+			$this->db->select('id')
+				->from('access_co')
+				->where('name', $co['name'])
+				->limit(1);
+
+			if (!isset($co['parent_id']) && !isset($co['foreign_key'])) {
+				$this->db->where('parent_id != 1');
+			} else {
+				if (isset($co['parent_id'])) $this->db->where('parent_id', $co['parent_id']);
+			}
+
+			if (!isset($co['foreign_key'])) {
+				$this->db->where('foreign_key', 0);
+			} else {
+				$this->db->where('foreign_key', $co['foreign_key']);
+			}
+
+			$rs = $this->db->get();
+
+			if ($rs->num_rows() == 0) return FALSE;
+
+			$result = $rs->row_array();
+
+			return $result['id'];
+		}
+	}
+
+	//Get a CO object
+	function get_co($co_id) {
+		$rs = $this->db->select()
+				->from('access_co')
+				->where('id', $co_id)
+				->limit(1)
+				->get();
+
+		if ($rs->num_rows() == 0) return FALSE;
+
+		return $rs->row_array();
+	}
+
+	//Get a CO object with it's parents
+	function get_co_tiered($co_id) {
+		$co = $this->get_co($co_id);
+
+		if ($co === FALSE) die('Cannot find CO object for: '.$co_id);
+
+		$rs = $this->db->select()
+				->from('access_co')
+				->where('lft <=', $co['lft'])
+				->where('rght >=', $co['rght'])
+				->order_by('lft', 'DESC')
+				->get();
+
+		if ($rs->num_rows() == 0) return FALSE;
+
+		return $rs->result_array();
+	}
+
+	//Fetch a specific RO-CO rule
+	function get_roco($ro_id, $co_id) {
+		$rs = $this->db->select()
+				->from('access_ro_co')
+				->where('ro_id', $ro_id)
+				->where('co_id', $co_id)
+				->limit(1)
+				->get();
+
+		if ($rs->num_rows() == 0) return FALSE;
+
+		return $rs->row_array();
+	}
+
+	//Fetch rules matching Single RO, Multiple CO
+	function get_rocos($ro_id, $co_ids) {
+		$rs = $this->db->select('roco.*, co.lft')
+				->from('access_ro_co AS roco')
+				->join('access_co AS co', 'co.id=roco.co_id', 'LEFT')
+				->where('ro_id', $ro_id)
+				->where_in('co_id', $co_ids)
+				->order_by('co.lft', 'DESC')
+				->get();
+
+		if ($rs->num_rows() == 0) return FALSE;
+
+		return $rs->result_array();
+	}
+
+
+	//Gets the ID of an RO/CO object based on a path.
+	//Examples of paths:
+	// helpdesk/a_helpdesk
+	// helpdesk/a_helpdesk/10 - an item with an ID of 10 in the a_helpdesk table
+	function get_id_by_path($path, $type) {
+		$this->check_type($type);
+
+		$orig_path = $path;
+		$path = explode('/', $path);
+		$path_count = count($path);
+
+		if ($path_count == 1) {
+			$this->db->select('id')
+				->from('access_'.$type)
+				->where('name', $path[0]);
+		 } else {
+			//if the last item in the path is a number
+			if (is_numeric($path[$path_count-1])) {
+				$foreign_key = array_pop($path);
+				$path_count--;
+			}
+
+			$this->db->select('tb'.$path_count.'.id')
+				->from('access_'.$type.' AS tb1');
+
+			for($x=1; $x<=$path_count; $x++) {
+				$this->db->join('access_'.$type.' AS tb'.($x+1),
+						'tb'.($x+1).'.parent_id=tb'.($x).'.id',
+						'LEFT');
+			}
+
+			foreach($path AS $x=>$p) {
+				$this->db->where('tb'.($x+1).'.name', $p);
+			}
+
+			//if the last item in the path is a number
+			if (isset($foreign_key) && is_numeric($foreign_key)) {
+				$this->db->where('tb'.($x+1).'.foreign_key', $foreign_key);
+			}
+		}
+
+		$rs = $this->db->limit(1)
+				->get();
+
+		if ($rs->num_rows() == 0) return FALSE;
+
+		$result = $rs->row_array();
+		return $result['id'];
+	}
+
+
+	//finds the parent_id of a CO for an individual row of data
+	function find_co_parent_id($co) {
+		$rs = $this->db->select('id')
+				->from('access_co')
+				->where('parent_id != 1')
+				->where('name', $co['name'])
+				->where('foreign_key', 0)
+				->limit(1)
+				->get();
+
+		if ($rs->num_rows() == 0) return FALSE;
+
+		$result = $rs->row_array();
+		return $result['id'];
+	}
+
+	private function check_type($type) {
+		$acceptable_types = array('co','ro');
+		if (!in_array($type, $acceptable_types)) {
+			die('Unacceptable Type. Only "co" or "ro" accepted. Received: '.$type);
+		}
+	}
+
+	function install() {
+		// ===================================================================== INSTALLTING CO
+		$apps = array(
+			'card' => array(
+				'card',
+				'card_address',
+				'card_associate',
+				'card_bank',
+				'card_email',
+				'card_extra',
+				'card_name',
+				'card_notes',
+				'card_social',
+				'card_tel',
+			),
+			'client' => array(
+				'client',
+				'client_more'
+			),
+			'staff' => array(
+				'staff',
+				'staff_dept',
+				'staff_deptlist',
+			),
+			'product' => array(
+			),
+			'invoice' => array(
+				'a_invoice',
+				'a_invoice_info',
+				'a_invoice_item',
+				'a_invoice_pay',
+				'a_invoice_paybatch',
+				'a_invoice_payitem',
+				'a_invoice_paynotice',
+				'a_invoice_quote',
+				'a_invoice_quotetemplate',
+				'a_invoice_quote_item',
+			),
+			'vendor' => array(
+				'vendor'
+			),
+			'docs' => array(
+				'a_docs',
+				'a_docs_dir',
+			),
+			'helpdesk' => array(
+				'a_helpdesk',
+				'a_helpdesk_comment',
+				'a_helpdesk_re',
+			)
+		);
+
+		foreach($apps AS $app=>$tables) {
+			$data = array(
+				'name' => $app,
+			);
+			$parent_id = $this->create_node(1, $data, 'co');
+
+			$data = array();
+			foreach($tables AS $t) {
+				$data[] = array(
+					'parent_id' => $parent_id,
+					'name' => $t,
+				);
+			}
+			if (count($data) > 0) $this->create_nodes($parent_id, $data, 'co');
+		}
+
+		// ===================================================================== INSTALLTING RO
+		$roles = $this->get_roles_list();
+
+		foreach($roles AS $role) {
+			$data = array(
+				'name' => $role['name'],
+				'foreign_key' => $role['code'],
+			);
+			$role_parent_id = $this->create_node(1, $data, 'ro');
+
+			//if there are users in this role, create an RO for them
+			$rs = $this->db->select('card_id')
+					->from('access_user_role')
+					->where('role_id', $role['code'])
+					->get();
+			if ($rs->num_rows() > 0) {
+				$data = array();
+				foreach($rs->result_array() AS $r) {
+					$data[] = array(
+						'name' => 'card',
+						'foreign_key' => $r['card_id']
+					);
+				}
+				$this->create_nodes($role_parent_id, $data, 'ro');
+			}
+
+			$subroles = $this->get_subroles($role['code']);
+			if (count($subroles) == 0) continue;
+
+			foreach($subroles AS $sr) {
+				$data = array(
+					'name' => $sr['name'],
+					'foreign_key' => $sr['id'],
+				);
+				$subrole_parent_id = $this->create_node($role_parent_id, $data, 'ro');
+
+				$rs = $this->db->select('card_id')
+					->from('access_user_role_sub')
+					->where('roles_sub_id', $sr['id'])
+					->get();
+				if ($rs->num_rows() > 0) {
+					$data = array();
+					foreach($rs->result_array() AS $r) {
+						$data[] = array(
+							'name' => 'card',
+							'foreign_key' => $r['card_id']
+						);
+					}
+					$this->create_nodes($subrole_parent_id, $data, 'ro');
+				}
+			}
+		}
 	}
 }
