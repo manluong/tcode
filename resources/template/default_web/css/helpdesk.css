@@ -229,3 +229,8 @@ select{
 .ul_pagination li{
 	cursor:pointer;
 }
+.hide_page{
+	display:none !important;
+}
+
+
