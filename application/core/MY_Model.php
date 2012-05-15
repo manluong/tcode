@@ -179,6 +179,25 @@ class MY_Model extends CI_Model {
 		return $results;
 	}
 
+	function get_total_records() {
+		$this->db->select($this->id_field)
+			->from($this->table);
+
+		if (count($this->where) > 0) {
+			foreach($this->where AS $w) {
+				$this->db->where($w);
+			}
+		}
+
+		if ($this->sett_has_system_fields && $this->sett_filter_deleted) {
+			$this->db->where('deleted', 0);
+		}
+
+		$rs = $this->db->get();
+
+		return $rs->num_rows();
+	}
+
 	function get_error_string() {
 		return implode("\n", $this->errors);
 	}
