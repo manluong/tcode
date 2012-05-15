@@ -66,23 +66,12 @@ class Console extends MY_Controller {
 		echo "Done installing basic ACL\n";
 	}
 
-	function acl_install_test_rules() {
+	function acl_install_basic_rules() {
 		$this->load->model('AclM');
 		$this->AclM->grant('DEFAULT/Admin', 'DEFAULT');
-		$this->AclM->grant('DEFAULT/Staff', 'DEFAULT/card');
-		$this->AclM->grant('DEFAULT/Staff', 'DEFAULT/docs');
+		$this->AclM->grant('DEFAULT/Staff', 'DEFAULT');
 
-		$this->AclM->grant('DEFAULT/Staff', 'DEFAULT/helpdesk');
-		$this->AclM->deny('DEFAULT/Staff/Accounts', 'DEFAULT/helpdesk');
-
-		$this->AclM->grant('DEFAULT/Staff/Accounts', 'DEFAULT/invoice');
-		$this->AclM->grant('DEFAULT/Staff/HR', 'DEFAULT/invoice');
-		$this->AclM->deny('DEFAULT/Staff/IT', 'DEFAULT/invoice');
-
-		$this->AclM->grant('DEFAULT/Staff/HR', 'DEFAULT/invoice/a_invoice/10');
-		$this->AclM->deny('DEFAULT/Staff/Accounts/card/192', 'DEFAULT/invoice/a_invoice/10');
-
-		echo "Done installaing test rules\n";
+		echo "Done installing basic rules\n";
 	}
 
 	function acl_display($type='co') {
@@ -146,7 +135,7 @@ class Console extends MY_Controller {
 	function acl_reinstall() {
 		$this->acl_reset();
 		$this->acl_install_basic();
-		$this->acl_install_test_rules();
+		$this->acl_install_basic_rules();
 
 		echo "ACL Reinstallation done.\n";
 	}
