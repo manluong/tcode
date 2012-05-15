@@ -183,7 +183,7 @@
 					</div>
 				</div>
 				<div class="dataTables_filter" id="helpdesk_list_table_filter">
-					<div style="width:650px;" class="input-prepend">
+					<div style="width:600px;" class="input-prepend">
 						<span class="add-on" onclick="return ajax_search();"><i style="cursor:pointer;" class="icon-search"></i></span>
 						<input onchange="return ajax_search();" type="text" id="helpdesk_search" name="helpdesk_search">
 					</div>
