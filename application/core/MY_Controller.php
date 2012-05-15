@@ -127,7 +127,7 @@ class MY_Controller extends CI_Controller {
 		$this->data['title'] = '8Force';
 		$this->data['tenant'] = array();
 
-		$this->data['app_list'] = $this->AppM->get_apps();
+		$this->data['app_list'] = $this->ACLM->get_app_list();
 	}
 
 	function _do_output() {
