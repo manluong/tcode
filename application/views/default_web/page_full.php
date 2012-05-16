@@ -1,12 +1,97 @@
 <!DOCTYPE html><html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" >
 	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
 
 	<title><?=$title?></title>
+	<meta name="viewport" content="width=device-width">
+	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/style.css" />
+	<link href='http://fonts.googleapis.com/css?family=Lato:300' rel='stylesheet' type='text/css'>
+
+	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/bootstrap-responsive.min.css" />
+
+	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/modernizr-2.5.3.min.js"></script>
+	<script type="text/javascript" src="/resources/addon/jquery.min.js"></script>
+	<!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>-->
+
+	<?//=$head?>
+
+</head>
+
+<div id="popup_message" class="alert"></div>
+
+<body class="fullwidth">
+	<!-- Start Header -->
+	<header>
+		<div class="rightMenu">
+
+			<input class="search" />
+				<div class="optionsDropdownContainer">
+					<a href="#" class="optionsDropdownOpener">Options</a>
+					<div class="optionsDropdownPadder">
+						<div class="optionsDropdownList">
+							<div class="arrow"></div>
+							<ul>
+								<li><input type="checkbox" class="styled" id="contacts" /> <label for="contacts">Contacts</label></li>
+								<li><input type="checkbox" class="styled" id="vendors" /> <label for="vendors">Vendors</label></li>
+								<li><input type="checkbox" class="styled" id="documents" /> <label for="documents">Documents</label></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+
+			<input type="submit" class="searchInput" value="Go" />
+
+			<div class="dropdownAvatar">
+				<img src="/resources/template/<?=get_template()?>/img/avatar.png" alt="" width="37" class="dropdownAvatarOpener" />
+				<div class="arrow dropdownAvatarOpener"></div>
+
+				<div class="userDropdownPadding">
+					<div class="userDropdownList">
+						<div class="arrow"></div>
+						<ul>
+							<li><a class="settings" href="#">Settings</a></li>
+							<li><a class="support" href="#">Support</a></li>
+							<li><a class="logout last" href="#">Logout</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+		<div class="logoSpace">
+			<a href="/"><?=$company_name?></a>
+		</div>
+	</header>
+	<!-- End Header -->
+
+	<?=$sidebar?>
+
+	<div role="main" id="main" class="clearfix">
+		<div class="mainContent">
+			<?=$breadcrumb?>
+
+			<?=$content?>
+		</div>
+	</div>
+
+	<!-- Start Footer -->
+	<footer>
+		<a href="#" class="logo"></a>
+		<div class="links">
+			<a href="#">About</a> <a href="#">Send us feedback</a>
+			<?php echo '<span style="font-size:11px;">DEBUG: env: ',ENVIRONMENT,' - role: ',APP_ROLE,' - db: ',$debug['database'],'</span>'; ?>
+		</div>
+	</footer>
+	<!-- End Footer -->
 
 	<script type="text/javascript" src="/resources/addon/tpl.js"></script>
-	<script type="text/javascript" src="/resources/addon/jquery.min.js"></script>
 	<script type="text/javascript" src="/resources/addon/jquery.ui.min.js"></script>
 	<script type="text/javascript" src="/resources/addon/jquery.tools.min.js"></script>
 	<script type="text/javascript" src="/resources/addon/jquery.dataTables.min.js"></script>
@@ -25,80 +110,14 @@
 	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/jquery.cookie.js"></script>
 	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/theme-global.js"></script>
 
-	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/helpdesk.css" />
-	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/base.css" />
-	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/bootstrap.min.css" />
-	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/bootstrap-responsive.min.css" />
-
-	<!-- Docs -->
-		<!-- plupload -->
-		
-		<script type="text/javascript" src="http://bp.yahooapis.com/2.4.21/browserplus-min.js"></script>
-		<script type="text/javascript" src="/resources/addon/plupload/js/plupload.full.js"></script>
-		<script type="text/javascript" src="/resources/addon/plupload/js/jquery.plupload.queue/jquery.plupload.queue.js"></script>
-		<link href="/resources/addon/plupload/js/jquery.plupload.queue/css/jquery.plupload.queue.css" media="screen" rel="stylesheet" type="text/css" />
-
-		<!-- end plupload -->
-
-		<!-- Adaptive ui -->
-		<link rel="stylesheet" type="text/css" href="/resources/addon/docs/flexpaper.css" />
-		<script type="text/javascript" src="/resources/addon/jquery.extensions.min.js"></script>
-		<script type="text/javascript" src="/resources/addon/docs/flexpaper.js"></script>
-		<script type="text/javascript" src="/resources/addon/docs/flexpaper_handlers.js"></script>
-		<!-- end adaptive ui -->
-	<!-- end Docs -->
-
-	<?//=$head?>
-
-</head>
-
-<body>
-    <div class="container-full">
-		<?=$sidebar?>
-
-		<div id="popup_message" class="alert"></div>
-		<div id="content-container">
-			<?=$breadcrumb?>
-			<div id="content">
-				<?=$content?>
-			</div>
-			<div id="content-footer">
-				<?=$app_menu?>
-				<?php echo '<div class="pull-right" style="padding:5px;">env: ',ENVIRONMENT,' - role: ',APP_ROLE,' - db: ',$debug['database'],'</div>'; ?>
-			</div>
-		</div>
-
-	</div>
+	<!-- new theme stuff -->
+	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/custom-form-elements.js"></script>
+	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/jquery.smooth-scroll.min.js"></script>
+	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/plugins.js"></script>
+	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/script.js"></script>
 
 	<script>
-		/*
-		$(document).ready(function() {
-			resize_nav();
 
-			$('.dropdown-toggle').dropdown();
-		});
-
-		$(window).resize(function(){
-			setTimeout('resize_nav()', 1000);
-		});
-		
-		$('#content-container').on('click', function() {
-			$('#status-update').slideUp(300);
-			$('#global-search-options').slideUp(300);
-			setTimeout('resize_nav()', 400);
-		});
-		
-		function resize_nav() {
-			var sidebar_height = $('#sidebar').outerHeight();
-			sidebar_height -= $('#company-logo').outerHeight();
-			sidebar_height -= $('#global-search-container').outerHeight();
-			sidebar_height -= $('#status').outerHeight();
-			sidebar_height -= $('#sidebar-footer').outerHeight();
-
-			$('#nav').outerHeight(sidebar_height);
-		}
-		*/
 	</script>
-
 </body>
 </html>

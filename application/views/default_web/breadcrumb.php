@@ -1,4 +1,9 @@
+<div id="breadcrumb">
+	<a href="#" class="main"><?=$active_app_name;?></a> <a href="#" id="favoriteIcon" class="on" title="Remove from favorites"></a>
+</div>
+
 <?php
+/*
 //echo '<div class="row-fluid>';
 	echo '<ul id="breadcrumb" class="breadcrumb">';
 
@@ -26,4 +31,4 @@
 
 
 //echo '</div>';
-
+*/

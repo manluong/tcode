@@ -27,12 +27,13 @@ class MY_Controller extends CI_Controller {
 	var $data = array(
 		//filled in by system automatically
 		'title' => '8Force', //HTML <title>
-		'company_name' => '',
+		'company_name' => 'Telcoson',
 		'company_logo' => '',
 		'current_user' => array(),
 		'sidebar' => '',
 		'footer' => '',
 		'app_list' => '',
+		'active_app' => '',
 
 		//to be filled in by the app
 		'app_menu' => array(),
@@ -128,6 +129,8 @@ class MY_Controller extends CI_Controller {
 		$this->data['tenant'] = array();
 
 		$this->data['app_list'] = $this->ACLM->get_app_list();
+		$this->data['active_app'] = $this->url['app'];
+		$this->data['active_app_name'] = $this->lang->line('core_apps-name-'.$this->url['app']);
 	}
 
 	function _do_output() {
@@ -140,12 +143,15 @@ class MY_Controller extends CI_Controller {
 		$html['breadcrumb'] = '';
 		$html['app_menu'] = '';
 
+		if ($this->UserM->is_logged_in()) {
+			$html['breadcrumb'] = $this->load->view(get_template().'/breadcrumb', $this->data, TRUE);
+		}
+
 		if ($this->is_pjax) {
 			$this->load->view(get_template().'/page_ajax', $html);
 		} else {
 			if ($this->UserM->is_logged_in()) {
 				$html['sidebar'] = $this->load->view(get_template().'/sidebar', $this->data, TRUE);
-				$html['breadcrumb'] = $this->load->view(get_template().'/breadcrumb', $this->data, TRUE);
 				$html['app_menu'] = $this->load->view(get_template().'/app_menu', $this->data, TRUE);
 			}
 

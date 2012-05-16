@@ -1,94 +1,49 @@
-<div id="sidebar">
-	<div id="company-logo">
+<ul class="tabsNavigation">
+	<!--
+	<li class="active"><div class="activeTab"><a href="#" class="home">Home</a></div></li>
+	<li><div class="activeTab"><a href="#" class="activity">Activity</a></div></li>
+	<li><div class="activeTab"><a href="#" class="calendar">Calendar</a></div></li>
+	<li><div class="activeTab"><a href="#" class="addressbook">Contacts</a></div></li>
+	<li><div class="activeTab"><a href="#" class="activity">Activity</a></div></li>
+	<li><div class="activeTab"><a href="#" class="calendar">Calendar</a></div></li>
+	<li><div class="activeTab"><a href="#" class="addressbook">Contacts</a></div></li>
+	<li><div class="activeTab"><a href="#" class="activity">Activity</a></div></li>
+	<li><div class="activeTab"><a href="#" class="calendar">Calendar</a></div></li>
+	<li><div class="activeTab"><a href="#" class="addressbook">Contacts</a></div></li>
+	<li><div class="activeTab"><a href="#" class="activity">Activity</a></div></li>
+	<li><div class="activeTab"><a href="#" class="calendar">Calendar</a></div></li>
+	<li><div class="activeTab"><a href="#" class="addressbook">Contacts</a></div></li>
+	<li><div class="activeTab"><a href="#" class="calendar">Calendar</a></div></li>
+	<li><div class="activeTab"><a href="#" class="addressbook">Contacts</a></div></li>
+	-->
+	<!-- <li class="viewer"><span>OFF</span></li> -->
 	<?php
-		if ($company_logo != '') {
-			echo "<img src=\"/resources/images/$company_logo\" />";
-		} else {
-			echo "<h3>$company_name</h3>";
+		foreach ($app_list as $app) {
+
+			if ($active_app == $app) {
+				echo '<li class="active">';
+			} else {
+				echo '<li>';
+			}
+
+	?><div class="activeTab"><a href="<?=base_url().$app?>" data-app_name="<?=$app?>" class="ajax <?=$app?>"><?=lang('core_apps-name-'.$app)?></a></div></li><?php
 		}
 	?>
-	</div>
+</ul>
 
-	<div id="global-search-container">
-		<div id="global-search">
-			<input type="text" name="global-search" id="global-search-field" class="search-query" />
-			<i class="icon-search" id="global-search-icon"></i>
-		</div>
-		<div id="global-search-options" class="hide">
-			<div class="control-group">
-				<div class="controls">
-					<label class="checkbox">
-						<input type="checkbox" name="optionsCheckboxList1" value="option1">
-						Contacts
-					</label>
-					<label class="checkbox">
-						<input type="checkbox" name="optionsCheckboxList2" value="option2">
-						Vendors
-					</label>
-					<label class="checkbox">
-						<input type="checkbox" name="optionsCheckboxList3" value="option3">
-						Documents
-					</label>
-					<a class="btn btn-primary">Search</a>
-					<a class="btn" id="global-search-cancel">Cancel</a>
-				</div>
-			</div>
-		</div>
-	</div>
+<ul id="bottomMenus">
+	<li>
+		<a href="#" class="history"></a>
+		<a href="#" class="favorites"></a>
+	</li>
+</ul>
 
-	<script>
-		$(document).ready(function() {
-			$('#global-search-field').on('focus click', function() {
-				$('#global-search-options').slideDown(300);
-				hide_status_update();
-			}).on('keypress', function(e) {
-				if (e.which == 13) $('#global-search-options').slideUp(300);
-			});
+<a href="#" class="appsIconTop tabsNavigationPagers"></a>
+<a href="#" class="appsIconBottom tabsNavigationPagers"></a>
 
-			$('#global-search-cancel').on('click', function() {
-				$('#global-search-options').slideUp(300);
-			});
-		});
-	</script>
-
-
-
-
+<!--
+<div id="sidebar">
 	<div id="status">
-		<div class="row-fluid">
-			<div class="avatar"><img src="/resources/template/<?=get_template()?>/img/avatar.png" /></div>
-			<div id="status-details">
-				<strong><?=$current_user['name']?></strong><br />
-				<div id="status-current"></div>
-				<div>
-					<span id="status-availability"></span>
-					<span id="status-location"></span>
-					<span id="status-task"></span>
-				</div>
-			</div>
-		</div>
-
-		<div id="status-update" class="row-fluid">
-			<form id="status-update-form">
-				Currently:<br /> <input type="text" id="status-message" name="message" value="" />
-
-				<div id="status-more-options" class="hide">
-					Availability:<br /> <select id="status-status_type_id" name="status_type_id"></select>
-					Location:<br /> <select id="status-location_id" name="location_id"></select>
-					Working On:<br /> <select id="status-task_id" name="task_id"></select>
-				</div>
-
-				<div id="status-more" class="row-fluid">
-					<a href="#" class="pull-right">More Options</a>
-				</div>
-
-				<input type="hidden" name="geo_lat" val="" />
-				<input type="hidden" name="geo_lng" val="" />
-
-				<a class="btn btn-primary" id="status-update-submit">Update</a><a class="btn status-close">Cancel</a>
-			</form>
-		</div>
-	</div>
 
 	<script>
 		var status_dropdowns_loaded = false;
@@ -239,24 +194,6 @@
 
 
 
-	<div id="nav">
-		<ul class="unstyled">
-		<?php
-			foreach ($app_list as $app) {
-		?>
-			<li>
-				<a href="<?=base_url().$app?>" data-app_name="<?=$app?>" class="ajax">
-					<span class="app-icon" title="<?=lang('core_apps-name-'.$app)?>">
-						<img src="/resources/images/appicons/30/<?=$app?>.png" />
-					</span>
-					<span class="app-name"><?=lang('core_apps-name-'.$app)?></span>
-				</a>
-			</li>
-		<?php
-			}
-		?>
-		</ul>
-	</div>
 
 	<script>
 	   $(document).ready(function() {
@@ -314,3 +251,4 @@
 	</script>
 
 </div>
+-->
