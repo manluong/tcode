@@ -14,6 +14,7 @@
 	</ul>
 </div>
 
+<div id="invoice_detail">
 <div id="view_header">
 	<div class="left"><span><?php echo '#'.$invoice['id'] ?></span></div>
 	<div class="right">
@@ -21,7 +22,7 @@
 		<a href="/invoice/edit/<?php echo $invoice['id']?>"><button class="btn">Edit</button></a>
 		<button class="btn">Send</button>
 		<button class="btn">PDF</button>
-		<button class="btn">Print</button>
+		<button id="invoice_print" class="btn">Print</button>
 	</div>
 </div>
 
@@ -88,10 +89,10 @@
 			<div><span>Duration</span></div>
 		</div>
 		<div class="invoice_item_sub clear"<?php echo ($invoice_item->price_type) ? '' : ' style="display: none;"' ?>>
-			<div><?php echo $invoice_item->price_type ?></div>
+			<div><?php echo $invoice_item->a_product_pricetype_name ?></div>
 			<div><?php echo date('Y-m-d', strtotime($invoice_item->subscription_start_stamp)) ?></div>
 			<div><?php echo date('Y-m-d', strtotime($invoice_item->subscription_end_stamp)) ?></div>
-			<div><?php echo $invoice_item->duration_type ?></div>
+			<div><?php echo $invoice_item->a_product_durationtype_name ?></div>
 		</div>
 	</div>
 	<?php endforeach ?>
@@ -127,4 +128,5 @@
 </div>
 
 <div class="div_btn clear">
+</div>
 </div>

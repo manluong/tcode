@@ -467,9 +467,9 @@ $(document).ready(function() {
 	
 	$('#slider').slider({
 		range: true,
-		min: $('#total_default_min').val(),
-		max: $('#total_default_max').val(),
-		values: [$('#total_default_min').val(), $('#total_default_max').val()],
+		min: parseInt($('#total_default_min').val()),
+		max: parseInt($('#total_default_max').val()),
+		values: [parseInt($('#total_default_min').val()), parseInt($('#total_default_max').val())],
 		slide: function( event, ui ) {
 			$('#total_min').val(ui.values[0]);
 			$('#total_max').val(ui.values[1]);
@@ -493,9 +493,29 @@ $(document).ready(function() {
 			data: $('#frm_search').serialize(),
 			success: function(resp) {
 				$('#invoice_list').html(resp);
+				$('#page').val(1);
 			}
 		});
 		return false;
+	});
+	
+	$('.pagination a').live('click', function(e) {
+		e.preventDefault();
+		var li = $(this).closest('li');
+		if (!$(li).hasClass('disabled') && !$(li).hasClass('active')) {
+			$('#page').val($(this).data('page'));
+			$('#search_btn').click();
+		}
+	});
+	
+	$('#invoice_list_table_length select').live('change', function(e) {
+		$('#row_per_page').val($(this).val());
+		$('#page').val(1);
+		$('#search_btn').click();
+	});
+		
+	$('#invoice_print').on('click', function(e) {
+		window.print();
 	});
 	
 	$('.datepicker').datetimepicker({
@@ -537,4 +557,5 @@ $(document).ready(function() {
 	});
 	add_last_row();
 	cal_invoice_total();
+	$('#search_btn').click();
 });

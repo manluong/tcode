@@ -106,7 +106,10 @@ ul {
 	margin-top: 16px;
 	width: 100%;
 }
-#invoice_item_list input{
+#invoice_item_list input {
+	width: 100%;
+}
+#invoice_item_list select {
 	width: 100%;
 }
 .input_table {

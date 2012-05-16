@@ -179,6 +179,29 @@ class MY_Model extends CI_Model {
 		return $results;
 	}
 
+	function get_total_records() {
+		$this->db->select($this->id_field)
+			->from($this->table);
+
+		if (count($this->where) > 0) {
+			foreach($this->where AS $w) {
+				$this->db->where($w);
+			}
+		}
+
+		if ($this->sett_has_system_fields && $this->sett_filter_deleted) {
+			$this->db->where('deleted', 0);
+		}
+
+		$rs = $this->db->get();
+
+		return $rs->num_rows();
+	}
+
+	function get_errors() {
+		return $this->errors;
+	}
+
 	function get_error_string() {
 		return implode("\n", $this->errors);
 	}
@@ -244,6 +267,24 @@ class MY_Model extends CI_Model {
 					if ($result === 0 || $result === FALSE) {
 						$this->errors[] = $this->lang->line('error-regex_failed').' : '.$this->lang->line($this->table.'-'.$field);
 						$this->field_errors[$field][] = $this->lang->line('error-regex_failed');
+						$has_error = TRUE;
+					}
+				}
+
+				if (isset($field_detail['min_length']) && is_numeric($field_detail['min_length'])) {
+					if (strlen($data[$field]) < $field_detail['min_length']) {
+						$error_string = str_replace('#char#', $field_detail['min_length'], $this->lang->line('error-min_length'));
+						$this->errors[] = $error_string.' : '.$this->lang->line($this->table.'-'.$field);
+						$this->field_errors[$field][] = $error_string;
+						$has_error = TRUE;
+					}
+				}
+
+				if (isset($field_detail['max_length']) && is_numeric($field_detail['max_length'])) {
+					if (strlen($data[$field]) > $field_detail['max_length']) {
+						$error_string = str_replace('#char#', $field_detail['max_length'], $this->lang->line('error-max_length'));
+						$this->errors[] = $error_string.' : '.$this->lang->line($this->table.'-'.$field);
+						$this->field_errors[$field][] = $error_string;
 						$has_error = TRUE;
 					}
 				}

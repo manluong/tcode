@@ -5,7 +5,6 @@ class Helpdesk extends MY_Controller {
 	function __construct() {
 		parent::__construct();
 
-		$this->load->model('DS_Helpdesk');
 		$this->load->model('Helpdesk_CommentM');
 		$this->load->model('HelpdeskM');
 	}
@@ -15,7 +14,7 @@ class Helpdesk extends MY_Controller {
 		$this->HelpdeskM->limit = 10;
 
 		$content = array(
-			'total' => $this->HelpdeskM->getTotalRecord(),
+			'total' => $this->HelpdeskM->get_total_records(),
 			'result' => $this->HelpdeskM->get_list(),
 			'group' =>  $this->Helpdesk_CommentM->get_group(),
 			'status' => $this->Helpdesk_CommentM->get_status(),

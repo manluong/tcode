@@ -61,6 +61,8 @@
 		</tr>
 	</table>
 </div>
+<input type="hidden" id="page" name="page" />
+<input type="hidden" id="row_per_page" name="row_per_page" />
 <input type="submit" id="search_btn" class="btn" value="Search" />
 </form>
 

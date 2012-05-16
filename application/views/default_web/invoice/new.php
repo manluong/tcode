@@ -92,10 +92,24 @@
 			<div><span>Duration</span></div>
 		</div>
 		<div class="invoice_item_sub clear" style="display: none;">
-			<div><input type="text" name="price_type[]" /></div>
+			<div>
+				<select name="price_type[]">
+					<option value="">-- Select --</option>
+					<?php foreach ($price_type as $r): ?>
+					<option value="<?php echo $r->a_product_pricetype_id ?>"><?php echo $r->a_product_pricetype_name ?></option>
+					<?php endforeach ?>
+				</select>
+			</div>
 			<div><input type="text" name="from[]" class="item_datepicker" /></div>
 			<div><input type="text" name="to[]" class="item_datepicker" /></div>
-			<div><input type="text" name="duration[]" /></div>
+			<div>
+				<select name="duration[]">
+					<option value="">-- Select --</option>
+					<?php foreach ($duration_type as $r): ?>
+					<option value="<?php echo $r->a_product_durationtype_id ?>"><?php echo $r->a_product_durationtype_name ?></option>
+					<?php endforeach ?>
+				</select>
+			</div>
 		</div>
 	</div>
 </div>

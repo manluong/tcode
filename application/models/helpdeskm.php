@@ -73,7 +73,7 @@ class HelpdeskM extends MY_Model {
 
 	function group_fillter($value) {
 		$this->db->select('*');
-		$this->db->where('group',$value);
+		$this->db->where('group', $value);
 		$query = $this->db->get($this->table);
 
 		if ($query->result()) {
@@ -85,7 +85,7 @@ class HelpdeskM extends MY_Model {
 
 	function status_fillter($value) {
 		$this->db->select('*');
-		$this->db->where('status',$value);
+		$this->db->where('status', $value);
 		$query = $this->db->get($this->table);
 
 		if ($query->result()) {
@@ -97,7 +97,7 @@ class HelpdeskM extends MY_Model {
 
 	function type_fillter($value) {
 		$this->db->select('*');
-		$this->db->where('type',$value);
+		$this->db->where('type', $value);
 		$query = $this->db->get($this->table);
 
 		if ($query->result()) {
@@ -109,7 +109,7 @@ class HelpdeskM extends MY_Model {
 
 	function priority_fillter($value) {
 		$this->db->select('*');
-		$this->db->where('priority',$value);
+		$this->db->where('priority', $value);
 		$query = $this->db->get($this->table);
 
 		if ($query->result()) {
@@ -133,7 +133,7 @@ class HelpdeskM extends MY_Model {
 
 	function get_helpdesk_not_use() {
 		$this->db->select('id');
-		$this->db->where('active',1);
+		$this->db->where('active', 1);
 		$query = $this->db->get($this->table);
 
 		if ($query->result()) {
