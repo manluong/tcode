@@ -14,19 +14,19 @@ class HelpdeskM extends MY_Model {
 		),
 		'group' => array(
 		),
-                'status' => array(
+        'status' => array(
 		),
-                'type' => array(
+        'type' => array(
 		),
-                'rate' => array(
+        'rate' => array(
 		),
-                'in_charge_card_id' => array(
+        'in_charge_card_id' => array(
 		),
-                'cc_email' => array(
+        'cc_email' => array(
 		),
-                'assign_id' => array(
+        'assign_id' => array(
 		),
-                'active' => array(
+        'active' => array(
 		),
 	);
 
@@ -119,12 +119,12 @@ class HelpdeskM extends MY_Model {
 		}
 	}
 
-	function insert_upload_file($filename , $id_helpdesk) {
+	function insert_upload_file($filename , $comment_id) {
 		$data = array (
 			'filename' => $filename,
-			'id_helpdesk' => $id_helpdesk
+			'id_comment' => $comment_id
 		);
-		if ($this->db->insert('a_helpdesk_file',$data)) {
+		if ($this->db->insert('a_comment_file',$data)) {
 			return $this->db->insert_id();
 		} else {
 			return 0;
@@ -141,22 +141,6 @@ class HelpdeskM extends MY_Model {
 		} else {
 			return false;
 		}
-	}
+        }
 
-	function get_helpdesk_files($id) {
-		$this->db->select('*');
-		$this->db->where('id_comment',$id);
-		$query = $this->db->get('a_comment_file');
-
-		if ($query->result()) {
-			return $query->result();
-		} else {
-			return false;
-		}
-	}
-
-	function delete_files_not_use($id){
-		$this->db->where('id', $id);
-		$this->db->delete('a_comment_file');
-	}
 }

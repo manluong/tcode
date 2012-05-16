@@ -32,7 +32,7 @@ function submit_insert_helpdesk(){
 	var status = $('#a_helpdesk_comment_status').val();
 	var type = $('#a_helpdesk_comment_type').val();
 	var priority = $('#a_helpdesk_comment_priority').val();
-	
+
 	var url = '<?=site_url('helpdesk/save_insert_helpdesk');?>';
 
 	$.post(url,{
@@ -50,7 +50,7 @@ function submit_insert_helpdesk(){
 			}else{
 				window.location='<?=site_url('helpdesk');?>';
 			}
-			
+
 		}
 	);
 }
@@ -58,21 +58,23 @@ function submit_insert_helpdesk(){
 function submit_comment(){
 	var comment = $('#a_helpdesk_comment_comment').val();
 	var id_helpdesk = $('#hiddenIdAdmincp').attr('value');
+        var id_comment = $('#hiddenCommentID').attr('value');
 	var priority_helpdesk = $('#a_helpdesk_comment_priority').val();
 	var group_helpdesk = $('#a_helpdesk_comment_group').val();
 	var status_helpdesk = $('#a_helpdesk_comment_status').val();
 	var type_helpdesk = $('#a_helpdesk_comment_type').val();
-	
+
 	if ($('#private').is(':checked')) {
 		var pri = 1;
 	} else {
 		var pri = 0	;
 	}
-	
+
 	var url_comment = '<?=site_url('helpdesk/save_comment');?>';
-	
+
 	$.post(url_comment,{
 			id : id_helpdesk,
+                        id_comment : id_comment,
 			comment: comment,
 			pri: pri,
 			group : group_helpdesk,
@@ -92,14 +94,14 @@ function submit_comment(){
 	<div class="head_helpdesk">
 		<div id="content_left">HelpDesk Insert</div>
 	</div>
-	
+
 	<form id="frmManagement" action="" method="post" enctype="multipart/form-data">
 	<div id="helpdesk_info" style="height:200px;">
 		<ul id="form_change" >
 			<li><span class="helpdesk_info_span">Subject</span> <span class="input_change">: <input value="" type="text" name="subject" id="subject" /></span></li>
 			<li><span class="helpdesk_info_span">Creator</span> : <a href="#">Customer A</a></li>
-			
-			<li><span class="helpdesk_info_span">Assigned</span> : 
+
+			<li><span class="helpdesk_info_span">Assigned</span> :
 				<select  name="assign" id="assign">
 					<option value="">something</option>
 					<?php if(!empty($assign)){
@@ -112,9 +114,11 @@ function submit_comment(){
 			<li><span class="helpdesk_info_span">CC Mail</span> <span class="input_change">: <input name="cc_email" value="" type="text" id="cc_email" /></span></li>
 		</ul>
 	</div>
-	
+
 	<input type="hidden" value="<?=(!empty($helpdesk_id)? $helpdesk_id : '0')?>" name="hiddenIdAdmincp" id="hiddenIdAdmincp" />
-	<div id="helpdesk_select">
+	<input type="hidden" value="<?=(!empty(comment_id)? comment_id : '0')?>" name="hiddenCommentID" id="hiddenCommentID" />
+
+        <div id="helpdesk_select">
 		<ul>
 			<li class="controls">
 				<label class="control-label" for="select01">Group\Department</label>
@@ -152,11 +156,11 @@ function submit_comment(){
 				<label class="control-label" for="select01">Type</label>
 				<select  id="a_helpdesk_comment_type" name="a_helpdesk_comment_type">
 					<option value="">something</option>
-					<?php if(!empty($type)){
+					<?php if(!empty($type)) {
 							if(!empty($result->type)){
-								$value_type = $result->type;
+									$value_type = $result->type;
 							}else{
-								$value_type= 0;
+									$value_type= 0;
 							}
 							foreach($type as $k){
 					?>
@@ -165,52 +169,52 @@ function submit_comment(){
 				</select>
 			</li>
 			<li class="controls">
-				<label class="control-label" for="select01">Priority</label>
-				<select id="a_helpdesk_comment_priority" name="a_helpdesk_comment_priority">
-					<option value="">something</option>
-					<?php if(!empty($priority)){
-							if(!empty($result->priority)){
-								$value_pri = $result->priority;
-							}else{
-								$value_pri= 0;
-							}
-							foreach($priority as $k){
-					?>
-					<option <?=($value_pri == $k->id?'selected=selected':'' )?> value="<?=$k->id?>"><?=$k->name?></option>
-					<?php }}?>
-				</select>
+                            <label class="control-label" for="select01">Priority</label>
+                            <select id="a_helpdesk_comment_priority" name="a_helpdesk_comment_priority">
+                                <option value="">something</option>
+                                <?php if(!empty($priority)){
+                                        if(!empty($result->priority)){
+                                                $value_pri = $result->priority;
+                                        }else{
+                                                $value_pri= 0;
+                                        }
+                                        foreach($priority as $k){
+                                ?>
+                                <option <?=($value_pri == $k->id?'selected=selected':'' )?> value="<?=$k->id?>"><?=$k->name?></option>
+                                <?php }}?>
+                            </select>
 			</li>
-			
-			<li class="controls" style="width:100%;">
-				<textarea rows="3" id="a_helpdesk_comment_comment" value="" class="input-xlarge"></textarea>
-			</li>
-			
-			<li class="controls" style="width:100%;">
-				<label class="checkbox">
-                <input type="checkbox" value="" id="private">
-                Private comments (Only staff see this comments)
-				</label>
-			</li>
-			
-			<li class="controls" style="width:577px;">
-				<!-- PLUpload-->
-				<h1 style="display:none;">Custom example</h1>
-				<p style="display:none;">Shows you how to use the core plupload API.</p>
 
-				<div id="container" >
-					<a class="btn" id="pickfiles" href="javascript:;">Attach files</a> 
-					<a style="text-decoration:none;" id="uploadfiles" href="javascript:;">[Upload files]</a>
-					<div id="filelist" style="margin-top:5px;"></div>
-				</div>
+			<li class="controls" style="width:100%;">
+                            <textarea rows="3" id="a_helpdesk_comment_comment" value="" class="input-xlarge"></textarea>
 			</li>
-			
+
+			<li class="controls" style="width:100%;">
+                            <label class="checkbox">
+                            <input type="checkbox" value="" id="private">
+                            Private comments (Only staff see this comments)
+                            </label>
+			</li>
+
+			<li class="controls" style="width:577px;">
+                            <!-- PLUpload-->
+                            <h1 style="display:none;">Custom example</h1>
+                            <p style="display:none;">Shows you how to use the core plupload API.</p>
+
+                            <div id="container" >
+                                <a class="btn" id="pickfiles" href="javascript:;">Attach files</a>
+                                <a style="text-decoration:none;" id="uploadfiles" href="javascript:;">[Upload files]</a>
+                                <div id="filelist" style="margin-top:5px;"></div>
+                            </div>
+			</li>
+
 			<li class="controls" >
 				<div onclick="submit_insert_helpdesk()" class="btn">Submit</div>
 			</li>
 		</ul>
 	</div>
 </form>
-	
+
 	<div class="clearAll"></div>
 </div>
 
@@ -218,7 +222,7 @@ function submit_comment(){
 
 // Custom example logic
 	function getid(id) {
-		return document.getElementById(id);	
+		return document.getElementById(id);
 	}
 
 	var uploader = new plupload.Uploader({
@@ -226,7 +230,7 @@ function submit_comment(){
 		browse_button : 'pickfiles',
 		container: 'container',
 		max_file_size : '10mb',
-		url : '/helpdesk/upload/'+$('#hiddenIdAdmincp').attr('value'),
+		url : '/helpdesk/upload/'+$('#hiddenCommentID').attr('value'),
 
 		filters : [
 			{title : "Image files", extensions : "jpg,gif,png"},
@@ -248,6 +252,6 @@ function submit_comment(){
 		uploader.start();
 		return false;
 	};
-	
+
 	uploader.init();
 </script>
