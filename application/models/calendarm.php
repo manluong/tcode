@@ -69,7 +69,7 @@ class CalendarM extends MY_Model {
 	}
 
 	function update_event($event) {
-		$event['modified_cardid'] = $this->UserM->get_card_id();
+		$event['modified_card_id'] = $this->UserM->get_card_id();
 		$event['modified_stamp'] = get_current_stamp();
 
 		$id = $event['id'];
@@ -81,10 +81,11 @@ class CalendarM extends MY_Model {
 
 
 	function save_event($event) {
-		$event['created_cardid'] = $this->UserM->get_card_id();
+		$event['created_card_id'] = $this->UserM->get_card_id();
 		$event['created_stamp'] = get_current_stamp();
 
 		$this->db->insert('a_calendars_objects', $event);
+		return TRUE;
 	}
 
 
