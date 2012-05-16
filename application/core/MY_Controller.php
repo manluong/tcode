@@ -74,7 +74,7 @@ class MY_Controller extends CI_Controller {
 	function __construct() {
 		parent::__construct();
 
-		if ($this->input->get_request_header('X-PJAX', TRUE) !== FALSE) $this->is_pjax = TRUE;
+		if ($this->input->get_request_header('X-pjax', TRUE) !== FALSE) $this->is_pjax = TRUE;
 		$this->is_cli = $this->input->is_cli_request();
 
 		$this->load->config('eightforce', TRUE);
