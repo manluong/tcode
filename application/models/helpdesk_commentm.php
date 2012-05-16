@@ -3,116 +3,144 @@
 class Helpdesk_CommentM extends MY_Model {
 	function __construct() {
 		parent::__construct();
-		
-		$this->table = 'a_helpdesk_comment';
+
+		$this->table = 'a_comment_file';
 		$this->cache_enabled = TRUE;
 	}
-	
-	function get_list(){
+
+	function get_list() {
 		$this->db->select('*');
 		$query = $this->db->get('a_helpdesk');
 
-		if($query->result()){
+		if ($query->result()) {
 			return $query->result();
-		}else{
+		} else {
 			return false;
 		}
 	}
-	
-	function get_group(){
+
+	function get_group() {
 		$this->db->select('*');
 		$query = $this->db->get('a_access_gpsub');
 
-		if($query->result()){
+		if ($query->result()) {
 			return $query->result();
-		}else{
+		} else {
 			return false;
 		}
 	}
-	
-	function get_status(){
+
+	function get_status() {
 		$this->db->select('*');
 		$query = $this->db->get('a_status');
 
-		if($query->result()){
+		if ($query->result()) {
 			return $query->result();
-		}else{
+		} else {
 			return false;
 		}
 	}
-	
-	function get_type(){
+
+	function get_type() {
 		$this->db->select('*');
 		$query = $this->db->get('a_type');
 
-		if($query->result()){
+		if ($query->result()) {
 			return $query->result();
-		}else{
+		} else {
 			return false;
 		}
 	}
-	
-	function get_priority(){
+
+	function get_priority() {
 		$this->db->select('*');
 		$query = $this->db->get('a_priority');
 
-		if($query->result()){
+		if ($query->result()) {
 			return $query->result();
-		}else{
+		} else {
 			return false;
 		}
 	}
-	
-	function get_assign(){
+
+	function get_assign() {
 		$this->db->select('id,nickname');
 		$query = $this->db->get('card');
 
-		if($query->result()){
+		if ($query->result()) {
 			return $query->result();
-		}else{
+		} else {
 			return false;
 		}
 	}
-	
-	function get_content($id){
+
+	function get_content($id) {
 		$this->db->select('*');
-		$this->db->where('helpdesk_id',$id);
+		$this->db->where('id_comment',$id);
 		$query = $this->db->get($this->table);
 
-		if($query->result()){
+		if ($query->result()) {
 			return $query->result();
-		}else{
+		} else {
 			return false;
 		}
 	}
-	
-	function get_content_helpdesk($id){
+
+	function get_content_helpdesk($id) {
 		$this->db->select('*');
 		$this->db->where('id',$id);
 		$query = $this->db->get('a_helpdesk');
 
-		if($query->result()){
+		if ($query->result()) {
 			return $query->result();
-		}else{
+		} else {
 			return false;
 		}
 	}
-	
-	function get_assigname($id){
+
+	function get_assigname($id) {
 		$this->db->select('nickname');
 		$this->db->where('id',$id);
 		$query = $this->db->get('card');
 
-		if($query->result()){
+		if ($query->result()) {
 			$tmp = $query->result();
-			if(!empty($tmp)){
-				foreach($tmp as $k){
+			if (!empty($tmp)) {
+				foreach($tmp as $k) {
 					return $k->nickname;
 				}
 			}
-		}else{
+		} else {
 			return false;
 		}
 	}
 
+         function get_comment_not_use() {
+		$this->db->select('id');
+		$this->db->where('active', 1);
+		$query = $this->db->get('a_helpdesk_comment');
+
+		if ($query->result()) {
+			return $query->result();
+		} else {
+			return false;
+		}
+	}
+
+	function get_comment_files($id) {
+		$this->db->select('*');
+		$this->db->where('id_comment',$id);
+		$query = $this->db->get('a_comment_file');
+
+		if ($query->result()) {
+			return $query->result();
+		} else {
+			return false;
+		}
+	}
+
+        function delete_files_not_use($id){
+		$this->db->where('id', $id);
+		$this->db->delete('a_comment_file');
+	}
 }

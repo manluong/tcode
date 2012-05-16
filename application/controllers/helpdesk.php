@@ -26,23 +26,42 @@ class Helpdesk extends MY_Controller {
 	}
 
 	function add() {
-		//Delete helpdesk null
-		$this->delete_helpdesk();
+            //Delete helpdesk null
+            $this->delete_helpdesk();
 
-		$helpdesk_data = array(
-			'subject' => '',
-			'assign_id' => '',
-			'cc_email' => '',
+            //Delete comment null
+            $this->delete_comment();
+
+            //Create Helpdesk null
+            $helpdesk_data = array(
+                    'subject' => '',
+                    'assign_id' => '',
+                    'cc_email' => '',
+                    'group' => '',
+                    'status' => '',
+                    'type' => '',
+                    'priority' => '',
+                    'active' => 1,
+            );
+
+	   $helpdesk_id = $this->HelpdeskM->save($helpdesk_data);
+
+	   //Create Comment null
+	   $comment_data = array(
 			'group' => '',
 			'status' => '',
 			'type' => '',
 			'priority' => '',
-			'active' => 1,
+			'comment' => '',
+			'private' => '',
+			'helpdesk_id' => $id_helpdesk ,
+                        'active' => 1,
 		);
+		$insert_comment_id = $this->Helpdesk_CommentM->save($comment_data);
 
-	   $helpdesk_id = $this->HelpdeskM->save($helpdesk_data);
-
+		//get data for add new helpdesk
 		$content = array(
+			'comment_id' => $insert_comment_id,
 			'helpdesk_id' => $helpdesk_id,
 			'group' =>  $this->Helpdesk_CommentM->get_group(),
 			'status' => $this->Helpdesk_CommentM->get_status(),
@@ -70,7 +89,7 @@ class Helpdesk extends MY_Controller {
 			'comment' => $this->Helpdesk_CommentM->get_content($id),
 			'result' => $result[0],
 			'assign' => $this->Helpdesk_CommentM->get_assign(),
-			'file_attach' => $this->HelpdeskM->get_helpdesk_files($id),
+			'file_attach' => $this->Helpdesk_CommentM->get_comment_files($id),
 		);
 
 		$this->data['content'] = $this->load->view(get_template().'/helpdesk/comment',$content, TRUE);
@@ -78,12 +97,33 @@ class Helpdesk extends MY_Controller {
 
 	}
 
+	function out_put_pdf($id) {
+		$result[0] = array();
+		if($id!=0){
+			$result = $this->Helpdesk_CommentM->get_content_helpdesk($id);
+		}
+		$content = array(
+			'id' => $id,
+			'group' =>  $this->Helpdesk_CommentM->get_group(),
+			'status' => $this->Helpdesk_CommentM->get_status(),
+			'priority' => $this->Helpdesk_CommentM->get_priority(),
+			'type' => $this->Helpdesk_CommentM->get_type(),
+			'comment' => $this->Helpdesk_CommentM->get_content($id),
+			'result' => $result[0],
+			'assign' => $this->Helpdesk_CommentM->get_assign(),
+			'file_attach' => $this->HelpdeskM->get_helpdesk_files($id),
+		);
+
+		$html = $this->load->view(get_template().'/helpdesk/pdf_comment',$content, TRUE);
+		output_pdf($html);
+	}
+
 	function ajax_pagination(){
 		$this->HelpdeskM->offset = $this->input->post('offset');
 		$this->HelpdeskM->limit = 10;
 
 		$data = array(
-			'total' => $this->HelpdeskM->get_total_records(),
+			'total' => $this->HelpdeskM->getTotalRecord(),
 			'result' => $this->HelpdeskM->get_list(),
 		);
 		$this->load->view(get_template().'/helpdesk/ajax_fillter_list',$data);
@@ -143,6 +183,7 @@ class Helpdesk extends MY_Controller {
 	function save_comment(){
 		$id_helpdesk = $this->input->post('id');
 		$data = array(
+                        'id' => $this->input->post('id_comment'),
 			'group' => $this->input->post('group'),
 			'status' => $this->input->post('status'),
 			'type' => $this->input->post('type'),
@@ -150,6 +191,7 @@ class Helpdesk extends MY_Controller {
 			'comment' => $this->input->post('comment'),
 			'private' => $this->input->post('pri'),
 			'helpdesk_id' => $id_helpdesk ,
+                        'active' => 0,
 		);
 		$insert_id = $this->Helpdesk_CommentM->save($data);
 
@@ -193,12 +235,12 @@ class Helpdesk extends MY_Controller {
 		echo $ajax_content;
 	}
 
-	function upload($helpdesk_id){
+	function upload($comment_id){
 
 	   $this->load->library('filel');
 	   $file = $this->filel->save('file', 'Helpdesk');
 		if($helpdesk_id != 0){
-		   $insert_id = $this->HelpdeskM->insert_upload_file($file['hash'],$helpdesk_id);
+		   $insert_id = $this->HelpdeskM->insert_upload_file($file['hash'],$comment_id);
 		   echo $insert_id;
 		}
 	}
@@ -209,15 +251,24 @@ class Helpdesk extends MY_Controller {
 		if(!empty($result)){
 			foreach($result as $k){
 				$this->HelpdeskM->delete($k->id,TRUE);
-				$file = $this->HelpdeskM->get_helpdesk_files($k->id);
+			}
+		}
+	}
+
+        function delete_comment(){
+                $result = $this->Helpdesk_CommentM->get_comment_not_use();
+                if(!empty($result)){
+			foreach($result as $k){
+				$this->Helpdesk_CommentM->delete($k->id,TRUE);
+				$file = $this->Helpdesk_CommentM->get_comment_files($k->id);
 				if(!empty($file)){
 					foreach($file as $v){
 						$this->filel->delete($v->filename);
-						$this->HelpdeskM->delete_files_not_use($v->id);
+						$this->Helpdesk_CommentM->delete_files_not_use($v->id);
 					}
 				}
 			}
 		}
-	}
+        }
 
 }
