@@ -21,19 +21,19 @@
 		var current_page = parseInt(offset)/10 + 1;
 		show_curren_page(current_page);
 		
-		if(offset == 0){
+		if (offset == 0) {
 			$('.prev').addClass('disabled');
-		}else{
+		} else {
 			$('.prev').removeClass('disabled');
 		}
-		if((parseInt(offset)+10) > total){
+		if ((parseInt(offset)+10) > total) {
 			$('.next').addClass('disabled');
-		}else{
+		} else {
 			$('.next').removeClass('disabled');
 		}
 		var to = parseInt(offset) + 1;
 		var from = parseInt(offset) + 10;
-		if(from > total){
+		if (from > total) {
 			from = total;
 		}
 		$('#helpdesk_list_table_info').html('Showing '+to+' to '+from+' of '+total);
@@ -47,46 +47,46 @@
 	function show_curren_page(current_page){
 		$('.page_active_top ').removeClass('hide_page');
 		$('.page_active_bottom ').removeClass('hide_page');
-		if(current_page == 1){//first page
+		if (current_page == 1) {//first page
 			for(var i = 50 ; i <= total ; i+=10){
 				$('#page_top'+i).addClass('hide_page');
 				$('#page_bottom'+i).addClass('hide_page');
 			}
-		}else{
-			if((current_page*10) >= total){//last page
+		} else {
+			if ((current_page*10) >= total){//last page
 				for (var i = (current_page*10) - 60; i >= 0 ; i -=10){
 					$('#page_top'+i).addClass('hide_page');
 					$('#page_bottom'+i).addClass('hide_page');
 				}
-			}else{
-				if(current_page - 1 == 1){//right first page
-					for (i = (current_page*10) + 30 ; i <= total ; i+=10){
+			} else {
+				if (current_page - 1 == 1){//right first page
+					for (i = (current_page*10) + 30 ; i <= total ; i+=10) {
 						$('#page_top'+i).addClass('hide_page');
 						$('#page_bottom'+i).addClass('hide_page');
 					}
 					
-					for (i = (current_page*10) - 40 ; i >= 0 ; i-=10){
+					for (i = (current_page*10) - 40 ; i >= 0 ; i-=10) {
 						$('#page_top'+i).addClass('hide_page');
 						$('#page_bottom'+i).addClass('hide_page');
 					}
-				}else{
-					if((current_page*10)+10 >= total){//left last page
-						for (i = (current_page*10) + 20 ; i <= total ; i+=10){
+				} else {
+					if ((current_page*10)+10 >= total) {//left last page
+						for (i = (current_page*10) + 20 ; i <= total ; i+=10) {
 							$('#page_top'+i).addClass('hide_page');
 							$('#page_bottom'+i).addClass('hide_page');
 						}
 						
-						for (i = (current_page*10) - 50 ; i >= 0 ; i-=10){
+						for (i = (current_page*10) - 50 ; i >= 0 ; i-=10) {
 							$('#page_top'+i).addClass('hide_page');
 							$('#page_bottom'+i).addClass('hide_page');
 						}
-					}else{//between
-						for (i = (current_page*10) + 20 ; i <= total ; i+=10){
+					} else {//between
+						for (i = (current_page*10) + 20 ; i <= total ; i+=10) {
 							$('#page_top'+i).addClass('hide_page');
 							$('#page_bottom'+i).addClass('hide_page');
 						}
 						
-						for (i = (current_page*10) - 40 ; i >= 0 ; i-=10){
+						for (i = (current_page*10) - 40 ; i >= 0 ; i-=10) {
 							$('#page_top'+i).addClass('hide_page');
 							$('#page_bottom'+i).addClass('hide_page');
 						}
@@ -96,11 +96,11 @@
 		}
 	}
 	
-	function ajax_pre(){
+	function ajax_pre() {
 		var temp = $('.active').attr('is_active');
-		if(temp == 0){
+		if (temp == 0) {
 			var offset = 0; 
-		}else{
+		} else {
 			var offset = parseInt(temp) - 10;
 		}
 		
@@ -119,7 +119,7 @@
 		var temp = $('.active').attr('is_active');
 		
 		var offset = parseInt(temp) + 10;
-		if(offset > total){
+		if (offset > total) {
 			offset = offset - 10;
 		}
 		set_active_page(offset);
@@ -221,8 +221,8 @@
 					<div class="dataTables_paginate paging_bootstrap pagination">
 						<ul class="ul_pagination">
 							<li class="prev disabled"><a onclick="ajax_pre()" href="#">Previous</a></li>
-							<?php if($total > 0){
-							for($i = 0 ; $i < $total ; $i+=10){
+							<?php if ($total > 0) {
+							for ($i = 0 ; $i < $total ; $i+=10) {
 								$j = $i/10 + 1 ;
 							?>
 							<li id="page_top<?=$i?>" is_active="<?=$i?>" class="page_active_top <?=($j>5?'hide_page':'')?>"><a  onclick="ajax_pagination(<?=$i?>)"><?=$j?></a></li>
@@ -243,8 +243,8 @@
 							<label class="control-label" for="select01">Group</label>
 							<select  onchange="group_fillter()" name="helpdesk_group" id="helpdesk_group">
 								<option value="">Fillter</option>
-								<?php if(!empty($group)){
-										foreach($group as $k){
+								<?php if (!empty($group)) {
+										foreach($group as $k) {
 								?>
 								<option value="<?=$k->access_gpsub_id?>"><?=$k->access_gpsub_name?></option>
 								<?php }}?>
@@ -255,8 +255,8 @@
 							<label class="control-label" for="select01">Status</label>
 							<select  onchange="status_fillter()" id="helpdesk_status" name="helpdesk_status">
 								<option value="">Fillter</option>
-								<?php if(!empty($status)){
-										foreach($status as $k){
+								<?php if (!empty($status)) {
+										foreach($status as $k) {
 								?>
 								<option value="<?=$k->id?>"><?=$k->name?></option>
 								<?php }}?>
@@ -267,8 +267,8 @@
 							<label class="control-label" for="select01">Type</label>
 							<select  onchange="type_fillter()" id="helpdesk_type" name="helpdesk_type">
 								<option value="">Fillter</option>
-								<?php if(!empty($type)){
-										foreach($type as $k){
+								<?php if (!empty($type)) {
+										foreach($type as $k) {
 								?>
 								<option value="<?=$k->id?>"><?=$k->name?></option>
 								<?php }}?>
@@ -279,8 +279,8 @@
 							<label class="control-label" for="select01">Priority</label>
 							<select onchange="priority_fillter()" id="helpdesk_priority" name="helpdesk_priority">
 								<option value="">Fillter</option>
-								<?php if(!empty($priority)){
-										foreach($priority as $k){
+								<?php if (!empty($priority)) {
+										foreach($priority as $k) {
 								?>
 								<option value="<?=$k->id?>"><?=$k->name?></option>
 								<?php }}?>
@@ -304,8 +304,8 @@
 				</thead>
 				
 				<tbody id="helpdesk_datalist">
-					<?php if(!empty($result)){
-							for($i = 0 ; $i < count($result) ; $i++){
+					<?php if (!empty($result)) {
+							for ($i = 0 ; $i < count($result) ; $i++) {
 					?>
 					<tr class="odd">
 						<td class=" sorting_1"><?=$result[$i][id]?></td>
@@ -326,8 +326,8 @@
 			<div class="dataTables_paginate paging_bootstrap pagination">
 				<ul class="ul_pagination">
 					<li class="prev disabled"><a onclick="ajax_pre()" href="#">Previous</a></li>
-					<?php if($total > 0){
-					for($i = 0 ; $i < $total ; $i+=10){
+					<?php if ($total > 0) {
+					for ($i = 0 ; $i < $total ; $i+=10) {
 						$j = $i/10 + 1 ;
 					?>
 					<li id="page_bottom<?=$i?>" class="page_active_bottom <?=($j>5?'hide_page':'')?>"><a  onclick="ajax_pagination(<?=$i?>)"><?=$j?></a></li>

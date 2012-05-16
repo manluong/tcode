@@ -1,5 +1,5 @@
-<?php if(!empty($result)){
-		for($i = 0 ; $i < count($result) ; $i++){
+<?php if (!empty($result)) {
+		for ($i = 0 ; $i < count($result) ; $i++) {
 ?>
 <tr class="odd">
 	<td class=" sorting_1"><?=$result[$i][id]?></td>

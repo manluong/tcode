@@ -1,5 +1,5 @@
-<?php if(!empty($info)){
-		foreach($info as $k){
+<?php if (!empty($info)) {
+		foreach ($info as $k) {
 ?>
 <li><span class="helpdesk_info_span">Subject</span> : <?=$k->subject?></li>
 <li><span class="helpdesk_info_span">Creator</span> : <a href="#">Customer A</a></li>

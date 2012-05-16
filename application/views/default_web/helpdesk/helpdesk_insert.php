@@ -63,9 +63,9 @@ function submit_comment(){
 	var status_helpdesk = $('#a_helpdesk_comment_status').val();
 	var type_helpdesk = $('#a_helpdesk_comment_type').val();
 	
-	if($('#private').is(':checked')){
+	if ($('#private').is(':checked')) {
 		var pri = 1;
-	}else{
+	} else {
 		var pri = 0	;
 	}
 	
@@ -80,7 +80,7 @@ function submit_comment(){
 			type : type_helpdesk,
 			priority : priority_helpdesk,
 		},function(data){
-			if(data != ''){
+			if (data != '') {
 				window.location='<?=site_url('helpdesk');?>';
 			}
 		}

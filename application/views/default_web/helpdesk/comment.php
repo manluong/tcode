@@ -42,12 +42,12 @@ function submit_comment(){
 	var status = $('#a_helpdesk_comment_status').val();
 	var type = $('#a_helpdesk_comment_type').val();
 	
-	if($('#private').is(':checked')){
+	if ($('#private').is(':checked')) {
 		var pri = 1;
-	}else{
+	} else {
 		var pri = 0	;
 	}
-	if(comment == ''){
+	if (comment == '') {
 		alert('Please input comment !');
 		return false;
 	}
@@ -77,7 +77,7 @@ function submit_comment(){
 		
 		<div id="content_right">
 			<div id="time_curent"><?=date('F d Y g:i A',strtotime($result->created_stamp))?></div>
-			<?php if(!empty($result->modified_stamp)){
+			<?php if (!empty($result->modified_stamp)) {
 				$update_time = time() - strtotime($result->modified_stamp);
 				$update_time = intval($update_time /1200);
 			?>
@@ -102,13 +102,13 @@ function submit_comment(){
 			<li><span class="helpdesk_info_span">Assigned</span> : 
 				<select  name="assign" id="assign">
 					<option value="">something</option>
-					<?php if(!empty($assign)){
-							if(!empty($result->assign_id)){
+					<?php if (!empty($assign)) {
+							if (!empty($result->assign_id)) {
 								$value_assign = $result->assign_id;
-							}else{
+							} else {
 								$value_assign = 0;
 							}
-							foreach($assign as $k){
+							foreach ($assign as $k) {
 					?>
 					<option <?=($value_assign == $k->id?'selected=selected':'' )?> value="<?=$k->id?>"><?=$k->nickname?></option>
 					<?php }}?>
@@ -127,13 +127,13 @@ function submit_comment(){
 				<label class="control-label" for="select01">Group\Department</label>
 				<select  disabled="disabled" name="a_helpdesk_comment_group" id="a_helpdesk_comment_group">
 					<option value="">something</option>
-					<?php if(!empty($group)){
-							if(!empty($result->group)){
+					<?php if (!empty($group)) {
+							if (!empty($result->group)) {
 								$value_group = $result->group;
-							}else{
+							} else {
 								$value_group = 0;
 							}
-							foreach($group as $k){
+							foreach ($group as $k) {
 					?>
 					<option <?=($value_group == $k->access_gpsub_id?'selected=selected':'' )?> value="<?=$k->access_gpsub_id?>"><?=$k->access_gpsub_name?></option>
 					<?php }}?>
@@ -143,13 +143,13 @@ function submit_comment(){
 				<label class="control-label" for="select01">Status</label>
 				<select  disabled="disabled" id="a_helpdesk_comment_status" name="a_helpdesk_comment_status">
 					<option value="">something</option>
-					<?php if(!empty($status)){
-							if(!empty($result->status)){
+					<?php if (!empty($status)) {
+							if (!empty($result->status)) {
 								$value_status = $result->status;
-							}else{
+							} else {
 								$value_status = 0;
 							}
-							foreach($status as $k){
+							foreach ($status as $k) {
 					?>
 					<option <?=($value_status == $k->id?'selected=selected':'' )?> value="<?=$k->id?>"><?=$k->name?></option>
 					<?php }}?>
@@ -159,13 +159,13 @@ function submit_comment(){
 				<label class="control-label" for="select01">Type</label>
 				<select  disabled="disabled" id="a_helpdesk_comment_type" name="a_helpdesk_comment_type">
 					<option value="">something</option>
-					<?php if(!empty($type)){
-							if(!empty($result->type)){
+					<?php if (!empty($type)) {
+							if (!empty($result->type)) {
 								$value_type = $result->type;
-							}else{
+							} else {
 								$value_type= 0;
 							}
-							foreach($type as $k){
+							foreach ($type as $k) {
 					?>
 					<option <?=($value_type == $k->id?'selected=selected':'' )?> value="<?=$k->id?>"><?=$k->name?></option>
 					<?php }}?>
@@ -175,37 +175,40 @@ function submit_comment(){
 				<label class="control-label" for="select01">Priority</label>
 				<select id="a_helpdesk_comment_priority" name="a_helpdesk_comment_priority">
 					<option value="">something</option>
-					<?php if(!empty($priority)){
-							if(!empty($result->priority)){
+					<?php if (!empty($priority)) {
+							if (!empty($result->priority)) {
 								$value_pri = $result->priority;
-							}else{
+							} else {
 								$value_pri= 0;
 							}
-							foreach($priority as $k){
+							foreach ($priority as $k) {
 					?>
 					<option <?=($value_pri == $k->id?'selected=selected':'' )?> value="<?=$k->id?>"><?=$k->name?></option>
 					<?php }}?>
 				</select>
 			</li>
 
-			<li class="controls" style="width:100%;">
+			<li class="controls">
 				<textarea rows="3" id="a_helpdesk_comment_comment" value="" class="input-xlarge"></textarea>
 			</li>
-			<li class="controls" style="width:100%;">
+			<li class="controls" style="width:577px;">
 				<label class="checkbox">
                 <input type="checkbox" value="" id="private">
                 Private comments (Only staff see this comments)
 				</label>
 			</li>
-			<li class="controls">
+			<li class="controls" style="width:400px;">
 				<span style="width:597px;float:left;">
-					<?php if(!empty($file_attach)){
-							foreach($file_attach as $k){
+					<?php if (!empty($file_attach)) {
+							foreach ($file_attach as $k) {
 					?>
 					<a href="http://apple.8force.net/file/read/<?=$k->filename?>" class="btn" target="_blank">File Attach</a>
 					<?php }}?>
 				</span>
 				<div onclick="return submit_comment();" class="btn" >Submit</div>
+			</li>
+			<li class="controls">
+				<a target="_blank" href="<?=site_url('helpdesk/out_put_pdf');?>/<?=$id?>" class="btn">Print PDF File</a>
 			</li>
 		</ul>
 	</div>
@@ -214,8 +217,8 @@ function submit_comment(){
 		<div id="comment_title"><span id="comment_h1">Comments</span>Comment only | Show all comment</div>
 		<div id="comment_content">
 			<div id="ajax_comment_left">
-				<?php if(!empty($comment)){
-					foreach($comment as $k){
+				<?php if (!empty($comment)) {
+					foreach ($comment as $k) {
 					$date = date('F d Y g:i A',strtotime($k->created_stamp));
 				?>
 				<div id="comment_content_left">
