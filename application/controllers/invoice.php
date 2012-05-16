@@ -83,6 +83,36 @@ class Invoice extends MY_Controller {
 		$this->_do_output();
 	}
 
+	function print_invoice($id) {
+		$invoice = $this->InvoiceM->get($id);
+		$data = array(
+			'invoice' => $invoice,
+			'invoice_items' => $this->InvoiceItemM->get_by_invoice_id($id),
+			'customer_name' => '',
+			'invoice_terms' => ''
+		);
+
+		if ($invoice['customer_card_id']) {
+			$customer = $this->InvoiceM->get_customer_by_id($invoice['customer_card_id']);
+			if ($customer) {
+				$data['customer_name'] = $customer->nickname;
+			}
+		}
+
+		if ($invoice['terms_id']) {
+			$terms = $this->InvoiceM->get_terms_by_id($invoice['terms_id']);
+			if ($terms) {
+				$data['invoice_terms'] = $terms->content;
+			}
+		} else {
+			$data['invoice_terms'] = $invoice['terms_content'];
+		}
+
+		$content = $this->load->view(get_template().'/invoice/print', $data, TRUE);
+		echo $content;
+	}
+
+
 	function edit($id) {
 		$invoice = $this->InvoiceM->get($id);
 		$data = array(
@@ -146,7 +176,7 @@ class Invoice extends MY_Controller {
 					'unit_price' => $post['unit_price'][$index],
 					'quantity' => $post['qty'][$index],
 					'discount' => $post['discount'][$index],
-					'tax_id' => $post['tax'][$index],
+					'tax_id' => 0,
 					'total' => $post['total'][$index],
 					'price_type' => $post['price_type'][$index],
 					'subscription_start_stamp' => $this->format_date($post['from'][$index]),
@@ -219,7 +249,7 @@ class Invoice extends MY_Controller {
 					'unit_price' => $post['unit_price'][$index],
 					'quantity' => $post['qty'][$index],
 					'discount' => $post['discount'][$index],
-					'tax_id' => $post['tax'][$index],
+					'tax_id' => 0,
 					'total' => $post['total'][$index],
 					'price_type' => $post['price_type'][$index],
 					'subscription_start_stamp' => $this->format_date($post['from'][$index]),

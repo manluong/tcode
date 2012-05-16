@@ -1,9 +1,11 @@
 .left {
 	float: left;
 }
+
 .right {
 	float: right;
 }
+
 .clear {
 	clear: both;
 }
@@ -17,6 +19,7 @@
 a {
 	text-decoration: none;
 }
+
 a:hover {
 	text-decoration: underline;
 }
@@ -25,37 +28,47 @@ a:hover {
 	float: left;
 	margin-right: 20px;
 }
+
 #search_main span {
 	margin-right: 5px;
 }
+
 #search_main .block {
 	display: block;
 }
+
 #search_customer input {
 	margin-top: 18px;
 	width: 220px;
 }
+
 #search_date_range select {
 	margin-top: 18px;
 	width: 120px;
 }
+
 #search_date_range input {
 	margin-top: 18px;
 	width: 100px;
 }
+
 #search_invoice_range input {
 	margin-top: 5px;
 }
+
 #search_more td.first {
 	width: 120px;
 }
+
 #slider {
 	margin-top: 15px;
 	width: 90%;
 }
+
 #more_options {
 	margin: 10px 0 0 785px;
 }
+
 #search_btn {
 	margin: 20px 0 0 120px;
 }
@@ -63,29 +76,56 @@ a:hover {
 ul {
 	list-style: none outside none;
 }
+
 #invoice_nav {
 	margin: 15px 0 30px 0;
 	padding-bottom: 10px;
 }
+
 #invoice_nav ul.nav_left {
 	margin: 0;
 }
+
 #invoice_nav ul.nav_left li {
 	float: left;
 	margin: 0 0 0 5px;
 }
+
 #invoice_nav li.main {
 	font-size: 220%;
 	font-weight: bold;
 }
+
 #invoice_nav ul.nav_right {
 	float: right;
 }
+
 #invoice_nav ul.nav_right li {
 	float: left;
 	margin-left: 20px;
 	font-size: 150%;
 }
+
+#view_company {
+	width: 40%;
+}
+
+#invoice_header {
+	font-size: 250%;
+	font-weight: bold;
+}
+
+#view_customer {
+	background-color: #DDDDDD;
+	padding: 5px;
+	width: 40%;
+}
+
+#view_detail {
+	margin-right: 30px;
+	width: 270px;
+}
+
 #invoice_info {
 	background-color: #EEEEEE;
 	background-image: -moz-linear-gradient(center top , #F5F5F5 0%, #EEEEEE 100%);
@@ -96,91 +136,166 @@ ul {
 	margin: 20px 0;
 	width: 100%;
 }
+
 #invoice_info #form_show li {
 	float: left;
 	margin-top: 10px;
 	width: 100%;
 }
-#invoice_info #form_change li {
-	float: left;
-	margin-top: 16px;
-	width: 100%;
-}
-#invoice_item_list input {
-	width: 100%;
-}
-#invoice_item_list select {
-	width: 100%;
-}
+
 .input_table {
 	width: 100%;
 }
+
 #invoice_select {
 	height: 280px;
 	padding: 20px 0 0 10px;
 }
+
 #invoice_select ul li {
 	float: left;
 	margin-right: 20px;
 }
+
 .invoice_info_span {
 	margin-left: 0 !important;
 	min-height: 22px;
 	width: 100px !important;
 }
+
 .invoice_info_link {
 	float: right;
 	margin-right: 25px;
 }
+
 #total {
 	margin: 20px 100px 40px 0;
 	width: 200px;
 }
+
 #total span {
 	width: 100px;
 }
+
 #total .right {
 	text-align: right;
 }
+
 .terms {
 	width: 480px;
 	margin-right: 10px;
 }
+
 .terms span {
 	height: 28px;
 }
+
 .terms textarea {
 	height: 150px;
 	width: 100%;
 }
+
 .terms textarea.notes {
 	margin-top: 19px;
 }
-.invoice_item div {
-	float: left;
-	margin-left: 5px;
-	padding: 0 5px;
-	width: 100px;
-}
-div.invoice_item_sub {
-	margin-left: 150px;
+
+#invoice_item_list input, #invoice_item_list select {
+	background-color: #EEEEEE;
 	width: 100%;
 }
+
+.invoice_item {
+	clear: both;
+	padding: 7px 0;
+	width: 100%;
+}
+
+.invoice_item.header div {
+	background-color: #E0E0E0;
+	font-weight: bold;
+	margin: 0px;
+	padding: 10px 5px;
+}
+
+.invoice_item div {
+	float: left;
+	margin-left: 1px;
+	padding: 0 5px;
+}
+
+div.invoice_item_sub {
+	margin: -8px 0 0 51px;
+	width: 100%;
+}
+
 .invoice_item_sub div {
 	float: left;
-	margin-left: 5px;
+	margin-left: 1px;
 	padding: 0 5px;
+}
+
+.invoice_item .col-1 {
+	width: 45px;
+}
+
+.invoice_item .col-2 {
+	width: 200px;
+}
+
+.invoice_item .col-3 {
+	width: 400px;
+}
+
+.invoice_item .col-4 {
 	width: 100px;
 }
+
+.invoice_item .col-5 {
+	width: 100px;
+}
+
+.invoice_item .col-6 {
+	padding: 4px 0 0 10px;
+	width: 100px;
+}
+
+.invoice_item .col-7 {
+	width: 80px;
+}
+
+.invoice_item .col-8 {
+	width: 80px;
+}
+
+.invoice_item .col-9 {
+	width: 140px;
+}
+
+.invoice_item .col-10 {
+	width: 140px;
+}
+
+.invoice_item .col-11 {
+	width: 100px;
+}
+
+.invoice_item .col-12 {
+	padding: 4px 0 0 10px;
+	width: 100px;
+}
+
 .header span {
 	font-weight: bold;
 }
+
 div.act {
 	width: 40px;
 }
+
 div.desc {
 	width: 300px;
 }
+
 .div_btn {
 	margin: 0 auto;
 	padding: 10px 0 50px 0;
@@ -200,25 +315,3 @@ div.desc {
 	margin-left: 10px;
 	width: 80px;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

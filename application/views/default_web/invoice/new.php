@@ -56,76 +56,86 @@
 
 <div id="invoice_item_list">
 	<div class="invoice_item header clear">
-		<div><span>Product</span></div>
-		<div class="desc"><span>Description</span></div>
-		<div><span>Unit Price</span></div>
-		<div><span>Qty</span></div>
-		<div><span>Discount</span></div>
-		<div><span>Tax</span></div>
-		<div><span>Total</span></div>
-		<div class="act"></div>
+		<div class="col-1">&nbsp;</div>
+		<div class="col-2">Product</div>
+		<div class="col-3">Description</div>
+		<div class="col-4">Unit Price</div>
+		<div class="col-5">Qty</div>
+		<div class="col-6">Total</div>
 	</div>
 </div>
 
 <div id="invoice_item_template" style="display: none;">
 	<div class="invoice_item temp clear">
-		<div>
+		<div class="col-1">
+			<a href="#" class="remove">x</a>
+			<a href="#" class="more">+</a>
+		</div>
+		<div class="col-2">
 			<input type="hidden" name="invoice_item_id[]" />
 			<input type="hidden" name="product_id[]" class="product_id" />
 			<input type="text" name="product_name[]" class="product_name" />
 		</div>
-		<div class="desc"><input type="text" name="description[]" /></div>
-		<div><input type="text" name="unit_price[]" class="unit_price cal" /></div>
-		<div><input type="text" name="qty[]" class="qty cal" /></div>
-		<div><input type="text" name="discount[]" class="discount cal" /></div>
-		<div><input type="text" name="tax[]" class="tax cal" /></div>
-		<div><input type="text" name="total[]" class="item_total" /></div>
-		<div class="act">
-			<a href="#" class="more">m</a>
-			<a href="#" class="add">+</a>
-			<a href="#" class="remove">x</a>
-		</div>
-		<div class="invoice_item_sub header clear" style="display: none;">
-			<div><span>Price Type</span></div>
-			<div><span>From</span></div>
-			<div><span>To</span></div>
-			<div><span>Duration</span></div>
+		<div class="col-3"><input type="text" name="description[]" /></div>
+		<div class="col-4"><input type="text" name="unit_price[]" class="unit_price cal" /></div>
+		<div class="col-5"><input type="text" name="qty[]" class="qty cal" /></div>
+		<div class="col-6">
+			<input type="hidden" name="total[]" class="item_total" />
+			<label class="item_total_label"></label>
 		</div>
 		<div class="invoice_item_sub clear" style="display: none;">
-			<div>
-				<select name="price_type[]">
-					<option value="">-- Select --</option>
-					<?php foreach ($price_type as $r): ?>
-					<option value="<?php echo $r->a_product_pricetype_id ?>"><?php echo $r->a_product_pricetype_name ?></option>
-					<?php endforeach ?>
-				</select>
-			</div>
-			<div><input type="text" name="from[]" class="item_datepicker" /></div>
-			<div><input type="text" name="to[]" class="item_datepicker" /></div>
-			<div>
+			<div class="col-7"><input type="text" name="from[]" class="item_datepicker" /></div>
+			<div class="col-8"><input type="text" name="to[]" class="item_datepicker" /></div>
+			<div class="col-9">
 				<select name="duration[]">
-					<option value="">-- Select --</option>
+					<option value="">Period</option>
 					<?php foreach ($duration_type as $r): ?>
 					<option value="<?php echo $r->a_product_durationtype_id ?>"><?php echo $r->a_product_durationtype_name ?></option>
 					<?php endforeach ?>
 				</select>
 			</div>
+			<div class="col-10">
+				<select name="price_type[]">
+					<option value="">Price Type</option>
+					<?php foreach ($price_type as $r): ?>
+					<option value="<?php echo $r->a_product_pricetype_id ?>"><?php echo $r->a_product_pricetype_name ?></option>
+					<?php endforeach ?>
+				</select>
+			</div>
+			<div class="col-11"><input type="text" name="discount[]" class="discount cal" /></div>
+			<div class="col-12">
+				<input type="checkbox" style="width: auto" /> GST
+				<input type="checkbox" style="width: auto" /> VAT
+			</div>
 		</div>
 	</div>
 </div>
-
-<div id="total" class="right">
-	<span class="left">Sub Total</span><span id="sub_total" class="right"></span>
-	<br />
-	<span class="left">Tax Total</span><span id="tax_total" class="right"></span>
-	<br />
-	<br />
-	<span class="left">Invoice Total</span><span id="invoice_total" class="right"></span>
-	<br />
-	<span class="left">Paid</span>
-	<br />
-	<br />
-	<span class="left">Balance</span>
+<br />
+<div class="clear">
+	<div class="apply left">
+		<input id="add_row" type="button" class="btn" value="ADD ROW" />
+		Apply to all items:
+		<input type="text" id="apply_all_discount" style="width: 100px;" />
+		<input type="checkbox" id="apply_all_gst" data-tax="gst" /> GST
+		<input type="checkbox" id="apply_all_vat" data-tax="vat" /> VAT
+	</div>
+	<div id="total" class="right">
+		<span class="left">Sub Total</span><span id="sub_total" class="right"></span>
+		<br />
+		<!-- <span class="left">TAX - GST(5%)</span><span id="tax_gst" class="right"></span>
+		<br />
+		<span class="left">TAX - VAT(10%)</span><span id="tax_vat" class="right"></span>
+		<br /> -->
+		<span class="left">Discount</span><span id="discount_total" class="right"></span>
+		<br />
+		<br />
+		<span class="left">Invoice Total</span><span id="invoice_total" class="right"></span>
+		<br />
+		<span class="left">Paid</span>
+		<br />
+		<br />
+		<span class="left">Balance</span>
+	</div>
 </div>
 
 <div class="clear">

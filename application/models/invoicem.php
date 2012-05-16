@@ -2,6 +2,39 @@
 
 class InvoiceM extends MY_Model {
 
+	public $data_fields = array(
+		'customer_card_id' => array(
+			'type' => 'id'
+		),
+		'invoice_stamp' => array(
+			'type' => 'datetime'
+		),
+		'payment_due_stamp' => array(
+			'type' => 'datetime'
+		),
+		'currency' => array(
+			'type' => 'text'
+		),
+		'tax_id' => array(
+			'type' => 'id'
+		),
+		'purchase_order_number' => array(
+			'type' => 'numeric'
+		),
+		'acc_code' => array(
+			'type' => 'text'
+		),
+		'memo' => array(
+			'type' => 'text'
+		),
+		'terms_id' => array(
+			'type' => 'id'
+		),
+		'terms_content' => array(
+			'type' => 'text'
+		)
+	);
+
 	function __construct() {
 		parent::__construct();
 
