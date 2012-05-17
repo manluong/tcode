@@ -28,7 +28,7 @@ class InvoiceItemM extends MY_Model {
 			'type' => 'numeric'
 		),
 		'discount' => array(
-			'type' => 'numeric'
+			'type' => 'text'
 		),
 		'total' => array(
 			'type' => 'numeric'

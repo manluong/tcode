@@ -39,19 +39,6 @@
 			<span class="invoice_info_span">PO Number</span>
 			<input type="text" name="po_number" value="<?php echo $invoice['purchase_order_number'] ?>" />
 		</li>
-		<li>
-			<span class="invoice_info_span">Tax</span>
-			<select name="tax_id">
-				<option value="">---- Select ----</option>
-				<?php foreach ($tax as $id => $name): ?>
-				<option value="<?php echo $id ?>"<?php echo ($id == $invoice['tax_id']) ? ' selected="selected"' : '' ?>><?php echo $name ?></option>
-				<?php endforeach ?>
-			</select>
-		</li>
-		<li>
-			<span class="invoice_info_span">Currency</span>
-			<input type="text" name="currency" value="<?php echo $invoice['currency'] ?>" />
-		</li>
 	</ul>
 </div>
 
@@ -69,6 +56,7 @@
 		<div class="col-1">
 			<a href="#" class="remove">x</a>
 			<a href="#" class="more">+</a>
+			<a href="#" class="move">m</a>
 		</div>
 		<div class="col-2">
 			<input type="hidden" name="invoice_item_id[]" value="<?php echo $invoice_item->id ?>" />
@@ -80,7 +68,7 @@
 		<div class="col-5"><input type="text" name="qty[]" value="<?php echo $invoice_item->quantity ?>" class="qty cal" /></div>
 		<div class="col-6">
 			<input type="hidden" name="total[]" value="<?php echo (float)$invoice_item->total ?>" class="item_total" />
-			<label class="item_total_label"><?php echo (float)$invoice_item->total ?></label>
+			<label class="item_total_label"><?php echo '$'.number_format($invoice_item->total, 2) ?></label>
 		</div>
 		<div class="invoice_item_sub clear"<?php echo ($invoice_item->price_type) ? '' : ' style="display: none;"' ?>>
 			<div class="col-7"><input type="text" name="from[]" value="<?php echo date('Y-m-d', strtotime($invoice_item->subscription_start_stamp)) ?>" class="item_datepicker" /></div>
@@ -116,6 +104,7 @@
 		<div class="col-1">
 			<a href="#" class="remove">x</a>
 			<a href="#" class="more">+</a>
+			<a href="#" class="move">m</a>
 		</div>
 		<div class="col-2">
 			<input type="hidden" name="invoice_item_id[]" />
@@ -150,8 +139,8 @@
 			</div>
 			<div class="col-11"><input type="text" name="discount[]" class="discount cal" /></div>
 			<div class="col-12">
-				<input type="checkbox" style="width: auto" /> GST
-				<input type="checkbox" style="width: auto" /> VAT
+				<input type="checkbox" class="tax-gst" style="width: auto" /> GST
+				<input type="checkbox" class="tax-vat" style="width: auto" /> VAT
 			</div>
 		</div>
 	</div>

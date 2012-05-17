@@ -19,7 +19,7 @@ class InvoiceM extends MY_Model {
 			'type' => 'id'
 		),
 		'purchase_order_number' => array(
-			'type' => 'numeric'
+			'type' => 'text'
 		),
 		'acc_code' => array(
 			'type' => 'text'
