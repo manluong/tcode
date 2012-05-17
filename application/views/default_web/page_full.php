@@ -55,9 +55,9 @@
 					<div class="userDropdownList">
 						<div class="arrow"></div>
 						<ul>
-							<li><a class="settings" href="#">Settings</a></li>
+							<li><a class="settings" href="/setting">Settings</a></li>
 							<li><a class="support" href="#">Support</a></li>
-							<li><a class="logout last" href="#">Logout</a></li>
+							<li><a class="logout last" href="/access/logout">Logout</a></li>
 						</ul>
 					</div>
 				</div>
