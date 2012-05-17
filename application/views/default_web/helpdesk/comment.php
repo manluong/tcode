@@ -1,6 +1,7 @@
 <script type="text/javascript" src="/resources/addon/plupload/js/plupload.full.js"></script>
 <script type="text/javascript" src="/resources/addon/plupload/js/jquery.plupload.queue/jquery.plupload.queue.js"></script>
 <link href="/resources/addon/plupload/js/jquery.plupload.queue/css/jquery.plupload.queue.css" media="screen" rel="stylesheet" type="text/css" />
+<link href="/resources/template/default_web/helpdesk.css" media="screen" rel="stylesheet" type="text/css" />
 
 <script type="text/javascript">
 function showRequest(formData, jqForm, options) {
@@ -220,7 +221,7 @@ function submit_comment(){
 				</span>
 				<div onclick="return submit_comment();" class="btn" >Submit</div>
 			</li>
-                        
+
 			<li style="margin-top:10px;" class="controls">
 				<a target="_blank" href="<?=site_url('helpdesk/out_put_pdf');?>/<?=$id?>" class="btn">Download PDF File</a>
 			</li>

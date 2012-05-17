@@ -1,5 +1,5 @@
 <div id="breadcrumb">
-	<a href="#" class="main"><?=$active_app_name;?></a> <a href="#" id="favoriteIcon" class="on" title="Remove from favorites"></a>
+	<a href="#" class="main"><?=$active_app_name;?></a> <!--<a href="#" id="favoriteIcon" class="on" title="Remove from favorites"></a>-->
 </div>
 
 <?php
