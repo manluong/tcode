@@ -1,8 +1,14 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Docs extends MY_Controller {
-	private $_views_data = array();
-	private $_upload_status = FALSE;
+	private $icons = array(
+		'folder_icon' => '<i class="icon-folder-open"></i>',
+		'docs_icon' => '<i class="icon-file"></i>',
+		'tick_icon' => '<i class="icon-ok-sign"></i>',
+		'cross_icon' => '<i class="icon-remove-sign"></i>',
+		'loader_icon' => '<i class="icon-time"></i>',
+		'error_icon' => '<i class="icon-exclamation-sign"></i>',
+	);
 
 	function __construct() {
 		parent::__construct();
@@ -10,93 +16,7 @@ class Docs extends MY_Controller {
 		$this->load->library('CommentsL');
 
 		$this->load->model('DocsM');
-
-		$this->_views_data['folder_icon'] = '<img src="/resources/template/'.get_template().'/images/icons/16/folder-small-horizontal.png">';
-		$this->_views_data['docs_icon'] = '<img src="/resources/template/'.get_template().'/images/icons/16/document-small.png">';
-		$this->_views_data['tick_icon'] = '<img src="/resources/template/'.get_template().'/images/icons/16/tick-circle.png" id="tick-icon">';
-		$this->_views_data['cross_icon'] = '<img src="/resources/template/'.get_template().'/images/icons/16/cross-circle.png" id="cross-icon">';
-		$this->_views_data['loader_icon'] = '<img src="/resources/template/'.get_template().'/images/ajax-loader.gif" style="display:none;" id="loader-icon">';
-		$this->_views_data['error_icon'] = '<img src="/resources/template/'.get_template().'/images/icons/16/exclamation-red.png" style="display:none;" id="error-icon">';
 	}
-
-	//TODO: might be deleted
-	function get_object($uri) {
-		$object = S3::getObject($this->eightforce_config['s3_bucket'], $uri, FALSE);
-		return $object;
-	}
-
-	/*
-	function index() {
-		redirect('/docs/view/0/list-view');
-	}*/
-
-	function file() {
-		$vars['url'] = $this->url;
-		$vars['page'] = get_template().'/docs/docs_file_html';
-
-		$this->data['content'] = $this->load->view(get_template().'/docs/docs_view',$vars,TRUE);
-
-		$this->_do_output();
-	}
-
-	// Called by view in tbuilder
-	function index() {
-		/*
-		if ($this->url['subaction'] === 'folder-view') {
-
-		} else {
-			$folder_exists = $this->DocsM->does_folder_exists($this->url['id_plain']);
-			if ( ! empty ($folder_exists)) {
-
-			} else {
-				// Does user has a root directory
-				$root_dir = $this->DocsM->get_root_dir();
-				if ( ! empty($root_dir)) {
-					redirect('/docs/view/'.encode_id($root_dir['a_docs_id']).'/list-view');
-				} else {
-					// Create root folder
-					$this->_create_folder(0, $this->UserM->info['cardid'], 'root');
-					redirect('/docs/view/'.encode_id($id).'/list-view');
-				}
-			}
-		}
-*/
-
-
-		$vars['url'] = $this->url;
-		$vars['page'] = get_template().'/docs/docs_view_html';
-		$this->data['content'] = $this->load->view(get_template().'/docs/docs_view', $vars, TRUE);
-
-		$this->_do_output();
-	}
-
-	function view() {
-		$vars['url'] = $this->url;
-		$vars['page'] = get_template().'/docs/docs_view_html';
-
-		$this->data['content'] = $this->load->view(get_template().'/docs/docs_view', $vars, TRUE);
-
-		$this->_do_output();
-	}
-
-	/**
-	 * Returns raw json values of directory contents
-	 */
-	//TODO: does not seem to be in use, possible to delete
-	function get_dir_contents_raw() {
-		$sub_folders = $this->DocsM->get_sub_folders($this->url['id_plain']);
-		if ($this->url['id_plain'] !== '1') {
-			$parent = $this->DocsM->get_parent_id($this->url['id_plain']);
-		}
-		$docs = $this->DocsM->get_docs($this->url['id_plain']);
-		$json = array('parent' => isset($parent) ? $parent : '',
-			'sub_folder' => $sub_folders, 'docs' => $docs);
-		$this->output->set_content_type('application/json')
-			->set_output(json_encode($json));
-	}
-
-
-
 
 	function pdfPreview() {
 		require_once('resources/addon/docs/AdaptiveUI1.3.5/common.php');
@@ -228,6 +148,65 @@ class Docs extends MY_Controller {
 
 
 	// updated by erik
+	function index() {
+		/*
+		if ($this->url['subaction'] === 'folder-view') {
+
+		} else {
+			$folder_exists = $this->DocsM->does_folder_exists($this->url['id_plain']);
+			if ( ! empty ($folder_exists)) {
+
+			} else {
+				// Does user has a root directory
+				$root_dir = $this->DocsM->get_root_dir();
+				if ( ! empty($root_dir)) {
+					redirect('/docs/view/'.encode_id($root_dir['a_docs_id']).'/list-view');
+				} else {
+					// Create root folder
+					$this->_create_folder(0, $this->UserM->info['cardid'], 'root');
+					redirect('/docs/view/'.encode_id($id).'/list-view');
+				}
+			}
+		}
+		*/
+
+
+		$vars = $this->icons;
+		$vars['url'] = $this->url;
+
+		$this->data['content'] = '<div>';
+		$this->data['content'] .= $this->load->view(get_template().'/docs/docs_view_html', $vars, TRUE);
+		$this->data['content'] .= $this->load->view(get_template().'/docs/docs_js', $vars, TRUE);
+		$this->data['content'] .= '<div>';
+
+		$this->_do_output();
+	}
+
+	function view() {
+		$vars = $this->icons;
+		$vars['url'] = $this->url;
+
+		$this->data['content'] = '<div>';
+		$this->data['content'] .= $this->load->view(get_template().'/docs/docs_view_html', $vars, TRUE);
+		$this->data['content'] .= $this->load->view(get_template().'/docs/docs_js', $vars, TRUE);
+		$this->data['content'] .= '<div>';
+
+		$this->_do_output();
+	}
+
+
+	function file() {
+		$vars = $this->icons;
+		$vars['url'] = $this->url;
+
+		$this->data['content'] = '<div>';
+		$this->data['content'] .= $this->load->view(get_template().'/docs/docs_file_html', $vars, TRUE);
+		$this->data['content'] .= $this->load->view(get_template().'/docs/docs_js', $vars, TRUE);
+		$this->data['content'] .= '<div>';
+
+		$this->_do_output();
+	}
+
 	function ajax_create_folder() {
 		$folder = $this->input->post('name');
 		$parent_folder = $this->input->post('parent_folder');
@@ -246,7 +225,7 @@ class Docs extends MY_Controller {
 				->output_json();
 	}
 
-		/**
+	/**
 	 * Returns json details of document
 	 */
 	function ajax_get_file_details() {
@@ -258,22 +237,6 @@ class Docs extends MY_Controller {
 					->output_json();
 			return;
 		}
-
-		/*
-		 * TODO: This block does not seem to server any purpose, delete after confirmation
-		switch ($docs_details['mime']) {
-			case 'image/gif':
-			case 'image/jpeg':
-			case 'image/png':
-				$s3object = html_entity_decode($this->filel->get_url($docs_details['hash']));
-				//$s3object = '<img src="'.$this->_views_data['s3_object'].'">';
-				break;
-			case 'application/pdf':
-				$s3object = $this->get_object($this->eightforce_config['s3_bucket'], $this->format_dirpath($docs_details['a_docs_dir_dirpath'],$docs_details['a_docs_ver_filename']));
-				$this->save_to_file($s3object->body, $docs_details['a_docs_id'].'.pdf');
-				break;
-		}
-		*/
 
 		$data = array(
 			'docs_details' => $docs_details,
@@ -372,19 +335,19 @@ class Docs extends MY_Controller {
 
 		if ($this->url['id_plain'] !== '0') {
 			$parent_id = $this->DocsM->get_dir_parent_id($this->url['id_plain']);
-			$parent = anchor('/docs/view/'.encode_id($parent_id).'/list-view', 'prev', 'class="ajax"');
+			$parent = anchor('/docs/view/'.encode_id($parent_id).'/list-view', '<i class="icon-arrow-left"></i> Previous Folder', 'class="ajax"');
 			array_push($rows, array($parent, '--', '--'));
 		}
 
 		$sub_folders = $this->DocsM->get_subdir($this->url['id_plain']);
 		foreach ($sub_folders as $subfolder) {
-			$name = anchor('/docs/view/'.encode_id($subfolder['id']).'/list-view', $subfolder['name'], 'class="ajax"');
+			$name = anchor('/docs/view/'.encode_id($subfolder['id']).'/list-view', '<i class="icon-folder-open"></i> '.$subfolder['name'], 'class="ajax"');
 			array_push($rows, array($name, '--', '--'));
 		}
 
 		$docs = $this->DocsM->get_dir_contents($this->url['id_plain']);
 		foreach ($docs as $doc) {
-			$link = anchor('/docs/file/'.encode_id($doc['id']).'/v', $doc['display_name'], 'class="ajax"');
+			$link = anchor('/docs/file/'.encode_id($doc['id']).'/v', '<i class="icon-file"></i> '.$doc['display_name'], 'class="ajax"');
 			array_push($rows, array($link, byte_size($doc['file_size']), $doc['created_stamp']));
 		}
 

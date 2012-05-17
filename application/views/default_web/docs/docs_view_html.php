@@ -1,3 +1,5 @@
+<div class="container">
+
 <form>
 	<div id="uploader">
 		<p>Your browser doesn't have Flash, Silverlight, Gears, BrowserPlus or HTML5 support.</p>
@@ -22,3 +24,5 @@
 	</tr>
 	</tbody>
 </table>
+
+</div>
