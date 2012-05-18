@@ -5,7 +5,6 @@ class Invoice extends MY_Controller {
 	function __construct() {
 		parent::__construct();
 
-		$this->load->model('DS_Invoice');
 		$this->load->model('InvoiceM');
 		$this->load->model('InvoiceItemM');
 	}
