@@ -8,6 +8,41 @@ class Card extends MY_Controller {
 		$this->load->model('CardM');
 	}
 
+	function index() {
+		$view_data = array(
+			'list' => $this->CardM->get_list(),
+		);
+
+		$this->data['content'] = $this->load->view(get_template().'/card/index', $view_data, TRUE);
+		$this->_do_output();
+	}
+
+	function view($id) {
+		$view_data = $this->CardM->get($id);
+
+		$this->data['content'] = $this->load->view(get_template().'/card/view', $view_data, TRUE);
+		$this->_do_output();
+	}
+
+	function edit($id) {
+		$view_data = $this->CardM->get($id);
+
+		$this->data['content'] = $this->load->view(get_template().'/card/edit', $view_data, TRUE);
+		$this->_do_output();
+	}
+
+	function save() {
+		//$id = $this->CardM->save();
+		echo '<pre>', print_r($_POST, TRUE), '</pre>';
+		die();
+		if ($id == FALSE) {
+			echo 'error saving.';
+			echo '<pre>', print_r($this->CardM->errors, TRUE), '</pre>';
+		} else {
+			redirect('/card/view'.$id);
+		}
+	}
+
 	function ajax_get_list() {
 		$limit = $this->input->post('limit');
 		$offset = $this->input->post('offset');
@@ -25,36 +60,6 @@ class Card extends MY_Controller {
 				->set_details($list)
 				->output_json();
 	}
-
-	function x_card() {
-		$details = array(
-			'columns' => $this->DS_Card->get_datatable_fields(),
-			'data' => $this->DS_Card->get_datatable_data(),
-			'ids' => $this->DS_Card->get_list_ids(),
-			'setting' => array(
-				'hidetitle' => 0,
-			),
-			'listlinks' => array(
-				array(
-					'target' => '',
-					'text' => 'View',
-					'type' => 'page',
-					'url' => '/card/view/{{id}}/v',
-					'style' => 'default',
-					'icon' => '',
-				)
-			),
-		);
-
-		$this->RespM->set_message()
-				->set_type('list')
-				->set_template('')
-				->set_success(true)
-				->set_title('Contacts List')
-				->set_details($details)
-				->output_json();
-	}
-
 
 	function ajax_edit() {
 		$id = $this->input->post('id');
@@ -94,19 +99,25 @@ class Card extends MY_Controller {
 				->output_json();
 	}
 
-	function ajax_edit_save() {
-		$result = $this->DS_Card->set_subaction('e')
-					->save();
+	function ajax_save() {
+		$id = $this->CardM->save();
 
-		$message = $this->DS_Card->get_save_errors();
+		$success = ($id !== FALSE);
+
+		$message = '';
+		$details = '';
+		if (!$success) {
+			$message = $this->CardM->get_error_string();
+			$details = $this->CardM->error_fields;
+		}
 
 		$this->RespM->set_message($message)
 				->set_type('form')
 				->set_template('')
 				//->set_template('custom_viewcard')//custom template
-				->set_success($result)
+				->set_success($success)
 				->set_title('Card Info Dataset')
-				->set_details()
+				->set_details($details)
 				->output_json();
 	}
 }
