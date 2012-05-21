@@ -2,15 +2,13 @@
 
 class LogM extends CI_Model {
 
-	private $_url = array();
 	private $_core_apps = array();
 	private $_log_data = array();
 
 	function __construct() {
 		parent::__construct();
-		$CI =& get_instance();
-		$this->_url =& $CI->url;
-		$this->_log_data =&  $CI->log_data; //element_dgroup_save access the same data
+
+		$this->_log_data =  $this->log_data; //element_dgroup_save access the same data
 		$this->_core_apps = array('card', 'client', 'vendor', 'staff', 'invoice', 'product');
 	}
 
@@ -61,7 +59,7 @@ class LogM extends CI_Model {
             'action' => $this->url['action'],
             'subaction' => $this->url['subaction'],
 			'stamp' => get_current_stamp(),
-            'app_data_id' => $this->_url['id_plain'],
+            'app_data_id' => $this->url['id_plain'],
 			'app_data_id_uri' => $this->uri->segment(3),
 			'uri' => $server_request_uri,
 			'saveid' => $this->_log_data['saveid'],
@@ -78,8 +76,8 @@ class LogM extends CI_Model {
 	function _get_log_type() {
 		$query = $this->db->select()
 				->from('global_setting.log_type')
-				->where(array('app'=>$this->_url['app'],'action'=>$this->_url['action'],
-						'subaction'=>$this->_url['subaction']
+				->where(array('app'=>$this->url['app'],'action'=>$this->url['action'],
+						'subaction'=>$this->url['subaction']
 					))
 				->limit(1)
 				->get();
@@ -117,9 +115,9 @@ class LogM extends CI_Model {
 
 	private function _update_log($total_time) {
 		if ($this->is_cli) return;
-		
+
 		$data = array(
-			'app_data_id' => $this->_url['id_plain'],
+			'app_data_id' => $this->url['id_plain'],
 			'saveid' => $this->_log_data['saveid'],
 			'ms' => $total_time,
 			'load' => 0,
@@ -132,7 +130,7 @@ class LogM extends CI_Model {
 	private function _insert_log_event() {
 		$data = array(
 			'log_type_id' => $this->_log_data['log_type']['id'],
-			'app_id' => $this->_url['app_id'],
+			'app_id' => $this->url['app_id'],
 			'app_data_id' => $this->url['id_plain'],
 			'saveid' => $this->_log_data['saveid'],
 			'card_id' => $this->UserM->get_card_id(),
@@ -149,7 +147,7 @@ class LogM extends CI_Model {
 	function insert_wall_post($text) {
 		$data = array(
 			'log_type_id' => $this->_log_data['log_type']['id'],
-			'app_id' => $this->_url['app_id'],
+			'app_id' => $this->url['app_id'],
 			'app_data_id' => $this->url['id_plain'],
 			'saveid' => $this->_log_data['saveid'],
 			'card_id' => $this->UserM->get_card_id(),
@@ -178,8 +176,8 @@ class LogM extends CI_Model {
 		if ($this->_log_data['log_type']['auditfield']) {
             foreach (array_keys($this->_log_data['log_type']['auditfield']) as $field){
 				log_message('debug', 'Field: '.$field);
-                 if (($this->_url['subaction'] == 'as' && $this->_log_data['log_type']['auditfield'][$field]['new'])||
-                     ($this->_url['subaction'] == 'es' && $this->_log_data['log_type']['auditfield'][$field]['cur'] != $this->_log_data['log_type']['auditfield'][$field]['new'])) {
+                 if (($this->url['subaction'] == 'as' && $this->_log_data['log_type']['auditfield'][$field]['new'])||
+                     ($this->url['subaction'] == 'es' && $this->_log_data['log_type']['auditfield'][$field]['cur'] != $this->_log_data['log_type']['auditfield'][$field]['new'])) {
 					$data = array(
 						'log_type_id' => $this->_log_data['log_type']['id'],
 						'log_id' => $this->_log_data['insert_id'],
@@ -206,7 +204,7 @@ class LogM extends CI_Model {
 			if ($this->_log_data['log_type']['msg_history'] !== '') {
 				$text = $this->_get_custom_msg($this->lang->line('core'.$this->_log_data['log_type']['msg_history']));
 			} else {
-				$text = $this->_get_default_msg($this->_url['subaction'], $this->_url['app'], $this->_url['id_plain']);
+				$text = $this->_get_default_msg($this->url['subaction'], $this->url['app'], $this->url['id_plain']);
 			}
 			$data = array(
 				'log_type_id' => $this->_log_data['log_type']['id'],
@@ -258,8 +256,8 @@ class LogM extends CI_Model {
 		$patterns[3] = '/#card_emailid#/';
 		$patterns[4] = '/#when#/';
 		$replacements = array();
-		$replacements[0] = $this->_url['id_plain'];
-		$replacements[1] = $this->lang->line('coreapptitle_'.$this->_url['app']);
+		$replacements[0] = $this->url['id_plain'];
+		$replacements[1] = $this->lang->line('coreapptitle_'.$this->url['app']);
 		$replacements[2] = '';//TODO: check this function-> $this->App_generalM->core_app_id2name('card',$this->UserM->get_card_id(),0);
 		$replacements[3] = '';//$this->App_generalM->core_app_id2name("card",app_convertid("emailid","cardid",$field1['tid']),0);
 		$replacements[4] = parse_stamp(get_current_stamp());
@@ -282,7 +280,7 @@ class LogM extends CI_Model {
 		if (in_array($app, $this->_core_apps)) {
 			$text .= $this->App_generalM->core_app_id2name($app, $url_id,1);
 		} else {
-			$text .= $_url['id_plain'];
+			$text .= $url['id_plain'];
 		}
 
 		return $text;
@@ -385,12 +383,12 @@ class LogM extends CI_Model {
 		return $this->db->insert_id();
 	}
 	//	private function _get_request_uri() {
-	//		$_url = explode("?", $_SERVER['REQUEST_URI'],2);
+	//		$url = explode("?", $_SERVER['REQUEST_URI'],2);
 	//        $log['furi'] = $uri[1];
-	//        $uri = preg_replace("/app=".$this->_url['app']."/", "", $uri[1]);
-	//        $uri = preg_replace("/&an=".$this->_url['action']."/", "", $uri);
-	//        $uri = preg_replace("/&aved=".$this->_url['subaction']."/", "", $uri);
-	//        $uri = preg_replace("/&thisid=".$this->_url['id_encrpted']."/", "", $uri);
+	//        $uri = preg_replace("/app=".$this->url['app']."/", "", $uri[1]);
+	//        $uri = preg_replace("/&an=".$this->url['action']."/", "", $uri);
+	//        $uri = preg_replace("/&aved=".$this->url['subaction']."/", "", $uri);
+	//        $uri = preg_replace("/&thisid=".$this->url['id_encrpted']."/", "", $uri);
 	//        if ($uri == "&") $uri = "";
 	//        $this->_request_uri = $uri;
 	//	}
