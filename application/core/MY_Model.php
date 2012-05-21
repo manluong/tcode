@@ -52,7 +52,32 @@ class MY_Model extends CI_Model {
 		$this->CI =& get_instance();
 	}
 
+	function set_where($where) {
+		$this->where[] = $where;
+		return $this;
+	}
 
+	function set_order_by($order_by) {
+		$this->order_by[] = $order_by;
+		return $this;
+	}
+
+	function set_offset($offset) {
+		$this->offset = $offset;
+		return $this;
+	}
+
+	function set_limit($limit) {
+		$this->limit = $limit;
+		return $this;
+	}
+
+	function reset() {
+		$this->where = array();
+		$this->order_by = array();
+		$this->offset = 0;
+		$this->limit = 0;
+	}
 
 	function get($id) {
 		if ($this->cache_enabled) {
@@ -243,7 +268,7 @@ class MY_Model extends CI_Model {
 						//TODO: datetime validation
 						break;
 					case 'selection':
-						if (!in_array($data[$field], $field_detail['options'])) {
+						if (!in_array($data[$field], array_keys($field_detail['options']))) {
 							$this->errors[] = $this->lang->line('error-invalid_option').' : '.$this->lang->line($this->table.'-'.$field);
 							$this->field_errors[$field][] = $this->lang->line('error-invalid_option');
 							$has_error = TRUE;
@@ -309,9 +334,11 @@ class MY_Model extends CI_Model {
 		//get data from POST based on data_fields
 		if ($data === FALSE) {
 			$data = $this->get_form_data();
-			$this->errors[] = $this->lang->line('error-no_save_data');
-			$this->field_errors[$this->id_field][] = $this->lang->line('error-no_save_data');
-			if ($data === FALSE) return FALSE;
+			if ($data === FALSE) {
+				$this->errors[] = $this->lang->line('error-no_save_data');
+				$this->field_errors[$this->id_field][] = $this->lang->line('error-no_save_data');
+				return FALSE;
+			}
 		}
 
 		$is_new = !(isset($data[$this->id_field]) && $data[$this->id_field] !== FALSE);
@@ -345,6 +372,7 @@ class MY_Model extends CI_Model {
 			return $data[$this->id_field];
 		}
 	}
+
 
 	function delete($id, $actual_delete=FALSE) {
 		if ($this->sett_has_system_fields && $actual_delete===FALSE) {
@@ -425,7 +453,11 @@ class MY_Model extends CI_Model {
 				if (isset($df[$sk]['options'])) {
 					$temp_options = array();
 					foreach($df[$sk]['options'] AS $ok=>$ov) {
-						$temp_options[$ok] = $this->lang->line($ov);
+						if ($ov == '') {
+							$temp_options[$ok] = '';
+						} else {
+							$temp_options[$ok] = $this->lang->line($ov);
+						}
 					}
 					$temp[$sk.'_options'] = $temp_options;
 				}
