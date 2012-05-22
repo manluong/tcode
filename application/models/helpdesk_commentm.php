@@ -22,7 +22,7 @@ class Helpdesk_CommentM extends MY_Model {
 
 	function get_group() {
 		$this->db->select('*');
-		$query = $this->db->get('a_access_gpsub');
+		$query = $this->db->get('access_ro');
 
 		if ($query->result()) {
 			return $query->result();

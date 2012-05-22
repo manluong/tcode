@@ -70,7 +70,7 @@ class Helpdesk extends MY_Controller {
 			'assign' => $this->Helpdesk_CommentM->get_assign(),
 		);
 
-		$this->data['content'] = $this->load->view(get_template().'/helpdesk/helpdesk_insert',$content, TRUE);
+		$this->data['content'] = $this->load->view(get_template().'/helpdesk/add',$content, TRUE);
 		$this->_do_output();
 	}
 
@@ -86,13 +86,13 @@ class Helpdesk extends MY_Controller {
 			'status' => $this->Helpdesk_CommentM->get_status(),
 			'priority' => $this->Helpdesk_CommentM->get_priority(),
 			'type' => $this->Helpdesk_CommentM->get_type(),
-			'comment' => $this->Helpdesk_CommentM->get_content($id),
+			//'comment' => $this->Helpdesk_CommentM->get_content($id),
 			'result' => $result[0],
 			'assign' => $this->Helpdesk_CommentM->get_assign(),
 			'file_attach' => $this->Helpdesk_CommentM->get_comment_files($id),
 		);
 
-		$this->data['content'] = $this->load->view(get_template().'/helpdesk/comment',$content, TRUE);
+		$this->data['content'] = $this->load->view(get_template().'/helpdesk/edit',$content, TRUE);
 		$this->_do_output();
 
 	}
