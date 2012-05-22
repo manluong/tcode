@@ -90,7 +90,7 @@ class MY_Model extends CI_Model {
 
 		if (count($this->where) > 0) {
 			foreach($this->where AS $w) {
-				$this->db->where($w);
+				$this->db->where($w, NULL, FALSE);
 			}
 		}
 
@@ -117,7 +117,7 @@ class MY_Model extends CI_Model {
 
 		if (count($this->where) > 0) {
 			foreach($this->where AS $w) {
-				$this->db->where($w);
+				$this->db->where($w, NULL, FALSE);
 			}
 		}
 
@@ -210,7 +210,7 @@ class MY_Model extends CI_Model {
 
 		if (count($this->where) > 0) {
 			foreach($this->where AS $w) {
-				$this->db->where($w);
+				$this->db->where($w, NULL, FALSE);
 			}
 		}
 
@@ -341,7 +341,7 @@ class MY_Model extends CI_Model {
 			}
 		}
 
-		$is_new = !(isset($data[$this->id_field]) && $data[$this->id_field] !== FALSE);
+		$is_new = (!isset($data[$this->id_field]) || $data[$this->id_field] === FALSE || !is_numeric($data[$this->id_field]));
 
 		//perform validation
 		if ($this->sett_skip_validation) {
@@ -483,7 +483,8 @@ class MY_Model extends CI_Model {
 			if ($is_new && isset($d['db_save_skip']) && $d['db_save_skip']===TRUE) continue;
 			if (!$is_new && isset($d['db_edit_skip']) && $d['db_edit_skip']===TRUE) continue;
 
-			$data[$f] = $this->input->post($f);
+			$form_field = $this->input->post($f);
+			if ($form_field !== FALSE) $data[$f] = $form_field;
 		}
 
 		if (count($data) == 0) return FALSE;
