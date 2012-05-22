@@ -1,25 +1,103 @@
-<div class="container-fluid">
-	<div class="row-fluid">
-		<div class="span7">
-			<div class="widget">
-				<div class="widget-body">
-					<div id="wall">
-						<div>
-							<?=form_open('/dashboard/new_post')?>
-							<input type="text" class="input-block-level" id="new_post" name="" value="" placeholder="Something to share?" />
-							</form>
-						</div>
-						<div id="posts">
-						</div>
-						<button id="show_more" class="btn" data-last_id="" style="width:100%;">Show More</button>
-					</div>
-				</div>
-			</div>
+
+<div id="boxes" class="timeline">
+	<!-- Start Timeline box -->
+	<div class="box left">
+		<div class="title"><img src="/resources/template/<?=get_template()?>/img/icon-chevron-right.png" /> Recent activity</div>
+
+		<div class="boxContent timeline">
+			<div id="posts"></div>
+
+			<a href="/activity" class="viewAll">View all &rarr;</a>
 		</div>
-		<div class="span7">
+	</div>
+	<!-- End Timeline box -->
+
+	<!-- Start Contacts box -->
+	<div class="box">
+		<div class="title"><img src="/resources/template/<?=get_template()?>/img/icon-chevron-right.png" /> Contacts</div>
+
+		<div class="boxContent upcoming events">
+
+			{graphs js}
 
 		</div>
 	</div>
+	<!-- End Contacts box -->
+
+	<!-- Start Upcoming Events box -->
+	<div class="box left">
+		<div class="title"><img src="/resources/template/<?=get_template()?>/img/icon-chevron-right.png" /> Upcoming events</div>
+
+		<div class="boxContent upcomingEvents">
+
+			<div class="entry clearfix">
+				<div class="calendarNumber">25</div>
+				<div class="info">
+					<a href="#">Networking event</a> <span class="">at Hilton Hotel</span>
+					<div class="time">On thursday 29th at 18:00</div>
+				</div>
+			</div>
+
+			<div class="entry clearfix">
+				<div class="calendarNumber">10</div>
+				<div class="info">
+					<a href="#">FOWA 2012</a> <span class="">at Hilton Hotel</span>
+					<div class="time">On thursday 29th at 18:00</div>
+				</div>
+			</div>
+
+			<div class="entry clearfix">
+				<div class="calendarNumber">12</div>
+				<div class="info">
+					<a href="#">SXSW 2012</a> <span class="">at Hilton Hotel</span>
+					<div class="time">On thursday 29th at 18:00</div>
+				</div>
+			</div>
+
+			<a href="#" class="viewAll">View all &rarr;</a>
+
+		</div>
+	</div>
+	<!-- End Upcoming Events box -->
+
+	<!-- Start Recently Viewed box -->
+	<div class="box">
+		<div class="title"><img src="/resources/template/<?=get_template()?>/img/icon-chevron-right.png" /> Recently viewed</div>
+
+		<div class="boxContent recentlyViewed">
+
+			<div class="entry left">
+				<div class="icon activityIcon"></div>
+				<div class="info">
+					<a href="#">Activity</a>
+					<div class="time">23 minutes ago</div>
+				</div>
+			</div>
+
+			<div class="entry">
+				<div class="icon calendarIcon"></div>
+				<div class="info">
+					<a href="#">FOWA 2012</a> <span class="">at Hilton Hotel</span>
+					<div class="time">About 1 hour ago</div>
+				</div>
+			</div>
+
+			<div class="entry left">
+				<div class="icon contactsIcon"></div>
+				<div class="info">
+					<a href="#">Mark Zuckerberg's profile</a>
+					<div class="time">About 30 minutes ago</div>
+				</div>
+			</div>
+
+			<div class="clearfix"></div>
+
+			<a href="#" class="viewAll">View all &rarr;</a>
+
+		</div>
+	</div>
+	<!-- End Recently Viewed box -->
+
 </div>
 
 <script>
@@ -46,88 +124,15 @@
 						});
 					}
 
-					if (v.comments_more) {
-						show_more_html += Mustache.to_html(tpl_comments.show_more, v);
-					}
-
-					v.comments_html = show_more_html + comments_html;
+					v.comments_html = comments_html;
 					posts += Mustache.to_html(tpl_dashboard.post, v);
 					last_id = v.id;
 				});
 				$('#posts').html(posts);
-				$('span.displaydate').timeago();
-
-				$('#show_more').attr('data-last_id', last_id);
+				$('div.time').timeago();
 			},
 			'json'
 		);
-
-
-		$('#show_more').on('click', function() {
-			$.get(
-				'/dashboard/ajax_wall/'+$('#show_more').attr('data-last_id'),
-				function(resp) {
-					var posts = '';
-					var last_id = '';
-
-					$.each(resp.details, function(k, v) {
-						posts += Mustache.to_html(tpl_dashboard.post, v);
-						last_id = v.id;
-					});
-					$('#posts').append(posts);
-
-					if ($(resp.details).size() < 10) $('#show_more').remove();
-
-					$('#show_more').attr('data-last_id', last_id);
-				},
-				'json'
-			);
-		});
-
-
-		$('#wall').on('keypress', '#new_post', function(e) {
-			if (e.which != 13) return true;
-
-			var textbox = $(this);
-			var textboxform = textbox.closest('form');
-
-			var text = textbox.val();
-
-			if (text.length == 0) {
-				e.preventDefault();
-				return false;
-			}
-
-			textbox.attr('disabled', 'disabled');
-			$(textboxform).attr('onSubmit', 'return false;')
-
-			$.post(
-				'/dashboard/new_post',
-				{ text: text },
-				function(resp) {
-					if (resp.success) {
-						textbox.val('');
-						resp.details.app_id = 18;
-						resp.details.app_data_id = resp.details.id;
-
-						$('#posts').prepend(
-							Mustache.to_html(tpl_dashboard.post, resp.details)
-						);
-
-						$('span.displaydate').timeago();
-					} else {
-						alert('Unable to save. Please try again.'+resp.message);
-					}
-					textbox.removeAttr('disabled');
-					$(textboxform).removeAttr('onSubmit');
-				},
-				'json'
-			);
-
-			//prevent enter key from submitting the form
-			e.preventDefault();
-			return false;
-		});
 
 	});
 

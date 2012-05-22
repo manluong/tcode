@@ -19,7 +19,7 @@
 		<button class="btn">Pay</button>
 		<a href="/invoice/edit/<?php echo $invoice['id']?>"><button class="btn">Edit</button></a>
 		<button class="btn">Send</button>
-		<button class="btn">PDF</button>
+		<a href="/invoice/pdf/<?php echo $invoice['id']?>" target="_blank"><button class="btn">PDF</button></a>
 		<button id="invoice_print" class="btn" data-url="/invoice/print_invoice/<?php echo $invoice['id']?>">Print</button>
 		<iframe id="iframe_print" src="" style="display: none; height:0px; width: 0px"></iframe>
 	</div>
@@ -93,18 +93,26 @@
 			<td><?php echo $invoice_item->a_product_name ?></td>
 			<td>
 				<?php echo $invoice_item->description ?>
-				<?php if ($invoice_item->price_type): ?>
+				<?php if ($invoice_item->subscription_start_stamp): ?>
 					<br />
 					<?php echo date('Y-m-d', strtotime($invoice_item->subscription_start_stamp)).' to '.date('Y-m-d', strtotime($invoice_item->subscription_end_stamp)) ?>
+				<?php endif ?>
+				<?php if ($invoice_item->a_product_durationtype_name): ?>
 					<br />
 					<?php echo $invoice_item->a_product_durationtype_name ?>
+				<?php endif ?>
+				<?php if ($invoice_item->a_product_pricetype_name): ?>
 					<br />
 					<?php echo $invoice_item->a_product_pricetype_name ?>
 				<?php endif ?>
+				<?php if ($invoice_item->discount): ?>
+					<br />
+					<?php echo $invoice_item->discount.'% Discount' ?>
+				<?php endif ?>
 			</td>
-			<td><?php echo (float)$invoice_item->unit_price ?></td>
+			<td><?php echo '$'.number_format($invoice_item->unit_price, 2) ?></td>
 			<td><?php echo $invoice_item->quantity ?></td>
-			<td><?php echo (float)$invoice_item->total ?></td>
+			<td><?php echo '$'.number_format($invoice_item->total, 2) ?></td>
 		</tr>
 		<?php endforeach ?>
 	</tbody>

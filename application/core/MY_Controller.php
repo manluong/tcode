@@ -82,6 +82,7 @@ class MY_Controller extends CI_Controller {
 		$this->eightforce_config = $this->config->item('eightforce');
 
 		$this->setup_url();
+		$this->setup_language();
 
 		if (!$this->is_cli) {
 			$this->_setup_db();
@@ -92,26 +93,25 @@ class MY_Controller extends CI_Controller {
 		}
 
 		$this->load->model('UserM');
-		$this->load->model('ACLM');
+		$this->load->model('AclM');
 		$this->load->model('AppM');
 		$this->load->model('LogM');
 		$this->load->model('LicenseM');
 		$this->load->model('RespM');
 
 		if (!$this->is_cli) {
+			$this->UserM->setup();
 			$this->AppM->setup();
 
 			$this->url['app_id'] = $this->AppM->get_id($this->url['app']);
 
-			$this->UserM->setup();
-			$this->setup_language();
 			$this->LogM->start_log();
 			$this->LicenseM->setup();
 			$this->setup_output();
 
 
-			if ($this->AppM->must_disable_plain_id($this->url['app'])) $this->ACLM->check_id_encryption();
-			$this->ACLM->check_app_access();
+			if ($this->AppM->must_disable_plain_id($this->url['app'])) $this->AclM->check_id_encryption();
+			$this->AclM->check_app_access();
 			if (APP_ROLE == 'TSUB') {
 				if ($this->LicenseM->has_restriction($this->url['app_id'], 'access')) {
 					$access = $this->LicenseM->get_restriction($this->url['app_id'], 'access');
@@ -128,7 +128,7 @@ class MY_Controller extends CI_Controller {
 		$this->data['title'] = '8Force';
 		$this->data['tenant'] = array();
 
-		$this->data['app_list'] = $this->ACLM->get_app_list();
+		$this->data['app_list'] = $this->AppM->acl_app_list;
 		$this->data['active_app'] = $this->url['app'];
 		$this->data['active_app_name'] = $this->lang->line('core_apps-name-'.$this->url['app']);
 	}
@@ -139,6 +139,7 @@ class MY_Controller extends CI_Controller {
 		$html = array();
 		$html['content'] = $this->load->view(get_template().'/layout/'.$this->layout['type'], $this->data, TRUE);
 		$html['debug'] = $this->debug;
+		$html['user_controls'] = '';
 		$html['sidebar'] = '';
 		$html['breadcrumb'] = '';
 		$html['app_menu'] = '';
@@ -151,6 +152,7 @@ class MY_Controller extends CI_Controller {
 			$this->load->view(get_template().'/page_ajax', $html);
 		} else {
 			if ($this->UserM->is_logged_in()) {
+				$html['user_controls'] = $this->load->view(get_template().'/user_controls', $this->data, TRUE);
 				$html['sidebar'] = $this->load->view(get_template().'/sidebar', $this->data, TRUE);
 				$html['app_menu'] = $this->load->view(get_template().'/app_menu', $this->data, TRUE);
 			}

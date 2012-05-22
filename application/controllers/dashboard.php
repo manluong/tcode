@@ -13,7 +13,7 @@ class Dashboard extends MY_Controller {
 	}
 
 	function ajax_wall($id='') {
-		$wall = $this->LogM->get_wall($id, 10);
+		$wall = $this->LogM->get_wall($id, 5);
 
 		$this->load->model('CommentsM');
 		$this->CommentsM->results_per_page = 2;

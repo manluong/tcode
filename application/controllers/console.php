@@ -30,7 +30,8 @@ class Console extends MY_Controller {
 	}
 
 	function test($p1, $p2) {
-		echo "success: $p1 $p2";
+		echo "P1: $p1\n";
+		echo "P2: $p2\n";
 	}
 
 	function help() {
@@ -54,8 +55,17 @@ class Console extends MY_Controller {
 		echo " acl_check <domain> <name> <foreign_key> <card_id> <action_type=access|create|read|update|delete>\n";
 		echo "  - Checks the ACL rules to see if action is granted or not.\n\n";
 
-		echo " acl_test\n";
+		echo " acl_path_to_id <domain> <path> <type=ro|co>\n";
+		echo "  - Get the RO/CO ID of a path. Separate paths with -(hyphen) instead of /(forward slash) \n\n";
+
+		echo " acl_path_to_foreign_id <domain> <path> <type=ro|co>\n";
+		echo "  - Get the Foreign ID of a path. Separate paths with -(hyphen) instead of /(forward slash) \n\n";
+
+		echo " acl_test <domain>\n";
 		echo "  - Runs an ACL test.\n\n";
+
+		echo " user_add <domain> <name> <email> <password> <role>\n";
+		echo "  - Add a user.\n\n";
 	}
 
 	function acl_install_basic() {
@@ -68,8 +78,12 @@ class Console extends MY_Controller {
 
 	function acl_install_basic_rules() {
 		$this->load->model('AclM');
-		$this->AclM->grant('DEFAULT/Admin', 'DEFAULT');
 		$this->AclM->grant('DEFAULT/Staff', 'DEFAULT');
+		$this->AclM->grant('DEFAULT/Vendor', 'DEFAULT/dashboard');
+		$this->AclM->grant('DEFAULT/Vendor', 'DEFAULT/helpdesk');
+		$this->AclM->grant('DEFAULT/Client', 'DEFAULT/dashboard');
+		$this->AclM->grant('DEFAULT/Client', 'DEFAULT/invoice');
+		$this->AclM->grant('DEFAULT/Client', 'DEFAULT/helpdesk');
 
 		echo "Done installing basic rules\n";
 	}
@@ -150,6 +164,15 @@ class Console extends MY_Controller {
 		echo "ID: $id\n";
 	}
 
+	function acl_path_to_foreign_id($path, $type) {
+		$this->load->model('AclM');
+
+		$path = str_replace('-', '/', $path);
+
+		$id = $this->AclM->get_foreign_id_by_path($path, $type);
+		echo "Foreign ID: $id\n";
+	}
+
 	function acl_check($name, $foreign_key, $type, $card_id) {
 		$this->load->model('AclM');
 		$result = $this->AclM->check($name, $foreign_key, $type, $card_id);
@@ -201,5 +224,55 @@ class Console extends MY_Controller {
 		echo 'Access for Staff Three on invoice row 10: ';
 		echo ($this->AclM->check('a_invoice', 10, 'access', 193))?'granted':'denied';
 		echo "\n\n";
+	}
+
+	function user_add($name, $email, $password, $role) {
+		$this->load->model('CardM');
+		$this->load->model('AclM');
+
+		$name = explode(' ', $name);
+		$card = array();
+		switch(count($name)) {
+			case 1:
+				$card['first_name'] = $name[0];
+				break;
+			case 2:
+				$card['first_name'] = $name[0];
+				$card['last_name'] = $name[1];
+				break;
+			case 3:
+				$card['first_name'] = $name[0];
+				$card['middle_name'] = $name[1];
+				$card['last_name'] = $name[2];
+				break;
+		}
+
+		$email = str_replace(':', '@', $email);
+		$card['addon_email'][] = array(
+			'email' => $email,
+			'is_default' => 1
+		);
+
+		$card['addon_access_user'][] = array(
+			'password' => $password,
+			'status' => 1
+		);
+
+		$card_id = $this->CardM->save($card);
+		if ($card_id === FALSE) {
+			echo $this->CardM->get_error_string();
+			return;
+		} else {
+			echo "New user created\n";
+		}
+
+		$role = str_replace('-', '/', $role);
+		$result = $this->AclM->assign_role($card_id, $role);
+
+		if ($result) {
+			echo "Role Assigned.\n";
+		} else {
+			echo "Error assigning role: ".$this->AclM->get_error_string()."\n";
+		}
 	}
 }

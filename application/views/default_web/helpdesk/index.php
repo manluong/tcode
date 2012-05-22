@@ -1,11 +1,11 @@
-
+<link href="/resources/template/default_web/helpdesk.css" media="screen" rel="stylesheet" type="text/css" />
 <script type="text/javascript" >
 	var total = <?php echo $total?>;
 	$(document).ready(function(){
 		$('.page_active_top:first').addClass('active');
 		$('.page_active_bottom:first').addClass('active');
 	});
-	
+
 	function ajax_pagination(offset){
 		set_active_page(offset);
 		var url = '<?=site_url('helpdesk/ajax_pagination');?>';
@@ -16,11 +16,11 @@
 			}
 		);
 	}
-	
+
 	function set_active_page(offset){
 		var current_page = parseInt(offset)/10 + 1;
 		show_curren_page(current_page);
-		
+
 		if (offset == 0) {
 			$('.prev').addClass('disabled');
 		} else {
@@ -37,13 +37,13 @@
 			from = total;
 		}
 		$('#helpdesk_list_table_info').html('Showing '+to+' to '+from+' of '+total);
-		
+
 		$('.page_active_top').removeClass('active');
 		$('.page_active_bottom').removeClass('active');
 		$('#page_top'+offset).addClass("active");
 		$('#page_bottom'+offset).addClass("active");
 	}
-	
+
 	function show_curren_page(current_page){
 		$('.page_active_top ').removeClass('hide_page');
 		$('.page_active_bottom ').removeClass('hide_page');
@@ -64,7 +64,7 @@
 						$('#page_top'+i).addClass('hide_page');
 						$('#page_bottom'+i).addClass('hide_page');
 					}
-					
+
 					for (i = (current_page*10) - 40 ; i >= 0 ; i-=10) {
 						$('#page_top'+i).addClass('hide_page');
 						$('#page_bottom'+i).addClass('hide_page');
@@ -75,7 +75,7 @@
 							$('#page_top'+i).addClass('hide_page');
 							$('#page_bottom'+i).addClass('hide_page');
 						}
-						
+
 						for (i = (current_page*10) - 50 ; i >= 0 ; i-=10) {
 							$('#page_top'+i).addClass('hide_page');
 							$('#page_bottom'+i).addClass('hide_page');
@@ -85,7 +85,7 @@
 							$('#page_top'+i).addClass('hide_page');
 							$('#page_bottom'+i).addClass('hide_page');
 						}
-						
+
 						for (i = (current_page*10) - 40 ; i >= 0 ; i-=10) {
 							$('#page_top'+i).addClass('hide_page');
 							$('#page_bottom'+i).addClass('hide_page');
@@ -95,17 +95,17 @@
 			}
 		}
 	}
-	
+
 	function ajax_pre() {
 		var temp = $('.active').attr('is_active');
 		if (temp == 0) {
-			var offset = 0; 
+			var offset = 0;
 		} else {
 			var offset = parseInt(temp) - 10;
 		}
-		
+
 		set_active_page(offset);
-		
+
 		var url = '<?=site_url('helpdesk/ajax_pagination');?>';
 		$.post(url,{
 				offset : offset
@@ -114,18 +114,18 @@
 			}
 		);
 	}
-	
+
 	function ajax_next(){
 		var temp = $('.active').attr('is_active');
-		
+
 		var offset = parseInt(temp) + 10;
 		if (offset > total) {
 			offset = offset - 10;
 		}
 		set_active_page(offset);
-		
+
 		var url = '<?=site_url('helpdesk/ajax_pagination');?>';
-		
+
 		$.post(url,{
 				offset : offset
 			},function(data){
@@ -133,12 +133,12 @@
 			}
 		);
 	}
-	
+
 	function ajax_search(){
 		var value = $('#helpdesk_search').val();
-		
+
 		var url = '<?=site_url('helpdesk/ajax_search');?>';
-		
+
 		$.post(url,{
 				value : value
 			},function(data){
@@ -146,11 +146,11 @@
 			}
 		);
 	}
-	
+
 	function group_fillter(){
 		var value = $('#helpdesk_group').val();
 		var url = '<?=site_url('helpdesk/group_fillter');?>';
-		
+
 		$.post(url,{
 				value : value
 			},function(data){
@@ -158,11 +158,11 @@
 			}
 		);
 	}
-	
+
 	function status_fillter(){
 		var value = $('#helpdesk_status').val();
 		var url = '<?=site_url('helpdesk/status_fillter');?>';
-		
+
 		$.post(url,{
 				value : value
 			},function(data){
@@ -170,11 +170,11 @@
 			}
 		);
 	}
-	
+
 	function type_fillter(){
 		var value = $('#helpdesk_type').val();
 		var url = '<?=site_url('helpdesk/type_fillter');?>';
-		
+
 		$.post(url,{
 				value : value
 			},function(data){
@@ -182,11 +182,11 @@
 			}
 		);
 	}
-	
+
 	function priority_fillter(){
 		var value = $('#helpdesk_prioruty').val();
 		var url = '<?=site_url('helpdesk/priority_fillter');?>';
-		
+
 		$.post(url,{
 				value : value
 			},function(data){
@@ -194,7 +194,7 @@
 			}
 		);
 	}
-	
+
 	function fillter_record(){
 		var value = $('#fillter_record').val();
 		var url = '<?=site_url('helpdesk/fillter_record');?>';
@@ -214,7 +214,7 @@
 				<div><a href="<?=site_url('helpdesk/add');?>">New</a></div>
 			</h4>
 		</div>
-		
+
 		<div class="widget-body">
 			<div class="dataTables_wrapper form-inline" id="helpdesk_list_table_wrapper">
 				<div class="pull-right">
@@ -290,7 +290,7 @@
 					<!--END FILLTER-->
 				</div>
 			</div>
-			
+
 			<table cellspacing="0" cellpadding="0" border="0" id="helpdesk_list_table" class="table table-striped table-bordered">
 				<thead>
 					<tr>
@@ -302,26 +302,26 @@
 						<th style="width: 45px;" colspan="1" rowspan="1" class="sorting">Edit</th>
 					</tr>
 				</thead>
-				
+
 				<tbody id="helpdesk_datalist">
 					<?php if (!empty($result)) {
 							for ($i = 0 ; $i < count($result) ; $i++) {
 					?>
 					<tr class="odd">
-						<td class=" sorting_1"><?=$result[$i][id]?></td>
-						<td><?=$result[$i][subject]?></td>
-						<td><?=$result[$i][created_stamp]?></td>
-						<td><?=$result[$i][modified_stamp]?></td>
-						<td><?=$this->Helpdesk_CommentM->get_assigname($result[$i][assign_id])?></td>
-						<td><a href="<?=site_url('helpdesk/edit');?>/<?=$result[$i][id]?>" class="btn btn-default">Edit</a>
-						
+						<td class=" sorting_1"><?=$result[$i]['id']?></td>
+						<td><?=$result[$i]['subject']?></td>
+						<td><?=$result[$i]['created_stamp']?></td>
+						<td><?=$result[$i]['modified_stamp']?></td>
+						<td><?=$this->Helpdesk_CommentM->get_assigname($result[$i]['assign_id'])?></td>
+						<td><a href="<?=site_url('helpdesk/edit');?>/<?=$result[$i]['id']?>" class="btn btn-default">Edit</a>
+
 						</td>
 					</tr>
 					<?php }}?>
 				</tbody>
 			</table>
-		
-		
+
+
 		<div class="pull-right">
 			<div class="dataTables_paginate paging_bootstrap pagination">
 				<ul class="ul_pagination">
@@ -336,7 +336,7 @@
 				</ul>
 			</div>
 		</div>
-		
+
 		<div id="helpdesk_list_table_length" class="dataTables_length">
 			<label>
 				<select onchange="fillter_record()" id="fillter_record">
@@ -347,7 +347,7 @@
 				</select>
 			</label>
 		</div>
-		
+
 		<div class="dataTables_info" id="helpdesk_list_table_info">Showing 1 to 10 of <?=$total?></div>
 		</div>
 	</div>

@@ -38,19 +38,6 @@
 			<span class="invoice_info_span">PO Number</span>
 			<input type="text" name="po_number" />
 		</li>
-		<li>
-			<span class="invoice_info_span">Tax</span>
-			<select name="tax_id">
-				<option value="">---- Select ----</option>
-				<?php foreach ($tax as $id => $name): ?>
-				<option value="<?php echo $id ?>"><?php echo $name ?></option>
-				<?php endforeach ?>
-			</select>
-		</li>
-		<li>
-			<span class="invoice_info_span">Currency</span>
-			<input type="text" name="currency" />
-		</li>
 	</ul>
 </div>
 
@@ -70,6 +57,7 @@
 		<div class="col-1">
 			<a href="#" class="remove">x</a>
 			<a href="#" class="more">+</a>
+			<a href="#" class="move">m</a>
 		</div>
 		<div class="col-2">
 			<input type="hidden" name="invoice_item_id[]" />
@@ -104,8 +92,8 @@
 			</div>
 			<div class="col-11"><input type="text" name="discount[]" class="discount cal" /></div>
 			<div class="col-12">
-				<input type="checkbox" style="width: auto" /> GST
-				<input type="checkbox" style="width: auto" /> VAT
+				<input type="checkbox" class="tax-gst" style="width: auto" /> GST
+				<input type="checkbox" class="tax-vat" style="width: auto" /> VAT
 			</div>
 		</div>
 	</div>

@@ -383,3 +383,11 @@ function get_filename_without_extension($filename) {
 function generate_hash() {
 	return md5(uniqid(mt_rand().time()));
 }
+
+function get_distinct($key, &$keychain) {
+	$result = array();
+	foreach($keychain AS $k=>$v) {
+		$result[$v[$key]] = '';
+	}
+	return array_keys($result);
+}

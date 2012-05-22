@@ -21,7 +21,6 @@ class UserM extends MY_Model {
 
 	//var $info = array();
 
-	var $admin = FALSE;
 	var $logged_in = FALSE;
 
 	var $loguid = 0;
@@ -38,9 +37,8 @@ class UserM extends MY_Model {
 
 	public function debug() {
 		echo '<p>';
-		echo 'email: ',$this->email,'<br />';
+		echo 'email: <pre>',print_r($this->get_email($this->id, 'all'), true),'</pre>';
 		echo 'loguid: ',$this->loguid,'<br />';
-		echo 'admin: ',$this->admin,'<br />';
 		echo 'info: <pre>',print_r($this->info, true),'</pre>';
 		echo '</p>';
 	}
@@ -50,7 +48,11 @@ class UserM extends MY_Model {
 	}
 
 	public function is_admin() {
-		return $this->admin;
+		foreach($this->info['sub_roles'] AS $role_id=>$role_name) {
+			if ($role_name == 'Administrators') return TRUE;
+		}
+
+		return FALSE;
 	}
 
 	public function get_loguid() {
@@ -90,7 +92,9 @@ class UserM extends MY_Model {
 	}
 
 	//$type = primary | secondary | all
-	public function get_email($card_id, $type='primary') {
+	public function get_email($card_id='', $type='primary') {
+		if ($card_id == '') $card_id = $this->id;
+
 		$this->db->select('email')
 			->from('card_email')
 			->where('card_id', $card_id);
@@ -174,7 +178,6 @@ class UserM extends MY_Model {
 		$this->status = 2;
 		$this->info = $this->get_info($access_user['card_id']);
 		$this->logged_in = TRUE;
-		$this->admin = ($this->info['role']['name'] == 'Admin');
 
 		$this->session->set_userdata('id', $this->id);
 		$this->session->set_userdata('user_info', $this->info);
@@ -210,7 +213,6 @@ class UserM extends MY_Model {
 		$this->status = 1;
 		$this->info = $this->session->userdata('user_info');
 		$this->logged_in = TRUE;
-		$this->admin = ($this->info['role']['name'] == 'Admin');
 	}
 
 	//gets a user's card details and it's roles and subroles
@@ -231,23 +233,24 @@ class UserM extends MY_Model {
 			$result['name'] = $result['organization_name'];
 		}
 
-		$result['sub_roles'] = $this->get_subroles($card_id);
 		$result['role'] = $this->get_role_info($card_id);
+		$result['sub_roles'] = $this->get_subroles($card_id);
 
 		return $result;
 	}
 
 	private function get_subroles($card_id){
-		$rs = $this->db->select('roles_sub_id')
-				->from('access_user_role_sub')
-				->where('card_id', $card_id)
+		$rs = $this->db->select('usr.roles_sub_id, sr.name')
+				->from('access_user_role_sub AS usr')
+				->join('access_roles_sub AS sr', 'sr.id=usr.roles_sub_id', 'left')
+				->where('usr.card_id', $card_id)
 				->get();
 
 		if ($rs->num_rows() == 0) return array();
 
 		$result = array();
 		foreach ($rs->result_array() as $r) {
-			$result[] = $r['roles_sub_id'];
+			$result[$r['roles_sub_id']] = $r['name'];
 		}
 
 		return $result;
@@ -275,18 +278,18 @@ class UserM extends MY_Model {
 		$result['name'] = $temp['name'];
 		$result['role_id'] = $temp['role_id'];
 
-		if (in_array($temp['role_id'], array(1,4,6,7))) return $result;
+		if (in_array($temp['role_id'], array(3,5,6))) return $result;
 
 		$this->db->select();
 
 		switch($temp['role_id']){
-			case '2':
+			case '1':
 				$this->db->from('staff');
 				break;
-			case '3':
+			case '2':
 				$this->db->from('client');
 				break;
-			case '5':
+			case '4':
 				$this->db->from('vendor');
 				break;
 		}

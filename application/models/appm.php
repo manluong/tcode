@@ -19,7 +19,7 @@ class AppM extends MY_Model {
 	}
 
 	function setup() {
-		$this->acl_app_list = $this->get_apps(TRUE);
+		$this->acl_app_list = $this->get_apps();
 	}
 
 	function get($app_id_or_name) {
@@ -103,15 +103,15 @@ class AppM extends MY_Model {
 				->get();
 
 		if ($rs->num_rows() == 0) return array();
-
 		$results = array();
 		foreach($rs->result_array() AS $row) {
+			if (!$this->AclM->check($row['name'])) continue;
+
 			$results[] = $row['name'];
 
 			$this->app_cache[$row['id']] = $row;
 			$this->app_cache[$row['name']] = $row;
 		}
-
 		return $results;
 	}
 }

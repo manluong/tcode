@@ -1,7 +1,7 @@
 <script type="text/javascript" src="/resources/addon/plupload/js/plupload.full.js"></script>
 <script type="text/javascript" src="/resources/addon/plupload/js/jquery.plupload.queue/jquery.plupload.queue.js"></script>
 <link href="/resources/addon/plupload/js/jquery.plupload.queue/css/jquery.plupload.queue.css" media="screen" rel="stylesheet" type="text/css" />
-
+<link href="/resources/template/default_web/helpdesk.css" media="screen" rel="stylesheet" type="text/css" />
 <style>
 .file-wrapper {
 display: inline-block;
@@ -43,7 +43,7 @@ function submit_insert_helpdesk(){
 			group : group,
 			status : status,
 			type : type,
-			priority : priority,
+			priority : priority
 		},function(data){
 			if(comment != ''){
 				submit_comment();
@@ -80,7 +80,7 @@ function submit_comment(){
 			group : group_helpdesk,
 			status : status_helpdesk,
 			type : type_helpdesk,
-			priority : priority_helpdesk,
+			priority : priority_helpdesk
 		},function(data){
 			if (data != '') {
 				window.location='<?=site_url('helpdesk');?>';

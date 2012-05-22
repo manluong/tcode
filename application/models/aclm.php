@@ -1,6 +1,6 @@
 <?php if (!defined('BASEPATH')) exit('No direct access allowed.');
 
-class ACLM extends MY_Model {
+class AclM extends MY_Model {
 	var $cache_acl = array();
 	var $unit_test = array(
 		'triggered_rule' => array(),
@@ -23,28 +23,17 @@ class ACLM extends MY_Model {
 			header( 'Location: /access/'.set_return_url(TRUE));
 			exit;
 		} elseif ($this->UserM->is_logged_in() && !$this->UserM->is_admin() && !$this->allow_unauthed_access) {
-			$app_id = $this->url['app_id'];
+			$app = $this->url['app'];
 			$acl_app_list = $this->AppM->acl_app_list;
 			$has_access = FALSE;
-			foreach($acl_app_list AS $app) {
-				if ($app['id'] == $app_id) $has_access = TRUE;
+			foreach($acl_app_list AS $app_name) {
+				if ($app_name == $app) $has_access = TRUE;
 			}
 			if (!$has_access) {
 				die('You do not have the permissions to access this app');
 				//TODO: change to 404 error?
 			}
 		}
-	}
-
-	function get_app_list($show_hidden_apps=FALSE) {
-		$apps = $this->AppM->get_apps($show_hidden_apps);
-
-		//TODO: This is a simple but ineffecient solution.
-		foreach($apps AS $k=>$v) {
-			if (!$this->check($v)) unset($apps[$k]);
-		}
-
-		return $apps;
 	}
 
 	function get_subroles_batch($ids, $id_as_key=FALSE) {
@@ -499,11 +488,14 @@ class ACLM extends MY_Model {
 		} elseif (is_array($ro)) {
 			if (!isset($ro['foreign_key'])) $ro['foreign_key'] = 0;
 
-			$rs = $this->db->select('id')
-					->from('access_ro')
-					->where('name', $ro['name'])
-					->where('foreign_key', $ro['foreign_key'])
-					->get();
+			$this->db->select('id')
+				->from('access_ro')
+				->where('name', $ro['name'])
+				->where('foreign_key', $ro['foreign_key']);
+
+			if (isset($ro['parent_id'])) $this->db->where('parent_id', $ro['parent_id']);
+
+			$rs = $this->db->get();
 
 			if ($rs->num_rows() == 0) return FALSE;
 
@@ -712,6 +704,56 @@ class ACLM extends MY_Model {
 		return $result['id'];
 	}
 
+	//Gets the Foreign ID of an RO/CO object based on a path.
+	//Examples of paths:
+	// helpdesk/a_helpdesk
+	// helpdesk/a_helpdesk/10 - an item with an ID of 10 in the a_helpdesk table
+	function get_foreign_id_by_path($path, $type) {
+		$this->check_type($type);
+
+		$orig_path = $path;
+		$path = explode('/', $path);
+		$path_count = count($path);
+
+		if ($path_count == 1) {
+			$this->db->select('foreign_key')
+				->from('access_'.$type)
+				->where('name', $path[0]);
+		 } else {
+			//if the last item in the path is a number
+			if (is_numeric($path[$path_count-1])) {
+				$foreign_key = array_pop($path);
+				$path_count--;
+			}
+
+			$this->db->select('tb'.$path_count.'.foreign_key')
+				->from('access_'.$type.' AS tb1');
+
+			for($x=1; $x<=$path_count; $x++) {
+				$this->db->join('access_'.$type.' AS tb'.($x+1),
+						'tb'.($x+1).'.parent_id=tb'.($x).'.id',
+						'LEFT');
+			}
+
+			foreach($path AS $x=>$p) {
+				$this->db->where('tb'.($x+1).'.name', $p);
+			}
+
+			//if the last item in the path is a number
+			if (isset($foreign_key) && is_numeric($foreign_key)) {
+				$this->db->where('tb'.($x+1).'.foreign_key', $foreign_key);
+			}
+		}
+
+		$rs = $this->db->limit(1)
+				->get();
+
+		if ($rs->num_rows() == 0) return FALSE;
+
+		$result = $rs->row_array();
+		return $result['foreign_key'];
+	}
+
 
 	//finds the parent_id of a CO for an individual row of data
 	function find_co_parent_id($co) {
@@ -819,19 +861,21 @@ class ACLM extends MY_Model {
 			$role_parent_id = $this->create_node(1, $data, 'ro');
 
 			//if there are users in this role, create an RO for them
-			$rs = $this->db->select('card_id')
-					->from('access_user_role')
-					->where('role_id', $role['code'])
-					->get();
-			if ($rs->num_rows() > 0) {
-				$data = array();
-				foreach($rs->result_array() AS $r) {
-					$data[] = array(
-						'name' => 'card',
-						'foreign_key' => $r['card_id']
-					);
+			if ($role['code']!=1) {	//skip the Staff role
+				$rs = $this->db->select('card_id')
+						->from('access_user_role')
+						->where('role_id', $role['code'])
+						->get();
+				if ($rs->num_rows() > 0) {
+					$data = array();
+					foreach($rs->result_array() AS $r) {
+						$data[] = array(
+							'name' => 'card',
+							'foreign_key' => $r['card_id']
+						);
+					}
+					$this->create_nodes($role_parent_id, $data, 'ro');
 				}
-				$this->create_nodes($role_parent_id, $data, 'ro');
 			}
 
 			$subroles = $this->get_subroles($role['code']);
@@ -861,4 +905,84 @@ class ACLM extends MY_Model {
 			}
 		}
 	}
+
+
+	function assign_role($card_id, $role) {
+		$role_id = $this->get_foreign_id_by_path($role, 'ro');
+
+		$depth = count(explode('/', $role));
+		if ($depth == 2) {
+			//is a role
+			$existing_role_id = $this->get_card_role_id($card_id);
+			if ($existing_role_id !== FALSE) {
+				$this->errors[] = $this->lang->line('error-already_has_role');
+				return FALSE;
+			}
+			$data = array(
+				'card_id' => $card_id,
+				'role_id' => $role_id,
+			);
+
+			$result = $this->db->insert('access_user_role', $data);
+		} elseif ($depth == 3) {
+			//is a subrole
+			if (!$this->has_sub_role($card_id, $role_id)) {
+				$data = array(
+					'card_id' => $card_id,
+					'roles_sub_id' => $role_id,
+				);
+
+				$result = $this->db->insert('access_user_role_sub', $data);
+			} else {
+				$result = TRUE;
+			}
+		}
+
+		$parent_ro_id = $this->get_id_by_path($role, 'ro');
+		$ro = array(
+			'parent_id' => $parent_ro_id,
+			'name' => 'card',
+			'foreign_key' => $card_id,
+		);
+		$ro_id = $this->get_ro_id($ro);
+		if ($ro_id === FALSE) {
+			$this->create_node($parent_ro_id, $ro, 'ro');
+		}
+
+		return $result;
+	}
+
+	function get_card_role_id($card_id) {
+		$rs = $this->db->select('role_id')
+				->from('access_user_role')
+				->where('card_id', $card_id)
+				->limit(1)
+				->get();
+
+		if ($rs->num_rows() == 0) return FALSE;
+
+		$result = $rs->row_array();
+		return $result['role_id'];
+	}
+
+	function has_sub_role($card_id, $role_id) {
+		$rs = $this->db->select('id')
+				->from('access_user_role_sub')
+				->where('card_id', $card_id)
+				->where('roles_sub_id', $role_id)
+				->limit(1)
+				->get();
+
+		return ($rs->num_rows() == 1);
+	}
+
+
+
+
+
+
+
+
+
+
 }

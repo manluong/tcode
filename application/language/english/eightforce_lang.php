@@ -42,9 +42,12 @@ $lang['core_select-select-card_teltype-home'] = 'Home';
 $lang['core_select-select-card_teltype-fax'] = 'Fax';
 $lang['core_select-select-card_social-facebook'] = 'Facebook';
 $lang['core_select-select-card_social-linkedin'] = 'Linkedin';
-$lang['core_select-select-card_social-msn'] = 'Msn';
-$lang['core_select-select-card_social-yahoo'] = 'Yahoo';
+$lang['core_select-select-card_social-msn'] = 'MSN';
+$lang['core_select-select-card_social-yahoo'] = 'Yahoo!';
 $lang['core_select-select-card_social-skype'] = 'Skype';
+$lang['core_select-select-card_social-qq'] = 'Qq';
+$lang['core_select-select-card_social-google'] = 'Google';
+$lang['core_select-select-card_social-website'] = 'Website';
 $lang['core_select-select-card_social-other'] = 'Other';
 $lang['core_select-select-card_associate-co-worker'] = 'Co-worker';
 $lang['core_select-select-card_associate-manager'] = 'Manager';
@@ -55,9 +58,6 @@ $lang['core_select-select-card_marital-single'] = 'Single';
 $lang['core_select-select-card_marital-married'] = 'Married';
 $lang['core_select-select-card_marital-other'] = 'Other';
 $lang['core_select-select-card_social-twitter'] = 'Twitter';
-$lang['core_select-select-card_social-qq'] = 'Qq';
-$lang['core_select-select-card_social-google'] = 'Google';
-$lang['core_select-select-card_social-website'] = 'Website';
 $lang['card_extra-id'] = 'ID';
 $lang['card_extra-card_id'] = 'Card ID';
 $lang['card_extra-marital'] = 'Marital';
@@ -180,7 +180,7 @@ $lang['lang-note'] = 'Note';
 
 // core
 $lang['core_apps-name-client'] = 'Client';
-$lang['core_apps-name-card'] = 'Card';
+$lang['core_apps-name-card'] = 'Contacts';
 $lang['core_apps-name-demo'] = 'Demo';
 $lang['core_apps-name-access'] = 'Access';
 $lang['core_apps-name-staff'] = 'Staff';
@@ -215,7 +215,7 @@ $lang['core_apps_menu-appmenu_adduser3'] = 'Adduser3';
 $lang['core_apps_menu-appmenu_access_usergroup'] = 'Access Usergroup';
 $lang['core_apps_menu-appmenu_usergroup'] = 'Usergroup';
 $lang['core_apps_menu-appmenu_usergroup_add'] = 'Usergroup Add';
-$lang['core_apps_menu-appmenu_access_userstatus'] = 'Access Userstatus';
+$lang['core_apps_menu-appmenu_access_userstatus'] = 'Access User Status';
 $lang['core_apps_menu-appmenu_userstatus'] = 'Userstatus';
 $lang['core_apps_menu-appmenu_userstatus_add'] = 'Userstatus Add';
 $lang['core_apps_menu-appmenu_userlist'] = 'Userlist';
@@ -310,6 +310,8 @@ $lang['access-login_status-8'] = 'You have been logged out due to a long period 
 $lang['access-logout-success'] = 'You have logged out successfully.';
 $lang['login_email'] = 'Email Address';
 $lang['login_password'] = 'Password';
+$lang['access-user_status-0'] = 'Inactive';
+$lang['access-user_status-1'] = 'Active';
 
 
 // client
@@ -489,3 +491,4 @@ $lang['error-regex_failed'] = 'The content you entered failed to match a specifi
 $lang['error-no_save_data'] = 'There is no data to be saved';
 $lang['error-min_length'] = 'You must enter at least #char# characters.';
 $lang['error-max_length'] = 'You cannot enter more than #char# characters.';
+$lang['error-already_has_role'] = 'This user has already been assigned a role.';
