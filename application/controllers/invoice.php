@@ -15,7 +15,7 @@ class Invoice extends MY_Controller {
 			'total_min' => floor($total['min']),
 			'total_max' => ceil($total['max'])
 		);
-		$this->data['content'] = $this->load->view(get_template().'/invoice/index', $data, TRUE);
+		$this->data['content'] = $this->load->view(get_template().'/invoice/index', $data, true);
 
 		$this->_do_output();
 	}
@@ -48,7 +48,7 @@ class Invoice extends MY_Controller {
 			'max_page' => ($row_per_page == -1) ? 1 : ceil($total_record/$row_per_page)
 		);
 
-		$content = $this->load->view(get_template().'/invoice/search', $data, TRUE);
+		$content = $this->load->view(get_template().'/invoice/search', $data, true);
 		echo $content;
 	}
 
@@ -77,7 +77,7 @@ class Invoice extends MY_Controller {
 			$data['invoice_terms'] = $invoice['terms_content'];
 		}
 
-		$this->data['content'] = $this->load->view(get_template().'/invoice/view', $data, TRUE);
+		$this->data['content'] = $this->load->view(get_template().'/invoice/view', $data, true);
 
 		$this->_do_output();
 	}
@@ -107,7 +107,7 @@ class Invoice extends MY_Controller {
 			$data['invoice_terms'] = $invoice['terms_content'];
 		}
 
-		$content = $this->load->view(get_template().'/invoice/print', $data, TRUE);
+		$content = $this->load->view(get_template().'/invoice/print', $data, true);
 		output_pdf($content);
 	}
 
@@ -136,7 +136,7 @@ class Invoice extends MY_Controller {
 			$data['invoice_terms'] = $invoice['terms_content'];
 		}
 
-		$content = $this->load->view(get_template().'/invoice/print', $data, TRUE);
+		$content = $this->load->view(get_template().'/invoice/print', $data, true);
 		echo $content;
 	}
 
@@ -161,7 +161,7 @@ class Invoice extends MY_Controller {
 			$data['invoice_terms'] = $invoice['terms_content'];
 		}
 
-		$this->data['content'] = $this->load->view(get_template().'/invoice/edit', $data, TRUE);
+		$this->data['content'] = $this->load->view(get_template().'/invoice/edit', $data, true);
 
 		$this->_do_output();
 	}
@@ -244,7 +244,7 @@ class Invoice extends MY_Controller {
 			'terms' => $this->InvoiceM->get_terms()
 		);
 
-		$this->data['content'] = $this->load->view(get_template().'/invoice/new', $data, TRUE);
+		$this->data['content'] = $this->load->view(get_template().'/invoice/new', $data, true);
 
 		$this->_do_output();
 	}
@@ -314,6 +314,16 @@ class Invoice extends MY_Controller {
 			'url' => '/invoice/view/'.$invoice_id
 		));
 		exit;
+	}
+
+	function pay($id) {
+		$data = array (
+			'invoice_id' => $id
+		);
+
+		$this->data['content'] = $this->load->view(get_template().'/invoice/pay', $data, true);
+
+		$this->_do_output();
 	}
 
 	function get_terms($id) {

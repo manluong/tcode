@@ -1,153 +1,203 @@
-<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/invoice.css" />
+<link rel="stylesheet" href="/resources/template/<?php echo get_template() ?>/css/invoice.css" />
 <link rel="stylesheet" href="/resources/addon/jqueryui/aristo/ui.css" />
 <script type="text/javascript" src="/resources/addon/invoice.js"></script>
 
-<div id="invoice_nav">
-	<ul class="nav_left">
-		<li class="main">Invoice</li>
-		<li>&gt; New</li>
-	</ul>
-	<ul class="nav_right">
-		<li><a href="#">Dashboard</a></li>
-		<li><a href="/invoice">List</a></li>
-		<li><a href="/invoice/add">New</a></li>
-	</ul>
-</div>
-
-<form id="invoice_form" action="/invoice/add_save" method="post">
-<div id="invoice_info">
-	<ul id="form_show">
-		<li>
-			<span class="invoice_info_span">Customer</span>
-			<select name="customer_id">
-				<option value="">---- Select ----</option>
-				<?php foreach ($customer as $r): ?>
-				<option value="<?php echo $r->id ?>"><?php echo $r->nickname ?></option>
-				<?php endforeach ?>
-			</select>
-		</li>
-		<li>
-			<span class="invoice_info_span">Date of Issue</span>
-			<input type="text" name="issue_date" class="datepicker" style="width: 200px" />
-		</li>
-		<li>
-			<span class="invoice_info_span">Due Date</span>
-			<input type="text" name="due_date" class="datepicker" style="width: 200px" />
-		</li>
-		<li>
-			<span class="invoice_info_span">PO Number</span>
-			<input type="text" name="po_number" />
-		</li>
-	</ul>
-</div>
-
-<div id="invoice_item_list">
-	<div class="invoice_item header clear">
-		<div class="col-1">&nbsp;</div>
-		<div class="col-2">Product</div>
-		<div class="col-3">Description</div>
-		<div class="col-4">Unit Price</div>
-		<div class="col-5">Qty</div>
-		<div class="col-6">Total</div>
+<div id="breadcrumb">
+	<div id="module_name">
+		<ul>
+			<li><a href="/invoice" class="main">INVOICE</a></li>
+			<li class="arrow"></li>
+			<li class="curent_page">New</li>
+			<li><a href="#" id="favoriteIcon" class="on" title="Remove from favorites"></a></li>
+		</ul>
+	</div>
+	<div id="top_button">
+		<ul>
+			<li><a href="/invoice"><button class="btn btn-inverse">LIST</button></a></li>
+			<li><a href="/invoice/add"><button class="btn btn-inverse">NEW</button></a></li>
+		</ul>
 	</div>
 </div>
 
-<div id="invoice_item_template" style="display: none;">
-	<div class="invoice_item temp clear">
-		<div class="col-1">
-			<a href="#" class="remove">x</a>
-			<a href="#" class="more">+</a>
-			<a href="#" class="move">m</a>
+<div id="content_top">
+	<div id="user_profile">
+		<div id="user_avatar"><img alt="avatar" src="/resources/template/default_web/img/invoice/invoice-avatar.jpg"/></div>
+		<div id="user_info">
+			<ul>
+				<li class="user_sex">Mr.</li>
+				<li class="user_name">Albert Z</li>
+				<li class="user_position">Facebook Inc. <span style="font-weight: normal;">CEO</span></li>
+			</ul>
 		</div>
-		<div class="col-2">
-			<input type="hidden" name="invoice_item_id[]" />
-			<input type="hidden" name="product_id[]" class="product_id" />
-			<input type="text" name="product_name[]" class="product_name" />
+	</div>
+	<div id="customer_list">
+		<div class="btn-group">
+			<a href="#" class="btn btn-inverse">CUSTOMER</a>
+			<a href="#" data-toggle="dropdown" class="btn btn-inverse dropdown-toggle"><span class="caret"></span></a>
+			<ul class="dropdown-menu">
+				<li><a href="#"><i class="icon-pencil"></i> Edit</a></li>
+				<li><a href="#"><i class="icon-trash"></i> Delete</a></li>
+				<li><a href="#"><i class="icon-ban-circle"></i> Ban</a></li>
+			</ul>
 		</div>
-		<div class="col-3"><input type="text" name="description[]" /></div>
-		<div class="col-4"><input type="text" name="unit_price[]" class="unit_price cal" /></div>
-		<div class="col-5"><input type="text" name="qty[]" class="qty cal" /></div>
-		<div class="col-6">
-			<input type="hidden" name="total[]" class="item_total" />
-			<label class="item_total_label"></label>
+	</div>
+</div>
+
+<div id="boxes">
+	<form id="invoice_form" action="/invoice/add_save" method="post">
+	<div>
+		<div class="invoice_title"><span class="arrow_title"></span><span>INVOICE INFORMATION</span></div>
+		<div id="input_data_info">
+			<ul>
+				<li>
+					<span class="input_data_label">Customer</span>
+					<select name="customer_id">
+						<option value="">- - - Select - - -</option>
+						<?php foreach ($customer as $r): ?>
+						<option value="<?php echo $r->id ?>"><?php echo $r->nickname ?></option>
+						<?php endforeach ?>
+					</select>
+				</li>
+				<li>
+					<span class="input_data_label">Invoice Date</span>
+					<span class="fillter_input"><input type="text" name="issue_date" class="inv-field datepicker" /></span>
+				</li>
+				<li>
+					<span class="input_data_label">Due Date</span>
+					<span class="fillter_input"><input type="text" name="due_date" class="inv-field datepicker" /></span>
+				</li>
+				<li>
+					<span class="input_data_label">Purchase Order</span>
+					<span class="fillter_input"><input type="text" name="po_number" class="inv-field" /></span>
+				</li>
+			</ul>
 		</div>
-		<div class="invoice_item_sub clear" style="display: none;">
-			<div class="col-7"><input type="text" name="from[]" class="item_datepicker" /></div>
-			<div class="col-8"><input type="text" name="to[]" class="item_datepicker" /></div>
-			<div class="col-9">
-				<select name="duration[]">
-					<option value="">Period</option>
-					<?php foreach ($duration_type as $r): ?>
-					<option value="<?php echo $r->a_product_durationtype_id ?>"><?php echo $r->a_product_durationtype_name ?></option>
-					<?php endforeach ?>
-				</select>
+	</div>
+	<div id="invoice_detail">
+		<div class="invoice_title"><span class="arrow_title"></span><span>DETAILS</span></div>
+		<div id="main_cases">
+			<div id="item_list_header">
+				<div style="width: 28px;"></div>
+				<div style="width: 216px;">Product</div>
+				<div style="width: 360px;">Description</div>
+				<div style="width: 85px;">Unit Price</div>
+				<div style="width: 88px;">Qty</div>
+				<div style="width: 80px;">Total</div>
 			</div>
-			<div class="col-10">
-				<select name="price_type[]">
-					<option value="">Price Type</option>
-					<?php foreach ($price_type as $r): ?>
-					<option value="<?php echo $r->a_product_pricetype_id ?>"><?php echo $r->a_product_pricetype_name ?></option>
-					<?php endforeach ?>
-				</select>
-			</div>
-			<div class="col-11"><input type="text" name="discount[]" class="discount cal" /></div>
-			<div class="col-12">
-				<input type="checkbox" class="tax-gst" style="width: auto" /> GST
-				<input type="checkbox" class="tax-vat" style="width: auto" /> VAT
+			<div id="invoice_item_list">
 			</div>
 		</div>
-	</div>
-</div>
-<br />
-<div class="clear">
-	<div class="apply left">
-		<input id="add_row" type="button" class="btn" value="ADD ROW" />
-		Apply to all items:
-		<input type="text" id="apply_all_discount" style="width: 100px;" />
-		<input type="checkbox" id="apply_all_gst" data-tax="gst" /> GST
-		<input type="checkbox" id="apply_all_vat" data-tax="vat" /> VAT
-	</div>
-	<div id="total" class="right">
-		<span class="left">Sub Total</span><span id="sub_total" class="right"></span>
-		<br />
-		<!-- <span class="left">TAX - GST(5%)</span><span id="tax_gst" class="right"></span>
-		<br />
-		<span class="left">TAX - VAT(10%)</span><span id="tax_vat" class="right"></span>
-		<br /> -->
-		<span class="left">Discount</span><span id="discount_total" class="right"></span>
-		<br />
-		<br />
-		<span class="left">Invoice Total</span><span id="invoice_total" class="right"></span>
-		<br />
-		<span class="left">Paid</span>
-		<br />
-		<br />
-		<span class="left">Balance</span>
-	</div>
-</div>
 
-<div class="clear">
-	<div class="terms left">
-		<span>Terms</span>
-		<select id="terms_id" name="terms_id" class="right">
-			<option value="">Pre Define Terms</option>
-			<?php foreach ($terms as $r): ?>
-			<option value="<?php echo $r->id ?>"><?php echo $r->name ?></option>
-			<?php endforeach ?>
-		</select>
-		<br />
-		<div class="clear"></div>
-		<textarea id="terms_content" name="terms_content"></textarea>
-	</div>
-	<div class="terms right">
-		<span>Notes for Customer</span>
-		<br />
-		<textarea name="notes" class="notes"></textarea>
-	</div>
-</div>
+		<div id="invoice_item_template" style="display: none;">
+			<div class="invoice_item temp clearfix">
+				<div class="col-1">
+					<ul>
+						<li class="row_delete"></li>
+						<li class="row_move"></li>
+						<li class="row_down"></li>
+					</ul>
+				</div>
+				<div class="invoice_item_main">
+					<div>
+						<input type="hidden" name="invoice_item_id[]" />
+						<input type="hidden" name="product_id[]" class="product_id" />
+						<input type="text" name="product_name[]" class="col-2 inv-field product_name" />
+					</div>
+					<div><input type="text" name="description[]" class="col-3" /></div>
+					<div><input type="text" name="unit_price[]" class="col-4 unit_price cal" /></div>
+					<div><input type="text" name="qty[]" class="col-5 qty cal" /></div>
+					<div>
+						<input type="hidden" name="total[]" class="item_total" />
+						<label class="col-6 item_total_label"></label>
+					</div>
+				</div>
+				<div class="invoice_item_sub clear" style="display: none;">
+					<div><input type="text" name="from[]" class="col-7 item_datepicker" /></div>
+					<div><input type="text" name="to[]" class="col-8 item_datepicker" /></div>
+					<div>
+						<select name="duration[]" class="col-9">
+							<option value="">Period</option>
+							<?php foreach ($duration_type as $r): ?>
+							<option value="<?php echo $r->a_product_durationtype_id ?>"><?php echo $r->a_product_durationtype_name ?></option>
+							<?php endforeach ?>
+						</select>
+					</div>
+					<div>
+						<select name="price_type[]" class="col-10">
+							<option value="">Price Type</option>
+							<?php foreach ($price_type as $r): ?>
+							<option value="<?php echo $r->a_product_pricetype_id ?>"><?php echo $r->a_product_pricetype_name ?></option>
+							<?php endforeach ?>
+						</select>
+					</div>
+					<div><input type="text" name="discount[]" class="col-11 discount cal" /></div>
+					<div class="col-12">
+						<input type="checkbox" class="tax-gst" /><span>GST</span>
+						<input type="checkbox" class="tax-vat" /><span>VAT</span>
+					</div>
+				</div>
+			</div>
+		</div>
 
-<div class="div_btn clear">
-	<input id="submit_btn" type="submit" class="btn" value="Submit" />
-	<a href="/invoice"><input type="button" class="btn" value="Cancel" /></a>
+		<div>
+			<div id="invoice_footer">
+				<div id="add_row">
+					<input type="button" class="btn btn-inverse" value="ADD ROW" />
+				</div>
+				<div id="all_discount">
+					<ul>
+						<li>Apply to all items</li>
+						<li><input type="text" id="apply_all_discount" class="inv-field" /></li>
+						<li><input type="checkbox" id="apply_all_gst" data-tax="gst" /> GST</li>
+						<li><input type="checkbox" id="apply_all_vat" data-tax="vat" /> VAT</li>
+					</ul>
+				</div>
+			</div>
+			<div id="total_price">
+				<ul>
+					<li>
+						<div class="total_label">Sub Total</div>
+						<div class="total_price"><span id="sub_total">$0</span></div>
+					</li>
+					<li>
+						<div class="total_label">Discount</div>
+						<div class="total_price"><span id="discount_total">$0</span></div>
+					</li>
+					<li style="font-size:18px;">
+						<div class="total_label">Invoice Total</div>
+						<div class="total_price"><span id="invoice_total">$0</span></div>
+					</li>
+					<li>
+						<div class="total_label">Paid</div>
+						<div class="total_price">$0</div>
+					</li>
+					<li style="font-weight:bold;">
+						<div class="total_label">Balance</div>
+						<div class="total_price"><span id="balance">$0</span></div>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div id="submit_all_page"><button id="submit_btn" class="btn btn-primary">SUBMIT</button></div>
+
+		<div id="invoice_note">
+			<div id="term_condition">
+				<div id="term_condition_title">Terms &amp; Conditions</div>
+				<div style="float:left;width:150px;">
+					<select id="terms_id" name="terms_id" class="right">
+						<option value="">Pre Define Terms</option>
+						<?php foreach ($terms as $r): ?>
+						<option value="<?php echo $r->id ?>"><?php echo $r->name ?></option>
+						<?php endforeach ?>
+					</select>
+				</div>
+				<div style="width:100%;"><textarea rows="3" id="terms_content" name="terms_content" class="input-xlarge"></textarea></div>
+			</div>
+			<div id="note_customer">
+				<div style="width:100%;float:left;height:37px;">Notes for Customers</div>
+				<div style="width:100%;"><textarea rows="3" name="notes" class="input-xlarge"></textarea></div>
+			</div>
+		</div>
+	</div>
+	</form>
 </div>
-</form>
