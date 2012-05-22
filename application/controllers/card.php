@@ -18,28 +18,27 @@ class Card extends MY_Controller {
 	}
 
 	function view($id) {
-		$view_data = $this->CardM->get($id);
+		$view_data['data'] = $this->CardM->get($id);
 
 		$this->data['content'] = $this->load->view(get_template().'/card/view', $view_data, TRUE);
 		$this->_do_output();
 	}
 
 	function edit($id) {
-		$view_data = $this->CardM->get($id);
+		$view_data['data'] = $this->CardM->get($id);
+		$view_data['is_new'] = FALSE;
 
 		$this->data['content'] = $this->load->view(get_template().'/card/edit', $view_data, TRUE);
 		$this->_do_output();
 	}
 
 	function save() {
-		//$id = $this->CardM->save();
-		echo '<pre>', print_r($_POST, TRUE), '</pre>';
-		die();
+		$id = $this->CardM->save();
 		if ($id == FALSE) {
 			echo 'error saving.';
 			echo '<pre>', print_r($this->CardM->errors, TRUE), '</pre>';
 		} else {
-			redirect('/card/view'.$id);
+			redirect('/card/view/'.$id);
 		}
 	}
 
