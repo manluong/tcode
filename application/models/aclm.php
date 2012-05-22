@@ -924,36 +924,6 @@ class AclM extends MY_Model {
 			$result = $this->db->insert('access_user_role', $data);
 		} elseif ($depth == 3) {
 			//is a subrole
-
-			//check if it has a main role, if not, add it
-			$existing_role_id = $this->get_card_role_id($card_id);
-			if ($existing_role_id === FALSE) {
-				$role_path = explode('/', $role);
-				array_pop($role_path);
-				$role_path = implode('/', $role_path);
-
-				$parent_role_id = $this->get_foreign_id_by_path($role_path, 'ro');
-				$data = array(
-					'card_id' => $card_id,
-					'role_id' => $parent_role_id,
-				);
-
-				$result = $this->db->insert('access_user_role', $data);
-
-				//create RO for this main role
-				$parent_ro_id = $this->get_id_by_path($role_path, 'ro');
-				$ro = array(
-					'parent_id' => $parent_ro_id,
-					'name' => 'card',
-					'foreign_key' => $card_id,
-				);
-				$ro_id = $this->get_ro_id($ro);
-				if ($ro_id === FALSE) {
-					$this->create_node($parent_ro_id, $ro, 'ro');
-				}
-			}
-
-			//adding subrole
 			if (!$this->has_sub_role($card_id, $role_id)) {
 				$data = array(
 					'card_id' => $card_id,
