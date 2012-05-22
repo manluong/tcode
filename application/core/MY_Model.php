@@ -341,7 +341,7 @@ class MY_Model extends CI_Model {
 			}
 		}
 
-		$is_new = !(isset($data[$this->id_field]) && $data[$this->id_field] !== FALSE);
+		$is_new = (!isset($data[$this->id_field]) || $data[$this->id_field] === FALSE || !is_numeric($data[$this->id_field]));
 
 		//perform validation
 		if ($this->sett_skip_validation) {
