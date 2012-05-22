@@ -861,19 +861,21 @@ class AclM extends MY_Model {
 			$role_parent_id = $this->create_node(1, $data, 'ro');
 
 			//if there are users in this role, create an RO for them
-			$rs = $this->db->select('card_id')
-					->from('access_user_role')
-					->where('role_id', $role['code'])
-					->get();
-			if ($rs->num_rows() > 0) {
-				$data = array();
-				foreach($rs->result_array() AS $r) {
-					$data[] = array(
-						'name' => 'card',
-						'foreign_key' => $r['card_id']
-					);
+			if ($role['code']!=1) {	//skip the Staff role
+				$rs = $this->db->select('card_id')
+						->from('access_user_role')
+						->where('role_id', $role['code'])
+						->get();
+				if ($rs->num_rows() > 0) {
+					$data = array();
+					foreach($rs->result_array() AS $r) {
+						$data[] = array(
+							'name' => 'card',
+							'foreign_key' => $r['card_id']
+						);
+					}
+					$this->create_nodes($role_parent_id, $data, 'ro');
 				}
-				$this->create_nodes($role_parent_id, $data, 'ro');
 			}
 
 			$subroles = $this->get_subroles($role['code']);

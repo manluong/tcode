@@ -78,7 +78,6 @@ class Console extends MY_Controller {
 
 	function acl_install_basic_rules() {
 		$this->load->model('AclM');
-		$this->AclM->grant('DEFAULT/Admin', 'DEFAULT');
 		$this->AclM->grant('DEFAULT/Staff', 'DEFAULT');
 		$this->AclM->grant('DEFAULT/Vendor', 'DEFAULT/dashboard');
 		$this->AclM->grant('DEFAULT/Vendor', 'DEFAULT/helpdesk');
