@@ -24,19 +24,19 @@
 			<ul>
 				<li>
 					<span class="input_data_label">Requester</span>
-					<span class="fillter_input"><input type="text" class="inv-field"/></span>
+					<span class="fillter_input"><input name="requester" type="text" class="inv-field"/></span>
 				</li>
 				<li>
 					<span class="input_data_label">Subject</span>
-					<span class="fillter_input" id="new_helpdesk_subject"><input type="text" class="inv-field"/></span>
+					<span class="fillter_input" id="new_helpdesk_subject"><input name="subject" type="text" class="inv-field"/></span>
 				</li>
 				<li>
 					<span class="input_data_label">Assigned</span>
-					<span class="fillter_input"><input type="text" class="inv-field"/></span>
+					<span class="fillter_input"><input name="assigned" type="text" class="inv-field"/></span>
 				</li>
 				<li style="height:22px;">
 					<span class="input_data_label">CC (Email)</span>
-					<span class="fillter_input"><input type="text" class="inv-field"/></span>
+					<span class="fillter_input"><input name="cc_mail" type="text" class="inv-field"/></span>
 				</li>
 			</ul>
 		</div>
@@ -49,32 +49,75 @@
 				<li>
 					<span class="fillter_label"><strong>Status</strong></span>
 					<span class="fillter_input">
-						<select name="date_fillter" id="date_fillter">
-							<option>- - - Select - - -</option>
+						<select name="status" id="status">
+							<option value="">- - - Something - - -</option>
+							<?php if(!empty($status)) {
+									if(!empty($result->status)) {
+										$value_status = $result->status;
+									} else {
+										$value_status = 0;
+									}
+									foreach($status as $k) {
+							?>
+							<option <?=($value_status == $k->id?'selected=selected':'' )?> value="<?=$k->id?>"><?=$k->name?></option>
+							<?php }}?>
 						</select>
 					</span>
 				</li>
+				
 				<li>
 					<span style="width:130px;" class="fillter_label"><strong>Group \ Department</strong></span>
 					<span class="fillter_input">
-						<select name="date_fillter" id="date_fillter">
-							<option>- - - Select - - -</option>
+						<select name="group" id="group">
+							<option value="">- - - Something - - -</option>
+							<?php if(!empty($group)) {
+									if(!empty($result->group)) {
+										$value_group = $result->group;
+									} else {
+										$value_group = 0;
+									}
+									foreach($group as $k) {
+							?>
+							<option <?=($value_group == $k->id?'selected=selected':'' )?> value="<?=$k->id?>"><?=$k->name?></option>
+							<?php }}?>
 						</select>
 					</span>
 				</li>
+				
 				<li>
 					<span class="fillter_label"><strong>Type</strong></span>
 					<span class="fillter_input">
-						<select name="date_fillter" id="date_fillter">
-							<option>- - - Select - - -</option>
+						<select name="type" id="type">
+							<option value="">- - - Something - - -</option>
+							<?php if(!empty($type)) {
+									if(!empty($result->type)) {
+											$value_type = $result->type;
+									} else {
+											$value_type= 0;
+									}
+									foreach($type as $k) {
+							?>
+							<option <?=($value_type == $k->id?'selected=selected':'' )?> value="<?=$k->id?>"><?=$k->name?></option>
+							<?php }}?>
 						</select>
 					</span>
 				</li>
+				
 				<li>
 					<span class="fillter_label"><strong>Priority</strong></span>
 					<span class="fillter_input">
-						<select name="date_fillter" id="date_fillter">
-							<option>- - - Select - - -</option>
+						<select name="priority" id="priority">
+							<option value="">- - - Something - - -</option>
+							 <?php if(!empty($priority)) {
+									if(!empty($result->priority)) {
+											$value_pri = $result->priority;
+									} else {
+											$value_pri= 0;
+									}
+									foreach($priority as $k) {
+							?>
+							<option <?=($value_pri == $k->id?'selected=selected':'' )?> value="<?=$k->id?>"><?=$k->name?></option>
+							<?php }}?>
 						</select>
 					</span>
 				</li>
