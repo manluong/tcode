@@ -19,7 +19,7 @@ class AppM extends MY_Model {
 	}
 
 	function setup() {
-		$this->acl_app_list = $this->get_apps(TRUE);
+		$this->acl_app_list = $this->get_apps();
 	}
 
 	function get($app_id_or_name) {
