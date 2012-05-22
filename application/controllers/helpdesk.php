@@ -54,7 +54,7 @@ class Helpdesk extends MY_Controller {
 			'priority' => '',
 			'comment' => '',
 			'private' => '',
-			'helpdesk_id' => $id_helpdesk ,
+			'helpdesk_id' => $helpdesk_id ,
                         'active' => 1,
 		);
 		$insert_comment_id = $this->Helpdesk_CommentM->save($comment_data);

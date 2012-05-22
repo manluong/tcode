@@ -116,7 +116,7 @@ function submit_comment(){
 	</div>
 
 	<input type="hidden" value="<?=(!empty($helpdesk_id)? $helpdesk_id : '0')?>" name="hiddenIdAdmincp" id="hiddenIdAdmincp" />
-	<input type="hidden" value="<?=(!empty(comment_id)? comment_id : '0')?>" name="hiddenCommentID" id="hiddenCommentID" />
+	<input type="hidden" value="<?=(!empty($comment_id)? $comment_id : '0')?>" name="hiddenCommentID" id="hiddenCommentID" />
 
         <div id="helpdesk_select">
 		<ul>

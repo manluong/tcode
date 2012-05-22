@@ -4,8 +4,9 @@ class Helpdesk_CommentM extends MY_Model {
 	function __construct() {
 		parent::__construct();
 
-		$this->table = 'a_comment_file';
+		$this->table = 'a_helpdesk_comment';
 		$this->cache_enabled = TRUE;
+                $this->sett_filter_deleted = FALSE;
 	}
 
 	function get_list() {
