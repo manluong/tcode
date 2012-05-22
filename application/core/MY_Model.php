@@ -90,7 +90,7 @@ class MY_Model extends CI_Model {
 
 		if (count($this->where) > 0) {
 			foreach($this->where AS $w) {
-				$this->db->where($w);
+				$this->db->where($w, NULL, FALSE);
 			}
 		}
 
@@ -117,7 +117,7 @@ class MY_Model extends CI_Model {
 
 		if (count($this->where) > 0) {
 			foreach($this->where AS $w) {
-				$this->db->where($w);
+				$this->db->where($w, NULL, FALSE);
 			}
 		}
 
@@ -210,7 +210,7 @@ class MY_Model extends CI_Model {
 
 		if (count($this->where) > 0) {
 			foreach($this->where AS $w) {
-				$this->db->where($w);
+				$this->db->where($w, NULL, FALSE);
 			}
 		}
 
