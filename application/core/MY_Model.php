@@ -483,7 +483,8 @@ class MY_Model extends CI_Model {
 			if ($is_new && isset($d['db_save_skip']) && $d['db_save_skip']===TRUE) continue;
 			if (!$is_new && isset($d['db_edit_skip']) && $d['db_edit_skip']===TRUE) continue;
 
-			$data[$f] = $this->input->post($f);
+			$form_field = $this->input->post($f);
+			if ($form_field !== FALSE) $data[$f] = $form_field;
 		}
 
 		if (count($data) == 0) return FALSE;
