@@ -75,6 +75,19 @@ class Card extends MY_Controller {
 				->output_json();
 	}
 
+	function ajax_get() {
+		$id = $this->input->post('id');
+		$result = $this->CardM->get($id);
+
+		$this->RespM->set_message('')
+			->set_type('')
+			->set_template('')
+			->set_success(TRUE)
+			->set_title('Contact Info')
+			->set_details($result)
+			->output_json();
+	}
+
 	function ajax_edit() {
 		$id = $this->input->post('id');
 
