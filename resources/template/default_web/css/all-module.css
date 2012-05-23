@@ -71,7 +71,7 @@ html, body{
 }
 #top_button ul li{
 	float:left;
-	margin-right:9px;
+	margin-left:9px;
 }
 .btn_list{
 	width:42px;
@@ -90,7 +90,6 @@ html, body{
 	height:95px;
 }
 #user_profile{
-	width:739px;
 	float:left;
 }
 #user_avatar{
@@ -100,11 +99,10 @@ html, body{
 	padding:0 16px 12px 0;
 }
 #user_info{
-	width:100%;
 	color:#485152;
+	float: left;
 }
 #user_info ul li{
-	width:100%;
 	margin-bottom:8px;
 }
 .user_sex{
@@ -119,20 +117,16 @@ html, body{
 	font-weight:bold;
 }
 #customer_list{
-	width:121px;
-	height:27px;
-	float:left;
+	float:right;
 }
 #invoice_fillter{
 	width:860px;
 	min-height:127px;
 }
 .invoice_title{
-	width:100%;
 	color:#a8682a;
 	font-size:12px;
 	font-weight:bold;
-	float:left;
 	height:20px;
 }
 .arrow_title{
@@ -203,7 +197,6 @@ html, body{
 	margin-top: 24px;
 }
 #input_data_fillter{
-	height:190px;
 	width:100%;
 	display:none;
 }
@@ -222,7 +215,6 @@ html, body{
 }
 .page{
 	float:left;
-	width:310px;
 }
 .page a{
 	color:#0084cf !important;
@@ -283,22 +275,17 @@ html, body{
 #main_cases{
 	width:100%;
 	float:left;
-	min-height:225px;
 }
 #main_cases thead{
-	width:813px;
 	height:41px;
 	background:url(../img/invoice/invoice-bg_thead.jpg) repeat-x;
 	font-size:13px;
 	color:#444444;
 	padding:0 38px 0 10px;
-	float:left;
 	line-height:37px;
 }
 #main_cases tbody{
-	width:861px;
 	min-height:41px;
-	float:left;
 }
 
 #main_cases th{
@@ -323,171 +310,6 @@ html, body{
 	width:860px;
 }
 /*END INVOICE CSS */
-
-/*BEGIN INVOICE EDIT CSS */
-#title_item_edit{
-	height:53px;
-	width:860px;
-	text-align:right;
-	font-size:30px;
-	color:#485152;
-}
-#input_data_info{
-	height:123px;
-	width:857px;
-	background: url("../img/invoice/invoice-shadown_fillter.png") no-repeat scroll 0 0 transparent;
-	float:left;
-	padding-top:25px;
-	margin-top:5px;
-}
-.detail_product input{
-	width:215px;
-	margin-right:2px;
-}
-.detail_des input{
-	width:343px;
-	margin-right:2px;
-}
-.detail_unitprice input{
-	width:72px;
-	margin-right:2px;
-}
-.detail_qty input{
-	width:65px;
-}
-.tr_detail{
-	height:67px !important;
-	line-height:67px !important;
-}
-#row_control ul {
-	width:22px;
-	padding-top:6px;
-}
-.row_delete{
-	width:15px;
-	height:15px;
-	background: url("../img/invoice/invoice-delete_row.jpg") no-repeat scroll 0 0 transparent;
-	cursor:pointer;
-}
-.row_move{
-	width:13px;
-	height:13px;
-	background: url("../img/invoice/invoice-move.jpg") no-repeat scroll 1px 2px transparent;
-	cursor:pointer;
-}
-.row_up{
-	width:19px;
-	height:19px;
-	background: url("../img/invoice/invoice-up_arrow.jpg") no-repeat scroll -4px 0 transparent;
-	cursor:pointer;
-}
-.row_down{
-	width:19px;
-	height:19px;
-	background: url("../img/invoice/invoice-down_arrow.png") no-repeat scroll -4px 0 transparent;
-	cursor:pointer;
-}
-#input_date input{
-	width:101px;
-	float:left;
-}
-#input_date select{
-	width:119px;
-	float:left;
-	margin-right:2px;
-}
-#input_checkbox{
-	float:left;
-	margin-top:-20px;
-}
-#add_row{
-	float:left;
-	width:228px;
-	margin-left:36px;
-}
-#all_discount{
-	width:356px;
-	float:left;
-}
-#all_discount ul li{
-	float:left;
-	margin-right:15px;
-}
-#all_discount input[type="text"]{
-	width:100px;
-	margin-top:-3px;
-}
-input {
-	color:#4d4d4d;
-}
-#total_price{
-	width:240px;
-	height:168px;
-	background-color:#f7f7f7;
-	float:left;
-	margin-top:-17px;
-	font-size:13px;
-	color:#444444;
-}
-#total_price ul li{
-	width:100%;
-	padding-top:26px;
-}
-.total_label{
-	width:125px;
-	float:left;
-	text-align:right;
-}
-.total_price{
-	float:left;
-	margin-left:23px ;
-	display:inline;
-}
-#invoice_total{
-	float:left;
-	width:100%;
-}
-#submit_all_page{
-	width:866px;
-	text-align:right;
-	padding-top:20px;
-	float:left;
-}
-#invoice_note{
-	float:left;
-	width:100%;
-	padding-top:20px;
-}
-#term_condition{
-	float:left;
-	width:420px;
-}
-#note_customer{
-	float:left;
-	width:420px;
-	margin-left:17px;
-	display:inline;
-}
-#term_condition_title{
-	float:left;
-	width: 270px;
-}
-#term_condition select{
-	width:150px;
-}
-#invoice_note textarea{
-	width:410px;
-	height:195px;
-}
-#invoice_total input{
-	font-style:italic;
-	color:#8e9191;
-}
-#input_date input{
-	font-style:italic;
-	color:#8e9191;
-}
-/*END INVOICE EDIT CSS */
 
 /*START HELPDESK LIST CSS */
 #helpdesk_fillter{
