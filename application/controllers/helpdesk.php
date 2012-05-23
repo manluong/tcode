@@ -26,28 +26,27 @@ class Helpdesk extends MY_Controller {
 	}
 
 	function add() {
-            //Delete helpdesk null
-            $this->delete_helpdesk();
+		//Delete helpdesk null
+		$this->delete_helpdesk();
 
-            //Delete comment null
-            $this->delete_comment();
+		//Delete comment null
+		$this->delete_comment();
 
-            //Create Helpdesk null
-            $helpdesk_data = array(
-                    'subject' => '',
-                    'assign_id' => '',
-                    'cc_email' => '',
-                    'group' => '',
-                    'status' => '',
-                    'type' => '',
-                    'priority' => '',
-                    'active' => 1,
-            );
+		//Create Helpdesk null
+		$helpdesk_data = array(
+			'subject' => '',
+			'assign_id' => '',
+			'cc_email' => '',
+			'group' => '',
+			'status' => '',
+			'type' => '',
+			'priority' => '',
+			'active' => 1,
+		);
 
 	   $helpdesk_id = $this->HelpdeskM->save($helpdesk_data);
-
 	   //Create Comment null
-	   $comment_data = array(
+	   $comment_data = array (
 			'group' => '',
 			'status' => '',
 			'type' => '',
@@ -55,7 +54,7 @@ class Helpdesk extends MY_Controller {
 			'comment' => '',
 			'private' => '',
 			'helpdesk_id' => $helpdesk_id ,
-                        'active' => 1,
+            'active' => 1,
 		);
 		$insert_comment_id = $this->Helpdesk_CommentM->save($comment_data);
 
@@ -94,7 +93,6 @@ class Helpdesk extends MY_Controller {
 
 		$this->data['content'] = $this->load->view(get_template().'/helpdesk/edit',$content, TRUE);
 		$this->_do_output();
-
 	}
 
 	function out_put_pdf($id) {
@@ -183,7 +181,7 @@ class Helpdesk extends MY_Controller {
 	function save_comment(){
 		$id_helpdesk = $this->input->post('id');
 		$data = array(
-                        'id' => $this->input->post('id_comment'),
+            'id' => $this->input->post('id_comment'),
 			'group' => $this->input->post('group'),
 			'status' => $this->input->post('status'),
 			'type' => $this->input->post('type'),
@@ -191,14 +189,14 @@ class Helpdesk extends MY_Controller {
 			'comment' => $this->input->post('comment'),
 			'private' => $this->input->post('pri'),
 			'helpdesk_id' => $id_helpdesk ,
-                        'active' => 0,
+            'active' => 0,
 		);
 		$insert_id = $this->Helpdesk_CommentM->save($data);
 
-		$data_ajax['comment'] = $this->Helpdesk_CommentM->get_content($id_helpdesk);
+		//$data_ajax['comment'] = $this->Helpdesk_CommentM->get_content($insert_id);
 
-		$ajax_content = $this->load->view(get_template().'/helpdesk/ajax_updateComment',$data_ajax ,true);
-		echo $ajax_content ;
+		//$ajax_content = $this->load->view(get_template().'/helpdesk/ajax_updateComment',$data_ajax ,true);
+		echo $insert_id  ;
 	}
 
 
@@ -236,7 +234,6 @@ class Helpdesk extends MY_Controller {
 	}
 
 	function upload($comment_id){
-
 	   $this->load->library('filel');
 	   $file = $this->filel->save('file', 'Helpdesk');
 		if($helpdesk_id != 0){
@@ -245,30 +242,30 @@ class Helpdesk extends MY_Controller {
 		}
 	}
 
-	function delete_helpdesk(){
+	function delete_helpdesk() {
 		//$this->load->library('filel');
 		$result = $this->HelpdeskM->get_helpdesk_not_use();
-		if(!empty($result)){
-			foreach($result as $k){
+		if (!empty($result)) {
+			foreach($result as $k) {
 				$this->HelpdeskM->delete($k->id,TRUE);
 			}
 		}
 	}
 
-        function delete_comment(){
-                $result = $this->Helpdesk_CommentM->get_comment_not_use();
-                if(!empty($result)){
-			foreach($result as $k){
+	function delete_comment() {
+		$result = $this->Helpdesk_CommentM->get_comment_not_use();
+		if (!empty($result)) {
+			foreach ($result as $k) {
 				$this->Helpdesk_CommentM->delete($k->id,TRUE);
 				$file = $this->Helpdesk_CommentM->get_comment_files($k->id);
-				if(!empty($file)){
-					foreach($file as $v){
+				if (!empty($file)) {
+					foreach ($file as $v) {
 						$this->filel->delete($v->filename);
 						$this->Helpdesk_CommentM->delete_files_not_use($v->id);
 					}
 				}
 			}
 		}
-        }
+	}
 
 }

@@ -33,7 +33,7 @@
 
 <div id="content_top">
 	<div id="user_profile">
-		<div id="user_avatar"><image alt="avatar" src="resources/template/default_web/img/invoice/invoice-avatar.jpg"/></div>
+		<div id="user_avatar"><image alt="avatar" src="<?=site_url('resources/template/default_web/img/invoice')?>/invoice-avatar.jpg"/></div>
 		<div id="user_info">
 			<ul>
 				<li class="user_sex">Mr.</li>
@@ -63,32 +63,52 @@
 				<li>
 					<span class="fillter_label">Status</span>
 					<span class="fillter_input">
-						<select name="date_fillter" id="date_fillter">
-							<option>- - - Select - - -</option>
+						<select name="status" id="status">
+							<option value="">- - - Something - - -</option>
+							<?php if(!empty($status)) {
+									foreach($status as $k) {
+							?>
+							<option value="<?=$k->id?>"><?=$k->name?></option>
+							<?php }}?>
 						</select>
 					</span>
 				</li>
 				<li>
 					<span class="fillter_label">Group \ Department</span>
 					<span class="fillter_input">
-						<select name="date_fillter" id="date_fillter">
-							<option>- - - Select - - -</option>
+						<select name="group" id="group">
+							<option value="">- - - Something - - -</option>
+							<?php if(!empty($group)) {
+									foreach($group as $k) {
+							?>
+							<option value="<?=$k->id?>"><?=$k->name?></option>
+							<?php }}?>
 						</select>
 					</span>
 				</li>
 				<li>
 					<span class="fillter_label">Type</span>
 					<span class="fillter_input">
-						<select name="date_fillter" id="date_fillter">
-							<option>- - - Select - - -</option>
+						<select name="type" id="type">
+							<option value="">- - - Something - - -</option>
+							<?php if(!empty($type)) {
+									foreach($type as $k) {
+							?>
+							<option value="<?=$k->id?>"><?=$k->name?></option>
+							<?php }}?>
 						</select>
 					</span>
 				</li>
 				<li>
 					<span class="fillter_label">Priority</span>
 					<span class="fillter_input">
-						<select name="date_fillter" id="date_fillter">
-							<option>- - - Select - - -</option>
+						<select name="priority" id="priority">
+							<option value="">- - - Something - - -</option>
+							 <?php if(!empty($priority)) {								
+									foreach($priority as $k) {
+							?>
+							<option value="<?=$k->id?>"><?=$k->name?></option>
+							<?php }}?>
 						</select>
 					</span>
 				</li>
