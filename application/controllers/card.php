@@ -75,18 +75,8 @@ class Card extends MY_Controller {
 			return;
 		}
 
-		$details['data'] = $this->DS_Card->set_subaction('v')
-				->set_id($id)
-				->get_fields_with_data();
-
-		$details['links'][] = array(
-			'type' => 'submit',
-			'url' => '/card/ajax_edit_save',
-			'target' => 'form',
-			'style' => 'primary',
-			'icon' => 'ok',
-			'text' => 'Save',
-		);
+		$result['data'] = $this->CardM->get($id);
+		$result['is_new'] = FALSE;
 
 		$this->RespM->set_message()
 				->set_type('form')
@@ -94,7 +84,7 @@ class Card extends MY_Controller {
 				//->set_template('custom_viewcard')//custom template
 				->set_success(true)
 				->set_title('Card Info Dataset')
-				->set_details($details)
+				->set_details($result)
 				->output_json();
 	}
 
