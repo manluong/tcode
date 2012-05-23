@@ -9,6 +9,14 @@ class Card extends MY_Controller {
 	}
 
 	function index() {
+		$this->CardM->sett_fill_address = FALSE;
+		$this->CardM->sett_fill_bank = FALSE;
+		$this->CardM->sett_fill_email = FALSE;
+		$this->CardM->sett_fill_extra = FALSE;
+		$this->CardM->sett_fill_notes = FALSE;
+		$this->CardM->sett_fill_social = FALSE;
+		$this->CardM->sett_fill_tel = FALSE;
+
 		$view_data = array(
 			'list' => $this->CardM->get_list(),
 		);
@@ -49,6 +57,13 @@ class Card extends MY_Controller {
 		$this->CardM->limit = $limit;
 		$this->CardM->offset = $offset;
 
+		$this->CardM->sett_fill_address = FALSE;
+		$this->CardM->sett_fill_bank = FALSE;
+		$this->CardM->sett_fill_email = FALSE;
+		$this->CardM->sett_fill_extra = FALSE;
+		$this->CardM->sett_fill_notes = FALSE;
+		$this->CardM->sett_fill_social = FALSE;
+		$this->CardM->sett_fill_tel = FALSE;
 		$list = $this->CardM->get_list();
 
 		$this->RespM->set_message()
