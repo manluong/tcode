@@ -9,6 +9,14 @@ class Card extends MY_Controller {
 	}
 
 	function index() {
+		$this->CardM->sett_fill_address = FALSE;
+		$this->CardM->sett_fill_bank = FALSE;
+		$this->CardM->sett_fill_email = FALSE;
+		$this->CardM->sett_fill_extra = FALSE;
+		$this->CardM->sett_fill_notes = FALSE;
+		$this->CardM->sett_fill_social = FALSE;
+		$this->CardM->sett_fill_tel = FALSE;
+
 		$view_data = array(
 			'list' => $this->CardM->get_list(),
 		);
@@ -49,6 +57,13 @@ class Card extends MY_Controller {
 		$this->CardM->limit = $limit;
 		$this->CardM->offset = $offset;
 
+		$this->CardM->sett_fill_address = FALSE;
+		$this->CardM->sett_fill_bank = FALSE;
+		$this->CardM->sett_fill_email = FALSE;
+		$this->CardM->sett_fill_extra = FALSE;
+		$this->CardM->sett_fill_notes = FALSE;
+		$this->CardM->sett_fill_social = FALSE;
+		$this->CardM->sett_fill_tel = FALSE;
 		$list = $this->CardM->get_list();
 
 		$this->RespM->set_message()
@@ -58,6 +73,19 @@ class Card extends MY_Controller {
 				->set_title('Contacts List')
 				->set_details($list)
 				->output_json();
+	}
+
+	function ajax_get() {
+		$id = $this->input->post('id');
+		$result = $this->CardM->get($id);
+
+		$this->RespM->set_message('')
+			->set_type('')
+			->set_template('')
+			->set_success(TRUE)
+			->set_title('Contact Info')
+			->set_details($result)
+			->output_json();
 	}
 
 	function ajax_edit() {
@@ -75,18 +103,8 @@ class Card extends MY_Controller {
 			return;
 		}
 
-		$details['data'] = $this->DS_Card->set_subaction('v')
-				->set_id($id)
-				->get_fields_with_data();
-
-		$details['links'][] = array(
-			'type' => 'submit',
-			'url' => '/card/ajax_edit_save',
-			'target' => 'form',
-			'style' => 'primary',
-			'icon' => 'ok',
-			'text' => 'Save',
-		);
+		$result['data'] = $this->CardM->get($id);
+		$result['is_new'] = FALSE;
 
 		$this->RespM->set_message()
 				->set_type('form')
@@ -94,7 +112,7 @@ class Card extends MY_Controller {
 				//->set_template('custom_viewcard')//custom template
 				->set_success(true)
 				->set_title('Card Info Dataset')
-				->set_details($details)
+				->set_details($result)
 				->output_json();
 	}
 
