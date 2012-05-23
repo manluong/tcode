@@ -156,4 +156,16 @@ class Api extends MY_Controller {
 		$this->load->model($ds_name);
 		return $this->$ds_name;
 	}
+
+	function ajax_get_apps() {
+		$results = $this->AppM->acl_app_list;
+
+		$this->RespM->set_message('')
+				->set_type('form')
+				->set_template('')
+				->set_success(TRUE)
+				->set_title('Dataset')
+				->set_details($results)
+				->output_json();
+	}
 }
