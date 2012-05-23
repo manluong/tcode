@@ -9,7 +9,7 @@ class Helpdesk extends MY_Controller {
 		$this->load->model('HelpdeskM');
 	}
 
-	function index(){
+	function index() {
 		$this->HelpdeskM->offset = 0;
 		$this->HelpdeskM->limit = 10;
 
@@ -26,13 +26,13 @@ class Helpdesk extends MY_Controller {
 	}
 
 	function add() {
-		//Delete helpdesk null
+		//Delete NULL HELPDESK
 		$this->delete_helpdesk();
 
-		//Delete comment null
+		//Delete NULL COMMENT
 		$this->delete_comment();
 
-		//Create Helpdesk null
+		//Create NULL HELPDESK
 		$helpdesk_data = array(
 			'subject' => '',
 			'assign_id' => '',
@@ -45,7 +45,7 @@ class Helpdesk extends MY_Controller {
 		);
 
 	   $helpdesk_id = $this->HelpdeskM->save($helpdesk_data);
-	   //Create Comment null
+	   //Create NULL COMMENT
 	   $comment_data = array (
 			'group' => '',
 			'status' => '',
@@ -73,24 +73,42 @@ class Helpdesk extends MY_Controller {
 		$this->_do_output();
 	}
 
-	function edit() {
+	function edit(){
+		//Delete NULL COMMENT
+		$this->delete_comment() ;
+		
 		$id = $this->uri->segment(3);
+		
+		//Create NULL COMMENT for upload attach file
+	   $comment_data = array (
+			'group' => '',
+			'status' => '',
+			'type' => '',
+			'priority' => '',
+			'comment' => '',
+			'private' => '',
+			'helpdesk_id' => $id ,
+            'active' => 1,
+		);
+		$comment_id = $this->Helpdesk_CommentM->save($comment_data);
+			
 		$result[0] = array();
 		if($id!=0){
 			$result = $this->Helpdesk_CommentM->get_content_helpdesk($id);
 		}
+		
 		$content = array(
 			'id' => $id,
+			'comment_id' => $comment_id,
 			'group' =>  $this->Helpdesk_CommentM->get_group(),
 			'status' => $this->Helpdesk_CommentM->get_status(),
 			'priority' => $this->Helpdesk_CommentM->get_priority(),
 			'type' => $this->Helpdesk_CommentM->get_type(),
-			//'comment' => $this->Helpdesk_CommentM->get_content($id),
+			'comment' => $this->Helpdesk_CommentM->get_content($id),
 			'result' => $result[0],
 			'assign' => $this->Helpdesk_CommentM->get_assign(),
 			'file_attach' => $this->Helpdesk_CommentM->get_comment_files($id),
 		);
-
 		$this->data['content'] = $this->load->view(get_template().'/helpdesk/edit',$content, TRUE);
 		$this->_do_output();
 	}
@@ -191,12 +209,19 @@ class Helpdesk extends MY_Controller {
 			'helpdesk_id' => $id_helpdesk ,
             'active' => 0,
 		);
-		$insert_id = $this->Helpdesk_CommentM->save($data);
+		$this->Helpdesk_CommentM->save($data);
+		
+		$result[0] = array();
+		if($id_helpdesk!=0){
+			$result = $this->Helpdesk_CommentM->get_content_helpdesk($id_helpdesk);
+		}
+		$data_ajax = array(
+           'comment' => $this->Helpdesk_CommentM->get_content($id_helpdesk),
+		   'result' => $result[0],
+		);
 
-		//$data_ajax['comment'] = $this->Helpdesk_CommentM->get_content($insert_id);
-
-		//$ajax_content = $this->load->view(get_template().'/helpdesk/ajax_updateComment',$data_ajax ,true);
-		echo $insert_id  ;
+		$ajax_content = $this->load->view(get_template().'/helpdesk/ajax_updateComment',$data_ajax ,true);
+		echo $ajax_content  ;
 	}
 
 
@@ -216,7 +241,7 @@ class Helpdesk extends MY_Controller {
 		echo $insert_id;
 	}
 
-	function ajaxChangeInfoHelpDesk(){
+	function ajaxChangeInfoHelpDesk() {
 		$id = $this->input->post('id');
 		$data = array(
 			'id'=>$id,
@@ -224,7 +249,7 @@ class Helpdesk extends MY_Controller {
 			'assign_id' => $this->input->post('assign'),
 			'cc_email' => $this->input->post('cc_email'),
 		);
-		$edit_id = $this->HelpdeskM->save($data);
+		$this->HelpdeskM->save($data);
 		$content = array (
 			'info' => $this->HelpdeskM->get_content($id),
 		);

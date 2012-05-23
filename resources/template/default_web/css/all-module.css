@@ -127,7 +127,7 @@ html, body{
 	color:#a8682a;
 	font-size:12px;
 	font-weight:bold;
-	height:20px;
+	height:24px;
 }
 .arrow_title{
 	width:10px;
@@ -317,9 +317,9 @@ html, body{
 	height:68px;
 	background:url(../img/invoice/invoice-shadown_fillter.png) no-repeat;
 	float:left;
-	padding-top:20px;
+	padding:20px 0 0 40px;
 	display:inline;
-	padding-left:40px;
+	margin-top:5px;
 }
 #helpdesk_fillter ul li{
 	float:left;
@@ -347,7 +347,6 @@ html, body{
 	background: url("../img/invoice/invoice-shadown_fillter.png") no-repeat scroll 0 0 transparent;
 	float:left;
 	padding-top:25px;
-	margin-top:5px;
 }
 #helpdesk_show_info ul li{
 	float:left;
@@ -363,6 +362,7 @@ html, body{
 	font-size:16px;
 	margin-top:4px;
 	float:left;
+	font-weight:bold;
 }
 #helpdesk_change_info{
 	color:#1d57a0;
@@ -436,8 +436,6 @@ html, body{
 	width:100%;
 	height:50px;
 	float:left;
-	margin-left:40px;
-	display:inline;
 }
 .comment_user_avatar{
 	width:45px;
@@ -447,12 +445,12 @@ html, body{
 .comment_content{
 	float:left;
 	width:760px;
-	margin:0 0 25px 93px;
+	margin:0 0 25px 53px;
 	display:inline;
 	color:#444444;
 	font-size:13px;
 }
-#comment_arrow{
+.comment_arrow {
 	float:left;
 	width:50px;
 	margin-top:-30px;
@@ -475,6 +473,23 @@ html, body{
 }
 #new_helpdesk_subject input{
 	width:435px;
+}
+.btn-group a{
+	color:white;
+}
+#top_button a{
+	color:white;
+}
+.dropdown-menu a{
+	color:#000000;
+}
+#input_data_info {
+    background: url("../img/invoice/invoice-shadown_fillter.png") no-repeat scroll 0 0 transparent;
+    float: left;
+    height: 123px;
+    margin-top: 5px;
+    padding-top: 27px;
+    width: 857px;
 }
 /*END HELPDESK LIST CSS */
 
