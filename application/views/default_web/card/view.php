@@ -19,27 +19,27 @@ function ajax_edit(id){
 		<ul>
 			<li>
 				<span class="input_data_label">First Name</span>
-				<span class="fillter_input"><?=$data[first_name]?></span>
+				<span class="fillter_input"><?=$data['first_name']?></span>
 			</li>
 			<li>
 				<span class="input_data_label">Last Name</span>
-				<span class="fillter_input"><?=$data[last_name]?></span>
+				<span class="fillter_input"><?=$data['last_name']?></span>
 			</li>
 			<li>
 				<span class="input_data_label">Nickname</span>
-				<span class="fillter_input"><?=$data[nickname] ?></span>
+				<span class="fillter_input"><?=$data['nickname'] ?></span>
 			</li>
 			<li>
 				<span class="input_data_label">Organization Name</span>
-				<span class="fillter_input"><?=$data[organization_name] ?></span>
+				<span class="fillter_input"><?=$data['organization_name'] ?></span>
 			</li>
 			<li>
 				<span class="input_data_label">Organization Title</span>
-				<span class="fillter_input"><?=$data[organization_title] ?></span>
+				<span class="fillter_input"><?=$data['organization_title'] ?></span>
 			</li>
 			<li>
 				<span class="input_data_label">Organization Number</span>
-				<span class="fillter_input"><?=$data[organization_number] ?></span>
+				<span class="fillter_input"><?=$data['organization_number'] ?></span>
 			</li>
 			<li style="margin-left:118px;">	
 				<span class="btn btn-inverse" onclick="ajax_edit(<?=$data['id']?>);">EDIT DETAIL<span> 
