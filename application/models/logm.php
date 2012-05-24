@@ -35,7 +35,6 @@ class LogM extends CI_Model {
 		if ($this->_log_data['log_type']) {
 			if ($this->_log_data['log_type']['event']) {
 				$log_event_insert_id = $this->_insert_log_event();
-				$this->_insert_log_audit($log_event_insert_id);
 			}
 
 			if ($this->_log_data['log_type']['history']) {
@@ -170,26 +169,6 @@ class LogM extends CI_Model {
 		$data['created_stamp_iso'] = parse_user_date($data['stamp'], 'ISO');
 
 		return $data;
-	}
-
-	private function _insert_log_audit($log_event_insert_id) {
-		if ($this->_log_data['log_type']['auditfield']) {
-            foreach (array_keys($this->_log_data['log_type']['auditfield']) as $field){
-				log_message('debug', 'Field: '.$field);
-                 if (($this->url['subaction'] == 'as' && $this->_log_data['log_type']['auditfield'][$field]['new'])||
-                     ($this->url['subaction'] == 'es' && $this->_log_data['log_type']['auditfield'][$field]['cur'] != $this->_log_data['log_type']['auditfield'][$field]['new'])) {
-					$data = array(
-						'log_type_id' => $this->_log_data['log_type']['id'],
-						'log_id' => $this->_log_data['insert_id'],
-						'field' => $field,
-						'from' => $this->_log_data['log_type']['auditfield'][$field]['cur'],
-						'to' => $this->_log_data['log_type']['auditfield'][$field]['new']
-					);
-					$this->db->insert('log_audit', $data);
-				}
-            }
-        }
-		return;
 	}
 
 	private function _insert_log_history() {
