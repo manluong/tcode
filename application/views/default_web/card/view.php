@@ -33,8 +33,8 @@ function ajax_edit(id){
 					foreach($card_email as $k){
 			?>
 			<li>
-				<span class="input_data_label">Email</span>
-				<span class="fillter_input"><?=$k->email?></span>
+				<span class="input_data_label" style="<?=($k->is_default == 1?'color:red':'')?>">Email</span>
+				<span class="fillter_input" style="<?=($k->is_default == 1?'color:red':'')?>"><?=$k->email?></span>
 			</li>
 			<?php }}?>
 			<!-- CARD ADDRESS -->
@@ -42,9 +42,9 @@ function ajax_edit(id){
 					foreach($card_address as $k) {
 			?>
 			<li>
-				<span class="input_data_label">Address</span>
-				<span class="fillter_input"><?=$k->line_1.' | '.$k->line_2?></span>
-				<span class="fillter_input"><?=' City: '.$k->city.' - State: '.$k->state.' - Postal Code: '.$k->postal?></span>
+				<span class="input_data_label" style="<?=($k->is_default == 1?'color:red':'')?>">Address</span>
+				<span class="fillter_input" style="<?=($k->is_default == 1?'color:red':'')?>"><?=$k->line_1.' | '.$k->line_2?></span>
+				<span class="fillter_input" style="<?=($k->is_default == 1?'color:red':'')?>"><?=' City: '.$k->city.' - State: '.$k->state.' - Postal Code: '.$k->postal?></span>
 			</li>
 			<?php }}?>
 			<!-- CARD SOCIAL -->
@@ -92,8 +92,8 @@ function ajax_edit(id){
 					foreach($card_phone as $k){
 			?>
 			<li>
-				<span class="input_data_label">Phone</span>
-				<span class="fillter_input"><?=$k->extension.' - '.$k->area.' - '.$k->country.' - '.$k->number?></span>
+				<span class="input_data_label" style="<?=($k->is_default == 1?'color:red':'')?>">Phone</span>
+				<span class="fillter_input" style="<?=($k->is_default == 1?'color:red':'')?>"><?=$k->extension.' - '.$k->area.' - '.$k->country.' - '.$k->number?></span>
 			</li>
 			<?php }}?>
 			
