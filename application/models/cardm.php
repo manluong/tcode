@@ -212,5 +212,56 @@ class CardM extends MY_Model {
 			}
 		}
 	}
+	
+	function get_card_email($id) {
+		$this->db->select('*');
+		$this->db->where('card_id', $id);
+		$this->db->where('is_default', 1);
+		$query = $this->db->get('card_email');
+
+		if ($query->result()) {
+			return $query->result();
+		} else {
+			return false;
+		}
+	}
+	
+	function get_card_social($id) {
+		$this->db->select('*');
+		$this->db->where('card_id', $id);
+		$query = $this->db->get('card_social');
+
+		if ($query->result()) {
+			return $query->result();
+		} else {
+			return false;
+		}
+	}
+	
+	function get_card_phone($id) {
+		$this->db->select('*');
+		$this->db->where('card_id', $id);
+		$this->db->where('is_default', 1);
+		$query = $this->db->get('card_tel');
+
+		if ($query->result()) {
+			return $query->result();
+		} else {
+			return false;
+		}
+	}
+	
+	function get_card_address($id) {
+		$this->db->select('*');
+		$this->db->where('card_id', $id);
+		$this->db->where('is_default', 1);
+		$query = $this->db->get('card_address');
+
+		if ($query->result()) {
+			return $query->result();
+		} else {
+			return false;
+		}
+	}
 
 }
