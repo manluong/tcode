@@ -44,7 +44,7 @@ function ajax_edit(id){
 			<li>
 				<span class="input_data_label">Address</span>
 				<span class="fillter_input"><?=$k->line_1.' | '.$k->line_2?></span>
-				<span class="fillter_input"><?='City: '.$k->city.' - State: '.$k->state.' - Postal Code: '.$k->postal?></span>
+				<span class="fillter_input"><?=' City: '.$k->city.' - State: '.$k->state.' - Postal Code: '.$k->postal?></span>
 			</li>
 			<?php }}?>
 			<!-- CARD SOCIAL -->
@@ -83,8 +83,8 @@ function ajax_edit(id){
 					}
 			?>
 			<li>
-				<span class="input_data_label">Social</span>
-				<span class="fillter_input"><?='Type: '.$typename.' | '.$k->name_id?></span>
+				<span class="input_data_label"><?=$typename?></span>
+				<span class="fillter_input"><?=$k->name_id?></span>
 			</li>
 			<?php }}?>
 			<!-- CARD PHONE -->

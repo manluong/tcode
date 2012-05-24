@@ -108,7 +108,7 @@ class LogM extends CI_Model {
 			'loguid' => $this->UserM->get_loguid(),
 			'agent' => $_SERVER['HTTP_USER_AGENT'],
 			'dev' => '0',
-			'ip' => inet_pton($_SERVER['REMOTE_ADDR'])
+			//'ip' => inet_pton($_SERVER['REMOTE_ADDR'])
 		);
 		$this->db->insert('log_session', $data);
 	}
