@@ -329,6 +329,38 @@ class MY_Model extends CI_Model {
 		return !$has_error;
 	}
 
+	function get_differences($new_data) {
+		$id = $new_data[$this->id_field];
+
+		$existing = $this->get($id);
+
+		$diff = array();
+		foreach($new_data AS $field => $new_value) {
+			if ($existing[$field] === $new_value) continue;
+
+			$diff[] = array(
+				'table' => $this->table,
+				'data_id' => $id,
+				'field' => $field,
+				'old' => $existing[$field],
+				'new' => $new_value,
+			);
+		}
+
+		return $diff;
+	}
+
+	function save_differences($diff) {
+		if (count($diff) == 0) return;
+
+		foreach($diff AS $k=>$v) {
+			$diff[$k]['created_stamp'] = get_current_stamp();
+			$diff[$k]['created_card_id'] = $this->UserM->get_card_id();
+		}
+
+		$this->db->insert_batch('log_audit', $diff);
+	}
+
 
 	function save($data=FALSE) {
 		//get data from POST based on data_fields
@@ -362,14 +394,19 @@ class MY_Model extends CI_Model {
 			$rs = $this->db->insert($this->table, $data);
 			return $this->db->insert_id();
 		} else {
+			$id = $data[$this->id_field];
+
+			$diff = $this->get_differences($data);
+			$this->save_differences($diff);
+
 			if ($this->sett_has_system_fields) {
 				$data['modified_stamp'] = get_current_stamp();
 				$data['modified_card_id'] = $this->CI->UserM->get_card_id();
 			}
 
-			$rs = $this->db->where($this->id_field, $data[$this->id_field])
+			$rs = $this->db->where($this->id_field, $id)
 					->update($this->table, $data);
-			return $data[$this->id_field];
+			return $id;
 		}
 	}
 
