@@ -45,7 +45,17 @@ class Card extends MY_Controller {
 		$this->data['content'] = $this->load->view(get_template().'/card/edit', $view_data, TRUE);
 		$this->_do_output();
 	}
+	
+	function card_ajax_edit() {
+		$id = $this->input->post('id');
+		
+		$view_data['data'] = $this->CardM->get($id);
+		$view_data['is_new'] = FALSE;
 
+		$content = $this->load->view(get_template().'/card/edit', $view_data, TRUE);
+		echo $content;
+	}
+	
 	function save() {
 		$id = $this->CardM->save();
 		if ($id == FALSE) {
