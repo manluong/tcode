@@ -70,9 +70,9 @@
 					<span class="fillter_label">Payment</span>
 					<span class="fillter_input">
 						<div data-toggle="buttons-radio" class="btn-group">
-							<button class="btn">All</button >
-							<button class="btn">Paid</button >
-							<button class="btn">Unpaid</button >
+							<button class="btn" onlick="return false;">All</button>
+							<button class="btn" onlick="return false;">Paid</button>
+							<button class="btn" onlick="return false;">Unpaid</button>
 						</div>
 					</span>
 				</li>
@@ -121,6 +121,8 @@
 	<button id="search_btn" class="btn btn-primary">SUBMIT</button>
 	</form>
 
-	<div id="invoice_list">
+	<div id="invoice_cases">
+		<div class="invoice_title"><span class="arrow_title"></span><span>Cases</span></div>
+		<div id="invoice_list"></div>
 	</div>
 </div>

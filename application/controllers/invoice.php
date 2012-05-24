@@ -21,8 +21,8 @@ class Invoice extends MY_Controller {
 	}
 
 	function search() {
-		$page = $this->input->post('page') ? $this->input->post('page') : 1;
-		$row_per_page = $this->input->post('row_per_page') ? $this->input->post('row_per_page') : 10;
+		//$page = $this->input->post('page') ? $this->input->post('page') : 1;
+		//$row_per_page = $this->input->post('row_per_page') ? $this->input->post('row_per_page') : 10;
 
 		$search_param = array(
 			'customer_id' => $this->input->post('customer_id'),
@@ -35,17 +35,17 @@ class Invoice extends MY_Controller {
 			'invoice_id' => $this->input->post('invoice_id'),
 			'po_number' => $this->input->post('po_number'),
 			'notes' => $this->input->post('notes'),
-			'page' => $page,
-			'row_per_page' => $row_per_page
+			//'page' => $page,
+			//'row_per_page' => $row_per_page
 		);
 
-		$total_record = $this->InvoiceM->search($search_param, true);
+		//$total_record = $this->InvoiceM->search($search_param, true);
 		$data = array(
 			'invoice_list' => $this->InvoiceM->search($search_param),
-			'total_record' => $total_record,
-			'current_page' => $page,
-			'row_per_page' => $row_per_page,
-			'max_page' => ($row_per_page == -1) ? 1 : ceil($total_record/$row_per_page)
+			//'total_record' => $total_record,
+			//'current_page' => $page,
+			//'row_per_page' => $row_per_page,
+			//'max_page' => ($row_per_page == -1) ? 1 : ceil($total_record/$row_per_page)
 		);
 
 		$content = $this->load->view(get_template().'/invoice/search', $data, true);
@@ -168,7 +168,7 @@ class Invoice extends MY_Controller {
 
 	function edit_save() {
 		// get input data
-		$post = $this->input->post();
+		/*$post = $this->input->post();
 		$invoice_id = $post['invoice_id'];
 
 		$invoice_data = array(
@@ -233,6 +233,17 @@ class Invoice extends MY_Controller {
 			'success' => true,
 			'url' => '/invoice/view/'.$invoice_id
 		));
+		exit;*/
+
+		$invoice_id = $this->InvoiceM->save();
+		if ($invoice_id === false) {
+			var_dump($this->InvoiceM->errors);die;
+		}
+
+		echo json_encode(array(
+			'success' => true,
+			'url' => '/invoice/view/'.$invoice_id
+		));
 		exit;
 	}
 
@@ -251,7 +262,7 @@ class Invoice extends MY_Controller {
 
 	function add_save() {
 		// get input data
-		$post = $this->input->post();
+		/*$post = $this->input->post();
 
 		$invoice_data = array(
 			'customer_card_id' => $post['customer_id'],
@@ -304,9 +315,14 @@ class Invoice extends MY_Controller {
 
 		// save db
 		$invoice_id = $this->InvoiceM->save($invoice_data);
-		foreach ($invoice_item_data as $data) {
+		/*foreach ($invoice_item_data as $data) {
 			$data['invoice_id'] = $invoice_id;
 			$this->InvoiceItemM->save($data);
+		}*/
+
+		$invoice_id = $this->InvoiceM->save();
+		if ($invoice_id === false) {
+			var_dump($this->InvoiceM->errors);die;
 		}
 
 		echo json_encode(array(

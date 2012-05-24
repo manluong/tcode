@@ -51,7 +51,7 @@
 			<ul>
 				<li>
 					<span class="input_data_label">Customer</span>
-					<select name="customer_id">
+					<select name="customer_card_id">
 						<option value="">- - - Select - - -</option>
 						<?php foreach ($customer as $r): ?>
 						<option value="<?php echo $r->id ?>"><?php echo $r->nickname ?></option>
@@ -60,15 +60,15 @@
 				</li>
 				<li>
 					<span class="input_data_label">Invoice Date</span>
-					<span class="fillter_input"><input type="text" name="issue_date" class="inv-field datepicker" /></span>
+					<span class="fillter_input"><input type="text" name="invoice_stamp" class="inv-field datepicker" /></span>
 				</li>
 				<li>
 					<span class="input_data_label">Due Date</span>
-					<span class="fillter_input"><input type="text" name="due_date" class="inv-field datepicker" /></span>
+					<span class="fillter_input"><input type="text" name="payment_due_stamp" class="inv-field datepicker" /></span>
 				</li>
 				<li>
 					<span class="input_data_label">Purchase Order</span>
-					<span class="fillter_input"><input type="text" name="po_number" class="inv-field" /></span>
+					<span class="fillter_input"><input type="text" name="purchase_order_number" class="inv-field" /></span>
 				</li>
 			</ul>
 		</div>
@@ -85,57 +85,6 @@
 				<div style="width: 80px;">Total</div>
 			</div>
 			<div id="invoice_item_list">
-			</div>
-		</div>
-
-		<div id="invoice_item_template" style="display: none;">
-			<div class="invoice_item temp clearfix">
-				<div class="col-1">
-					<ul>
-						<li class="row_delete"></li>
-						<li class="row_move"></li>
-						<li class="row_down"></li>
-					</ul>
-				</div>
-				<div class="invoice_item_main">
-					<div>
-						<input type="hidden" name="invoice_item_id[]" />
-						<input type="hidden" name="product_id[]" class="product_id" />
-						<input type="text" name="product_name[]" class="col-2 inv-field product_name" />
-					</div>
-					<div><input type="text" name="description[]" class="col-3" /></div>
-					<div><input type="text" name="unit_price[]" class="col-4 unit_price cal" /></div>
-					<div><input type="text" name="qty[]" class="col-5 qty cal" /></div>
-					<div>
-						<input type="hidden" name="total[]" class="item_total" />
-						<label class="col-6 item_total_label"></label>
-					</div>
-				</div>
-				<div class="invoice_item_sub clear" style="display: none;">
-					<div><input type="text" name="from[]" class="col-7 item_datepicker" /></div>
-					<div><input type="text" name="to[]" class="col-8 item_datepicker" /></div>
-					<div>
-						<select name="duration[]" class="col-9">
-							<option value="">Period</option>
-							<?php foreach ($duration_type as $r): ?>
-							<option value="<?php echo $r->a_product_durationtype_id ?>"><?php echo $r->a_product_durationtype_name ?></option>
-							<?php endforeach ?>
-						</select>
-					</div>
-					<div>
-						<select name="price_type[]" class="col-10">
-							<option value="">Price Type</option>
-							<?php foreach ($price_type as $r): ?>
-							<option value="<?php echo $r->a_product_pricetype_id ?>"><?php echo $r->a_product_pricetype_name ?></option>
-							<?php endforeach ?>
-						</select>
-					</div>
-					<div><input type="text" name="discount[]" class="col-11 discount cal" /></div>
-					<div class="col-12">
-						<input type="checkbox" class="tax-gst" /><span>GST</span>
-						<input type="checkbox" class="tax-vat" /><span>VAT</span>
-					</div>
-				</div>
 			</div>
 		</div>
 
@@ -157,15 +106,15 @@
 				<ul>
 					<li>
 						<div class="total_label">Sub Total</div>
-						<div class="total_price"><span id="sub_total">$0</span></div>
+						<div class="total_price"><span id="lbl_sub_total">$0</span></div>
 					</li>
 					<li>
 						<div class="total_label">Discount</div>
-						<div class="total_price"><span id="discount_total">$0</span></div>
+						<div class="total_price"><span id="lbl_discount_total">$0</span></div>
 					</li>
 					<li style="font-size:18px;">
 						<div class="total_label">Invoice Total</div>
-						<div class="total_price"><span id="invoice_total">$0</span></div>
+						<div class="total_price"><span id="lbl_invoice_total">$0</span></div>
 					</li>
 					<li>
 						<div class="total_label">Paid</div>
@@ -173,7 +122,7 @@
 					</li>
 					<li style="font-weight:bold;">
 						<div class="total_label">Balance</div>
-						<div class="total_price"><span id="balance">$0</span></div>
+						<div class="total_price"><span id="lbl_balance">$0</span></div>
 					</li>
 				</ul>
 			</div>
@@ -195,9 +144,60 @@
 			</div>
 			<div id="note_customer">
 				<div style="width:100%;float:left;height:37px;">Notes for Customers</div>
-				<div style="width:100%;"><textarea rows="3" name="notes" class="input-xlarge"></textarea></div>
+				<div style="width:100%;"><textarea rows="3" name="memo" class="input-xlarge"></textarea></div>
 			</div>
 		</div>
 	</div>
 	</form>
+</div>
+
+<input type="hidden" id="invoice_item_count" value="0" />
+<div id="invoice_item_template" style="display: none;">
+	<div class="invoice_item temp clearfix">
+		<div class="col-1">
+			<ul>
+				<li class="row_delete"></li>
+				<li class="row_move"></li>
+				<li class="row_down"></li>
+			</ul>
+		</div>
+		<div class="invoice_item_main">
+			<div>
+				<input type="hidden" name="addon_item[{xxxxx}][product_id]" class="product_id" />
+				<input type="text" name="addon_item[{xxxxx}][product_name]" class="col-2 inv-field product_name" />
+			</div>
+			<div><input type="text" name="addon_item[{xxxxx}][description]" class="col-3" /></div>
+			<div><input type="text" name="addon_item[{xxxxx}][unit_price]" class="col-4 unit_price cal" /></div>
+			<div><input type="text" name="addon_item[{xxxxx}][quantity]" class="col-5 qty cal" /></div>
+			<div>
+				<input type="hidden" name="addon_item[{xxxxx}][total]" class="item_total" />
+				<label class="col-6 item_total_label"></label>
+			</div>
+		</div>
+		<div class="invoice_item_sub clear" style="display: none;">
+			<div><input type="text" name="addon_item[{xxxxx}][subscription_start_stamp]" class="col-7 item_datepicker" /></div>
+			<div><input type="text" name="addon_item[{xxxxx}][subscription_end_stamp]" class="col-8 item_datepicker" /></div>
+			<div>
+				<select name="addon_item[{xxxxx}][duration_type]" class="col-9">
+					<option value="">Period</option>
+					<?php foreach ($duration_type as $r): ?>
+					<option value="<?php echo $r->a_product_durationtype_id ?>"><?php echo $r->a_product_durationtype_name ?></option>
+					<?php endforeach ?>
+				</select>
+			</div>
+			<div>
+				<select name="addon_item[{xxxxx}][price_type]" class="col-10">
+					<option value="">Price Type</option>
+					<?php foreach ($price_type as $r): ?>
+					<option value="<?php echo $r->a_product_pricetype_id ?>"><?php echo $r->a_product_pricetype_name ?></option>
+					<?php endforeach ?>
+				</select>
+			</div>
+			<div><input type="text" name="addon_item[{xxxxx}][discount]" class="col-11 discount cal" /></div>
+			<div class="col-12">
+				<input type="checkbox" class="tax-gst" /><span>GST</span>
+				<input type="checkbox" class="tax-vat" /><span>VAT</span>
+			</div>
+		</div>
+	</div>
 </div>

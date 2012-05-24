@@ -35,6 +35,12 @@ class InvoiceM extends MY_Model {
 		)
 	);
 
+	public $sett_fill_item = TRUE;
+
+	private $addons = array(
+		'item' => 'InvoiceItemM'
+	);
+
 	function __construct() {
 		parent::__construct();
 
@@ -193,5 +199,105 @@ class InvoiceM extends MY_Model {
 		}
 
 		return array('min' => $min, 'max' => $max);
+	}
+
+	function save($data = FALSE) {
+		$has_error = FALSE;
+
+		if ($data === FALSE) $data = $this->get_form_data();
+		$is_new = !(isset($data[$this->id_field]) && $data[$this->id_field] !== FALSE);
+
+		//filter out any addon data
+		$card = array();
+		foreach($data AS $k=>$v) {
+			$k = str_replace('addon_', '', $k);
+			if (in_array($k, array_keys($this->addons))) continue;
+			$card[$k] = $v;
+		}
+		$invoice_id = parent::save($card);
+
+		if ($invoice_id === FALSE) $has_error = TRUE;
+
+		foreach($this->addons AS $name=>$model) {
+			$form_addon = FALSE;
+			if (isset($data['addon_'.$name])) $form_addon = $data['addon_'.$name];			//check if it's in $data
+			if ($form_addon === FALSE) $form_addon = $this->input->post('addon_'.$name);	//if not, check if it's post var
+			if ($form_addon === FALSE) continue;											//if not, skip to next addon
+
+			if ($is_new) {
+				foreach($form_addon AS $fa) {
+					if ($this->is_empty_array($fa)) continue;
+
+					$addon_set = array(
+						'invoice_id' => $invoice_id
+					);
+
+					foreach($this->$model->data_fields AS $key=>$detail) {
+						if (isset($fa[$key])) $addon_set[$key] = $fa[$key];
+					}
+
+					$id = $this->$model->save($addon_set);
+
+					if ($id === FALSE) {
+						$this->errors[] = $this->$model->get_error_string();
+						$this->field_errors['addon_'.$name] = $this->$model->field_errors;
+						$has_error = TRUE;
+					}
+				}
+			} else {
+				$this->$model->where[] = 'invoice_id='.$invoice_id;
+				$existing_set = $this->$model->get_list();
+				$existing_ids = get_distinct('id', $existing_set);
+				$form_ids = get_distinct('id', $form_addon);
+
+				$deleted_ids = array_diff($existing_ids, $form_ids);
+				if (count($deleted_ids) > 0) {
+					foreach($deleted_ids AS $id) {
+						if ($id == '') continue;
+						$this->$model->delete($id);
+					}
+				}
+
+				foreach($form_addon AS $fa) {
+					if ($this->is_empty_array($fa)) continue;
+
+					$addon_set = array(
+						'id' => $fa['id'],
+						'invoice_id' => $invoice_id
+					);
+					foreach($this->$model->data_fields AS $key=>$detail) {
+						if (isset($fa[$key])) $addon_set[$key] = $fa[$key];
+					}
+					$id = $this->$model->save($addon_set);
+
+					if ($id === FALSE) {
+						$this->errors[] = $this->$model->get_error_string();
+						$this->field_errors['addon_'.$name] = $this->$model->field_errors;
+						$has_error = TRUE;
+					}
+				}
+			}
+		}
+
+		if ($has_error) {
+			$result = FALSE;
+		} else {
+			$result = $invoice_id;
+		}
+
+		return $result;
+	}
+
+	private function is_empty_array($array)
+	{
+		$is_empty = !empty($array);
+
+		foreach ($array as $v) {
+			if ($v != '') {
+				$is_empty = FALSE;
+			}
+		}
+
+		return $is_empty;
 	}
 }

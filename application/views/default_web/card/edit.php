@@ -148,6 +148,59 @@
 
 				</script>
 
+				<br />
+
+				<div id="addon_social">
+				<?php
+					$x = 0;
+					$social_type_options = array();
+					$social_label = '';
+					foreach($data['addon_social'] AS $e) {
+						if ($x == 0) {
+							$social_type_options = $e['type_options'];
+							$social_label = 'Social';
+						}
+						echo '<div class="control-group">';
+							echo '<label class="control-label" for="social_',$e['id'],'">',$social_label,'</label>';
+							echo '<div class="controls">';
+								echo form_hidden('addon_social['.$x.'][id]', $e['id']);
+								echo form_dropdown('addon_social['.$x.'][type]', $e['type_options'], $e['type'], 'class="input-small"'),' ';
+								echo form_input('addon_social['.$x.'][name_id]', $e['name_id'], 'id="social_'.$e['id'].'"'),' ';
+							echo '</div>';
+						echo '</div>';
+
+						$x++;
+					}
+				?>
+				</div>
+
+				<button type="button" class="btn btn-mini pull-right" id="social_add">More Social</button>
+				<script>
+					var social_index = <?=$x?>;
+					var social_type_options = jQuery.parseJSON('<?=json_encode($social_type_options)?>');
+					var social_label = '<?=$social_label?>';
+
+					$(document).ready(function() {
+						$('#social_add').on('click', function() {
+							var new_social = '<div class="control-group">'+
+												'<label class="control-label" for="social_'+social_index+'">'+social_label+'</label>'+
+												'<div class="controls">'+
+													'<input type="hidden" name="addon_social['+social_index+'][id]" value="" />'+
+													'<select name="addon_social['+social_index+'][type]" class="input-small">';
+							$(social_type_options).each(function(k, v) {
+								new_social += '<option value="'+k+'">'+v+'</option>';
+							});
+							new_social += '</select> '+
+										'<input type="text" name="addon_social['+social_index+'][name_id]" id="social_'+social_index+'" /> '+
+									'</div>'+
+								'</div>';
+
+							$('#addon_social').append(new_social);
+							social_index++;
+						});
+					});
+
+				</script>
 
 				<br />
 				<div class="control-group">
