@@ -1,10 +1,16 @@
 function add_last_row() {
+	var c = $('#invoice_item_count').val();
 	var html = $('#invoice_item_template').html();
+	while (html.indexOf('{xxxxx}') != -1) {
+		html = html.replace('{xxxxx}', c);
+	}
 	$('#invoice_item_list').append(html);
 
 	var new_item = $('#invoice_item_list .temp');
 	new_item.removeClass('temp');
 	bind_event_row(new_item);
+
+	$('#invoice_item_count').val(parseInt(c) + 1);
 }
 
 function add_row(object) {
@@ -67,10 +73,11 @@ function cal_invoice_total() {
 		invoice_total += price*qty - price*qty*discount/100;
 	});
 
-	$('#sub_total').html(format_money(sub_total));
-	$('#discount_total').html(format_money(discount_total));
-	//$('#tax_total').html(tax_total);
-	$('#invoice_total').html(format_money(invoice_total));
+	$('#lbl_sub_total').html(format_money(sub_total));
+	$('#lbl_discount_total').html(format_money(discount_total));
+	//$('#lbl_tax_total').html(tax_total);
+	$('#lbl_invoice_total').html(format_money(invoice_total));
+	$('#lbl_balance').html(format_money(invoice_total));
 }
 
 function bind_event_row(item) {
@@ -165,12 +172,39 @@ $(document).ready(function() {
 			success: function(resp) {
 				$('#invoice_list').html(resp);
 				$('#page').val(1);
+
+				$.extend($.fn.dataTableExt.oStdClasses, {
+					"sWrapper": "dataTables_wrapper form-inline"
+				});
+
+				$('#tbl_invoice').dataTable({
+					"sDom": "<<'pull-right'p>>t<<'pull-right'p>lfi>",
+					"sPaginationType": "bootstrap",
+					"iDisplayLength": 10,
+					"oLanguage": {
+						"sSearch" : "<div class=\"input-prepend\"><span class=\"add-on\"><i class=\"icon-filter\"></i></span></i>_INPUT_</div>",
+						"sInfo": "_START_ to _END_ of _TOTAL_",
+						"sLengthMenu": "_MENU_ Rows per Page",
+						"sInfoFiltered": " - filtering from _MAX_ records",
+						"oPaginate": {
+							"sPrevious": "Previous",
+							"sNext": "Next"
+					},
+					"sLengthMenu": '<select>'+
+					'<option value="10">10</option>'+
+					'<option value="20">20</option>'+
+					'<option value="30">30</option>'+
+					'<option value="40">40</option>'+
+					'<option value="50">50 Rows</option>'+
+					'<option value="-1">All</option>'+
+					'</select>'
+				}});
 			}
 		});
 		return false;
 	});
 
-	$('.page a').live('click', function(e) {
+	/*$('.page a').live('click', function(e) {
 		e.preventDefault();
 		var li = $(this).closest('li');
 		if (!$(li).hasClass('disabled') && !$(li).hasClass('active')) {
@@ -183,7 +217,7 @@ $(document).ready(function() {
 		$('#row_per_page').val($(this).val());
 		$('#page').val(1);
 		$('#search_btn').click();
-	});
+	});*/
 
 	$('#btn_print').on('click', function(e) {
 		if ($('#iframe_print').attr('src') == '') {
@@ -262,10 +296,12 @@ $(document).ready(function() {
 	$('#invoice_item_list .invoice_item').not('.header').each(function(index, item) {
 		bind_event_row(item);
 	});
-	if ($('#invoice_item_list div.invoice_item').length == 0) {
-		add_last_row();
+	if ($('#invoice_item_list').length > 0) {
+		if ($('#invoice_item_list div.invoice_item').length == 0) {
+			add_last_row();
+		}
+		cal_invoice_total();
 	}
-	cal_invoice_total();
 	$('#search_btn').click();
 
 	$('#submit_btn').click(function() {
