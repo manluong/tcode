@@ -4,7 +4,7 @@
 
 <script type="text/javascript">
 
-function submit_insert_helpdesk(){
+function submit_insert_helpdesk() {
 	var comment = $('#comment').val();
 	var requester = $('#requester').val();
 	var subject = $('#subject').val();
@@ -39,7 +39,7 @@ function submit_insert_helpdesk(){
 	);
 }
 
-function submit_comment(){
+function submit_comment() {
 	var comment = $('#comment').val();
 	var id_helpdesk = $('#hiddenIdAdmincp').attr('value');
     var id_comment = $('#hiddenCommentID').attr('value');
@@ -117,7 +117,7 @@ function submit_comment(){
 </div>
 
 <div id="boxes">
-	<div id="invoice_fillter" style="height:228px;">
+	<div id="invoice_fillter" style="height:224px;">
 		<div class="invoice_title"><span class="arrow_title"></span><span>NEW CASE INFORMATION</span></div>
 		<div id="input_data_info">
 			<ul>
@@ -218,7 +218,6 @@ function submit_comment(){
 						<div id="uploadfiles" class="btn_plupload">Upload File</div>
 						<div id="filelist" style="float:left ;margin:23px 0 0 -154px;"></div>
 					</div>
-					
 				</div>
 				<div style="float:left;margin-top:2px;"><button href="#" onclick="submit_insert_helpdesk()" class="btn btn-primary">SUBMIT</button></div>
 			</div>
@@ -231,7 +230,6 @@ function submit_comment(){
 	function getid(id) {
 		return document.getElementById(id);
 	}
-
 	var uploader = new plupload.Uploader({
 		runtimes : 'gears,html5,flash,silverlight,browserplus',
 		browse_button : 'pickfiles',
@@ -244,21 +242,17 @@ function submit_comment(){
 			{title : "Zip files", extensions : "zip"}
 		]
 	});
-
 	uploader.bind('FilesAdded', function(up, files) {
 		for (var i in files) {
 			getid('filelist').innerHTML += '<div id="' + files[i].id + '">' + files[i].name + ' (' + plupload.formatSize(files[i].size) + ') <b></b></div>';
 		}
 	});
-
 	uploader.bind('UploadProgress', function(up, file) {
 		getid(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
 	});
-
 	getid('uploadfiles').onclick = function() {
 		uploader.start();
 		return false;
 	};
-
 	uploader.init();
 </script>

@@ -24,9 +24,9 @@
 	</div>
 	<div id="top_button" style="width:210px;">
 		<ul>
-			<li><button class="btn btn-inverse" href="#">LIST</button></li>
-			<li><button class="btn btn-inverse" href="#">MY CASE</button></li>
-			<li><button class="btn btn-inverse" href="#">NEW</button></li>
+			<li><a href="<?=site_url('helpdesk')?>" class="btn btn-inverse" href="#">LIST</a></li>
+			<li><a class="btn btn-inverse" href="#">MY CASE</a></li>
+			<li><a href="<?=site_url('helpdesk/add')?>" class="btn btn-inverse" href="#">NEW</a></li>
 		</ul>
 	</div> 
 </div>
@@ -112,7 +112,7 @@
 						</select>
 					</span>
 				</li>
-				<li style="width:27px; margin:26px 0 0 72px;"><div id="arrow" class="up_arrow"></div></li>
+				<li style="width:27px; margin:26px 0 0 72px;"><div id="arrow" class="down_arrow"></div></li>
 				<li style="width:60px;padding-top:23px;"><button href="#" class="btn btn-primary">SUBMIT</button></li>
 			</ul>						
 		</div>

@@ -6,7 +6,7 @@ class Helpdesk_CommentM extends MY_Model {
 
 		$this->table = 'a_helpdesk_comment';
 		$this->cache_enabled = TRUE;
-                $this->sett_filter_deleted = FALSE;
+        $this->sett_filter_deleted = FALSE;
 	}
 
 	function get_list() {
@@ -77,7 +77,7 @@ class Helpdesk_CommentM extends MY_Model {
 
 	function get_content($id) {
 		$this->db->select('*');
-		$this->db->where('id_comment',$id);
+		$this->db->where('helpdesk_id',$id);
 		$query = $this->db->get($this->table);
 
 		if ($query->result()) {
