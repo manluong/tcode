@@ -97,7 +97,7 @@ function ajax_edit(id){
 			</li>
 			<?php }}?>
 			
-			<li style="margin-left:118px;">
+			<li style="margin:20px 0 0 118px;">
 				<span class="btn btn-inverse" onclick="ajax_edit(<?=$data['id']?>);">EDIT DETAIL<span>
 			</li>
 		</ul>
