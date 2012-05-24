@@ -128,6 +128,7 @@ class UserM extends MY_Model {
 				->from('access_user AS u')
 				->join('card_email AS e', 'e.card_id=u.card_id')
 				->where('e.email', $email)
+				->where('e.is_default', 1)
 				->limit(1)
 				->get();
 
