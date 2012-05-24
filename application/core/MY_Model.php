@@ -351,6 +351,8 @@ class MY_Model extends CI_Model {
 	}
 
 	function save_differences($diff) {
+		if (count($diff) == 0) return;
+
 		foreach($diff AS $k=>$v) {
 			$diff[$k]['created_stamp'] = get_current_stamp();
 			$diff[$k]['created_card_id'] = $this->UserM->get_card_id();
