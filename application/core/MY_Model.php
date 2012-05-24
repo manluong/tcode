@@ -330,7 +330,7 @@ class MY_Model extends CI_Model {
 	}
 
 	function get_differences($new_data) {
-		$id = $data[$this->id_field];
+		$id = $new_data[$this->id_field];
 
 		$existing = $this->get($id);
 
