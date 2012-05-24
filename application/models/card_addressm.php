@@ -16,7 +16,12 @@ class Card_AddressM extends MY_Model {
 			'type' => 'numeric'
 		),
 		'type' => array(
-			'type' => 'numeric'
+			'type' => 'selection',
+			'default' => 0,
+			'options' => array(
+				0 => 'core_select-select-card_addtype-office',
+				1 => 'core_select-select-card_addtype-home',
+			),
 		),
 		'country' => array(
 			'type' => 'text'
@@ -41,6 +46,10 @@ class Card_AddressM extends MY_Model {
 		),
 		'geo_lng' => array(
 			'type' => 'text',
+		),
+		'is_default' => array(
+			'type' => 'numeric',
+			'default' => 0
 		),
 	);
 

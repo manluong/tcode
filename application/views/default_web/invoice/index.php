@@ -70,9 +70,9 @@
 					<span class="fillter_label">Payment</span>
 					<span class="fillter_input">
 						<div data-toggle="buttons-radio" class="btn-group">
-							<button class="btn" onlick="return false;">All</button>
-							<button class="btn" onlick="return false;">Paid</button>
-							<button class="btn" onlick="return false;">Unpaid</button>
+							<button type="button" class="btn">All</button>
+							<button type="button" class="btn">Paid</button>
+							<button type="button" class="btn">Unpaid</button>
 						</div>
 					</span>
 				</li>

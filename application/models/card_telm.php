@@ -10,12 +10,10 @@ class Card_TelM extends MY_Model {
 			'type' => 'selection',
 			'default' => 0,
 			'options' => array(
-				0 => 'core_select-select-card_addtype-office',
-				1 => 'core_select-select-card_addtype-home',
-				2 => 'core_select-select-card_teltype-work',
-				3 => 'core_select-select-card_teltype-mobile',
-				4 => 'core_select-select-card_teltype-home',
-				5 => 'core_select-select-card_teltype-fax',
+				0 => 'core_select-select-card_teltype-work',
+				1 => 'core_select-select-card_teltype-mobile',
+				2 => 'core_select-select-card_teltype-home',
+				3 => 'core_select-select-card_teltype-fax',
 			),
 		),
 		'number' => array(
@@ -29,6 +27,10 @@ class Card_TelM extends MY_Model {
 		),
 		'extension' => array(
 			'type' => 'text'
+		),
+		'is_default' => array(
+			'type' => 'numeric',
+			'default' => 0
 		),
 	);
 

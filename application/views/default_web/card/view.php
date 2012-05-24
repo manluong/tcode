@@ -1,5 +1,5 @@
 <?php
-	//echo '<pre>', print_r($data, TRUE), '</pre>';
+	echo '<pre>', print_r($data, TRUE), '</pre>';
 ?>
 <script type="text/javascript">
 function ajax_edit(id){
@@ -41,8 +41,8 @@ function ajax_edit(id){
 				<span class="input_data_label">Organization Number</span>
 				<span class="fillter_input"><?=$data[organization_number] ?></span>
 			</li>
-			<li style="margin-left:118px;">	
-				<span class="btn btn-inverse" onclick="ajax_edit(<?=$data['id']?>);">EDIT DETAIL<span> 
+			<li style="margin-left:118px;">
+				<span class="btn btn-inverse" onclick="ajax_edit(<?=$data['id']?>);">EDIT DETAIL<span>
 			</li>
 		</ul>
 	</div>

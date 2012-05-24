@@ -80,6 +80,82 @@
 
 				<br />
 
+				<div id="addon_tel">
+				<?php
+					$x = 0;
+					$tel_type_options = array();
+					$tel_label = '';
+					foreach($data['addon_tel'] AS $e) {
+						if ($x == 0) {
+							$tel_type_options = $e['type_options'];
+							$tel_label = 'Phone';
+						}
+						echo '<div class="control-group">';
+							echo '<label class="control-label" for="tel_',$e['id'],'">',$tel_label,'</label>';
+							echo '<div class="controls">';
+								echo form_hidden('addon_tel['.$x.'][id]', $e['id']);
+								echo form_dropdown('addon_tel['.$x.'][type]', $e['type_options'], $e['type'], 'class="input-small"'),' ';
+								echo form_input('addon_tel['.$x.'][country]', $e['country'], 'id="tel_country_'.$e['id'].'" style="width: 40px;"'),' ';
+								echo form_input('addon_tel['.$x.'][area]', $e['area'], 'id="tel_area_'.$e['id'].'" style="width: 40px;"'),' ';
+								echo form_input('addon_tel['.$x.'][number]', $e['number'], 'id="tel_number_'.$e['id'].'" style="width: 100px;"'),' ';
+								echo form_input('addon_tel['.$x.'][extension]', $e['extension'], 'id="tel_extension_'.$e['id'].'" style="width: 40px;"'),' ';
+								$checked = ($e['is_default'] == 1);
+								echo form_radio('tel_is_default_radio', $x, $checked, 'class="tel_is_default_radio"');
+							echo '</div>';
+						echo '</div>';
+
+						if ($checked) {
+							echo '<input type="hidden" name="addon_tel['.$x.'][is_default]" value="1" class="tel_is_default_hidden" id="tel_is_default_'.$x.'" />';
+						} else {
+							echo '<input type="hidden" name="addon_tel['.$x.'][is_default]" value="0" class="tel_is_default_hidden" id="tel_is_default_'.$x.'" />';
+						}
+
+						$x++;
+					}
+				?>
+				</div>
+
+				<button type="button" class="btn btn-mini pull-right" id="tel_add">More Phone</button>
+				<script>
+					var tel_index = <?=$x?>;
+					var tel_type_options = jQuery.parseJSON('<?=json_encode($tel_type_options)?>');
+					var tel_label = '<?=$tel_label?>';
+
+					$(document).ready(function() {
+						$('#tel_add').on('click', function() {
+							var new_tel = '<div class="control-group">'+
+												'<label class="control-label" for="tel_'+tel_index+'">'+tel_label+'</label>'+
+												'<div class="controls">'+
+													'<input type="hidden" name="addon_tel['+tel_index+'][id]" value="" />'+
+													'<select name="addon_tel['+tel_index+'][type]" class="input-small">';
+							$(tel_type_options).each(function(k, v) {
+								new_tel += '<option value="'+k+'">'+v+'</option>';
+							});
+							new_tel += '</select> '+
+										'<input type="text" name="addon_tel['+tel_index+'][country]" id="tel_country_'+tel_index+'" style="width: 40px;" /> '+
+										'<input type="text" name="addon_tel['+tel_index+'][area]" id="tel_area_'+tel_index+'" style="width: 40px;" /> '+
+										'<input type="text" name="addon_tel['+tel_index+'][number]" id="tel_number_'+tel_index+'" style="width: 100px;" /> '+
+										'<input type="text" name="addon_tel['+tel_index+'][extension]" id="tel_extension_'+tel_index+'" style="width: 40px;" /> '+
+										'<input type="radio" name="tel_is_default_radio" value="'+tel_index+'" class="tel_is_default_radio" />'+
+										'<input type="hidden" name="addon_tel['+tel_index+'][is_default]" value="0" class="tel_is_default_hidden" id="tel_is_default_'+tel_index+'" />'
+									'</div>'+
+								'</div>';
+
+							$('#addon_tel').append(new_tel);
+							tel_index++;
+						});
+
+						$('#addon_tel').on('click', '.tel_is_default_radio', function() {
+							var selected = $(this).val();
+							$('.tel_is_default_hidden').attr('value', 0);
+							$('#tel_is_default_'+selected).attr('value', 1);
+						});
+					});
+
+				</script>
+
+				<br /><br />
+
 				<div id="addon_email">
 				<?php
 					$x = 0;
@@ -131,7 +207,7 @@
 							new_email += '</select> '+
 										'<input type="text" name="addon_email['+email_index+'][email]" id="email_'+email_index+'" /> '+
 										'<input type="radio" name="email_is_default_radio" value="'+email_index+'" class="email_is_default_radio" />'+
-										'<input type="hidden" name="addon_email['+email_index+'][is_default]" value="0" class="email_is_default_hidden" id="email_is_default_'+email_index+'" />'
+										'<input type="hidden" name="addon_email['+email_index+'][is_default]" value="0" class="email_is_default_hidden" id="email_is_default_'+email_index+'" />'+
 									'</div>'+
 								'</div>';
 
@@ -148,7 +224,85 @@
 
 				</script>
 
-				<br />
+				<br /><br />
+
+				<div id="addon_address">
+				<?php
+					$x = 0;
+					$address_type_options = array();
+					$address_label = '';
+					foreach($data['addon_address'] AS $e) {
+						if ($x == 0) {
+							$address_type_options = $e['type_options'];
+							$address_label = 'Address';
+						}
+						echo '<div class="control-group">';
+							echo '<label class="control-label" for="address_',$e['id'],'">',$address_label,'</label>';
+							echo '<div class="controls">';
+								echo form_hidden('addon_address['.$x.'][id]', $e['id']);
+								echo form_dropdown('addon_address['.$x.'][type]', $e['type_options'], $e['type'], 'class="input-small"'),' ';
+								echo form_input('addon_address['.$x.'][line_1]', $e['line_1'], 'id="address_line_1_'.$e['id'].'" style="width: 209px;"'),' ';
+								$checked = ($e['is_default'] == 1);
+								echo form_radio('address_is_default_radio', $x, $checked, 'class="address_is_default_radio"');
+								echo form_input('addon_address['.$x.'][line_2]', $e['line_2'], 'id="address_line_2_'.$e['id'].'" style="width: 302px;"'),' ';
+								echo form_input('addon_address['.$x.'][city]', $e['city'], 'id="address_city_'.$e['id'].'" style="width: 92px;"'),' ';
+								echo form_input('addon_address['.$x.'][state]', $e['state'], 'id="address_state_'.$e['id'].'" style="width: 92px;"'),' ';
+								echo form_input('addon_address['.$x.'][postal]', $e['postal'], 'id="address_postal_'.$e['id'].'" style="width: 92px;"'),' ';
+							echo '</div>';
+						echo '</div>';
+
+						if ($checked) {
+							echo '<input type="hidden" name="addon_address['.$x.'][is_default]" value="1" class="address_is_default_hidden" id="address_is_default_'.$x.'" />';
+						} else {
+							echo '<input type="hidden" name="addon_address['.$x.'][is_default]" value="0" class="address_is_default_hidden" id="address_is_default_'.$x.'" />';
+						}
+
+						$x++;
+					}
+				?>
+				</div>
+
+				<button type="button" class="btn btn-mini pull-right" id="address_add">More Address</button>
+				<script>
+					var address_index = <?=$x?>;
+					var address_type_options = jQuery.parseJSON('<?=json_encode($address_type_options)?>');
+					var address_label = '<?=$address_label?>';
+
+					$(document).ready(function() {
+						$('#address_add').on('click', function() {
+							var new_address = '<div class="control-group">'+
+												'<label class="control-label" for="address_'+address_index+'">'+address_label+'</label>'+
+												'<div class="controls">'+
+													'<input type="hidden" name="addon_address['+address_index+'][id]" value="" />'+
+													'<select name="addon_address['+address_index+'][type]" class="input-small">';
+							$(address_type_options).each(function(k, v) {
+								new_address += '<option value="'+k+'">'+v+'</option>';
+							});
+							new_address += '</select> '+
+										'<input type="text" name="addon_address['+address_index+'][line_1]" id="address_line_1_'+address_index+'" style="width: 209px;" /> '+
+										'<input type="radio" name="address_is_default_radio" value="'+address_index+'" class="address_is_default_radio" />'+
+										'<input type="text" name="addon_address['+address_index+'][line_2]" id="address_line_2_'+address_index+'" style="width: 302px;" /> '+
+										'<input type="text" name="addon_address['+address_index+'][city]" id="address_city_'+address_index+'" style="width: 92px;" /> '+
+										'<input type="text" name="addon_address['+address_index+'][state]" id="address_state_'+address_index+'" style="width: 92px;" /> '+
+										'<input type="text" name="addon_address['+address_index+'][postal]" id="address_postal_'+address_index+'" style="width: 92px;" /> '+
+										'<input type="hidden" name="addon_address['+address_index+'][is_default]" value="0" class="address_is_default_hidden" id="address_is_default_'+address_index+'" />'+
+									'</div>'+
+								'</div>';
+
+							$('#addon_address').append(new_address);
+							address_index++;
+						});
+
+						$('#addon_address').on('click', '.address_is_default_radio', function() {
+							var selected = $(this).val();
+							$('.address_is_default_hidden').attr('value', 0);
+							$('#address_is_default_'+selected).attr('value', 1);
+						});
+					});
+
+				</script>
+
+				<br /><br />
 
 				<div id="addon_social">
 				<?php
@@ -202,7 +356,8 @@
 
 				</script>
 
-				<br />
+				<br /><br />
+
 				<div class="control-group">
 					<label class="control-label"></label>
 					<div class="controls">
