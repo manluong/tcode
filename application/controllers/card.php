@@ -6,6 +6,7 @@ class Card extends MY_Controller {
 		parent::__construct();
 
 		$this->load->model('CardM');
+		$this->load->model('Card_AddressM');
 	}
 
 	function index() {
@@ -35,6 +36,7 @@ class Card extends MY_Controller {
 	function edit($id) {
 		$view_data['data'] = $this->CardM->get($id);
 		$view_data['is_new'] = FALSE;
+		$view_data['countries'] = $this->Card_AddressM->get_country_list();
 
 		$this->data['content'] = $this->load->view(get_template().'/card/edit', $view_data, TRUE);
 		$this->_do_output();
@@ -48,7 +50,7 @@ class Card extends MY_Controller {
 		$content = $this->load->view(get_template().'/card/edit', $view_data, TRUE);
 		echo $content;
 	}
-	
+
 	function save() {
 		$id = $this->CardM->save();
 		if ($id == FALSE) {

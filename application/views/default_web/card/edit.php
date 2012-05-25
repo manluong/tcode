@@ -248,6 +248,8 @@
 								echo form_input('addon_address['.$x.'][city]', $e['city'], 'id="address_city_'.$e['id'].'" style="width: 92px;"'),' ';
 								echo form_input('addon_address['.$x.'][state]', $e['state'], 'id="address_state_'.$e['id'].'" style="width: 92px;"'),' ';
 								echo form_input('addon_address['.$x.'][postal]', $e['postal'], 'id="address_postal_'.$e['id'].'" style="width: 92px;"'),' ';
+								echo '<br /><button type="button" class="btn" id="map">Map</button>';
+								echo form_dropdown('addon_address['.$x.'][country]', $countries, $e['country'], 'class="input-small" style="margin-left: 175px;'),' ';
 							echo '</div>';
 						echo '</div>';
 
@@ -267,6 +269,7 @@
 					var address_index = <?=$x?>;
 					var address_type_options = jQuery.parseJSON('<?=json_encode($address_type_options)?>');
 					var address_label = '<?=$address_label?>';
+					var address_countries_options = jQuery.parseJSON('<?=json_encode($countries)?>');
 
 					$(document).ready(function() {
 						$('#address_add').on('click', function() {
@@ -286,6 +289,12 @@
 										'<input type="text" name="addon_address['+address_index+'][state]" id="address_state_'+address_index+'" style="width: 92px;" /> '+
 										'<input type="text" name="addon_address['+address_index+'][postal]" id="address_postal_'+address_index+'" style="width: 92px;" /> '+
 										'<input type="hidden" name="addon_address['+address_index+'][is_default]" value="0" class="address_is_default_hidden" id="address_is_default_'+address_index+'" />'+
+										'<br /><button type="button" class="btn" id="map">Map</button>'+
+										'<select name="addon_address['+address_index+'][country]" class="input-small" style="margin-left: 175px;">';
+							$.each(address_countries_options, function(k, v) {
+								new_address += '<option value="'+k+'">'+v+'</option>';
+							});
+							new_address += '</select> '+
 									'</div>'+
 								'</div>';
 
