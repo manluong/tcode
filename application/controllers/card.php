@@ -27,7 +27,6 @@ class Card extends MY_Controller {
 	}
 
 	function view($id) {
-		//$view_data['data'] = $this->CardM->get($id);
 		$view_data = array(
 			'data' => $this->CardM->get($id),
 			'card_email' => $this->CardM->get_card_email($id),

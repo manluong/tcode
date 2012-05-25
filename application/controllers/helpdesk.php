@@ -7,12 +7,14 @@ class Helpdesk extends MY_Controller {
 
 		$this->load->model('Helpdesk_CommentM');
 		$this->load->model('HelpdeskM');
+		$this->load->model('CardM');
 	}
 
 	function index() {
-		$this->HelpdeskM->offset = 0;
-		$this->HelpdeskM->limit = 10;
+		//$this->HelpdeskM->offset = 0;
+		//$this->HelpdeskM->limit = 10;
 
+		
 		$content = array(
 			'total' => $this->HelpdeskM->get_total_records(),
 			'result' => $this->HelpdeskM->get_list(),
@@ -75,10 +77,9 @@ class Helpdesk extends MY_Controller {
 
 	function edit(){
 		//Delete NULL COMMENT
-		$this->delete_comment() ;
+		//$this->delete_comment() ;
 		
-		$id = $this->uri->segment(3);
-		
+		$id = $this->uri->segment(3);	
 		//Create NULL COMMENT for upload attach file
 	   $comment_data = array (
 			'group' => '',
@@ -105,7 +106,7 @@ class Helpdesk extends MY_Controller {
 			'priority' => $this->Helpdesk_CommentM->get_priority(),
 			'type' => $this->Helpdesk_CommentM->get_type(),
 			'comment' => $this->Helpdesk_CommentM->get_content($id),
-			'result' => $result[0],
+			'result' => $this->HelpdeskM->get($id),
 			'assign' => $this->Helpdesk_CommentM->get_assign(),
 			'file_attach' => $this->Helpdesk_CommentM->get_comment_files($id),
 		);
@@ -179,7 +180,7 @@ class Helpdesk extends MY_Controller {
 		$this->load->view(get_template().'/helpdesk/ajax_helpdesk_list',$data);
 	}
 
-        function type_fillter(){
+	function type_fillter(){
 		$value = $this->input->post('value');
 		$data = array(
 			'result' => $this->HelpdeskM->type_fillter($value),
@@ -268,7 +269,6 @@ class Helpdesk extends MY_Controller {
 	}
 
 	function delete_helpdesk() {
-		//$this->load->library('filel');
 		$result = $this->HelpdeskM->get_helpdesk_not_use();
 		if (!empty($result)) {
 			foreach($result as $k) {
@@ -278,6 +278,7 @@ class Helpdesk extends MY_Controller {
 	}
 
 	function delete_comment() {
+		$this->load->library('filel');
 		$result = $this->Helpdesk_CommentM->get_comment_not_use();
 		if (!empty($result)) {
 			foreach ($result as $k) {

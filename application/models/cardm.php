@@ -112,7 +112,7 @@ class CardM extends MY_Model {
 			$card[$k] = $v;
 		}
 		$card_id = parent::save($card);
-
+		
 		if ($card_id === FALSE) $has_error = TRUE;
 
 		foreach($this->addons AS $name=>$model) {

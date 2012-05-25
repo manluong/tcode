@@ -1,5 +1,45 @@
 <script type="text/javascript">
 	$(document).ready(function(){
+		$('#main_cases').html( '<table class="table table-striped" id="example"></table>' );
+		$.extend( $.fn.dataTableExt.oStdClasses, {
+				    "sWrapper": "dataTables_wrapper form-inline"
+				} );
+		$('#example').dataTable( {
+			"sDom": "<<'pull-right'p>>t<<'pull-right'p>lfi>",
+			"sPaginationType": "bootstrap",
+			"iDisplayLength": 15,
+			"aaData": [
+				<?php 
+					for ($i = 0 ; $i < count($result) ; $i++){
+						echo '[ "'.$result[$i]['subject'].'", "'.$result[$i]['cc_email'].'", "'.$result[$i]['assign_id'].'", "'.$result[$i]['created_stamp'].'" ],';
+					}
+				?>
+			],
+			"aoColumns": [
+				{ "sTitle": "Subject" },
+				{ "sTitle": "CC Email" },
+				{ "sTitle": "Assign ID" },
+				{ "sTitle": "Created" },
+			],
+			"oLanguage": {
+				"sSearch" : "<div class=\"input-prepend\"><span class=\"add-on\"><i class=\"icon-filter\"></i></span></i>_INPUT_</div>",
+				"sInfo": "_START_ to _END_ of _TOTAL_",
+				"sLengthMenu": "_MENU_ Rows per Page",
+				"sInfoFiltered": " - filtering from _MAX_ records",
+				"oPaginate": {
+					"sPrevious": "Previous",
+					"sNext": "Next"
+			},
+			"sLengthMenu": '<select>'+
+			'<option value="10">10</option>'+
+			'<option value="20">20</option>'+
+			'<option value="30">30</option>'+
+			'<option value="40">40</option>'+
+			'<option value="50">50 Rows</option>'+
+			'<option value="-1">All</option>'+
+			'</select>'
+		}})
+	
 		$("#arrow").click(function(){
 			$("#input_data_fillter").slideToggle();
 			
@@ -144,41 +184,7 @@
 			<div class="invoice_title" style="width:550px;"><span class="arrow_title"></span><span>Cases</span></div>
 		</div>
 		<div id="main_cases">
-			<table>
-				<thead>
-					<tr>
-						<th width="300">Subject</th>
-						<th width="182">Requester</th>
-						<th width="144">Requested</th>
-						<th width="116">Priority</th>
-						<th width="85">Last Updated</th>
-					</tr>
-				</thead>
-				
-				<tbody>
-					<tr>
-						<td width="290" style="padding-left:10px;"><a href="#">This is the subject of case</a></td>
-						<td width="182">Albert Z</td>
-						<td width="144">19 Apr</td>
-						<td width="116">High</td>
-						<td width="101" style="padding-right:18px;">3 Hours ago</td>
-					</tr>
-					<tr>
-						<td width="290" style="padding-left:10px;"><a href="#">This is the subject of case</a></td>
-						<td width="182">Albert Z</td>
-						<td width="144">19 Apr</td>
-						<td width="116">High</td>
-						<td width="101" style="padding-right:18px;">3 Hours ago</td>
-					</tr>
-					<tr>
-						<td width="290" style="padding-left:10px;"><a href="#">This is the subject of case</a></td>
-						<td width="182">Albert Z</td>
-						<td width="144">19 Apr</td>
-						<td width="116">High</td>
-						<td width="101" style="padding-right:18px;">3 Hours ago</td>
-					</tr>
-				</tbody>
-			</table>
+			
 		</div>
 	</div>
 </div>
