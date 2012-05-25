@@ -67,6 +67,75 @@ td { vertical-align: top; }
 html, html body {
 	background: #e1e1e1;
 }
+/* most used frame css */
+.fl { float: left } .fr { float: right }
+/*padding all*/
+.pa5 { padding:5px } .pa10 { padding:10px } .pa15 { padding:15px } .pa20 { padding:20px }
+/*padding top*/
+.pt1{padding-top:1px} .pt2{padding-top:2px} .pt3{padding-top:3px} .pt4{padding-top:4px} .pt5{padding-top:5px} .pt10{padding-top:10px} .pt15{padding-top:15px} .pt20{padding-top:20px} 
+/*padding right*/
+.pr5{padding-right:5px} .pr10{padding-right:10px} .pr15{padding-right:15px} .pr20{padding-right:20px} .pr25 { padding-right: 25px; }
+/*padding bottom*/
+.pb5{padding-bottom:5px} .pb10{padding-bottom:10px} .pb15{padding-bottom:15px} .pb20{padding-bottom:20px}
+/*padding left*/
+.pl5{padding-left:5px} .pl10{padding-left:10px} .pl15{padding-left:15px} .pl20{padding-left:20px} .pl25{padding-left:25px;} .pl30{padding-left:30px;}
+/*padding left + right */
+.ph5{padding-left:5px;padding-right:5px} .ph10{padding-left:10px;padding-right:10px} .ph15{padding-left:15px;padding-right:15px} .ph20{padding-left:20px;padding-right:20px}
+/*padding top + bottom */
+.pv1{padding-top:1px;padding-bottom:1px} .pv5{padding-top:5px;padding-bottom:5px} .pv10{padding-top:10px;padding-bottom:10px} .pv15{padding-top:15px;padding-bottom:15px} .pv20{padding-top:20px;padding-bottom:20px}
+/*margin all*/
+.ma5{margin:5px} .ma10{margin:10px} .ma15{margin:15px} .ma20{margin:20px}
+/*margin top*/
+.mt1{margin-top:1px} .mt2{margin-top:2px} .mt3{margin-top:3px} .mt4{margin-top:4px} .mt5{margin-top:5px} .mt6{margin-top:6px}  .mt7{margin-top:7px} .mt8{margin-top:8px} .mt9{margin-top:9px}   .mt10{margin-top:10px} .mt12{margin-top:12px}  .mt13{margin-top:13px} .mt15{margin-top:15px} .mt20{margin-top:20px} .mt25{margin-top:25px}  
+/*margin right*/
+.mr1{margin-right:1px} .mr5{margin-right:5px} .mr10{margin-right:10px}  .mr9{margin-right:9px} .mr15{margin-right:15px} .mr20{margin-right:20px} 
+/*margin bottom*/
+.mb5 {margin-bottom:5px} .mb10{margin-bottom:10px} .mb15{margin-bottom:15px} .mb20{margin-bottom:20px} .mb25{margin-bottom:25px;}.mb30{margin-bottom:30px;}
+/*margin left*/
+.ml5{margin-left:5px} .ml10{margin-left:10px} .ml15{margin-left:15px} .ml20{margin-left:20px} .ml30{margin-left:30px} .ml-1{margin-left:-1px;}
+/*margin left + right*/
+.mh5{margin-left:5px;margin-right:5px} .mh10{margin-left:10px;margin-right:10px} .mh15{margin-left:15px;margin-right:15px} .mh20{margin-left:20px;margin-right:20px}
+.mha{margin-left:auto; margin-right:auto;}
+/*margin top + right*/
+.mv5{margin-top:5px;margin-bottom:5px} .mv10{margin-top:10px;margin-bottom:10px} .mv15{margin-top:15px;margin-bottom:15px} .mv20{margin-top:20px;margin-bottom:20px}
+/*font style*/
+.fwn{font-weight:normal} .fwb{font-weight:bold} .fsi { font-style: italic } 
+/*text style*/
+.tac { text-align: center } .tal { text-align: left } .tar { text-align: right } .taj{text-align: justify} .ttu { text-transform: uppercase; } .ttc{text-transform: capitalize;} .tdu{text-decoration:underline;} .tdn{text-decoration:none; &:hover { text-decoration:none }} 
+.ti9{ text-indent: -9999px; } .tsd{text-shadow: 1px 1px 0px #999;}
+/*display style*/
+.dpn { display:none } .dpb { display:block } .dpi { display:inline } .dpib { display:inline-block }
+/*position style*/
+.por { position: relative } .poa { position: absolute } .pof { position: fixed } 
+/*overflow*/
+.ofh{overflow:hidden;} .ofa{overflow:auto;} 
+/* color */
+.cf1 { color: #555; }
+.cf2 { color: #887938; }
+.cf3 { color: #fff; }
+.cf4 { color: #444 }
+/* background */
+.bg1 { background: #c6c6c6; }
+.bg2 { background: #ee9d4e; }
+.bg3 { background: #fff; }
+.bg4 { background: #acb1b1; }
+/* font size */
+.fs11 { font-size: 11px }  .fs12 { font-size: 12px } 
+.h47 { height:47px; } .h50 { height:50px; }
+.lhn{ line-height: normal; }
+.cp{ cursor: pointer; }
+
+/* rounded */
+.rounded7 { border-radius: 7px;  -moz-border-radius: 7px;  -webkit-border-radius: 7px;}
+.rounded14 { border-radius: 14px;  -moz-border-radius: 14px;  -webkit-border-radius: 14px;}
+/* icon */
+.iChat { background: url(../img/chatIcon.png) no-repeat; display: inline-block; }
+.iChat1 {  background-position: -1px -1px; width: 29px; height: 31px }
+.iChat2 {  background-position: -1px -35px; width: 27px; height: 27px }
+.iChat3 {  background-position: -1px -65px; width: 27px; height: 27px }
+.iChat4 {  background-position: -36px -3px; width: 10px; height: 11px }
+.iChat5 {  background-position: -50px -7px; width: 10px; height: 4px }
+.iChat6 {  background-position: -62px -1px; width: 16px; height: 15px }
 
 
 /*
@@ -588,7 +657,7 @@ a.appsIconTop {
 
 .tabsNavigation li.active .activeTab {
 	position: absolute;
-	background: url('../img/sprite-1.png') no-repeat -211px -80px;
+	background: url(../img/sprite-1.png) no-repeat -211px -80px;
 	width: 73px;
 	height: 70px;
 	left: -15px;
@@ -621,7 +690,7 @@ div#main .mainContent {
 }
 
 .box {
-	background: url('../img/boxTitleBackground.png') no-repeat center 11px;
+	background: url(../img/boxTitleBackground.png) no-repeat center 11px;
 	width: 400px;
 	float: left;
 	padding-top: 10px;
@@ -637,9 +706,6 @@ div#main .mainContent {
 	height: 22px;
 	border-bottom: 1px solid #EAEAEA;
 	margin-bottom: 3px;
-}
-.box .title img {
-	vertical-align: text-top;
 }
 
 .box.left {
@@ -1227,12 +1293,12 @@ table.table thead .sorting_desc_disabled {
 	*cursor: hand;
 }
 
-table.table thead .sorting { background: url('../img/sort_both.png') no-repeat center right; }
-table.table thead .sorting_asc { background: url('../img/sort_asc.png') no-repeat center right; }
-table.table thead .sorting_desc { background: url('../img/sort_desc.png') no-repeat center right; }
+table.table thead .sorting { background: url('images/sort_both.png') no-repeat center right; }
+table.table thead .sorting_asc { background: url('images/sort_asc.png') no-repeat center right; }
+table.table thead .sorting_desc { background: url('images/sort_desc.png') no-repeat center right; }
 
-table.table thead .sorting_asc_disabled { background: url('../img/sort_asc_disabled.png') no-repeat center right; }
-table.table thead .sorting_desc_disabled { background: url('../img/sort_desc_disabled.png') no-repeat center right; }
+table.table thead .sorting_asc_disabled { background: url('images/sort_asc_disabled.png') no-repeat center right; }
+table.table thead .sorting_desc_disabled { background: url('images/sort_desc_disabled.png') no-repeat center right; }
 
 table.dataTable th:active {
 	outline: none;
