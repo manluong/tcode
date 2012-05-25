@@ -261,9 +261,9 @@ class Helpdesk extends MY_Controller {
 	function upload($comment_id){
 	   $this->load->library('filel');
 	   $file = $this->filel->save('file', 'Helpdesk');
-		if($helpdesk_id != 0){
+		if($comment_id != 0){
 		   $insert_id = $this->HelpdeskM->insert_upload_file($file['hash'],$comment_id);
-		   echo $insert_id;
+		   echo $file['hash'];
 		}
 	}
 
