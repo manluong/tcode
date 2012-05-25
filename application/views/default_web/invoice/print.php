@@ -1,5 +1,8 @@
+<link rel="stylesheet" href="/resources/template/<?php echo get_template() ?>/css/style.css" />
+<link rel="stylesheet" href="/resources/template/<?php echo get_template() ?>/css/bootstrap.min.css" />
+<link rel="stylesheet" href="/resources/template/<?php echo get_template() ?>/css/bootstrap-responsive.min.css" />
+<link rel="stylesheet" href="/resources/template/<?php echo get_template() ?>/css/all-module.css" />
 <link rel="stylesheet" href="/resources/template/<?php echo get_template() ?>/css/invoice.css" />
-<link rel="stylesheet" href="/resources/addon/jqueryui/aristo/ui.css" />
 
 <div id="boxes" class="clearfix">
 	<div id="invoice_container" class="clearfix">
@@ -19,7 +22,7 @@
 				<div id="customer_info">
 					<div id="customer_name">
 						Facebook Inc<br />
-						<?php echo $customer_name ?>
+						<?php echo $invoice['card_info']['nickname'] ?>
 					</div>
 					<div id="customer_address">
 						7 Temasek Bouleverd<br />
@@ -59,33 +62,33 @@
 				</tr>
 			</thead>
 			<tbody>
-				<?php foreach ($invoice_items as $invoice_item): ?>
+				<?php foreach ($invoice['addon_item'] as $invoice_item): ?>
 				<tr>
-					<td><?php echo $invoice_item->a_product_name ?></td>
+					<td><?php echo $invoice_item['a_product_name'] ?></td>
 					<td>
-						<?php echo $invoice_item->description ?>
+						<?php echo $invoice_item['description'] ?>
 						<div class="sub_desc">
-							<?php if ($invoice_item->subscription_start_stamp): ?>
-								<?php echo date('Y-m-d', strtotime($invoice_item->subscription_start_stamp)).' to '.date('Y-m-d', strtotime($invoice_item->subscription_end_stamp)) ?>
+							<?php if ($invoice_item['subscription_start_stamp']): ?>
+								<?php echo date('Y-m-d', strtotime($invoice_item['subscription_start_stamp'])).' to '.date('Y-m-d', strtotime($invoice_item['subscription_end_stamp'])) ?>
 								<br />
 							<?php endif ?>
-							<?php if ($invoice_item->a_product_durationtype_name): ?>
-								<?php echo $invoice_item->a_product_durationtype_name ?>
+							<?php if ($invoice_item['a_product_durationtype_name']): ?>
+								<?php echo $invoice_item['a_product_durationtype_name'] ?>
 								<br />
 							<?php endif ?>
-							<?php if ($invoice_item->a_product_pricetype_name): ?>
-								<?php echo $invoice_item->a_product_pricetype_name ?>
+							<?php if ($invoice_item['a_product_pricetype_name']): ?>
+								<?php echo $invoice_item['a_product_pricetype_name'] ?>
 								<br />
 							<?php endif ?>
-							<?php if ($invoice_item->discount): ?>
-								<?php echo $invoice_item->discount.'% Discount' ?>
+							<?php if ($invoice_item['discount']): ?>
+								<?php echo $invoice_item['discount'].'% Discount' ?>
 								<br />
 							<?php endif ?>
 						</div>
 					</td>
-					<td><?php echo '$'.number_format($invoice_item->unit_price, 2) ?></td>
-					<td><?php echo $invoice_item->quantity ?></td>
-					<td class="total"><?php echo '$'.number_format($invoice_item->total, 2) ?></td>
+					<td><?php echo '$'.number_format($invoice_item['unit_price'], 2) ?></td>
+					<td><?php echo $invoice_item['quantity'] ?></td>
+					<td class="total"><?php echo '$'.number_format($invoice_item['total'], 2) ?></td>
 				</tr>
 				<?php endforeach ?>
 			</tbody>

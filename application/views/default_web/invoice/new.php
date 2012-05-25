@@ -163,6 +163,7 @@
 		</div>
 		<div class="invoice_item_main">
 			<div>
+				<input type="hidden" name="addon_item[{xxxxx}][id]" />
 				<input type="hidden" name="addon_item[{xxxxx}][product_id]" class="product_id" />
 				<input type="text" name="addon_item[{xxxxx}][product_name]" class="col-2 inv-field product_name" />
 			</div>

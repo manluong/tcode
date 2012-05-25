@@ -56,17 +56,17 @@ class Invoice extends MY_Controller {
 		$invoice = $this->InvoiceM->get($id);
 		$data = array(
 			'invoice' => $invoice,
-			'invoice_items' => $this->InvoiceItemM->get_by_invoice_id($id),
-			'customer_name' => '',
+			//'invoice_items' => $this->InvoiceItemM->get_by_invoice_id($id),
+			//'customer_name' => '',
 			'invoice_terms' => ''
 		);
 
-		if ($invoice['customer_card_id']) {
-			$customer = $this->InvoiceM->get_customer_by_id($invoice['customer_card_id']);
-			if ($customer) {
-				$data['customer_name'] = $customer->nickname;
-			}
-		}
+		//if ($invoice['customer_card_id']) {
+		//	$customer = $this->InvoiceM->get_customer_by_id($invoice['customer_card_id']);
+		//	if ($customer) {
+		//		$data['customer_name'] = $customer->nickname;
+		//	}
+		//}
 
 		if ($invoice['terms_id']) {
 			$terms = $this->InvoiceM->get_terms_by_id($invoice['terms_id']);
@@ -86,17 +86,17 @@ class Invoice extends MY_Controller {
 		$invoice = $this->InvoiceM->get($id);
 		$data = array(
 			'invoice' => $invoice,
-			'invoice_items' => $this->InvoiceItemM->get_by_invoice_id($id),
-			'customer_name' => '',
+			//'invoice_items' => $this->InvoiceItemM->get_by_invoice_id($id),
+			//'customer_name' => '',
 			'invoice_terms' => ''
 		);
 
-		if ($invoice['customer_card_id']) {
-			$customer = $this->InvoiceM->get_customer_by_id($invoice['customer_card_id']);
-			if ($customer) {
-				$data['customer_name'] = $customer->nickname;
-			}
-		}
+		//if ($invoice['customer_card_id']) {
+		//	$customer = $this->InvoiceM->get_customer_by_id($invoice['customer_card_id']);
+		//	if ($customer) {
+		//		$data['customer_name'] = $customer->nickname;
+		//	}
+		//}
 
 		if ($invoice['terms_id']) {
 			$terms = $this->InvoiceM->get_terms_by_id($invoice['terms_id']);
@@ -115,17 +115,17 @@ class Invoice extends MY_Controller {
 		$invoice = $this->InvoiceM->get($id);
 		$data = array(
 			'invoice' => $invoice,
-			'invoice_items' => $this->InvoiceItemM->get_by_invoice_id($id),
-			'customer_name' => '',
+			//'invoice_items' => $this->InvoiceItemM->get_by_invoice_id($id),
+			//'customer_name' => '',
 			'invoice_terms' => ''
 		);
 
-		if ($invoice['customer_card_id']) {
-			$customer = $this->InvoiceM->get_customer_by_id($invoice['customer_card_id']);
-			if ($customer) {
-				$data['customer_name'] = $customer->nickname;
-			}
-		}
+		//if ($invoice['customer_card_id']) {
+		//	$customer = $this->InvoiceM->get_customer_by_id($invoice['customer_card_id']);
+		//	if ($customer) {
+		//		$data['customer_name'] = $customer->nickname;
+		//	}
+		//}
 
 		if ($invoice['terms_id']) {
 			$terms = $this->InvoiceM->get_terms_by_id($invoice['terms_id']);
@@ -144,7 +144,7 @@ class Invoice extends MY_Controller {
 		$invoice = $this->InvoiceM->get($id);
 		$data = array(
 			'invoice' => $invoice,
-			'invoice_items' => $this->InvoiceItemM->get_by_invoice_id($id),
+			//'invoice_items' => $this->InvoiceItemM->get_by_invoice_id($id),
 			'customer' => $this->InvoiceM->get_customer(),
 			'price_type' => $this->InvoiceM->get_price_type(),
 			'duration_type' => $this->InvoiceM->get_duration_type(),
