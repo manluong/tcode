@@ -18,15 +18,15 @@ function ajax_edit(id){
 		<ul>
 			<li>
 				<span class="input_data_label">First Name</span>
-				<span class="fillter_input"><?=$data[first_name]?></span>
+				<span class="fillter_input"><?=$data['first_name']?></span>
 			</li>
 			<li>
 				<span class="input_data_label">Last Name</span>
-				<span class="fillter_input"><?=$data[last_name]?></span>
+				<span class="fillter_input"><?=$data['last_name']?></span>
 			</li>
 			<li>
 				<span class="input_data_label">Nickname</span>
-				<span class="fillter_input"><?=$data[nickname] ?></span>
+				<span class="fillter_input"><?=$data['nickname'] ?></span>
 			</li>
 			<!-- CARD EMAIL -->
 			<?php if(!empty($card_email)){
@@ -96,9 +96,9 @@ function ajax_edit(id){
 				<span class="fillter_input" style="<?=($k->is_default == 1?'color:red':'')?>"><?=$k->extension.' - '.$k->area.' - '.$k->country.' - '.$k->number?></span>
 			</li>
 			<?php }}?>
-			
+
 			<li style="margin:20px 0 0 118px;">
-				<span class="btn btn-inverse" onclick="ajax_edit(<?=$data['id']?>);">EDIT DETAIL<span>
+				<span class="btn btn-inverse" onclick="ajax_edit(<?=$data['id']?>);">EDIT DETAIL</span>
 			</li>
 		</ul>
 	</div>

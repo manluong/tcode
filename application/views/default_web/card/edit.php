@@ -91,6 +91,7 @@
 							$tel_label = 'Phone';
 						}
 						echo '<div class="control-group">';
+							echo '<button class="btn btn-mini pull-left remove">X</button>';
 							echo '<label class="control-label" for="tel_',$e['id'],'">',$tel_label,'</label>';
 							echo '<div class="controls">';
 								echo form_hidden('addon_tel['.$x.'][id]', $e['id']);
@@ -101,14 +102,14 @@
 								echo form_input('addon_tel['.$x.'][extension]', $e['extension'], 'id="tel_extension_'.$e['id'].'" style="width: 40px;"'),' ';
 								$checked = ($e['is_default'] == 1);
 								echo form_radio('tel_is_default_radio', $x, $checked, 'class="tel_is_default_radio"');
+								if ($checked) {
+									echo '<input type="hidden" name="addon_tel['.$x.'][is_default]" value="1" class="tel_is_default_hidden" id="tel_is_default_'.$x.'" />';
+								} else {
+									echo '<input type="hidden" name="addon_tel['.$x.'][is_default]" value="0" class="tel_is_default_hidden" id="tel_is_default_'.$x.'" />';
+								}
+
 							echo '</div>';
 						echo '</div>';
-
-						if ($checked) {
-							echo '<input type="hidden" name="addon_tel['.$x.'][is_default]" value="1" class="tel_is_default_hidden" id="tel_is_default_'.$x.'" />';
-						} else {
-							echo '<input type="hidden" name="addon_tel['.$x.'][is_default]" value="0" class="tel_is_default_hidden" id="tel_is_default_'.$x.'" />';
-						}
 
 						$x++;
 					}
@@ -124,6 +125,7 @@
 					$(document).ready(function() {
 						$('#tel_add').on('click', function() {
 							var new_tel = '<div class="control-group">'+
+												'<button class="btn btn-mini pull-left remove">X</button>'+
 												'<label class="control-label" for="tel_'+tel_index+'">'+tel_label+'</label>'+
 												'<div class="controls">'+
 													'<input type="hidden" name="addon_tel['+tel_index+'][id]" value="" />'+
@@ -167,6 +169,7 @@
 							$email_label = $e['email_label'];
 						}
 						echo '<div class="control-group">';
+							echo '<button class="btn btn-mini pull-left remove">X</button>';
 							echo '<label class="control-label" for="email_',$e['id'],'">',$e['email_label'],'</label>';
 							echo '<div class="controls">';
 								echo form_hidden('addon_email['.$x.'][id]', $e['id']);
@@ -174,14 +177,14 @@
 								echo form_input('addon_email['.$x.'][email]', $e['email'], 'id="email_'.$e['id'].'"'),' ';
 								$checked = ($e['is_default'] == 1);
 								echo form_radio('email_is_default_radio', $x, $checked, 'class="email_is_default_radio"');
+								if ($checked) {
+									echo '<input type="hidden" name="addon_email['.$x.'][is_default]" value="1" class="email_is_default_hidden" id="email_is_default_'.$x.'" />';
+								} else {
+									echo '<input type="hidden" name="addon_email['.$x.'][is_default]" value="0" class="email_is_default_hidden" id="email_is_default_'.$x.'" />';
+								}
+
 							echo '</div>';
 						echo '</div>';
-
-						if ($checked) {
-							echo '<input type="hidden" name="addon_email['.$x.'][is_default]" value="1" class="email_is_default_hidden" id="email_is_default_'.$x.'" />';
-						} else {
-							echo '<input type="hidden" name="addon_email['.$x.'][is_default]" value="0" class="email_is_default_hidden" id="email_is_default_'.$x.'" />';
-						}
 
 						$x++;
 					}
@@ -197,6 +200,7 @@
 					$(document).ready(function() {
 						$('#email_add').on('click', function() {
 							var new_email = '<div class="control-group">'+
+												'<button class="btn btn-mini pull-left remove">X</button>'+
 												'<label class="control-label" for="email_'+email_index+'">'+email_label+'</label>'+
 												'<div class="controls">'+
 													'<input type="hidden" name="addon_email['+email_index+'][id]" value="" />'+
@@ -237,6 +241,7 @@
 							$address_label = 'Address';
 						}
 						echo '<div class="control-group">';
+							echo '<button class="btn btn-mini pull-left remove">X</button>';
 							echo '<label class="control-label" for="address_',$e['id'],'">',$address_label,'</label>';
 							echo '<div class="controls">';
 								echo form_hidden('addon_address['.$x.'][id]', $e['id']);
@@ -244,6 +249,12 @@
 								echo form_input('addon_address['.$x.'][line_1]', $e['line_1'], 'id="address_line_1_'.$e['id'].'" style="width: 209px;"'),' ';
 								$checked = ($e['is_default'] == 1);
 								echo form_radio('address_is_default_radio', $x, $checked, 'class="address_is_default_radio"');
+								if ($checked) {
+									echo '<input type="hidden" name="addon_address['.$x.'][is_default]" value="1" class="address_is_default_hidden" id="address_is_default_'.$x.'" />';
+								} else {
+									echo '<input type="hidden" name="addon_address['.$x.'][is_default]" value="0" class="address_is_default_hidden" id="address_is_default_'.$x.'" />';
+								}
+
 								echo form_input('addon_address['.$x.'][line_2]', $e['line_2'], 'id="address_line_2_'.$e['id'].'" style="width: 302px;"'),' ';
 								echo form_input('addon_address['.$x.'][city]', $e['city'], 'id="address_city_'.$e['id'].'" style="width: 92px;"'),' ';
 								echo form_input('addon_address['.$x.'][state]', $e['state'], 'id="address_state_'.$e['id'].'" style="width: 92px;"'),' ';
@@ -252,12 +263,6 @@
 								echo form_dropdown('addon_address['.$x.'][country]', $countries, $e['country'], 'class="input-small" style="margin-left: 175px;'),' ';
 							echo '</div>';
 						echo '</div>';
-
-						if ($checked) {
-							echo '<input type="hidden" name="addon_address['.$x.'][is_default]" value="1" class="address_is_default_hidden" id="address_is_default_'.$x.'" />';
-						} else {
-							echo '<input type="hidden" name="addon_address['.$x.'][is_default]" value="0" class="address_is_default_hidden" id="address_is_default_'.$x.'" />';
-						}
 
 						$x++;
 					}
@@ -274,6 +279,7 @@
 					$(document).ready(function() {
 						$('#address_add').on('click', function() {
 							var new_address = '<div class="control-group">'+
+												'<button class="btn btn-mini pull-left remove">X</button>'+
 												'<label class="control-label" for="address_'+address_index+'">'+address_label+'</label>'+
 												'<div class="controls">'+
 													'<input type="hidden" name="addon_address['+address_index+'][id]" value="" />'+
@@ -379,3 +385,11 @@
 
 	</div>
 </div>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('.remove').live('click', function() {
+			$(this).closest('.control-group').remove();
+		});
+	});
+</script>
