@@ -59,7 +59,7 @@
 	</footer>
 	<!-- End Footer -->
         <!-- chat area -->
-    <div class="chatSection pof">
+    <div class="chatSection pof" id="chat" style="display:none;">
         <div class="chatSlider h50">
             <!-- chat list -->
             <div class="chatItemWrapper chatList por fr">
