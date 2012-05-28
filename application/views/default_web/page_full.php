@@ -81,7 +81,7 @@
             <!-- chat 1 -->
             <div class="chatItemWrapper por fl mr1">
                 <!-- show chat box -->
-                <div class="chatBox poa ">
+                <div class="chatBox poa " style="display:none;">
                     <div class="chatBoxIner pb5 rounded7 fl bigChat">
                         <div class="chatBoxItem fl pv5 ph10">
                             <div class="fl">
