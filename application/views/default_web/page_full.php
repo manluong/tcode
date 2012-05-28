@@ -58,8 +58,9 @@
 		</div>
 	</footer>
 	<!-- End Footer -->
+        <?php if($this->UserM->is_logged_in()):?>
         <!-- chat area -->
-    <div class="chatSection pof" id="chat" style="display:none;">
+    <div class="chatSection pof" id="chat">
         <div class="chatSlider h50">
             <!-- chat list -->
             <div class="chatItemWrapper chatList por fr">
@@ -264,7 +265,7 @@
         </div>
     </div>
     <!-- end chat area -->
-
+    <?php endif;?>
 	<script type="text/javascript" src="/resources/addon/tpl.js"></script>
 	<script type="text/javascript" src="/resources/addon/jquery.ui.min.js"></script>
 	<script type="text/javascript" src="/resources/addon/jquery.tools.min.js"></script>
