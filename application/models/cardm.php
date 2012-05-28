@@ -59,6 +59,7 @@ class CardM extends MY_Model {
 	public $sett_fill_social = TRUE;
 	public $sett_fill_tel = TRUE;
 	public $sett_fill_access_user = FALSE;
+	public $sett_fill_invoice = FALSE;
 
 	private $addons = array(
 		'address' => 'Card_addressM',
@@ -86,6 +87,12 @@ class CardM extends MY_Model {
 		$result = parent::get($id);
 
 		$this->fill_addons($result);
+
+		if ($this->sett_fill_invoice) {
+			$this->load->model('InvoiceM');
+			$this->InvoiceM->where[] = 'customer_card_id='.$id;
+			$result['addon_invoice'] = $this->InvoiceM->get_list();
+		}
 
 		return $result;
 	}
@@ -212,7 +219,7 @@ class CardM extends MY_Model {
 			}
 		}
 	}
-	
+
 	function get_card_email($id) {
 		$this->db->select('*');
 		$this->db->where('card_id', $id);
@@ -225,7 +232,7 @@ class CardM extends MY_Model {
 			return false;
 		}
 	}
-	
+
 	function get_card_social($id) {
 		$this->db->select('*');
 		$this->db->where('card_id', $id);
@@ -237,7 +244,7 @@ class CardM extends MY_Model {
 			return false;
 		}
 	}
-	
+
 	function get_card_phone($id) {
 		$this->db->select('*');
 		$this->db->where('card_id', $id);
@@ -250,7 +257,7 @@ class CardM extends MY_Model {
 			return false;
 		}
 	}
-	
+
 	function get_card_address($id) {
 		$this->db->select('*');
 		$this->db->where('card_id', $id);
