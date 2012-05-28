@@ -349,6 +349,7 @@ class MY_Model extends CI_Model {
 	function get_differences($new_data) {
 		$id = $new_data[$this->id_field];
 
+		$this->reset();
 		$existing = $this->get($id);
 
 		$diff = array();
