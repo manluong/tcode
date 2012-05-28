@@ -20,6 +20,12 @@ class Invoice extends MY_Controller {
 		$this->_do_output();
 	}
 
+	function test($id) {
+		$this->InvoiceM->sett_fill_card_info = TRUE;
+		$data = $this->InvoiceM->get($id);
+		echo '<pre>', print_r($data, TRUE), '</pre>';
+	}
+
 	function search() {
 		//$page = $this->input->post('page') ? $this->input->post('page') : 1;
 		//$row_per_page = $this->input->post('row_per_page') ? $this->input->post('row_per_page') : 10;
