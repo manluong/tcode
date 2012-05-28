@@ -65,7 +65,7 @@
             <!-- chat list -->
             <div class="chatItemWrapper chatList por fr">
                 <!-- show chat box -->
-                <div class="chatBox poa" id="list_chat">
+                <div class="chatBox poa" id="list_chat" style="display:none;">
                     <div class="chatBoxIner pb5 rounded7 fl">
                         <!-- List chat here -->
                     </div>
