@@ -169,15 +169,42 @@ $(document).ready(function() {
 			type: "POST",
 			url: $('#frm_search').attr('action'),
 			data: $('#frm_search').serialize(),
+			dataType: 'json',
 			success: function(resp) {
-				$('#invoice_list').html(resp);
-				$('#page').val(1);
+				//$('#invoice_list').html(resp);
+				//$('#page').val(1);
 
-				$.extend($.fn.dataTableExt.oStdClasses, {
-					"sWrapper": "dataTables_wrapper form-inline"
-				});
+				//$.extend($.fn.dataTableExt.oStdClasses, {
+				//	"sWrapper": "dataTables_wrapper form-inline"
+				//});
+
+				var data = new Array();
+				for (i in resp) {
+					var item = resp[i];
+					var row  = new Array();
+					row[0] = '<input type="checkbox" />';
+					row[1] = item.nickname;
+					row[2] = '<a href="/invoice/view/'+item.id+'">'+item.id+'</a>';
+					var date = new Date((item.payment_due_stamp).substring(0, 10));
+					row[3] = $.datepicker.formatDate('yy-mm-dd', date);
+					row[4] = format_money(item.total);
+					row[5] = '';
+					row[6] = '<a href="/invoice/edit/'+item.id+'">Edit</a></td>';
+					data.push(row);
+				}
 
 				$('#tbl_invoice').dataTable({
+					"bDestroy" : true,
+					"aaData": data,
+					"aoColumns": [
+						{ "sTitle": "", "sClass": "center" },
+						{ "sTitle": "Customer" },
+						{ "sTitle": "Invoice #", "sClass": "center" },
+						{ "sTitle": "Date", "sClass": "center" },
+						{ "sTitle": "Total", "sClass": "right" },
+						{ "sTitle": "Status", "sClass": "center" },
+						{ "sTitle": "Edit", "sClass": "center" }
+					],
 					"sDom": "<<'pull-right'p>>t<<'pull-right'p>lfi>",
 					"sPaginationType": "bootstrap",
 					"iDisplayLength": 10,
@@ -191,13 +218,13 @@ $(document).ready(function() {
 							"sNext": "Next"
 					},
 					"sLengthMenu": '<select>'+
-					'<option value="10">10</option>'+
-					'<option value="20">20</option>'+
-					'<option value="30">30</option>'+
-					'<option value="40">40</option>'+
-					'<option value="50">50 Rows</option>'+
-					'<option value="-1">All</option>'+
-					'</select>'
+						'<option value="10">10</option>'+
+						'<option value="20">20</option>'+
+						'<option value="30">30</option>'+
+						'<option value="40">40</option>'+
+						'<option value="50">50 Rows</option>'+
+						'<option value="-1">All</option>'+
+						'</select>'
 				}});
 			}
 		});

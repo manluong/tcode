@@ -123,6 +123,9 @@
 
 	<div id="invoice_cases">
 		<div class="invoice_title"><span class="arrow_title"></span><span>Cases</span></div>
-		<div id="invoice_list"></div>
+		<div id="invoice_list">
+			<table id="tbl_invoice" cellpadding="0" cellspacing="0" border="0" class="table table-striped">
+			</table>
+		</div>
 	</div>
 </div>

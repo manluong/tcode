@@ -44,7 +44,7 @@
 </div>
 
 <div id="boxes">
-	<form id="invoice_form" action="/invoice/add_save" method="post">
+	<form id="invoice_form" action="/invoice/save" method="post">
 	<div>
 		<div class="invoice_title"><span class="arrow_title"></span><span>INVOICE INFORMATION</span></div>
 		<div id="input_data_info">

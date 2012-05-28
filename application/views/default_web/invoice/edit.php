@@ -46,7 +46,7 @@
 <div id="title_item_edit"><span style="color:#2a9611;">Draft</span> Invoice #<?php echo $invoice['id'] ?></div>
 
 <div id="boxes">
-	<form id="invoice_form" action="/invoice/edit_save" method="post">
+	<form id="invoice_form" action="/invoice/save" method="post">
 	<input type="hidden" name="id" value="<?php echo $invoice['id'] ?>" />
 	<div>
 		<div class="invoice_title"><span class="arrow_title"></span><span>INVOICE INFORMATION</span></div>
