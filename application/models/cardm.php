@@ -271,4 +271,52 @@ class CardM extends MY_Model {
 		}
 	}
 
+	function search($search_string) {
+		$search_fields = array();
+
+		//search first_name + last_name
+		$search_fields[] = array(
+			'first_name',
+			'last_name',
+		);
+
+		//search organization name
+		$search_fields[] = array(
+			'organization_name',
+		);
+
+		return parent::search($search_fields, $search_string);
+	}
+
+	function search_staff($search_string) {
+		$search_fields = array();
+
+		//search first_name + last_name
+		$search_fields[] = array(
+			'first_name',
+			'last_name',
+		);
+
+		//get card_ids in STAFF role
+		$staff_card_ids = array();
+		$rs = $this->db->select('card_id')
+				->from('access_user_role')
+				->where('role_id', 1)
+				->get();
+
+		foreach($rs->result_array() AS $r) {
+			$staff_card_ids[] = $r['card_id'];
+		}
+
+		//if there are no STAFF card_ids, return a blank result.
+		if (count($staff_card_ids) == 0) return array();
+
+		//limit results to card_ids in STAFF role
+		$this->where[] = 'id IN ('.implode(',', $staff_card_ids).')';
+
+		//retrieve only id, first_name and last_name
+		$this->select_fields = array('id', 'first_name', 'last_name');
+
+		return parent::search($search_fields, $search_string);
+	}
 }
