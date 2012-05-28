@@ -65,7 +65,7 @@
             <!-- chat list -->
             <div class="chatItemWrapper chatList por fr">
                 <!-- show chat box -->
-                <div class="chatBox poa">
+                <div class="chatBox poa" id="list_chat">
                     <div class="chatBoxIner pb5 rounded7 fl">
                         <div class="chatBoxItem fl pv5 ph10">
                             <div class="avatar rounded14 fl mr5"><img src="/resources/template/default_web/img/avatar.png" alt="" width="28" class=" rounded14"></div>
@@ -121,7 +121,7 @@
                 </div>
                 <!-- end show chat box -->
                 <!-- show chat status -->
-                <div class="chatItem dpb fl cp active h50">
+                <div class="chatItem dpb fl cp active h50" id="show_hide_chat">
                     <i class="iChat iChat1 mt10 mh10"></i>
                 </div>
                 <!-- show chat status -->
@@ -290,7 +290,7 @@
 	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/jquery.smooth-scroll.min.js"></script>
 	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/plugins.js"></script>
 	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/script.js"></script>
-
+        <script type="text/javascript" src="/resources/template/<?=get_template()?>/js/chat.js"></script>
 	<script>
 
 	</script>
