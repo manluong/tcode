@@ -54,7 +54,7 @@
 					<select name="customer_card_id">
 						<option value="">- - - Select - - -</option>
 						<?php foreach ($customer as $r): ?>
-						<option value="<?php echo $r->id ?>"><?php echo $r->nickname ?></option>
+						<option value="<?php echo $r->id ?>"><?php echo trim($r->first_name.' '.$r->last_name) ?></option>
 						<?php endforeach ?>
 					</select>
 				</li>
@@ -158,7 +158,7 @@
 			<ul>
 				<li class="row_delete"></li>
 				<li class="row_move"></li>
-				<li class="row_down"></li>
+				<li class="row_more row_down"></li>
 			</ul>
 		</div>
 		<div class="invoice_item_main">

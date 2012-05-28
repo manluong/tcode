@@ -194,7 +194,7 @@ $(document).ready(function() {
 					var item = resp[i];
 					var row  = new Array();
 					row[0] = '<input type="checkbox" />';
-					row[1] = item.nickname;
+					row[1] = (item.first_name+' '+item.last_name).trim();
 					row[2] = '<a href="/invoice/view/'+item.id+'">'+item.id+'</a>';
 					var date = new Date((item.payment_due_stamp).substring(0, 10));
 					row[3] = $.datepicker.formatDate('yy-mm-dd', date);
@@ -277,9 +277,17 @@ $(document).ready(function() {
 		e.preventDefault();
 		remove_row(this);
 	});
-	$('.row_down').live('click', function(e) {
+	$('.row_more').live('click', function(e) {
 		e.preventDefault();
 		more(this);
+
+		if ($(this).hasClass('row_down')){
+			$(this).removeClass('row_down');
+			$(this).addClass('row_up');
+		} else {
+			$(this).removeClass('row_up');
+			$(this).addClass('row_down');
+		}
 	});
 	$('#add_row input').on('click', function(e) {
 		add_last_row();

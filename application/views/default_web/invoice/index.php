@@ -87,7 +87,7 @@
 						<div id="slider-range"></div>
 					</span>
 				</li>
-				<li style="width: 25px; margin: 36px 0 0 28px;"><div id="arrow" class="up_arrow"></div></li>
+				<li style="width: 25px; margin: 36px 0 0 28px;"><div id="arrow" class="down_arrow"></div></li>
 			</ul>
 		</div>
 		<div class="ClearLeft"></div>

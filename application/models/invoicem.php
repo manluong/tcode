@@ -147,7 +147,7 @@ class InvoiceM extends MY_Model {
 			$this->db->where('memo LIKE', '%'.$param['notes'].'%');
 		}
 
-		$this->db->select('a_invoice.*, card.nickname, invoice_total.total');
+		$this->db->select('a_invoice.*, card.first_name, card.last_name, invoice_total.total');
 		$this->db->from('a_invoice');
 		$this->db->join('card', 'a_invoice.customer_card_id = card.id', 'left');
 		$this->db->join('(SELECT invoice_id, SUM(total) AS total FROM a_invoice_item GROUP BY invoice_id) invoice_total', 'a_invoice.id = invoice_total.invoice_id', 'left');
@@ -169,7 +169,7 @@ class InvoiceM extends MY_Model {
 	}
 
 	function get_customer() {
-		$this->db->select('id, nickname');
+		$this->db->select('id, first_name, last_name');
 		$query = $this->db->get('card');
 
 		return $query->result();
@@ -223,7 +223,7 @@ class InvoiceM extends MY_Model {
 	}
 
 	function get_customer_by_id($id) {
-		$this->db->select('id, nickname');
+		$this->db->select('id, first_name, last_name');
 		$this->db->where('id', $id);
 		$query = $this->db->get('card');
 
@@ -235,13 +235,13 @@ class InvoiceM extends MY_Model {
 		}
 	}
 
-	function get_customer_by_name($name) {
+	/*function get_customer_by_name($name) {
 		$this->db->select('id, nickname');
 		$this->db->like('nickname', $name);
 		$query = $this->db->get('card');
 
 		return $query->result();
-	}
+	}*/
 
 	function get_product_by_name($name) {
 		$this->db->select('*');

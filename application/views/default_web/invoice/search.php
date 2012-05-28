@@ -14,7 +14,7 @@
 		<?php foreach ($invoice_list as $invoice): ?>
 		<tr>
 			<td style="text-align: center;"><input type="checkbox" /></td>
-			<td><?php echo $invoice->nickname ?></td>
+			<td><?php echo trim($invoice->first_name.' '.$invoice->last_name) ?></td>
 			<td style="text-align: center;"><a href="/invoice/view/<?php echo $invoice->id ?>"><?php echo $invoice->id ?></a></td>
 			<td style="text-align: center;"><?php echo date('Y-m-d', strtotime($invoice->payment_due_stamp)) ?></td>
 			<td style="text-align: right;"><?php echo '$'.number_format($invoice->total, 2) ?></td>

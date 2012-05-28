@@ -227,7 +227,7 @@ class Invoice extends MY_Controller {
 	}
 
 	function get_customer() {
-		$term = $this->input->get('term');
+		/*$term = $this->input->get('term');
 		$customer_list = $this->InvoiceM->get_customer_by_name($term);
 
 		$content = array();
@@ -237,6 +237,24 @@ class Invoice extends MY_Controller {
 					'id' => $customer->id,
 					'label' => $customer->nickname,
 					'value' => $customer->nickname,
+				);
+			}
+		}
+
+		echo json_encode($content);*/
+
+		$term = $this->input->get('term');
+
+		$this->load->model('CardM');
+		$customer_list = $this->CardM->search_staff($term);
+
+		$content = array();
+		if ($customer_list) {
+			foreach ($customer_list as $customer) {
+				$content[] = array(
+					'id' => $customer['id'],
+					'label' => trim($customer['first_name'].' '.$customer['last_name']),
+					'value' => trim($customer['first_name'].' '.$customer['last_name'])
 				);
 			}
 		}
