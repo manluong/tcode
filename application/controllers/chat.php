@@ -2,12 +2,14 @@
 
     class Chat extends MY_Controller {
         function __construct() {
-		$this->load->model('chatm');
-
 		parent::__construct();
+                $this->load->model('ChatM');
 	}
         function forward(){
-            $this->ChatM->forward();
+           $this->ChatM->forward();
+        }
+        function index(){
+            //echo 'hello world';
         }
     }
 

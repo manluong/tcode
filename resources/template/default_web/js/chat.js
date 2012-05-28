@@ -185,7 +185,7 @@ jQuery(document).ready(function(){
 
 });
 $(document).bind("connect", function (ev, data) {
-    var conn = new Strophe.Connection("/chat/forward");
+        var conn = new Strophe.Connection("/chat/forward");
 	//var conn = new Strophe.Connection("http://proxy.leo9x.co.cc:5280/http-bind");
 	conn.connect(data.user, data.company, function (status) {
         if (status === Strophe.Status.CONNECTED) {
