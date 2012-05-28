@@ -10,6 +10,7 @@ class MY_Model extends CI_Model {
 	public $errors = array();
 	public $field_errors = array();
 
+	public $select_fields = array();
 	public $where = array();
 	public $order_by = array();
 	public $limit = 0;
@@ -73,6 +74,7 @@ class MY_Model extends CI_Model {
 	}
 
 	function reset() {
+		$this->select_fields = array();
 		$this->where = array();
 		$this->order_by = array();
 		$this->offset = 0;
@@ -84,8 +86,13 @@ class MY_Model extends CI_Model {
 			if (isset($this->cache[$this->table][$id])) return $this->cache[$this->table][$id];
 		}
 
-		$this->db->select()
-			->from($this->table)
+		if (count($this->select_fields) > 0) {
+			$this->db->select(implode(', ', $this->select_fields));
+		} else {
+			$this->db->select();
+		}
+
+		$this->db->from($this->table)
 			->where($this->id_field, $id);
 
 		if (count($this->where) > 0) {
@@ -112,8 +119,13 @@ class MY_Model extends CI_Model {
 	}
 
 	function get_list() {
-		$this->db->select()
-			->from($this->table);
+		if (count($this->select_fields) > 0) {
+			$this->db->select(implode(', ', $this->select_fields));
+		} else {
+			$this->db->select();
+		}
+
+		$this->db->from($this->table);
 
 		if (count($this->where) > 0) {
 			foreach($this->where AS $w) {
@@ -166,8 +178,13 @@ class MY_Model extends CI_Model {
 		}
 
 		if (count($ids)>0) {
-			$this->db->select()
-				->from($this->table)
+			if (count($this->select_fields) > 0) {
+				$this->db->select(implode(', ', $this->select_fields));
+			} else {
+				$this->db->select();
+			}
+
+			$this->db->from($this->table)
 				->where_in($this->id_field, $ids);
 
 			if ($this->sett_has_system_fields && $this->sett_filter_deleted) {
