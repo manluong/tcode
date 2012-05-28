@@ -42,15 +42,18 @@ var custom_viewcard = "My {{#content}}{{card_fname_label}} is {{card_fname_value
 var custom_editcard = "My {{#content}}{{#card_fname}}{{label}} is {{{control}}}{{/card_fname}}!{{{links}}}{{/content}}<br>";
 
 var tpl_comments = [];
-tpl_comments.post = '<div class="entry {{reply}} clearfix">{{#card_info}}'+
-						'<img src="/resources/template/default_web/img/avatar.png" alt="" width="28" />'+
-						'<div class="info" data-comment_id="{{id}}">'+
-							'<a href="#">{{card_fname}} {{card_lname}}</a> {{/card_info}}'+
-							'<div class="info">{{text}}</div>'+
-							'<div class="time" title="{{created_stamp_iso8601}}">{{created_stamp_iso}}</div>'+
-						'</div>'+
-					'</div>';
-//'<a href="#" class="comment_reply" data-reply_to="{{id}}" data-app_id="{{app_id}}" data-app_data_id="{{app_data_id}}">Reply</a> · '+
+tpl_comments.post = '<div class="post {{reply}} clearfix">{{#card_info}}'+
+							'<div class="avatar"><img class="avatar" src="/resources/template/default_web/img/avatar.png" /></div>'+
+							'<div class="content" data-comment_id="{{id}}">'+
+								'<span class="name">{{card_fname}} {{card_lname}}</span> {{/card_info}}'+
+								'{{#in_reply_to}}<span class="in_reply_to"> in reply to {{name}}</span> {{/in_reply_to}}'+
+								'<span class="text">{{text}}</span>'+
+								'<div class="post_controls">'+
+									'<a href="#" class="comment_reply" data-reply_to="{{id}}" data-app_id="{{app_id}}" data-app_data_id="{{app_data_id}}">Reply</a> · '+
+									'<span class="displaydate" title="{{created_stamp_iso8601}}">{{created_stamp_iso}}</span>'+
+								'</div>'+
+							'</div>'+
+						'</div>';
 
 tpl_comments.show_more = '<div class="show_more">'+
 							'<a href="#" class="show_more_comments" data-last="{{last_id}}" data-threaded="false" data-app_id="{{app_id}}" data-app_data_id="{{id}}">Show older comments</a>'+
@@ -61,15 +64,14 @@ tpl_comments.input = '<div class="new_comment">'+
 					'</div>';
 
 var tpl_dashboard = [];
-tpl_dashboard.post = '<div class="entry clearfix">'+
-						'<img src="/resources/template/default_web/img/avatar.png" alt="" width="28" />'+
-						'<div class="info" data-comment_id="{{id}}">'+
-							'<a href="#">{{card_name}}</a> '+
-							'<span>{{msg}}</span>'+
-
-//								'<a href="#" class="comment_reply" data-reply_to="0" data-app_id="{{app_id}}" data-app_data_id="{{id}}">Reply</a> · '+
-							'<div class="time" title="{{created_stamp_iso8601}}">{{created_stamp_iso}}</div>'+
-
-//							'<div class="comments clearfix" data-app_id="{{app_id}}" data-app_data_id="{{id}}">{{{comments_html}}}</div>'+
+tpl_dashboard.post = '<div class="post">'+
+						'<div class="avatar"><img class="avatar" src="/resources/template/default_web/img/avatar.png" /></div>'+
+						'<div class="content" data-comment_id="{{id}}">'+
+							'<span class="name">{{card_name}}</span><br />{{msg}}'+
+							'<div class="post_controls">'+
+								'<a href="#" class="comment_reply" data-reply_to="0" data-app_id="{{app_id}}" data-app_data_id="{{id}}">Reply</a> · '+
+								'<span class="displaydate" title="{{created_stamp_iso8601}}">{{created_stamp_iso}}</span>'+
+							'</div>'+
+							'<div class="comments clearfix" data-app_id="{{app_id}}" data-app_data_id="{{id}}">{{{comments_html}}}</div>'+
 						'</div>'+
 					'</div>';

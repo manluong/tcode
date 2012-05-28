@@ -89,7 +89,7 @@
 			</div>
 			<div id="invoice_item_list">
 				<?php $c = 0 ?>
-				<?php foreach ($invoice_items as $invoice_item): ?>
+				<?php foreach ($invoice['addon_item'] as $invoice_item): ?>
 				<div class="invoice_item clearfix">
 					<div class="col-1">
 						<ul>
@@ -100,27 +100,27 @@
 					</div>
 					<div class="invoice_item_main">
 						<div>
-							<input type="hidden" name="addon_item[<?php echo $c ?>][id]" value="<?php echo $invoice_item->id ?>" />
-							<input type="hidden" name="addon_item[<?php echo $c ?>][invoice_id]" value="<?php echo $invoice_item->invoice_id ?>" />
-							<input type="hidden" name="addon_item[<?php echo $c ?>][product_id]" value="<?php echo $invoice_item->product_id ?>" class="product_id" />
-							<input type="text" name="addon_item[<?php echo $c ?>][product_name]" value="<?php echo $invoice_item->a_product_name ?>" class="col-2 inv-field product_name" />
+							<input type="hidden" name="addon_item[<?php echo $c ?>][id]" value="<?php echo $invoice_item['id'] ?>" />
+							<input type="hidden" name="addon_item[<?php echo $c ?>][invoice_id]" value="<?php echo $invoice_item['invoice_id'] ?>" />
+							<input type="hidden" name="addon_item[<?php echo $c ?>][product_id]" value="<?php echo $invoice_item['product_id'] ?>" class="product_id" />
+							<input type="text" name="addon_item[<?php echo $c ?>][product_name]" value="<?php echo $invoice_item['a_product_name'] ?>" class="col-2 inv-field product_name" />
 						</div>
-						<div><input type="text" name="addon_item[<?php echo $c ?>][description]" value="<?php echo $invoice_item->description ?>" class="col-3" /></div>
-						<div><input type="text" name="addon_item[<?php echo $c ?>][unit_price]" value="<?php echo (float)$invoice_item->unit_price ?>" class="col-4 unit_price cal" /></div>
-						<div><input type="text" name="addon_item[<?php echo $c ?>][quantity]" value="<?php echo $invoice_item->quantity ?>" class="col-5 qty cal" /></div>
+						<div><input type="text" name="addon_item[<?php echo $c ?>][description]" value="<?php echo $invoice_item['description'] ?>" class="col-3" /></div>
+						<div><input type="text" name="addon_item[<?php echo $c ?>][unit_price]" value="<?php echo (float)$invoice_item['unit_price'] ?>" class="col-4 unit_price cal" /></div>
+						<div><input type="text" name="addon_item[<?php echo $c ?>][quantity]" value="<?php echo $invoice_item['quantity'] ?>" class="col-5 qty cal" /></div>
 						<div>
-							<input type="hidden" name="addon_item[<?php echo $c ?>][total]" value="<?php echo (float)$invoice_item->total ?>" class="item_total" />
-							<label class="col-6 item_total_label"><?php echo '$'.number_format($invoice_item->total, 2) ?></label>
+							<input type="hidden" name="addon_item[<?php echo $c ?>][total]" value="<?php echo (float)$invoice_item['total'] ?>" class="item_total" />
+							<label class="col-6 item_total_label"><?php echo '$'.number_format($invoice_item['total'], 2) ?></label>
 						</div>
 					</div>
-					<div class="invoice_item_sub clear"<?php echo ($invoice_item->price_type) ? '' : ' style="display: none;"' ?>>
-						<div><input type="text" name="addon_item[<?php echo $c ?>][subscription_start_stamp]" value="<?php echo date('Y-m-d', strtotime($invoice_item->subscription_start_stamp)) ?>" class="col-7 item_datepicker" /></div>
-						<div><input type="text" name="addon_item[<?php echo $c ?>][subscription_end_stamp]" value="<?php echo date('Y-m-d', strtotime($invoice_item->subscription_end_stamp)) ?>" class="col-8 item_datepicker" /></div>
+					<div class="invoice_item_sub clear"<?php echo ($invoice_item['price_type']) ? '' : ' style="display: none;"' ?>>
+						<div><input type="text" name="addon_item[<?php echo $c ?>][subscription_start_stamp]" value="<?php echo date('Y-m-d', strtotime($invoice_item['subscription_start_stamp'])) ?>" class="col-7 item_datepicker" /></div>
+						<div><input type="text" name="addon_item[<?php echo $c ?>][subscription_end_stamp]" value="<?php echo date('Y-m-d', strtotime($invoice_item['subscription_end_stamp'])) ?>" class="col-8 item_datepicker" /></div>
 						<div>
 							<select name="addon_item[<?php echo $c ?>][duration_type]" class="col-9">
 								<option value="">Period</option>
 								<?php foreach ($duration_type as $r): ?>
-								<option value="<?php echo $r->a_product_durationtype_id ?>"<?php echo ($r->a_product_durationtype_id == $invoice_item->duration_type) ? ' selected="selected"' : '' ?>><?php echo $r->a_product_durationtype_name ?></option>
+								<option value="<?php echo $r->a_product_durationtype_id ?>"<?php echo ($r->a_product_durationtype_id == $invoice_item['duration_type']) ? ' selected="selected"' : '' ?>><?php echo $r->a_product_durationtype_name ?></option>
 								<?php endforeach ?>
 							</select>
 						</div>
@@ -128,11 +128,11 @@
 							<select name="addon_item[<?php echo $c ?>][price_type]" class="col-10">
 								<option value="">Price Type</option>
 								<?php foreach ($price_type as $r): ?>
-								<option value="<?php echo $r->a_product_pricetype_id ?>"<?php echo ($r->a_product_pricetype_id == $invoice_item->price_type) ? ' selected="selected"' : '' ?>><?php echo $r->a_product_pricetype_name ?></option>
+								<option value="<?php echo $r->a_product_pricetype_id ?>"<?php echo ($r->a_product_pricetype_id == $invoice_item['price_type']) ? ' selected="selected"' : '' ?>><?php echo $r->a_product_pricetype_name ?></option>
 								<?php endforeach ?>
 							</select>
 						</div>
-						<div><input type="text" name="addon_item[<?php echo $c ?>][discount]" value="<?php echo $invoice_item->discount ?>" class="col-11 discount cal" /></div>
+						<div><input type="text" name="addon_item[<?php echo $c ?>][discount]" value="<?php echo $invoice_item['discount'] ?>" class="col-11 discount cal" /></div>
 						<div class="col-12">
 							<input type="checkbox" class="tax-gst" /><span>GST</span>
 							<input type="checkbox" class="tax-vat" /><span>VAT</span>
@@ -219,6 +219,7 @@
 		</div>
 		<div class="invoice_item_main">
 			<div>
+				<input type="hidden" name="addon_item[{xxxxx}][id]" />
 				<input type="hidden" name="addon_item[{xxxxx}][product_id]" class="product_id" />
 				<input type="text" name="addon_item[{xxxxx}][product_name]" class="col-2 inv-field product_name" />
 			</div>
