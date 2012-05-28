@@ -120,6 +120,17 @@ function format_money(n, c, d, t, q) {
 };
 
 $(document).ready(function() {
+	$('#date_range').on('change', function(e) {
+		if ($(this).val() == 1) {
+			now = new Date();
+			$('#date_range_from').val($.datepicker.formatDate('yy-mm-dd', new Date(now.getFullYear(), now.getMonth() - 1, 1)));
+			$('#date_range_to').val($.datepicker.formatDate('yy-mm-dd', new Date(new Date(now.getFullYear(), now.getMonth(), 1) - 1)));
+		} else {
+			$('#date_range_from').val('');
+			$('#date_range_to').val('');
+		}
+	});
+
 	$('#customer_name').autocomplete({
 		source: '/invoice/get_customer',
 		minLength: 2,
@@ -197,13 +208,13 @@ $(document).ready(function() {
 					"bDestroy" : true,
 					"aaData": data,
 					"aoColumns": [
-						{ "sTitle": "", "sClass": "center" },
+						{ "sTitle": "" },
 						{ "sTitle": "Customer" },
-						{ "sTitle": "Invoice #", "sClass": "center" },
-						{ "sTitle": "Date", "sClass": "center" },
-						{ "sTitle": "Total", "sClass": "right" },
-						{ "sTitle": "Status", "sClass": "center" },
-						{ "sTitle": "Edit", "sClass": "center" }
+						{ "sTitle": "Invoice #" },
+						{ "sTitle": "Date" },
+						{ "sTitle": "Total" },
+						{ "sTitle": "Status" },
+						{ "sTitle": "Edit" }
 					],
 					"sDom": "<<'pull-right'p>>t<<'pull-right'p>lfi>",
 					"sPaginationType": "bootstrap",

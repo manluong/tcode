@@ -52,7 +52,7 @@
 				<li>
 					<span class="fillter_label">Date</span>
 					<span class="fillter_input">
-						<select name="date_range">
+						<select id="date_range" name="date_range">
 							<option value="">- - - Select - - -</option>
 							<option value="1">Last Month</option>
 						</select>
@@ -60,11 +60,11 @@
 				</li>
 				<li>
 					<span class="fillter_label">From</span>
-					<span class="fillter_input"><input type="text" name="date_range_from" class="inv-field datepicker" /></span>
+					<span class="fillter_input"><input type="text" id="date_range_from" name="date_range_from" class="inv-field datepicker" /></span>
 				</li>
 				<li>
 					<span class="fillter_label">To</span>
-					<span class="fillter_input"><input type="text" name="date_range_to" class="inv-field datepicker" /></span>
+					<span class="fillter_input"><input type="text" id="date_range_to" name="date_range_to" class="inv-field datepicker" /></span>
 				</li>
 				<li style="width:150px;margin-left:10px;">
 					<span class="fillter_label">Payment</span>
