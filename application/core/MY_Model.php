@@ -547,4 +547,38 @@ class MY_Model extends CI_Model {
 		return $data;
 	}
 
+	function search($search_fields, $search_string) {
+		if (count($this->select_fields) > 0) {
+			$this->db->select(implode(', ', $this->select_fields));
+		} else {
+			$this->db->select();
+		}
+
+		$this->db->from($this->table);
+
+		foreach($search_fields AS $sf) {
+			if (count($sf) == 1) {
+				$sf = array_shift($sf);
+				$this->db->or_like($sf, $search_string, 'after');
+			} else {
+				$sf = implode(",' ',", $sf);
+				$this->db->or_like("CONCAT($sf)", $search_string, 'after');
+			}
+		}
+
+		if ($this->sett_has_system_fields && $this->sett_filter_deleted) {
+			$this->db->where('deleted', 0);
+		}
+
+		if (count($this->where) > 0) {
+			foreach($this->where AS $w) {
+				$this->db->where($w, NULL, FALSE);
+			}
+		}
+
+		$rs = $this->db->get();
+
+		return $rs->result_array();
+	}
+
 }
