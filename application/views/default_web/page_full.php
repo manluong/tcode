@@ -68,7 +68,7 @@
                 <div class="chatBox poa">
                     <div class="chatBoxIner pb5 rounded7 fl">
                         <div class="chatBoxItem fl pv5 ph10">
-                            <div class="avatar rounded14 fl mr5"><img src="resources/template/default_web/img/avatar.png" alt="" width="28" class=" rounded14"></div>
+                            <div class="avatar rounded14 fl mr5"><img src="/resources/template/default_web/img/avatar.png" alt="" width="28" class=" rounded14"></div>
                             <span class="fl dpb ofh cf1 mt5 fwb">Andy Anthony</span>
                             <div class="tools fr">
                                 <a href="#" class="fl mr5 mt3"><i class="iChat iChat2"></i></a>
@@ -143,7 +143,7 @@
                             </div>
                         </div>
                         <div class="chatBoxItem fl pv1 ph10">
-                            <div class="avatar rounded14 fl mr10"><img src="resources/template/default_web/img/avatar.png" alt="" width="28" class=" rounded14"></div>
+                            <div class="avatar rounded14 fl mr10"><img src="/resources/template/default_web/img/avatar.png" alt="" width="28" class=" rounded14"></div>
                             <span class="fl dpb ofh cf1 mt5 w80p">
                                 Whatssss?<br />
                             </span>
@@ -187,7 +187,7 @@
                                 <span class="rounded14 cf4 bg4 fwb noAvatar tac vam dpib">GP</span>
                             </div>
                             <span class="fl dpb ofh cf1 mt5 w80p">
-                               <img src="resources/template/default_web/img/typing.gif" alt="" width=""/>
+                               <img src="/resources/template/default_web/img/typing.gif" alt="" width=""/>
                             </span>
                         </div>
                         <div class="chatBoxItem fl pv1 ph10 bgN">
@@ -200,7 +200,7 @@
                 <div class="chatItem fl cp h50 ph10 por active">
                     <span class="count bg2 fs12 fwb tac rounded7  lhn poa dpn">7</span>
                     <a href="" class="dpb mt10">
-                    <div class="avatar rounded14 fl mr5"><img src="resources/template/default_web/img/avatar.png" alt="" width="28" class="rounded14"></div>
+                    <div class="avatar rounded14 fl mr5"><img src="/resources/template/default_web/img/avatar.png" alt="" width="28" class="rounded14"></div>
                     <span class="fl  dpb ofh cf1 mt5 fwb">Andrwe..</span>
                     </a>
                 </div>
@@ -218,7 +218,7 @@
                 <div class="chatItem fl cp h50 ph10 por">
                     <span class="count bg2 fs12 fwb tac rounded7 lhn poa dpb">9</span>
                     <a href="" class="dpb mt10">
-                        <div class="avatar rounded14 fl mr5"><img src="resources/template/default_web/img/avatar.png" alt="" width="28" class="rounded14"></div>
+                        <div class="avatar rounded14 fl mr5"><img src="/resources/template/default_web/img/avatar.png" alt="" width="28" class="rounded14"></div>
                         <span class="fl  dpb ofh cf1 mt5 fwb">Andrwe..</span>
                     </a>
                 </div>
