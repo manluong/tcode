@@ -185,8 +185,8 @@ jQuery(document).ready(function(){
 
 });
 $(document).bind("connect", function (ev, data) {
-        var conn = new Strophe.Connection("/chat/forward");
-	//var conn = new Strophe.Connection("http://proxy.leo9x.co.cc:5280/http-bind");
+        //var conn = new Strophe.Connection("/chat/forward");
+	var conn = new Strophe.Connection("http://proxy.leo9x.co.cc:5280/http-bind");
 	conn.connect(data.user, data.company, function (status) {
         if (status === Strophe.Status.CONNECTED) {
             $(document).trigger("connected");
@@ -195,4 +195,14 @@ $(document).bind("connect", function (ev, data) {
         }
     });
     telcoson.connection = conn;
+});
+$(document).bind("connected", function () {
+	list();
+    var iq = $iq({type: "get"}).c("query", {xmlns: "jabber:iq:roster"});
+    leo9x.connection.sendIQ(iq, leo9x.on_roster);
+	leo9x.connection.addHandler(leo9x.on_message,
+                           null, "message", "chat");
+});
+$(document).bind("disconnected", function () {
+    // nothing here yet
 });
