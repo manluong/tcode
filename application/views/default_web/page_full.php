@@ -60,32 +60,14 @@
 	<!-- End Footer -->
         <?php if($this->UserM->is_logged_in()):?>
         <!-- chat area -->
-    <div class="chatSection pof" id="chat" style="display:none;">
+    <div class="chatSection pof" id="chat">
         <div class="chatSlider h50">
             <!-- chat list -->
             <div class="chatItemWrapper chatList por fr">
                 <!-- show chat box -->
                 <div class="chatBox poa" id="list_chat">
                     <div class="chatBoxIner pb5 rounded7 fl">
-                        <div class="chatBoxItem fl pv5 ph10">
-                            <div class="avatar rounded14 fl mr5"><img src="/resources/template/default_web/img/avatar.png" alt="" width="28" class=" rounded14"></div>
-                            <span class="fl dpb ofh cf1 mt5 fwb">Andy Anthony</span>
-                            <div class="tools fr">
-                                <a href="#" class="fl mr5 mt3"><i class="iChat iChat2"></i></a>
-                                <a href="#" class="fl w18 mt7" style="display:none;"><input type="checkbox" class="styled" /></i></a>
-                            </div>
-                        </div>
-
-                        <div class="chatBoxItem fl pv5 ph10">
-                            <div class="avatar rounded14 fl mr5">
-                                <span class="rounded14 cf4 bg4 fwb noAvatar tac vam dpib">GP</span>
-                            </div>
-                            <span class="fl dpb ofh cf2 mt5 fwb">Group Chat</span>
-                            <div class="tools fr">
-                                <a href="#" class="fl mr5 mt3"><i class="iChat iChat3"></i></a>
-<!--                                <a href="#" class="fl w18 mt7"><input type="checkbox" class="styled" /></i></a>-->
-                            </div>
-                        </div>
+                        <!-- List chat here -->
                     </div>
                 </div>
                 <!-- end show chat box -->
