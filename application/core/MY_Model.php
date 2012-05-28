@@ -465,7 +465,7 @@ class MY_Model extends CI_Model {
 
 		foreach($data AS $k=>$v) {
 			foreach($card_id_fields AS $field) {
-				$card_field_name = str_replace($field, 'card_id', 'card_info');
+				$card_field_name = str_replace('card_id', 'card_info', $field);
 				if (isset($cards[$v[$field]])) {
 					$data[$k][$card_field_name] = $cards[$v[$field]];
 				} else {
