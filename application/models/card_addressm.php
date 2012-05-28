@@ -61,5 +61,15 @@ class Card_AddressM extends MY_Model {
 		$this->sett_has_system_fields = FALSE;
 	}
 
+	function get_country_list() {
+		$this->db->select('*');
+		$query = $this->db->get('countries');
 
+		$countries = array();
+		foreach ($query->result() as $r) {
+			$countries[$r->countries_iso_2] = htmlentities($r->countries_name, ENT_QUOTES);
+		}
+
+		return $countries;
+	}
 }

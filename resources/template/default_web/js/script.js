@@ -56,10 +56,10 @@ $(".tabsNavigation li a").click(function(){
 
 	// Ajax call to load new sections goes here
 	var url = $(this).attr('href');
+	console.log('loading: '+url);
 	$.pjax({
 		url: url,
-		container: '#main',
-		timeout: 3000
+		container: '#main'
 	});
 
 	return false;

@@ -46,6 +46,75 @@ class InvoiceM extends MY_Model {
 
 		$this->table = 'a_invoice';
 		$this->cache_enabled = TRUE;
+		$this->sett_fill_card_info = TRUE;
+
+		foreach ($this->addons AS $name => $model) {
+			$this->load->model($model);
+		}
+	}
+
+	function get($id) {
+		$result = parent::get($id);
+
+		$this->fill_addons($result);
+
+		return $result;
+	}
+
+	function get_list() {
+		$result = parent::get_list();
+
+		$this->fill_addons($result, MULTIPLE_DATA);
+
+		return $result;
+	}
+
+	private function fill_addons(&$data, $mode = SINGLE_DATA) {
+		foreach ($this->addons AS $name => $model) {
+			$sett_var = 'sett_fill_'.$name;
+			if ($this->$sett_var == FALSE) continue;
+
+			if ($mode == SINGLE_DATA) {
+				$data = array($data);
+			}
+
+			$invoice_ids = get_distinct('id', $data);
+			//$addons = $this->$model
+			//			->set_where('invoice_id IN ('.implode(',', $invoice_ids).')')
+			//			->get_list();
+
+			if ($name == 'item') {
+				$this->db->select('a_invoice_item.*, a_product.a_product_name, a_product_pricetype.a_product_pricetype_name, a_product_durationtype.a_product_durationtype_name');
+				$this->db->from('a_invoice_item');
+				$this->db->join('a_product', 'a_invoice_item.product_id = a_product.a_product_id');
+				$this->db->join('a_product_pricetype', 'a_invoice_item.price_type = a_product_pricetype.a_product_pricetype_id', 'left');
+				$this->db->join('a_product_durationtype', 'a_invoice_item.duration_type = a_product_durationtype.a_product_durationtype_id', 'left');
+				$this->db->where('a_invoice_item.invoice_id IN ('.implode(',', $invoice_ids).')');
+				$query = $this->db->get();
+
+				$addons = $query->result_array();
+			} else {
+				$addons = $this->$model
+						->set_where('invoice_id IN ('.implode(',', $invoice_ids).')')
+						->get_list();
+			}
+
+			if ($addons !== FALSE && count($addons) > 0) {
+				foreach ($data AS $k => $v) {
+					foreach ($addons AS $addon) {
+						if ($addon['invoice_id'] != $v['id']) continue;
+
+						$data[$k]['addon_'.$name][] = $addon;
+					}
+				}
+			}
+
+			$this->$model->reset();
+
+			if ($mode == SINGLE_DATA) {
+				$data = $data[0];
+			}
+		}
 	}
 
 	function search($param, $count = false) {
