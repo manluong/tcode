@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-    class Access extends MY_Controller {
+    class Chat extends MY_Controller {
         function __construct() {
 		$this->load->model('chatm');
 
