@@ -158,7 +158,8 @@ class Card extends MY_Controller {
 				->output_json();
 	}
 
-	function ajax_search_staff($search_string) {
+	function ajax_search_staff() {
+		$search_string = $this->input->get_post('search_string');
 		$list = $this->CardM->search_staff($search_string);
 
 		$this->RespM->set_success(TRUE)
