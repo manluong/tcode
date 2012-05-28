@@ -11,13 +11,9 @@ class Helpdesk extends MY_Controller {
 	}
 
 	function index() {
-		//$this->HelpdeskM->offset = 0;
-		//$this->HelpdeskM->limit = 10;
-
-		
 		$content = array(
 			'total' => $this->HelpdeskM->get_total_records(),
-			'result' => $this->HelpdeskM->get_list(),
+			'result' => json_encode($this->HelpdeskM->get_list()),
 			'group' =>  $this->Helpdesk_CommentM->get_group(),
 			'status' => $this->Helpdesk_CommentM->get_status(),
 			'priority' => $this->Helpdesk_CommentM->get_priority(),
@@ -26,7 +22,55 @@ class Helpdesk extends MY_Controller {
 		$this->data['content'] = $this->load->view(get_template().'/helpdesk/index',$content, TRUE);
 		$this->_do_output();
 	}
-
+	
+	function ajax_status_fillter(){
+		$value = $this->input->post('value');
+		$where = array(
+			'status' => $value,
+		);
+		$this->HelpdeskM->set_where($where);
+		
+		$result = $this->HelpdeskM->get_list();
+		$data = json_encode($result);
+		echo $data;
+	}
+	
+	function ajax_group_fillter(){
+		$value = $this->input->post('value');
+		$where = array(
+			'group' => $value,
+		);
+		$this->HelpdeskM->set_where($where);
+		
+		$result = $this->HelpdeskM->get_list();
+		$data = json_encode($result);
+		echo $data;
+	}
+	
+	function ajax_type_fillter(){
+		$value = $this->input->post('value');
+		$where = array(
+			'type' => $value,
+		);
+		$this->HelpdeskM->set_where($where);
+		
+		$result = $this->HelpdeskM->get_list();
+		$data = json_encode($result);
+		echo $data;
+	}
+	
+	function ajax_priority_fillter(){
+		$value = $this->input->post('value');
+		$where = array(
+			'priority' => $value,
+		);
+		$this->HelpdeskM->set_where($where);
+		
+		$result = $this->HelpdeskM->get_list();
+		$data = json_encode($result);
+		echo $data;
+	}
+	
 	function add() {
 		//Delete NULL HELPDESK
 		$this->delete_helpdesk();
@@ -113,7 +157,7 @@ class Helpdesk extends MY_Controller {
 		$this->data['content'] = $this->load->view(get_template().'/helpdesk/edit',$content, TRUE);
 		$this->_do_output();
 	}
-
+	
 	function out_put_pdf($id) {
 		$result[0] = array();
 		if($id!=0){

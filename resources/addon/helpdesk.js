@@ -1,66 +1,141 @@
-function submit_insert_helpdesk(){
-	var comment = $('#a_helpdesk_comment_comment').val();
-	var subject = $('#subject').val();
-	var id = $('#hiddenIdAdmincp').attr('value');
-	var assign = $('#assign').val();
-	var cc_email = $('#cc_email').val();
-	var group = $('#a_helpdesk_comment_group').val();
-	var status = $('#a_helpdesk_comment_status').val();
-	var type = $('#a_helpdesk_comment_type').val();
-	var priority = $('#a_helpdesk_comment_priority').val();
 
-	var url = '<?=site_url('helpdesk/save_insert_helpdesk');?>';
+function load_helpdesk_list(data){
+	var json = jQuery.parseJSON(data);
+	var content = new Array();
+	for (i in json) {
+		 var item = json[i];
+		 var row  = new Array();
+		
+		 row[0] = '<a href="helpdesk/edit/'+item.id+'">'+item.subject+'</a>';
+		 row[1] = item.cc_email;
+		 row[2] = item.assign_id;
+		 row[3] = item.created_stamp;
+		 content.push(row);
+	}
+	load_datatable(content);
+}
+
+function status_fillter(){
+	var value = $('#status').val();
+	var url = 'helpdesk/ajax_status_fillter';
 
 	$.post(url,{
-			id : id,
-			subject : subject,
-			assign : assign,
-			cc_email : cc_email,
-			group : group,
-			status : status,
-			type : type,
-			priority : priority
+			value : value
 		},function(data){
-			if(comment != ''){
-				submit_comment();
-			}else{
-				window.location='<?=site_url('helpdesk');?>';
+			var json = jQuery.parseJSON(data);
+			var content = new Array();
+			for (i in json) {
+				 var item = json[i];
+				 var row  = new Array();
+				 row[0] = '<a href="helpdesk/edit/'+item.id+'">'+item.subject+'</a>';
+				 row[1] = item.cc_email;
+				 row[2] = item.assign_id;
+				 row[3] = item.created_stamp;
+				 content.push(row);
 			}
-
+			load_datatable(content);
 		}
 	);
 }
 
-function submit_comment(){
-	var comment = $('#a_helpdesk_comment_comment').val();
-	var id_helpdesk = $('#hiddenIdAdmincp').attr('value');
-        var id_comment = $('#hiddenCommentID').attr('value');
-	var priority_helpdesk = $('#a_helpdesk_comment_priority').val();
-	var group_helpdesk = $('#a_helpdesk_comment_group').val();
-	var status_helpdesk = $('#a_helpdesk_comment_status').val();
-	var type_helpdesk = $('#a_helpdesk_comment_type').val();
+function group_fillter(){
+	var value = $('#group').val();
+	var url = 'helpdesk/ajax_group_fillter';
 
-	if ($('#private').is(':checked')) {
-		var pri = 1;
-	} else {
-		var pri = 0	;
-	}
-
-	var url_comment = '<?=site_url('helpdesk/save_comment');?>';
-
-	$.post(url_comment,{
-			id : id_helpdesk,
-                        id_comment : id_comment,
-			comment: comment,
-			pri: pri,
-			group : group_helpdesk,
-			status : status_helpdesk,
-			type : type_helpdesk,
-			priority : priority_helpdesk
+	$.post(url,{
+			value : value
 		},function(data){
-			if (data != '') {
-				window.location='<?=site_url('helpdesk');?>';
+			var json = jQuery.parseJSON(data);
+			var content = new Array();
+			for (i in json) {
+				 var item = json[i];
+				 var row  = new Array();
+				 row[0] = '<a href="helpdesk/edit/'+item.id+'">'+item.subject+'</a>';
+				 row[1] = item.cc_email;
+				 row[2] = item.assign_id;
+				 row[3] = item.created_stamp;
+				 content.push(row);
 			}
+			load_datatable(content);
 		}
 	);
+}
+
+function type_fillter(){
+	var value = $('#type').val();
+	var url = 'helpdesk/ajax_type_fillter';
+
+	$.post(url,{
+			value : value
+		},function(data){
+			var json = jQuery.parseJSON(data);
+			var content = new Array();
+			for (i in json) {
+				 var item = json[i];
+				 var row  = new Array();
+				 row[0] = '<a href="helpdesk/edit/'+item.id+'">'+item.subject+'</a>';
+				 row[1] = item.cc_email;
+				 row[2] = item.assign_id;
+				 row[3] = item.created_stamp;
+				 content.push(row);
+			}
+			load_datatable(content);
+		}
+	);
+}
+
+function priority_fillter(){
+	var value = $('#priority').val();
+	var url = 'helpdesk/ajax_priority_fillter';
+
+	$.post(url,{
+			value : value
+		},function(data){
+			var json = jQuery.parseJSON(data);
+			var content = new Array();
+			for (i in json) {
+				 var item = json[i];
+				 var row  = new Array();
+				 row[0] = '<a href="helpdesk/edit/'+item.id+'">'+item.subject+'</a>';
+				 row[1] = item.cc_email;
+				 row[2] = item.assign_id;
+				 row[3] = item.created_stamp;
+				 content.push(row);
+			}
+			load_datatable(content);
+		}
+	);
+}
+	
+function load_datatable(data){
+	$('#example').dataTable( {
+		"sDom": "<<'pull-right'p>>t<<'pull-right'p>lfi>",
+		"sPaginationType": "bootstrap",
+		"iDisplayLength": 10,
+		"bDestroy": true,
+		"aaData": data,
+		"aoColumns": [
+			{ "sTitle": "Subject" },
+			{ "sTitle": "CC Email" },
+			{ "sTitle": "Assign ID" },
+			{ "sTitle": "Created" },
+		],
+		"oLanguage": {
+			"sSearch" : "<div class=\"input-prepend\"><span class=\"add-on\"><i class=\"icon-filter\"></i></span></i>_INPUT_</div>",
+			"sInfo": "_START_ to _END_ of _TOTAL_",
+			"sLengthMenu": "_MENU_ Rows per Page",
+			"sInfoFiltered": " - filtering from _MAX_ records",
+			"oPaginate": {
+				"sPrevious": "Previous",
+				"sNext": "Next"
+		},
+		"sLengthMenu": '<select>'+
+		'<option value="10">10</option>'+
+		'<option value="20">20</option>'+
+		'<option value="30">30</option>'+
+		'<option value="40">40</option>'+
+		'<option value="50">50 Rows</option>'+
+		'<option value="-1">All</option>'+
+		'</select>'
+	}})
 }

@@ -491,6 +491,12 @@ html, body{
     padding-top: 27px;
     width: 857px;
 }
+.pull-right a{
+	color: #0084CF;
+    font-size: 12px;
+    font-weight: bold;
+    text-decoration: none !important;
+}
 /*END HELPDESK LIST CSS */
 
 

@@ -1,45 +1,15 @@
+<script type="text/javascript" src="/resources/addon/helpdesk.js"></script>
+
 <script type="text/javascript">
 	$(document).ready(function(){
 		$('#main_cases').html( '<table class="table table-striped" id="example"></table>' );
 		$.extend( $.fn.dataTableExt.oStdClasses, {
 				    "sWrapper": "dataTables_wrapper form-inline"
 				} );
-		$('#example').dataTable( {
-			"sDom": "<<'pull-right'p>>t<<'pull-right'p>lfi>",
-			"sPaginationType": "bootstrap",
-			"iDisplayLength": 15,
-			"aaData": [
-				<?php 
-					for ($i = 0 ; $i < count($result) ; $i++){
-						echo '[ "'.$result[$i]['subject'].'", "'.$result[$i]['cc_email'].'", "'.$result[$i]['assign_id'].'", "'.$result[$i]['created_stamp'].'" ],';
-					}
-				?>
-			],
-			"aoColumns": [
-				{ "sTitle": "Subject" },
-				{ "sTitle": "CC Email" },
-				{ "sTitle": "Assign ID" },
-				{ "sTitle": "Created" },
-			],
-			"oLanguage": {
-				"sSearch" : "<div class=\"input-prepend\"><span class=\"add-on\"><i class=\"icon-filter\"></i></span></i>_INPUT_</div>",
-				"sInfo": "_START_ to _END_ of _TOTAL_",
-				"sLengthMenu": "_MENU_ Rows per Page",
-				"sInfoFiltered": " - filtering from _MAX_ records",
-				"oPaginate": {
-					"sPrevious": "Previous",
-					"sNext": "Next"
-			},
-			"sLengthMenu": '<select>'+
-			'<option value="10">10</option>'+
-			'<option value="20">20</option>'+
-			'<option value="30">30</option>'+
-			'<option value="40">40</option>'+
-			'<option value="50">50 Rows</option>'+
-			'<option value="-1">All</option>'+
-			'</select>'
-		}})
-	
+		
+		var result = '<?=$result?>';
+		load_helpdesk_list(result);
+		
 		$("#arrow").click(function(){
 			$("#input_data_fillter").slideToggle();
 			
@@ -53,6 +23,7 @@
 		});
 	});
 </script>
+
 <div id="breadcrumb">
 	<div id="module_name" style="width:650px;">
 		<ul>
@@ -103,7 +74,7 @@
 				<li>
 					<span class="fillter_label">Status</span>
 					<span class="fillter_input">
-						<select name="status" id="status">
+						<select name="status" id="status" onchange="status_fillter();">
 							<option value="">- - - Something - - -</option>
 							<?php if(!empty($status)) {
 									foreach($status as $k) {
@@ -116,7 +87,7 @@
 				<li>
 					<span class="fillter_label">Group \ Department</span>
 					<span class="fillter_input">
-						<select name="group" id="group">
+						<select name="group" id="group" onchange="group_fillter();">
 							<option value="">- - - Something - - -</option>
 							<?php if(!empty($group)) {
 									foreach($group as $k) {
@@ -129,7 +100,7 @@
 				<li>
 					<span class="fillter_label">Type</span>
 					<span class="fillter_input">
-						<select name="type" id="type">
+						<select name="type" id="type" onchange="type_fillter();">
 							<option value="">- - - Something - - -</option>
 							<?php if(!empty($type)) {
 									foreach($type as $k) {
@@ -142,7 +113,7 @@
 				<li>
 					<span class="fillter_label">Priority</span>
 					<span class="fillter_input">
-						<select name="priority" id="priority">
+						<select name="priority" id="priority" onchange="priority_fillter();">
 							<option value="">- - - Something - - -</option>
 							 <?php if(!empty($priority)) {								
 									foreach($priority as $k) {
@@ -183,6 +154,7 @@
 		<div id="top_cases">
 			<div class="invoice_title" style="width:550px;"><span class="arrow_title"></span><span>Cases</span></div>
 		</div>
+		
 		<div id="main_cases">
 			
 		</div>
