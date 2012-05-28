@@ -154,6 +154,7 @@ class Helpdesk extends MY_Controller {
 			'assign' => $this->Helpdesk_CommentM->get_assign(),
 			'file_attach' => $this->Helpdesk_CommentM->get_comment_files($id),
 		);
+
 		$this->data['content'] = $this->load->view(get_template().'/helpdesk/edit',$content, TRUE);
 		$this->_do_output();
 	}

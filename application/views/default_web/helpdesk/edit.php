@@ -126,15 +126,15 @@ function show_detail_comment(id){
 			<ul>
 				<li>
 					<span class="input_data_label">Subject</span>
-					<span class="fillter_input"><?=$result->subject?></span>
+					<span class="fillter_input"><?=$result['subject']?></span>
 				</li>
 				<li>
 					<span class="input_data_label">Assigned</span>
-					<span class="fillter_input"><?=$this->Helpdesk_CommentM->get_assigname($result->assign_id)?></span>
+					<span class="fillter_input"><?=$this->Helpdesk_CommentM->get_assigname($result['assign_id'])?></span>
 				</li>
 				<li>
 					<span class="input_data_label">CC (Email)</span>
-					<span class="fillter_input"><?=$result->cc_email?></span>
+					<span class="fillter_input"><?=$result['cc_email']?></span>
 				</li>
 				<li id="helpdesk_change_info">Change Info</li>
 			</ul>
@@ -156,8 +156,8 @@ function show_detail_comment(id){
 						<select  name="assign" id="assign">
 							<option value="">something</option>
 							<?php if (!empty($assign)) {
-									if (!empty($result->assign_id)) {
-										$value_assign = $result->assign_id;
+									if (!empty($result['assign_id'])) {
+										$value_assign = $result['assign_id'];
 									} else {
 										$value_assign = 0;
 									}
@@ -170,7 +170,7 @@ function show_detail_comment(id){
 				</li>
 				<li style="height:22px;">
 					<span style="font-weight:normal;" class="input_data_label">CC (Email)</span>
-					<span class="fillter_input"><input type="text" id="cc_email" class="inv-field" value="<?=(isset($result->cc_email)? print $result->cc_email : print '')?>"/></span>
+					<span class="fillter_input"><input type="text" id="cc_email" class="inv-field" value="<?=(isset($result['cc_email'])? print $result['cc_email'] : print '')?>"/></span>
 				</li>
 				<li id="helpdesk_save_info" style="margin-top:-5px;">Save</li>
 			</ul>
@@ -187,8 +187,8 @@ function show_detail_comment(id){
 						<select disabled="disabled" name="status" id="status">
 							<option value="">- - - Something - - -</option>
 							<?php if(!empty($status)) {
-									if(!empty($result->status)) {
-										$value_status = $result->status;
+									if(!empty($result['status'])) {
+										$value_status = $result['status'];
 									} else {
 										$value_status = 0;
 									}
@@ -205,8 +205,8 @@ function show_detail_comment(id){
 						<select disabled="disabled" name="group" id="group">
 							<option value="">- - - Something - - -</option>
 							<?php if(!empty($group)) {
-									if(!empty($result->group)) {
-										$value_group = $result->group;
+									if(!empty($result['group'])) {
+										$value_group = $result['group'];
 									} else {
 										$value_group = 0;
 									}
@@ -223,8 +223,8 @@ function show_detail_comment(id){
 						<select disabled="disabled" name="type" id="type">
 							<option value="">- - - Something - - -</option>
 							<?php if(!empty($type)) {
-									if(!empty($result->type)) {
-											$value_type = $result->type;
+									if(!empty($result['type'])) {
+											$value_type = $result['type'];
 									} else {
 											$value_type= 0;
 									}
@@ -241,8 +241,8 @@ function show_detail_comment(id){
 						<select name="priority" id="priority">
 							<option value="">- - - Something - - -</option>
 							 <?php if(!empty($priority)) {
-									if(!empty($result->priority)) {
-											$value_pri = $result->priority;
+									if(!empty($result['priority'])) {
+											$value_pri = $result['priority'];
 									} else {
 											$value_pri= 0;
 									}
