@@ -101,7 +101,7 @@
                             </div>
                             <div class="tools fr">
                                 <a href="#" class="fl mr5 mt3"><i class="iChat iChat2"></i></a>
-                                <a href="#" class="fl w18 mt7"><input type="checkbox" class="styled" /></i></a>
+                                <a href="#" class="fl w18 mt7"><input type="checkbox" style="display:none;" class="styled" /></i></a>
                             </div>
                         </div>
 
