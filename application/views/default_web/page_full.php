@@ -104,49 +104,7 @@
                                 <a href="#" class="fl w18 mt7"><input type="checkbox" class="styled" /></i></a>
                             </div>
                         </div>
-                        <div class="chatBoxItem fl pv5 ph10">
-                            <div class="avatar rounded14 fl mr5"><img src="resources/template/default_web/img/avatar.png" alt="" width="28" class=" rounded14"></div>
-                            <span class="fl dpb ofh cf1 mt5 fwb">Andy Anthony</span>
-                            <div class="tools fr">
-                                <a href="#" class="fl mr5 mt3"><i class="iChat iChat2"></i></a>
-                                <a href="#" class="fl w18 mt7"><input type="checkbox" class="styled" /></i></a>
-                            </div>
-                        </div>
-
-                        <div class="chatBoxItem fl pv5 ph10">
-                            <div class="avatar rounded14 fl mr5"><img src="http://1.bp.blogspot.com/-W7sLIzOS9ws/T3cbzjHNtOI/AAAAAAAAcF4/SpKt8glEWqo/s400/avatar%2Bshock%2B%252870%2529.jpg" alt="" width="28" class="rounded14"></div>
-                            <span class="fl dpb ofh cf1 mt5 fwb">Tung Pham Thanh</span>
-                            <div class="tools fr">
-                                <a href="#" class="fl mr5 mt3"><i class="iChat iChat3"></i></a>
-                                <a href="#" class="fl w18 mt7"><input type="checkbox" class="styled" /></i></a>
-                            </div>
-                        </div>
-                        <div class="chatBoxItem fl pv5 ph10">
-                            <div class="avatar rounded14 fl mr5"><img src="http://mobileworld.vn/forum/customavatars/avatar44905_19.gif" alt="" width="28" class="rounded14"></div>
-                            <span class="fl dpb ofh cf1 mt5 fwb">Andy Anthony</span>
-                            <div class="tools fr">
-                                <a href="#" class="fl mr5 mt3"><i class="iChat iChat2"></i></a>
-                                <a href="#" class="fl w18 mt7"><input type="checkbox" class="styled" /></i></a>
-                            </div>
-                        </div>
-                        <div class="chatBoxItem fl pv5 ph10">
-                            <div class="avatar rounded14 fl mr5"><img src="http://profile.ak.fbcdn.net/hprofile-ak-snc4/276943_207161932643727_628715287_q.jpg" alt="" width="28" class="rounded14"></div>
-                            <span class="fl dpb ofh cf1 mt5 fwb">Tung Pham Thanh</span>
-                            <div class="tools fr">
-                                <a href="#" class="fl mr5 mt3"><i class="iChat iChat9"></i></a>
-                                <a href="#" class="fl w18 mt7"><input type="checkbox" class="styled" /></i></a>
-                            </div>
-                        </div>
-                        <div class="chatBoxItem fl pv5 ph10">
-                            <div class="avatar rounded14 fl mr5">
-                                <span class="rounded14 cf4 bg4 fwb noAvatar tac vam dpib">GP</span>
-                            </div>
-                            <span class="fl dpb ofh cf1 mt5 fwb">Grant Chan</span>
-                            <div class="tools fr">
-                                <a href="#" class="fl mr5 mt3"><i class="iChat iChat3"></i></a>
-                                <a href="#" class="fl w18 mt7"><input type="checkbox" class="styled" /></i></a>
-                            </div>
-                        </div>
+                        
                     </div>
                 </div>
                 <!-- end show chat box -->
