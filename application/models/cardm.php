@@ -115,6 +115,16 @@ class CardM extends MY_Model {
 		return $result;
 	}
 
+	function get_name($card_id) {
+		$user = $this->get($card_id);
+
+		if (strlen($user['display_name']) > 0) {
+			return $user['display_name'];
+		}
+
+		return $user['first_name'].' '.$user['last_name'];
+	}
+
 	function save($data = FALSE) {
 		$has_error = FALSE;
 

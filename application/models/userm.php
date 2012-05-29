@@ -86,6 +86,8 @@ class UserM extends MY_Model {
 
 		if ($this->id == 0) return 'system';
 
+		if (strlen($this->info['display_name']) > 0) return $this->info['display_name'];
+
 		return $this->info['first_name'].' '.$this->info['last_name'];
 	}
 
