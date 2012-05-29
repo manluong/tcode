@@ -77,7 +77,7 @@ var telcoson = {
 			//var contact = $('<div id="' + jid_id + '" class="offline" onclick="chatWith(\''+jid_id+'\',\''+name+'\')">'+name+'</div>');
                         var contact = $('<div class="chatBoxItem fl pv5 ph10" id="user_'+jid_id+'"><div class="avatar rounded14 fl mr5"><img src="/resources/template/default_web/img/avatar.png" alt="" width="28" class=" rounded14"></div><span class="fl dpb ofh cf1 mt5 fwb">'+name+'</span><div class="tools fr"><a href="#" class="fl mr5 mt3"><i class="iChat iChat3"></i></a><a href="#" class="fl w18 mt7" style="display:none;"><input type="checkbox" class="styled" /></i></a></div></div>');
                         //console.log(contact);
-			jQuery("#list_chat div.chatBoxIner").append(contact);
+			//jQuery("#list_chat div.chatBoxIner").append(contact);
 			//telcoson.insert_contact(contact)
 				});
                // var contact = $('<div class="chatBoxItem fl pv5 ph10"><div class="avatar rounded14 fl mr5"><span class="rounded14 cf4 bg4 fwb noAvatar tac vam dpib">GP</span></div><span class="fl dpb ofh cf2 mt5 fwb">Group Chat</span><div class="tools fr"><a href="#" class="fl mr5 mt3"><i class="iChat iChat3"></i></a></div></div>');
