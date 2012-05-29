@@ -236,34 +236,38 @@ class CardM extends MY_Model {
 	}
 
 	private function fill_addons(&$data, $mode=SINGLE_DATA) {
+		if ($mode == SINGLE_DATA) {
+			$data = array($data);
+		}
+
+		$card_ids = get_distinct('id', $data);
+
 		foreach($this->addons AS $name=>$model) {
 			$sett_var = 'sett_fill_'.$name;
 			if ($this->$sett_var == FALSE) continue;
 
-			if ($mode == SINGLE_DATA) {
-				$data = array($data);
-			}
+			$addon_data = $this->$model->set_where('card_id IN ('.implode(',', $card_ids).')')
+							->get_list();
 
-			$card_ids = get_distinct('id', $data);
-			$addons = $this->$model
-						->set_where('card_id IN ('.implode(',', $card_ids).')')
-						->get_list();
-
-			if ($addons !== FALSE && count($addons) > 0) {
+			if ($addon_data !== FALSE && count($addon_data) > 0) {
 				foreach($data AS $k=>$v) {
-					foreach($addons AS $addon) {
-						if ($addon['card_id'] != $v['id']) continue;
+					foreach($addon_data AS $ad) {
+						if ($ad['card_id'] != $v['id']) continue;
 
-						$data[$k]['addon_'.$name][] = $addon;
+						$data[$k]['addon_'.$name][] = $ad;
 					}
+				}
+			} else {
+				foreach($data AS $k=>$v) {
+					$data[$k]['addon_'.$name] = array();
 				}
 			}
 
 			$this->$model->reset();
+		}
 
-			if ($mode == SINGLE_DATA) {
-				$data = $data[0];
-			}
+		if ($mode == SINGLE_DATA) {
+			$data = $data[0];
 		}
 	}
 
