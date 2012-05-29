@@ -59,7 +59,7 @@
 		</div>
 	</footer>
 	<!-- End Footer -->
-        <?php if($this->UserM->is_logged_in()):?>
+        <?php if(!$this->UserM->is_logged_in()):?>
         <!-- chat area -->
     <div class="chatSection pof" id="chat" style="display:none;">
         <div class="chatSlider h50">
