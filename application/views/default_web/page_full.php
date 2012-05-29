@@ -76,7 +76,7 @@
                                 <a href="#" class="fs11 cf6 mb0 fwb">Group Chat</a>
                             </div>
                         </div>
-                        <div class="chatBoxItem fl pv5 ph10 bgN setStatus">
+                        <div class="chatBoxItem fl pv5 ph10 bgN setStatus" id="set_status" style="display:none;">
                             <p class="cf5 mb0 fl fs10 mt10 mr10 fwb w40 tac">Change Status</p>
                             <a href="#" class="fl mr5 mt3 tac pt5 ph5 tdn status">
                                 <i class="iChat iChat1"></i>
