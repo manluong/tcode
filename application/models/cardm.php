@@ -59,6 +59,7 @@ class CardM extends MY_Model {
 	public $sett_fill_social = TRUE;
 	public $sett_fill_tel = TRUE;
 	public $sett_fill_access_user = FALSE;
+	public $sett_fill_invoice = FALSE;
 
 	private $addons = array(
 		'address' => 'Card_addressM',
@@ -86,6 +87,12 @@ class CardM extends MY_Model {
 		$result = parent::get($id);
 
 		$this->fill_addons($result);
+
+		if ($this->sett_fill_invoice) {
+			$this->load->model('InvoiceM');
+			$this->InvoiceM->where[] = 'customer_card_id='.$id;
+			$result['addon_invoice'] = $this->InvoiceM->get_list();
+		}
 
 		return $result;
 	}
@@ -212,7 +219,7 @@ class CardM extends MY_Model {
 			}
 		}
 	}
-	
+
 	function get_card_email($id) {
 		$this->db->select('*');
 		$this->db->where('card_id', $id);
@@ -225,7 +232,7 @@ class CardM extends MY_Model {
 			return false;
 		}
 	}
-	
+
 	function get_card_social($id) {
 		$this->db->select('*');
 		$this->db->where('card_id', $id);
@@ -237,7 +244,7 @@ class CardM extends MY_Model {
 			return false;
 		}
 	}
-	
+
 	function get_card_phone($id) {
 		$this->db->select('*');
 		$this->db->where('card_id', $id);
@@ -250,7 +257,7 @@ class CardM extends MY_Model {
 			return false;
 		}
 	}
-	
+
 	function get_card_address($id) {
 		$this->db->select('*');
 		$this->db->where('card_id', $id);
@@ -264,4 +271,52 @@ class CardM extends MY_Model {
 		}
 	}
 
+	function search($search_string) {
+		$search_fields = array();
+
+		//search first_name + last_name
+		$search_fields[] = array(
+			'first_name',
+			'last_name',
+		);
+
+		//search organization name
+		$search_fields[] = array(
+			'organization_name',
+		);
+
+		return parent::search($search_fields, $search_string);
+	}
+
+	function search_staff($search_string) {
+		$search_fields = array();
+
+		//search first_name + last_name
+		$search_fields[] = array(
+			'first_name',
+			'last_name',
+		);
+
+		//get card_ids in STAFF role
+		$staff_card_ids = array();
+		$rs = $this->db->select('card_id')
+				->from('access_user_role')
+				->where('role_id', 1)
+				->get();
+
+		foreach($rs->result_array() AS $r) {
+			$staff_card_ids[] = $r['card_id'];
+		}
+
+		//if there are no STAFF card_ids, return a blank result.
+		if (count($staff_card_ids) == 0) return array();
+
+		//limit results to card_ids in STAFF role
+		$this->where[] = 'id IN ('.implode(',', $staff_card_ids).')';
+
+		//retrieve only id, first_name and last_name
+		$this->select_fields = array('id', 'first_name', 'last_name');
+
+		return parent::search($search_fields, $search_string);
+	}
 }

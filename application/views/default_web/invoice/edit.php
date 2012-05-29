@@ -46,7 +46,7 @@
 <div id="title_item_edit"><span style="color:#2a9611;">Draft</span> Invoice #<?php echo $invoice['id'] ?></div>
 
 <div id="boxes">
-	<form id="invoice_form" action="/invoice/edit_save" method="post">
+	<form id="invoice_form" action="/invoice/save" method="post">
 	<input type="hidden" name="id" value="<?php echo $invoice['id'] ?>" />
 	<div>
 		<div class="invoice_title"><span class="arrow_title"></span><span>INVOICE INFORMATION</span></div>
@@ -57,7 +57,7 @@
 					<select name="customer_card_id">
 						<option value="">- - - Select - - -</option>
 						<?php foreach ($customer as $r): ?>
-						<option value="<?php echo $r->id ?>"<?php echo ($r->id == $invoice['customer_card_id']) ? ' selected="selected"' : '' ?>><?php echo $r->nickname ?></option>
+						<option value="<?php echo $r->id ?>"<?php echo ($r->id == $invoice['customer_card_id']) ? ' selected="selected"' : '' ?>><?php echo trim($r->first_name.' '.$r->last_name) ?></option>
 						<?php endforeach ?>
 					</select>
 				</li>
@@ -89,13 +89,14 @@
 			</div>
 			<div id="invoice_item_list">
 				<?php $c = 0 ?>
+				<?php if (isset($invoice['addon_item'])): ?>
 				<?php foreach ($invoice['addon_item'] as $invoice_item): ?>
 				<div class="invoice_item clearfix">
 					<div class="col-1">
 						<ul>
 							<li class="row_delete"></li>
 							<li class="row_move"></li>
-							<li class="row_down"></li>
+							<li class="row_more row_down"></li>
 						</ul>
 					</div>
 					<div class="invoice_item_main">
@@ -141,6 +142,7 @@
 				</div>
 				<?php $c++ ?>
 				<?php endforeach ?>
+				<?php endif ?>
 			</div>
 		</div>
 
@@ -214,7 +216,7 @@
 			<ul>
 				<li class="row_delete"></li>
 				<li class="row_move"></li>
-				<li class="row_down"></li>
+				<li class="row_more row_down"></li>
 			</ul>
 		</div>
 		<div class="invoice_item_main">

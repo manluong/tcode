@@ -48,11 +48,25 @@ class UserM extends MY_Model {
 	}
 
 	public function is_admin() {
+		if ($this->info['role']['name'] !== 'Staff') return FALSE;
+
 		foreach($this->info['sub_roles'] AS $role_id=>$role_name) {
 			if ($role_name == 'Administrators') return TRUE;
 		}
 
 		return FALSE;
+	}
+
+	public function is_staff() {
+		return ($this->info['role']['name'] == 'Staff');
+	}
+
+	public function is_client() {
+		return ($this->info['role']['name'] == 'Client' || $this->info['role']['name'] == 'Client (Additional)');
+	}
+
+	public function is_vendor() {
+		return ($this->info['role']['name'] == 'Vendor');
 	}
 
 	public function get_loguid() {

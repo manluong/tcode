@@ -10,6 +10,7 @@ class MY_Model extends CI_Model {
 	public $errors = array();
 	public $field_errors = array();
 
+	public $select_fields = array();
 	public $where = array();
 	public $order_by = array();
 	public $limit = 0;
@@ -73,6 +74,7 @@ class MY_Model extends CI_Model {
 	}
 
 	function reset() {
+		$this->select_fields = array();
 		$this->where = array();
 		$this->order_by = array();
 		$this->offset = 0;
@@ -84,8 +86,13 @@ class MY_Model extends CI_Model {
 			if (isset($this->cache[$this->table][$id])) return $this->cache[$this->table][$id];
 		}
 
-		$this->db->select()
-			->from($this->table)
+		if (count($this->select_fields) > 0) {
+			$this->db->select(implode(', ', $this->select_fields));
+		} else {
+			$this->db->select();
+		}
+
+		$this->db->from($this->table)
 			->where($this->id_field, $id);
 
 		if (count($this->where) > 0) {
@@ -112,8 +119,13 @@ class MY_Model extends CI_Model {
 	}
 
 	function get_list() {
-		$this->db->select()
-			->from($this->table);
+		if (count($this->select_fields) > 0) {
+			$this->db->select(implode(', ', $this->select_fields));
+		} else {
+			$this->db->select();
+		}
+
+		$this->db->from($this->table);
 
 		if (count($this->where) > 0) {
 			foreach($this->where AS $w) {
@@ -166,8 +178,13 @@ class MY_Model extends CI_Model {
 		}
 
 		if (count($ids)>0) {
-			$this->db->select()
-				->from($this->table)
+			if (count($this->select_fields) > 0) {
+				$this->db->select(implode(', ', $this->select_fields));
+			} else {
+				$this->db->select();
+			}
+
+			$this->db->from($this->table)
 				->where_in($this->id_field, $ids);
 
 			if ($this->sett_has_system_fields && $this->sett_filter_deleted) {
@@ -332,6 +349,7 @@ class MY_Model extends CI_Model {
 	function get_differences($new_data) {
 		$id = $new_data[$this->id_field];
 
+		$this->reset();
 		$existing = $this->get($id);
 
 		$diff = array();
@@ -465,7 +483,7 @@ class MY_Model extends CI_Model {
 
 		foreach($data AS $k=>$v) {
 			foreach($card_id_fields AS $field) {
-				$card_field_name = str_replace($field, 'card_id', 'card_info');
+				$card_field_name = str_replace('card_id', 'card_info', $field);
 				if (isset($cards[$v[$field]])) {
 					$data[$k][$card_field_name] = $cards[$v[$field]];
 				} else {
@@ -527,6 +545,40 @@ class MY_Model extends CI_Model {
 		if (count($data) == 0) return FALSE;
 
 		return $data;
+	}
+
+	function search($search_fields, $search_string) {
+		if (count($this->select_fields) > 0) {
+			$this->db->select(implode(', ', $this->select_fields));
+		} else {
+			$this->db->select();
+		}
+
+		$this->db->from($this->table);
+
+		foreach($search_fields AS $sf) {
+			if (count($sf) == 1) {
+				$sf = array_shift($sf);
+				$this->db->or_like($sf, $search_string, 'after');
+			} else {
+				$sf = implode(",' ',", $sf);
+				$this->db->or_like("CONCAT($sf)", $search_string, 'after');
+			}
+		}
+
+		if ($this->sett_has_system_fields && $this->sett_filter_deleted) {
+			$this->db->where('deleted', 0);
+		}
+
+		if (count($this->where) > 0) {
+			foreach($this->where AS $w) {
+				$this->db->where($w, NULL, FALSE);
+			}
+		}
+
+		$rs = $this->db->get();
+
+		return $rs->result_array();
 	}
 
 }

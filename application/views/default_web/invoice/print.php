@@ -22,7 +22,7 @@
 				<div id="customer_info">
 					<div id="customer_name">
 						Facebook Inc<br />
-						<?php echo $invoice['card_info']['nickname'] ?>
+						<?php echo trim($invoice['customer_card_info']['first_name'].' '.$invoice['customer_card_info']['last_name']) ?>
 					</div>
 					<div id="customer_address">
 						7 Temasek Bouleverd<br />

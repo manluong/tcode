@@ -52,7 +52,7 @@
 				<li>
 					<span class="fillter_label">Date</span>
 					<span class="fillter_input">
-						<select name="date_range">
+						<select id="date_range" name="date_range">
 							<option value="">- - - Select - - -</option>
 							<option value="1">Last Month</option>
 						</select>
@@ -60,11 +60,11 @@
 				</li>
 				<li>
 					<span class="fillter_label">From</span>
-					<span class="fillter_input"><input type="text" name="date_range_from" class="inv-field datepicker" /></span>
+					<span class="fillter_input"><input type="text" id="date_range_from" name="date_range_from" class="inv-field datepicker" /></span>
 				</li>
 				<li>
 					<span class="fillter_label">To</span>
-					<span class="fillter_input"><input type="text" name="date_range_to" class="inv-field datepicker" /></span>
+					<span class="fillter_input"><input type="text" id="date_range_to" name="date_range_to" class="inv-field datepicker" /></span>
 				</li>
 				<li style="width:150px;margin-left:10px;">
 					<span class="fillter_label">Payment</span>
@@ -87,7 +87,7 @@
 						<div id="slider-range"></div>
 					</span>
 				</li>
-				<li style="width: 25px; margin: 36px 0 0 28px;"><div id="arrow" class="up_arrow"></div></li>
+				<li style="width: 25px; margin: 36px 0 0 28px;"><div id="arrow" class="down_arrow"></div></li>
 			</ul>
 		</div>
 		<div class="ClearLeft"></div>
@@ -123,6 +123,9 @@
 
 	<div id="invoice_cases">
 		<div class="invoice_title"><span class="arrow_title"></span><span>Cases</span></div>
-		<div id="invoice_list"></div>
+		<div id="invoice_list">
+			<table id="tbl_invoice" cellpadding="0" cellspacing="0" border="0" class="table table-striped">
+			</table>
+		</div>
 	</div>
 </div>

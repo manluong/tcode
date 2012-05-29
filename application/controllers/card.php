@@ -39,6 +39,8 @@ class Card extends MY_Controller {
 	}
 
 	function edit($id) {
+		//if (!$this->AclM->check('card', $id, 'edit')) die('you cannot edit this data');
+
 		$view_data['data'] = $this->CardM->get($id);
 		$view_data['is_new'] = FALSE;
 		$view_data['countries'] = $this->Card_AddressM->get_country_list();
@@ -46,10 +48,10 @@ class Card extends MY_Controller {
 		$this->data['content'] = $this->load->view(get_template().'/card/edit', $view_data, TRUE);
 		$this->_do_output();
 	}
-	
+
 	function card_ajax_edit() {
 		$id = $this->input->post('id');
-		
+
 		$view_data['data'] = $this->CardM->get($id);
 		$view_data['is_new'] = FALSE;
 
@@ -152,6 +154,15 @@ class Card extends MY_Controller {
 				->set_success($success)
 				->set_title('Card Info Dataset')
 				->set_details($details)
+				->output_json();
+	}
+
+	function ajax_search_staff() {
+		$search_string = $this->input->get_post('search_string');
+		$list = $this->CardM->search_staff($search_string);
+
+		$this->RespM->set_success(TRUE)
+				->set_details($list)
 				->output_json();
 	}
 }

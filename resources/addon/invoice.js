@@ -120,6 +120,17 @@ function format_money(n, c, d, t, q) {
 };
 
 $(document).ready(function() {
+	$('#date_range').on('change', function(e) {
+		if ($(this).val() == 1) {
+			now = new Date();
+			$('#date_range_from').val($.datepicker.formatDate('yy-mm-dd', new Date(now.getFullYear(), now.getMonth() - 1, 1)));
+			$('#date_range_to').val($.datepicker.formatDate('yy-mm-dd', new Date(new Date(now.getFullYear(), now.getMonth(), 1) - 1)));
+		} else {
+			$('#date_range_from').val('');
+			$('#date_range_to').val('');
+		}
+	});
+
 	$('#customer_name').autocomplete({
 		source: '/invoice/get_customer',
 		minLength: 2,
@@ -169,15 +180,42 @@ $(document).ready(function() {
 			type: "POST",
 			url: $('#frm_search').attr('action'),
 			data: $('#frm_search').serialize(),
+			dataType: 'json',
 			success: function(resp) {
-				$('#invoice_list').html(resp);
-				$('#page').val(1);
+				//$('#invoice_list').html(resp);
+				//$('#page').val(1);
 
-				$.extend($.fn.dataTableExt.oStdClasses, {
-					"sWrapper": "dataTables_wrapper form-inline"
-				});
+				//$.extend($.fn.dataTableExt.oStdClasses, {
+				//	"sWrapper": "dataTables_wrapper form-inline"
+				//});
+
+				var data = new Array();
+				for (i in resp) {
+					var item = resp[i];
+					var row  = new Array();
+					row[0] = '<input type="checkbox" />';
+					row[1] = (item.first_name+' '+item.last_name).trim();
+					row[2] = '<a href="/invoice/view/'+item.id+'">'+item.id+'</a>';
+					var date = new Date((item.payment_due_stamp).substring(0, 10));
+					row[3] = $.datepicker.formatDate('yy-mm-dd', date);
+					row[4] = format_money(item.total);
+					row[5] = '';
+					row[6] = '<a href="/invoice/edit/'+item.id+'">Edit</a></td>';
+					data.push(row);
+				}
 
 				$('#tbl_invoice').dataTable({
+					"bDestroy" : true,
+					"aaData": data,
+					"aoColumns": [
+						{ "sTitle": "" },
+						{ "sTitle": "Customer" },
+						{ "sTitle": "Invoice #" },
+						{ "sTitle": "Date" },
+						{ "sTitle": "Total" },
+						{ "sTitle": "Status" },
+						{ "sTitle": "Edit" }
+					],
 					"sDom": "<<'pull-right'p>>t<<'pull-right'p>lfi>",
 					"sPaginationType": "bootstrap",
 					"iDisplayLength": 10,
@@ -191,13 +229,13 @@ $(document).ready(function() {
 							"sNext": "Next"
 					},
 					"sLengthMenu": '<select>'+
-					'<option value="10">10</option>'+
-					'<option value="20">20</option>'+
-					'<option value="30">30</option>'+
-					'<option value="40">40</option>'+
-					'<option value="50">50 Rows</option>'+
-					'<option value="-1">All</option>'+
-					'</select>'
+						'<option value="10">10</option>'+
+						'<option value="20">20</option>'+
+						'<option value="30">30</option>'+
+						'<option value="40">40</option>'+
+						'<option value="50">50 Rows</option>'+
+						'<option value="-1">All</option>'+
+						'</select>'
 				}});
 			}
 		});
@@ -239,9 +277,17 @@ $(document).ready(function() {
 		e.preventDefault();
 		remove_row(this);
 	});
-	$('.row_down').live('click', function(e) {
+	$('.row_more').live('click', function(e) {
 		e.preventDefault();
 		more(this);
+
+		if ($(this).hasClass('row_down')){
+			$(this).removeClass('row_down');
+			$(this).addClass('row_up');
+		} else {
+			$(this).removeClass('row_up');
+			$(this).addClass('row_down');
+		}
 	});
 	$('#add_row input').on('click', function(e) {
 		add_last_row();

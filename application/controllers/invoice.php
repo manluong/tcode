@@ -20,6 +20,12 @@ class Invoice extends MY_Controller {
 		$this->_do_output();
 	}
 
+	function test($id) {
+		$this->InvoiceM->sett_fill_card_info = TRUE;
+		$data = $this->InvoiceM->get($id);
+		echo '<pre>', print_r($data, TRUE), '</pre>';
+	}
+
 	function search() {
 		//$page = $this->input->post('page') ? $this->input->post('page') : 1;
 		//$row_per_page = $this->input->post('row_per_page') ? $this->input->post('row_per_page') : 10;
@@ -40,16 +46,25 @@ class Invoice extends MY_Controller {
 		);
 
 		//$total_record = $this->InvoiceM->search($search_param, true);
-		$data = array(
-			'invoice_list' => $this->InvoiceM->search($search_param),
+		//$data = array(
+			//'invoice_list' => $this->InvoiceM->search($search_param),
 			//'total_record' => $total_record,
 			//'current_page' => $page,
 			//'row_per_page' => $row_per_page,
 			//'max_page' => ($row_per_page == -1) ? 1 : ceil($total_record/$row_per_page)
-		);
+		//);
 
-		$content = $this->load->view(get_template().'/invoice/search', $data, true);
-		echo $content;
+		//$content = $this->load->view(get_template().'/invoice/search', $data, true);
+		//echo $content;
+
+		echo json_encode($this->InvoiceM->search($search_param));
+
+		//$result = array();
+		//foreach ($this->InvoiceM->search($search_param) as $invoice) {
+		//	$result[] = array('cb', $invoice->nickname, $invoice->id, date('Y-m-d', strtotime($invoice->payment_due_stamp)), '$'.number_format($invoice->total, 2), '', $invoice->id);
+		//}
+
+		//echo json_encode($result);
 	}
 
 	function view($id) {
@@ -166,87 +181,6 @@ class Invoice extends MY_Controller {
 		$this->_do_output();
 	}
 
-	function edit_save() {
-		// get input data
-		/*$post = $this->input->post();
-		$invoice_id = $post['invoice_id'];
-
-		$invoice_data = array(
-			'id' => $invoice_id,
-			'customer_card_id' => $post['customer_id'],
-			'invoice_stamp' => $this->format_date($post['issue_date']),
-			'payment_due_stamp' => $this->format_date($post['due_date']),
-			'purchase_order_number' => $post['po_number'],
-			'terms_id' => $post['terms_id'] ? $post['terms_id'] : null,
-			'terms_content' => $post['terms_id'] ? null : $post['terms_content'],
-			'memo' => $post['notes']
-		);
-
-		$invoice_item_data = array();
-		foreach ($post['product_name'] as $index => $value) {
-			if ($value) {
-				$invoice_item_data[] = array(
-					'invoice_id' => $invoice_id,
-					'product_id' => $post['product_id'][$index],
-					'description' => $post['description'][$index],
-					'unit_price' => $post['unit_price'][$index],
-					'quantity' => $post['qty'][$index],
-					'discount' => $post['discount'][$index],
-					'tax_id' => 0,
-					'total' => $post['total'][$index],
-					'price_type' => $post['price_type'][$index],
-					'subscription_start_stamp' => $this->format_date($post['from'][$index]),
-					'subscription_end_stamp' => $this->format_date($post['to'][$index]),
-					'duration_type' => $post['duration'][$index]
-				);
-			}
-		}
-
-		// validate data
-		$is_valid = true;
-		$error = array();
-
-		$is_valid = $is_valid && $this->InvoiceM->is_valid($invoice_data);
-		$error = array_merge($error, $this->InvoiceM->field_errors);
-
-		foreach ($invoice_item_data as $data) {
-			$is_valid = $is_valid && $this->InvoiceItemM->is_valid($data);
-			$error = array_merge($error, $this->InvoiceItemM->field_errors);
-		}
-
-		if (!$is_valid) {
-			echo json_encode(array(
-				'success' => false,
-				'error' => $error
-			));
-			exit;
-		}
-
-		// save db
-		$this->InvoiceM->save($invoice_data);
-		$this->InvoiceItemM->delete_by_invoice_id($invoice_id);
-		foreach ($invoice_item_data as $data) {
-			$this->InvoiceItemM->save($data);
-		}
-
-		echo json_encode(array(
-			'success' => true,
-			'url' => '/invoice/view/'.$invoice_id
-		));
-		exit;*/
-
-		$invoice_id = $this->InvoiceM->save();
-		if ($invoice_id === false) {
-			var_dump($this->InvoiceM->errors);die;
-		}
-
-		echo json_encode(array(
-			'success' => true,
-			'url' => '/invoice/view/'.$invoice_id
-		));
-		exit;
-	}
-
 	function add() {
 		$data = array(
 			'customer' => $this->InvoiceM->get_customer(),
@@ -260,69 +194,10 @@ class Invoice extends MY_Controller {
 		$this->_do_output();
 	}
 
-	function add_save() {
-		// get input data
-		/*$post = $this->input->post();
-
-		$invoice_data = array(
-			'customer_card_id' => $post['customer_id'],
-			'invoice_stamp' => $this->format_date($post['issue_date']),
-			'payment_due_stamp' => $this->format_date($post['due_date']),
-			'purchase_order_number' => $post['po_number'],
-			'terms_id' => $post['terms_id'] ? $post['terms_id'] : null,
-			'terms_content' => $post['terms_id'] ? null : $post['terms_content'],
-			'memo' => $post['notes']
-		);
-
-		$invoice_item_data = array();
-		foreach ($post['product_name'] as $index => $value) {
-			if ($value) {
-				$invoice_item_data[] = array(
-					'product_id' => $post['product_id'][$index],
-					'description' => $post['description'][$index],
-					'unit_price' => $post['unit_price'][$index],
-					'quantity' => $post['qty'][$index],
-					'discount' => $post['discount'][$index],
-					'tax_id' => 0,
-					'total' => $post['total'][$index],
-					'price_type' => $post['price_type'][$index],
-					'subscription_start_stamp' => $this->format_date($post['from'][$index]),
-					'subscription_end_stamp' => $this->format_date($post['to'][$index]),
-					'duration_type' => $post['duration'][$index]
-				);
-			}
-		}
-
-		// validate data
-		$is_valid = true;
-		$error = array();
-
-		$is_valid = $is_valid && $this->InvoiceM->is_valid($invoice_data);
-		$error = array_merge($error, $this->InvoiceM->field_errors);
-
-		foreach ($invoice_item_data as $data) {
-			$is_valid = $is_valid && $this->InvoiceItemM->is_valid($data);
-			$error = array_merge($error, $this->InvoiceItemM->field_errors);
-		}
-
-		if (!$is_valid) {
-			echo json_encode(array(
-				'success' => false,
-				'error' => $error
-			));
-			exit;
-		}
-
-		// save db
-		$invoice_id = $this->InvoiceM->save($invoice_data);
-		/*foreach ($invoice_item_data as $data) {
-			$data['invoice_id'] = $invoice_id;
-			$this->InvoiceItemM->save($data);
-		}*/
-
+	function save() {
 		$invoice_id = $this->InvoiceM->save();
 		if ($invoice_id === false) {
-			var_dump($this->InvoiceM->errors);die;
+			echo '<pre>'.print_r($this->InvoiceM->errors).'</pre>';die;
 		}
 
 		echo json_encode(array(
@@ -352,7 +227,7 @@ class Invoice extends MY_Controller {
 	}
 
 	function get_customer() {
-		$term = $this->input->get('term');
+		/*$term = $this->input->get('term');
 		$customer_list = $this->InvoiceM->get_customer_by_name($term);
 
 		$content = array();
@@ -362,6 +237,24 @@ class Invoice extends MY_Controller {
 					'id' => $customer->id,
 					'label' => $customer->nickname,
 					'value' => $customer->nickname,
+				);
+			}
+		}
+
+		echo json_encode($content);*/
+
+		$term = $this->input->get('term');
+
+		$this->load->model('CardM');
+		$customer_list = $this->CardM->search_staff($term);
+
+		$content = array();
+		if ($customer_list) {
+			foreach ($customer_list as $customer) {
+				$content[] = array(
+					'id' => $customer['id'],
+					'label' => trim($customer['first_name'].' '.$customer['last_name']),
+					'value' => trim($customer['first_name'].' '.$customer['last_name'])
 				);
 			}
 		}
