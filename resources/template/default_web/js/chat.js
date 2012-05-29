@@ -11,7 +11,7 @@ var telcoson = {
     },
 	logoff: function(){
 		telcoson.connection.disconnect();
-                jQuery("list_chat").hide();
+                jQuery("#list_chat").hide();
 	},
 	status: function(status){
 		if(status != 'offline'){
