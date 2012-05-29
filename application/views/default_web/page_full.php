@@ -161,7 +161,7 @@
             <div class="chatItemWrapper por fl mr1">
                 <!-- show chat box -->
                 <div class="chatBox poa ">
-                    <div class="chatBoxIner pb5 rounded7 fl abigChat">
+                    <div class="chatBoxIner pb5 rounded7 fl abigChat" style="display:none;">
                         <div class="chatBoxItem fl pv5 ph10 bgN">
                             <div class="fl">
                                 <a href="#" class="fs11 tdu cf6 fwb mr5">Loading History</a>
@@ -306,7 +306,7 @@
         </div>
     </div>
     <!-- end chat area -->
-    
+
     <?php endif;?>
 	<script type="text/javascript" src="/resources/addon/tpl.js"></script>
 	<script type="text/javascript" src="/resources/addon/jquery.ui.min.js"></script>
