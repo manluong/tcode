@@ -231,14 +231,17 @@ jQuery("#status_online").click(function(){
     telcoson.status('chat');
     jQuery("#show_hide_chat i").removeClass('iChat1').removeClass('iChat7').removeClass('iChat8').addClass('iChat1');
     jQuery("#chat_status").html('Online');
+    jQuery("#set_status").slideUp();
 });
 jQuery("#status_busy").click(function(){
     telcoson.status('away');
     jQuery("#show_hide_chat i").removeClass('iChat1').removeClass('iChat7').removeClass('iChat8').addClass('iChat8');
     jQuery("#chat_status").html('Do Not Distrub');
+    jQuery("#set_status").slideUp();
 });
 jQuery("#status_offline").click(function(){
     telcoson.status('offline');
     jQuery("#show_hide_chat i").removeClass('iChat1').removeClass('iChat7').removeClass('iChat8').addClass('iChat7');
     jQuery("#chat_status").html('Offline');
+    jQuery("#set_status").slideUp();
 });
