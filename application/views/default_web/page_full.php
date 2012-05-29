@@ -83,15 +83,15 @@
                                 <div class="clear"></div>
                                 <span class=" cf6 fwb fs10">Online</span>
                             </a>
-                            <a href="#" class="fl mr5 mt3 tac pt5 ph5 tdn status" id="status_busy">
+                            <a href="#" class="fl mr5 mt3 tac pt5 ph5 tdn status" id="status_offline">
                                 <i class="iChat iChat7 dpib"></i>
                                 <div class="clear"></div>
-                                <span class=" cf6 fwb fs10">Do Not Distrub</span>
+                                <span class=" cf6 fwb fs10">Offline</span>
                             </a>
-                            <a href="#" class="fl mr5 mt3 tac pt5 ph5 tdn status" id="status_offline">
+                            <a href="#" class="fl mr5 mt3 tac pt5 ph5 tdn status" id="status_busy">
                                 <i class="iChat iChat8"></i>
                                  <div class="clear"></div>
-                                <span class=" cf6 fwb fs10">Offline</span>
+                                <span class=" cf6 fwb fs10">Do Not Distrub</span>
                             </a>
                             <a href="#" class="fl mt15 fs14 fwb cf6">x</a>
                         </div>
