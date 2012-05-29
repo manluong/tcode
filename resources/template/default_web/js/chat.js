@@ -228,7 +228,7 @@ jQuery("#set_status a.mt15").click(function(){
     jQuery("#set_status").slideUp();
 });
 jQuery("#set_status .iChat1").click(function(){
-    telcoson.status('online');
+    telcoson.status('chat');
 });
 jQuery("#set_status .iChat7").click(function(){
     telcoson.status('away');
