@@ -90,23 +90,27 @@ var telcoson = {
 	on_presence: function (presence) {
 		var ptype = $(presence).attr('type');
 		var from = $(presence).attr('from');
+                //console.log(from);
 		var to = $(presence).attr('to');
 		if (ptype !== 'error') {
-			var contact = $('#' + telcoson.jid_to_id(from) + ' i')
-				.removeClass('iChat1')
+                    	var contact = $('#user_' + telcoson.jid_to_id(from) + ' i')
+				.removeClass('iChat9')
 				.removeClass('iChat2')
 				.removeClass('iChat3');
 			if (ptype === 'unavailable') {
 				contact.addClass('iChat3');
+                               // console.log(from + ' Offline');
 				//jQuery("#chatbox_"+telcoson.jid_to_id(from)+" .chatboxtitle").addClass('offline2');
 			} else {
 				var show = $(presence).find('show').text();
 				if (show === '' || show === 'chat') {
-                                    console.log('#' + telcoson.jid_to_id(from) + ' i')
+
 					contact.addClass('iChat2');
+                                        //console.log(from + ' Online');
 					//jQuery("#chatbox_"+telcoson.jid_to_id(from)+" .chatboxtitle").addClass('online2');
 				} else {
-					contact.addClass('iChat3');
+					contact.addClass('iChat9');
+                                        //console.log(from + ' Busy');
 					//jQuery("#chatbox_"+telcoson.jid_to_id(from)+" .chatboxtitle").addClass('away2');
 				}
 			}
@@ -179,10 +183,13 @@ jQuery(document).ready(function(){
     });
    //
    // Chat
-   $(document).trigger("connect", {
-                    user: 'test1',
-                    company: 'company1'
-                });
+   if(jQuery("#chat").length > 0){
+    $(document).trigger("connect", {
+                user: 'test1',
+                company: 'company1'
+            });
+   }
+
 
    //
 

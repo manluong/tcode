@@ -68,6 +68,14 @@
                 <!-- show chat box -->
                 <div class="chatBox poa" id="list_chat" style="display:none;">
                     <div class="chatBoxIner pb5 rounded7 fl">
+                         <div class="chatBoxItem fl pt5 ph10 bgN">
+                            <div class="fl">
+                                <a href="#" class="fs11 cf6 mb0 fwb">Online</a>
+                            </div>
+                            <div class="fr">
+                                <a href="#" class="fs11 cf6 mb0 fwb">Group Chat</a>
+                            </div>
+                        </div>
                         <!-- List chat here -->
                     </div>
                 </div>
