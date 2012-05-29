@@ -546,7 +546,7 @@ class MY_Model extends CI_Model {
 
 		return $data;
 	}
-
+	/*
 	function search($search_fields, $search_string) {
 		if (count($this->select_fields) > 0) {
 			$this->db->select(implode(', ', $this->select_fields));
@@ -580,5 +580,5 @@ class MY_Model extends CI_Model {
 
 		return $rs->result_array();
 	}
-
+	*/
 }

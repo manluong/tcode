@@ -6,7 +6,7 @@ function load_helpdesk_list(data){
 		 var item = json[i];
 		 var row  = new Array();
 		
-		 row[0] = '<a href="helpdesk/edit/'+item.id+'">'+item.subject+'</a>';
+		 row[0] = '<a href="/helpdesk/edit/'+item.id+'">'+item.subject+'</a>';
 		 row[1] = item.cc_email;
 		 row[2] = item.assign_id;
 		 row[3] = item.created_stamp;
@@ -17,7 +17,7 @@ function load_helpdesk_list(data){
 
 function status_fillter(){
 	var value = $('#status').val();
-	var url = 'helpdesk/ajax_status_fillter';
+	var url = '/helpdesk/ajax_status_fillter';
 
 	$.post(url,{
 			value : value
@@ -27,7 +27,7 @@ function status_fillter(){
 			for (i in json) {
 				 var item = json[i];
 				 var row  = new Array();
-				 row[0] = '<a href="helpdesk/edit/'+item.id+'">'+item.subject+'</a>';
+				 row[0] = '<a href="/helpdesk/edit/'+item.id+'">'+item.subject+'</a>';
 				 row[1] = item.cc_email;
 				 row[2] = item.assign_id;
 				 row[3] = item.created_stamp;
@@ -40,7 +40,7 @@ function status_fillter(){
 
 function group_fillter(){
 	var value = $('#group').val();
-	var url = 'helpdesk/ajax_group_fillter';
+	var url = '/helpdesk/ajax_group_fillter';
 
 	$.post(url,{
 			value : value
@@ -50,7 +50,7 @@ function group_fillter(){
 			for (i in json) {
 				 var item = json[i];
 				 var row  = new Array();
-				 row[0] = '<a href="helpdesk/edit/'+item.id+'">'+item.subject+'</a>';
+				 row[0] = '<a href="/helpdesk/edit/'+item.id+'">'+item.subject+'</a>';
 				 row[1] = item.cc_email;
 				 row[2] = item.assign_id;
 				 row[3] = item.created_stamp;
@@ -63,7 +63,7 @@ function group_fillter(){
 
 function type_fillter(){
 	var value = $('#type').val();
-	var url = 'helpdesk/ajax_type_fillter';
+	var url = '/helpdesk/ajax_type_fillter';
 
 	$.post(url,{
 			value : value
@@ -73,7 +73,7 @@ function type_fillter(){
 			for (i in json) {
 				 var item = json[i];
 				 var row  = new Array();
-				 row[0] = '<a href="helpdesk/edit/'+item.id+'">'+item.subject+'</a>';
+				 row[0] = '<a href="/helpdesk/edit/'+item.id+'">'+item.subject+'</a>';
 				 row[1] = item.cc_email;
 				 row[2] = item.assign_id;
 				 row[3] = item.created_stamp;
@@ -86,7 +86,7 @@ function type_fillter(){
 
 function priority_fillter(){
 	var value = $('#priority').val();
-	var url = 'helpdesk/ajax_priority_fillter';
+	var url = '/helpdesk/ajax_priority_fillter';
 
 	$.post(url,{
 			value : value
@@ -96,7 +96,7 @@ function priority_fillter(){
 			for (i in json) {
 				 var item = json[i];
 				 var row  = new Array();
-				 row[0] = '<a href="helpdesk/edit/'+item.id+'">'+item.subject+'</a>';
+				 row[0] = '<a href="/helpdesk/edit/'+item.id+'">'+item.subject+'</a>';
 				 row[1] = item.cc_email;
 				 row[2] = item.assign_id;
 				 row[3] = item.created_stamp;
@@ -154,7 +154,7 @@ $(document).ready(function(){
 		var cc_email = $('#cc_email').val();
 		var id = $('#hiddenIdAdmincp').val();
 
-		var url = 'helpdesk/ajaxChangeInfoHelpDesk';
+		var url = '/helpdesk/ajaxChangeInfoHelpDesk';
 		$.post(url,{
 				id : id,
 				assign : assign,
@@ -186,7 +186,7 @@ function submit_comment(){
 		alert('Please input comment !');
 		return false;
 	}
-	var url = 'helpdesk/save_comment';
+	var url = '/helpdesk/save_comment';
 
 	$.post(url,{
 			id : id,
