@@ -109,7 +109,7 @@
                 </div>
                 <!-- end show chat box -->
                 <!-- show chat status -->
-                <div class="chatItem dpb fl cp active h50">
+                <div class="chatItem dpb fl cp active h50" id="show_hide_chat">
                     <i class="iChat iChat1 mt10 mh10"></i>
                 </div>
                 <!-- show chat status -->
