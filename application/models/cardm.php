@@ -51,6 +51,19 @@ class CardM extends MY_Model {
 		),
 	);
 
+	public $search_fields = array(
+		//search first_name + last_name
+		array(
+			'first_name',
+			'last_name',
+		),
+
+		//search organization name
+		array(
+			'organization_name',
+		),
+	);
+
 	public $sett_fill_address = TRUE;
 	public $sett_fill_bank = TRUE;
 	public $sett_fill_email = TRUE;
@@ -119,7 +132,7 @@ class CardM extends MY_Model {
 			$card[$k] = $v;
 		}
 		$card_id = parent::save($card);
-		
+
 		if ($card_id === FALSE) $has_error = TRUE;
 
 		foreach($this->addons AS $name=>$model) {
@@ -271,30 +284,13 @@ class CardM extends MY_Model {
 		}
 	}
 
-	function search($search_string) {
-		$search_fields = array();
-
-		//search first_name + last_name
-		$search_fields[] = array(
-			'first_name',
-			'last_name',
-		);
-
-		//search organization name
-		$search_fields[] = array(
-			'organization_name',
-		);
-
-		return parent::search($search_fields, $search_string);
-	}
-
 	function search_staff($search_string) {
-		$search_fields = array();
-
-		//search first_name + last_name
-		$search_fields[] = array(
-			'first_name',
-			'last_name',
+		//search first_name + last_name only
+		$this->search_fields = array(
+			array(
+				'first_name',
+				'last_name',
+			),
 		);
 
 		//get card_ids in STAFF role
@@ -317,6 +313,6 @@ class CardM extends MY_Model {
 		//retrieve only id, first_name and last_name
 		$this->select_fields = array('id', 'first_name', 'last_name');
 
-		return parent::search($search_fields, $search_string);
+		return parent::search($search_string);
 	}
 }
