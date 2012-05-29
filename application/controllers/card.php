@@ -7,6 +7,9 @@ class Card extends MY_Controller {
 
 		$this->load->model('CardM');
 		$this->load->model('Card_AddressM');
+		$this->load->model('Card_EmailM');
+		$this->load->model('Card_SocialM');
+		$this->load->model('Card_TelM');
 	}
 
 	function index() {
@@ -44,6 +47,18 @@ class Card extends MY_Controller {
 		$view_data['data'] = $this->CardM->get($id);
 		$view_data['is_new'] = FALSE;
 		$view_data['countries'] = $this->Card_AddressM->get_country_list();
+
+		$view_data['tel_label'] = $this->Card_TelM->get_label('number');
+		$view_data['tel_type_options'] = $this->Card_TelM->get_options('type');
+
+		$view_data['email_label'] = $this->Card_EmailM->get_label('email');
+		$view_data['email_type_options'] = $this->Card_EmailM->get_options('type');
+
+		$view_data['address_label'] = 'Address';
+		$view_data['address_type_options'] = $this->Card_AddressM->get_options('type');
+
+		$view_data['social_label'] = 'Social';
+		$view_data['social_type_options'] = $this->Card_SocialM->get_options('type');
 
 		$this->data['content'] = $this->load->view(get_template().'/card/edit', $view_data, TRUE);
 		$this->_do_output();
