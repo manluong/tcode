@@ -1,81 +1,7 @@
+<script type="text/javascript" src="/resources/addon/helpdesk.js"></script>
 <script type="text/javascript" src="/resources/addon/plupload/js/plupload.full.js"></script>
 <script type="text/javascript" src="/resources/addon/plupload/js/jquery.plupload.queue/jquery.plupload.queue.js"></script>
 <link href="/resources/addon/plupload/js/jquery.plupload.queue/css/jquery.plupload.queue.css" media="screen" rel="stylesheet" type="text/css" />
-
-<script type="text/javascript">
-$(document).ready(function(){
-	$("#helpdesk_change_info").click(function(){
-		$("#helpdesk_show_info").hide();
-		$("#input_data_info").show();
-	});
-	
-	$("#helpdesk_save_info").click(function(){
-		var subject = $('#subject').val();
-		var assign = $('#assign').val();
-		var cc_email = $('#cc_email').val();
-		var id = $('#hiddenIdAdmincp').val();
-
-		var url = '<?=site_url('helpdesk/ajaxChangeInfoHelpDesk');?>';
-		$.post(url,{
-				id : id,
-				assign : assign,
-				subject: subject,
-				cc_email: cc_email,
-			},function(data){
-				$("#input_data_info").hide();
-				$("#helpdesk_show_info").show();
-				$('#helpdesk_show_info').html(data);
-			}
-		);
-	});
-});
-
-function submit_comment(){
-	var comment = $('#comment').val();
-	var id = $('#hiddenIdAdmincp').val();
-	var priority = $('#priority').val();
-	var group = $('#group').val();
-	var status = $('#status').val();
-	var type = $('#type').val();
-
-	if ($('#private').is(':checked')) {
-		var pri = 1;
-	} else {
-		var pri = 0	;
-	}
-	if (comment == '') {
-		alert('Please input comment !');
-		return false;
-	}
-	var url = '<?=site_url('helpdesk/save_comment');?>';
-
-	$.post(url,{
-			id : id,
-			comment: comment,
-			pri: pri,
-			group : group,
-			status : status,
-			type : type,
-			priority : priority,
-		},function(data){
-			$('#wap_comment_list').html(data);
-			$('#comment').attr('value','');
-		}
-	);
-}
-	
-function show_detail_comment(id){
-	$("#comment_detail_"+id).slideToggle();
-	
-	if($('#arrow_comment_'+id).attr('class') == 'down_arrow'){
-		$('#arrow_comment_'+id).removeClass('down_arrow');
-		$('#arrow_comment_'+id).addClass('up_arrow');
-	}else{
-		$('#arrow_comment_'+id).removeClass('up_arrow');
-		$('#arrow_comment_'+id).addClass('down_arrow');
-	}
-}
-</script>
 
 <div id="breadcrumb">
 	<div id="module_name" style="width:650px;">
@@ -147,7 +73,7 @@ function show_detail_comment(id){
 				<li>
 					<span style="font-weight:normal;" class="input_data_label">Subject</span>
 					<span class="fillter_input">
-						<input type="text" id="subject" class="inv-field" value="<?=(isset($result->subject)? print $result->subject : print '')?>"/>
+						<input type="text" id="subject" class="inv-field" value="<?=(isset($result['subject']) ? $result['subject'] : '')?>"/>
 					</span>
 				</li>
 				<li>
@@ -299,8 +225,8 @@ function show_detail_comment(id){
 						<div style="float:left;width:50px;margin:-22px 0 0 -48px" id="arrow_comment_<?=$k->id?>" onclick="show_detail_comment(<?=$k->id?>);" class="up_arrow"></div>
 						<div id="comment_detail_<?=$k->id?>" class="comment_detail">
 							<p>Type set to Incident</p>
-							<p>Subject set to '<?=$result->subject?>'</p>
-							<p>Email send to '<?=$result->cc_email?>'</p><br/>
+							<p>Subject set to '<?=$result['subject']?>'</p>
+							<p>Email send to '<?=$result['cc_email']?>'</p><br/>
 							<span style="font-size:11px;">
 								<p>Client: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.7; rv:12.0) Gecko/20100101 Firefox/12.0</p>
 								<p>IP address: 115.66.148.168</p>

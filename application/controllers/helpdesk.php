@@ -296,6 +296,7 @@ class Helpdesk extends MY_Controller {
 			'cc_email' => $this->input->post('cc_email'),
 		);
 		$this->HelpdeskM->save($data);
+		
 		$content = array (
 			'info' => $this->HelpdeskM->get_content($id),
 		);

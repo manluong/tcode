@@ -139,3 +139,78 @@ function load_datatable(data){
 		'</select>'
 	}})
 }
+
+//EDIT
+
+$(document).ready(function(){
+	$("#helpdesk_change_info").click(function(){
+		$("#helpdesk_show_info").hide();
+		$("#input_data_info").show();
+	});
+	
+	$("#helpdesk_save_info").click(function(){
+		var subject = $('#subject').val();
+		var assign = $('#assign').val();
+		var cc_email = $('#cc_email').val();
+		var id = $('#hiddenIdAdmincp').val();
+
+		var url = 'helpdesk/ajaxChangeInfoHelpDesk';
+		$.post(url,{
+				id : id,
+				assign : assign,
+				subject: subject,
+				cc_email: cc_email,
+			},function(data){
+				$("#input_data_info").hide();
+				$("#helpdesk_show_info").show();
+				$('#helpdesk_show_info').html(data);
+			}
+		);
+	});
+});
+
+function submit_comment(){
+	var comment = $('#comment').val();
+	var id = $('#hiddenIdAdmincp').val();
+	var priority = $('#priority').val();
+	var group = $('#group').val();
+	var status = $('#status').val();
+	var type = $('#type').val();
+
+	if ($('#private').is(':checked')) {
+		var pri = 1;
+	} else {
+		var pri = 0	;
+	}
+	if (comment == '') {
+		alert('Please input comment !');
+		return false;
+	}
+	var url = 'helpdesk/save_comment';
+
+	$.post(url,{
+			id : id,
+			comment: comment,
+			pri: pri,
+			group : group,
+			status : status,
+			type : type,
+			priority : priority,
+		},function(data){
+			$('#wap_comment_list').html(data);
+			$('#comment').attr('value','');
+		}
+	);
+}
+	
+function show_detail_comment(id){
+	$("#comment_detail_"+id).slideToggle();
+	
+	if($('#arrow_comment_'+id).attr('class') == 'down_arrow'){
+		$('#arrow_comment_'+id).removeClass('down_arrow');
+		$('#arrow_comment_'+id).addClass('up_arrow');
+	}else{
+		$('#arrow_comment_'+id).removeClass('up_arrow');
+		$('#arrow_comment_'+id).addClass('down_arrow');
+	}
+}
