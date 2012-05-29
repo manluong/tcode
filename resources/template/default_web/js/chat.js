@@ -227,12 +227,12 @@ jQuery("#chat_status").click(function(){
 jQuery("#set_status a.mt15").click(function(){
     jQuery("#set_status").slideUp();
 });
-jQuery("#set_status .iChat1").click(function(){
+jQuery("#status_online").click(function(){
     telcoson.status('chat');
 });
-jQuery("#set_status .iChat7").click(function(){
+jQuery("#status_busy").click(function(){
     telcoson.status('away');
 });
-jQuery("#set_status .iChat8").click(function(){
+jQuery("#status_offline").click(function(){
     telcoson.status('offline');
 });

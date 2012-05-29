@@ -78,17 +78,17 @@
                         </div>
                         <div class="chatBoxItem fl pv5 ph10 bgN setStatus" id="set_status" style="display:none;">
                             <p class="cf5 mb0 fl fs10 mt10 mr10 fwb w40 tac">Change Status</p>
-                            <a href="#" class="fl mr5 mt3 tac pt5 ph5 tdn status">
+                            <a href="#" class="fl mr5 mt3 tac pt5 ph5 tdn status" id="status_online">
                                 <i class="iChat iChat1"></i>
                                 <div class="clear"></div>
                                 <span class=" cf6 fwb fs10">Online</span>
                             </a>
-                            <a href="#" class="fl mr5 mt3 tac pt5 ph5 tdn status">
+                            <a href="#" class="fl mr5 mt3 tac pt5 ph5 tdn status" id="status_busy">
                                 <i class="iChat iChat7 dpib"></i>
                                 <div class="clear"></div>
                                 <span class=" cf6 fwb fs10">Do Not Distrub</span>
                             </a>
-                            <a href="#" class="fl mr5 mt3 tac pt5 ph5 tdn status">
+                            <a href="#" class="fl mr5 mt3 tac pt5 ph5 tdn status" id="status_offline">
                                 <i class="iChat iChat8"></i>
                                  <div class="clear"></div>
                                 <span class=" cf6 fwb fs10">Offline</span>
