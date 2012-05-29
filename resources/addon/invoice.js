@@ -156,28 +156,29 @@ $(document).ready(function() {
 	$('#total_min').val($('#slider-range').slider('values', 0));
 	$('#total_max').val($('#slider-range').slider('values', 1));
 
-	$("#arrow").click(function(){
-		$("#input_data_fillter").slideToggle();
+	$('#arrow').click(function() {
+		$('#input_data_fillter').slideToggle();
 
-		if($('#arrow').attr('class') == 'down_arrow'){
+		if ($('#arrow').attr('class') == 'down_arrow') {
 			$('#arrow').removeClass('down_arrow');
 			$('#arrow').addClass('up_arrow');
-		}else{
+		} else {
 			$('#arrow').removeClass('up_arrow');
 			$('#arrow').addClass('down_arrow');
+			$('#input_data_fillter input').val('');
 		}
 	});
 
-	$('#more_options').on('click', function(e) {
-		$('#search_more table').toggle();
-		if (!$('#search_more table').is(":visible")) {
-			$('#search_more input').val('');
-		}
-	});
+	//$('#more_options').on('click', function(e) {
+	//	$('#search_more table').toggle();
+	//	if (!$('#search_more table').is(":visible")) {
+	//		$('#search_more input').val('');
+	//	}
+	//});
 
 	$('#search_btn').on('click', function(e) {
 		$.ajax({
-			type: "POST",
+			type: 'POST',
 			url: $('#frm_search').attr('action'),
 			data: $('#frm_search').serialize(),
 			dataType: 'json',
@@ -321,7 +322,7 @@ $(document).ready(function() {
 		var id = $(this).val();
 		if (id) {
 			$.ajax({
-				type: "GET",
+				type: 'GET',
 				url: '/invoice/get_terms/'+id,
 				success: function(resp) {
 					$('#terms_content').val(resp);
@@ -352,7 +353,7 @@ $(document).ready(function() {
 
 	$('#submit_btn').click(function() {
 		$.ajax({
-			type: "POST",
+			type: 'POST',
 			url: $('#invoice_form').attr('action'),
 			data: $('#invoice_form').serialize(),
 			dataType: 'json',

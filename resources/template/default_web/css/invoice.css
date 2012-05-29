@@ -371,6 +371,7 @@ html, body{
 .invoice_item .col-6 {
 	cursor: auto;
 	padding: 5px 0 0 5px;
+	max-width: 80px;
 }
 
 .invoice_item .col-7 {
@@ -529,6 +530,7 @@ input {
 	float:left;
 	margin-left:23px ;
 	display:inline;
+	max-width: 90px;
 }
 #invoice_footer {
 	float: left;

@@ -122,7 +122,7 @@ class InvoiceM extends MY_Model {
 			$this->db->where('customer_card_id =', $param['customer_id']);
 		} else {
 			if (array_key_exists('customer_name', $param) && $param['customer_name']) {
-				$this->db->where('card.display_name LIKE', '%'.$param['customer_name'].'%');
+				$this->db->where('CONCAT(card.first_name, \' \', card.last_name) LIKE', '%'.$param['customer_name'].'%');
 			}
 		}
 		if (array_key_exists('date_range_from', $param) && $param['date_range_from']) {
