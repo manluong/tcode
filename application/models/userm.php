@@ -250,77 +250,8 @@ class UserM extends MY_Model {
 			$result['name'] = $result['organization_name'];
 		}
 
-		$result['role'] = $this->get_role_info($card_id);
-		$result['sub_roles'] = $this->get_subroles($card_id);
-
-		return $result;
-	}
-
-	private function get_subroles($card_id){
-		$rs = $this->db->select('usr.roles_sub_id, sr.name')
-				->from('access_user_role_sub AS usr')
-				->join('access_roles_sub AS sr', 'sr.id=usr.roles_sub_id', 'left')
-				->where('usr.card_id', $card_id)
-				->get();
-
-		if ($rs->num_rows() == 0) return array();
-
-		$result = array();
-		foreach ($rs->result_array() as $r) {
-			$result[$r['roles_sub_id']] = $r['name'];
-		}
-
-		return $result;
-	}
-
-	//get this user's role ID, name, and the relevant role data id.
-	private function get_role_info($card_id){
-		$rs = $this->db->select('ur.role_id, r.name')
-				->from('access_user_role AS ur')
-				->join('global_setting.access_roles AS r', 'r.code=ur.role_id')
-				->where('ur.card_id', $card_id)
-				->limit(1)
-				->get();
-
-		if ($rs->num_rows() == 0) {
-			if (ENVIRONMENT == 'development') {
-				echo $this->db->last_query();
-			}
-
-			die('error loading role info.');
-		}
-
-		$result = array();
-		$temp = $rs->row_array();
-		$result['name'] = $temp['name'];
-		$result['role_id'] = $temp['role_id'];
-
-		if (in_array($temp['role_id'], array(3,5,6))) return $result;
-
-		$this->db->select();
-
-		switch($temp['role_id']){
-			case '1':
-				$this->db->from('staff');
-				break;
-			case '2':
-				$this->db->from('client');
-				break;
-			case '4':
-				$this->db->from('vendor');
-				break;
-		}
-
-		$rs = $this->db->where('card_id', $card_id)
-				->limit(1)
-				->get();
-
-		if ($rs->num_rows()>0) {
-			$temp = $rs->row_array();
-			$result['role_data_id'] = $temp['id'];
-			$result['role_data_id_encoded'] = encode_id($temp['id']);
-			$result['details'] = $temp;
-		}
+		$result['role'] = $this->AclM->get_user_role_info($card_id);
+		$result['sub_roles'] = $this->AclM->get_user_subroles($card_id);
 
 		return $result;
 	}

@@ -68,8 +68,9 @@ class CardM extends MY_Model {
 	public $sett_fill_notes = TRUE;
 	public $sett_fill_social = TRUE;
 	public $sett_fill_tel = TRUE;
-	public $sett_fill_access_user = FALSE;
+
 	public $sett_fill_invoice = FALSE;
+	public $sett_fill_roles = FALSE;
 
 	private $addons = array(
 		'address' => 'Card_addressM',
@@ -79,7 +80,6 @@ class CardM extends MY_Model {
 		'notes' => 'Card_NotesM',
 		'social' => 'Card_SocialM',
 		'tel' => 'Card_TelM',
-		'access_user' => 'Access_UserM',
 	);
 
 	function __construct() {
@@ -104,6 +104,11 @@ class CardM extends MY_Model {
 			$result['addon_invoice'] = $this->InvoiceM->get_list();
 		}
 
+		if ($this->sett_fill_roles) {
+			$result['role'] = $this->AclM->get_user_role_info($id);
+			$result['sub_roles'] = $this->AclM->get_user_subroles($id);
+		}
+
 		return $result;
 	}
 
@@ -111,6 +116,14 @@ class CardM extends MY_Model {
 		$result = parent::get_list();
 
 		$this->fill_addons($result, MULTIPLE_DATA);
+
+		//TODO: inefficiency here
+		if ($this->sett_fill_roles) {
+			foreach($result AS $k=>$v) {
+				$result[$k]['role'] = $this->AclM->get_user_role_info($v['id']);
+				$result[$k]['sub_roles'] = $this->AclM->get_user_subroles($v['id']);
+			}
+		}
 
 		return $result;
 	}
