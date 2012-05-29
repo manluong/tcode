@@ -61,12 +61,12 @@
 	<!-- End Footer -->
         <?php if($this->UserM->is_logged_in()):?>
         <!-- chat area -->
-    <div class="chatSection pof">
+    <div class="chatSection pof" id="chat">
         <div class="chatSlider h50">
             <!-- chat list -->
             <div class="chatItemWrapper chatList por fr">
                 <!-- show chat box -->
-                <div class="chatBox poa">
+                <div class="chatBox poa" id="list_chat">
                     <div class="chatBoxIner pb5 rounded7 fl">
                         <div class="chatBoxItem fl pt5 ph10 bgN">
                             <div class="fl">
@@ -104,7 +104,7 @@
                                 <a href="#" class="fl w18 mt7"><input type="checkbox" class="styled" /></i></a>
                             </div>
                         </div>
-                        
+
                     </div>
                 </div>
                 <!-- end show chat box -->
