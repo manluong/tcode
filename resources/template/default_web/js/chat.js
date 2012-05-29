@@ -11,8 +11,7 @@ var telcoson = {
     },
 	logoff: function(){
 		telcoson.connection.disconnect();
-		jQuery(".chatbox").hide();
-		jQuery(".chatboxcontent").html('');
+                jQuery("list_chat").hide();
 	},
 	status: function(status){
 		if(status != 'offline'){
@@ -20,7 +19,6 @@ var telcoson = {
 			telcoson.connection.send(status);
 		}
 		else {
-			jQuery("#chatbox_List .chatboxtitle select").val('chat');
 			if(confirm("Are you sure you want to logoff ? ")){
 				telcoson.logoff();
 			}
