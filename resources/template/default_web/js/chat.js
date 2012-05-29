@@ -224,3 +224,6 @@ $(document).bind("disconnected", function () {
 jQuery("#chat_status").click(function(){
     jQuery("#set_status").slideDown();
 });
+jQuery("#set_status a.mt15").click(function(){
+    jQuery("#set_status").slideUp();
+})
