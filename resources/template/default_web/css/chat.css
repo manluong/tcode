@@ -1,11 +1,11 @@
 /* ====================== chat style =========================*/
- .w230 { width: 230px }  .w190 { width: 190px; }.w120 { width: 120px; } .w50 { width: 50px; } .w40 { width: 40px; } .w18 { width: 18px; }
+ .w230 { width: 230px }  .w190 { width: 190px; }.w120 { width: 120px; } .w50 { width: 50px; } .w40 { width: 40px; } .w18 { width: 18px; }  
  .w100p { width: 100%; } .w90p { width: 90%; } .w80p { width: 80%; } .w75p { width: 75%; }
 .chatSection { bottom:0; right: 2.5%; font-size: 13px;}
 .chatItem:hover , .chatItem.active{ background:#c6c6c6; }
     .chatItem .count { width: 15px; height: 15px; top: -8px; right: 4px }
-.chatBox {  bottom: 50px; right: 61px; z-index: 9; }
-    .chatList .chatBox {  bottom: 50px; right: -5px; z-index: 9; }
+.chatBox {  bottom: 50px; right: 61px; z-index: 9; } 
+    .chatList .chatBox {  bottom: 50px; right: -5px; z-index: 9; } 
 .chatBoxItem { width: 240px }
 .chatBoxItem:hover { background: #f7edc3; }
 .chatBoxItem.bgN:hover { background: none; }
