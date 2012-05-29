@@ -61,7 +61,7 @@
 	<!-- End Footer -->
         <?php if($this->UserM->is_logged_in()):?>
         <!-- chat area -->
-    <div class="chatSection pof" id="chat">
+    <div class="chatSection pof" id="chat" style="display:none;">
         <div class="chatSlider h50">
             <!-- chat list -->
             <div class="chatItemWrapper chatList por fr">
@@ -95,7 +95,7 @@
                             </a>
                             <a href="#" class="fl mt15 fs14 fwb cf6">x</a>
                         </div>
-                        <div class="chatBoxItem fl pv5 ph10 bgN">
+                        <div class="chatBoxItem fl pv5 ph10 bgN" id="group_chat" style="display:none;">
                             <div class="fl w75p">
                                 <input class="inv-field w100p " type="text" >
                             </div>
