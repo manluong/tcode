@@ -80,8 +80,8 @@ var telcoson = {
 			jQuery("#list_chat div.chatBoxIner").append(contact);
 			//telcoson.insert_contact(contact)
 				});
-                var contact = $('<div class="chatBoxItem fl pv5 ph10"><div class="avatar rounded14 fl mr5"><span class="rounded14 cf4 bg4 fwb noAvatar tac vam dpib">GP</span></div><span class="fl dpb ofh cf2 mt5 fwb">Group Chat</span><div class="tools fr"><a href="#" class="fl mr5 mt3"><i class="iChat iChat3"></i></a></div></div>');
-                jQuery("#list_chat div.chatBoxIner").append(contact);
+               // var contact = $('<div class="chatBoxItem fl pv5 ph10"><div class="avatar rounded14 fl mr5"><span class="rounded14 cf4 bg4 fwb noAvatar tac vam dpib">GP</span></div><span class="fl dpb ofh cf2 mt5 fwb">Group Chat</span><div class="tools fr"><a href="#" class="fl mr5 mt3"><i class="iChat iChat3"></i></a></div></div>');
+               // jQuery("#list_chat div.chatBoxIner").append(contact);
                 jQuery("#list_chat").removeAttr('style');
 		// set up presence handler and send initial presence
 		telcoson.connection.addHandler(telcoson.on_presence, null, 'presence');
