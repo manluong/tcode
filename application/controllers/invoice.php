@@ -82,6 +82,9 @@ class Invoice extends MY_Controller {
 		//		$data['customer_name'] = $customer->display_name;
 		//	}
 		//}
+		$this->load->model('CardM');
+		$card = $this->CardM->get_quickjump($invoice['customer_card_id']);
+		$data['quickjump'] = $this->load->view(get_template().'/card/quickjump', $card, TRUE);
 
 		if ($invoice['terms_id']) {
 			$terms = $this->InvoiceM->get_terms_by_id($invoice['terms_id']);
@@ -92,7 +95,7 @@ class Invoice extends MY_Controller {
 			$data['invoice_terms'] = $invoice['terms_content'];
 		}
 
-		$this->data['content'] = $this->load->view(get_template().'/invoice/view', $data, true);
+		$this->data['content'] = $this->load->view(get_template().'/invoice/view', $data, TRUE);
 
 		$this->_do_output();
 	}

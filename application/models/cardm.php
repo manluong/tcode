@@ -138,6 +138,20 @@ class CardM extends MY_Model {
 		return $user['first_name'].' '.$user['last_name'];
 	}
 
+	function get_quickjump($card_id) {
+		$this->sett_fill_address = FALSE;
+		$this->sett_fill_bank = FALSE;
+		$this->sett_fill_email = FALSE;
+		$this->sett_fill_extra = FALSE;
+		$this->sett_fill_notes = FALSE;
+		$this->sett_fill_social = FALSE;
+		$this->sett_fill_tel = FALSE;
+		$this->sett_fill_invoice = FALSE;
+
+		$this->sett_fill_roles = TRUE;
+		return $this->get($card_id);
+	}
+
 	function save($data = FALSE) {
 		$has_error = FALSE;
 
