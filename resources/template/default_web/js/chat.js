@@ -141,7 +141,7 @@ var telcoson = {
 			}
 		}
 		else {
-		chatWith(jid,jQuery("#"+jid).html());
+		//chatWith(jid,jQuery("#"+jid).html());
 		var body = '';
 			jQuery("#typing").remove();
 			jQuery.each($(message).find("body"),function(index,value){
@@ -149,6 +149,7 @@ var telcoson = {
 					body = jQuery(this).text();
 				}
 			});
+                        console.log(body);
 			if(body != '')
 				body = "<li><b>"+jQuery("#"+jid).html()+": </b>"+body+"</li>";
 
