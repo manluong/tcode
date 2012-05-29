@@ -211,6 +211,7 @@ $(document).bind("connect", function (ev, data) {
 $(document).bind("connected", function () {
 	//list();
     console.log("connected");
+    jQuery("#chat").removeAttr('style');
     var iq = $iq({type: "get"}).c("query", {xmlns: "jabber:iq:roster"});
     telcoson.connection.sendIQ(iq, telcoson.on_roster);
 	telcoson.connection.addHandler(telcoson.on_message,
