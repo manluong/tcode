@@ -226,4 +226,4 @@ jQuery("#chat_status").click(function(){
 });
 jQuery("#set_status a.mt15").click(function(){
     jQuery("#set_status").slideUp();
-})
+});
