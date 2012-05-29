@@ -107,7 +107,7 @@ function submit_comment(){
 					<?php if(!empty($assign)){
 							foreach($assign as $k){
 					?>
-					<option value="<?=$k->id?>"><?=$k->nickname?></option>
+					<option value="<?=$k->id?>"><?=$k->display_name?></option>
 					<?php }}?>
 				</select>
 			</li>

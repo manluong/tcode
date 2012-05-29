@@ -61,7 +61,7 @@ class Invoice extends MY_Controller {
 
 		//$result = array();
 		//foreach ($this->InvoiceM->search($search_param) as $invoice) {
-		//	$result[] = array('cb', $invoice->nickname, $invoice->id, date('Y-m-d', strtotime($invoice->payment_due_stamp)), '$'.number_format($invoice->total, 2), '', $invoice->id);
+		//	$result[] = array('cb', $invoice->display_name, $invoice->id, date('Y-m-d', strtotime($invoice->payment_due_stamp)), '$'.number_format($invoice->total, 2), '', $invoice->id);
 		//}
 
 		//echo json_encode($result);
@@ -79,7 +79,7 @@ class Invoice extends MY_Controller {
 		//if ($invoice['customer_card_id']) {
 		//	$customer = $this->InvoiceM->get_customer_by_id($invoice['customer_card_id']);
 		//	if ($customer) {
-		//		$data['customer_name'] = $customer->nickname;
+		//		$data['customer_name'] = $customer->display_name;
 		//	}
 		//}
 
@@ -109,7 +109,7 @@ class Invoice extends MY_Controller {
 		//if ($invoice['customer_card_id']) {
 		//	$customer = $this->InvoiceM->get_customer_by_id($invoice['customer_card_id']);
 		//	if ($customer) {
-		//		$data['customer_name'] = $customer->nickname;
+		//		$data['customer_name'] = $customer->display_name;
 		//	}
 		//}
 
@@ -138,7 +138,7 @@ class Invoice extends MY_Controller {
 		//if ($invoice['customer_card_id']) {
 		//	$customer = $this->InvoiceM->get_customer_by_id($invoice['customer_card_id']);
 		//	if ($customer) {
-		//		$data['customer_name'] = $customer->nickname;
+		//		$data['customer_name'] = $customer->display_name;
 		//	}
 		//}
 
@@ -235,8 +235,8 @@ class Invoice extends MY_Controller {
 			foreach ($customer_list as $customer) {
 				$content[] = array(
 					'id' => $customer->id,
-					'label' => $customer->nickname,
-					'value' => $customer->nickname,
+					'label' => $customer->display_name,
+					'value' => $customer->display_name,
 				);
 			}
 		}

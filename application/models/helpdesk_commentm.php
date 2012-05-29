@@ -65,7 +65,7 @@ class Helpdesk_CommentM extends MY_Model {
 	}
 
 	function get_assign() {
-		$this->db->select('id,nickname');
+		$this->db->select('id,display_name');
 		$query = $this->db->get('card');
 
 		if ($query->result()) {
@@ -100,7 +100,7 @@ class Helpdesk_CommentM extends MY_Model {
 	}
 
 	function get_assigname($id) {
-		$this->db->select('nickname');
+		$this->db->select('display_name');
 		$this->db->where('id',$id);
 		$query = $this->db->get('card');
 
@@ -108,7 +108,7 @@ class Helpdesk_CommentM extends MY_Model {
 			$tmp = $query->result();
 			if (!empty($tmp)) {
 				foreach($tmp as $k) {
-					return $k->nickname;
+					return $k->display_name;
 				}
 			}
 		} else {

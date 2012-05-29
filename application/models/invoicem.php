@@ -122,7 +122,7 @@ class InvoiceM extends MY_Model {
 			$this->db->where('customer_card_id =', $param['customer_id']);
 		} else {
 			if (array_key_exists('customer_name', $param) && $param['customer_name']) {
-				$this->db->where('card.nickname LIKE', '%'.$param['customer_name'].'%');
+				$this->db->where('card.display_name LIKE', '%'.$param['customer_name'].'%');
 			}
 		}
 		if (array_key_exists('date_range_from', $param) && $param['date_range_from']) {
@@ -236,8 +236,8 @@ class InvoiceM extends MY_Model {
 	}
 
 	/*function get_customer_by_name($name) {
-		$this->db->select('id, nickname');
-		$this->db->like('nickname', $name);
+		$this->db->select('id, display_name');
+		$this->db->like('display_name', $name);
 		$query = $this->db->get('card');
 
 		return $query->result();

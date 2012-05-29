@@ -18,7 +18,7 @@
 			<li><button class="btn btn-inverse" href="#">MY CASE</button></li>
 			<li><button class="btn btn-inverse" href="#">NEW</button></li>
 		</ul>
-	</div> 
+	</div>
 </div>
 
 <div id="content_top">
@@ -89,7 +89,7 @@
 									}
 									foreach ($assign as $k) {
 							?>
-							<option <?=($value_assign == $k->id?'selected=selected':'' )?> value="<?=$k->id?>"><?=$k->nickname?></option>
+							<option <?=($value_assign == $k->id?'selected=selected':'' )?> value="<?=$k->id?>"><?=$k->display_name?></option>
 							<?php }}?>
 						</select>
 					</span>
@@ -102,7 +102,7 @@
 			</ul>
 		</div>
 	</div>
-	
+
 	<div id="invoice_fillter">
 		<div class="invoice_title"><span class="arrow_title"></span><span>DETAILS</span></div>
 		<div id="helpdesk_fillter">
@@ -179,7 +179,7 @@
 						</select>
 					</span>
 				</li>
-			</ul>						
+			</ul>
 		</div>
 		<div id="helpdesk_comment">
 			<textarea rows="3" id="comment" ></textarea>
@@ -202,7 +202,7 @@
 			</div>
 		</div>
 	</div>
-	
+
 	<div id="comment_list">
 		<div class="invoice_title" style="height:20px;"><span class="arrow_title"></span><span>COMMENTS / EVENTS</span></div>
 		<div id="helpdesk_fillter">

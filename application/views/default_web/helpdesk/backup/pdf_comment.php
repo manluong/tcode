@@ -7,7 +7,7 @@
 
 	<div class="head_helpdesk">
 		<div id="content_left">HelpDesk Case #<?=$id?></div>
-		
+
 		<div id="content_right">
 			<div id="time_curent"><?=date('F d Y g:i A',strtotime($result->created_stamp))?></div>
 			<?php if (!empty($result->modified_stamp)) {
@@ -27,12 +27,12 @@
 			<li><span class="helpdesk_info_span">CC</span> : <?=$result->cc_email?></li>
 			<li><div onclick="return show_form_change();" class="btn btn-inverse" href="#">Change</div></li>
 		</ul>
-		
+
 		<ul id="form_change" style="display:none">
 			<li><span class="helpdesk_info_span">Subject</span> <span class="input_change">: <input value="<?php if(isset($result->subject)) { print $result->subject; }else{ print '';} ?>" type="text" name="subject" id="subject" /></span></li>
 			<li><span class="helpdesk_info_span">Creator</span> : <a href="#">Customer A</a></li>
-			
-			<li><span class="helpdesk_info_span">Assigned</span> : 
+
+			<li><span class="helpdesk_info_span">Assigned</span> :
 				<select  name="assign" id="assign">
 					<option value="">something</option>
 					<?php if (!empty($assign)) {
@@ -43,16 +43,16 @@
 							}
 							foreach ($assign as $k) {
 					?>
-					<option <?=($value_assign == $k->id?'selected=selected':'' )?> value="<?=$k->id?>"><?=$k->nickname?></option>
+					<option <?=($value_assign == $k->id?'selected=selected':'' )?> value="<?=$k->id?>"><?=$k->display_name?></option>
 					<?php }}?>
 				</select>
 			</li>
-			
+
 			<li><span class="helpdesk_info_span">CC</span> <span class="input_change">: <input name="cc_email" value="<?php if(isset($result->cc_email)) { print $result->cc_email; }else{ print '';} ?>" type="text" id="cc_email" /></span></li>
 			<li><div onclick="return show_form_show();" class="btn btn-inverse" href="#">Save</div></li>
 		</ul>
 	</div>
-	
+
 	<input type="hidden" value="<?=$id?>" name="hiddenIdAdmincp" id="hiddenIdAdmincp" />
 	<div id="helpdesk_select">
 		<ul>
@@ -161,8 +161,8 @@
 				</div>
 				<?php }}?>
 			</div>
-			
-			<div id="comment_content_right">	
+
+			<div id="comment_content_right">
 				<div id="info_comment">
 					<p>Type send to Incident</p>
 					<p>Subject send to <?=$result->subject?></p>

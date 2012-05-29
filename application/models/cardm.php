@@ -6,7 +6,7 @@ class CardM extends MY_Model {
 		'avatar' => array(
 			'type' => 'text'
 		),
-		'nickname' => array(
+		'display_name' => array(
 			'type' => 'text'
 		),
 		'title' => array(
@@ -27,9 +27,6 @@ class CardM extends MY_Model {
 			'type' => 'text'
 		),
 		'last_name' => array(
-			'type' => 'text'
-		),
-		'format_name' => array(
 			'type' => 'text'
 		),
 		'organization_name' => array(

@@ -3,12 +3,11 @@
 // card
 $lang['card-id'] = 'ID';
 $lang['card-avatar'] = 'Avatar';
-$lang['card-nickname'] = 'Nickname';
+$lang['card-display_name'] = 'Display Name';
 $lang['card-title'] = 'Title';
 $lang['card-first_name'] = 'First Name';
 $lang['card-middle_name'] = 'Middle Name';
 $lang['card-last_name'] = 'Last Name';
-$lang['card-format_name'] = 'Format Name';
 $lang['card-organization_name'] = 'Organization Name';
 $lang['card-organization_number'] = 'Organization Number';
 $lang['card-organization_title'] = 'Organization Title';

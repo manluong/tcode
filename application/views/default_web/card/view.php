@@ -25,8 +25,8 @@ function ajax_edit(id){
 				<span class="fillter_input"><?=$data['last_name']?></span>
 			</li>
 			<li>
-				<span class="input_data_label">Nickname</span>
-				<span class="fillter_input"><?=$data['nickname'] ?></span>
+				<span class="input_data_label">Display Name</span>
+				<span class="fillter_input"><?=$data['display_name'] ?></span>
 			</li>
 			<!-- CARD EMAIL -->
 			<?php if(!empty($card_email)){
