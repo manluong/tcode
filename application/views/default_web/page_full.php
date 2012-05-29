@@ -306,6 +306,7 @@
         </div>
     </div>
     <!-- end chat area -->
+    
     <?php endif;?>
 	<script type="text/javascript" src="/resources/addon/tpl.js"></script>
 	<script type="text/javascript" src="/resources/addon/jquery.ui.min.js"></script>
