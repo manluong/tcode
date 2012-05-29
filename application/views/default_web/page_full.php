@@ -70,7 +70,7 @@
                     <div class="chatBoxIner pb5 rounded7 fl">
                         <div class="chatBoxItem fl pt5 ph10 bgN">
                             <div class="fl">
-                                <a href="#" class="fs11 cf6 mb0 fwb">Online</a>
+                                <a href="#" class="fs11 cf6 mb0 fwb" id="chat_status">Online</a>
                             </div>
                             <div class="fr">
                                 <a href="#" class="fs11 cf6 mb0 fwb">Group Chat</a>

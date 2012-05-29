@@ -220,3 +220,7 @@ $(document).bind("connected", function () {
 $(document).bind("disconnected", function () {
     // nothing here yet
 });
+// ---------- more function ------------ //
+jQuery("#chat_status").click(function(){
+    jQuery("#set_status").slideDown();
+});
