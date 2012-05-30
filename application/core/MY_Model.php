@@ -23,6 +23,7 @@ class MY_Model extends CI_Model {
 	public $sett_skip_validation = FALSE;
 
 	public $data_fields = array();
+	public $search_fields = array();
 	public $system_fields = array(
 		'id'=>array(
 			'type' => 'id',
@@ -546,8 +547,8 @@ class MY_Model extends CI_Model {
 
 		return $data;
 	}
-	/*
-	function search($search_fields, $search_string) {
+
+	function search($search_string) {
 		if (count($this->select_fields) > 0) {
 			$this->db->select(implode(', ', $this->select_fields));
 		} else {
@@ -556,7 +557,7 @@ class MY_Model extends CI_Model {
 
 		$this->db->from($this->table);
 
-		foreach($search_fields AS $sf) {
+		foreach($this->search_fields AS $sf) {
 			if (count($sf) == 1) {
 				$sf = array_shift($sf);
 				$this->db->or_like($sf, $search_string, 'after');

@@ -4,7 +4,7 @@ class HelloworldM extends MY_Model {
 	public $data_fields = array(
 		'avatar' => array(
 		),
-		'nickname' => array(
+		'display_name' => array(
 		),
 		'title' => array(
 			'type'=>'selection',
@@ -30,7 +30,7 @@ class HelloworldM extends MY_Model {
 
 	);
 
-	
+
 	function __construct() {
 		$this->table = 'card';
 		$this->cache_enabled = TRUE;

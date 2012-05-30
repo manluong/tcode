@@ -2,7 +2,7 @@
 	<thead>
 		<tr>
 			<th>Name</th>
-			<th>Nickname</th>
+			<th>Display Name</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -10,7 +10,7 @@
 	foreach($list AS $l) {
 		echo '<tr>';
 		echo '<td>',$l['title_options'][$l['title']],' ',$l['first_name'],' ',$l['last_name'],'</td>';
-		echo '<td>',$l['nickname'],'</td>';
+		echo '<td>',$l['display_name'],'</td>';
 		echo '</tr>';
 	}
 ?>

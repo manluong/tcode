@@ -1,3 +1,87 @@
+//INSERT
+function submit_insert_helpdesk() {
+	var comment = $('#comment').val();
+	var requester = $('#requester').val();
+	var subject = $('#subject').val();
+	var assigned = $('#assigned').val();
+	var id = $('#hiddenIdAdmincp').attr('value');
+	var cc_email = $('#cc_email').val();
+	
+	var group = $('#group').val();
+	var status = $('#status').val();
+	var type = $('#type').val();
+	var priority = $('#priority').val();
+
+	var url = '/helpdesk/save_insert_helpdesk';
+
+	$.post(url,{
+			id : id,
+			subject : subject,
+			assign : assigned,
+			cc_email : cc_email,
+			group : group,
+			status : status,
+			type : type,
+			priority : priority
+		},function(data){
+			if(comment != ''){
+				insert_comment();
+			}else{
+				window.location='helpdesk';
+			}
+
+		}
+	);
+}
+
+function insert_comment() {
+	var comment = $('#comment').val();
+	var id_helpdesk = $('#hiddenIdAdmincp').attr('value');
+    var id_comment = $('#hiddenCommentID').attr('value');
+	var group_comment = $('#group').val();
+	var status_comment = $('#status').val();
+	var type_comment = $('#type').val();
+	var priority_comment = $('#priority').val();
+
+	if ($('#private').is(':checked')) {
+		var pri = 1;
+	} else {
+		var pri = 0	;
+	}
+
+	var url_comment = '/helpdesk/save_comment';
+
+	$.post(url_comment,{
+			id : id_helpdesk,
+            id_comment : id_comment,
+			comment: comment,
+			pri: pri,
+			group : group_comment,
+			status : status_comment,
+			type : type_comment,
+			priority : priority_comment,
+		},function(data){
+			if (data != '') {
+				window.location= 'helpdesk';
+			}
+		}
+	);
+}
+
+//INDEX
+$(document).ready(function(){
+	$("#arrow").click(function(){
+		$("#input_data_fillter").slideToggle();
+		
+		if($('#arrow').attr('class') == 'down_arrow'){
+			$('#arrow').removeClass('down_arrow');
+			$('#arrow').addClass('up_arrow');
+		}else{
+			$('#arrow').removeClass('up_arrow');
+			$('#arrow').addClass('down_arrow');
+		}
+	});
+});
 
 function load_helpdesk_list(data){
 	var json = jQuery.parseJSON(data);
@@ -13,6 +97,33 @@ function load_helpdesk_list(data){
 		 content.push(row);
 	}
 	load_datatable(content);
+}
+
+function helpdesk_fillter(){
+	var status = $('#status').val();
+	var group = $('#group').val();
+	var type = $('#type').val(); 
+	var priority = $('#priority').val();
+	
+	var url = '/helpdesk/ajax_status_fillter';
+
+	$.post(url,{
+			value : value
+		},function(data){
+			var json = jQuery.parseJSON(data);
+			var content = new Array();
+			for (i in json) {
+				 var item = json[i];
+				 var row  = new Array();
+				 row[0] = '<a href="/helpdesk/edit/'+item.id+'">'+item.subject+'</a>';
+				 row[1] = item.cc_email;
+				 row[2] = item.assign_id;
+				 row[3] = item.created_stamp;
+				 content.push(row);
+			}
+			load_datatable(content);
+		}
+	);
 }
 
 function status_fillter(){

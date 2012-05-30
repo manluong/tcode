@@ -6,21 +6,8 @@
 		$.extend( $.fn.dataTableExt.oStdClasses, {
 				    "sWrapper": "dataTables_wrapper form-inline"
 				} );
-		
 		var result = '<?=$result?>';
 		load_helpdesk_list(result);
-		
-		$("#arrow").click(function(){
-			$("#input_data_fillter").slideToggle();
-			
-			if($('#arrow').attr('class') == 'down_arrow'){
-				$('#arrow').removeClass('down_arrow');
-				$('#arrow').addClass('up_arrow');
-			}else{
-				$('#arrow').removeClass('up_arrow');
-				$('#arrow').addClass('down_arrow');
-			}
-		});
 	});
 </script>
 

@@ -121,7 +121,7 @@ class Helpdesk extends MY_Controller {
 
 	function edit(){
 		//Delete NULL COMMENT
-		//$this->delete_comment() ;
+		$this->delete_comment() ;
 		
 		$id = $this->uri->segment(3);	
 		//Create NULL COMMENT for upload attach file

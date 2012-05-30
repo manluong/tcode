@@ -60,11 +60,14 @@ class HelpdeskM extends MY_Model {
 			if ($mode == SINGLE_DATA) {
 				$data = array($data);
 			}
-
 			$assign_id = get_distinct('assign_id', $data);
-			$addons = $this->$model
+			
+			if(!empty($assign_id)){
+				$addons = $this->$model
 						->set_where('id IN ('.implode(',', $assign_id).')')
 						->get_list();
+			}
+			
 			if ($addons !== FALSE && count($addons) > 0) {
 				foreach($data AS $k=>$v) {
 					foreach($addons AS $addon) {

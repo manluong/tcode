@@ -1,78 +1,7 @@
+<script type="text/javascript" src="/resources/addon/helpdesk.js"></script>
 <script type="text/javascript" src="/resources/addon/plupload/js/plupload.full.js"></script>
 <script type="text/javascript" src="/resources/addon/plupload/js/jquery.plupload.queue/jquery.plupload.queue.js"></script>
 <link href="/resources/addon/plupload/js/jquery.plupload.queue/css/jquery.plupload.queue.css" media="screen" rel="stylesheet" type="text/css" />
-
-<script type="text/javascript">
-
-function submit_insert_helpdesk() {
-	var comment = $('#comment').val();
-	var requester = $('#requester').val();
-	var subject = $('#subject').val();
-	var assigned = $('#assigned').val();
-	var id = $('#hiddenIdAdmincp').attr('value');
-	var cc_email = $('#cc_email').val();
-	
-	var group = $('#group').val();
-	var status = $('#status').val();
-	var type = $('#type').val();
-	var priority = $('#priority').val();
-
-	var url = '<?=site_url('helpdesk/save_insert_helpdesk');?>';
-
-	$.post(url,{
-			id : id,
-			subject : subject,
-			assign : assigned,
-			cc_email : cc_email,
-			group : group,
-			status : status,
-			type : type,
-			priority : priority
-		},function(data){
-			if(comment != ''){
-				submit_comment();
-			}else{
-				window.location='<?=site_url('helpdesk');?>';
-			}
-
-		}
-	);
-}
-
-function submit_comment() {
-	var comment = $('#comment').val();
-	var id_helpdesk = $('#hiddenIdAdmincp').attr('value');
-    var id_comment = $('#hiddenCommentID').attr('value');
-	var group_comment = $('#group').val();
-	var status_comment = $('#status').val();
-	var type_comment = $('#type').val();
-	var priority_comment = $('#priority').val();
-
-	if ($('#private').is(':checked')) {
-		var pri = 1;
-	} else {
-		var pri = 0	;
-	}
-
-	var url_comment = '<?=site_url('helpdesk/save_comment');?>';
-
-	$.post(url_comment,{
-			id : id_helpdesk,
-            id_comment : id_comment,
-			comment: comment,
-			pri: pri,
-			group : group_comment,
-			status : status_comment,
-			type : type_comment,
-			priority : priority_comment,
-		},function(data){
-			if (data != '') {
-				window.location='<?=site_url('helpdesk');?>';
-			}
-		}
-	);
-}
-</script>
 
 <div id="breadcrumb">
 	<div id="module_name" style="width:650px;">
@@ -85,9 +14,9 @@ function submit_comment() {
 	</div>
 	<div id="top_button" style="width:210px;">
 		<ul>
-			<li><button class="btn btn-inverse" href="#">LIST</button></li>
-			<li><button class="btn btn-inverse" href="#">MY CASE</button></li>
-			<li><button class="btn btn-inverse" href="#">NEW</button></li>
+			<li><a href="<?=site_url('helpdesk')?>" class="btn btn-inverse" href="#">LIST</a></li>
+			<li><a class="btn btn-inverse" href="#">MY CASE</a></li>
+			<li><a href="<?=site_url('helpdesk/add')?>" class="btn btn-inverse" href="#">NEW</a></li>
 		</ul>
 	</div> 
 </div>
