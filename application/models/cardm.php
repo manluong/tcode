@@ -312,4 +312,36 @@ class CardM extends MY_Model {
 
 		return parent::search($search_string);
 	}
+	
+	function search_customer($search_string) {
+		//search first_name + last_name only
+		$this->search_fields = array(
+			array(
+				'first_name',
+				'last_name',
+			),
+		);
+
+		//get id on Card table 
+		$staff_card_ids = array();
+		$rs = $this->db->select('card_id')
+				->from('access_user_role')
+				->get();
+
+		foreach($rs->result_array() AS $r) {
+			$card_ids[] = $r['card_id'];
+		}
+
+		//if there are no card_ids, return a blank result.
+		if (count($card_ids) == 0) return array();
+
+		//limit results to card_ids
+		$this->where[] = 'id IN ('.implode(',', $card_ids).')';
+
+		//retrieve only id, first_name and last_name
+		$this->select_fields = array('id', 'first_name', 'last_name');
+
+		return parent::search($search_string);
+	}
+	
 }

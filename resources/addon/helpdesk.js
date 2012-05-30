@@ -1,9 +1,9 @@
-//INSERT
+//ADD
 function submit_insert_helpdesk() {
 	var comment = $('#comment').val();
-	var requester = $('#requester').val();
+	var requester = $('#customer_id').val();
 	var subject = $('#subject').val();
-	var assigned = $('#assigned').val();
+	var assigned = $('#assign_id').val();
 	var id = $('#hiddenIdAdmincp').attr('value');
 	var cc_email = $('#cc_email').val();
 	
@@ -70,6 +70,20 @@ function insert_comment() {
 
 //INDEX
 $(document).ready(function(){
+	//Autocomplete assign
+	$('#assign_name').autocomplete({
+		source: '/helpdesk/get_staff',
+		minLength: 2,
+		select: function(e, ui) {
+			$('#assign_id').val(ui.item.id);
+		}
+	});
+	
+	$('#assign_name').on('change', function(e) {
+		$('#assign_id').val('');
+	});
+	
+	//Autocomplete requester 
 	$('#customer_name').autocomplete({
 		source: '/helpdesk/get_customer',
 		minLength: 2,
@@ -148,8 +162,8 @@ function helpdesk_fillter_all(){
 	var type = $('#type').val(); 
 	var priority = $('#priority').val();
 	
-	var customer = $('#customer_name').val();
-	var assigned = $('#assigned').val();
+	var customer = $('#customer_id').val();
+	var assigned = $('#assign_id').val();
 	var subject = $('#subject').val(); 
 	var comments = $('#comments').val();
 	

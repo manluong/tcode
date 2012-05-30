@@ -117,7 +117,7 @@
 		<div style="height:193px;" id="input_data_fillter">
 			<ul>
 				<li>
-					<span class="input_data_label">Customer</span>
+					<span class="input_data_label">Requester</span>
 					<span class="fillter_input">
 						<input type="hidden" id="customer_id" name="customer_id" />
 						<input type="text" id="customer_name" name="customer_name" class="inv-field" />
@@ -125,7 +125,10 @@
 				</li>
 				<li>
 					<span class="input_data_label">Assigned</span>
-					<span class="fillter_input"><input id="assigned" class="inv-field" type="text"/></span>
+					<span class="fillter_input">
+						<input type="hidden" id="assign_id" name="assign_id" />
+						<input type="text" id="assign_name" name="assign_name" class="inv-field" />
+					</span>
 				</li>
 				<li>
 					<span class="input_data_label">Subject</span>

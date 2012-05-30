@@ -24,7 +24,6 @@ class Helpdesk extends MY_Controller {
 	}
 	
 	function helpdesk_fillter(){
-	
 		$status = $this->input->post('status');
 		if(!empty($status)){
 			$where['status'] = $status;		
@@ -32,8 +31,8 @@ class Helpdesk extends MY_Controller {
 		
 		$group = $this->input->post('group');
 		if(!empty($group)){
-			$where['group'] = $group;		
-		}
+			$where['`group`'] = $group;		
+		}	
 		
 		$type = $this->input->post('type');
 		if(!empty($type)){
@@ -61,7 +60,7 @@ class Helpdesk extends MY_Controller {
 		
 		$group = $this->input->post('group');
 		if(!empty($group)){
-			$where['group'] = $group;		
+			$where['`group`'] = $group;		
 		}
 		
 		$type = $this->input->post('type');
@@ -86,7 +85,7 @@ class Helpdesk extends MY_Controller {
 		
 		$subject = $this->input->post('subject');
 		if(!empty($subject)){
-			$where['subject'] = $subject;		
+			$where['subject'] = '"'.$subject.'"';		
 		}
 		
 		$comments = $this->input->post('comments');
@@ -101,6 +100,26 @@ class Helpdesk extends MY_Controller {
 	}
 	
 	function get_customer() {
+		$term = $this->input->get('term');
+
+		$this->load->model('CardM');
+		$customer_list = $this->CardM->search_customer($term);
+
+		$content = array();
+		if ($customer_list) {
+			foreach ($customer_list as $customer) {
+				$content[] = array(
+					'id' => $customer['id'],
+					'label' => trim($customer['first_name'].' '.$customer['last_name']),
+					'value' => trim($customer['first_name'].' '.$customer['last_name'])
+				);
+			}
+		}
+
+		echo json_encode($content);
+	}
+	
+	function get_staff() {
 		$term = $this->input->get('term');
 
 		$this->load->model('CardM');
@@ -312,7 +331,7 @@ class Helpdesk extends MY_Controller {
 			'subject' => $this->input->post('subject'),
 			'assign_id' => $this->input->post('assign'),
 			'cc_email' => $this->input->post('cc_email'),
-			'group' => $this->input->post('group'),
+			'`group`' => $this->input->post('group'),
 			'status' => $this->input->post('status'),
 			'type' => $this->input->post('type'),
 			'priority' => $this->input->post('priority'),
