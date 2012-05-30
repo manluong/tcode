@@ -70,6 +70,18 @@ function insert_comment() {
 
 //INDEX
 $(document).ready(function(){
+	$('#customer_name').autocomplete({
+		source: '/helpdesk/get_customer',
+		minLength: 2,
+		select: function(e, ui) {
+			$('#customer_id').val(ui.item.id);
+		}
+	});
+	
+	$('#customer_name').on('change', function(e) {
+		$('#customer_id').val('');
+	});
+	
 	$("#arrow").click(function(){
 		$("#input_data_fillter").slideToggle();
 		
@@ -105,10 +117,13 @@ function helpdesk_fillter(){
 	var type = $('#type').val(); 
 	var priority = $('#priority').val();
 	
-	var url = '/helpdesk/ajax_status_fillter';
+	var url = '/helpdesk/helpdesk_fillter';
 
 	$.post(url,{
-			value : value
+			status : status,
+			group : group,
+			type : type,
+			priority : priority,
 		},function(data){
 			var json = jQuery.parseJSON(data);
 			var content = new Array();
@@ -126,12 +141,29 @@ function helpdesk_fillter(){
 	);
 }
 
-function status_fillter(){
-	var value = $('#status').val();
-	var url = '/helpdesk/ajax_status_fillter';
+function helpdesk_fillter_all(){
+
+	var status = $('#status').val();
+	var group = $('#group').val();
+	var type = $('#type').val(); 
+	var priority = $('#priority').val();
+	
+	var customer = $('#customer_name').val();
+	var assigned = $('#assigned').val();
+	var subject = $('#subject').val(); 
+	var comments = $('#comments').val();
+	
+	var url = '/helpdesk/helpdesk_fillter_all';
 
 	$.post(url,{
-			value : value
+			status : status,
+			group : group,
+			type : type,
+			priority : priority,
+			customer : customer,
+			assigned : assigned,
+			subject : subject,
+			comments : comments,
 		},function(data){
 			var json = jQuery.parseJSON(data);
 			var content = new Array();
@@ -148,75 +180,7 @@ function status_fillter(){
 		}
 	);
 }
-
-function group_fillter(){
-	var value = $('#group').val();
-	var url = '/helpdesk/ajax_group_fillter';
-
-	$.post(url,{
-			value : value
-		},function(data){
-			var json = jQuery.parseJSON(data);
-			var content = new Array();
-			for (i in json) {
-				 var item = json[i];
-				 var row  = new Array();
-				 row[0] = '<a href="/helpdesk/edit/'+item.id+'">'+item.subject+'</a>';
-				 row[1] = item.cc_email;
-				 row[2] = item.assign_id;
-				 row[3] = item.created_stamp;
-				 content.push(row);
-			}
-			load_datatable(content);
-		}
-	);
-}
-
-function type_fillter(){
-	var value = $('#type').val();
-	var url = '/helpdesk/ajax_type_fillter';
-
-	$.post(url,{
-			value : value
-		},function(data){
-			var json = jQuery.parseJSON(data);
-			var content = new Array();
-			for (i in json) {
-				 var item = json[i];
-				 var row  = new Array();
-				 row[0] = '<a href="/helpdesk/edit/'+item.id+'">'+item.subject+'</a>';
-				 row[1] = item.cc_email;
-				 row[2] = item.assign_id;
-				 row[3] = item.created_stamp;
-				 content.push(row);
-			}
-			load_datatable(content);
-		}
-	);
-}
-
-function priority_fillter(){
-	var value = $('#priority').val();
-	var url = '/helpdesk/ajax_priority_fillter';
-
-	$.post(url,{
-			value : value
-		},function(data){
-			var json = jQuery.parseJSON(data);
-			var content = new Array();
-			for (i in json) {
-				 var item = json[i];
-				 var row  = new Array();
-				 row[0] = '<a href="/helpdesk/edit/'+item.id+'">'+item.subject+'</a>';
-				 row[1] = item.cc_email;
-				 row[2] = item.assign_id;
-				 row[3] = item.created_stamp;
-				 content.push(row);
-			}
-			load_datatable(content);
-		}
-	);
-}
+	
 	
 function load_datatable(data){
 	$('#example').dataTable( {

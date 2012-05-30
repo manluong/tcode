@@ -61,7 +61,7 @@
 				<li>
 					<span class="fillter_label">Status</span>
 					<span class="fillter_input">
-						<select name="status" id="status" onchange="status_fillter();">
+						<select name="status" id="status" onchange="helpdesk_fillter();">
 							<option value="">- - - Something - - -</option>
 							<?php if(!empty($status)) {
 									foreach($status as $k) {
@@ -74,7 +74,7 @@
 				<li>
 					<span class="fillter_label">Group \ Department</span>
 					<span class="fillter_input">
-						<select name="group" id="group" onchange="group_fillter();">
+						<select name="group" id="group" onchange="helpdesk_fillter();">
 							<option value="">- - - Something - - -</option>
 							<?php if(!empty($group)) {
 									foreach($group as $k) {
@@ -87,7 +87,7 @@
 				<li>
 					<span class="fillter_label">Type</span>
 					<span class="fillter_input">
-						<select name="type" id="type" onchange="type_fillter();">
+						<select name="type" id="type" onchange="helpdesk_fillter();">
 							<option value="">- - - Something - - -</option>
 							<?php if(!empty($type)) {
 									foreach($type as $k) {
@@ -100,7 +100,7 @@
 				<li>
 					<span class="fillter_label">Priority</span>
 					<span class="fillter_input">
-						<select name="priority" id="priority" onchange="priority_fillter();">
+						<select name="priority" id="priority" onchange="helpdesk_fillter();">
 							<option value="">- - - Something - - -</option>
 							 <?php if(!empty($priority)) {								
 									foreach($priority as $k) {
@@ -111,27 +111,36 @@
 					</span>
 				</li>
 				<li style="width:27px; margin:26px 0 0 72px;"><div id="arrow" class="down_arrow"></div></li>
-				<li style="width:60px;padding-top:23px;"><button href="#" class="btn btn-primary">SUBMIT</button></li>
 			</ul>						
 		</div>
 		<div class="ClearLeft"></div>
-		<div style="height:163px;" id="input_data_fillter">
+		<div style="height:193px;" id="input_data_fillter">
 			<ul>
 				<li>
 					<span class="input_data_label">Customer</span>
-					<span class="fillter_input"><input class="inv-field" type="text"/></span>
+					<span class="fillter_input">
+						<input type="hidden" id="customer_id" name="customer_id" />
+						<input type="text" id="customer_name" name="customer_name" class="inv-field" />
+					</span>
 				</li>
 				<li>
 					<span class="input_data_label">Assigned</span>
-					<span class="fillter_input"><input class="inv-field" type="text"/></span>
+					<span class="fillter_input"><input id="assigned" class="inv-field" type="text"/></span>
 				</li>
 				<li>
 					<span class="input_data_label">Subject</span>
-					<span class="fillter_input"><input class="inv-field" type="text"/></span>
+					<span class="fillter_input"><input id="subject" class="inv-field" type="text"/></span>
 				</li>
+				
 				<li>
 					<span class="input_data_label">Comments</span>
-					<span class="fillter_input"><input class="inv-field" type="text"/></span>
+					<span class="fillter_input"><input id="comments" class="inv-field" type="text"/></span>
+				</li>
+				
+				<li style="padding-left:119px;">
+					<span class="">
+						<button onclick="helpdesk_fillter_all();" href="javascript:void(0)" class="btn btn-primary">SUBMIT</button>
+					</span>
 				</li>
 			</ul>
 		</div>

@@ -23,6 +23,103 @@ class Helpdesk extends MY_Controller {
 		$this->_do_output();
 	}
 	
+	function helpdesk_fillter(){
+	
+		$status = $this->input->post('status');
+		if(!empty($status)){
+			$where['status'] = $status;		
+		}
+		
+		$group = $this->input->post('group');
+		if(!empty($group)){
+			$where['group'] = $group;		
+		}
+		
+		$type = $this->input->post('type');
+		if(!empty($type)){
+			$where['type'] = $type;		
+		}
+		
+		$priority = $this->input->post('priority');
+		if(!empty($priority)){
+			$where['priority'] = $priority;		
+		}
+		
+		$this->HelpdeskM->set_where($where);
+		
+		$result = $this->HelpdeskM->get_list();
+		$data = json_encode($result);
+		echo $data;
+	}
+	
+	function helpdesk_fillter_all(){
+	
+		$status = $this->input->post('status');
+		if(!empty($status)){
+			$where['status'] = $status;		
+		}
+		
+		$group = $this->input->post('group');
+		if(!empty($group)){
+			$where['group'] = $group;		
+		}
+		
+		$type = $this->input->post('type');
+		if(!empty($type)){
+			$where['type'] = $type;		
+		}
+		
+		$priority = $this->input->post('priority');
+		if(!empty($priority)){
+			$where['priority'] = $priority;		
+		}
+		
+		$customer = $this->input->post('customer');
+		if(!empty($customer)){
+			$where['customer'] = $customer;		
+		}
+		
+		$assigned = $this->input->post('assigned');
+		if(!empty($assigned)){
+			$where['assigned'] = $assigned;		
+		}
+		
+		$subject = $this->input->post('subject');
+		if(!empty($subject)){
+			$where['subject'] = $subject;		
+		}
+		
+		$comments = $this->input->post('comments');
+		if(!empty($comments)){
+			$where['comments'] = $comments;		
+		}
+		$this->HelpdeskM->set_where($where);
+		
+		$result = $this->HelpdeskM->get_list();
+		$data = json_encode($result);
+		echo $data;
+	}
+	
+	function get_customer() {
+		$term = $this->input->get('term');
+
+		$this->load->model('CardM');
+		$customer_list = $this->CardM->search_staff($term);
+
+		$content = array();
+		if ($customer_list) {
+			foreach ($customer_list as $customer) {
+				$content[] = array(
+					'id' => $customer['id'],
+					'label' => trim($customer['first_name'].' '.$customer['last_name']),
+					'value' => trim($customer['first_name'].' '.$customer['last_name'])
+				);
+			}
+		}
+
+		echo json_encode($content);
+	}
+	
 	function ajax_status_fillter(){
 		$value = $this->input->post('value');
 		$where = array(
