@@ -20,27 +20,7 @@
 </div>
 
 <div id="content_top">
-	<div id="user_profile">
-		<div id="user_avatar"><img alt="avatar" src="/resources/template/default_web/img/invoice/invoice-avatar.jpg"/></div>
-		<div id="user_info">
-			<ul>
-				<li class="user_sex">Mr.</li>
-				<li class="user_name">Albert Z</li>
-				<li class="user_position">Facebook Inc. <span style="font-weight: normal;">CEO</span></li>
-			</ul>
-		</div>
-	</div>
-	<div id="customer_list">
-		<div class="btn-group">
-			<a href="#" class="btn btn-inverse">CUSTOMER</a>
-			<a href="#" data-toggle="dropdown" class="btn btn-inverse dropdown-toggle"><span class="caret"></span></a>
-			<ul class="dropdown-menu">
-				<li><a href="#"><i class="icon-pencil"></i> Edit</a></li>
-				<li><a href="#"><i class="icon-trash"></i> Delete</a></li>
-				<li><a href="#"><i class="icon-ban-circle"></i> Ban</a></li>
-			</ul>
-		</div>
-	</div>
+	<?=$quickjump?>
 </div>
 
 <div id="boxes" class="clearfix">
@@ -177,4 +157,28 @@
 			</div>
 		</div>
 	</div>
+
+	<?php if (isset($invoice['addon_pay_item'])): ?>
+	<div style="margin-top: 40px;">
+		<div class="invoice_title"><span class="arrow_title"></span><span>PAYMENT INFORMATION</span></div>
+		<table cellpadding="0" cellspacing="0" border="0" class="table table-striped">
+			<thead>
+				<tr>
+					<th style="width: 370px;">Date</th>
+					<th style="width: 320px;">Payment Type</th>
+					<th style="width: 200px;">Amount</th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php foreach ($invoice['addon_pay_item'] as $pay_item): ?>
+				<tr>
+					<td><?php echo date('Y-m-d', strtotime($pay_item['transaction_stamp'])) ?></td>
+					<td><?php echo $pay_item['note'] ?></td>
+					<td><?php echo '$'.number_format($pay_item['amount'], 2) ?></td>
+				</tr>
+				<?php endforeach ?>
+			</tbody>
+		</table>
+	</div>
+	<?php endif ?>
 </div>

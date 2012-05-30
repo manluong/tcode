@@ -1,6 +1,6 @@
 <?php if (!defined('BASEPATH')) exit('No direct access allowed.');
 
-class InvoiceItemM extends MY_Model {
+class Invoice_ItemM extends MY_Model {
 
 	public $data_fields = array(
 		'invoice_id' => array(

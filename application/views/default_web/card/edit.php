@@ -1,7 +1,7 @@
 <div class="container">
 	<div class="row span6">
 
-		<form method="post" action="/card/save" class="form-horizontal">
+		<form method="post" action="/card/save" class="form-horizontal" id="card-edit-form" data-ajax_save="/card/ajax_save">
 			<?php
 				if (!$is_new) echo form_hidden('id', $data['id']);
 			?>
@@ -83,13 +83,7 @@
 				<div id="addon_tel">
 				<?php
 					$x = 0;
-					$tel_type_options = array();
-					$tel_label = '';
 					foreach($data['addon_tel'] AS $e) {
-						if ($x == 0) {
-							$tel_type_options = $e['type_options'];
-							$tel_label = 'Phone';
-						}
 						echo '<div class="control-group">';
 							echo '<button class="btn btn-mini pull-left remove">X</button>';
 							echo '<label class="control-label" for="tel_',$e['id'],'">',$tel_label,'</label>';
@@ -161,13 +155,7 @@
 				<div id="addon_email">
 				<?php
 					$x = 0;
-					$email_type_options = array();
-					$email_label = '';
 					foreach($data['addon_email'] AS $e) {
-						if ($x == 0) {
-							$email_type_options = $e['type_options'];
-							$email_label = $e['email_label'];
-						}
 						echo '<div class="control-group">';
 							echo '<button class="btn btn-mini pull-left remove">X</button>';
 							echo '<label class="control-label" for="email_',$e['id'],'">',$e['email_label'],'</label>';
@@ -233,13 +221,7 @@
 				<div id="addon_address">
 				<?php
 					$x = 0;
-					$address_type_options = array();
-					$address_label = '';
 					foreach($data['addon_address'] AS $e) {
-						if ($x == 0) {
-							$address_type_options = $e['type_options'];
-							$address_label = 'Address';
-						}
 						echo '<div class="control-group">';
 							echo '<button class="btn btn-mini pull-left remove">X</button>';
 							echo '<label class="control-label" for="address_',$e['id'],'">',$address_label,'</label>';
@@ -322,13 +304,7 @@
 				<div id="addon_social">
 				<?php
 					$x = 0;
-					$social_type_options = array();
-					$social_label = '';
 					foreach($data['addon_social'] AS $e) {
-						if ($x == 0) {
-							$social_type_options = $e['type_options'];
-							$social_label = 'Social';
-						}
 						echo '<div class="control-group">';
 							echo '<label class="control-label" for="social_',$e['id'],'">',$social_label,'</label>';
 							echo '<div class="controls">';
@@ -390,6 +366,35 @@
 	$(document).ready(function() {
 		$('.remove').live('click', function() {
 			$(this).closest('.control-group').remove();
+		});
+
+		$('form').validator({messageClass:'alert alert-error'}).submit(function(e) {
+			var form = $(this);
+			var ajax_url = form.attr('data-ajax_save');
+
+			if (typeof ajax_url === 'undefined' || ajax_url.length == 0) return;
+
+			if (!e.isDefaultPrevented()) {
+				$.post(
+					ajax_url,
+					form.serialize(),
+					function(resp) {
+						if (resp.success) {
+							$.pjax({
+								url: resp.details,
+								container: '#main',
+								timeout: 5000
+							});
+						} else {
+							//show errors
+							form.data('validator').invalidate(resp.details);
+						}
+					},
+					'json'
+				)
+			}
+
+			e.preventDefault();
 		});
 	});
 </script>

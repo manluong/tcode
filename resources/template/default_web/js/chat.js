@@ -11,8 +11,7 @@ var telcoson = {
     },
 	logoff: function(){
 		telcoson.connection.disconnect();
-		jQuery(".chatbox").hide();
-		jQuery(".chatboxcontent").html('');
+                jQuery("#list_chat").hide();
 	},
 	status: function(status){
 		if(status != 'offline'){
@@ -20,7 +19,6 @@ var telcoson = {
 			telcoson.connection.send(status);
 		}
 		else {
-			jQuery("#chatbox_List .chatboxtitle select").val('chat');
 			if(confirm("Are you sure you want to logoff ? ")){
 				telcoson.logoff();
 			}
@@ -80,8 +78,8 @@ var telcoson = {
 			jQuery("#list_chat div.chatBoxIner").append(contact);
 			//telcoson.insert_contact(contact)
 				});
-                var contact = $('<div class="chatBoxItem fl pv5 ph10"><div class="avatar rounded14 fl mr5"><span class="rounded14 cf4 bg4 fwb noAvatar tac vam dpib">GP</span></div><span class="fl dpb ofh cf2 mt5 fwb">Group Chat</span><div class="tools fr"><a href="#" class="fl mr5 mt3"><i class="iChat iChat3"></i></a></div></div>');
-                jQuery("#list_chat div.chatBoxIner").append(contact);
+               // var contact = $('<div class="chatBoxItem fl pv5 ph10"><div class="avatar rounded14 fl mr5"><span class="rounded14 cf4 bg4 fwb noAvatar tac vam dpib">GP</span></div><span class="fl dpb ofh cf2 mt5 fwb">Group Chat</span><div class="tools fr"><a href="#" class="fl mr5 mt3"><i class="iChat iChat3"></i></a></div></div>');
+               // jQuery("#list_chat div.chatBoxIner").append(contact);
                 jQuery("#list_chat").removeAttr('style');
 		// set up presence handler and send initial presence
 		telcoson.connection.addHandler(telcoson.on_presence, null, 'presence');
@@ -90,23 +88,27 @@ var telcoson = {
 	on_presence: function (presence) {
 		var ptype = $(presence).attr('type');
 		var from = $(presence).attr('from');
+                //console.log(from);
 		var to = $(presence).attr('to');
 		if (ptype !== 'error') {
-			var contact = $('#' + telcoson.jid_to_id(from) + ' i')
-				.removeClass('iChat1')
+                    	var contact = $('#user_' + telcoson.jid_to_id(from) + ' i')
+				.removeClass('iChat9')
 				.removeClass('iChat2')
 				.removeClass('iChat3');
 			if (ptype === 'unavailable') {
 				contact.addClass('iChat3');
+                               // console.log(from + ' Offline');
 				//jQuery("#chatbox_"+telcoson.jid_to_id(from)+" .chatboxtitle").addClass('offline2');
 			} else {
 				var show = $(presence).find('show').text();
 				if (show === '' || show === 'chat') {
-                                    console.log('#' + telcoson.jid_to_id(from) + ' i')
+
 					contact.addClass('iChat2');
+                                        //console.log(from + ' Online');
 					//jQuery("#chatbox_"+telcoson.jid_to_id(from)+" .chatboxtitle").addClass('online2');
 				} else {
-					contact.addClass('iChat3');
+					contact.addClass('iChat9');
+                                        //console.log(from + ' Busy');
 					//jQuery("#chatbox_"+telcoson.jid_to_id(from)+" .chatboxtitle").addClass('away2');
 				}
 			}
@@ -139,7 +141,7 @@ var telcoson = {
 			}
 		}
 		else {
-		chatWith(jid,jQuery("#"+jid).html());
+		//chatWith(jid,jQuery("#"+jid).html());
 		var body = '';
 			jQuery("#typing").remove();
 			jQuery.each($(message).find("body"),function(index,value){
@@ -147,6 +149,7 @@ var telcoson = {
 					body = jQuery(this).text();
 				}
 			});
+                        console.log(body);
 			if(body != '')
 				body = "<li><b>"+jQuery("#"+jid).html()+": </b>"+body+"</li>";
 
@@ -179,10 +182,13 @@ jQuery(document).ready(function(){
     });
    //
    // Chat
-   $(document).trigger("connect", {
-                    user: 'test1',
-                    company: 'company1'
-                });
+   if(jQuery("#chat").length > 0){
+    $(document).trigger("connect", {
+                user: 'test1',
+                company: 'company1'
+            });
+   }
+
 
    //
 
@@ -204,6 +210,7 @@ $(document).bind("connect", function (ev, data) {
 $(document).bind("connected", function () {
 	//list();
     console.log("connected");
+    jQuery("#chat").removeAttr('style');
     var iq = $iq({type: "get"}).c("query", {xmlns: "jabber:iq:roster"});
     telcoson.connection.sendIQ(iq, telcoson.on_roster);
 	telcoson.connection.addHandler(telcoson.on_message,
@@ -211,4 +218,29 @@ $(document).bind("connected", function () {
 });
 $(document).bind("disconnected", function () {
     // nothing here yet
+});
+// ---------- more function ------------ //
+jQuery("#chat_status").click(function(){
+    jQuery("#set_status").slideDown();
+});
+jQuery("#set_status a.mt15").click(function(){
+    jQuery("#set_status").slideUp();
+});
+jQuery("#status_online").click(function(){
+    telcoson.status('chat');
+    jQuery("#show_hide_chat i").removeClass('iChat1').removeClass('iChat7').removeClass('iChat8').addClass('iChat1');
+    jQuery("#chat_status").html('Online');
+    jQuery("#set_status").slideUp();
+});
+jQuery("#status_busy").click(function(){
+    telcoson.status('away');
+    jQuery("#show_hide_chat i").removeClass('iChat1').removeClass('iChat7').removeClass('iChat8').addClass('iChat8');
+    jQuery("#chat_status").html('Do Not Distrub');
+    jQuery("#set_status").slideUp();
+});
+jQuery("#status_offline").click(function(){
+    telcoson.status('offline');
+    jQuery("#show_hide_chat i").removeClass('iChat1').removeClass('iChat7').removeClass('iChat8').addClass('iChat7');
+    jQuery("#chat_status").html('Offline');
+    jQuery("#set_status").slideUp();
 });

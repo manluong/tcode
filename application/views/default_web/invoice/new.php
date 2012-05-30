@@ -127,7 +127,7 @@
 				</ul>
 			</div>
 		</div>
-		<div id="submit_all_page"><button id="submit_btn" class="btn btn-primary">SUBMIT</button></div>
+		<div id="submit_all_page"><button id="btn_submit" class="btn btn-primary">SUBMIT</button></div>
 
 		<div id="invoice_note">
 			<div id="term_condition">

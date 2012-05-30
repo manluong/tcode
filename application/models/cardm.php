@@ -68,8 +68,10 @@ class CardM extends MY_Model {
 	public $sett_fill_notes = TRUE;
 	public $sett_fill_social = TRUE;
 	public $sett_fill_tel = TRUE;
-	public $sett_fill_access_user = FALSE;
+
 	public $sett_fill_invoice = FALSE;
+	public $sett_fill_roles = FALSE;
+	public $sett_fill_access_user = FALSE;
 
 	private $addons = array(
 		'address' => 'Card_addressM',
@@ -79,7 +81,7 @@ class CardM extends MY_Model {
 		'notes' => 'Card_NotesM',
 		'social' => 'Card_SocialM',
 		'tel' => 'Card_TelM',
-		'access_user' => 'Access_UserM',
+		'access_user' => 'Access_UserM',	//used in adding role access in console add_user, saving password
 	);
 
 	function __construct() {
@@ -104,6 +106,11 @@ class CardM extends MY_Model {
 			$result['addon_invoice'] = $this->InvoiceM->get_list();
 		}
 
+		if ($this->sett_fill_roles) {
+			$result['role'] = $this->AclM->get_user_role_info($id);
+			$result['sub_roles'] = $this->AclM->get_user_subroles($id);
+		}
+
 		return $result;
 	}
 
@@ -112,7 +119,39 @@ class CardM extends MY_Model {
 
 		$this->fill_addons($result, MULTIPLE_DATA);
 
+		//TODO: inefficiency here
+		if ($this->sett_fill_roles) {
+			foreach($result AS $k=>$v) {
+				$result[$k]['role'] = $this->AclM->get_user_role_info($v['id']);
+				$result[$k]['sub_roles'] = $this->AclM->get_user_subroles($v['id']);
+			}
+		}
+
 		return $result;
+	}
+
+	function get_name($card_id) {
+		$user = $this->get($card_id);
+
+		if (strlen($user['display_name']) > 0) {
+			return $user['display_name'];
+		}
+
+		return $user['first_name'].' '.$user['last_name'];
+	}
+
+	function get_quickjump($card_id) {
+		$this->sett_fill_address = FALSE;
+		$this->sett_fill_bank = FALSE;
+		$this->sett_fill_email = FALSE;
+		$this->sett_fill_extra = FALSE;
+		$this->sett_fill_notes = FALSE;
+		$this->sett_fill_social = FALSE;
+		$this->sett_fill_tel = FALSE;
+		$this->sett_fill_invoice = FALSE;
+
+		$this->sett_fill_roles = TRUE;
+		return $this->get($card_id);
 	}
 
 	function save($data = FALSE) {
@@ -199,36 +238,38 @@ class CardM extends MY_Model {
 	}
 
 	private function fill_addons(&$data, $mode=SINGLE_DATA) {
+		if ($mode == SINGLE_DATA) {
+			$data = array($data);
+		}
+
+		$card_ids = get_distinct('id', $data);
+
 		foreach($this->addons AS $name=>$model) {
 			$sett_var = 'sett_fill_'.$name;
 			if ($this->$sett_var == FALSE) continue;
 
-			if ($mode == SINGLE_DATA) {
-				$data = array($data);
-			}
+			$addon_data = $this->$model->set_where('card_id IN ('.implode(',', $card_ids).')')
+							->get_list();
 
-			$card_ids = get_distinct('id', $data);
-			if(!empty($card_ids)){
-				$addons = $this->$model
-						->set_where('card_id IN ('.implode(',', $card_ids).')')
-						->get_list();
-			}
-
-			if ($addons !== FALSE && count($addons) > 0) {
+			if ($addon_data !== FALSE && count($addon_data) > 0) {
 				foreach($data AS $k=>$v) {
-					foreach($addons AS $addon) {
-						if ($addon['card_id'] != $v['id']) continue;
+					foreach($addon_data AS $ad) {
+						if ($ad['card_id'] != $v['id']) continue;
 
-						$data[$k]['addon_'.$name][] = $addon;
+						$data[$k]['addon_'.$name][] = $ad;
 					}
+				}
+			} else {
+				foreach($data AS $k=>$v) {
+					$data[$k]['addon_'.$name] = array();
 				}
 			}
 
 			$this->$model->reset();
+		}
 
-			if ($mode == SINGLE_DATA) {
-				$data = $data[0];
-			}
+		if ($mode == SINGLE_DATA) {
+			$data = $data[0];
 		}
 	}
 
@@ -292,16 +333,7 @@ class CardM extends MY_Model {
 			),
 		);
 
-		//get card_ids in STAFF role
-		$staff_card_ids = array();
-		$rs = $this->db->select('card_id')
-				->from('access_user_role')
-				->where('role_id', 1)
-				->get();
-
-		foreach($rs->result_array() AS $r) {
-			$staff_card_ids[] = $r['card_id'];
-		}
+		$staff_card_ids = $this->AclM->get_card_ids_in_role('Staff');
 
 		//if there are no STAFF card_ids, return a blank result.
 		if (count($staff_card_ids) == 0) return array();
@@ -311,6 +343,21 @@ class CardM extends MY_Model {
 
 		//retrieve only id, first_name and last_name
 		$this->select_fields = array('id', 'first_name', 'last_name');
+
+		return parent::search($search_string);
+	}
+
+	function get_staff_list() {
+		$staff_card_ids = $this->AclM->get_card_ids_in_role('Staff');
+
+		//if there are no STAFF card_ids, return a blank result.
+		if (count($staff_card_ids) == 0) return array();
+
+		//limit results to card_ids in STAFF role
+		$this->where[] = 'id IN ('.implode(',', $staff_card_ids).')';
+
+		return $this->get_list();
+	}
 
 		return parent::search($search_string);
 	}
@@ -346,4 +393,5 @@ class CardM extends MY_Model {
 		return parent::search($search_string);
 	}
 	
+}
 }

@@ -505,17 +505,9 @@ class MY_Model extends CI_Model {
 		foreach($data AS $k=>$v) {
 			$temp = array();
 			foreach($v AS $sk=>$sv) {
-				if (isset($df[$sk])) $temp[$sk.'_label'] = $this->lang->line($this->table.'-'.$sk);
+				if (isset($df[$sk])) $temp[$sk.'_label'] = $this->get_label($sk);
 				if (isset($df[$sk]['options'])) {
-					$temp_options = array();
-					foreach($df[$sk]['options'] AS $ok=>$ov) {
-						if ($ov == '') {
-							$temp_options[$ok] = '';
-						} else {
-							$temp_options[$ok] = $this->lang->line($ov);
-						}
-					}
-					$temp[$sk.'_options'] = $temp_options;
+					$temp[$sk.'_options'] = $this->get_options($sk);
 				}
 			}
 
@@ -580,5 +572,24 @@ class MY_Model extends CI_Model {
 		$rs = $this->db->get();
 
 		return $rs->result_array();
+	}
+	function get_options($datafield) {
+		if (!isset($this->data_fields[$datafield]['options'])) return array();
+
+		$options = array();
+
+		foreach($this->data_fields[$datafield]['options'] AS $ok=>$ov) {
+			if ($ov == '') {
+				$options[$ok] = '';
+			} else {
+				$options[$ok] = $this->lang->line($ov);
+			}
+		}
+
+		return $options;
+	}
+
+	function get_label($datafield) {
+		return $this->lang->line($this->table.'-'.$datafield);
 	}
 }

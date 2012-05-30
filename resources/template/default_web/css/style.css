@@ -13,7 +13,7 @@ body { margin: 0; font-size: 1em; line-height: 1.4; }
 ::selection { background: #fe57a1; color: #fff; text-shadow: none; }
 
 a { color: #00e; }
-a:visited { color: #551a8b; }
+/* a:visited { color: #551a8b; } */
 a:hover { color: #06e; }
 a:focus { outline: thin dotted; }
 a:hover, a:active { outline: 0; }
@@ -90,7 +90,7 @@ html, html body {
 /*margin right*/
 .mr1{margin-right:1px} .mr5{margin-right:5px} .mr10{margin-right:10px}  .mr9{margin-right:9px} .mr15{margin-right:15px} .mr20{margin-right:20px} 
 /*margin bottom*/
-.mb5 {margin-bottom:5px} .mb10{margin-bottom:10px} .mb15{margin-bottom:15px} .mb20{margin-bottom:20px} .mb25{margin-bottom:25px;}.mb30{margin-bottom:30px;}
+.mb0 {margin-bottom:0px} .mb5 {margin-bottom:5px} .mb10{margin-bottom:10px} .mb15{margin-bottom:15px} .mb20{margin-bottom:20px} .mb25{margin-bottom:25px;}.mb30{margin-bottom:30px;}
 /*margin left*/
 .ml5{margin-left:5px} .ml10{margin-left:10px} .ml15{margin-left:15px} .ml20{margin-left:20px} .ml30{margin-left:30px} .ml-1{margin-left:-1px;}
 /*margin left + right*/
@@ -114,13 +114,15 @@ html, html body {
 .cf2 { color: #887938; }
 .cf3 { color: #fff; }
 .cf4 { color: #444 }
+.cf5 { color: #5e6363 } /* xam */
+.cf6 { color: #a29563 } /* nau */
 /* background */
 .bg1 { background: #c6c6c6; }
 .bg2 { background: #ee9d4e; }
 .bg3 { background: #fff; }
 .bg4 { background: #acb1b1; }
 /* font size */
-.fs11 { font-size: 11px }  .fs12 { font-size: 12px } 
+.fs10 { font-size: 10px }   .fs11 { font-size: 11px }  .fs12 { font-size: 12px }  .fs14 { font-size: 14px } 
 .h47 { height:47px; } .h50 { height:50px; }
 .lhn{ line-height: normal; }
 .cp{ cursor: pointer; }
@@ -130,13 +132,15 @@ html, html body {
 .rounded14 { border-radius: 14px;  -moz-border-radius: 14px;  -webkit-border-radius: 14px;}
 /* icon */
 .iChat { background: url(../img/chatIcon.png) no-repeat; display: inline-block; }
-.iChat1 {  background-position: -1px -1px; width: 29px; height: 31px }
+.iChat1 {  background-position: -1px -1px; width: 29px; height: 32px }
 .iChat2 {  background-position: -1px -35px; width: 27px; height: 27px }
 .iChat3 {  background-position: -1px -65px; width: 27px; height: 27px }
 .iChat4 {  background-position: -36px -3px; width: 10px; height: 11px }
 .iChat5 {  background-position: -50px -7px; width: 10px; height: 4px }
 .iChat6 {  background-position: -62px -1px; width: 16px; height: 15px }
-
+.iChat7 {  background-position: -34px -18px; width: 30px; height: 32px }
+.iChat8 {  background-position: -33px -53px; width: 30px; height: 32px }
+.iChat9 {  background-position: -1px -95px; width: 27px; height: 27px }
 
 /*
 	Header area */

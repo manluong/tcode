@@ -117,7 +117,88 @@ function format_money(n, c, d, t, q) {
 	i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + '';
 	j = (j = i.length) > 3 ? j % 3 : 0;
 	return s + q + (j ? i.substr(0, j) + t : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, '$1' + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : '');
-};
+}
+
+var req_search;
+function search_invoice() {
+	if ($('#frm_search').length == 0) return;
+	if (req_search) req_search.abort();
+
+	req_search = $.ajax({
+		type: 'POST',
+		url: $('#frm_search').attr('action'),
+		data: $('#frm_search').serialize(),
+		dataType: 'json',
+		success: function(resp) {
+			//$('#invoice_list').html(resp);
+			//$('#page').val(1);
+
+			//$.extend($.fn.dataTableExt.oStdClasses, {
+			//	"sWrapper": "dataTables_wrapper form-inline"
+			//});
+
+			var data = new Array();
+			for (i in resp) {
+				var item = resp[i];
+				var row  = new Array();
+				row[0] = '<input type="checkbox" />';
+				row[1] = (item.first_name+' '+item.last_name).trim();
+				row[2] = '<a href="/invoice/view/'+item.id+'">'+item.id+'</a>';
+				var date = new Date((item.payment_due_stamp).substring(0, 10));
+				row[3] = $.datepicker.formatDate('yy-mm-dd', date);
+				row[4] = format_money(item.total);
+				row[5] = '';
+				row[6] = '<a href="/invoice/edit/'+item.id+'">Edit</a></td>';
+				data.push(row);
+			}
+
+			$('#tbl_invoice').dataTable({
+				"bDestroy" : true,
+				"aaData": data,
+				"aoColumns": [
+					{ "sTitle": "" },
+					{ "sTitle": "Customer" },
+					{ "sTitle": "Invoice #" },
+					{ "sTitle": "Date" },
+					{ "sTitle": "Total" },
+					{ "sTitle": "Status" },
+					{ "sTitle": "Edit" }
+				],
+				"sDom": "<<'pull-right'p>>t<<'pull-right'p>lfi>",
+				"sPaginationType": "bootstrap",
+				"iDisplayLength": 10,
+				"oLanguage": {
+					"sSearch" : "<div class=\"input-prepend\"><span class=\"add-on\"><i class=\"icon-filter\"></i></span></i>_INPUT_</div>",
+					"sInfo": "_START_ to _END_ of _TOTAL_",
+					"sLengthMenu": "_MENU_ Rows per Page",
+					"sInfoFiltered": " - filtering from _MAX_ records",
+					"oPaginate": {
+						"sPrevious": "Previous",
+						"sNext": "Next"
+				},
+				"sLengthMenu": '<select>'+
+					'<option value="10">10</option>'+
+					'<option value="20">20</option>'+
+					'<option value="30">30</option>'+
+					'<option value="40">40</option>'+
+					'<option value="50">50 Rows</option>'+
+					'<option value="-1">All</option>'+
+					'</select>'
+			}});
+		}
+	});
+}
+
+function cal_pay_total() {
+	var pay_total = 0;
+	$('#tbl_pay .tr_pay').each(function(index, item) {
+		var pay_amount = parseFloat($(item).find('.pay_amount').val()) || 0;
+		pay_total += pay_amount;
+	});
+
+	$('#pay_total').val(pay_total);
+	$('#lbl_pay_total').html(format_money(pay_total));
+}
 
 $(document).ready(function() {
 	$('#date_range').on('change', function(e) {
@@ -129,6 +210,7 @@ $(document).ready(function() {
 			$('#date_range_from').val('');
 			$('#date_range_to').val('');
 		}
+		search_invoice();
 	});
 
 	$('#customer_name').autocomplete({
@@ -147,115 +229,41 @@ $(document).ready(function() {
 		min: parseInt($('#total_default_min').val()),
 		max: parseInt($('#total_default_max').val()),
 		values: [parseInt($('#total_default_min').val()), parseInt($('#total_default_max').val())],
-		slide: function( event, ui ) {
+		slide: function(event, ui) {
 			$('#total_min').val(ui.values[0]);
 			$('#total_max').val(ui.values[1]);
 			$('#lbl_total').html('$'+ui.values[0]+' - '+'$'+ui.values[1]);
+		},
+		change: function(event, ui) {
+			search_invoice();
 		}
 	});
 	$('#total_min').val($('#slider-range').slider('values', 0));
 	$('#total_max').val($('#slider-range').slider('values', 1));
 
-	$("#arrow").click(function(){
-		$("#input_data_fillter").slideToggle();
+	$('#arrow').click(function() {
+		$('#input_data_fillter').slideToggle();
 
-		if($('#arrow').attr('class') == 'down_arrow'){
+		if ($('#arrow').attr('class') == 'down_arrow') {
 			$('#arrow').removeClass('down_arrow');
 			$('#arrow').addClass('up_arrow');
-		}else{
+		} else {
 			$('#arrow').removeClass('up_arrow');
 			$('#arrow').addClass('down_arrow');
+			$('#input_data_fillter input').val('');
 		}
 	});
 
-	$('#more_options').on('click', function(e) {
-		$('#search_more table').toggle();
-		if (!$('#search_more table').is(":visible")) {
-			$('#search_more input').val('');
-		}
-	});
+	//$('#more_options').on('click', function(e) {
+	//	$('#search_more table').toggle();
+	//	if (!$('#search_more table').is(":visible")) {
+	//		$('#search_more input').val('');
+	//	}
+	//});
 
 	$('#search_btn').on('click', function(e) {
-		$.ajax({
-			type: "POST",
-			url: $('#frm_search').attr('action'),
-			data: $('#frm_search').serialize(),
-			dataType: 'json',
-			success: function(resp) {
-				//$('#invoice_list').html(resp);
-				//$('#page').val(1);
-
-				//$.extend($.fn.dataTableExt.oStdClasses, {
-				//	"sWrapper": "dataTables_wrapper form-inline"
-				//});
-
-				var data = new Array();
-				for (i in resp) {
-					var item = resp[i];
-					var row  = new Array();
-					row[0] = '<input type="checkbox" />';
-					row[1] = (item.first_name+' '+item.last_name).trim();
-					row[2] = '<a href="/invoice/view/'+item.id+'">'+item.id+'</a>';
-					var date = new Date((item.payment_due_stamp).substring(0, 10));
-					row[3] = $.datepicker.formatDate('yy-mm-dd', date);
-					row[4] = format_money(item.total);
-					row[5] = '';
-					row[6] = '<a href="/invoice/edit/'+item.id+'">Edit</a></td>';
-					data.push(row);
-				}
-
-				$('#tbl_invoice').dataTable({
-					"bDestroy" : true,
-					"aaData": data,
-					"aoColumns": [
-						{ "sTitle": "" },
-						{ "sTitle": "Customer" },
-						{ "sTitle": "Invoice #" },
-						{ "sTitle": "Date" },
-						{ "sTitle": "Total" },
-						{ "sTitle": "Status" },
-						{ "sTitle": "Edit" }
-					],
-					"sDom": "<<'pull-right'p>>t<<'pull-right'p>lfi>",
-					"sPaginationType": "bootstrap",
-					"iDisplayLength": 10,
-					"oLanguage": {
-						"sSearch" : "<div class=\"input-prepend\"><span class=\"add-on\"><i class=\"icon-filter\"></i></span></i>_INPUT_</div>",
-						"sInfo": "_START_ to _END_ of _TOTAL_",
-						"sLengthMenu": "_MENU_ Rows per Page",
-						"sInfoFiltered": " - filtering from _MAX_ records",
-						"oPaginate": {
-							"sPrevious": "Previous",
-							"sNext": "Next"
-					},
-					"sLengthMenu": '<select>'+
-						'<option value="10">10</option>'+
-						'<option value="20">20</option>'+
-						'<option value="30">30</option>'+
-						'<option value="40">40</option>'+
-						'<option value="50">50 Rows</option>'+
-						'<option value="-1">All</option>'+
-						'</select>'
-				}});
-			}
-		});
-		return false;
+		search_invoice();
 	});
-
-	/*$('.page a').live('click', function(e) {
-		e.preventDefault();
-		var li = $(this).closest('li');
-		if (!$(li).hasClass('disabled') && !$(li).hasClass('active')) {
-			$('#page').val($(this).data('page'));
-			$('#search_btn').click();
-		}
-	});
-
-	$('#invoice_list_table_length select').live('change', function(e) {
-		$('#row_per_page').val($(this).val());
-		$('#page').val(1);
-		$('#search_btn').click();
-	});*/
 
 	$('#btn_print').on('click', function(e) {
 		if ($('#iframe_print').attr('src') == '') {
@@ -270,7 +278,10 @@ $(document).ready(function() {
 
 	$('.datepicker').datetimepicker({
 		showTimepicker: false,
-		dateFormat: 'yy-mm-dd'
+		dateFormat: 'yy-mm-dd',
+		onSelect: function() {
+			search_invoice();
+		}
 	});
 
 	$('.row_delete').live('click', function(e) {
@@ -321,7 +332,7 @@ $(document).ready(function() {
 		var id = $(this).val();
 		if (id) {
 			$.ajax({
-				type: "GET",
+				type: 'GET',
 				url: '/invoice/get_terms/'+id,
 				success: function(resp) {
 					$('#terms_content').val(resp);
@@ -348,13 +359,14 @@ $(document).ready(function() {
 		}
 		cal_invoice_total();
 	}
-	$('#search_btn').click();
+	search_invoice();
 
-	$('#submit_btn').click(function() {
+	$('#btn_submit').click(function() {
+		var frm = $(this).closest('form');
 		$.ajax({
-			type: "POST",
-			url: $('#invoice_form').attr('action'),
-			data: $('#invoice_form').serialize(),
+			type: 'POST',
+			url: $(frm).attr('action'),
+			data: $(frm).serialize(),
 			dataType: 'json',
 			success: function(resp) {
 				if (resp.success) {
@@ -366,5 +378,22 @@ $(document).ready(function() {
 			}
 		});
 		return false;
+	});
+
+	$('#btn_more_pay').on('click', function() {
+		var c = $('#pay_item_count').val();
+		var html = $('#tr_pay_template').html();
+		while (html.indexOf('{xxxxx}') != -1) {
+			html = html.replace('{xxxxx}', c);
+		}
+		$('#tr_pay_total').before(html);
+
+		$('#pay_item_count').val(parseInt(c) + 1);
+	});
+
+	$('#tbl_pay .pay_amount').live('change', function(e) {
+		var val = parseFloat($(this).val()) || 0;
+		$(this).val(val);
+		cal_pay_total();
 	});
 });

@@ -7,6 +7,9 @@ class Card extends MY_Controller {
 
 		$this->load->model('CardM');
 		$this->load->model('Card_AddressM');
+		$this->load->model('Card_EmailM');
+		$this->load->model('Card_SocialM');
+		$this->load->model('Card_TelM');
 	}
 
 	function index() {
@@ -45,18 +48,20 @@ class Card extends MY_Controller {
 		$view_data['is_new'] = FALSE;
 		$view_data['countries'] = $this->Card_AddressM->get_country_list();
 
+		$view_data['tel_label'] = $this->Card_TelM->get_label('number');
+		$view_data['tel_type_options'] = $this->Card_TelM->get_options('type');
+
+		$view_data['email_label'] = $this->Card_EmailM->get_label('email');
+		$view_data['email_type_options'] = $this->Card_EmailM->get_options('type');
+
+		$view_data['address_label'] = 'Address';
+		$view_data['address_type_options'] = $this->Card_AddressM->get_options('type');
+
+		$view_data['social_label'] = 'Social';
+		$view_data['social_type_options'] = $this->Card_SocialM->get_options('type');
+
 		$this->data['content'] = $this->load->view(get_template().'/card/edit', $view_data, TRUE);
 		$this->_do_output();
-	}
-
-	function card_ajax_edit() {
-		$id = $this->input->post('id');
-
-		$view_data['data'] = $this->CardM->get($id);
-		$view_data['is_new'] = FALSE;
-
-		$content = $this->load->view(get_template().'/card/edit', $view_data, TRUE);
-		echo $content;
 	}
 
 	function save() {
@@ -107,52 +112,31 @@ class Card extends MY_Controller {
 			->output_json();
 	}
 
-	function ajax_edit() {
-		$id = $this->input->post('id');
-
-		if ($id === FALSE) {
-			$this->RespM->set_message('Invalid ID')
-				->set_type('form')
-				->set_template('')
-				//->set_template('custom_viewcard')//custom template
-				->set_success(False)
-				->set_title('Card Info Dataset')
-				->set_details()
-				->output_json();
-			return;
-		}
-
-		$result['data'] = $this->CardM->get($id);
-		$result['is_new'] = FALSE;
-
-		$this->RespM->set_message()
-				->set_type('form')
-				->set_template('')
-				//->set_template('custom_viewcard')//custom template
-				->set_success(true)
-				->set_title('Card Info Dataset')
-				->set_details($result)
-				->output_json();
-	}
-
 	function ajax_save() {
+		/*
+		//test code for client-side validation
+		$errors = array(
+			'first_name' => 'test error first name'
+		);
+		$this->RespM->set_success(FALSE)
+				->set_details($errors)
+				->output_json();
+		return;
+		*/
+
 		$id = $this->CardM->save();
 
 		$success = ($id !== FALSE);
 
 		$message = '';
-		$details = '';
+		$details = '/card/view/'.$id;
 		if (!$success) {
 			$message = $this->CardM->get_error_string();
-			$details = $this->CardM->error_fields;
+			$details = $this->CardM->field_errors;
 		}
 
 		$this->RespM->set_message($message)
-				->set_type('form')
-				->set_template('')
-				//->set_template('custom_viewcard')//custom template
 				->set_success($success)
-				->set_title('Card Info Dataset')
 				->set_details($details)
 				->output_json();
 	}

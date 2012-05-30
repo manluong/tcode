@@ -3,13 +3,11 @@
 ?>
 <script type="text/javascript">
 function ajax_edit(id){
-	var url = '<?=site_url('card/card_ajax_edit');?>';
-	$.post(url,{
-			id : id,
-		},function(data){
-			$('#card_edit').html(data);
-		}
-	);
+	$.pjax({
+		url: '/card/edit/'+id,
+		container: '#main',
+		timeout: 5000
+	});
 }
 </script>
 <div id="card_edit">

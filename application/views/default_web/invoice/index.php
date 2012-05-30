@@ -112,13 +112,16 @@
 					<span class="input_data_label">Notes</span>
 					<span class="fillter_input"><input type="text" name="notes" class="inv-field" /></span>
 				</li>
+				<li>
+					<span class="input_data_label"></span>
+					<span class="fillter_input"><button type="button" id="search_btn" class="btn btn-primary">SUBMIT</button></span>
+				</li>
 			</ul>
 		</div>
 	</div>
 
 	<input type="hidden" id="page" name="page" />
 	<input type="hidden" id="row_per_page" name="row_per_page" />
-	<button id="search_btn" class="btn btn-primary">SUBMIT</button>
 	</form>
 
 	<div id="invoice_cases">

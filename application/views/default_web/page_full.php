@@ -59,16 +59,52 @@
 		</div>
 	</footer>
 	<!-- End Footer -->
-        <?php if($this->UserM->is_logged_in()):?>
+        <?php if(!$this->UserM->is_logged_in()):?>
         <!-- chat area -->
-    <div class="chatSection pof" id="chat">
+    <div class="chatSection pof" id="chat" style="display:none;">
         <div class="chatSlider h50">
             <!-- chat list -->
             <div class="chatItemWrapper chatList por fr">
                 <!-- show chat box -->
-                <div class="chatBox poa" id="list_chat" style="display:none;">
+                <div class="chatBox poa" id="list_chat">
                     <div class="chatBoxIner pb5 rounded7 fl">
-                        <!-- List chat here -->
+                        <div class="chatBoxItem fl pt5 ph10 bgN">
+                            <div class="fl">
+                                <a href="#" class="fs11 cf6 mb0 fwb" id="chat_status">Online</a>
+                            </div>
+                            <div class="fr">
+                                <a href="#" class="fs11 cf6 mb0 fwb">Group Chat</a>
+                            </div>
+                        </div>
+                        <div class="chatBoxItem fl pv5 ph10 bgN setStatus" id="set_status" style="display:none;">
+                            <p class="cf5 mb0 fl fs10 mt10 mr10 fwb w40 tac">Change Status</p>
+                            <a href="#" class="fl mr5 mt3 tac pt5 ph5 tdn status" id="status_online">
+                                <i class="iChat iChat1"></i>
+                                <div class="clear"></div>
+                                <span class=" cf6 fwb fs10">Online</span>
+                            </a>
+                            <a href="#" class="fl mr5 mt3 tac pt5 ph5 tdn status" id="status_offline">
+                                <i class="iChat iChat7 dpib"></i>
+                                <div class="clear"></div>
+                                <span class=" cf6 fwb fs10">Offline</span>
+                            </a>
+                            <a href="#" class="fl mr5 mt3 tac pt5 ph5 tdn status" id="status_busy">
+                                <i class="iChat iChat8"></i>
+                                 <div class="clear"></div>
+                                <span class=" cf6 fwb fs10">Do Not Distrub</span>
+                            </a>
+                            <a href="#" class="fl mt15 fs14 fwb cf6">x</a>
+                        </div>
+                        <div class="chatBoxItem fl pv5 ph10 bgN" id="group_chat" style="display:none;">
+                            <div class="fl w75p">
+                                <input class="inv-field w100p " type="text" >
+                            </div>
+                            <div class="tools fr">
+                                <a href="#" class="fl mr5 mt3"><i class="iChat iChat2"></i></a>
+                                <a href="#" class="fl w18 mt7" style="display:none;" ><input type="checkbox" class="styled" /></i></a>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
                 <!-- end show chat box -->
@@ -82,11 +118,12 @@
             <!-- chat 1 -->
             <div class="chatItemWrapper por fl mr1">
                 <!-- show chat box -->
-                <div class="chatBox poa " style="display:none;">
-                    <div class="chatBoxIner pb5 rounded7 fl bigChat">
-                        <div class="chatBoxItem fl pv5 ph10">
+                <div class="chatBox poa ">
+                    <div class="chatBoxIner pb5 rounded7 fl abigChat" style="display:none;">
+                        <div class="chatBoxItem fl pv5 ph10 bgN">
                             <div class="fl">
-                                <a href="#" class="fs11 tdu cf1">Loading History</a>
+                                <a href="#" class="fs11 tdu cf6 fwb mr5">Loading History</a>
+                                <a href="#" class="fs11 tdu cf6 fwb">Leave Group</a>
                             </div>
                             <div class="fr">
                                 <a href="#"><i class="iChat iChat4 fl mr10 mt2"></i></a>
@@ -94,8 +131,18 @@
                                 <a href="#"><i class="iChat iChat6 fl"></i></a>
                             </div>
                         </div>
+                         <div class="chatBoxItem fl pv5 ph10 bgN">
+                            <div class="fl w120">
+                                <p class="cf5 mb0 fl fs12  mr10 fwb cf6">Sales Meeting For Tomorrow</p>
+                            </div>
+                            <div class="fr">
+                                <div class="avatar rounded14 fl mr5"><img src="resources/template/default_web/img/avatar.png" alt="" width="28" class=" rounded14"></div>
+                                <div class="avatar rounded14 fl mr5"><img src="resources/template/default_web/img/avatar.png" alt="" width="28" class=" rounded14"></div>
+                                <div class="avatar rounded14 fl mr5"><img src="http://diendan.hocmai.vn/customavatars/avatar1163893_1.gif" alt="" width="28" class=" rounded14"></div>
+                            </div>
+                        </div>
                         <div class="chatBoxItem fl pv1 ph10">
-                            <div class="avatar rounded14 fl mr10"><img src="/resources/template/default_web/img/avatar.png" alt="" width="28" class=" rounded14"></div>
+                            <div class="avatar rounded14 fl mr10"><img src="resources/template/default_web/img/avatar.png" alt="" width="28" class=" rounded14"></div>
                             <span class="fl dpb ofh cf1 mt5 w80p">
                                 Whatssss?<br />
                             </span>
@@ -139,7 +186,7 @@
                                 <span class="rounded14 cf4 bg4 fwb noAvatar tac vam dpib">GP</span>
                             </div>
                             <span class="fl dpb ofh cf1 mt5 w80p">
-                               <img src="/resources/template/default_web/img/typing.gif" alt="" width=""/>
+                               <img src="resources/template/default_web/img/typing.gif" alt="" width=""/>
                             </span>
                         </div>
                         <div class="chatBoxItem fl pv1 ph10 bgN">
@@ -152,7 +199,7 @@
                 <div class="chatItem fl cp h50 ph10 por active">
                     <span class="count bg2 fs12 fwb tac rounded7  lhn poa dpn">7</span>
                     <a href="" class="dpb mt10">
-                    <div class="avatar rounded14 fl mr5"><img src="/resources/template/default_web/img/avatar.png" alt="" width="28" class="rounded14"></div>
+                    <div class="avatar rounded14 fl mr5"><img src="resources/template/default_web/img/avatar.png" alt="" width="28" class="rounded14"></div>
                     <span class="fl  dpb ofh cf1 mt5 fwb">Andrwe..</span>
                     </a>
                 </div>
@@ -170,7 +217,7 @@
                 <div class="chatItem fl cp h50 ph10 por">
                     <span class="count bg2 fs12 fwb tac rounded7 lhn poa dpb">9</span>
                     <a href="" class="dpb mt10">
-                        <div class="avatar rounded14 fl mr5"><img src="/resources/template/default_web/img/avatar.png" alt="" width="28" class="rounded14"></div>
+                        <div class="avatar rounded14 fl mr5"><img src="resources/template/default_web/img/avatar.png" alt="" width="28" class="rounded14"></div>
                         <span class="fl  dpb ofh cf1 mt5 fwb">Andrwe..</span>
                     </a>
                 </div>
@@ -217,6 +264,7 @@
         </div>
     </div>
     <!-- end chat area -->
+
     <?php endif;?>
 	<script type="text/javascript" src="/resources/addon/tpl.js"></script>
 	<script type="text/javascript" src="/resources/addon/jquery.ui.min.js"></script>
@@ -242,8 +290,8 @@
 	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/jquery.smooth-scroll.min.js"></script>
 	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/plugins.js"></script>
 	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/script.js"></script>
-        <script type="text/javascript" src="/resources/template/<?=get_template()?>/js/strophe.js"></script>
-        <script type="text/javascript" src="/resources/template/<?=get_template()?>/js/chat.js"></script>
+<!--        <script type="text/javascript" src="/resources/template/<?=get_template()?>/js/strophe.js"></script>
+        <script type="text/javascript" src="/resources/template/<?=get_template()?>/js/chat.js"></script>-->
 	<script>
 
 	</script>
