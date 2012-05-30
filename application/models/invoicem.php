@@ -36,9 +36,11 @@ class InvoiceM extends MY_Model {
 	);
 
 	public $sett_fill_item = TRUE;
+	public $sett_fill_pay_item = FALSE;
 
 	private $addons = array(
-		'item' => 'InvoiceItemM'
+		'item' => 'Invoice_ItemM',
+		'pay_item' => 'Invoice_Pay_ItemM'
 	);
 
 	function __construct() {
@@ -90,6 +92,14 @@ class InvoiceM extends MY_Model {
 				$this->db->join('a_product_pricetype', 'a_invoice_item.price_type = a_product_pricetype.a_product_pricetype_id', 'left');
 				$this->db->join('a_product_durationtype', 'a_invoice_item.duration_type = a_product_durationtype.a_product_durationtype_id', 'left');
 				$this->db->where('a_invoice_item.invoice_id IN ('.implode(',', $invoice_ids).')');
+				$query = $this->db->get();
+
+				$addons = $query->result_array();
+			} elseif ($name == 'pay_item') {
+				$this->db->select('a_invoice_payitem.*, a_invoice_pay.transaction_stamp, a_invoice_pay.note');
+				$this->db->from('a_invoice_payitem');
+				$this->db->join('a_invoice_pay', 'a_invoice_payitem.invoice_pay_id = a_invoice_pay.id');
+				$this->db->where('a_invoice_payitem.invoice_id IN ('.implode(',', $invoice_ids).')');
 				$query = $this->db->get();
 
 				$addons = $query->result_array();
@@ -277,13 +287,13 @@ class InvoiceM extends MY_Model {
 		$is_new = !(isset($data[$this->id_field]) && $data[$this->id_field] !== FALSE);
 
 		//filter out any addon data
-		$card = array();
+		$invoice = array();
 		foreach($data AS $k=>$v) {
 			$k = str_replace('addon_', '', $k);
 			if (in_array($k, array_keys($this->addons))) continue;
-			$card[$k] = $v;
+			$invoice[$k] = $v;
 		}
-		$invoice_id = parent::save($card);
+		$invoice_id = parent::save($invoice);
 
 		if ($invoice_id === FALSE) $has_error = TRUE;
 
@@ -314,7 +324,7 @@ class InvoiceM extends MY_Model {
 					}
 				}
 			} else {
-				$this->$model->where[] = 'invoice_id='.$invoice_id;
+				$this->$model->where[] = 'invoice_id = '.$invoice_id;
 				$existing_set = $this->$model->get_list();
 				$existing_ids = get_distinct('id', $existing_set);
 				$form_ids = get_distinct('id', $form_addon);
@@ -357,8 +367,7 @@ class InvoiceM extends MY_Model {
 		return $result;
 	}
 
-	private function is_empty_array($array)
-	{
+	private function is_empty_array($array) {
 		$is_empty = !empty($array);
 
 		foreach ($array as $v) {

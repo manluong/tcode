@@ -157,4 +157,28 @@
 			</div>
 		</div>
 	</div>
+
+	<?php if (isset($invoice['addon_pay_item'])): ?>
+	<div style="margin-top: 40px;">
+		<div class="invoice_title"><span class="arrow_title"></span><span>PAYMENT INFORMATION</span></div>
+		<table cellpadding="0" cellspacing="0" border="0" class="table table-striped">
+			<thead>
+				<tr>
+					<th style="width: 370px;">Date</th>
+					<th style="width: 320px;">Payment Type</th>
+					<th style="width: 200px;">Amount</th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php foreach ($invoice['addon_pay_item'] as $pay_item): ?>
+				<tr>
+					<td><?php echo date('Y-m-d', strtotime($pay_item['transaction_stamp'])) ?></td>
+					<td><?php echo $pay_item['note'] ?></td>
+					<td><?php echo '$'.number_format($pay_item['amount'], 2) ?></td>
+				</tr>
+				<?php endforeach ?>
+			</tbody>
+		</table>
+	</div>
+	<?php endif ?>
 </div>

@@ -6,7 +6,7 @@ class Invoice extends MY_Controller {
 		parent::__construct();
 
 		$this->load->model('InvoiceM');
-		$this->load->model('InvoiceItemM');
+		$this->load->model('Invoice_ItemM');
 	}
 
 	function index() {
@@ -68,10 +68,11 @@ class Invoice extends MY_Controller {
 	}
 
 	function view($id) {
+		$this->InvoiceM->sett_fill_pay_item = TRUE;
 		$invoice = $this->InvoiceM->get($id);
 		$data = array(
 			'invoice' => $invoice,
-			//'invoice_items' => $this->InvoiceItemM->get_by_invoice_id($id),
+			//'invoice_items' => $this->Invoice_ItemM->get_by_invoice_id($id),
 			//'customer_name' => '',
 			'invoice_terms' => ''
 		);
@@ -104,7 +105,7 @@ class Invoice extends MY_Controller {
 		$invoice = $this->InvoiceM->get($id);
 		$data = array(
 			'invoice' => $invoice,
-			//'invoice_items' => $this->InvoiceItemM->get_by_invoice_id($id),
+			//'invoice_items' => $this->Invoice_ItemM->get_by_invoice_id($id),
 			//'customer_name' => '',
 			'invoice_terms' => ''
 		);
@@ -133,7 +134,7 @@ class Invoice extends MY_Controller {
 		$invoice = $this->InvoiceM->get($id);
 		$data = array(
 			'invoice' => $invoice,
-			//'invoice_items' => $this->InvoiceItemM->get_by_invoice_id($id),
+			//'invoice_items' => $this->Invoice_ItemM->get_by_invoice_id($id),
 			//'customer_name' => '',
 			'invoice_terms' => ''
 		);
@@ -162,7 +163,7 @@ class Invoice extends MY_Controller {
 		$invoice = $this->InvoiceM->get($id);
 		$data = array(
 			'invoice' => $invoice,
-			//'invoice_items' => $this->InvoiceItemM->get_by_invoice_id($id),
+			//'invoice_items' => $this->Invoice_ItemM->get_by_invoice_id($id),
 			'customer' => $this->InvoiceM->get_customer(),
 			'price_type' => $this->InvoiceM->get_price_type(),
 			'duration_type' => $this->InvoiceM->get_duration_type(),
@@ -218,6 +219,21 @@ class Invoice extends MY_Controller {
 		$this->data['content'] = $this->load->view(get_template().'/invoice/pay', $data, true);
 
 		$this->_do_output();
+	}
+
+	function pay_save() {
+		$this->load->model('Invoice_PayM');
+
+		$invoice_pay_id = $this->Invoice_PayM->save();
+		if ($invoice_pay_id === false) {
+			echo '<pre>'.print_r($this->Invoice_PayM->errors).'</pre>';die;
+		}
+
+		echo json_encode(array(
+			'success' => true,
+			'url' => '/invoice'
+		));
+		exit;
 	}
 
 	function get_terms($id) {
