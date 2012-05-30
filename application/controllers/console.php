@@ -275,4 +275,24 @@ class Console extends MY_Controller {
 			echo "Error assigning role: ".$this->AclM->get_error_string()."\n";
 		}
 	}
+
+	function user_delete($card_id) {
+		$rs = $this->db->query("SELECT id FROM access_ro WHERE name='card' AND foreign_key=$card_id");
+		$ro_ids = array();
+		foreach($rs->result_array() AS $r) {
+			$ro_ids[] = $r['id'];
+		}
+		if (count($ro_ids) > 0) {
+			$this->db->query("DELETE FROM access_ro WHERE id IN (".implode(',', $ro_ids).")");
+			$this->db->query("DELETE FROM access_ro_co WHERE ro_id IN (".implode(',', $ro_ids).")");
+		}
+
+		$this->db->query("DELETE FROM access_user WHERE card_id=$card_id");
+		$this->db->query("DELETE FROM access_user_role WHERE card_id=$card_id");
+		$this->db->query("DELETE FROM access_user_role_sub WHERE card_id=$card_id");
+		$this->db->query("DELETE FROM card WHERE id=$card_id");
+		$this->db->query("DELETE FROM card_email WHERE card_id=$card_id");
+		echo "Deleted user from DB.\n";
+		$this->acl_rebuild('ro');
+	}
 }
