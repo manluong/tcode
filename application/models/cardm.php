@@ -331,16 +331,7 @@ class CardM extends MY_Model {
 			),
 		);
 
-		//get card_ids in STAFF role
-		$staff_card_ids = array();
-		$rs = $this->db->select('card_id')
-				->from('access_user_role')
-				->where('role_id', 1)
-				->get();
-
-		foreach($rs->result_array() AS $r) {
-			$staff_card_ids[] = $r['card_id'];
-		}
+		$staff_card_ids = $this->AclM->get_card_ids_in_role('Staff');
 
 		//if there are no STAFF card_ids, return a blank result.
 		if (count($staff_card_ids) == 0) return array();
@@ -352,5 +343,17 @@ class CardM extends MY_Model {
 		$this->select_fields = array('id', 'first_name', 'last_name');
 
 		return parent::search($search_string);
+	}
+
+	function get_staff_list() {
+		$staff_card_ids = $this->AclM->get_card_ids_in_role('Staff');
+
+		//if there are no STAFF card_ids, return a blank result.
+		if (count($staff_card_ids) == 0) return array();
+
+		//limit results to card_ids in STAFF role
+		$this->where[] = 'id IN ('.implode(',', $staff_card_ids).')';
+
+		return $this->get_list();
 	}
 }
