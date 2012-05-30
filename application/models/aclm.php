@@ -94,6 +94,23 @@ class AclM extends MY_Model {
 		return $rs->result_array();
 	}
 
+	function get_card_ids_in_role($role_name) {
+		$card_ids = array();
+		$rs = $this->db->select('card_id')
+				->from('access_user_role AS ur')
+				->join('global_setting.access_roles AS r', 'r.code=ur.role_id', 'left')
+				->where('r.name', $role_name)
+				->get();
+
+		if ($rs->num_rows() == 0) return array();
+
+		foreach($rs->result_array() AS $r) {
+			$card_ids[] = $r['card_id'];
+		}
+
+		return $card_ids;
+	}
+
 	function get_users($role_id='') {
 		$subroles = $this->get_subroles($role_id);
 
