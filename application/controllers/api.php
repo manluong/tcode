@@ -17,4 +17,26 @@ class Api extends MY_Controller {
 				->set_details($results)
 				->output_json();
 	}
+
+	function ajax_get_staff_list() {
+		$this->load->model('CardM');
+
+		$this->CardM->select_fields = array(
+			'id', 'display_name', 'first_name', 'last_name', 'avatar'
+		);
+
+		$this->CardM->sett_fill_address = FALSE;
+		$this->CardM->sett_fill_bank = FALSE;
+		$this->CardM->sett_fill_email = FALSE;
+		$this->CardM->sett_fill_extra = FALSE;
+		$this->CardM->sett_fill_notes = FALSE;
+		$this->CardM->sett_fill_social = FALSE;
+		$this->CardM->sett_fill_tel = FALSE;
+
+		$results = $this->CardM->get_staff_list();
+
+		$this->RespM->set_success(TRUE)
+				->set_details($results)
+				->output_json();
+	}
 }
