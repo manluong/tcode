@@ -928,7 +928,16 @@ class AclM extends MY_Model {
 		$role_id = $this->get_foreign_id_by_path($role, 'ro');
 
 		$depth = count(explode('/', $role));
-		if ($depth == 2) {
+
+		if ($depth >= 2) {
+			if ($depth == 3) {
+				$arr_role = explode('/', $role);
+				array_pop($arr_role);
+				$main_role_id = $this->get_foreign_id_by_path(implode('/', $arr_role), 'ro');
+			} else {
+				$main_role_id = $role_id;
+			}
+
 			//is a role
 			$existing_role_id = $this->get_card_role_id($card_id);
 			if ($existing_role_id !== FALSE) {
@@ -937,11 +946,13 @@ class AclM extends MY_Model {
 			}
 			$data = array(
 				'card_id' => $card_id,
-				'role_id' => $role_id,
+				'role_id' => $main_role_id,
 			);
 
 			$result = $this->db->insert('access_user_role', $data);
-		} elseif ($depth == 3) {
+		}
+
+		if ($depth == 3) {
 			//is a subrole
 			if (!$this->has_sub_role($card_id, $role_id)) {
 				$data = array(

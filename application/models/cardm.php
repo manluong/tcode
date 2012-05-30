@@ -80,6 +80,7 @@ class CardM extends MY_Model {
 		'notes' => 'Card_NotesM',
 		'social' => 'Card_SocialM',
 		'tel' => 'Card_TelM',
+		'access_user' => 'Access_UserM',	//used in adding role access in console add_user, saving password
 	);
 
 	function __construct() {
