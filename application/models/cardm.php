@@ -208,9 +208,11 @@ class CardM extends MY_Model {
 			}
 
 			$card_ids = get_distinct('id', $data);
-			$addons = $this->$model
+			if(!empty($card_ids)){
+				$addons = $this->$model
 						->set_where('card_id IN ('.implode(',', $card_ids).')')
 						->get_list();
+			}
 
 			if ($addons !== FALSE && count($addons) > 0) {
 				foreach($data AS $k=>$v) {

@@ -75,23 +75,24 @@ class Helpdesk extends MY_Controller {
 		
 		$customer = $this->input->post('customer');
 		if(!empty($customer)){
-			$where['customer'] = $customer;		
+			$where['created_card_id'] = $customer;		
 		}
 		
 		$assigned = $this->input->post('assigned');
 		if(!empty($assigned)){
-			$where['assigned'] = $assigned;		
+			$where['assign_id'] = $assigned;		
 		}
 		
 		$subject = $this->input->post('subject');
 		if(!empty($subject)){
 			$where['subject'] = '"'.$subject.'"';		
 		}
-		
+		/*
 		$comments = $this->input->post('comments');
 		if(!empty($comments)){
-			$where['comments'] = $comments;		
+			$where['comments'] ='"'. $comments.'"';		
 		}
+		*/
 		$this->HelpdeskM->set_where($where);
 		
 		$result = $this->HelpdeskM->get_list();
@@ -112,6 +113,24 @@ class Helpdesk extends MY_Controller {
 					'id' => $customer['id'],
 					'label' => trim($customer['first_name'].' '.$customer['last_name']),
 					'value' => trim($customer['first_name'].' '.$customer['last_name'])
+				);
+			}
+		}
+
+		echo json_encode($content);
+	}
+	
+	function get_comment() {
+		$term = $this->input->get('term');
+		$comment_list = $this->Helpdesk_CommentM->search_comment($term);
+
+		$content = array();
+		if ($comment_list) {
+			foreach ($comment_list as $k) {
+				$content[] = array(
+					'id' => $k['id'],
+					'label' => $k['comment'],
+					'value' =>  $k['comment'],
 				);
 			}
 		}
@@ -335,6 +354,7 @@ class Helpdesk extends MY_Controller {
 			'status' => $this->input->post('status'),
 			'type' => $this->input->post('type'),
 			'priority' => $this->input->post('priority'),
+			'created_card_id' => $this->input->post('requester'),
 			'active' => 0,
 		);
 		$insert_id = $this->HelpdeskM->save($data);

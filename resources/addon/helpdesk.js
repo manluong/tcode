@@ -22,7 +22,8 @@ function submit_insert_helpdesk() {
 			group : group,
 			status : status,
 			type : type,
-			priority : priority
+			priority : priority,
+			requester : requester,
 		},function(data){
 			if(comment != ''){
 				insert_comment();
@@ -70,7 +71,7 @@ function insert_comment() {
 
 //INDEX
 $(document).ready(function(){
-	//Autocomplete assign
+	//Auto complete assign
 	$('#assign_name').autocomplete({
 		source: '/helpdesk/get_staff',
 		minLength: 2,
@@ -83,7 +84,7 @@ $(document).ready(function(){
 		$('#assign_id').val('');
 	});
 	
-	//Autocomplete requester 
+	//Auto complete requester 
 	$('#customer_name').autocomplete({
 		source: '/helpdesk/get_customer',
 		minLength: 2,
@@ -94,6 +95,19 @@ $(document).ready(function(){
 	
 	$('#customer_name').on('change', function(e) {
 		$('#customer_id').val('');
+	});
+	
+	//Auto complete comment
+	$('#comment_content').autocomplete({
+		source: '/helpdesk/get_comment',
+		minLength: 2,
+		select: function(e, ui) {
+			$('#helpdesk_id').val(ui.item.id);
+		}
+	});
+	
+	$('#comment_content').on('change', function(e) {
+		$('#helpdesk_id').val('');
 	});
 	
 	$("#arrow").click(function(){
@@ -165,7 +179,7 @@ function helpdesk_fillter_all(){
 	var customer = $('#customer_id').val();
 	var assigned = $('#assign_id').val();
 	var subject = $('#subject').val(); 
-	var comments = $('#comments').val();
+	var comments = $('#helpdesk_id').val();
 	
 	var url = '/helpdesk/helpdesk_fillter_all';
 
