@@ -1,7 +1,7 @@
 <div class="container">
 	<div class="row span6">
 
-		<form method="post" action="/card/save" class="form-horizontal">
+		<form method="post" action="/card/save" class="form-horizontal" id="card-edit-form" data-ajax_save="/card/ajax_save">
 			<?php
 				if (!$is_new) echo form_hidden('id', $data['id']);
 			?>
@@ -366,6 +366,35 @@
 	$(document).ready(function() {
 		$('.remove').live('click', function() {
 			$(this).closest('.control-group').remove();
+		});
+
+		$('form').validator({messageClass:'alert alert-error'}).submit(function(e) {
+			var form = $(this);
+			var ajax_url = form.attr('data-ajax_save');
+
+			if (typeof ajax_url === 'undefined' || ajax_url.length == 0) return;
+
+			if (!e.isDefaultPrevented()) {
+				$.post(
+					ajax_url,
+					form.serialize(),
+					function(resp) {
+						if (resp.success) {
+							$.pjax({
+								url: resp.details,
+								container: '#main',
+								timeout: 5000
+							});
+						} else {
+							//show errors
+							form.data('validator').invalidate(resp.details);
+						}
+					},
+					'json'
+				)
+			}
+
+			e.preventDefault();
 		});
 	});
 </script>
