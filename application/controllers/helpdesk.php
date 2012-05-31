@@ -22,84 +22,88 @@ class Helpdesk extends MY_Controller {
 		$this->data['content'] = $this->load->view(get_template().'/helpdesk/index',$content, TRUE);
 		$this->_do_output();
 	}
-	
+
 	function helpdesk_fillter(){
+		$where = array();
 		$status = $this->input->post('status');
 		if(!empty($status)){
-			$where['status'] = $status;		
+			$where[] = "status='$status'";
 		}
-		
+
 		$group = $this->input->post('group');
 		if(!empty($group)){
-			$where['`group`'] = $group;		
-		}	
-		
+			$where[] = "`group`='$group'";
+		}
+
 		$type = $this->input->post('type');
 		if(!empty($type)){
-			$where['type'] = $type;		
+			$where[] = "type='$type'";
 		}
-		
+
 		$priority = $this->input->post('priority');
 		if(!empty($priority)){
-			$where['priority'] = $priority;		
+			$where[] = "priority='$priority'";
 		}
-		
-		$this->HelpdeskM->set_where($where);
-		
+
+		$this->HelpdeskM->where = $where;
+
 		$result = $this->HelpdeskM->get_list();
 		$data = json_encode($result);
 		echo $data;
 	}
-	
+
 	function helpdesk_fillter_all(){
-	
+		$where = array();
+
 		$status = $this->input->post('status');
 		if(!empty($status)){
-			$where['status'] = $status;		
+			$where[] = "status='$status'";
 		}
-		
+
 		$group = $this->input->post('group');
 		if(!empty($group)){
-			$where['`group`'] = $group;		
+			$where[] = "`group`='$group'";
 		}
-		
+
 		$type = $this->input->post('type');
 		if(!empty($type)){
-			$where['type'] = $type;		
+			$where[] = "type='$type'";
 		}
-		
+
 		$priority = $this->input->post('priority');
 		if(!empty($priority)){
-			$where['priority'] = $priority;		
+			$where[] = "priority='$priority'";
 		}
-		
+
 		$customer = $this->input->post('customer');
 		if(!empty($customer)){
-			$where['created_card_id'] = $customer;		
+			$where[] = "created_card_id='$customer'";
 		}
-		
+
 		$assigned = $this->input->post('assigned');
 		if(!empty($assigned)){
-			$where['assign_id'] = $assigned;		
+			$where[] = "assign_id='$assigned'";
 		}
-		
+
 		$subject = $this->input->post('subject');
 		if(!empty($subject)){
-			$where['subject'] = '"'.$subject.'"';		
+			$where[] = "subject LIKE '$subject%'";
 		}
-		/*
+
 		$comments = $this->input->post('comments');
 		if(!empty($comments)){
-			$where['comments'] ='"'. $comments.'"';		
+			$results = $this->Helpdesk_CommentM->search_comment($comments);
+			$helpdesk_ids = get_distinct('helpdesk_id', $results);
+			$where[] = 'id IN ('.implode(',', $helpdesk_ids).')';
 		}
-		*/
-		$this->HelpdeskM->set_where($where);
-		
+
+		$this->HelpdeskM->where = $where;
+
 		$result = $this->HelpdeskM->get_list();
 		$data = json_encode($result);
 		echo $data;
 	}
-	
+
 	function get_customer() {
 		$term = $this->input->get('term');
 
@@ -119,7 +123,7 @@ class Helpdesk extends MY_Controller {
 
 		echo json_encode($content);
 	}
-	
+
 	function get_comment() {
 		$term = $this->input->get('term');
 		$comment_list = $this->Helpdesk_CommentM->search_comment($term);
@@ -137,7 +141,7 @@ class Helpdesk extends MY_Controller {
 
 		echo json_encode($content);
 	}
-	
+
 	function get_staff() {
 		$term = $this->input->get('term');
 
@@ -157,62 +161,62 @@ class Helpdesk extends MY_Controller {
 
 		echo json_encode($content);
 	}
-	
+
 	function ajax_status_fillter(){
 		$value = $this->input->post('value');
 		$where = array(
 			'status' => $value,
 		);
 		$this->HelpdeskM->set_where($where);
-		
+
 		$result = $this->HelpdeskM->get_list();
 		$data = json_encode($result);
 		echo $data;
 	}
-	
+
 	function ajax_group_fillter(){
 		$value = $this->input->post('value');
 		$where = array(
 			'group' => $value,
 		);
 		$this->HelpdeskM->set_where($where);
-		
+
 		$result = $this->HelpdeskM->get_list();
 		$data = json_encode($result);
 		echo $data;
 	}
-	
+
 	function ajax_type_fillter(){
 		$value = $this->input->post('value');
 		$where = array(
 			'type' => $value,
 		);
 		$this->HelpdeskM->set_where($where);
-		
+
 		$result = $this->HelpdeskM->get_list();
 		$data = json_encode($result);
 		echo $data;
 	}
-	
+
 	function ajax_priority_fillter(){
 		$value = $this->input->post('value');
 		$where = array(
 			'priority' => $value,
 		);
 		$this->HelpdeskM->set_where($where);
-		
+
 		$result = $this->HelpdeskM->get_list();
 		$data = json_encode($result);
 		echo $data;
 	}
-	
+
 	function add() {
 		//Delete NULL HELPDESK
 		$this->delete_helpdesk();
-		
+
 		//Delete NULL COMMENT
 		$this->delete_comment();
-		
+
 		//Create NULL HELPDESK
 		$helpdesk_data = array(
 			'subject' => '',
@@ -224,7 +228,7 @@ class Helpdesk extends MY_Controller {
 			'priority' => '',
 			'active' => 1,
 		);
-		
+
 	   $helpdesk_id = $this->HelpdeskM->save($helpdesk_data);
 	   //Create NULL COMMENT
 	   $comment_data = array (
@@ -238,7 +242,7 @@ class Helpdesk extends MY_Controller {
             'active' => 1,
 		);
 		$insert_comment_id = $this->Helpdesk_CommentM->save($comment_data);
-		
+
 		//get data for add new helpdesk
 		$content = array(
 			'comment_id' => $insert_comment_id,
@@ -249,7 +253,7 @@ class Helpdesk extends MY_Controller {
 			'type' => $this->Helpdesk_CommentM->get_type(),
 			'assign' => $this->Helpdesk_CommentM->get_assign(),
 		);
-		
+
 		$this->data['content'] = $this->load->view(get_template().'/helpdesk/add',$content, TRUE);
 		$this->_do_output();
 	}
@@ -257,8 +261,8 @@ class Helpdesk extends MY_Controller {
 	function edit(){
 		//Delete NULL COMMENT
 		$this->delete_comment() ;
-		
-		$id = $this->uri->segment(3);	
+
+		$id = $this->uri->segment(3);
 		//Create NULL COMMENT for upload attach file
 	   $comment_data = array (
 			'group' => '',
@@ -271,12 +275,12 @@ class Helpdesk extends MY_Controller {
             'active' => 1,
 		);
 		$comment_id = $this->Helpdesk_CommentM->save($comment_data);
-			
+
 		$result[0] = array();
 		if($id!=0){
 			$result = $this->Helpdesk_CommentM->get_content_helpdesk($id);
 		}
-		
+
 		$content = array(
 			'id' => $id,
 			'comment_id' => $comment_id,
@@ -293,7 +297,7 @@ class Helpdesk extends MY_Controller {
 		$this->data['content'] = $this->load->view(get_template().'/helpdesk/edit',$content, TRUE);
 		$this->_do_output();
 	}
-	
+
 	function out_put_pdf($id) {
 		$result[0] = array();
 		if($id!=0){
@@ -329,7 +333,7 @@ class Helpdesk extends MY_Controller {
             'active' => 0,
 		);
 		$this->Helpdesk_CommentM->save($data);
-		
+
 		$result[0] = array();
 		if($id_helpdesk!=0){
 			$result = $this->Helpdesk_CommentM->get_content_helpdesk($id_helpdesk);
@@ -370,7 +374,7 @@ class Helpdesk extends MY_Controller {
 			'cc_email' => $this->input->post('cc_email'),
 		);
 		$this->HelpdeskM->save($data);
-		
+
 		$content = array (
 			'info' => $this->HelpdeskM->get_content($id),
 		);
@@ -399,7 +403,7 @@ class Helpdesk extends MY_Controller {
 
 	function delete_comment() {
 		//$this->load->library('filel');
-		
+
 		$result = $this->Helpdesk_CommentM->get_comment_not_use();
 		if (!empty($result)) {
 			foreach ($result as $k) {
@@ -413,7 +417,7 @@ class Helpdesk extends MY_Controller {
 				}
 			}
 		}
-		
+
 	}
 
 }

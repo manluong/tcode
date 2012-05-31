@@ -9,6 +9,7 @@ class MY_Model extends CI_Model {
 
 	public $errors = array();
 	public $field_errors = array();
+	public $last_sql = '';
 
 	public $select_fields = array();
 	public $where = array();
@@ -107,6 +108,7 @@ class MY_Model extends CI_Model {
 		}
 
 		$rs = $this->db->get();
+		$this->last_sql = $this->db->last_query();
 		if ($rs->num_rows() == 0) return FALSE;
 
 		$result = $rs->row_array();
@@ -153,6 +155,7 @@ class MY_Model extends CI_Model {
 		}
 
 		$rs = $this->db->get();
+		$this->last_sql = $this->db->last_query();
 
 		if ($rs->num_rows() == 0) return FALSE;
 
@@ -193,6 +196,7 @@ class MY_Model extends CI_Model {
 			}
 
 			$rs = $this->db->get();
+			$this->last_sql = $this->db->last_query();
 
 			if ($rs->num_rows() == 0) return FALSE;
 
@@ -237,6 +241,7 @@ class MY_Model extends CI_Model {
 		}
 
 		$rs = $this->db->get();
+		$this->last_sql = $this->db->last_query();
 
 		return $rs->num_rows();
 	}
@@ -411,6 +416,7 @@ class MY_Model extends CI_Model {
 			}
 
 			$rs = $this->db->insert($this->table, $data);
+			$this->last_sql = $this->db->last_query();
 			return $this->db->insert_id();
 		} else {
 			$id = $data[$this->id_field];
@@ -425,6 +431,7 @@ class MY_Model extends CI_Model {
 
 			$rs = $this->db->where($this->id_field, $id)
 					->update($this->table, $data);
+			$this->last_sql = $this->db->last_query();
 			return $id;
 		}
 	}
@@ -445,6 +452,7 @@ class MY_Model extends CI_Model {
 					->limit(1)
 					->delete($this->table);
 		}
+		$this->last_sql = $this->db->last_query();
 
 		if ($rs === FALSE) $this->errors[] = $this->db->_error_message();
 
@@ -570,6 +578,7 @@ class MY_Model extends CI_Model {
 		}
 
 		$rs = $this->db->get();
+		$this->last_sql = $this->db->last_query();
 
 		return $rs->result_array();
 	}
