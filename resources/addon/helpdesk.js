@@ -6,7 +6,7 @@ function submit_insert_helpdesk() {
 	var assigned = $('#assign_id').val();
 	var id = $('#hiddenIdAdmincp').attr('value');
 	var cc_email = $('#cc_email').val();
-	
+
 	var group = $('#group').val();
 	var status = $('#status').val();
 	var type = $('#type').val();
@@ -79,12 +79,12 @@ $(document).ready(function(){
 			$('#assign_id').val(ui.item.id);
 		}
 	});
-	
+
 	$('#assign_name').on('change', function(e) {
 		$('#assign_id').val('');
 	});
-	
-	//Auto complete requester 
+
+	//Auto complete requester
 	$('#customer_name').autocomplete({
 		source: '/helpdesk/get_customer',
 		minLength: 2,
@@ -92,11 +92,11 @@ $(document).ready(function(){
 			$('#customer_id').val(ui.item.id);
 		}
 	});
-	
+
 	$('#customer_name').on('change', function(e) {
 		$('#customer_id').val('');
 	});
-	
+
 	//Auto complete comment
 	$('#comment_content').autocomplete({
 		source: '/helpdesk/get_comment',
@@ -105,14 +105,14 @@ $(document).ready(function(){
 			$('#helpdesk_id').val(ui.item.id);
 		}
 	});
-	
+
 	$('#comment_content').on('change', function(e) {
 		$('#helpdesk_id').val('');
 	});
-	
+
 	$("#arrow").click(function(){
 		$("#input_data_fillter").slideToggle();
-		
+
 		if($('#arrow').attr('class') == 'down_arrow'){
 			$('#arrow').removeClass('down_arrow');
 			$('#arrow').addClass('up_arrow');
@@ -129,7 +129,7 @@ function load_helpdesk_list(data){
 	for (i in json) {
 		 var item = json[i];
 		 var row  = new Array();
-		
+
 		 row[0] = '<a href="/helpdesk/edit/'+item.id+'">'+item.subject+'</a>';
 		 row[1] = item.cc_email;
 		 row[2] = item.assign_id;
@@ -142,9 +142,9 @@ function load_helpdesk_list(data){
 function helpdesk_fillter(){
 	var status = $('#status').val();
 	var group = $('#group').val();
-	var type = $('#type').val(); 
+	var type = $('#type').val();
 	var priority = $('#priority').val();
-	
+
 	var url = '/helpdesk/helpdesk_fillter';
 
 	$.post(url,{
@@ -173,14 +173,14 @@ function helpdesk_fillter_all(){
 
 	var status = $('#status').val();
 	var group = $('#group').val();
-	var type = $('#type').val(); 
+	var type = $('#type').val();
 	var priority = $('#priority').val();
-	
+
 	var customer = $('#customer_id').val();
 	var assigned = $('#assign_id').val();
-	var subject = $('#subject').val(); 
-	var comments = $('#helpdesk_id').val();
-	
+	var subject = $('#subject').val();
+	var comments = $('#comment_content').val();
+
 	var url = '/helpdesk/helpdesk_fillter_all';
 
 	$.post(url,{
@@ -191,7 +191,7 @@ function helpdesk_fillter_all(){
 			customer : customer,
 			assigned : assigned,
 			subject : subject,
-			comments : comments,
+			comments : comments
 		},function(data){
 			var json = jQuery.parseJSON(data);
 			var content = new Array();
@@ -208,8 +208,8 @@ function helpdesk_fillter_all(){
 		}
 	);
 }
-	
-	
+
+
 function load_datatable(data){
 	$('#example').dataTable( {
 		"sDom": "<<'pull-right'p>>t<<'pull-right'p>lfi>",
@@ -250,7 +250,7 @@ $(document).ready(function(){
 		$("#helpdesk_show_info").hide();
 		$("#input_data_info").show();
 	});
-	
+
 	$("#helpdesk_save_info").click(function(){
 		var subject = $('#subject').val();
 		var assign = $('#assign').val();
@@ -305,10 +305,10 @@ function submit_comment(){
 		}
 	);
 }
-	
+
 function show_detail_comment(id){
 	$("#comment_detail_"+id).slideToggle();
-	
+
 	if($('#arrow_comment_'+id).attr('class') == 'down_arrow'){
 		$('#arrow_comment_'+id).removeClass('down_arrow');
 		$('#arrow_comment_'+id).addClass('up_arrow');

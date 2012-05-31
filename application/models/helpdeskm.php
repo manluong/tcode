@@ -10,11 +10,11 @@ class HelpdeskM extends MY_Model {
 		$this->sett_fill_card_info = TRUE;
 	}
 	public $sett_fill_card = TRUE;
-		
+
 	private $addons = array(
 		'card' => 'CardM',
 	);
-	
+
 	public $data_fields = array(
 		'subject' => array(
 		),
@@ -35,7 +35,7 @@ class HelpdeskM extends MY_Model {
         'active' => array(
 		),
 	);
-	
+
 	function get($id) {
 		$result = parent::get($id);
 
@@ -43,49 +43,53 @@ class HelpdeskM extends MY_Model {
 
 		return $result;
 	}
-	
+
 	function get_list() {
 		$result = parent::get_list();
-		
+
 		$this->fill_addons($result, MULTIPLE_DATA);
-		
+
 		return $result;
 	}
-	
+
 	private function fill_addons(&$data, $mode=SINGLE_DATA) {
+		if (count($data) == 0 || $data === FALSE) return FALSE;
+		
+		if ($mode == SINGLE_DATA) {
+			$data = array($data);
+		}
+
+		$assign_id = get_distinct('assign_id', $data);
+
 		foreach($this->addons AS $name=>$model) {
 			$sett_var = 'sett_fill_'.$name;
 			if ($this->$sett_var == FALSE) continue;
 
-			if ($mode == SINGLE_DATA) {
-				$data = array($data);
-			}
-			$assign_id = get_distinct('assign_id', $data);
-			
 			if(!empty($assign_id)){
 				$addons = $this->$model
 						->set_where('id IN ('.implode(',', $assign_id).')')
 						->get_list();
-			}
-			
-			if ($addons !== FALSE && count($addons) > 0) {
-				foreach($data AS $k=>$v) {
-					foreach($addons AS $addon) {
-						if ($addon['id'] != $v['assign_id']) continue;
 
-						$data[$k]['addon_'.$name][] = $addon;
+
+				if ($addons !== FALSE && count($addons) > 0) {
+					foreach($data AS $k=>$v) {
+						foreach($addons AS $addon) {
+							if ($addon['id'] != $v['assign_id']) continue;
+
+							$data[$k]['addon_'.$name][] = $addon;
+						}
 					}
 				}
 			}
 
 			$this->$model->reset();
+		}
 
-			if ($mode == SINGLE_DATA) {
-				$data = $data[0];
-			}
+		if ($mode == SINGLE_DATA) {
+			$data = $data[0];
 		}
 	}
-	
+
 	function get_content($id) {
 		$this->db->select('*');
 		$this->db->where('id',$id);

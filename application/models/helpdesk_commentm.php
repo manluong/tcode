@@ -144,9 +144,12 @@ class Helpdesk_CommentM extends MY_Model {
 		$this->db->where('id', $id);
 		$this->db->delete('a_comment_file');
 	}
-	
+
 	function search_comment($search_string) {
 		$this->select_fields = array('helpdesk_id', 'comment');
+		$this->search_fields = array(
+			array('comment'),
+		);
 
 		return parent::search($search_string);
 	}
