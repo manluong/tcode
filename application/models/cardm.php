@@ -238,6 +238,8 @@ class CardM extends MY_Model {
 	}
 
 	private function fill_addons(&$data, $mode=SINGLE_DATA) {
+		if (count($data) == 0 || $data === FALSE) return FALSE;
+		
 		if ($mode == SINGLE_DATA) {
 			$data = array($data);
 		}
@@ -358,7 +360,7 @@ class CardM extends MY_Model {
 
 		return $this->get_list();
 	}
-	
+
 	function search_customer($search_string) {
 		//search first_name + last_name only
 		$this->search_fields = array(
@@ -368,15 +370,8 @@ class CardM extends MY_Model {
 			),
 		);
 
-		//get id on Card table 
-		$staff_card_ids = array();
-		$rs = $this->db->select('card_id')
-				->from('access_user_role')
-				->get();
-
-		foreach($rs->result_array() AS $r) {
-			$card_ids[] = $r['card_id'];
-		}
+		//get id on Card table
+		$card_ids = $this->AclM->get_card_ids_in_role('Client');
 
 		//if there are no card_ids, return a blank result.
 		if (count($card_ids) == 0) return array();
@@ -389,5 +384,5 @@ class CardM extends MY_Model {
 
 		return parent::search($search_string);
 	}
-	
+
 }
