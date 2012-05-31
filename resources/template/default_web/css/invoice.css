@@ -395,15 +395,7 @@ html, body{
 }
 
 .invoice_item .col-12 {
-	padding-top: 3px;
-}
-
-.invoice_item .col-12 input {
-	margin-left: 15px;
-}
-
-.invoice_item .col-12 span {
-	margin-left: 8px;
+	width: 158px;
 }
 
 .invoice_item input {
@@ -489,19 +481,19 @@ html, body{
 }
 #add_row{
 	float:left;
-	width:228px;
+	width: 186px;
 	margin-left:29px;
 }
 #all_discount{
 	float:left;
 	padding-top: 5px;
-	width:356px;
+	width: 405px;
 }
 #all_discount ul li{
 	float:left;
 	margin-right:15px;
 }
-#all_discount input[type="text"]{
+#all_discount input, #all_discount select {
 	width:100px;
 	margin-top:-3px;
 }

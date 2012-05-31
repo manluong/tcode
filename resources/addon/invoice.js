@@ -315,7 +315,17 @@ $(document).ready(function() {
 		cal_invoice_total();
 	});
 
-	$('#all_discount input:checkbox').on('change', function() {
+	$('#apply_all_tax').on('change', function() {
+		var val = $(this).val();
+
+		$('#invoice_item_list .tax').each(function(index, item) {
+			$(this).val(val);
+		});
+
+		cal_invoice_total();
+	});
+
+	/*$('#all_discount input:checkbox').on('change', function() {
 		var tax = $(this).data('tax');
 		var checked = this.checked;
 
@@ -326,7 +336,7 @@ $(document).ready(function() {
 		});
 
 		cal_invoice_total();
-	});
+	});*/
 
 	$('#terms_id').on('change', function(e) {
 		var id = $(this).val();

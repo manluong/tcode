@@ -7,6 +7,7 @@ class Invoice extends MY_Controller {
 
 		$this->load->model('InvoiceM');
 		$this->load->model('Invoice_ItemM');
+		$this->load->model('Tax_UseM');
 	}
 
 	function index() {
@@ -167,6 +168,7 @@ class Invoice extends MY_Controller {
 			'customer' => $this->InvoiceM->get_customer(),
 			'price_type' => $this->InvoiceM->get_price_type(),
 			'duration_type' => $this->InvoiceM->get_duration_type(),
+			'tax' => $this->Tax_UseM->get_list(),
 			'terms' => $this->InvoiceM->get_terms(),
 			'invoice_terms' => ''
 		);
@@ -190,6 +192,7 @@ class Invoice extends MY_Controller {
 			'customer' => $this->InvoiceM->get_customer(),
 			'price_type' => $this->InvoiceM->get_price_type(),
 			'duration_type' => $this->InvoiceM->get_duration_type(),
+			'tax' => $this->Tax_UseM->get_list(),
 			'terms' => $this->InvoiceM->get_terms()
 		);
 
@@ -290,11 +293,11 @@ class Invoice extends MY_Controller {
 			foreach ($product_list as $product) {
 				$content[] = array(
 					'product' => array(
-						'id' => $product->a_product_id,
-						'price' => (float)$product->a_product_price_price
+						'id' => $product->id,
+						'price' => (float)$product->amount
 					),
-					'label' => $product->a_product_name,
-					'value' => $product->a_product_name
+					'label' => $product->name,
+					'value' => $product->name
 				);
 			}
 		}

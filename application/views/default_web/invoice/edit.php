@@ -104,7 +104,7 @@
 							<input type="hidden" name="addon_item[<?php echo $c ?>][id]" value="<?php echo $invoice_item['id'] ?>" />
 							<input type="hidden" name="addon_item[<?php echo $c ?>][invoice_id]" value="<?php echo $invoice_item['invoice_id'] ?>" />
 							<input type="hidden" name="addon_item[<?php echo $c ?>][product_id]" value="<?php echo $invoice_item['product_id'] ?>" class="product_id" />
-							<input type="text" name="addon_item[<?php echo $c ?>][product_name]" value="<?php echo $invoice_item['a_product_name'] ?>" class="col-2 inv-field product_name" />
+							<input type="text" name="addon_item[<?php echo $c ?>][product_name]" value="<?php echo $invoice_item['name'] ?>" class="col-2 inv-field product_name" />
 						</div>
 						<div><input type="text" name="addon_item[<?php echo $c ?>][description]" value="<?php echo $invoice_item['description'] ?>" class="col-3" /></div>
 						<div><input type="text" name="addon_item[<?php echo $c ?>][unit_price]" value="<?php echo (float)$invoice_item['unit_price'] ?>" class="col-4 unit_price cal" /></div>
@@ -134,9 +134,13 @@
 							</select>
 						</div>
 						<div><input type="text" name="addon_item[<?php echo $c ?>][discount]" value="<?php echo $invoice_item['discount'] ?>" class="col-11 discount cal" /></div>
-						<div class="col-12">
-							<input type="checkbox" class="tax-gst" /><span>GST</span>
-							<input type="checkbox" class="tax-vat" /><span>VAT</span>
+						<div>
+							<select name="addon_item[<?php echo $c ?>][tax_use_id]" class="col-12 tax cal">
+								<option value="">Tax</option>
+								<?php foreach ($tax as $r): ?>
+								<option value="<?php echo $r['id'] ?>"<?php echo ($r['id'] == $invoice_item['tax_use_id']) ? ' selected="selected"' : '' ?>><?php echo $r['name'] ?></option>
+								<?php endforeach ?>
+							</select>
 						</div>
 					</div>
 				</div>
@@ -155,8 +159,14 @@
 					<ul>
 						<li>Apply to all items</li>
 						<li><input type="text" id="apply_all_discount" class="inv-field" /></li>
-						<li><input type="checkbox" id="apply_all_gst" data-tax="gst" /> GST</li>
-						<li><input type="checkbox" id="apply_all_vat" data-tax="vat" /> VAT</li>
+						<li>
+							<select id="apply_all_tax" style="width: 158px;">
+								<option value="">Tax</option>
+								<?php foreach ($tax as $r): ?>
+								<option value="<?php echo $r['id'] ?>"><?php echo $r['name'] ?></option>
+								<?php endforeach ?>
+							</select>
+						</li>
 					</ul>
 				</div>
 			</div>
@@ -253,9 +263,13 @@
 				</select>
 			</div>
 			<div><input type="text" name="addon_item[{xxxxx}][discount]" class="col-11 discount cal" /></div>
-			<div class="col-12">
-				<input type="checkbox" class="tax-gst" /><span>GST</span>
-				<input type="checkbox" class="tax-vat" /><span>VAT</span>
+			<div>
+				<select name="addon_item[{xxxxx}][tax_use_id]" class="col-12 tax cal">
+					<option value="">Tax</option>
+					<?php foreach ($tax as $r): ?>
+					<option value="<?php echo $r['id'] ?>"><?php echo $r['name'] ?></option>
+					<?php endforeach ?>
+				</select>
 			</div>
 		</div>
 	</div>

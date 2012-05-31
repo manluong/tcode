@@ -97,8 +97,14 @@
 					<ul>
 						<li>Apply to all items</li>
 						<li><input type="text" id="apply_all_discount" class="inv-field" /></li>
-						<li><input type="checkbox" id="apply_all_gst" data-tax="gst" /> GST</li>
-						<li><input type="checkbox" id="apply_all_vat" data-tax="vat" /> VAT</li>
+						<li>
+							<select id="apply_all_tax" style="width: 158px;">
+								<option value="">Tax</option>
+								<?php foreach ($tax as $r): ?>
+								<option value="<?php echo $r['id'] ?>"><?php echo $r['name'] ?></option>
+								<?php endforeach ?>
+							</select>
+						</li>
 					</ul>
 				</div>
 			</div>
@@ -195,9 +201,13 @@
 				</select>
 			</div>
 			<div><input type="text" name="addon_item[{xxxxx}][discount]" class="col-11 discount cal" /></div>
-			<div class="col-12">
-				<input type="checkbox" class="tax-gst" /><span>GST</span>
-				<input type="checkbox" class="tax-vat" /><span>VAT</span>
+			<div>
+				<select name="addon_item[{xxxxx}][tax_use_id]" class="col-12 tax cal">
+					<option value="">Tax</option>
+					<?php foreach ($tax as $r): ?>
+					<option value="<?php echo $r['id'] ?>"><?php echo $r['name'] ?></option>
+					<?php endforeach ?>
+				</select>
 			</div>
 		</div>
 	</div>
