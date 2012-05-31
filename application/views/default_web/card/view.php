@@ -1,5 +1,5 @@
 <?php
-	echo '<pre>', print_r($data, TRUE), '</pre>';
+	//echo '<pre>', print_r($data, TRUE), '</pre>';
 ?>
 <script type="text/javascript">
 function ajax_edit(id){
