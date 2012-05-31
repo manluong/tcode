@@ -358,9 +358,6 @@ class CardM extends MY_Model {
 
 		return $this->get_list();
 	}
-
-		return parent::search($search_string);
-	}
 	
 	function search_customer($search_string) {
 		//search first_name + last_name only
@@ -393,5 +390,4 @@ class CardM extends MY_Model {
 		return parent::search($search_string);
 	}
 	
-}
 }
