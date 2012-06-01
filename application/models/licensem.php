@@ -2,11 +2,25 @@
 
 class LicenseM extends MY_Model {
 
+	public $data_fields = array(
+		'name' => array(
+			'type' => 'text',
+		),
+		'description' => array(
+			'type' => 'text',
+		),
+		'duration' => array(
+			'type' => 'numeric',
+		),
+		'fee' => array(
+			'type' => 'numeric',
+		),
+	);
+
 	private $rules = array();
 
 	function __construct() {
 		$this->table = 'license';
-		$this->id_field = 'id';
 
 		parent::__construct();
 	}
@@ -65,8 +79,30 @@ class LicenseM extends MY_Model {
 		return $result;
 	}
 
-	function assign_license($license_id, $tenant_id, $recurring, $start, $end) {
+	function get_license_id($license_name) {
+		$rs = $this->db->select('id')
+				->from($this->table)
+				->where('name', $license_name)
+				->limit(1)
+				->get();
+
+		if ($rs->num_rows() == 0) return FALSE;
+
+		$result = $rs->row_array();
+
+		return $result['id'];
+	}
+
+	function assign_license($license_id_or_name, $tenant_id, $recurring=0, $start='', $end='') {
 		if (APP_ROLE != 'TBOSS') return FALSE;
+
+		if (is_numeric($license_id_or_name)) {
+			$license_id = $license_id_or_name;
+		} else {
+			$license_id = $this->get_license_id($license_id_or_name);
+		}
+
+		if ($start == '') $start = get_current_stamp();
 
 		$data = array(
 			'license_id' => $license_id,

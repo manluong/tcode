@@ -100,6 +100,7 @@ class Helpdesk extends MY_Controller {
 		$this->HelpdeskM->where = $where;
 
 		$result = $this->HelpdeskM->get_list();
+		
 		$data = json_encode($result);
 		echo $data;
 	}

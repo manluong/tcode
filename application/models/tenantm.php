@@ -1,11 +1,29 @@
 <?php
 //This Model is used in TBOSS, to modify data in TSUB (tenant) DB tables
 class TenantM extends MY_Model {
-	var $data = array();
+	public $data = array();
+
+	public $data_fields = array(
+		'card_id' => array(
+			'type' => 'id',
+		),
+		'type' => array(
+			'type' => 'selection',
+			'options' => array(
+				0 => '',
+				1 => '',
+			),
+		),
+		'subscription_id' => array(
+			'type' => 'id'
+		),
+		'domain' => array(
+			'type' => 'text',
+		),
+	);
 
 	function __construct() {
 		$this->table = 'tenant';
-		$this->id_field = 'id';
 
 		parent::__construct();
 	}
@@ -16,6 +34,7 @@ class TenantM extends MY_Model {
 		$this->data = $this->get($tenant_id);
 	}
 
+	//Clears the tenant_license_rules table before saving a new batch
 	function save_license_rules($rules) {
 		if (strlen($this->data['domain']) == 0) die('This tenant (id: '.$this->data['id'].') does not have a domain set up.');
 

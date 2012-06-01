@@ -54,14 +54,17 @@ class AclM extends MY_Model {
 	function get_roles_batch($ids, $id_as_key=FALSE) {
 		$temp_tb = $this->table;
 		$temp_id = $this->id_field;
+		$temp_db = $this->database;
 
-		$this->table = 'global_setting.access_roles';
+		$this->table = 'access_roles';
+		$this->database = 'global_setting.';
 		$this->id_field = 'code';
 
 		$results = parent::get_batch($ids, $id_as_key);
 
 		$this->table = $temp_tb;
 		$this->id_field = $temp_id;
+		$this->database = $temp_db;
 
 		return $results;
 	}
@@ -69,21 +72,24 @@ class AclM extends MY_Model {
 	function get_roles_list() {
 		$temp_tb = $this->table;
 		$temp_id = $this->id_field;
+		$temp_db = $this->database;
 
-		$this->table = 'global_setting.access_roles';
+		$this->table = 'access_roles';
+		$this->database = 'global_setting.';
 		$this->id_field = 'code';
 
 		$results = parent::get_list();
 
 		$this->table = $temp_tb;
 		$this->id_field = $temp_id;
+		$this->database = $temp_db;
 
 		return $results;
 	}
 
 	function get_subroles($role_id='') {
 		$this->db->select()
-			->from('access_roles_sub');
+			->from($this->database.'access_roles_sub');
 
 		if ($role_id != '') $this->db->where('role_id', $role_id);
 
@@ -97,7 +103,7 @@ class AclM extends MY_Model {
 	function get_card_ids_in_role($role_name) {
 		$card_ids = array();
 		$rs = $this->db->select('card_id')
-				->from('access_user_role AS ur')
+				->from($this->database.'access_user_role AS ur')
 				->join('global_setting.access_roles AS r', 'r.code=ur.role_id', 'left')
 				->where('r.name', $role_name)
 				->get();
@@ -123,9 +129,9 @@ class AclM extends MY_Model {
 		if (count($subrole_ids) == 0) return array();
 
 		$rs = $this->db->select('DISTINCT ur.card_id, CONCAT(c.card_fname," ",c.card_lname) AS name', false)
-				->from('access_user_role AS ur')
+				->from($this->database.'access_user_role AS ur')
+				->join($this->database.'card AS c', 'c.id=ur.card_id', 'left')
 				->where_in('ur.roles_sub_id', $subrole_ids)
-				->join('card AS c', 'c.id=ur.card_id', 'left')
 				->get();
 
 		if ($rs->num_rows() == 0) return array();
@@ -235,7 +241,7 @@ class AclM extends MY_Model {
 		$right = $left+1;
 
 		$rs = $this->db->select()
-				->from('access_'.$type)
+				->from($this->database.'access_'.$type)
 				->where('parent_id', $parent_id)
 				->get();
 
@@ -243,22 +249,15 @@ class AclM extends MY_Model {
 			$right = $this->rebuild($type, $r['id'], $right);
 		}
 
-		$this->db->query("UPDATE access_$type SET lft='$left', rght='$right' WHERE id=$parent_id");
+		$this->db->query("UPDATE ".$this->database."access_$type SET lft='$left', rght='$right' WHERE id=$parent_id");
 
 		return $right+1;
 	}
 
 	function reset() {
-		$this->db->query('DELETE FROM access_ro WHERE id!=1');
-		$this->db->query('ALTER TABLE access_ro AUTO_INCREMENT=2');
-		$this->db->query('UPDATE access_ro SET rght=2 WHERE id=1');
-
-		$this->db->query('DELETE FROM access_co WHERE id!=1');
-		$this->db->query('ALTER TABLE access_co AUTO_INCREMENT=2');
-		$this->db->query('UPDATE access_co SET rght=2 WHERE id=1');
-
-		$this->db->query('DELETE FROM access_ro_co WHERE id!=1');
-		$this->db->query('ALTER TABLE access_ro_co AUTO_INCREMENT=2');
+		$this->db->query('TRUNCATE '.$this->database.'access_ro');
+		$this->db->query('TRUNCATE '.$this->database.'access_co');
+		$this->db->query('TRUNCATE '.$this->database.'access_ro_co');
 	}
 
 	/*  $nodes = array(
@@ -285,10 +284,10 @@ class AclM extends MY_Model {
 		$increment = count($nodes)*2;
 
 		$this->db->trans_start();
-		$this->db->query('UPDATE access_'.$type.' SET lft=lft+'.$increment.' WHERE lft>='.$parent_lftrght['rght']);
-		$this->db->query('UPDATE access_'.$type.' SET rght=rght+'.$increment.' WHERE rght>='.$parent_lftrght['rght']);
+		$this->db->query('UPDATE '.$this->database.'access_'.$type.' SET lft=lft+'.$increment.' WHERE lft>='.$parent_lftrght['rght']);
+		$this->db->query('UPDATE '.$this->database.'access_'.$type.' SET rght=rght+'.$increment.' WHERE rght>='.$parent_lftrght['rght']);
 
-		$this->db->insert_batch('access_'.$type, $nodes);
+		$this->db->insert_batch($this->database.'access_'.$type, $nodes);
 		$this->db->trans_complete();
 
 		if ($this->db->trans_status() === FALSE) {
@@ -312,10 +311,10 @@ class AclM extends MY_Model {
 		if (isset($node['foreign_key'])) $data['foreign_key'] = $node['foreign_key'];
 
 		$this->db->trans_start();
-		$this->db->query('UPDATE access_'.$type.' SET lft=lft+2 WHERE lft>='.$parent_lftrght['rght']);
-		$this->db->query('UPDATE access_'.$type.' SET rght=rght+2 WHERE rght>='.$parent_lftrght['rght']);
+		$this->db->query('UPDATE '.$this->database.'access_'.$type.' SET lft=lft+2 WHERE lft>='.$parent_lftrght['rght']);
+		$this->db->query('UPDATE '.$this->database.'access_'.$type.' SET rght=rght+2 WHERE rght>='.$parent_lftrght['rght']);
 
-		$this->db->insert('access_'.$type, $data);
+		$this->db->insert($this->database.'access_'.$type, $data);
 		$new_id = $this->db->insert_id();
 		$this->db->trans_complete();
 
@@ -331,7 +330,7 @@ class AclM extends MY_Model {
 		$this->check_type($type);
 
 		$rs = $this->db->select('lft, rght')
-				->from('access_'.$type)
+				->from($this->database.'access_'.$type)
 				->where('id', $id)
 				->limit(1)
 				->get();
@@ -374,7 +373,7 @@ class AclM extends MY_Model {
 			$co_id = $this->create_node($parent_id, $co, 'co');
 		}
 
-		$fields = $this->db->list_fields('access_ro_co');
+		$fields = $this->db->list_fields($this->database.'access_ro_co');
 		if ($action!='*' && !in_array('action_'.$action, $fields)) die('Invalid Action: '.$action);
 
 		$roco = $this->get_roco($ro_id, $co_id);
@@ -392,7 +391,7 @@ class AclM extends MY_Model {
 			$roco['modified_stamp'] = get_current_stamp();
 
 			$this->db->where('id', $roco['id'])
-				->update('access_ro_co', $roco);
+				->update($this->database.'access_ro_co', $roco);
 		} else {
 			$roco = array(
 				'ro_id' => $ro_id,
@@ -410,7 +409,7 @@ class AclM extends MY_Model {
 				$roco['action_'.$action] = 1;
 			}
 
-			$this->db->insert('access_ro_co', $roco);
+			$this->db->insert($this->database.'access_ro_co', $roco);
 		}
 
 		return TRUE;
@@ -448,7 +447,7 @@ class AclM extends MY_Model {
 			$co_id = $this->create_node($parent_id, $co, 'co');
 		}
 
-		$fields = $this->db->list_fields('access_ro_co');
+		$fields = $this->db->list_fields($this->database.'access_ro_co');
 		if ($action!='*' && !in_array('action_'.$action, $fields)) die('Invalid Action: '.$action);
 
 		$roco = $this->get_roco($ro_id, $co_id);
@@ -466,7 +465,7 @@ class AclM extends MY_Model {
 			$roco['modified_stamp'] = get_current_stamp();
 
 			$this->db->where('id', $roco['id'])
-				->update('access_ro_co', $roco);
+				->update($this->database.'access_ro_co', $roco);
 		} else {
 			$roco = array(
 				'ro_id' => $ro_id,
@@ -484,7 +483,7 @@ class AclM extends MY_Model {
 				$roco['action_'.$action] = -1;
 			}
 
-			$this->db->insert('access_ro_co', $roco);
+			$this->db->insert($this->database.'access_ro_co', $roco);
 		}
 
 		return TRUE;
@@ -506,7 +505,7 @@ class AclM extends MY_Model {
 			if (!isset($ro['foreign_key'])) $ro['foreign_key'] = 0;
 
 			$this->db->select('id')
-				->from('access_ro')
+				->from($this->database.'access_ro')
 				->where('name', $ro['name'])
 				->where('foreign_key', $ro['foreign_key']);
 
@@ -532,7 +531,7 @@ class AclM extends MY_Model {
 	//Get an RO object
 	function get_ro($ro_id) {
 		$rs = $this->db->select()
-				->from('access_ro')
+				->from($this->database.'access_ro')
 				->where('id', $ro_id)
 				->limit(1)
 				->get();
@@ -549,7 +548,7 @@ class AclM extends MY_Model {
 		if ($ro === FALSE) die('Cannot find RO object for: '.$ro_id);
 
 		$rs = $this->db->select()
-				->from('access_ro')
+				->from($this->database.'access_ro')
 				->where('lft <=', $ro['lft'])
 				->where('rght >=', $ro['rght'])
 				->order_by('lft', 'DESC')
@@ -584,7 +583,7 @@ class AclM extends MY_Model {
 			}
 
 			$this->db->select('id')
-				->from('access_co')
+				->from($this->database.'access_co')
 				->where('name', $co['name'])
 				->limit(1);
 
@@ -613,7 +612,7 @@ class AclM extends MY_Model {
 	//Get a CO object
 	function get_co($co_id) {
 		$rs = $this->db->select()
-				->from('access_co')
+				->from($this->database.'access_co')
 				->where('id', $co_id)
 				->limit(1)
 				->get();
@@ -630,7 +629,7 @@ class AclM extends MY_Model {
 		if ($co === FALSE) die('Cannot find CO object for: '.$co_id);
 
 		$rs = $this->db->select()
-				->from('access_co')
+				->from($this->database.'access_co')
 				->where('lft <=', $co['lft'])
 				->where('rght >=', $co['rght'])
 				->order_by('lft', 'DESC')
@@ -644,7 +643,7 @@ class AclM extends MY_Model {
 	//Fetch a specific RO-CO rule
 	function get_roco($ro_id, $co_id) {
 		$rs = $this->db->select()
-				->from('access_ro_co')
+				->from($this->database.'access_ro_co')
 				->where('ro_id', $ro_id)
 				->where('co_id', $co_id)
 				->limit(1)
@@ -658,8 +657,8 @@ class AclM extends MY_Model {
 	//Fetch rules matching Single RO, Multiple CO
 	function get_rocos($ro_id, $co_ids) {
 		$rs = $this->db->select('roco.*, co.lft')
-				->from('access_ro_co AS roco')
-				->join('access_co AS co', 'co.id=roco.co_id', 'LEFT')
+				->from($this->database.'access_ro_co AS roco')
+				->join($this->database.'access_co AS co', 'co.id=roco.co_id', 'LEFT')
 				->where('ro_id', $ro_id)
 				->where_in('co_id', $co_ids)
 				->order_by('co.lft', 'DESC')
@@ -684,7 +683,7 @@ class AclM extends MY_Model {
 
 		if ($path_count == 1) {
 			$this->db->select('id')
-				->from('access_'.$type)
+				->from($this->database.'access_'.$type)
 				->where('name', $path[0]);
 		 } else {
 			//if the last item in the path is a number
@@ -694,10 +693,10 @@ class AclM extends MY_Model {
 			}
 
 			$this->db->select('tb'.$path_count.'.id')
-				->from('access_'.$type.' AS tb1');
+				->from($this->database.'access_'.$type.' AS tb1');
 
 			for($x=1; $x<=$path_count; $x++) {
-				$this->db->join('access_'.$type.' AS tb'.($x+1),
+				$this->db->join($this->database.'access_'.$type.' AS tb'.($x+1),
 						'tb'.($x+1).'.parent_id=tb'.($x).'.id',
 						'LEFT');
 			}
@@ -734,7 +733,7 @@ class AclM extends MY_Model {
 
 		if ($path_count == 1) {
 			$this->db->select('foreign_key')
-				->from('access_'.$type)
+				->from($this->database.'access_'.$type)
 				->where('name', $path[0]);
 		 } else {
 			//if the last item in the path is a number
@@ -744,7 +743,7 @@ class AclM extends MY_Model {
 			}
 
 			$this->db->select('tb'.$path_count.'.foreign_key')
-				->from('access_'.$type.' AS tb1');
+				->from($this->database.'access_'.$type.' AS tb1');
 
 			for($x=1; $x<=$path_count; $x++) {
 				$this->db->join('access_'.$type.' AS tb'.($x+1),
@@ -775,7 +774,7 @@ class AclM extends MY_Model {
 	//finds the parent_id of a CO for an individual row of data
 	function find_co_parent_id($co) {
 		$rs = $this->db->select('id')
-				->from('access_co')
+				->from($this->database.'access_co')
 				->where('parent_id != 1')
 				->where('name', $co['name'])
 				->where('foreign_key', 0)
@@ -796,6 +795,10 @@ class AclM extends MY_Model {
 	}
 
 	function install() {
+		// ===================================================================== Install root level objects
+		$this->db->query('INSERT INTO '.$this->database.'access_ro(id, parent_id, name, foreign_key, lft, rght) VALUES(1, 0, \'DEFAULT\', 0, 1, 2)');
+		$this->db->query('INSERT INTO '.$this->database.'access_co(id, parent_id, name, foreign_key, lft, rght) VALUES(1, 0, \'DEFAULT\', 0, 1, 2)');
+
 		// ===================================================================== INSTALLTING CO
 		$tables = array(
 			'card' => array(
@@ -880,7 +883,7 @@ class AclM extends MY_Model {
 			//if there are users in this role, create an RO for them
 			if ($role['code']!=1) {	//skip the Staff role
 				$rs = $this->db->select('card_id')
-						->from('access_user_role')
+						->from($this->database.'access_user_role')
 						->where('role_id', $role['code'])
 						->get();
 				if ($rs->num_rows() > 0) {
@@ -906,7 +909,7 @@ class AclM extends MY_Model {
 				$subrole_parent_id = $this->create_node($role_parent_id, $data, 'ro');
 
 				$rs = $this->db->select('card_id')
-					->from('access_user_role_sub')
+					->from($this->database.'access_user_role_sub')
 					->where('roles_sub_id', $sr['id'])
 					->get();
 				if ($rs->num_rows() > 0) {
@@ -921,6 +924,15 @@ class AclM extends MY_Model {
 				}
 			}
 		}
+
+		// ===================================================================== Installing RoCo, "Rules"
+		$this->deny('DEFAULT', 'DEFAULT');
+		$this->grant('DEFAULT/Staff', 'DEFAULT');
+		$this->grant('DEFAULT/Vendor', 'DEFAULT/dashboard');
+		$this->grant('DEFAULT/Vendor', 'DEFAULT/helpdesk');
+		$this->grant('DEFAULT/Client', 'DEFAULT/dashboard');
+		$this->grant('DEFAULT/Client', 'DEFAULT/invoice');
+		$this->grant('DEFAULT/Client', 'DEFAULT/helpdesk');
 	}
 
 
@@ -949,7 +961,7 @@ class AclM extends MY_Model {
 				'role_id' => $main_role_id,
 			);
 
-			$result = $this->db->insert('access_user_role', $data);
+			$result = $this->db->insert($this->database.'access_user_role', $data);
 		}
 
 		if ($depth == 3) {
@@ -960,7 +972,7 @@ class AclM extends MY_Model {
 					'roles_sub_id' => $role_id,
 				);
 
-				$result = $this->db->insert('access_user_role_sub', $data);
+				$result = $this->db->insert($this->database.'access_user_role_sub', $data);
 			} else {
 				$result = TRUE;
 			}
@@ -982,7 +994,7 @@ class AclM extends MY_Model {
 
 	function get_card_role_id($card_id) {
 		$rs = $this->db->select('role_id')
-				->from('access_user_role')
+				->from($this->database.'access_user_role')
 				->where('card_id', $card_id)
 				->limit(1)
 				->get();
@@ -995,7 +1007,7 @@ class AclM extends MY_Model {
 
 	function has_sub_role($card_id, $role_id) {
 		$rs = $this->db->select('id')
-				->from('access_user_role_sub')
+				->from($this->database.'access_user_role_sub')
 				->where('card_id', $card_id)
 				->where('roles_sub_id', $role_id)
 				->limit(1)
@@ -1007,7 +1019,7 @@ class AclM extends MY_Model {
 
 	function get_user_subroles($card_id){
 		$rs = $this->db->select('usr.roles_sub_id, sr.name')
-				->from('access_user_role_sub AS usr')
+				->from($this->database.'access_user_role_sub AS usr')
 				->join('access_roles_sub AS sr', 'sr.id=usr.roles_sub_id', 'left')
 				->where('usr.card_id', $card_id)
 				->get();
@@ -1025,7 +1037,7 @@ class AclM extends MY_Model {
 	//get this user's role ID, name, and the relevant role data id.
 	function get_user_role_info($card_id){
 		$rs = $this->db->select('ur.role_id, r.name')
-				->from('access_user_role AS ur')
+				->from($this->database.'access_user_role AS ur')
 				->join('global_setting.access_roles AS r', 'r.code=ur.role_id')
 				->where('ur.card_id', $card_id)
 				->limit(1)
@@ -1050,13 +1062,13 @@ class AclM extends MY_Model {
 
 		switch($temp['role_id']){
 			case '1':
-				$this->db->from('staff');
+				$this->db->from($this->database.'staff');
 				break;
 			case '2':
-				$this->db->from('client');
+				$this->db->from($this->database.'client');
 				break;
 			case '4':
-				$this->db->from('vendor');
+				$this->db->from($this->database.'vendor');
 				break;
 		}
 

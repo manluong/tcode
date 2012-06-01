@@ -1,14 +1,11 @@
-<div class="container">
+<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/contact.css" />
+<div  id="contact_edit" class="container">
 	<div class="row span6">
-
 		<form method="post" action="/card/save" class="form-horizontal" id="card-edit-form" data-ajax_save="/card/ajax_save">
 			<?php
 				if (!$is_new) echo form_hidden('id', $data['id']);
 			?>
-
 			<fieldset>
-				<legend>Basic Information</legend>
-
 				<div class="control-group">
 					<label class="control-label">Upload Photo</label>
 					<div class="controls">
@@ -40,30 +37,24 @@
 						<?=form_input('first_name', $data['first_name'], 'id="first_name"')?>
 					</div>
 				</div>
-
 				<div class="control-group">
 					<label class="control-label" for="middle_name"><?=$data['middle_name_label']?></label>
 					<div class="controls">
 						<?=form_input('middle_name', $data['middle_name'], 'id="middle_name"')?>
 					</div>
 				</div>
-
 				<div class="control-group">
 					<label class="control-label" for="last_name"><?=$data['last_name_label']?></label>
 					<div class="controls">
 						<?=form_input('last_name', $data['last_name'], 'id="last_name"')?>
 					</div>
 				</div>
-
-				<br />
-
 				<div class="control-group">
 					<label class="control-label" for="organization_name"><?=$data['organization_name_label']?></label>
 					<div class="controls">
 						<?=form_input('organization_name', $data['organization_name'], 'id="organization_name"')?>
 					</div>
 				</div>
-
 				<div class="control-group">
 					<label class="control-label" for="organization_title"><?=$data['organization_title_label']?></label>
 					<div class="controls">
@@ -78,8 +69,9 @@
 					</div>
 				</div>
 
-				<br />
-
+				<div style="padding-left:514px;font-size:11px;margin-bottom:2px;" class="control-group">
+					Default
+				</div>
 				<div id="addon_tel">
 				<?php
 					$x = 0;
@@ -104,7 +96,6 @@
 
 							echo '</div>';
 						echo '</div>';
-
 						$x++;
 					}
 				?>
@@ -150,7 +141,7 @@
 
 				</script>
 
-				<br /><br />
+				<br/><br/>
 
 				<div id="addon_email">
 				<?php
@@ -173,7 +164,6 @@
 
 							echo '</div>';
 						echo '</div>';
-
 						$x++;
 					}
 				?>
@@ -213,10 +203,9 @@
 							$('#email_is_default_'+selected).attr('value', 1);
 						});
 					});
-
 				</script>
 
-				<br /><br />
+				<br/><br/>
 
 				<div id="addon_address">
 				<?php

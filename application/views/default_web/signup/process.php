@@ -1,8 +1,8 @@
-<div class="hide" id="signup_process">
+<div class="hide alert alert-info" id="signup_process">
 	We're setting up your account now. Please hold.
 </div>
 
-<div class="hide" id="signup_success">
+<div class="hide alert alert-success" id="signup_success">
 	<h3>All Done!</h3>
 	<p>Your domain is now all setup and ready to go!</p>
 	<p>You may click on the link below to begin using.</p>
@@ -11,7 +11,7 @@
 	<p>Thank you for choosing 8Force.</p>
 </div>
 
-<div class="hide" id="signup_error">
+<div class="hide alert alert-error" id="signup_error">
 </div>
 
 <script>
@@ -28,6 +28,8 @@
 					$('#signup_error').html(resp.details).slideDown();
 				}
 			},'json'
-		);
+		).error(function() {
+			$('#signup_error').html('An unfortunate error occured.').slideDown();
+		});
 	});
 </script>
