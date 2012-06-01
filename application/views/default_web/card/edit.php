@@ -1,4 +1,9 @@
 <link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/contact.css" />
+<?php
+	echo '<pre>';
+	print_r($data);
+	echo '</pre>';
+?>
 <div  id="contact_edit" class="container">
 	<div class="row span6">
 		<form method="post" action="/card/save" class="form-horizontal" id="card-edit-form" data-ajax_save="/card/ajax_save">
@@ -32,38 +37,39 @@
 				</div>
 
 				<div class="control-group">
-					<label class="control-label" for="first_name"><?=$data['first_name_label']?></label>
+					<label class="control-label" for="first_name">First  Name</label>
 					<div class="controls">
 						<?=form_input('first_name', $data['first_name'], 'id="first_name"')?>
 					</div>
 				</div>
 				<div class="control-group">
-					<label class="control-label" for="middle_name"><?=$data['middle_name_label']?></label>
+					<label class="control-label" for="middle_name">Middle</label>
 					<div class="controls">
 						<?=form_input('middle_name', $data['middle_name'], 'id="middle_name"')?>
 					</div>
 				</div>
 				<div class="control-group">
-					<label class="control-label" for="last_name"><?=$data['last_name_label']?></label>
+					<label class="control-label" for="last_name">Last Name</label>
 					<div class="controls">
 						<?=form_input('last_name', $data['last_name'], 'id="last_name"')?>
 					</div>
 				</div>
-				<div class="control-group">
-					<label class="control-label" for="organization_name"><?=$data['organization_name_label']?></label>
+				
+				<div style="margin-top:20px;" class="control-group">
+					<label class="control-label" for="organization_name">Company</label>
 					<div class="controls">
 						<?=form_input('organization_name', $data['organization_name'], 'id="organization_name"')?>
 					</div>
 				</div>
 				<div class="control-group">
-					<label class="control-label" for="organization_title"><?=$data['organization_title_label']?></label>
+					<label class="control-label" for="organization_title">Position</label>
 					<div class="controls">
 						<?=form_input('organization_title', $data['organization_title'], 'id="organization_title"')?>
 					</div>
 				</div>
 
 				<div class="control-group">
-					<label class="control-label" for="organization_number"><?=$data['organization_number_label']?></label>
+					<label class="control-label" for="organization_number">Co. Reg.#</label>
 					<div class="controls">
 						<?=form_input('organization_number', $data['organization_number'], 'id="organization_number"')?>
 					</div>
@@ -77,8 +83,8 @@
 					$x = 0;
 					foreach($data['addon_tel'] AS $e) {
 						echo '<div class="control-group">';
-							echo '<button class="btn btn-mini pull-left remove">X</button>';
-							echo '<label class="control-label" for="tel_',$e['id'],'">',$tel_label,'</label>';
+							//echo '<button class="btn btn-mini pull-left remove">X</button>';
+							echo '<label class="control-label" for="tel_',$e['id'],'">','Phone','</label>';
 							echo '<div class="controls">';
 								echo form_hidden('addon_tel['.$x.'][id]', $e['id']);
 								echo form_dropdown('addon_tel['.$x.'][type]', $e['type_options'], $e['type'], 'class="input-small"'),' ';
@@ -101,16 +107,15 @@
 				?>
 				</div>
 
-				<button type="button" class="btn btn-mini pull-right" id="tel_add">More Phone</button>
+				<button style="margin-left:442px;" type="button" class="btn btn-mini pull-right button_add" id="tel_add">More Phone</button>
 				<script>
 					var tel_index = <?=$x?>;
 					var tel_type_options = jQuery.parseJSON('<?=json_encode($tel_type_options)?>');
-					var tel_label = '<?=$tel_label?>';
+					var tel_label = 'Phone';
 
 					$(document).ready(function() {
 						$('#tel_add').on('click', function() {
 							var new_tel = '<div class="control-group">'+
-												'<button class="btn btn-mini pull-left remove">X</button>'+
 												'<label class="control-label" for="tel_'+tel_index+'">'+tel_label+'</label>'+
 												'<div class="controls">'+
 													'<input type="hidden" name="addon_tel['+tel_index+'][id]" value="" />'+
@@ -148,7 +153,7 @@
 					$x = 0;
 					foreach($data['addon_email'] AS $e) {
 						echo '<div class="control-group">';
-							echo '<button class="btn btn-mini pull-left remove">X</button>';
+							//echo '<button class="btn btn-mini pull-left remove">X</button>';
 							echo '<label class="control-label" for="email_',$e['id'],'">',$e['email_label'],'</label>';
 							echo '<div class="controls">';
 								echo form_hidden('addon_email['.$x.'][id]', $e['id']);
@@ -169,7 +174,7 @@
 				?>
 				</div>
 
-				<button type="button" class="btn btn-mini pull-right" id="email_add">Add Email</button>
+				<button type="button" class="btn btn-mini pull-right button_add " id="email_add">Add Email</button>
 				<script>
 					var email_index = <?=$x?>;
 					var email_type_options = jQuery.parseJSON('<?=json_encode($email_type_options)?>');
@@ -178,7 +183,6 @@
 					$(document).ready(function() {
 						$('#email_add').on('click', function() {
 							var new_email = '<div class="control-group">'+
-												'<button class="btn btn-mini pull-left remove">X</button>'+
 												'<label class="control-label" for="email_'+email_index+'">'+email_label+'</label>'+
 												'<div class="controls">'+
 													'<input type="hidden" name="addon_email['+email_index+'][id]" value="" />'+
@@ -212,9 +216,10 @@
 					$x = 0;
 					foreach($data['addon_address'] AS $e) {
 						echo '<div class="control-group">';
-							echo '<button class="btn btn-mini pull-left remove">X</button>';
+							//echo '<button class="btn btn-mini pull-left remove">X</button>';
 							echo '<label class="control-label" for="address_',$e['id'],'">',$address_label,'</label>';
-							echo '<div class="controls">';
+							echo '<div id="contact_address" class="controls">';
+								echo '<ul><li>';
 								echo form_hidden('addon_address['.$x.'][id]', $e['id']);
 								echo form_dropdown('addon_address['.$x.'][type]', $e['type_options'], $e['type'], 'class="input-small"'),' ';
 								echo form_input('addon_address['.$x.'][line_1]', $e['line_1'], 'id="address_line_1_'.$e['id'].'" style="width: 209px;"'),' ';
@@ -225,13 +230,17 @@
 								} else {
 									echo '<input type="hidden" name="addon_address['.$x.'][is_default]" value="0" class="address_is_default_hidden" id="address_is_default_'.$x.'" />';
 								}
-
+								echo '</li><li>';
 								echo form_input('addon_address['.$x.'][line_2]', $e['line_2'], 'id="address_line_2_'.$e['id'].'" style="width: 302px;"'),' ';
+								echo '</li>';
+								echo '<li id="address_label"><span style="width:106px;">City</span><span style="width:101px;">State</span><span style="width:107px;">Postal Code</span></li><li>';
 								echo form_input('addon_address['.$x.'][city]', $e['city'], 'id="address_city_'.$e['id'].'" style="width: 92px;"'),' ';
 								echo form_input('addon_address['.$x.'][state]', $e['state'], 'id="address_state_'.$e['id'].'" style="width: 92px;"'),' ';
 								echo form_input('addon_address['.$x.'][postal]', $e['postal'], 'id="address_postal_'.$e['id'].'" style="width: 92px;"'),' ';
-								echo '<br /><button type="button" class="btn" id="map">Map</button>';
-								echo form_dropdown('addon_address['.$x.'][country]', $countries, $e['country'], 'class="input-small" style="margin-left: 175px;'),' ';
+								echo '</li><li>';
+								echo '<button type="button" class="btn btn-info" id="map"><i class="icon-map-marker icon-white"></i> Map</button>';
+								echo form_input('addon_address['.$x.'][country]',$e['country'], 'style="margin-left:43px; width:197px"');
+								echo '</li></ul>';
 							echo '</div>';
 						echo '</div>';
 
@@ -240,7 +249,7 @@
 				?>
 				</div>
 
-				<button type="button" class="btn btn-mini pull-right" id="address_add">More Address</button>
+				<button style="margin: -10px 0 0 376px;" type="button" class="btn btn-mini pull-right button_add" id="address_add">More Address</button>
 				<script>
 					var address_index = <?=$x?>;
 					var address_type_options = jQuery.parseJSON('<?=json_encode($address_type_options)?>');
@@ -250,29 +259,25 @@
 					$(document).ready(function() {
 						$('#address_add').on('click', function() {
 							var new_address = '<div class="control-group">'+
-												'<button class="btn btn-mini pull-left remove">X</button>'+
 												'<label class="control-label" for="address_'+address_index+'">'+address_label+'</label>'+
-												'<div class="controls">'+
+												'<div id="contact_address" class="controls"><ul><li>'+
 													'<input type="hidden" name="addon_address['+address_index+'][id]" value="" />'+
 													'<select name="addon_address['+address_index+'][type]" class="input-small">';
 							$(address_type_options).each(function(k, v) {
 								new_address += '<option value="'+k+'">'+v+'</option>';
 							});
 							new_address += '</select> '+
-										'<input type="text" name="addon_address['+address_index+'][line_1]" id="address_line_1_'+address_index+'" style="width: 209px;" /> '+
-										'<input type="radio" name="address_is_default_radio" value="'+address_index+'" class="address_is_default_radio" />'+
-										'<input type="text" name="addon_address['+address_index+'][line_2]" id="address_line_2_'+address_index+'" style="width: 302px;" /> '+
-										'<input type="text" name="addon_address['+address_index+'][city]" id="address_city_'+address_index+'" style="width: 92px;" /> '+
+										'<input type="text" name="addon_address['+address_index+'][line_1]" id="address_line_1_'+address_index+'" style="width: 209px;"/>'+
+										'<input type="radio" name="address_is_default_radio" value="'+address_index+'" class="address_is_default_radio" /></li><li>'+
+										'<input type="text" name="addon_address['+address_index+'][line_2]" id="address_line_2_'+address_index+'" style="width: 302px;" /></li>'+
+										'<li id="address_label"><span style="width:106px;">City</span><span style="width:101px;">State</span><span style="width:107px;">Postal Code</span></li>'+
+										'<li><input type="text" name="addon_address['+address_index+'][city]" id="address_city_'+address_index+'" style="width: 92px;" /> '+
 										'<input type="text" name="addon_address['+address_index+'][state]" id="address_state_'+address_index+'" style="width: 92px;" /> '+
 										'<input type="text" name="addon_address['+address_index+'][postal]" id="address_postal_'+address_index+'" style="width: 92px;" /> '+
-										'<input type="hidden" name="addon_address['+address_index+'][is_default]" value="0" class="address_is_default_hidden" id="address_is_default_'+address_index+'" />'+
-										'<br /><button type="button" class="btn" id="map">Map</button>'+
-										'<select name="addon_address['+address_index+'][country]" class="input-small" style="margin-left: 175px;">';
-							$.each(address_countries_options, function(k, v) {
-								new_address += '<option value="'+k+'">'+v+'</option>';
-							});
-							new_address += '</select> '+
-									'</div>'+
+										'<input type="hidden" name="addon_address['+address_index+'][is_default]" value="0" class="address_is_default_hidden" id="address_is_default_'+address_index+'" /></li><li>'+
+										'<button type="button" class="btn btn-info" id="map"><i class="icon-map-marker icon-white"></i> Map</button>'+
+										'<input type="text" name="addon_address['+address_index+'][country]" style="margin-left:43px; width:197px;">';
+									'</li></ul></div>'+
 								'</div>';
 
 							$('#addon_address').append(new_address);
@@ -308,7 +313,7 @@
 				?>
 				</div>
 
-				<button type="button" class="btn btn-mini pull-right" id="social_add">More Social</button>
+				<button style="margin-left:396px" type="button" class="btn btn-mini pull-right button_add" id="social_add">More Social</button>
 				<script>
 					var social_index = <?=$x?>;
 					var social_type_options = jQuery.parseJSON('<?=json_encode($social_type_options)?>');
@@ -335,10 +340,38 @@
 					});
 
 				</script>
-
-				<br /><br />
-
+				
 				<div class="control-group">
+					<label class="control-label">Gender</label>
+					<div class="controls">
+						<div class="btn-group" data-toggle="buttons-radio">
+							<?php
+								foreach($data['addon_extra'][0]['gender_options'] AS $title_val => $title_label) {
+								
+									echo '<button type="button" class="btn title_button';
+									if ($data['addon_extra'][0]['gender'] == $title_val) echo " active";
+									echo '" id="title_',$title_val,'" value="',$title_val,'">';
+									echo $title_label,'</button>';
+								}
+							?>
+						</div>
+						<input type="hidden" name="title" id="title" value="<?=$data['title']?>">
+						<script>
+							$(document).ready(function() {
+								$('.title_button').on('click', function() {
+									$('#title').val($(this).attr('value'));
+								});
+							});
+						</script>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="birth_date">Birthday</label>
+					<div class="controls">
+						<?=form_input('birth_date', $data['addon_extra'][0]['birth_date'], 'id="birth_date"')?>
+					</div>
+				</div>
+				<div style="margin-top:20px;" class="control-group">
 					<label class="control-label"></label>
 					<div class="controls">
 						<button type="submit" class="btn btn-primary">Save</button> or <a href="/card/view/<?=$data['id']?>">cancel</a>
@@ -352,6 +385,10 @@
 </div>
 
 <script type="text/javascript">
+	$(function() {
+		$( "#birth_date" ).datepicker();
+	});
+	
 	$(document).ready(function() {
 		$('.remove').live('click', function() {
 			$(this).closest('.control-group').remove();
@@ -372,7 +409,7 @@
 							$.pjax({
 								url: resp.details,
 								container: '#main',
-								timeout: 5000
+								timeout: 10000
 							});
 						} else {
 							//show errors

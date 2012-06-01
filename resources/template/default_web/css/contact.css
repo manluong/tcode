@@ -88,8 +88,24 @@
 }
 #contact_edit label{
 	font-weight:bold !important;
-	text-align:left;
+	text-align:right;
 }
 #contact_edit .control-group{
 	margin-bottom:10px;
+}
+.button_add{
+	float:left;
+	margin-left:405px;
+	margin-top:-5px;
+}
+#contact_address ul li{
+	float:left;
+	width:100%;
+	margin-bottom:5px;
+}
+#ui-datepicker-div{
+	z-index:9999 !important;
+}
+#address_label span{
+	float:left;
 }

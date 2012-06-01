@@ -16,6 +16,7 @@
 	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/bootstrap.min.css" />
 	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/bootstrap-responsive.min.css" />
 	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/bootstrap-8f.css" />
+	<link rel="stylesheet" href="/resources/addon/jqueryui/aristo/ui.css" />
 	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/all-module.css" />
 	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/modernizr-2.5.3.min.js"></script>
 	<script type="text/javascript" src="/resources/addon/jquery.min.js"></script>
