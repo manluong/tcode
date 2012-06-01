@@ -116,7 +116,7 @@ class Helpdesk_CommentM extends MY_Model {
 		}
 	}
 
-         function get_comment_not_use() {
+    function get_comment_not_use() {
 		$this->db->select('id');
 		$this->db->where('active', 1);
 		$query = $this->db->get('a_helpdesk_comment');

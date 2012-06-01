@@ -31,6 +31,7 @@ class Card extends MY_Controller {
 
 	function view($id) {
 		$view_data = array(
+			'title' => 'Contact View',
 			'data' => $this->CardM->get($id),
 			'card_email' => $this->CardM->get_card_email($id),
 			'card_social' => $this->CardM->get_card_social($id),
@@ -59,7 +60,9 @@ class Card extends MY_Controller {
 
 		$view_data['social_label'] = 'Social';
 		$view_data['social_type_options'] = $this->Card_SocialM->get_options('type');
-
+		
+		//$content = $this->load->view(get_template().'/card/edit', $view_data, TRUE);
+		//echo $content;
 		$this->data['content'] = $this->load->view(get_template().'/card/edit', $view_data, TRUE);
 		$this->_do_output();
 	}

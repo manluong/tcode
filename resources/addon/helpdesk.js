@@ -97,19 +97,6 @@ $(document).ready(function(){
 		$('#customer_id').val('');
 	});
 
-	//Auto complete comment
-	$('#comment_content').autocomplete({
-		source: '/helpdesk/get_comment',
-		minLength: 2,
-		select: function(e, ui) {
-			$('#helpdesk_id').val(ui.item.id);
-		}
-	});
-
-	$('#comment_content').on('change', function(e) {
-		$('#helpdesk_id').val('');
-	});
-
 	$("#arrow").click(function(){
 		$("#input_data_fillter").slideToggle();
 

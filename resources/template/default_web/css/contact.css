@@ -86,3 +86,10 @@
 	font-weight:bold;
     line-height: 25px;
 }
+#contact_edit label{
+	font-weight:bold !important;
+	text-align:left;
+}
+#contact_edit .control-group{
+	margin-bottom:10px;
+}
