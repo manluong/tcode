@@ -36,10 +36,12 @@ class InvoiceM extends MY_Model {
 	);
 
 	public $sett_fill_item = TRUE;
+	public $sett_fill_tax = TRUE;
 	public $sett_fill_pay_item = FALSE;
 
 	private $addons = array(
 		'item' => 'Invoice_ItemM',
+		'tax' => 'Invoice_TaxM',
 		'pay_item' => 'Invoice_Pay_ItemM'
 	);
 
@@ -86,11 +88,12 @@ class InvoiceM extends MY_Model {
 			//			->get_list();
 
 			if ($name == 'item') {
-				$this->db->select('a_invoice_item.*, a_product.name, a_product_pricetype.a_product_pricetype_name, a_product_durationtype.a_product_durationtype_name');
+				$this->db->select('a_invoice_item.*, a_product.name, a_product_pricetype.a_product_pricetype_name, a_product_durationtype.a_product_durationtype_name, tax_use.name as tax_use_name');
 				$this->db->from('a_invoice_item');
 				$this->db->join('a_product', 'a_invoice_item.product_id = a_product.id');
 				$this->db->join('a_product_pricetype', 'a_invoice_item.price_type = a_product_pricetype.a_product_pricetype_id', 'left');
 				$this->db->join('a_product_durationtype', 'a_invoice_item.duration_type = a_product_durationtype.a_product_durationtype_id', 'left');
+				$this->db->join('tax_use', 'a_invoice_item.tax_use_id = tax_use.id', 'left');
 				$this->db->where('a_invoice_item.invoice_id IN ('.implode(',', $invoice_ids).')');
 				$query = $this->db->get();
 
@@ -302,6 +305,12 @@ class InvoiceM extends MY_Model {
 						if (isset($fa[$key])) $addon_set[$key] = $fa[$key];
 					}
 
+					if ($name == 'tax') {
+						if (!isset($addon_set['amount']) || $addon_set['amount'] == 0) {
+							continue;
+						}
+					}
+
 					$id = $this->$model->save($addon_set);
 
 					if ($id === FALSE) {
@@ -331,9 +340,20 @@ class InvoiceM extends MY_Model {
 						'id' => $fa['id'],
 						'invoice_id' => $invoice_id
 					);
+
 					foreach($this->$model->data_fields AS $key=>$detail) {
 						if (isset($fa[$key])) $addon_set[$key] = $fa[$key];
 					}
+
+					if ($name == 'tax') {
+						if (!isset($addon_set['amount']) || $addon_set['amount'] == 0) {
+							if (isset($addon_set['id'])) {
+								$this->$model->delete($addon_set['id']);
+							}
+							continue;
+						}
+					}
+
 					$id = $this->$model->save($addon_set);
 
 					if ($id === FALSE) {

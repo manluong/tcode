@@ -140,15 +140,16 @@ function cal_invoice_total() {
 	$('#lbl_balance').html(format_money(invoice_total));
 
 	$.each(tax_detail, function(index, item) {
+		$('#tax_'+item.id+'_total').val(item.amount.toFixed(2));
 		$('#lbl_tax_'+item.id+'_total').html(format_money(item.amount));
 	});
-	$.each($('#total_price .total_hide'), function(index, item) {
+	/*$.each($('#total_price .total_hide'), function(index, item) {
 		if ($(this).find('span').html() != '$0,00') {
 			$(this).show();
 		} else {
 			$(this).hide();
 		}
-	});
+	});*/
 }
 
 function bind_event_row(item) {
