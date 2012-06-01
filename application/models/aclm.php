@@ -249,16 +249,9 @@ class AclM extends MY_Model {
 	}
 
 	function reset() {
-		$this->db->query('DELETE FROM '.$this->database.'access_ro WHERE id!=1');
-		$this->db->query('ALTER TABLE '.$this->database.'access_ro AUTO_INCREMENT=2');
-		$this->db->query('UPDATE '.$this->database.'access_ro SET rght=2 WHERE id=1');
-
-		$this->db->query('DELETE FROM '.$this->database.'access_co WHERE id!=1');
-		$this->db->query('ALTER TABLE '.$this->database.'access_co AUTO_INCREMENT=2');
-		$this->db->query('UPDATE '.$this->database.'access_co SET rght=2 WHERE id=1');
-
-		$this->db->query('DELETE FROM '.$this->database.'access_ro_co WHERE id!=1');
-		$this->db->query('ALTER TABLE '.$this->database.'access_ro_co AUTO_INCREMENT=2');
+		$this->db->query('TRUNCATE '.$this->database.'access_ro');
+		$this->db->query('TRUNCATE '.$this->database.'access_co');
+		$this->db->query('TRUNCATE '.$this->database.'access_ro_co');
 	}
 
 	/*  $nodes = array(
@@ -796,6 +789,10 @@ class AclM extends MY_Model {
 	}
 
 	function install() {
+		// ===================================================================== Install root level objects
+		$this->db->query('INSERT INTO '.$this->database.'access_ro(id, parent_id, name, foreign_key, lft, rght) VALUES(1, 0, \'DEFAULT\', 1, 2)');
+		$this->db->query('INSERT INTO '.$this->database.'access_co(id, parent_id, name, foreign_key, lft, rght) VALUES(1, 0, \'DEFAULT\', 1, 2)');
+
 		// ===================================================================== INSTALLTING CO
 		$tables = array(
 			'card' => array(
@@ -921,6 +918,15 @@ class AclM extends MY_Model {
 				}
 			}
 		}
+
+		// ===================================================================== Installing RoCo, "Rules"
+		$this->deny('DEFAULT', 'DEFAULT');
+		$this->grant('DEFAULT/Staff', 'DEFAULT');
+		$this->grant('DEFAULT/Vendor', 'DEFAULT/dashboard');
+		$this->grant('DEFAULT/Vendor', 'DEFAULT/helpdesk');
+		$this->grant('DEFAULT/Client', 'DEFAULT/dashboard');
+		$this->grant('DEFAULT/Client', 'DEFAULT/invoice');
+		$this->grant('DEFAULT/Client', 'DEFAULT/helpdesk');
 	}
 
 
