@@ -2,6 +2,7 @@
 
 class MY_Model extends CI_Model {
 	public $table = '';
+	public $database = '';
 	public $id_field = 'id';
 
 	public $cache = array();
@@ -75,17 +76,22 @@ class MY_Model extends CI_Model {
 		return $this;
 	}
 
+	function set_database($database) {
+		$this->database = $database.'.';
+	}
+
 	function reset() {
 		$this->select_fields = array();
 		$this->where = array();
 		$this->order_by = array();
 		$this->offset = 0;
 		$this->limit = 0;
+		$this->database = '';
 	}
 
 	function get($id) {
 		if ($this->cache_enabled) {
-			if (isset($this->cache[$this->table][$id])) return $this->cache[$this->table][$id];
+			if (isset($this->cache[$this->database.$this->table][$id])) return $this->cache[$this->database.$this->table][$id];
 		}
 
 		if (count($this->select_fields) > 0) {
@@ -94,7 +100,7 @@ class MY_Model extends CI_Model {
 			$this->db->select();
 		}
 
-		$this->db->from($this->table)
+		$this->db->from($this->database.$this->table)
 			->where($this->id_field, $id);
 
 		if (count($this->where) > 0) {
@@ -113,7 +119,7 @@ class MY_Model extends CI_Model {
 
 		$result = $rs->row_array();
 
-		if ($this->cache_enabled) $this->cache[$this->table][$result[$this->id_field]] = $result;
+		if ($this->cache_enabled) $this->cache[$this->database.$this->table][$result[$this->id_field]] = $result;
 
 		if ($this->sett_fill_details) $this->fill_details($result, SINGLE_DATA);
 		if ($this->sett_fill_card_info) $this->fill_card_info($result, SINGLE_DATA);
@@ -128,7 +134,7 @@ class MY_Model extends CI_Model {
 			$this->db->select();
 		}
 
-		$this->db->from($this->table);
+		$this->db->from($this->database.$this->table);
 
 		if (count($this->where) > 0) {
 			foreach($this->where AS $w) {
@@ -173,9 +179,9 @@ class MY_Model extends CI_Model {
 		$results = array();
 		if ($this->cache_enabled) {
 			foreach($ids AS $k=>$id) {
-				//var_dump($this->cache[$this->table][$id]);die();
-				if (isset($this->cache[$this->table][$id])) {
-					$results[] = $this->cache[$this->table][$id];
+				//var_dump($this->cache[$this->database.$this->table][$id]);die();
+				if (isset($this->cache[$this->database.$this->table][$id])) {
+					$results[] = $this->cache[$this->database.$this->table][$id];
 					unset($ids[$k]);
 				}
 			}
@@ -188,7 +194,7 @@ class MY_Model extends CI_Model {
 				$this->db->select();
 			}
 
-			$this->db->from($this->table)
+			$this->db->from($this->database.$this->table)
 				->where_in($this->id_field, $ids);
 
 			if ($this->sett_has_system_fields && $this->sett_filter_deleted) {
@@ -204,7 +210,7 @@ class MY_Model extends CI_Model {
 
 			if ($this->cache_enabled) {
 				foreach($temp AS $t) {
-					$this->cache[$this->table][$t[$this->id_field]] = $t;
+					$this->cache[$this->database.$this->table][$t[$this->id_field]] = $t;
 				}
 			}
 
@@ -228,7 +234,7 @@ class MY_Model extends CI_Model {
 
 	function get_total_records() {
 		$this->db->select($this->id_field)
-			->from($this->table);
+			->from($this->database.$this->table);
 
 		if (count($this->where) > 0) {
 			foreach($this->where AS $w) {
@@ -382,7 +388,7 @@ class MY_Model extends CI_Model {
 			$diff[$k]['created_card_id'] = $this->UserM->get_card_id();
 		}
 
-		$this->db->insert_batch('log_audit', $diff);
+		$this->db->insert_batch($this->database.'log_audit', $diff);
 	}
 
 
@@ -415,7 +421,7 @@ class MY_Model extends CI_Model {
 				$data['created_card_id'] = $this->CI->UserM->get_card_id();
 			}
 
-			$rs = $this->db->insert($this->table, $data);
+			$rs = $this->db->insert($this->database.$this->table, $data);
 			$this->last_sql = $this->db->last_query();
 			return $this->db->insert_id();
 		} else {
@@ -430,7 +436,7 @@ class MY_Model extends CI_Model {
 			}
 
 			$rs = $this->db->where($this->id_field, $id)
-					->update($this->table, $data);
+					->update($this->database.$this->table, $data);
 			$this->last_sql = $this->db->last_query();
 			return $id;
 		}
@@ -446,11 +452,11 @@ class MY_Model extends CI_Model {
 			);
 			$rs = $this->db->where($this->id_field, $id)
 					->limit(1)
-					->update($this->table, $data);
+					->update($this->database.$this->table, $data);
 		} else {
 			$rs = $this->db->where($this->id_field, $id)
 					->limit(1)
-					->delete($this->table);
+					->delete($this->database.$this->table);
 		}
 		$this->last_sql = $this->db->last_query();
 
@@ -555,7 +561,7 @@ class MY_Model extends CI_Model {
 			$this->db->select();
 		}
 
-		$this->db->from($this->table);
+		$this->db->from($this->database.$this->table);
 
 		foreach($this->search_fields AS $sf) {
 			if (count($sf) == 1) {

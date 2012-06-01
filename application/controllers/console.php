@@ -37,8 +37,8 @@ class Console extends MY_Controller {
 	function help() {
 		echo "Available commands:\n\n";
 
-		echo " acl_install_basic <domain>\n";
-		echo "  - installs the basic ACL request objects and control objects\n\n";
+		echo " acl_install<domain>\n";
+		echo "  - installs the basic ACL request objects and control objects and rules\n\n";
 
 		echo " acl_rebuild <domain> <type=co|ro, default=co> <parent_id=1> <left=1>\n";
 		echo "  - rebuilds the lft and rght values\n\n";
@@ -68,24 +68,12 @@ class Console extends MY_Controller {
 		echo "  - Add a user.\n\n";
 	}
 
-	function acl_install_basic() {
+	function acl_install() {
 		$this->load->model('AclM');
 
 		$this->AclM->install();
 
 		echo "Done installing basic ACL\n";
-	}
-
-	function acl_install_basic_rules() {
-		$this->load->model('AclM');
-		$this->AclM->grant('DEFAULT/Staff', 'DEFAULT');
-		$this->AclM->grant('DEFAULT/Vendor', 'DEFAULT/dashboard');
-		$this->AclM->grant('DEFAULT/Vendor', 'DEFAULT/helpdesk');
-		$this->AclM->grant('DEFAULT/Client', 'DEFAULT/dashboard');
-		$this->AclM->grant('DEFAULT/Client', 'DEFAULT/invoice');
-		$this->AclM->grant('DEFAULT/Client', 'DEFAULT/helpdesk');
-
-		echo "Done installing basic rules\n";
 	}
 
 	function acl_display($type='co') {
@@ -148,8 +136,7 @@ class Console extends MY_Controller {
 
 	function acl_reinstall() {
 		$this->acl_reset();
-		$this->acl_install_basic();
-		$this->acl_install_basic_rules();
+		$this->acl_install();
 
 		echo "ACL Reinstallation done.\n";
 	}

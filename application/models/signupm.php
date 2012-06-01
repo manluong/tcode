@@ -7,48 +7,54 @@ class SignupM extends CI_Model {
 		parent::__construct();
 	}
 
-	//TODO: Setup transactions?
 	function setup_account($info) {
+		$this->load->model('CardM');
+		$this->load->model('AclM');
+		$this->load->model('TenantM');
 
 		$this->db->trans_start();
 
 	//create a tenant record in the t_my database
 		//save card details
 		//TODO: save domain to another table
+
 		$name = explode(' ', $info['name']);
-		$data = array(
-			'card_nick' => '',
-			'card_title' => 0,
-			'card_fname' => $name[0],
-			'card_mname' => '',
-			'card_lname' => ( isset($name[1]) ) ? $name[1] : '',
-			'card_formatname' => '',
-			'card_orgname' => $info['domain'],
-			'card_orgnum' => '',
-			'card_orgtitle' => '',
-			'card_timezone' => 0,
-			'card_deflang' => '',
-		);
-		if ( ! $this->db->insert('card', $data) ) $this->messages[] = 'Unable to create tenant card record.';
-		$card_id = $this->db->insert_id();
+		$card = array();
+		switch(count($name)) {
+			case 1:
+				$card['first_name'] = $name[0];
+				break;
+			case 2:
+				$card['first_name'] = $name[0];
+				$card['last_name'] = $name[1];
+				break;
+			case 3:
+				$card['first_name'] = $name[0];
+				$card['middle_name'] = $name[1];
+				$card['last_name'] = $name[2];
+				break;
+		}
 
-		//allow login
+		$card['addon_email'][] = array(
+			'email' => $info['email'],
+			'is_default' => 1
+		);
+
+		$card['addon_access_user'][] = array(
+			'password' => $info['password'],
+			'status' => 1
+		);
+
+		$card_id = $this->CardM->save($card);
+
+		//Assign Client role
+		$this->AclM->assign_role($card_id, 'DEFAULT/Client');
+
 		$data = array(
 			'card_id' => $card_id,
-			'password' => f_password_encrypt($info['password']),
-			'status' => 1,
-			'created_stamp' => get_current_stamp(),
-			'active_stamp' => get_current_stamp(),
+			'domain' => $info['domain']
 		);
-		if ( ! $this->db->insert('access_user', $data) ) $this->messages[] = 'Unable to create tenant login record';
-		$user_id = $this->db->insert_id();
-
-		//assign to client group
-		$data = array(
-			'card_id' => $card_id,
-			'role_id' => 3,
-		);
-		if ( ! $this->db->insert('access_user_role', $data) ) $this->messages[] = 'Unable to assign to client group';
+		$tenant_id = $this->TenantM->save($data);
 
 	//create database and db user accounts, grant neccessary permissions.
 		$db_name = 't_'.$info['domain'];
@@ -56,11 +62,12 @@ class SignupM extends CI_Model {
 		//create tenant's database
 		if ( ! $this->db->query('CREATE DATABASE '.$db_name.';') ) $this->messages[] = 'Unable to create database';
 
-		//copy table structure from the 8force_template DB
+		//copy table structure and data from the 8force_template DB
 		$rs = $this->db->query('SHOW TABLES FROM 8force_template');
 		foreach($rs->result_array() AS $r) {
 			$t = $r['Tables_in_8force_template'];
 			if ( ! $this->db->query("CREATE TABLE $db_name.$t LIKE 8force_template.$t") ) $this->messages[] = 'Unable to create db table: '.$t;
+			if ( ! $this->db->query("INSERT INTO $db_name.$t SELECT * FROM 8force_template.$t") ) $this->messages[] = 'Unable to copy table data: '.$t;
 		}
 
 		//create tenant's db user account
@@ -80,39 +87,24 @@ class SignupM extends CI_Model {
 		$db_name = 't_'.$info['domain'];
 
 		//save card details
-		$data = array(
-			'card_nick' => '',
-			'card_title' => 0,
-			'card_fname' => $name[0],
-			'card_mname' => '',
-			'card_lname' => ( isset($name[1]) ) ? $name[1] : '',
-			'card_formatname' => '',
-			'card_orgname' => '',
-			'card_orgnum' => '',
-			'card_orgtitle' => '',
-			'card_timezone' => 0,
-			'card_deflang' => '',
-		);
-		if ( ! $this->db->insert($db_name.'.card', $data) ) $this->messages[] = 'Unable to create card in tenant\'s DB';
-		$card_id = $this->db->insert_id();
+		$this->CardM->set_database($db_name);
+		$this->AclM->set_database($db_name);
 
-		//allow login
-		$data = array(
-			'card_id' => $card_id,
-			'password' => f_password_encrypt($info['password']),
-			'status' => 1,
-			'created_stamp' => get_current_stamp(),
-			'active_stamp' => get_current_stamp(),
-		);
-		if ( ! $this->db->insert($db_name.'.access_user', $data) ) $this->messages[] = 'Unable to create login record';
-		$user_id = $this->db->insert_id();
+		$tenant_card_id = $this->CardM->save($card);
 
-		//assign to admin group
-		$data = array(
-			'card_id' => $card_id,
-			'role_id' => 1,
-		);
-		if ( ! $this->db->insert($db_name.'.access_link', $data) ) $this->messages[] = 'Unable to assign to admin group';
+		//Setup RoCo and Assign Role
+		$this->AclM->install();
+		$this->AclM->assign_role($tenant_card_id, 'DEFAULT/Staff/Administrators');
+
+
+		//Install Basic license, expiring in 30 days.
+		$current_date = get_current_stamp();
+		$current_timestamp = strtotime($current_date);
+		$end_timestamp = $current_timestamp + (30*24*60*60);
+		$end_stamp = parse_stamp($end_timestamp, 'MYSQL');
+
+		$this->LicenseM->assign_license('Basic', $tenant_id, 0, get_current_stamp(), $end_stamp);
+		$this->LicenseM->export_license_rules($tenant_id);
 
 		$this->db->trans_complete();
 
@@ -139,11 +131,10 @@ class SignupM extends CI_Model {
 		return $result;
 	}
 
-	//TODO: there's a table for this.
 	function domain_exists($domain) {
-		$rs = $this->db->select('card_orgname')
-				->from('card')
-				->where('card_orgname', $domain)
+		$rs = $this->db->select('domain')
+				->from('tenant')
+				->where('domain', $domain)
 				->limit(1)
 				->get();
 

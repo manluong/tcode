@@ -95,6 +95,14 @@ class CardM extends MY_Model {
 		}
 	}
 
+	function set_database($database) {
+		parent::set_database($database);
+
+		foreach($this->addons AS $name=>$model) {
+			$this->$model->set_database($database);
+		}
+	}
+
 	function get($id) {
 		$result = parent::get($id);
 
@@ -239,7 +247,7 @@ class CardM extends MY_Model {
 
 	private function fill_addons(&$data, $mode=SINGLE_DATA) {
 		if (count($data) == 0 || $data === FALSE) return FALSE;
-		
+
 		if ($mode == SINGLE_DATA) {
 			$data = array($data);
 		}

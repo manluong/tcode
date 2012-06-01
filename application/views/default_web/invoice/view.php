@@ -92,7 +92,7 @@
 			<tbody>
 				<?php foreach ($invoice['addon_item'] as $invoice_item): ?>
 				<tr>
-					<td><?php echo $invoice_item['a_product_name'] ?></td>
+					<td><?php echo $invoice_item['name'] ?></td>
 					<td>
 						<?php echo $invoice_item['description'] ?>
 						<div class="sub_desc">

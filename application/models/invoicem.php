@@ -86,9 +86,9 @@ class InvoiceM extends MY_Model {
 			//			->get_list();
 
 			if ($name == 'item') {
-				$this->db->select('a_invoice_item.*, a_product.a_product_name, a_product_pricetype.a_product_pricetype_name, a_product_durationtype.a_product_durationtype_name');
+				$this->db->select('a_invoice_item.*, a_product.name, a_product_pricetype.a_product_pricetype_name, a_product_durationtype.a_product_durationtype_name');
 				$this->db->from('a_invoice_item');
-				$this->db->join('a_product', 'a_invoice_item.product_id = a_product.a_product_id');
+				$this->db->join('a_product', 'a_invoice_item.product_id = a_product.id');
 				$this->db->join('a_product_pricetype', 'a_invoice_item.price_type = a_product_pricetype.a_product_pricetype_id', 'left');
 				$this->db->join('a_product_durationtype', 'a_invoice_item.duration_type = a_product_durationtype.a_product_durationtype_id', 'left');
 				$this->db->where('a_invoice_item.invoice_id IN ('.implode(',', $invoice_ids).')');
@@ -185,19 +185,6 @@ class InvoiceM extends MY_Model {
 		return $query->result();
 	}
 
-	function get_tax() {
-		//$this->db->select('set_tax_id, set_tax_name');
-		//$query = $this->db->get('set_tax');
-
-		//return $query->result();
-
-		$results = array();
-		$results[1] = 1;
-		$results[2] = 2;
-
-		return $results;
-	}
-
 	function get_price_type() {
 		$this->db->select('*');
 		$query = $this->db->get('a_product_pricetype');
@@ -256,8 +243,8 @@ class InvoiceM extends MY_Model {
 	function get_product_by_name($name) {
 		$this->db->select('*');
 		$this->db->from('a_product');
-		$this->db->join('a_product_price', 'a_product_price.a_product_price_productid = a_product.a_product_id');
-		$this->db->like('a_product.a_product_name', $name);
+		$this->db->join('a_product_price', 'a_product_price.product_id = a_product.id');
+		$this->db->like('a_product.name', $name);
 		$query = $this->db->get();
 
 		return $query->result();

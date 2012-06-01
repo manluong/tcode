@@ -6,7 +6,7 @@ class MY_Controller extends CI_Controller {
 
 	var $url = array(
 		'app' => '',
-		'app_id' => '',
+		'app_id' => 0,
 
 		'action' => '',
 

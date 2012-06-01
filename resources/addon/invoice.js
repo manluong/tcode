@@ -34,6 +34,58 @@ function remove_row(object) {
 	cal_invoice_total();
 }
 
+function get_json(obj, id) {
+	var i = null;
+	$.each(obj, function(index, item) {
+		if (item.id == id) {
+			i = index;
+		}
+	});
+
+	if (i == null) {
+		return false;
+	} else {
+		return obj[i];
+	}
+}
+
+function cal_tax(tax_use_id, amount) {
+	var tax_use = get_json(ary_tax_use, tax_use_id);
+
+	var result = [];
+	var tax = null;
+	var tax_1 = tax_2 = tax_3 = 0;
+
+	if (tax_use['tax_id_1']) {
+		tax = get_json(ary_tax, tax_use['tax_id_1']);
+		tax_1 = amount * tax['percent'] / 100;
+		result.push({id: tax['id'], name: tax['name'], amount: tax_1});
+	}
+
+	if (tax_use['tax_id_2']) {
+		tax = get_json(ary_tax, tax_use['tax_id_2']);
+		if (tax_use['tax_2_compound'] == 1) {
+			tax_2 = (amount + tax_1) * tax['percent'] / 100;
+		} else {
+			tax_2 = amount * tax['percent'] / 100;
+		}
+		result.push({id: tax['id'], name: tax['name'], amount: tax_2});
+	}
+
+	if (tax_use['tax_id_3']) {
+		tax = get_json(ary_tax, tax_use['tax_id_3']);
+		if (tax_use['tax_3_compound'] == 1) {
+			tax_3 = (amount + tax_1 + tax_2) * tax['percent'] / 100;
+		} else {
+			tax_3 = amount * tax['percent'] / 100;
+		}
+		result.push({id: tax['id'], name: tax['name'], amount: tax_3});
+	}
+
+	result.push({id: '0', name: 'Total', amount: tax_1 + tax_2 + tax_3});
+	return result;
+}
+
 function cal_item_total(object) {
 	var item = $(object).closest('div.invoice_item');
 	var price = parseFloat(item.find('.unit_price').val()) || 0;
@@ -47,37 +99,56 @@ function cal_item_total(object) {
 
 function cal_invoice_total() {
 	var sub_total = 0;
+	var tax_total = 0;
 	var discount_total = 0;
-	//var tax_gst_total = 0;
-	//var tax_vat_total = 0;
 	var invoice_total = 0;
+
+	var tax_detail = [];
+	$.each(ary_tax, function(index, tax) {
+		tax_detail.push({id: tax['id'], name: tax['name'], amount: 0});
+	});
+
 	$('#invoice_item_list .invoice_item').not('.header').each(function(index, item) {
 		var price = parseFloat($(item).find('.unit_price').val()) || 0;
 		var qty = parseInt($(item).find('.qty').val()) || 0;
 		var discount = parseInt($(item).find('.discount').val()) || 0;
 
-		//var tax_gst = 0;
-		//if ($(item).find('.tax_gst').checked) {
-		//	tax_gst = price*qty*5/100;
-		//	tax_gst_total += tax_gst;
-		//}
+		var tax = 0;
+		if ($(item).find('.tax').val()) {
+			t = cal_tax($(item).find('.tax').val(), price*qty);
+			tax = t[t.length-1].amount;
 
-		//var tax_vat = 0;
-		//if ($(item).find('.tax_vat').checked) {
-		//	tax_vat = price*qty*10/100;
-		//	tax_vat_total += tax_vat;
-		//}
+			$.each(tax_detail, function(index_1, item_1) {
+				$.each(t, function(index_2, item_2) {
+					if (item_1.id == item_2.id) {
+						item_1.amount += item_2.amount;
+					}
+				});
+			});
+		}
 
 		sub_total += price*qty;
-		discount_total += price*qty*discount/100;
-		invoice_total += price*qty - price*qty*discount/100;
+		tax_total += tax;
+		discount_total += (price*qty+tax)*discount/100;
+		invoice_total += price*qty+tax-(price*qty+tax)*discount/100;
 	});
 
 	$('#lbl_sub_total').html(format_money(sub_total));
+	$('#lbl_tax_total').html(format_money(tax_total));
 	$('#lbl_discount_total').html(format_money(discount_total));
-	//$('#lbl_tax_total').html(tax_total);
 	$('#lbl_invoice_total').html(format_money(invoice_total));
 	$('#lbl_balance').html(format_money(invoice_total));
+
+	$.each(tax_detail, function(index, item) {
+		$('#lbl_tax_'+item.id+'_total').html(format_money(item.amount));
+	});
+	$.each($('#total_price .total_hide'), function(index, item) {
+		if ($(this).find('span').html() != '$0,00') {
+			$(this).show();
+		} else {
+			$(this).hide();
+		}
+	});
 }
 
 function bind_event_row(item) {
@@ -140,7 +211,7 @@ function search_invoice() {
 			var data = new Array();
 			for (i in resp) {
 				var item = resp[i];
-				var row  = new Array();
+				var row = new Array();
 				row[0] = '<input type="checkbox" />';
 				row[1] = (item.first_name+' '+item.last_name).trim();
 				row[2] = '<a href="/invoice/view/'+item.id+'">'+item.id+'</a>';
@@ -315,7 +386,17 @@ $(document).ready(function() {
 		cal_invoice_total();
 	});
 
-	$('#all_discount input:checkbox').on('change', function() {
+	$('#apply_all_tax').on('change', function() {
+		var val = $(this).val();
+
+		$('#invoice_item_list .tax').each(function(index, item) {
+			$(this).val(val);
+		});
+
+		cal_invoice_total();
+	});
+
+	/*$('#all_discount input:checkbox').on('change', function() {
 		var tax = $(this).data('tax');
 		var checked = this.checked;
 
@@ -326,7 +407,7 @@ $(document).ready(function() {
 		});
 
 		cal_invoice_total();
-	});
+	});*/
 
 	$('#terms_id').on('change', function(e) {
 		var id = $(this).val();
