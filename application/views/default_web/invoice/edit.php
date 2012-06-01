@@ -136,8 +136,8 @@
 						<div><input type="text" name="addon_item[<?php echo $c ?>][discount]" value="<?php echo $invoice_item['discount'] ?>" class="col-11 discount cal" /></div>
 						<div>
 							<select name="addon_item[<?php echo $c ?>][tax_use_id]" class="col-12 tax cal">
-								<option value="">Tax</option>
-								<?php foreach ($tax as $r): ?>
+								<option value="">No Tax</option>
+								<?php foreach ($tax_use as $r): ?>
 								<option value="<?php echo $r['id'] ?>"<?php echo ($r['id'] == $invoice_item['tax_use_id']) ? ' selected="selected"' : '' ?>><?php echo $r['name'] ?></option>
 								<?php endforeach ?>
 							</select>
@@ -162,7 +162,7 @@
 						<li>
 							<select id="apply_all_tax" style="width: 158px;">
 								<option value="">Tax</option>
-								<?php foreach ($tax as $r): ?>
+								<?php foreach ($tax_use as $r): ?>
 								<option value="<?php echo $r['id'] ?>"><?php echo $r['name'] ?></option>
 								<?php endforeach ?>
 							</select>
@@ -174,23 +174,33 @@
 				<ul>
 					<li>
 						<div class="total_label">Sub Total</div>
-						<div class="total_price"><span id="lbl_sub_total">$0</span></div>
+						<div class="total_price"><span id="lbl_sub_total">$0,00</span></div>
 					</li>
-					<li>
+					<?php foreach ($tax as $r): ?>
+					<li class="total_hide" style="display: none;">
+						<div class="total_label">Tax - <?php echo $r['name'] ?></div>
+						<div class="total_price"><span id="lbl_tax_<?php echo $r['id'] ?>_total">$0,00</span></div>
+					</li>
+					<?php endforeach ?>
+					<!-- <li class="total_hide" style="display: none;">
+						<div class="total_label">Tax Total</div>
+						<div class="total_price"><span id="lbl_tax_total">$0,00</span></div>
+					</li> -->
+					<li class="total_hide" style="display: none;">
 						<div class="total_label">Discount</div>
-						<div class="total_price"><span id="lbl_discount_total">$0</span></div>
+						<div class="total_price"><span id="lbl_discount_total">$0,00</span></div>
 					</li>
 					<li style="font-size:18px;">
 						<div class="total_label">Invoice Total</div>
-						<div class="total_price"><span id="lbl_invoice_total">$0</span></div>
+						<div class="total_price"><span id="lbl_invoice_total">$0,00</span></div>
 					</li>
 					<li>
 						<div class="total_label">Paid</div>
-						<div class="total_price">$0</div>
+						<div class="total_price">$0,00</div>
 					</li>
 					<li style="font-weight:bold;">
 						<div class="total_label">Balance</div>
-						<div class="total_price"><span id="lbl_balance">$0</span></div>
+						<div class="total_price"><span id="lbl_balance">$0,00</span></div>
 					</li>
 				</ul>
 			</div>
@@ -265,8 +275,8 @@
 			<div><input type="text" name="addon_item[{xxxxx}][discount]" class="col-11 discount cal" /></div>
 			<div>
 				<select name="addon_item[{xxxxx}][tax_use_id]" class="col-12 tax cal">
-					<option value="">Tax</option>
-					<?php foreach ($tax as $r): ?>
+					<option value="">No Tax</option>
+					<?php foreach ($tax_use as $r): ?>
 					<option value="<?php echo $r['id'] ?>"><?php echo $r['name'] ?></option>
 					<?php endforeach ?>
 				</select>
@@ -274,3 +284,8 @@
 		</div>
 	</div>
 </div>
+
+<script type="text/javascript">
+	var ary_tax = $.parseJSON('<?php echo json_encode($tax) ?>');
+	var ary_tax_use = $.parseJSON('<?php echo json_encode($tax_use) ?>');
+</script>

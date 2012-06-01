@@ -41,52 +41,31 @@ class Tax_UseM extends MY_Model {
 
 		if ($tax_use['tax_id_1']) {
 			$tax = $this->TaxM->get($tax_use['tax_id_1']);
-
 			$tax_1 = $amount * $tax['percent'] / 100;
-
-			$result[] = array(
-				'id' => $tax['id'],
-				'name' => $tax['name'],
-				'amount' => $tax_1
-			);
+			$result[] = array('id' => $tax['id'], 'name' => $tax['name'], 'amount' => $tax_1);
 		}
 
 		if ($tax_use['tax_id_2']) {
 			$tax = $this->TaxM->get($tax_use['tax_id_2']);
-			if ($tax_use['tax_2_compound']) {
+			if ($tax_use['tax_2_compound'] == 1) {
 				$tax_2 = ($amount + $tax_1) * $tax['percent'] / 100;
 			} else {
 				$tax_2 = $amount * $tax['percent'] / 100;
 			}
-
-			$result[] = array(
-				'id' => $tax['id'],
-				'name' => $tax['name'],
-				'amount' => $tax_2
-			);
+			$result[] = array('id' => $tax['id'], 'name' => $tax['name'], 'amount' => $tax_2);
 		}
 
 		if ($tax_use['tax_id_3']) {
 			$tax = $this->TaxM->get($tax_use['tax_id_3']);
-			if ($tax_use['tax_3_compound']) {
+			if ($tax_use['tax_3_compound'] == 1) {
 				$tax_3 = ($amount + $tax_1 + $tax_2) * $tax['percent'] / 100;
 			} else {
 				$tax_3 = $amount * $tax['percent'] / 100;
 			}
-
-			$result[] = array(
-				'id' => $tax['id'],
-				'name' => $tax['name'],
-				'amount' => $tax_3
-			);
+			$result[] = array('id' => $tax['id'], 'name' => $tax['name'], 'amount' => $tax_3);
 		}
 
-		$result[] = array(
-			'id' => '0',
-			'name' => 'Total',
-			'amount' => $tax_1 + $tax_2 + $tax_3
-		);
-
+		$result[] = array('id' => '0', 'name' => 'Total', 'amount' => $tax_1 + $tax_2 + $tax_3);
 		return $result;
 	}
 }

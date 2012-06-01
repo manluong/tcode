@@ -502,12 +502,11 @@ input {
 }
 #total_price{
 	width:240px;
-	height:168px;
 	background-color:#f7f7f7;
 	float:right;
 	font-size:13px;
 	color:#444444;
-	padding-top: 6px;
+	padding: 6px 0 15px;
 }
 #total_price ul li{
 	width:100%;

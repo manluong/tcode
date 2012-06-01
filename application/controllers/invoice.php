@@ -7,6 +7,7 @@ class Invoice extends MY_Controller {
 
 		$this->load->model('InvoiceM');
 		$this->load->model('Invoice_ItemM');
+		$this->load->model('TaxM');
 		$this->load->model('Tax_UseM');
 	}
 
@@ -168,7 +169,8 @@ class Invoice extends MY_Controller {
 			'customer' => $this->InvoiceM->get_customer(),
 			'price_type' => $this->InvoiceM->get_price_type(),
 			'duration_type' => $this->InvoiceM->get_duration_type(),
-			'tax' => $this->Tax_UseM->get_list(),
+			'tax' => $this->TaxM->get_list(),
+			'tax_use' => $this->Tax_UseM->get_list(),
 			'terms' => $this->InvoiceM->get_terms(),
 			'invoice_terms' => ''
 		);
@@ -192,7 +194,8 @@ class Invoice extends MY_Controller {
 			'customer' => $this->InvoiceM->get_customer(),
 			'price_type' => $this->InvoiceM->get_price_type(),
 			'duration_type' => $this->InvoiceM->get_duration_type(),
-			'tax' => $this->Tax_UseM->get_list(),
+			'tax' => $this->TaxM->get_list(),
+			'tax_use' => $this->Tax_UseM->get_list(),
 			'terms' => $this->InvoiceM->get_terms()
 		);
 
