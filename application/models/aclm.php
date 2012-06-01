@@ -54,14 +54,17 @@ class AclM extends MY_Model {
 	function get_roles_batch($ids, $id_as_key=FALSE) {
 		$temp_tb = $this->table;
 		$temp_id = $this->id_field;
+		$temp_db = $this->database;
 
-		$this->table = 'global_setting.access_roles';
+		$this->table = 'access_roles';
+		$this->database = 'global_setting.';
 		$this->id_field = 'code';
 
 		$results = parent::get_batch($ids, $id_as_key);
 
 		$this->table = $temp_tb;
 		$this->id_field = $temp_id;
+		$this->database = $temp_db;
 
 		return $results;
 	}
@@ -69,14 +72,17 @@ class AclM extends MY_Model {
 	function get_roles_list() {
 		$temp_tb = $this->table;
 		$temp_id = $this->id_field;
+		$temp_db = $this->database;
 
-		$this->table = 'global_setting.access_roles';
+		$this->table = 'access_roles';
+		$this->database = 'global_setting.';
 		$this->id_field = 'code';
 
 		$results = parent::get_list();
 
 		$this->table = $temp_tb;
 		$this->id_field = $temp_id;
+		$this->database = $temp_db;
 
 		return $results;
 	}
@@ -790,8 +796,8 @@ class AclM extends MY_Model {
 
 	function install() {
 		// ===================================================================== Install root level objects
-		$this->db->query('INSERT INTO '.$this->database.'access_ro(id, parent_id, name, foreign_key, lft, rght) VALUES(1, 0, \'DEFAULT\', 1, 2)');
-		$this->db->query('INSERT INTO '.$this->database.'access_co(id, parent_id, name, foreign_key, lft, rght) VALUES(1, 0, \'DEFAULT\', 1, 2)');
+		$this->db->query('INSERT INTO '.$this->database.'access_ro(id, parent_id, name, foreign_key, lft, rght) VALUES(1, 0, \'DEFAULT\', 0, 1, 2)');
+		$this->db->query('INSERT INTO '.$this->database.'access_co(id, parent_id, name, foreign_key, lft, rght) VALUES(1, 0, \'DEFAULT\', 0, 1, 2)');
 
 		// ===================================================================== INSTALLTING CO
 		$tables = array(
