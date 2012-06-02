@@ -2,8 +2,6 @@
 
 var telcoson = {
     connection: null,
-    on_roster: function (iq) {
-    },
     jid_to_id: function (jid) {
         return Strophe.getBareJidFromJid(jid)
             .replace("@", "-")
@@ -72,23 +70,16 @@ var telcoson = {
 			var jid = $(this).attr("jid");
 			var name = $(this).attr("name") || jid;
 			var jid_id = telcoson.jid_to_id(jid);
-			//var contact = $('<div id="' + jid_id + '" class="offline" onclick="chatWith(\''+jid_id+'\',\''+name+'\')">'+name+'</div>');
                         var contact = $('<div class="chatBoxItem fl pv5 ph10" id="user_'+jid_id+'"><div class="avatar rounded14 fl mr5"><img src="/resources/template/default_web/img/avatar.png" alt="" width="28" class=" rounded14"></div><span class="fl dpb ofh cf1 mt5 fwb">'+name+'</span><div class="tools fr"><a href="#" class="fl mr5 mt3"><i class="iChat iChat3"></i></a><a href="#" class="fl w18 mt7" style="display:none;"><input type="checkbox" class="styled" /></i></a></div></div>');
-                        //console.log(contact);
 			jQuery("#list_chat div.chatBoxIner").append(contact);
 			//telcoson.insert_contact(contact)
 				});
-               // var contact = $('<div class="chatBoxItem fl pv5 ph10"><div class="avatar rounded14 fl mr5"><span class="rounded14 cf4 bg4 fwb noAvatar tac vam dpib">GP</span></div><span class="fl dpb ofh cf2 mt5 fwb">Group Chat</span><div class="tools fr"><a href="#" class="fl mr5 mt3"><i class="iChat iChat3"></i></a></div></div>');
-               // jQuery("#list_chat div.chatBoxIner").append(contact);
-                jQuery("#list_chat").removeAttr('style');
-		// set up presence handler and send initial presence
 		telcoson.connection.addHandler(telcoson.on_presence, null, 'presence');
 		telcoson.connection.send($pres());
 	},
 	on_presence: function (presence) {
 		var ptype = $(presence).attr('type');
 		var from = $(presence).attr('from');
-                //console.log(from);
 		var to = $(presence).attr('to');
 		if (ptype !== 'error') {
                     	var contact = $('#user_' + telcoson.jid_to_id(from) + ' i')
@@ -97,26 +88,14 @@ var telcoson = {
 				.removeClass('iChat3');
 			if (ptype === 'unavailable') {
 				contact.addClass('iChat3');
-                               // console.log(from + ' Offline');
-				//jQuery("#chatbox_"+telcoson.jid_to_id(from)+" .chatboxtitle").addClass('offline2');
-			} else {
+                        } else {
 				var show = $(presence).find('show').text();
 				if (show === '' || show === 'chat') {
-
 					contact.addClass('iChat2');
-                                        //console.log(from + ' Online');
-					//jQuery("#chatbox_"+telcoson.jid_to_id(from)+" .chatboxtitle").addClass('online2');
 				} else {
 					contact.addClass('iChat9');
-                                        //console.log(from + ' Busy');
-					//jQuery("#chatbox_"+telcoson.jid_to_id(from)+" .chatboxtitle").addClass('away2');
-				}
+ 				}
 			}
-			//var li = contact.parent();
-			//li.remove();
-
-
-			//telcoson.insert_contact(li);
 		}
 		return true;
 	},
@@ -141,27 +120,23 @@ var telcoson = {
 			}
 		}
 		else {
-		//chatWith(jid,jQuery("#"+jid).html());
-		var body = '';
+
+                var body = '';
 			jQuery("#typing").remove();
 			jQuery.each($(message).find("body"),function(index,value){
 				if(index == 0){
 					body = jQuery(this).text();
 				}
 			});
-                        console.log(body);
-			if(body != '')
-				body = "<li><b>"+jQuery("#"+jid).html()+": </b>"+body+"</li>";
+                        if(body != '')
+                            chatWith(jid,jQuery("#user_"+jid+" span").html(),body);
 
-			//console.log("#chatbox_"+jid+" .chatboxcontent");
-			jQuery("#chatbox_"+jid+" .chatboxcontent ul").append(body);
 		 }
-		 //console.log(jid);
 			if(jQuery("#chatbox_"+jid+" .chatboxcontent").length > 0)
 				$("#chatbox_"+jid+" .chatboxcontent").animate({scrollTop: $("#chatbox_"+jid+" .chatboxcontent")[0].scrollHeight});
 
 		return true;
-	},
+	}
 
 };
 // End chat function
@@ -244,3 +219,48 @@ jQuery("#status_offline").click(function(){
     jQuery("#chat_status").html('Offline');
     jQuery("#set_status").slideUp();
 });
+function chatWith(id,name,body){
+    if(jQuery("#chat_"+id).length > 0){
+
+    }
+    else {
+        // create chat area
+        var chat = '';
+        chat += '<div class="chatItemWrapper por fl mr1 ac" id="chat_'+id+'">';
+        chat += '<div class="chatItem fl cp h50 ph10 por active">';
+        chat += '<a href="" class="dpb mt10">';
+        chat += '<div class="avatar rounded14 fl mr5"><img src="resources/template/default_web/img/avatar.png" alt="" width="28" class="rounded14"></div>';
+        chat += '<span class="fl dpb ofh cf1 mt5 fwb">'+name+'</span>';
+        chat += '</a>';
+        chat += '</div>';
+        chat += '</div>';
+        jQuery(".chatSlider").append(chat);
+        //----------- Add first Messenge ---------------
+        var mess = '';
+            mess += '<div class="chatBox poa ">';
+            mess += '<div class="chatBoxIner pb5 rounded7 fl abigChat" style="">';
+            mess += '<div class="chatBoxItem fl pv5 ph10 bgN">';
+            mess += '<div class="fr">';
+            mess += '<a href="javascript:void(0);" onclick="min(\''+id+'\');"><i class="iChat iChat5 fl mr10 mt5"></i></a>';
+            mess += '<a href="#"><i class="iChat iChat6 fl"></i></a>';
+            mess += '</div>';
+            mess += '</div>';
+            mess += '<div class="chatBoxItem fl pv1 ph10">';
+            mess += '<div class="avatar rounded14 fl mr10"><img src="resources/template/default_web/img/avatar.png" alt=""  title="'+name+'"  width="28" class=" rounded14"></div>';
+            mess += '<span class="fl dpb ofh cf1 mt5 w80p">';
+            mess += body + '<br />';
+            mess += '</span>';
+            mess += '</div>';
+            mess += '<div class="chatBoxItem fl pv1 ph10 bgN">';
+            mess += '<input class="inv-field w95p mt10" type="text" onclick="value=\'\'" onblur="if(value==\'\'){value=\'This is description\'};" value="This is description">';
+            mess += '</div>'
+            mess += '</div>';
+            mess += '</div>';
+            jQuery("#chat_"+id).prepend(mess);
+    }
+    jQuery("#list_chat").hide();
+}
+function min(id){
+    jQuery("#chat_"+id+" .active").removeClass('active');
+    jQuery("#chat_"+id+" .chatBox").hide();
+}
