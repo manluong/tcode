@@ -10,6 +10,9 @@ var telcoson = {
 	logoff: function(){
 		telcoson.connection.disconnect();
                 jQuery("#list_chat").hide();
+				jQuery("#show_hide_chat").removeClass('active');
+				jQuery(".ac .chatBoxIner").hide();
+				jQuery(".ac").remove();
 	},
 	status: function(status){
 		if(status != 'offline'){
@@ -120,6 +123,8 @@ jQuery(document).ready(function(){
         if(document.getElementById('list_chat').style.display == 'none'){
             jQuery("#list_chat").show();
             jQuery("#show_hide_chat").addClass('active');
+			jQuery(".ac .chatBoxIner").hide();
+			jQuery(".ac .chatItem").removeClass('active');
         }
         else {
             jQuery("#list_chat").hide();
@@ -190,15 +195,28 @@ jQuery("#status_offline").click(function(){
     jQuery("#chat_status").html('Offline');
     jQuery("#set_status").slideUp();
 });
+// make chat window
 function chatWith(id,name,body){
     if(jQuery("#chat_"+id).length > 0){
-
+		if(jQuery("#chat_"+id+" .chatBoxIner").attr('style') == 'display: none;'){
+			if(jQuery("#chat_"+id+" .count").attr('style') == 'display: none;'){
+				var count = 1;
+				jQuery("#chat_"+id+" .count").removeAttr('style');
+			}
+			else {
+				var count = parseInt(jQuery("#chat_"+id+" .count").html())+1;
+			}
+			jQuery("#chat_"+id+" .count").html(count);
+		}
     }
     else {
+		jQuery(".ac .chatBoxIner").hide();
+		jQuery(".ac .chatItem").removeClass('active');
         // create chat area
         var chat = '';
         chat += '<div class="chatItemWrapper por fl mr1 ac" id="chat_'+id+'">';
         chat += '<div class="chatItem fl cp h50 ph10 por active">';
+		chat += '<span class="count bg2 fs12 fwb tac rounded7 lhn poa dpb" style="display:none;"></span>';
         chat += '<a href="" class="dpb mt10">';
         chat += '<div class="avatar rounded14 fl mr5"><img src="resources/template/default_web/img/avatar.png" alt="" width="28" class="rounded14"></div>';
         chat += '<span class="fl dpb ofh cf1 mt5 fwb">'+name+'</span>';
