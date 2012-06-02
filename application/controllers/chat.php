@@ -9,7 +9,7 @@
            $this->ChatM->forward();
         }
         function index(){
-            //echo 'hello world';
+            //echo 'hello world test';
         }
     }
 
