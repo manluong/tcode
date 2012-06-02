@@ -35,35 +35,6 @@ var telcoson = {
             }
     return 0;
 	},
-	insert_contact: function (elem) {
-		var jid = elem.find(".roster-jid").text();
-		var pres = telcoson.presence_value(elem.find(".roster-contact"));
-		var contacts = $("#roster-area li");
-		if (contacts.length > 0) {
-			var inserted = false;
-			contacts.each(function () {
-				var cmp_pres = telcoson.presence_value(
-					$(this).find(".roster-contact"));
-				var cmp_jid = $(this).find(".roster-jid").text();
-				if (pres > cmp_pres) {
-					$(this).before(elem);
-					inserted = true;
-					return false;
-				} else {
-					if (jid < cmp_jid) {
-						$(this).before(elem);
-						inserted = true;
-						return false;
-					}
-				}
-			});
-			if (!inserted) {
-				$("#roster-area ul").append(elem);
-			}
-		} else {
-			$("#roster-area ul").append(elem);
-		}
-	},
 	on_roster: function (iq) {
                 console.log("listed");
 		$(iq).find("item").each(function () {
