@@ -244,12 +244,14 @@ function chatWith(id,name,body){
             mess += '<a href="#"><i class="iChat iChat6 fl"></i></a>';
             mess += '</div>';
             mess += '</div>';
+			mess += '<div class="chatScroll">';
             mess += '<div class="chatBoxItem fl pv1 ph10">';
             mess += '<div class="avatar rounded14 fl mr10"><img src="/resources/template/default_web/img/avatar.png" alt=""  title="'+name+'"  width="28" class=" rounded14"></div>';
             mess += '<span class="fl dpb ofh cf1 mt5 w80p">';
             mess += body + '<br />';
             mess += '</span>';
             mess += '</div>';
+			mess += '</div>';
             mess += '<div class="chatBoxItem fl pv1 ph10 bgN mess">';
             mess += '<input class="inv-field w95p mt10" type="text" onclick="value=\'\'" onblur="if(value==\'\'){value=\'This is description\'};" value="This is description">';
             mess += '</div>'
