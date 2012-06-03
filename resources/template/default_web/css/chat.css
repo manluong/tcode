@@ -1,0 +1,23 @@
+/* ====================== chat style =========================*/
+.chatSection { bottom:0; right: 2.5%; font-size: 13px;}
+.chatItem:hover , .chatItem.active{ background:#c6c6c6; }
+    .chatItem .count { width: 15px; height: 15px; top: -8px; right: 4px; z-index:10 }
+.chatBox {  bottom: 50px; right: 61px; z-index: 9; } 
+    .chatList .chatBox {  bottom: 50px; right: -5px; z-index: 9; } 
+.chatBoxItem { width: 240px }
+.chatBoxItem:hover { background: #f7edc3; }
+.chatBoxItem.bgN:hover { background: none; }
+    .chatBoxItem .avatar, .chatItem .avatar { padding: 1px; border: solid 1px #e6e1ca; background:#fff; width: 28px; height: 28px;}
+    .chatItem .avatar { border: solid 1px #c7c7c7;}
+    .chatBoxItem .noAvatar { width: 28px; height: 28px; line-height: 28px; }
+    .chatBoxItem .inv-field { margin-bottom:0; width: 96%;}
+    .chatBoxItem.setStatus .status:hover { background: #f9f0ce; text-decoration: none;}
+.chatBoxIner { width: 260px;	position: relative;	background: #fff9e0;	border: 1px solid #ede5c5;    -moz-box-shadow: 0 0 7px #b4b3b3; -webkit-box-shadow: 0 0 7px #b4b3b3; box-shadow: 0 0 7px #b4b3b3; }
+.chatBoxIner:after, .chatBoxIner:before {	top: 100%;	border: solid transparent;	content: " ";	height: 0;	width: 0;	position: absolute;	pointer-events: none;}
+.chatBoxIner:after {	border-top-color: #fff9e0;	border-width: 6px;	right: 20px;	margin-left: -6px;}
+.chatBoxIner:before {	border-top-color: #ede5c5;	border-width: 6px;	right: 20px;	margin-left: -6px;}
+.chatBoxIner .chatScroll { max-height: 300px; overflow-y: auto; overflow-x: hidden; padding-right: 10px; }
+.chatBoxIner.bigChat { width: 460px; }
+    .chatBoxIner.bigChat .chatBoxItem { width: 440px }
+    .chatBoxIner.bigChat .w80p { width: 90% }
+    .chatBoxIner.bigChat .chatBoxItem .inv-field { width: 98%;}
