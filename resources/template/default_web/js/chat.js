@@ -106,8 +106,7 @@ var telcoson = {
                             chatWith(jid,jQuery("#user_"+jid+" span").html(),body);
 
 		 }
-			if(jQuery("#chatbox_"+jid+" .chatboxcontent").length > 0)
-				$("#chatbox_"+jid+" .chatboxcontent").animate({scrollTop: $("#chatbox_"+jid+" .chatboxcontent")[0].scrollHeight});
+
 
 		return true;
 	}
@@ -216,7 +215,8 @@ function chatWith(id,name,body){
             chatMess += body+'<br>';
             chatMess += '</span>';
             chatMess += '</div>';
-			jQuery(chatMess).insertBefore('.mess');
+			jQuery("#chat_"+id+" .chatScroll").append(chatMess);
+			$("#chat_"+id+" .chatScroll").animate({scrollTop: $("#chat_"+id+" .chatScroll")[0].scrollHeight});
 		}
     }
     else {
