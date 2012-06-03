@@ -1,9 +1,7 @@
 /* ====================== chat style =========================*/
- .w230 { width: 230px }  .w190 { width: 190px; }.w120 { width: 120px; } .w50 { width: 50px; } .w40 { width: 40px; } .w18 { width: 18px; }  
- .w100p { width: 100%; } .w90p { width: 90%; } .w80p { width: 80%; } .w75p { width: 75%; }
 .chatSection { bottom:0; right: 2.5%; font-size: 13px;}
 .chatItem:hover , .chatItem.active{ background:#c6c6c6; }
-    .chatItem .count { width: 15px; height: 15px; top: -8px; right: 4px }
+    .chatItem .count { width: 15px; height: 15px; top: -8px; right: 4px; z-index:10 }
 .chatBox {  bottom: 50px; right: 61px; z-index: 9; } 
     .chatList .chatBox {  bottom: 50px; right: -5px; z-index: 9; } 
 .chatBoxItem { width: 240px }
@@ -14,7 +12,7 @@
     .chatBoxItem .noAvatar { width: 28px; height: 28px; line-height: 28px; }
     .chatBoxItem .inv-field { margin-bottom:0; width: 96%;}
     .chatBoxItem.setStatus .status:hover { background: #f9f0ce; text-decoration: none;}
-.chatBoxIner { width: 260px;	position: relative;	background: #fff9e0;	border: 1px solid #ede5c5;    -moz-box-shadow: 0 0 7px #b4b3b3; -webkit-box-shadow: 0 0 7px #b4b3b3; box-shadow: 0 0 7px #b4b3b3;}
+.chatBoxIner { width: 260px;	position: relative;	background: #fff9e0;	border: 1px solid #ede5c5;    -moz-box-shadow: 0 0 7px #b4b3b3; -webkit-box-shadow: 0 0 7px #b4b3b3; box-shadow: 0 0 7px #b4b3b3; height: 400px; overflow-y: auto; overflow-x: hidden; padding-right: 10px;}
 .chatBoxIner:after, .chatBoxIner:before {	top: 100%;	border: solid transparent;	content: " ";	height: 0;	width: 0;	position: absolute;	pointer-events: none;}
 .chatBoxIner:after {	border-top-color: #fff9e0;	border-width: 6px;	right: 20px;	margin-left: -6px;}
 .chatBoxIner:before {	border-top-color: #ede5c5;	border-width: 6px;	right: 20px;	margin-left: -6px;}

@@ -208,6 +208,16 @@ function chatWith(id,name,body){
 			}
 			jQuery("#chat_"+id+" .count").html(count);
 		}
+		else {
+			var chatMess = '';
+			chatMess += '<div class="chatBoxItem fl pv1 ph10">';
+            chatMess += '<div class="avatar rounded14 fl mr10"><img width="28" class=" rounded14" alt="" title="'+name+'" src="/resources/template/default_web/img/avatar.png"></div>';
+            chatMess += '<span class="fl dpb ofh cf1 mt5 w80p">';
+            chatMess += body+'<br>';
+            chatMess += '</span>';
+            chatMess += '</div>';
+			jQuery(chatMess).insertBefore('.mess');
+		}
     }
     else {
 		jQuery(".ac .chatBoxIner").hide();
@@ -218,7 +228,7 @@ function chatWith(id,name,body){
         chat += '<div class="chatItem fl cp h50 ph10 por active">';
 		chat += '<span class="count bg2 fs12 fwb tac rounded7 lhn poa dpb" style="display:none;"></span>';
         chat += '<a href="" class="dpb mt10">';
-        chat += '<div class="avatar rounded14 fl mr5"><img src="resources/template/default_web/img/avatar.png" alt="" width="28" class="rounded14"></div>';
+        chat += '<div class="avatar rounded14 fl mr5"><img src="/resources/template/default_web/img/avatar.png" alt="" width="28" class="rounded14"></div>';
         chat += '<span class="fl dpb ofh cf1 mt5 fwb">'+name+'</span>';
         chat += '</a>';
         chat += '</div>';
@@ -235,12 +245,12 @@ function chatWith(id,name,body){
             mess += '</div>';
             mess += '</div>';
             mess += '<div class="chatBoxItem fl pv1 ph10">';
-            mess += '<div class="avatar rounded14 fl mr10"><img src="resources/template/default_web/img/avatar.png" alt=""  title="'+name+'"  width="28" class=" rounded14"></div>';
+            mess += '<div class="avatar rounded14 fl mr10"><img src="/resources/template/default_web/img/avatar.png" alt=""  title="'+name+'"  width="28" class=" rounded14"></div>';
             mess += '<span class="fl dpb ofh cf1 mt5 w80p">';
             mess += body + '<br />';
             mess += '</span>';
             mess += '</div>';
-            mess += '<div class="chatBoxItem fl pv1 ph10 bgN">';
+            mess += '<div class="chatBoxItem fl pv1 ph10 bgN mess">';
             mess += '<input class="inv-field w95p mt10" type="text" onclick="value=\'\'" onblur="if(value==\'\'){value=\'This is description\'};" value="This is description">';
             mess += '</div>'
             mess += '</div>';
