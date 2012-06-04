@@ -20,7 +20,8 @@ class Card extends MY_Controller {
 		$this->CardM->sett_fill_notes = FALSE;
 		$this->CardM->sett_fill_social = FALSE;
 		$this->CardM->sett_fill_tel = FALSE;
-
+		
+		$result =  $this->CardM->get_list();
 		$view_data = array(
 			'list' => $this->CardM->get_list(),
 		);

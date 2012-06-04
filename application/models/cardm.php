@@ -134,7 +134,6 @@ class CardM extends MY_Model {
 				$result[$k]['sub_roles'] = $this->AclM->get_user_subroles($v['id']);
 			}
 		}
-
 		return $result;
 	}
 
