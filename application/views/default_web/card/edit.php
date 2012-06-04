@@ -1,8 +1,12 @@
+<script type="text/javascript" src="/resources/addon/plupload/js/plupload.full.js"></script>
+<script type="text/javascript" src="/resources/addon/plupload/js/jquery.plupload.queue/jquery.plupload.queue.js"></script>
+<link href="/resources/addon/plupload/js/jquery.plupload.queue/css/jquery.plupload.queue.css" media="screen" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/contact.css" />
+
 <?php
-	echo '<pre>';
-	print_r($data);
-	echo '</pre>';
+	//echo '<pre>';
+	//print_r($data);
+	//echo '</pre>';
 ?>
 <div  id="contact_edit" class="container">
 	<div class="row span6">
@@ -11,9 +15,16 @@
 				if (!$is_new) echo form_hidden('id', $data['id']);
 			?>
 			<fieldset>
-				<div class="control-group">
-					<label class="control-label">Upload Photo</label>
-					<div class="controls">
+				<div class="control-group" style="position:relative;">
+					<h1 style="display:none;">Custom example</h1>
+					<p style="display:none;">Shows you how to use the core plupload API.</p>
+					<div id="container" >
+						<label id="pickfiles" class="control-label btn_upload"></label>
+						<div id="uploadfiles">Upload File</div>
+						<div id="filelist"></div>
+					</div>
+					
+					<div class="controls" style="margin-top:24px;">
 						<div class="btn-group" data-toggle="buttons-radio">
 							<?php
 								foreach($data['title_options'] AS $title_val => $title_label) {
@@ -423,4 +434,34 @@
 			e.preventDefault();
 		});
 	});
+	
+	function getid(id) {
+		return document.getElementById(id);
+	}
+	var uploader = new plupload.Uploader({
+		runtimes : 'gears,html5,flash,silverlight,browserplus',
+		browse_button : 'pickfiles',
+		container: 'container',
+		max_file_size : '10mb',
+		url : '/card/upload/'+<?=$data['id']?>,
+
+		filters : [
+			{title : "Image files", extensions : "jpg,gif,png"},
+			{title : "Zip files", extensions : "zip"}
+		]
+	});
+	uploader.bind('FilesAdded', function(up, files) {
+		for (var i in files) {
+			getid('filelist').innerHTML += '<div id="' + files[i].id + '">' + files[i].name + ' (' + plupload.formatSize(files[i].size) + ') <b></b></div>';
+		}
+	});
+	uploader.bind('UploadProgress', function(up, file) {
+		getid(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
+	});
+	getid('uploadfiles').onclick = function() {
+		uploader.start();
+		return false;
+	};
+	uploader.init();
+	
 </script>

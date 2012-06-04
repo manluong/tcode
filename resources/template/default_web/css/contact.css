@@ -109,3 +109,24 @@
 #address_label span{
 	float:left;
 }
+#uploadfiles{
+	position:absolute;
+	font-size:11px;
+	top:54px;
+	left:82px;
+	width:70px;
+	font-weight:bold;
+	cursor:pointer;
+}
+#filelist{
+	position:absolute;
+	top:54px;
+	left:160px;
+}
+.btn_upload{
+	width:54px !important;
+	height:54px !important;
+	background:url(../img/add_photo.png);
+	cursor:pointer;
+	margin-left:85px;
+}
