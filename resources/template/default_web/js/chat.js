@@ -2,8 +2,6 @@
 
 var telcoson = {
     connection: null,
-    on_roster: function (iq) {
-    },
     jid_to_id: function (jid) {
         return Strophe.getBareJidFromJid(jid)
             .replace("@", "-")
@@ -12,6 +10,9 @@ var telcoson = {
 	logoff: function(){
 		telcoson.connection.disconnect();
                 jQuery("#list_chat").hide();
+				jQuery("#show_hide_chat").removeClass('active');
+				jQuery(".ac .chatBoxIner").hide();
+				jQuery(".ac").remove();
 	},
 	status: function(status){
 		if(status != 'offline'){
@@ -37,58 +38,22 @@ var telcoson = {
             }
     return 0;
 	},
-	insert_contact: function (elem) {
-		var jid = elem.find(".roster-jid").text();
-		var pres = telcoson.presence_value(elem.find(".roster-contact"));
-		var contacts = $("#roster-area li");
-		if (contacts.length > 0) {
-			var inserted = false;
-			contacts.each(function () {
-				var cmp_pres = telcoson.presence_value(
-					$(this).find(".roster-contact"));
-				var cmp_jid = $(this).find(".roster-jid").text();
-				if (pres > cmp_pres) {
-					$(this).before(elem);
-					inserted = true;
-					return false;
-				} else {
-					if (jid < cmp_jid) {
-						$(this).before(elem);
-						inserted = true;
-						return false;
-					}
-				}
-			});
-			if (!inserted) {
-				$("#roster-area ul").append(elem);
-			}
-		} else {
-			$("#roster-area ul").append(elem);
-		}
-	},
 	on_roster: function (iq) {
                 console.log("listed");
 		$(iq).find("item").each(function () {
 			var jid = $(this).attr("jid");
 			var name = $(this).attr("name") || jid;
 			var jid_id = telcoson.jid_to_id(jid);
-			//var contact = $('<div id="' + jid_id + '" class="offline" onclick="chatWith(\''+jid_id+'\',\''+name+'\')">'+name+'</div>');
                         var contact = $('<div class="chatBoxItem fl pv5 ph10" id="user_'+jid_id+'"><div class="avatar rounded14 fl mr5"><img src="/resources/template/default_web/img/avatar.png" alt="" width="28" class=" rounded14"></div><span class="fl dpb ofh cf1 mt5 fwb">'+name+'</span><div class="tools fr"><a href="#" class="fl mr5 mt3"><i class="iChat iChat3"></i></a><a href="#" class="fl w18 mt7" style="display:none;"><input type="checkbox" class="styled" /></i></a></div></div>');
-                        //console.log(contact);
 			jQuery("#list_chat div.chatBoxIner").append(contact);
 			//telcoson.insert_contact(contact)
 				});
-               // var contact = $('<div class="chatBoxItem fl pv5 ph10"><div class="avatar rounded14 fl mr5"><span class="rounded14 cf4 bg4 fwb noAvatar tac vam dpib">GP</span></div><span class="fl dpb ofh cf2 mt5 fwb">Group Chat</span><div class="tools fr"><a href="#" class="fl mr5 mt3"><i class="iChat iChat3"></i></a></div></div>');
-               // jQuery("#list_chat div.chatBoxIner").append(contact);
-                jQuery("#list_chat").removeAttr('style');
-		// set up presence handler and send initial presence
 		telcoson.connection.addHandler(telcoson.on_presence, null, 'presence');
 		telcoson.connection.send($pres());
 	},
 	on_presence: function (presence) {
 		var ptype = $(presence).attr('type');
 		var from = $(presence).attr('from');
-                //console.log(from);
 		var to = $(presence).attr('to');
 		if (ptype !== 'error') {
                     	var contact = $('#user_' + telcoson.jid_to_id(from) + ' i')
@@ -97,26 +62,14 @@ var telcoson = {
 				.removeClass('iChat3');
 			if (ptype === 'unavailable') {
 				contact.addClass('iChat3');
-                               // console.log(from + ' Offline');
-				//jQuery("#chatbox_"+telcoson.jid_to_id(from)+" .chatboxtitle").addClass('offline2');
-			} else {
+                        } else {
 				var show = $(presence).find('show').text();
 				if (show === '' || show === 'chat') {
-
 					contact.addClass('iChat2');
-                                        //console.log(from + ' Online');
-					//jQuery("#chatbox_"+telcoson.jid_to_id(from)+" .chatboxtitle").addClass('online2');
 				} else {
 					contact.addClass('iChat9');
-                                        //console.log(from + ' Busy');
-					//jQuery("#chatbox_"+telcoson.jid_to_id(from)+" .chatboxtitle").addClass('away2');
-				}
+ 				}
 			}
-			//var li = contact.parent();
-			//li.remove();
-
-
-			//telcoson.insert_contact(li);
 		}
 		return true;
 	},
@@ -141,27 +94,22 @@ var telcoson = {
 			}
 		}
 		else {
-		//chatWith(jid,jQuery("#"+jid).html());
-		var body = '';
+
+                var body = '';
 			jQuery("#typing").remove();
 			jQuery.each($(message).find("body"),function(index,value){
 				if(index == 0){
 					body = jQuery(this).text();
 				}
 			});
-                        console.log(body);
-			if(body != '')
-				body = "<li><b>"+jQuery("#"+jid).html()+": </b>"+body+"</li>";
+                        if(body != '')
+                            chatWith(jid,jQuery("#user_"+jid+" span").html(),body);
 
-			//console.log("#chatbox_"+jid+" .chatboxcontent");
-			jQuery("#chatbox_"+jid+" .chatboxcontent ul").append(body);
 		 }
-		 //console.log(jid);
-			if(jQuery("#chatbox_"+jid+" .chatboxcontent").length > 0)
-				$("#chatbox_"+jid+" .chatboxcontent").animate({scrollTop: $("#chatbox_"+jid+" .chatboxcontent")[0].scrollHeight});
+
 
 		return true;
-	},
+	}
 
 };
 // End chat function
@@ -174,6 +122,8 @@ jQuery(document).ready(function(){
         if(document.getElementById('list_chat').style.display == 'none'){
             jQuery("#list_chat").show();
             jQuery("#show_hide_chat").addClass('active');
+			jQuery(".ac .chatBoxIner").hide();
+			jQuery(".ac .chatItem").removeClass('active');
         }
         else {
             jQuery("#list_chat").hide();
@@ -244,3 +194,86 @@ jQuery("#status_offline").click(function(){
     jQuery("#chat_status").html('Offline');
     jQuery("#set_status").slideUp();
 });
+// make chat window
+function chatWith(id,name,body){
+    if(jQuery("#chat_"+id).length > 0){
+		if(jQuery("#chat_"+id+" .chatBoxIner").attr('style') == 'display: none;'){
+			if(jQuery("#chat_"+id+" .count").attr('style') == 'display: none;'){
+				var count = 1;
+				jQuery("#chat_"+id+" .count").removeAttr('style');
+			}
+			else {
+				var count = parseInt(jQuery("#chat_"+id+" .count").html())+1;
+			}
+			jQuery("#chat_"+id+" .count").html(count);
+		}
+		else {
+			var chatMess = '';
+			chatMess += '<div class="chatBoxItem fl pv1 ph10">';
+            chatMess += '<div class="avatar rounded14 fl mr10"><img width="28" class=" rounded14" alt="" title="'+name+'" src="/resources/template/default_web/img/avatar.png"></div>';
+            chatMess += '<span class="fl dpb ofh cf1 mt5 w80p">';
+            chatMess += body+'<br>';
+            chatMess += '</span>';
+            chatMess += '</div>';
+			jQuery("#chat_"+id+" .chatScroll").append(chatMess);
+			$("#chat_"+id+" .chatScroll").animate({scrollTop: $("#chat_"+id+" .chatScroll")[0].scrollHeight});
+		}
+    }
+    else {
+		jQuery(".ac .chatBoxIner").hide();
+		jQuery(".ac .chatItem").removeClass('active');
+        // create chat area
+        var chat = '';
+        chat += '<div class="chatItemWrapper por fl mr1 ac" id="chat_'+id+'" >';
+        chat += '<div class="chatItem fl cp h50 ph10 por active">';
+		chat += '<span class="count bg2 fs12 fwb tac rounded7 lhn poa dpb" style="display:none;"></span>';
+        chat += '<a href="javascript:void(0);" onclick="selectChat(\''+id+'\');" class="dpb mt10">';
+        chat += '<div class="avatar rounded14 fl mr5"><img src="/resources/template/default_web/img/avatar.png" alt="" width="28" class="rounded14"></div>';
+        chat += '<span class="fl dpb ofh cf1 mt5 fwb">'+name+'</span>';
+        chat += '</a>';
+        chat += '</div>';
+        chat += '</div>';
+        jQuery(".chatSlider").append(chat);
+        //----------- Add first Messenge ---------------
+        var mess = '';
+            mess += '<div class="chatBox poa ">';
+            mess += '<div class="chatBoxIner pb5 rounded7 fl abigChat" style="">';
+            mess += '<div class="chatBoxItem fl pv5 ph10 bgN">';
+            mess += '<div class="fr">';
+            mess += '<a href="javascript:void(0);" onclick="min(\''+id+'\');"><i class="iChat iChat5 fl mr10 mt5"></i></a>';
+            mess += '<a href="#"><i class="iChat iChat6 fl"></i></a>';
+            mess += '</div>';
+            mess += '</div>';
+			mess += '<div class="chatScroll">';
+            mess += '<div class="chatBoxItem fl pv1 ph10">';
+            mess += '<div class="avatar rounded14 fl mr10"><img src="/resources/template/default_web/img/avatar.png" alt=""  title="'+name+'"  width="28" class=" rounded14"></div>';
+            mess += '<span class="fl dpb ofh cf1 mt5 w80p">';
+            mess += body + '<br />';
+            mess += '</span>';
+            mess += '</div>';
+			mess += '</div>';
+            mess += '<div class="chatBoxItem fl pv1 ph10 bgN mess">';
+            mess += '<input class="inv-field w95p mt10" type="text" onclick="value=\'\'" onblur="if(value==\'\'){value=\'This is description\'};" value="This is description">';
+            mess += '</div>'
+            mess += '</div>';
+            mess += '</div>';
+            jQuery("#chat_"+id).prepend(mess);
+    }
+    jQuery("#list_chat").hide();
+}
+function min(id){
+    jQuery("#chat_"+id+" .active").removeClass('active');
+	jQuery("#chat_"+id+" .chatBoxIner").hide();
+}
+function selectChat(id){
+	if(jQuery("#chat_"+id+" .chatBoxIner").attr('style') == 'display: none;'){
+		jQuery(".ac .chatBoxIner").hide();
+		jQuery(".ac .chatItem").removeClass('active');
+		jQuery("#chat_"+id+" .chatBoxIner").show();
+		jQuery("#chat_"+id+" .cp").addClass('active');
+	}
+	else {
+		jQuery("#chat_"+id+" .chatBoxIner").hide();
+		jQuery("#chat_"+id+" .active").removeClass('active');
+	}
+}

@@ -99,7 +99,7 @@
 						<li><input type="text" id="apply_all_discount" class="inv-field" /></li>
 						<li>
 							<select id="apply_all_tax" style="width: 158px;">
-								<option value="">Tax</option>
+								<option value="">No Tax</option>
 								<?php foreach ($tax_use as $r): ?>
 								<option value="<?php echo $r['id'] ?>"><?php echo $r['name'] ?></option>
 								<?php endforeach ?>
@@ -115,16 +115,21 @@
 						<div class="total_price"><span id="lbl_sub_total">$0,00</span></div>
 					</li>
 					<?php foreach ($tax as $r): ?>
-					<li class="total_hide" style="display: none;">
+					<li class="total_hide">
 						<div class="total_label">Tax - <?php echo $r['name'] ?></div>
-						<div class="total_price"><span id="lbl_tax_<?php echo $r['id'] ?>_total">$0,00</span></div>
+						<div class="total_price">
+							<span id="lbl_tax_<?php echo $r['id'] ?>_total">$0,00</span>
+							<input type="hidden" name="addon_tax[<?php echo $r['id'] ?>][id]" />
+							<input type="hidden" name="addon_tax[<?php echo $r['id'] ?>][tax_id]" value="<?php echo $r['id'] ?>" />
+							<input type="hidden" id="tax_<?php echo $r['id'] ?>_total" name="addon_tax[<?php echo $r['id'] ?>][amount]" />
+						</div>
 					</li>
 					<?php endforeach ?>
 					<!-- <li class="total_hide" style="display: none;">
 						<div class="total_label">Tax Total</div>
 						<div class="total_price"><span id="lbl_tax_total">$0,00</span></div>
 					</li> -->
-					<li class="total_hide" style="display: none;">
+					<li class="total_hide">
 						<div class="total_label">Discount</div>
 						<div class="total_price"><span id="lbl_discount_total">$0,00</span></div>
 					</li>

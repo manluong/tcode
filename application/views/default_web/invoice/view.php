@@ -90,6 +90,7 @@
 				</tr>
 			</thead>
 			<tbody>
+				<?php if (isset($invoice['addon_item'])): ?>
 				<?php foreach ($invoice['addon_item'] as $invoice_item): ?>
 				<tr>
 					<td><?php echo $invoice_item['name'] ?></td>
@@ -112,6 +113,10 @@
 								<?php echo $invoice_item['discount'].'% Discount' ?>
 								<br />
 							<?php endif ?>
+							<?php if ($invoice_item['tax_use_id']): ?>
+								<?php echo $invoice_item['tax_use_name'] ?>
+								<br />
+							<?php endif ?>
 						</div>
 					</td>
 					<td><?php echo '$'.number_format($invoice_item['unit_price'], 2) ?></td>
@@ -119,6 +124,7 @@
 					<td class="total"><?php echo '$'.number_format($invoice_item['total'], 2) ?></td>
 				</tr>
 				<?php endforeach ?>
+				<?php endif ?>
 			</tbody>
 		</table>
 
@@ -127,10 +133,18 @@
 				<th>Sub Total</th>
 				<td>$906.60</td>
 			</tr>
-			<tr>
-				<th>Tax - GST</th>
-				<td>$65.60</td>
-			</tr>
+			<?php if (isset($invoice['addon_tax'])): ?>
+			<?php foreach ($tax as $r): ?>
+				<?php foreach ($invoice['addon_tax'] as $invoice_tax): ?>
+					<?php if ($invoice_tax['tax_id'] == $r['id']): ?>
+					<tr>
+						<th>Tax - <?php echo $r['name'] ?></th>
+						<td><?php echo '$'.number_format($invoice_tax['amount'], 2) ?></td>
+					</tr>
+					<?php endif ?>
+				<?php endforeach ?>
+			<?php endforeach ?>
+			<?php endif ?>
 			<tr id="invoice_total">
 				<th class="bold">Invoice Total</th>
 				<td class="bold">$976.50</td>

@@ -8,31 +8,43 @@ class HelpdeskM extends MY_Model {
 		$this->cache_enabled = TRUE;
 		$this->sett_filter_deleted = FALSE;
 		$this->sett_fill_card_info = TRUE;
+		
+		foreach($this->addons AS $name=>$model) {
+			$this->load->model($model);
+		}
 	}
 	public $sett_fill_card = TRUE;
+	public $sett_fill_status = TRUE;
+	public $sett_fill_group = TRUE;
+	public $sett_fill_type = TRUE;
+	public $sett_fill_priority = TRUE;
 
 	private $addons = array(
 		'card' => 'CardM',
+		'status' => 'Helpdesk_StatusM',
+		'group' => 'Helpdesk_GroupM',
+		'type' => 'Helpdesk_TypeM',
+		'priority' => 'Helpdesk_PriorityM',
 	);
 
 	public $data_fields = array(
+		'id' => array(
+			'type' => 'id'
+		),
 		'subject' => array(
-		),
-		'group' => array(
-		),
-        'status' => array(
-		),
-        'type' => array(
-		),
-        'rate' => array(
+			'type' => 'text'
 		),
         'in_charge_card_id' => array(
+			'type' => 'id'
 		),
         'cc_email' => array(
+			'type' => 'text'
 		),
         'assign_id' => array(
+			'type' => 'id'
 		),
         'active' => array(
+			'type' => 'id'
 		),
 	);
 
@@ -75,7 +87,6 @@ class HelpdeskM extends MY_Model {
 					foreach($data AS $k=>$v) {
 						foreach($addons AS $addon) {
 							if ($addon['id'] != $v['assign_id']) continue;
-
 							$data[$k]['addon_'.$name][] = $addon;
 						}
 					}

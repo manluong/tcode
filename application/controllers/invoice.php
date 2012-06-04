@@ -76,6 +76,7 @@ class Invoice extends MY_Controller {
 			'invoice' => $invoice,
 			//'invoice_items' => $this->Invoice_ItemM->get_by_invoice_id($id),
 			//'customer_name' => '',
+			'tax' => $this->TaxM->get_list(),
 			'invoice_terms' => ''
 		);
 
@@ -109,6 +110,7 @@ class Invoice extends MY_Controller {
 			'invoice' => $invoice,
 			//'invoice_items' => $this->Invoice_ItemM->get_by_invoice_id($id),
 			//'customer_name' => '',
+			'tax' => $this->TaxM->get_list(),
 			'invoice_terms' => ''
 		);
 
@@ -138,6 +140,7 @@ class Invoice extends MY_Controller {
 			'invoice' => $invoice,
 			//'invoice_items' => $this->Invoice_ItemM->get_by_invoice_id($id),
 			//'customer_name' => '',
+			'tax' => $this->TaxM->get_list(),
 			'invoice_terms' => ''
 		);
 

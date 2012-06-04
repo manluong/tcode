@@ -126,7 +126,9 @@ html, html body {
 .h47 { height:47px; } .h50 { height:50px; }
 .lhn{ line-height: normal; }
 .cp{ cursor: pointer; }
-
+/* width */
+ .w230 { width: 230px }  .w190 { width: 190px; }.w120 { width: 120px; } .w50 { width: 50px; } .w40 { width: 40px; } .w18 { width: 18px; }  
+ .w100p { width: 100%; } .w90p { width: 90%; } .w80p { width: 80%; } .w75p { width: 75%; } .w70p { width: 70%; } .w15p { width: 15%; }
 /* rounded */
 .rounded7 { border-radius: 7px;  -moz-border-radius: 7px;  -webkit-border-radius: 7px;}
 .rounded14 { border-radius: 14px;  -moz-border-radius: 14px;  -webkit-border-radius: 14px;}
