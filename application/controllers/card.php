@@ -76,7 +76,16 @@ class Card extends MY_Controller {
 			redirect('/card/view/'.$id);
 		}
 	}
-
+	
+	function upload($card_id){
+	   $this->load->library('filel');
+	   $file = $this->filel->save('file', 'CardM');
+		if($card_id != 0){
+		   $insert_id = $this->CardM->insert_upload_file($file['hash'],$card_id);
+		   echo $file['hash'];
+		}
+	}
+	
 	function ajax_get_list() {
 		$limit = $this->input->post('limit');
 		$offset = $this->input->post('offset');

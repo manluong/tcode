@@ -8,15 +8,25 @@ class Helpdesk extends MY_Controller {
 		$this->load->model('Helpdesk_CommentM');
 		$this->load->model('HelpdeskM');
 		$this->load->model('CardM');
+		
+		$this->load->model('Helpdesk_StatusM');
+		$this->load->model('Helpdesk_GroupM');
+		$this->load->model('Helpdesk_TypeM');
+		$this->load->model('Helpdesk_PriorityM');
 	}
 
 	function index() {
+		$result = $this->HelpdeskM->get_list();
+		echo '<pre>';
+		print_r($result);
+		echo '</pre>';
+		die;
 		$content = array(
-			'total' => $this->HelpdeskM->get_total_records(),
-			'result' => json_encode($this->HelpdeskM->get_list()),
-			'group' =>  $this->Helpdesk_CommentM->get_group(),
-			'status' => $this->Helpdesk_CommentM->get_status(),
-			'priority' => $this->Helpdesk_CommentM->get_priority(),
+			//'total' => $this->HelpdeskM->get_total_records(),
+			//'result' => json_encode($this->HelpdeskM->get_list()),
+			//'group' =>  $this->Helpdesk_CommentM->get_group(),
+			//'status' => $this->Helpdesk_CommentM->get_status(),
+			//'priority' => $this->Helpdesk_CommentM->get_priority(),
 			'type' => $this->Helpdesk_CommentM->get_type(),
 		);
 		$this->data['content'] = $this->load->view(get_template().'/helpdesk/index',$content, TRUE);

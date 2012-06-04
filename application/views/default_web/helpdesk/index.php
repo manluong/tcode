@@ -1,5 +1,4 @@
 <script type="text/javascript" src="/resources/addon/helpdesk.js"></script>
-
 <script type="text/javascript">
 	$(document).ready(function(){
 		$('#main_cases').html( '<table class="table table-striped" id="example"></table>' );

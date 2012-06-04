@@ -341,6 +341,9 @@ class CardM extends MY_Model {
 				'first_name',
 				'last_name',
 			),
+			array(
+				'display_name'
+			),
 		);
 
 		$staff_card_ids = $this->AclM->get_card_ids_in_role('Staff');
@@ -352,7 +355,7 @@ class CardM extends MY_Model {
 		$this->where[] = 'id IN ('.implode(',', $staff_card_ids).')';
 
 		//retrieve only id, first_name and last_name
-		$this->select_fields = array('id', 'first_name', 'last_name');
+		$this->select_fields = array('id', 'first_name', 'last_name', 'display_name');
 
 		return parent::search($search_string);
 	}
@@ -376,6 +379,9 @@ class CardM extends MY_Model {
 				'first_name',
 				'last_name',
 			),
+			array(
+				'display_name'
+			),
 		);
 
 		//get id on Card table
@@ -388,7 +394,7 @@ class CardM extends MY_Model {
 		$this->where[] = 'id IN ('.implode(',', $card_ids).')';
 
 		//retrieve only id, first_name and last_name
-		$this->select_fields = array('id', 'first_name', 'last_name');
+		$this->select_fields = array('id', 'first_name', 'last_name', 'display_name');
 
 		return parent::search($search_string);
 	}
