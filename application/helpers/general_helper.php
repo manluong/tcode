@@ -166,13 +166,15 @@ function reset_return_url_form() {
 
 //	Checks for a return_url and if there is, redirect to it.
 //	Usually used in: controller
-function execute_return_url($link_only=FALSE) {
+function execute_return_url($link_only=FALSE, $default_url='') {
 	$CI =& get_instance();
 
 	if (!$CI->has_return) return NULL;
-	if ($link_only) return get_return_url();
 
-	redirect(get_return_url());
+	$return_url = get_return_url($default_url);
+	if ($link_only) return $return_url;
+
+	redirect($return_url);
 }
 
 
