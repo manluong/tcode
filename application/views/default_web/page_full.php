@@ -101,7 +101,7 @@
                             </div>
                             <div class="tools fr">
                                 <a href="#" class="fl mr5 mt3"><i class="iChat iChat2"></i></a>
-                                <a href="#" class="fl w18 mt7" style="display:none;" ><input type="checkbox" class="styled" /></i></a>
+                                <a href="#" class="fl w18 mt7 " style="display:none;" ><input type="checkbox" class="" /></a>
                             </div>
                         </div>
 
@@ -149,8 +149,8 @@
 	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/jquery.smooth-scroll.min.js"></script>
 	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/plugins.js"></script>
 	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/script.js"></script>
-<!--        <script type="text/javascript" src="/resources/template/<?=get_template()?>/js/strophe.js"></script>
-        <script type="text/javascript" src="/resources/template/<?=get_template()?>/js/chat.js"></script>-->
+        <script type="text/javascript" src="/resources/template/<?=get_template()?>/js/strophe.js"></script>
+        <script type="text/javascript" src="/resources/template/<?=get_template()?>/js/chat.js"></script>
 	<script>
 
 	</script>
