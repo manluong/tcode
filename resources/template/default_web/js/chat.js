@@ -130,6 +130,9 @@ jQuery(document).ready(function(){
             jQuery("#show_hide_chat").removeClass('active');
         }
     });
+     window.isActive = true;
+    jQuery(window).focus(function() { this.isActive = true; });
+    jQuery(window).blur(function() { this.isActive = false; });
    //
    // Chat
    if(jQuery("#chat").length > 0){
@@ -210,11 +213,11 @@ function chatWith(id,name,body){
 		else {
 			var chatMess = '';
 			chatMess += '<div class="chatBoxItem fl pv1 ph10">';
-            chatMess += '<div class="avatar rounded14 fl mr10"><img width="28" class=" rounded14" alt="" title="'+name+'" src="/resources/template/default_web/img/avatar.png"></div>';
-            chatMess += '<span class="fl dpb ofh cf1 mt5 w80p">';
-            chatMess += body+'<br>';
-            chatMess += '</span>';
-            chatMess += '</div>';
+                        chatMess += '<div class="avatar rounded14 fl mr10"><img width="28" class=" rounded14" alt="" title="'+name+'" src="/resources/template/default_web/img/avatar.png"></div>';
+                        chatMess += '<span class="fl dpb ofh cf1 mt5 w80p">';
+                        chatMess += body+'<br>';
+                        chatMess += '</span>';
+                        chatMess += '</div>';
 			jQuery("#chat_"+id+" .chatScroll").append(chatMess);
 			$("#chat_"+id+" .chatScroll").animate({scrollTop: $("#chat_"+id+" .chatScroll")[0].scrollHeight});
 		}
@@ -223,16 +226,16 @@ function chatWith(id,name,body){
 		jQuery(".ac .chatBoxIner").hide();
 		jQuery(".ac .chatItem").removeClass('active');
         // create chat area
-        var chat = '';
-        chat += '<div class="chatItemWrapper por fl mr1 ac" id="chat_'+id+'" >';
-        chat += '<div class="chatItem fl cp h50 ph10 por active">';
+                var chat = '';
+                chat += '<div class="chatItemWrapper por fl mr1 ac" id="chat_'+id+'" >';
+                chat += '<div class="chatItem fl cp h50 ph10 por active">';
 		chat += '<span class="count bg2 fs12 fwb tac rounded7 lhn poa dpb" style="display:none;"></span>';
-        chat += '<a href="javascript:void(0);" onclick="selectChat(\''+id+'\');" class="dpb mt10">';
-        chat += '<div class="avatar rounded14 fl mr5"><img src="/resources/template/default_web/img/avatar.png" alt="" width="28" class="rounded14"></div>';
-        chat += '<span class="fl dpb ofh cf1 mt5 fwb">'+name+'</span>';
-        chat += '</a>';
-        chat += '</div>';
-        chat += '</div>';
+                chat += '<a href="javascript:void(0);" onclick="selectChat(\''+id+'\');" class="dpb mt10">';
+                chat += '<div class="avatar rounded14 fl mr5"><img src="/resources/template/default_web/img/avatar.png" alt="" width="28" class="rounded14"></div>';
+                chat += '<span class="fl dpb ofh cf1 mt5 fwb">'+name+'</span>';
+                chat += '</a>';
+                chat += '</div>';
+                chat += '</div>';
         jQuery(".chatSlider").append(chat);
         //----------- Add first Messenge ---------------
         var mess = '';
@@ -244,14 +247,14 @@ function chatWith(id,name,body){
             mess += '<a href="#"><i class="iChat iChat6 fl"></i></a>';
             mess += '</div>';
             mess += '</div>';
-			mess += '<div class="chatScroll">';
+            mess += '<div class="chatScroll">';
             mess += '<div class="chatBoxItem fl pv1 ph10">';
             mess += '<div class="avatar rounded14 fl mr10"><img src="/resources/template/default_web/img/avatar.png" alt=""  title="'+name+'"  width="28" class=" rounded14"></div>';
             mess += '<span class="fl dpb ofh cf1 mt5 w80p">';
             mess += body + '<br />';
             mess += '</span>';
             mess += '</div>';
-			mess += '</div>';
+            mess += '</div>';
             mess += '<div class="chatBoxItem fl pv1 ph10 bgN mess">';
             mess += '<input class="inv-field w95p mt10" type="text" onclick="value=\'\'" onblur="if(value==\'\'){value=\'This is description\'};" value="This is description">';
             mess += '</div>'
@@ -276,4 +279,7 @@ function selectChat(id){
 		jQuery("#chat_"+id+" .chatBoxIner").hide();
 		jQuery("#chat_"+id+" .active").removeClass('active');
 	}
+}
+function checkWindow(){
+    console.log(window.isActive)
 }
