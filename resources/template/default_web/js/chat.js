@@ -210,7 +210,7 @@ function chatWith(id,name,body){
 			}
 			jQuery("#chat_"+id+" .count").html(count);
 		}
-		else {
+		
 			var chatMess = '';
 			chatMess += '<div class="chatBoxItem fl pv1 ph10">';
                         chatMess += '<div class="avatar rounded14 fl mr10"><img width="28" class=" rounded14" alt="" title="'+name+'" src="/resources/template/default_web/img/avatar.png"></div>';
@@ -220,7 +220,7 @@ function chatWith(id,name,body){
                         chatMess += '</div>';
 			jQuery("#chat_"+id+" .chatScroll").append(chatMess);
 			$("#chat_"+id+" .chatScroll").animate({scrollTop: $("#chat_"+id+" .chatScroll")[0].scrollHeight});
-		}
+		
     }
     else {
 		jQuery(".ac .chatBoxIner").hide();
@@ -229,7 +229,7 @@ function chatWith(id,name,body){
                 var chat = '';
                 chat += '<div class="chatItemWrapper por fl mr1 ac" id="chat_'+id+'" >';
                 chat += '<div class="chatItem fl cp h50 ph10 por active">';
-		chat += '<span class="count bg2 fs12 fwb tac rounded7 lhn poa dpb" style="display:none;"></span>';
+		chat += '<span class="count bg2 fs12 fwb tac rounded7 lhn poa dpb" style="display: none;"></span>';
                 chat += '<a href="javascript:void(0);" onclick="selectChat(\''+id+'\');" class="dpb mt10">';
                 chat += '<div class="avatar rounded14 fl mr5"><img src="/resources/template/default_web/img/avatar.png" alt="" width="28" class="rounded14"></div>';
                 chat += '<span class="fl dpb ofh cf1 mt5 fwb">'+name+'</span>';
@@ -274,6 +274,8 @@ function selectChat(id){
 		jQuery(".ac .chatItem").removeClass('active');
 		jQuery("#chat_"+id+" .chatBoxIner").show();
 		jQuery("#chat_"+id+" .cp").addClass('active');
+                jQuery("#chat_"+id+" .count").html('');
+                jQuery("#chat_"+id+" .count").hide();
 	}
 	else {
 		jQuery("#chat_"+id+" .chatBoxIner").hide();
