@@ -127,7 +127,6 @@ class Helpdesk extends MY_Controller {
 				);
 			}
 		}
-
 		echo json_encode($content);
 	}
 
@@ -153,7 +152,7 @@ class Helpdesk extends MY_Controller {
 		$term = $this->input->get('term');
 
 		$this->load->model('CardM');
-		$customer_list = $this->CardM->search_staff($term);
+		$customer_list = $this->Card->ajax_search_staff($term);
 
 		$content = array();
 		if ($customer_list) {
@@ -167,54 +166,6 @@ class Helpdesk extends MY_Controller {
 		}
 
 		echo json_encode($content);
-	}
-
-	function ajax_status_fillter(){
-		$value = $this->input->post('value');
-		$where = array(
-			'status' => $value,
-		);
-		$this->HelpdeskM->set_where($where);
-
-		$result = $this->HelpdeskM->get_list();
-		$data = json_encode($result);
-		echo $data;
-	}
-
-	function ajax_group_fillter(){
-		$value = $this->input->post('value');
-		$where = array(
-			'group' => $value,
-		);
-		$this->HelpdeskM->set_where($where);
-
-		$result = $this->HelpdeskM->get_list();
-		$data = json_encode($result);
-		echo $data;
-	}
-
-	function ajax_type_fillter(){
-		$value = $this->input->post('value');
-		$where = array(
-			'type' => $value,
-		);
-		$this->HelpdeskM->set_where($where);
-
-		$result = $this->HelpdeskM->get_list();
-		$data = json_encode($result);
-		echo $data;
-	}
-
-	function ajax_priority_fillter(){
-		$value = $this->input->post('value');
-		$where = array(
-			'priority' => $value,
-		);
-		$this->HelpdeskM->set_where($where);
-
-		$result = $this->HelpdeskM->get_list();
-		$data = json_encode($result);
-		echo $data;
 	}
 
 	function add() {
@@ -282,25 +233,28 @@ class Helpdesk extends MY_Controller {
             'active' => 1,
 		);
 		$comment_id = $this->Helpdesk_CommentM->save($comment_data);
-		
-		echo '<pre>';
-		print_r($this->HelpdeskM->get($id));
-		echo '</pre>';
-		die;
+		$result = $this->HelpdeskM->get($id);
 		
 		$content = array(
 			'id' => $id,
 			'comment_id' => $comment_id,
-			'group' =>  $this->Helpdesk_CommentM->get_group(),
-			'status' => $this->Helpdesk_CommentM->get_status(),
-			'priority' => $this->Helpdesk_CommentM->get_priority(),
-			'type' => $this->Helpdesk_CommentM->get_type(),
+			'group' =>  $this->Helpdesk_GroupM->get_list(),
+			'status' => $this->Helpdesk_StatusM->get_list(),
+			'priority' => $this->Helpdesk_PriorityM->get_list(),
+			'type' => $this->Helpdesk_TypeM->get_list(),
 			'comment' => $this->Helpdesk_CommentM->get_content($id),
-			'result' => $this->HelpdeskM->get($id),
+			'result' => $result,
 			'assign' => $this->Helpdesk_CommentM->get_assign(),
 			'file_attach' => $this->Helpdesk_CommentM->get_comment_files($id),
 		);
-
+		//echo '<pre>';
+		//print_r($result['created_card_id']);
+		//echo '</pre>';
+		//die;
+		
+		//$card = $this->CardM->get_quickjump($result['created_card_id']);
+		//$content['quickjump'] = $this->load->view(get_template().'/card/quickjump', $card, TRUE);
+		
 		$this->data['content'] = $this->load->view(get_template().'/helpdesk/edit',$content, TRUE);
 		$this->_do_output();
 	}
@@ -410,7 +364,6 @@ class Helpdesk extends MY_Controller {
 
 	function delete_comment() {
 		//$this->load->library('filel');
-
 		$result = $this->Helpdesk_CommentM->get_comment_not_use();
 		if (!empty($result)) {
 			foreach ($result as $k) {

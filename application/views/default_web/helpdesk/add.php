@@ -165,6 +165,7 @@
 	function getid(id) {
 		return document.getElementById(id);
 	}
+	
 	var uploader = new plupload.Uploader({
 		runtimes : 'gears,html5,flash,silverlight,browserplus',
 		browse_button : 'pickfiles',
@@ -177,14 +178,17 @@
 			{title : "Zip files", extensions : "zip"}
 		]
 	});
+	
 	uploader.bind('FilesAdded', function(up, files) {
 		for (var i in files) {
 			getid('filelist').innerHTML += '<div id="' + files[i].id + '">' + files[i].name + ' (' + plupload.formatSize(files[i].size) + ') <b></b></div>';
 		}
 	});
+	
 	uploader.bind('UploadProgress', function(up, file) {
 		getid(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
 	});
+	
 	getid('uploadfiles').onclick = function() {
 		uploader.start();
 		return false;
