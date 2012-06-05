@@ -232,6 +232,7 @@ function chatWith(id,name,body){
 		
     }
     else {
+                
 		jQuery(".ac .chatBoxIner").hide();
 		jQuery(".ac .chatItem").removeClass('active');
         // create chat area
@@ -265,16 +266,17 @@ function chatWith(id,name,body){
             mess += '</div>';
             mess += '</div>';
             mess += '<div class="chatBoxItem fl pv1 ph10 bgN mess">';
-            mess += '<input class="inv-field w95p mt10" type="text" onclick="value=\'\'" onblur="if(value==\'\'){value=\'This is description\'};" value="This is description">';
+            mess += '<input class="inv-field w95p mt10" type="text" onclick="value=\'\'" onblur="if(value==\'\'){value=\'This is description\'};" value="This is description" onkeyup="sendMess(event,\''+id+'\',this.value)">';
             mess += '</div>'
             mess += '</div>';
             mess += '</div>';
             jQuery("#chat_"+id).prepend(mess);
     }
     jQuery("#list_chat").hide();
+    jQuery("#chat_"+id+" .typing").remove();
 }
 function min(id){
-    jQuery("#chat_"+id+" .active").removeClass('active');
+        jQuery("#chat_"+id+" .active").removeClass('active');
 	jQuery("#chat_"+id+" .chatBoxIner").hide();
 }
 function selectChat(id){
@@ -290,6 +292,9 @@ function selectChat(id){
 		jQuery("#chat_"+id+" .chatBoxIner").hide();
 		jQuery("#chat_"+id+" .active").removeClass('active');
 	}
+}
+function sendMess(event,id,mess){
+    
 }
 function checkWindow(){
     console.log(window.isActive)
