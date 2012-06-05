@@ -44,7 +44,7 @@ var telcoson = {
 			var jid = $(this).attr("jid");
 			var name = $(this).attr("name") || jid;
 			var jid_id = telcoson.jid_to_id(jid);
-                        var contact = $('<div class="chatBoxItem fl pv5 ph10" id="user_'+jid_id+'"><div class="avatar rounded14 fl mr5"><img src="/resources/template/default_web/img/avatar.png" alt="" width="28" class=" rounded14"></div><span class="fl dpb ofh cf1 mt5 fwb">'+name+'</span><div class="tools fr"><a href="#" class="fl mr5 mt3"><i class="iChat iChat3"></i></a><a href="#" class="fl w18 mt7" style="display:none;"><input type="checkbox" class="" /></a></div></div>');
+                        var contact = $('<div class="chatBoxItem fl pv5 ph10" id="user_'+jid_id+'" onclick="openChat(\''+jid_id+'\',\''+name+'\');"><div class="avatar rounded14 fl mr5"><img src="/resources/template/default_web/img/avatar.png" alt="" width="28" class=" rounded14"></div><span class="fl dpb ofh cf1 mt5 fwb">'+name+'</span><div class="tools fr"><a href="#" class="fl mr5 mt3"><i class="iChat iChat3"></i></a><a href="#" class="fl w18 mt7" style="display:none;"><input type="checkbox" class="" /></a></div></div>');
 			jQuery("#list_chat div.chatBoxIner").append(contact);
 			//telcoson.insert_contact(contact)
 				});
@@ -294,7 +294,69 @@ function selectChat(id){
 	}
 }
 function sendMess(event,id,mess){
-    
+    if(event.keyCode == 13){
+        var jid = telcoson.id_to_jid(id);
+        mess = mess.replace(/^\s+|\s+$/g,"");
+                  telcoson.connection.send($msg({
+                            to: jid,
+                            "type": "chat"
+                    }).c("body").t(mess));
+            jQuery("#chat_"+id+" .mess input").val('');
+        var chatMess = '';
+            chatMess += '<div class="chatBoxItem fl pv1 ph10">';
+            chatMess += '<div class="avatar rounded14 fl mr10"><img width="28" class=" rounded14" alt="" title="Me" src="/resources/template/default_web/img/avatar.png"></div>';
+            chatMess += '<span class="fl dpb ofh cf1 mt5 w80p">';
+            chatMess += mess+'<br>';
+            chatMess += '</span>';
+            chatMess += '</div>';
+            if(jQuery("#chat_"+id+" .typing").length > 0)
+                jQuery(chatMess).insertBefore("#chat_"+id+" .typing");
+            else
+                jQuery("#chat_"+id+" .chatScroll").append(chatMess);
+            $("#chat_"+id+" .chatScroll").animate({scrollTop: $("#chat_"+id+" .chatScroll")[0].scrollHeight});
+    }
+    else {
+                 message = mess.replace(/^\s+|\s+$/g,"");
+		var jid = telcoson.id_to_jid(id);
+		 var notify = $msg({to: jid, "type": "chat"})
+                .c("composing", {xmlns: "http://jabber.org/protocol/chatstates"}).c("body").t(message);
+            telcoson.connection.send(notify);
+    }
+}
+function openChat(id,name){
+    	jQuery(".ac .chatBoxIner").hide();
+	jQuery(".ac .chatItem").removeClass('active');
+        // create chat area
+        var chat = '';
+        chat += '<div class="chatItemWrapper por fl mr1 ac" id="chat_'+id+'" >';
+        chat += '<div class="chatItem fl cp h50 ph10 por active">';
+        chat += '<span class="count bg2 fs12 fwb tac rounded7 lhn poa dpb" style="display: none;"></span>';
+        chat += '<a href="javascript:void(0);" onclick="selectChat(\''+id+'\');" class="dpb mt10">';
+        chat += '<div class="avatar rounded14 fl mr5"><img src="/resources/template/default_web/img/avatar.png" alt="" width="28" class="rounded14"></div>';
+        chat += '<span class="fl dpb ofh cf1 mt5 fwb">'+name+'</span>';
+        chat += '</a>';
+        chat += '</div>';
+        chat += '</div>';
+        jQuery(".chatSlider").append(chat);
+        //----------- Add first Messenge ---------------
+        var mess = '';
+            mess += '<div class="chatBox poa ">';
+            mess += '<div class="chatBoxIner pb5 rounded7 fl abigChat" style="">';
+            mess += '<div class="chatBoxItem fl pv5 ph10 bgN">';
+            mess += '<div class="fr">';
+            mess += '<a href="javascript:void(0);" onclick="min(\''+id+'\');"><i class="iChat iChat5 fl mr10 mt5"></i></a>';
+            mess += '<a href="#"><i class="iChat iChat6 fl"></i></a>';
+            mess += '</div>';
+            mess += '</div>';
+            mess += '<div class="chatScroll">';
+            mess += '</div>';
+            mess += '<div class="chatBoxItem fl pv1 ph10 bgN mess">';
+            mess += '<input class="inv-field w95p mt10" type="text" onclick="value=\'\'" onblur="if(value==\'\'){value=\'This is description\'};" value="This is description" onkeyup="sendMess(event,\''+id+'\',this.value)">';
+            mess += '</div>'
+            mess += '</div>';
+            mess += '</div>';
+            jQuery("#chat_"+id).prepend(mess);
+            jQuery("#list_chat").hide();
 }
 function checkWindow(){
     console.log(window.isActive)
