@@ -6,7 +6,6 @@ class Invoice extends MY_Controller {
 		parent::__construct();
 
 		$this->load->model('InvoiceM');
-		$this->load->model('Invoice_ItemM');
 		$this->load->model('TaxM');
 		$this->load->model('Tax_UseM');
 	}
@@ -14,6 +13,22 @@ class Invoice extends MY_Controller {
 	function index() {
 		$total = $this->InvoiceM->get_min_max_invoice_total();
 		$data = array(
+			'total_min' => floor($total['min']),
+			'total_max' => ceil($total['max'])
+		);
+		$this->data['content'] = $this->load->view(get_template().'/invoice/index', $data, true);
+
+		$this->_do_output();
+	}
+
+	function card($id) {
+		$this->load->model('CardM');
+		$customer_card_name = $this->CardM->get_name($id);
+
+		$total = $this->InvoiceM->get_min_max_invoice_total();
+		$data = array(
+			'customer_card_id' => $id,
+			'customer_card_name' => $customer_card_name,
 			'total_min' => floor($total['min']),
 			'total_max' => ceil($total['max'])
 		);
@@ -74,7 +89,6 @@ class Invoice extends MY_Controller {
 		$invoice = $this->InvoiceM->get($id);
 		$data = array(
 			'invoice' => $invoice,
-			//'invoice_items' => $this->Invoice_ItemM->get_by_invoice_id($id),
 			//'customer_name' => '',
 			'tax' => $this->TaxM->get_list(),
 			'invoice_terms' => ''
@@ -108,7 +122,6 @@ class Invoice extends MY_Controller {
 		$invoice = $this->InvoiceM->get($id);
 		$data = array(
 			'invoice' => $invoice,
-			//'invoice_items' => $this->Invoice_ItemM->get_by_invoice_id($id),
 			//'customer_name' => '',
 			'tax' => $this->TaxM->get_list(),
 			'invoice_terms' => ''
@@ -138,7 +151,6 @@ class Invoice extends MY_Controller {
 		$invoice = $this->InvoiceM->get($id);
 		$data = array(
 			'invoice' => $invoice,
-			//'invoice_items' => $this->Invoice_ItemM->get_by_invoice_id($id),
 			//'customer_name' => '',
 			'tax' => $this->TaxM->get_list(),
 			'invoice_terms' => ''
@@ -168,7 +180,6 @@ class Invoice extends MY_Controller {
 		$invoice = $this->InvoiceM->get($id);
 		$data = array(
 			'invoice' => $invoice,
-			//'invoice_items' => $this->Invoice_ItemM->get_by_invoice_id($id),
 			'customer' => $this->InvoiceM->get_customer(),
 			'price_type' => $this->InvoiceM->get_price_type(),
 			'duration_type' => $this->InvoiceM->get_duration_type(),
@@ -208,6 +219,15 @@ class Invoice extends MY_Controller {
 	}
 
 	function save() {
+		if ($this->InvoiceM->validate() == FALSE) {
+			$this->RespM
+				->set_success(FALSE)
+				->set_message($this->InvoiceM->get_error_string())
+				->set_details($this->InvoiceM->field_errors)
+				->output_json();
+			exit;
+		}
+
 		$invoice_id = $this->InvoiceM->save();
 		if ($invoice_id === false) {
 			echo '<pre>'.print_r($this->InvoiceM->errors).'</pre>';die;
@@ -239,9 +259,17 @@ class Invoice extends MY_Controller {
 			echo '<pre>'.print_r($this->Invoice_PayM->errors).'</pre>';die;
 		}
 
+		$item = $this->input->post('addon_item');
+		if (count($item) == 1) {
+			$url = '/invoice/view/'.$item[0]['invoice_id'];
+		} else {
+			$invoice = $this->InvoiceM->get($item[0]['invoice_id']);
+			$url = '/invoice/card/'.$invoice['customer_card_id'];
+		}
+
 		echo json_encode(array(
 			'success' => true,
-			'url' => '/invoice'
+			'url' => $url
 		));
 		exit;
 	}
@@ -259,7 +287,7 @@ class Invoice extends MY_Controller {
 		$term = $this->input->get('term');
 
 		$this->load->model('CardM');
-		$customer_list = $this->CardM->search_staff($term);
+		$customer_list = $this->CardM->search_customer($term);
 
 		$content = array();
 		if ($customer_list) {

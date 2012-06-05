@@ -90,7 +90,8 @@ function cal_item_total(object) {
 	var item = $(object).closest('div.invoice_item');
 	var price = parseFloat(item.find('.unit_price').val()) || 0;
 	var qty = parseInt(item.find('.qty').val()) || 0;
-	var total = price*qty;
+	var discount = parseFloat(item.find('.discount').val()) || 0;
+	var total = price*qty*(100-discount)/100;
 	item.find('.item_total').val(total.toFixed(2));
 	item.find('.item_total_label').html(format_money(total));
 
@@ -99,8 +100,6 @@ function cal_item_total(object) {
 
 function cal_invoice_total() {
 	var sub_total = 0;
-	var tax_total = 0;
-	var discount_total = 0;
 	var invoice_total = 0;
 
 	var tax_detail = [];
@@ -115,7 +114,7 @@ function cal_invoice_total() {
 
 		var tax = 0;
 		if ($(item).find('.tax').val()) {
-			t = cal_tax($(item).find('.tax').val(), price*qty);
+			t = cal_tax($(item).find('.tax').val(), price*qty*(100-discount)/100);
 			tax = t[t.length-1].amount;
 
 			$.each(tax_detail, function(index_1, item_1) {
@@ -127,15 +126,11 @@ function cal_invoice_total() {
 			});
 		}
 
-		sub_total += price*qty;
-		tax_total += tax;
-		discount_total += (price*qty+tax)*discount/100;
-		invoice_total += price*qty+tax-(price*qty+tax)*discount/100;
+		sub_total += price*qty*(100-discount)/100;
+		invoice_total += price*qty*(100-discount)/100+tax;
 	});
 
 	$('#lbl_sub_total').html(format_money(sub_total));
-	$('#lbl_tax_total').html(format_money(tax_total));
-	$('#lbl_discount_total').html(format_money(discount_total));
 	$('#lbl_invoice_total').html(format_money(invoice_total));
 	$('#lbl_balance').html(format_money(invoice_total));
 
@@ -143,13 +138,18 @@ function cal_invoice_total() {
 		$('#tax_'+item.id+'_total').val(item.amount.toFixed(2));
 		$('#lbl_tax_'+item.id+'_total').html(format_money(item.amount));
 	});
-	/*$.each($('#total_price .total_hide'), function(index, item) {
-		if ($(this).find('span').html() != '$0,00') {
+
+	hide_tax();
+}
+
+function hide_tax() {
+	$.each($('#total_price .total_hide'), function(index, item) {
+		if ($(this).find('span').html() != '$0.00') {
 			$(this).show();
 		} else {
 			$(this).hide();
 		}
-	});*/
+	});
 }
 
 function bind_event_row(item) {
@@ -181,8 +181,8 @@ function more(object) {
 
 function format_money(n, c, d, t, q) {
 	c = isNaN(c = Math.abs(c)) ? 2 : c;
-	d = d == undefined ? ',' : d;
-	t = t == undefined ? '.' : t;
+	d = d == undefined ? '.' : d;
+	t = t == undefined ? ',' : t;
 	q = q == undefined ? '$' : q;
 	s = n < 0 ? '-' : '';
 	i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + '';
@@ -283,7 +283,7 @@ $(document).ready(function() {
 	});
 
 	$('#customer_name').autocomplete({
-		source: '/invoice/get_customer',
+		source: '/card/ajax_auto_customer',
 		minLength: 2,
 		select: function(e, ui) {
 			$('#customer_id').val(ui.item.id);
@@ -378,6 +378,7 @@ $(document).ready(function() {
 
 		$('#invoice_item_list .discount').each(function(index, item) {
 			$(this).val(val);
+			cal_item_total(this);
 		});
 
 		cal_invoice_total();
@@ -436,6 +437,7 @@ $(document).ready(function() {
 			add_last_row();
 		}
 		cal_invoice_total();
+		//hide_tax();
 	}
 	search_invoice();
 
@@ -450,8 +452,7 @@ $(document).ready(function() {
 				if (resp.success) {
 					document.location.href = resp.url;
 				} else {
-					alert('input error');
-					console.log(resp.error);
+					alert(resp.message);
 				}
 			}
 		});

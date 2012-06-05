@@ -460,6 +460,24 @@ $lang['a_invoice-created_stamp'] = 'Created Stamp';
 $lang['a_invoice-deleted'] = 'Deleted';
 
 
+// a_invoice_item
+$lang['a_invoice_item-id'] = 'Id';
+$lang['a_invoice_item-invoice_id'] = 'Invoice Id';
+$lang['a_invoice_item-product_id'] = 'Product Id';
+$lang['a_invoice_item-subscription_id'] = 'Subscription Id';
+$lang['a_invoice_item-tax_use_id'] = 'Tax Use Id';
+$lang['a_invoice_item-price_type'] = 'Price Type';
+$lang['a_invoice_item-description'] = 'Description';
+$lang['a_invoice_item-unit_price'] = 'Unit Price';
+$lang['a_invoice_item-quantity'] = 'Quantity';
+$lang['a_invoice_item-discount'] = 'Discount';
+$lang['a_invoice_item-total'] = 'Total';
+$lang['a_invoice_item-subscription_start_stamp'] = 'Subscription Start Stamp';
+$lang['a_invoice_item-subscription_end_stamp'] = 'Subscription End Stamp';
+$lang['a_invoice_item-duration_type'] = 'Duration Type';
+$lang['a_invoice_item-acc_code'] = 'Acc Code';
+
+
 // comment
 $lang['a_helpdesk_comment-id'] = 'Id';
 $lang['a_helpdesk_comment-helpdesk_id'] = 'Helpdesk Id';

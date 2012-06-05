@@ -170,7 +170,7 @@
 				<ul>
 					<li>
 						<div class="total_label">Sub Total</div>
-						<div class="total_price"><span id="lbl_sub_total">$0,00</span></div>
+						<div class="total_price"><span id="lbl_sub_total">$0.00</span></div>
 					</li>
 					<?php foreach ($tax as $r): ?>
 					<li class="total_hide">
@@ -189,7 +189,7 @@
 							<?php endforeach ?>
 							<?php endif ?>
 							<?php if (!$has_tax): ?>
-								<span id="lbl_tax_<?php echo $r['id'] ?>_total">$0,00</span>
+								<span id="lbl_tax_<?php echo $r['id'] ?>_total">$0.00</span>
 								<input type="hidden" name="addon_tax[<?php echo $r['id'] ?>][id]" />
 								<input type="hidden" name="addon_tax[<?php echo $r['id'] ?>][tax_id]" value="<?php echo $r['id'] ?>" />
 								<input type="hidden" id="tax_<?php echo $r['id'] ?>_total" name="addon_tax[<?php echo $r['id'] ?>][amount]" />
@@ -197,25 +197,17 @@
 						</div>
 					</li>
 					<?php endforeach ?>
-					<!-- <li class="total_hide" style="display: none;">
-						<div class="total_label">Tax Total</div>
-						<div class="total_price"><span id="lbl_tax_total">$0,00</span></div>
-					</li> -->
-					<li class="total_hide">
-						<div class="total_label">Discount</div>
-						<div class="total_price"><span id="lbl_discount_total">$0,00</span></div>
-					</li>
 					<li style="font-size:18px;">
 						<div class="total_label">Invoice Total</div>
-						<div class="total_price"><span id="lbl_invoice_total">$0,00</span></div>
+						<div class="total_price"><span id="lbl_invoice_total">$0.00</span></div>
 					</li>
 					<li>
 						<div class="total_label">Paid</div>
-						<div class="total_price">$0,00</div>
+						<div class="total_price">$0.00</div>
 					</li>
 					<li style="font-weight:bold;">
 						<div class="total_label">Balance</div>
-						<div class="total_price"><span id="lbl_balance">$0,00</span></div>
+						<div class="total_price"><span id="lbl_balance">$0.00</span></div>
 					</li>
 				</ul>
 			</div>

@@ -96,8 +96,8 @@
 				<li>
 					<span class="input_data_label">Customer</span>
 					<span class="fillter_input">
-						<input type="hidden" id="customer_id" name="customer_id" />
-						<input type="text" id="customer_name" name="customer_name" class="inv-field" />
+						<input type="hidden" id="customer_id" name="customer_id" value="<?php echo isset($customer_card_id) ? $customer_card_id : '' ?>" />
+						<input type="text" id="customer_name" name="customer_name" value="<?php echo isset($customer_card_name) ? $customer_card_name : '' ?>" class="inv-field" />
 					</span>
 				</li>
 				<li>

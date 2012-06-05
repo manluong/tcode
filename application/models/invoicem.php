@@ -4,13 +4,19 @@ class InvoiceM extends MY_Model {
 
 	public $data_fields = array(
 		'customer_card_id' => array(
-			'type' => 'id'
+			'type' => 'id',
+			'required' => true,
+			'allow_blank' => false
 		),
 		'invoice_stamp' => array(
-			'type' => 'datetime'
+			'type' => 'datetime',
+			'required' => true,
+			'allow_blank' => false
 		),
 		'payment_due_stamp' => array(
-			'type' => 'datetime'
+			'type' => 'datetime',
+			'required' => true,
+			'allow_blank' => false
 		),
 		'currency' => array(
 			'type' => 'text'
@@ -19,7 +25,9 @@ class InvoiceM extends MY_Model {
 			'type' => 'id'
 		),
 		'purchase_order_number' => array(
-			'type' => 'text'
+			'type' => 'text',
+			'required' => true,
+			'allow_blank' => false
 		),
 		'acc_code' => array(
 			'type' => 'text'
@@ -188,8 +196,6 @@ class InvoiceM extends MY_Model {
 		$invoice = $this->InvoiceM->get($id);
 
 		$sub_total = 0;
-		$tax_total = 0;
-		$discount_total = 0;
 		$invoice_total = 0;
 
 		$tax_detail = array();
@@ -204,7 +210,7 @@ class InvoiceM extends MY_Model {
 
 			$tax = 0;
 			if ($item['tax_use_id']) {
-				$t = $this->Tax_UseM->calculate_tax($item['tax_use_id'], $price * $qty);
+				$t = $this->Tax_UseM->calculate_tax($item['tax_use_id'], $price * $qty * (100 - $discount) / 100);
 				$tax = $t[count($t) - 1]['amount'];
 
 				foreach ($tax_detail as $item_1) {
@@ -216,10 +222,8 @@ class InvoiceM extends MY_Model {
 				}
 			}
 
-			$sub_total += $price * $qty;
-			$tax_total += $tax;
-			$discount_total += ($price * $qty + $tax) * $discount / 100;
-			$invoice_total += $price * $qty + $tax - ($price * $qty + $tax) * $discount / 100;
+			$sub_total += $price * $qty * (100 - $discount) / 100;
+			$invoice_total += $price * $qty * (100 - $discount) / 100 + $tax;
 		}
 
 		return $invoice_total;
@@ -304,6 +308,57 @@ class InvoiceM extends MY_Model {
 		}
 
 		return array('min' => $min, 'max' => $max);
+	}
+
+	function validate($data = FALSE) {
+		$has_error = FALSE;
+
+		if ($data === FALSE) $data = $this->get_form_data();
+
+		//filter out any addon data
+		$invoice = array();
+		foreach ($data AS $k => $v) {
+			$k = str_replace('addon_', '', $k);
+			if (in_array($k, array_keys($this->addons))) continue;
+			$invoice[$k] = $v;
+		}
+		if ($this->InvoiceM->is_valid($data) == FALSE) {
+			$has_error = TRUE;
+		}
+
+		$count_item = 0;
+
+		foreach ($this->addons AS $name => $model) {
+			$form_addon = FALSE;
+			if (isset($data['addon_'.$name])) $form_addon = $data['addon_'.$name];			//check if it's in $data
+			if ($form_addon === FALSE) $form_addon = $this->input->post('addon_'.$name);	//if not, check if it's post var
+			if ($form_addon === FALSE) continue;											//if not, skip to next addon
+
+			foreach ($form_addon AS $fa) {
+				if ($this->is_empty_array($fa)) continue;
+
+				$addon_set = array();
+				foreach ($this->$model->data_fields AS $key => $detail) {
+					if (isset($fa[$key])) $addon_set[$key] = $fa[$key];
+				}
+
+				if ($this->$model->is_valid($addon_set) == FALSE) {
+					$this->errors[] = $this->$model->get_error_string();
+					$this->field_errors['addon_'.$name] = $this->$model->field_errors;
+					$has_error = TRUE;
+				}
+
+				if ($name == 'item') $count_item += 1;
+			}
+		}
+
+		if ($count_item == 0) {
+			$this->errors[] = 'Please add invoice items';
+			$this->field_errors['addon_item'] = array('Please add invoice items');
+			$has_error = TRUE;
+		}
+
+		return !$has_error;
 	}
 
 	function save($data = FALSE) {
