@@ -10,9 +10,11 @@ var telcoson = {
 	logoff: function(){
 		telcoson.connection.disconnect();
                 jQuery("#list_chat").hide();
-				jQuery("#show_hide_chat").removeClass('active');
-				jQuery(".ac .chatBoxIner").hide();
-				jQuery(".ac").remove();
+                jQuery("#show_hide_chat").removeClass('active');
+                jQuery(".ac .chatBoxIner").hide();
+                jQuery(".ac").remove();
+                jQuery("#list_chat div.userchat").remove();
+                
 	},
 	status: function(status){
 		if(status != 'offline'){
@@ -44,7 +46,7 @@ var telcoson = {
 			var jid = $(this).attr("jid");
 			var name = $(this).attr("name") || jid;
 			var jid_id = telcoson.jid_to_id(jid);
-                        var contact = $('<div class="chatBoxItem fl pv5 ph10" id="user_'+jid_id+'" onclick="openChat(\''+jid_id+'\',\''+name+'\');"><div class="avatar rounded14 fl mr5"><img src="/resources/template/default_web/img/avatar.png" alt="" width="28" class=" rounded14"></div><span class="fl dpb ofh cf1 mt5 fwb">'+name+'</span><div class="tools fr"><a href="#" class="fl mr5 mt3"><i class="iChat iChat3"></i></a><a href="#" class="fl w18 mt7" style="display:none;"><input type="checkbox" class="" /></a></div></div>');
+                        var contact = $('<div class="chatBoxItem fl pv5 ph10 userchat" id="user_'+jid_id+'" onclick="openChat(\''+jid_id+'\',\''+name+'\');"><div class="avatar rounded14 fl mr5"><img src="/resources/template/default_web/img/avatar.png" alt="" width="28" class=" rounded14"></div><span class="fl dpb ofh cf1 mt5 fwb">'+name+'</span><div class="tools fr"><a href="#" class="fl mr5 mt3"><i class="iChat iChat3"></i></a><a href="#" class="fl w18 mt7" style="display:none;"><input type="checkbox" class="" /></a></div></div>');
 			jQuery("#list_chat div.chatBoxIner").append(contact);
 			//telcoson.insert_contact(contact)
 				});
@@ -129,6 +131,15 @@ jQuery(document).ready(function(){
    // effect
     jQuery("#show_hide_chat").click(function(){
         if(document.getElementById('list_chat').style.display == 'none'){
+            if(jQuery("#show_hide_chat i").hasClass('iChat7')){
+                $(document).trigger("connect", {
+                user: 'test1',
+                company: 'company1'
+                });
+                jQuery("#set_status").hide();
+                jQuery("#chat_status").html('Online');
+                jQuery("#show_hide_chat i").removeClass('iChat7').addClass('iChat1');
+            }
             jQuery("#list_chat").show();
             jQuery("#show_hide_chat").addClass('active');
             jQuery(".ac .chatBoxIner").hide();
@@ -140,8 +151,8 @@ jQuery(document).ready(function(){
         }
     });
      window.isActive = true;
-    jQuery(window).focus(function() { this.isActive = true; });
-    jQuery(window).blur(function() { this.isActive = false; });
+    jQuery(window).focus(function() {this.isActive = true;});
+    jQuery(window).blur(function() {this.isActive = false;});
    //
    // Chat
    if(jQuery("#chat").length > 0){
@@ -208,6 +219,9 @@ jQuery("#status_offline").click(function(){
 });
 // make chat window
 function chatWith(id,name,body){
+    if(!checkWindow()){
+        console.log('play a sound');
+    }
     if(jQuery("#chat_"+id).length > 0){
 		if(jQuery("#chat_"+id+" .chatBoxIner").attr('style') == 'display: none;'){
 			if(jQuery("#chat_"+id+" .count").attr('style') == 'display: none;'){
@@ -218,6 +232,7 @@ function chatWith(id,name,body){
 				var count = parseInt(jQuery("#chat_"+id+" .count").html())+1;
 			}
 			jQuery("#chat_"+id+" .count").html(count);
+                        
 		}
 		
 			var chatMess = '';
@@ -246,6 +261,7 @@ function chatWith(id,name,body){
                 chat += '</a>';
                 chat += '</div>';
                 chat += '</div>';
+        
         jQuery(".chatSlider").append(chat);
         //----------- Add first Messenge ---------------
         var mess = '';
@@ -254,7 +270,7 @@ function chatWith(id,name,body){
             mess += '<div class="chatBoxItem fl pv5 ph10 bgN">';
             mess += '<div class="fr">';
             mess += '<a href="javascript:void(0);" onclick="min(\''+id+'\');"><i class="iChat iChat5 fl mr10 mt5"></i></a>';
-            mess += '<a href="#"><i class="iChat iChat6 fl"></i></a>';
+            mess += '<a href="javascript:void(0);" onclick="close(\''+id+'\');"><i class="iChat iChat6 fl"></i></a>';
             mess += '</div>';
             mess += '</div>';
             mess += '<div class="chatScroll">';
@@ -273,11 +289,15 @@ function chatWith(id,name,body){
             jQuery("#chat_"+id).prepend(mess);
     }
     jQuery("#list_chat").hide();
+    jQuery("#show_hide_chat").removeClass('active');
     jQuery("#chat_"+id+" .typing").remove();
 }
 function min(id){
         jQuery("#chat_"+id+" .active").removeClass('active');
 	jQuery("#chat_"+id+" .chatBoxIner").hide();
+}
+function close(id){
+    jQuery("#chat_"+id).remove();
 }
 function selectChat(id){
 	if(jQuery("#chat_"+id+" .chatBoxIner").attr('style') == 'display: none;'){
@@ -287,6 +307,8 @@ function selectChat(id){
 		jQuery("#chat_"+id+" .cp").addClass('active');
                 jQuery("#chat_"+id+" .count").html('');
                 jQuery("#chat_"+id+" .count").hide();
+                jQuery("#list_chat").hide();
+                jQuery("#show_hide_chat").removeClass('active');
 	}
 	else {
 		jQuery("#chat_"+id+" .chatBoxIner").hide();
@@ -337,6 +359,7 @@ function openChat(id,name){
         chat += '</a>';
         chat += '</div>';
         chat += '</div>';
+        if(jQuery("#chat_"+id).length == 0){
         jQuery(".chatSlider").append(chat);
         //----------- Add first Messenge ---------------
         var mess = '';
@@ -345,7 +368,7 @@ function openChat(id,name){
             mess += '<div class="chatBoxItem fl pv5 ph10 bgN">';
             mess += '<div class="fr">';
             mess += '<a href="javascript:void(0);" onclick="min(\''+id+'\');"><i class="iChat iChat5 fl mr10 mt5"></i></a>';
-            mess += '<a href="#"><i class="iChat iChat6 fl"></i></a>';
+            mess += '<a href="javascript:void(0);" onclick="close(\''+id+'\');"><i class="iChat iChat6 fl"></i></a>';
             mess += '</div>';
             mess += '</div>';
             mess += '<div class="chatScroll">';
@@ -357,6 +380,12 @@ function openChat(id,name){
             mess += '</div>';
             jQuery("#chat_"+id).prepend(mess);
             jQuery("#list_chat").hide();
+            jQuery("#show_hide_chat").removeClass('active');
+        }
+        else {
+            selectChat(id);
+        }
+            
 }
 function checkWindow(){
     console.log(window.isActive)
