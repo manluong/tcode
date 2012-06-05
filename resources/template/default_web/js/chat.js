@@ -77,11 +77,20 @@ var telcoson = {
 		var jid = telcoson.jid_to_id(Strophe.getBareJidFromJid($(message).attr("from")));
 
 		var composing = $(message).find("composing");
-
+                var name = jQuery("#user_"+jid+" span").html();
 		if (composing.length > 0) {
-			if(jQuery("#typing").length == 0){
-				body = "<li id='typing'><b>"+jQuery("#"+jid).html()+": </b>Typing....<img src='"+jQuery("#base_url").val()+"images/pencil.png' /></li>";
-				jQuery("#chatbox_"+jid+" .chatboxcontent ul").append(body);
+                       
+			if(jQuery("#chat_"+jid+" .typing").length == 0){
+				var chatMess = '';
+                                chatMess += '<div class="chatBoxItem fl pv1 ph10 typing">';
+                                chatMess += '<div class="avatar rounded14 fl mr10"><img width="28" class=" rounded14" alt="" title="'+name+'" src="/resources/template/default_web/img/avatar.png"></div>';
+                                chatMess += '<span class="fl dpb ofh cf1 mt5 w80p">';
+                                chatMess += '<img class=" rounded14" alt="" title="'+name+'" src="/resources/template/default_web/img/typing.gif"><br>';
+                                chatMess += '</span>';
+                                chatMess += '</div>';
+                                jQuery("#chat_"+jid+" .chatScroll").append(chatMess);
+                                if( jQuery("#chat_"+jid).length > 0 )
+                                    $("#chat_"+jid+" .chatScroll").animate({scrollTop: $("#chat_"+jid+" .chatScroll")[0].scrollHeight});
 			}
 			var draf= ''
 			jQuery.each($(message).find("body"),function(index,value){
@@ -90,13 +99,13 @@ var telcoson = {
 				}
 			});
 			if(draf == ''){
-				jQuery("#typing").remove();
+				jQuery("#chat_"+jid+" .typing").remove();
 			}
 		}
 		else {
 
                 var body = '';
-			jQuery("#typing").remove();
+			jQuery("#chat_"+jid+" .typing").remove();
 			jQuery.each($(message).find("body"),function(index,value){
 				if(index == 0){
 					body = jQuery(this).text();
@@ -122,8 +131,8 @@ jQuery(document).ready(function(){
         if(document.getElementById('list_chat').style.display == 'none'){
             jQuery("#list_chat").show();
             jQuery("#show_hide_chat").addClass('active');
-			jQuery(".ac .chatBoxIner").hide();
-			jQuery(".ac .chatItem").removeClass('active');
+            jQuery(".ac .chatBoxIner").hide();
+            jQuery(".ac .chatItem").removeClass('active');
         }
         else {
             jQuery("#list_chat").hide();
