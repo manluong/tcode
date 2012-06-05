@@ -105,7 +105,9 @@ function decode_id2($id){
 
 
 
-
+//	Checks for any return_url passed in from the previous request and generates
+//		a link back to that previous page.
+//	Usually used in: controller / view file
 function get_return_url($default_url='') {
 	$CI =& get_instance();
 
@@ -121,6 +123,9 @@ function get_return_url($default_url='') {
 	return implode('/', $result);
 }
 
+//	Get the current URL as a querystring or HTML hidden input, to use to tell
+//		the next page what URL to return to
+//	Usually used in: view file
 function set_return_url($querystring=FALSE) {
 	$seg = array('app','action','id','subaction');
 	$result = array();
@@ -142,6 +147,8 @@ function set_return_url($querystring=FALSE) {
 	}
 }
 
+//	If there are any return_urls passed in, re-use them again
+//	Usually used in: view file
 function reset_return_url_form() {
 	$seg = array('app','action','id','subaction');
 	$result = array();
@@ -157,14 +164,20 @@ function reset_return_url_form() {
 	return implode("\n\r", $result);
 }
 
-function execute_return_url($link_only=FALSE) {
+//	Checks for a return_url and if there is, redirect to it.
+//	Usually used in: controller
+function execute_return_url($link_only=FALSE, $default_url='') {
 	$CI =& get_instance();
 
 	if (!$CI->has_return) return NULL;
-	if ($link_only) return get_return_url();
 
-	redirect(get_return_url());
+	$return_url = get_return_url($default_url);
+	if ($link_only) return $return_url;
+
+	redirect($return_url);
 }
+
+
 // Helper function to format full path correctly
 function format_dirpath($dirpath, $filename) {
 	if ($dirpath === '/') {

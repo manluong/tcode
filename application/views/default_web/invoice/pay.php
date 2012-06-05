@@ -30,11 +30,11 @@
 				<tr class="tr_pay">
 					<td>
 						<span class="input_data_label">Invoice #</span>
-						<span class="fillter_input"><input type="text" name="addon_item[0][invoice_id]" class="pay_invoice_id inv-field" /></span>
+						<span class="fillter_input"><input type="text" name="addon_item[0][invoice_id]" value="<?php echo $invoice_id ?>" class="pay_invoice_id inv-field" /></span>
 					</td>
 					<td>
 						<span class="input_data_label">Amount</span>
-						<span class="fillter_input"><input type="text" name="addon_item[0][amount]" class="pay_amount inv-field" /></span>
+						<span class="fillter_input"><input type="text" name="addon_item[0][amount]" value="<?php echo $invoice_total ?>" class="pay_amount inv-field" /></span>
 					</td>
 				</tr>
 				<tr id="tr_pay_total">
@@ -44,7 +44,7 @@
 					</td>
 					<td>
 						<span class="input_data_label">Total</span>
-						<span id="lbl_pay_total" class="input_data_label" style="text-align: left;">$0</span>
+						<span id="lbl_pay_total" class="input_data_label" style="text-align: left;"><?php echo '$'.number_format($invoice_total, 2) ?></span>
 						<input type="hidden" id="pay_total" name="amount" />
 					</td>
 				</tr>

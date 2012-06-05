@@ -181,6 +181,50 @@ class InvoiceM extends MY_Model {
 		}
 	}
 
+	function get_invoice_total($id) {
+		$this->load->model('TaxM');
+		$this->load->model('Tax_UseM');
+
+		$invoice = $this->InvoiceM->get($id);
+
+		$sub_total = 0;
+		$tax_total = 0;
+		$discount_total = 0;
+		$invoice_total = 0;
+
+		$tax_detail = array();
+		foreach ($this->TaxM->get_list() as $tax) {
+			$tax_detail[] = array('id' => $tax['id'], 'name' => $tax['name'], 'amount' => 0);
+		}
+
+		foreach ($invoice['addon_item'] as $item) {
+			$price = $item['unit_price'];
+			$qty = $item['quantity'];
+			$discount = $item['discount'];
+
+			$tax = 0;
+			if ($item['tax_use_id']) {
+				$t = $this->Tax_UseM->calculate_tax($item['tax_use_id'], $price * $qty);
+				$tax = $t[count($t) - 1]['amount'];
+
+				foreach ($tax_detail as $item_1) {
+					foreach ($t as $item_2) {
+						if ($item_1['id'] == $item_2['id']) {
+							$item_1['amount'] += $item_2['amount'];
+						}
+					}
+				}
+			}
+
+			$sub_total += $price * $qty;
+			$tax_total += $tax;
+			$discount_total += ($price * $qty + $tax) * $discount / 100;
+			$invoice_total += $price * $qty + $tax - ($price * $qty + $tax) * $discount / 100;
+		}
+
+		return $invoice_total;
+	}
+
 	function get_customer() {
 		$this->db->select('id, first_name, last_name');
 		$query = $this->db->get('card');
@@ -234,14 +278,6 @@ class InvoiceM extends MY_Model {
 			return false;
 		}
 	}
-
-	/*function get_customer_by_name($name) {
-		$this->db->select('id, display_name');
-		$this->db->like('display_name', $name);
-		$query = $this->db->get('card');
-
-		return $query->result();
-	}*/
 
 	function get_product_by_name($name) {
 		$this->db->select('*');

@@ -54,12 +54,8 @@
 			<ul>
 				<li>
 					<span class="input_data_label">Customer</span>
-					<select name="customer_card_id">
-						<option value="">- - - Select - - -</option>
-						<?php foreach ($customer as $r): ?>
-						<option value="<?php echo $r->id ?>"<?php echo ($r->id == $invoice['customer_card_id']) ? ' selected="selected"' : '' ?>><?php echo trim($r->first_name.' '.$r->last_name) ?></option>
-						<?php endforeach ?>
-					</select>
+					<input type="hidden" id="customer_id" name="customer_card_id" value="<?php echo $invoice['customer_card_id'] ?>" />
+					<input type="text" id="customer_name" name="customer_card_name" value="<?php echo trim($invoice['customer_card_info']['first_name'].' '.$invoice['customer_card_info']['last_name']) ?>" class="inv-field" />
 				</li>
 				<li>
 					<span class="input_data_label">Invoice Date</span>

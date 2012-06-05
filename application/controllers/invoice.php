@@ -222,7 +222,8 @@ class Invoice extends MY_Controller {
 
 	function pay($id) {
 		$data = array (
-			'invoice_id' => $id
+			'invoice_id' => $id,
+			'invoice_total' => $this->InvoiceM->get_invoice_total($id)
 		);
 
 		$this->data['content'] = $this->load->view(get_template().'/invoice/pay', $data, true);
@@ -255,22 +256,6 @@ class Invoice extends MY_Controller {
 	}
 
 	function get_customer() {
-		/*$term = $this->input->get('term');
-		$customer_list = $this->InvoiceM->get_customer_by_name($term);
-
-		$content = array();
-		if ($customer_list) {
-			foreach ($customer_list as $customer) {
-				$content[] = array(
-					'id' => $customer->id,
-					'label' => $customer->display_name,
-					'value' => $customer->display_name,
-				);
-			}
-		}
-
-		echo json_encode($content);*/
-
 		$term = $this->input->get('term');
 
 		$this->load->model('CardM');

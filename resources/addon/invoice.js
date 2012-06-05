@@ -153,8 +153,7 @@ function cal_invoice_total() {
 }
 
 function bind_event_row(item) {
-	$(item).find('.item_datepicker').datetimepicker({
-		showTimepicker: false,
+	$(item).find('.item_datepicker').datepicker({
 		dateFormat: 'yy-mm-dd'
 	});
 
@@ -213,14 +212,13 @@ function search_invoice() {
 			for (i in resp) {
 				var item = resp[i];
 				var row = new Array();
-				row[0] = '<input type="checkbox" />';
-				row[1] = (item.first_name+' '+item.last_name).trim();
-				row[2] = '<a href="/invoice/view/'+item.id+'">'+item.id+'</a>';
+				row[0] = (item.first_name+' '+item.last_name).trim();
+				row[1] = '<a href="/invoice/view/'+item.id+'">'+item.id+'</a>';
 				var date = new Date((item.payment_due_stamp).substring(0, 10));
-				row[3] = $.datepicker.formatDate('yy-mm-dd', date);
-				row[4] = format_money(item.total);
-				row[5] = '';
-				row[6] = '<a href="/invoice/edit/'+item.id+'">Edit</a></td>';
+				row[2] = $.datepicker.formatDate('yy-mm-dd', date);
+				row[3] = format_money(item.total);
+				row[4] = '';
+				row[5] = '<a href="/invoice/edit/'+item.id+'">Edit</a></td>';
 				data.push(row);
 			}
 
@@ -228,7 +226,6 @@ function search_invoice() {
 				"bDestroy" : true,
 				"aaData": data,
 				"aoColumns": [
-					{ "sTitle": "" },
 					{ "sTitle": "Customer" },
 					{ "sTitle": "Invoice #" },
 					{ "sTitle": "Date" },
@@ -348,8 +345,7 @@ $(document).ready(function() {
 		}
 	});
 
-	$('.datepicker').datetimepicker({
-		showTimepicker: false,
+	$('.datepicker').datepicker({
 		dateFormat: 'yy-mm-dd',
 		onSelect: function() {
 			search_invoice();
