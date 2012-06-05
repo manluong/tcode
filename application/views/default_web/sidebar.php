@@ -1,6 +1,7 @@
 <ul class="tabsNavigation">
 	<?php
 		foreach ($app_list as $app) {
+			if ($app['display'] == 0) continue;
 
 			if ($active_app == $app) {
 				echo '<li class="active">';
@@ -8,7 +9,7 @@
 				echo '<li>';
 			}
 
-	?><div class="activeTab"><a href="<?=base_url().$app?>" data-app_name="<?=$app?>" class="ajax <?=$app?>"><?=lang('core_apps-name-'.$app)?></a></div></li><?php
+	?><div class="activeTab"><a href="<?=base_url().$app['name']?>" data-app_name="<?=$app['name']?>" class="ajax <?=$app['name']?>"><?=lang('core_apps-name-'.$app['name'])?></a></div></li><?php
 		}
 	?>
 </ul>
