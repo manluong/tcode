@@ -221,6 +221,8 @@ jQuery("#status_offline").click(function(){
 function chatWith(id,name,body){
     if(!checkWindow()){
         console.log('play a sound');
+        jQuery('embed').remove();
+        jQuery('body').append('<embed src="http://apple.telcoson.local/resources/sound/chat.wav" autostart="true" hidden="true" loop="false">');
     }
     if(jQuery("#chat_"+id).length > 0){
 		if(jQuery("#chat_"+id+" .chatBoxIner").attr('style') == 'display: none;'){
@@ -388,5 +390,5 @@ function openChat(id,name){
             
 }
 function checkWindow(){
-    console.log(window.isActive)
+    return window.isActive;
 }
