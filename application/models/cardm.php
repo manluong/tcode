@@ -344,14 +344,8 @@ class CardM extends MY_Model {
 				'display_name'
 			),
 		);
-
-		$staff_card_ids = $this->AclM->get_card_ids_in_role('Staff');
-
-		//if there are no STAFF card_ids, return a blank result.
-		if (count($staff_card_ids) == 0) return array();
-
 		//limit results to card_ids in STAFF role
-		$this->where[] = 'id IN ('.implode(',', $staff_card_ids).')';
+		$this->where[] = 'id IN (SELECT card_id FROM access_user_role WHERE role_id=1)';
 
 		//retrieve only id, first_name and last_name
 		$this->select_fields = array('id', 'first_name', 'last_name', 'display_name');
@@ -360,13 +354,8 @@ class CardM extends MY_Model {
 	}
 
 	function get_staff_list() {
-		$staff_card_ids = $this->AclM->get_card_ids_in_role('Staff');
-
-		//if there are no STAFF card_ids, return a blank result.
-		if (count($staff_card_ids) == 0) return array();
-
 		//limit results to card_ids in STAFF role
-		$this->where[] = 'id IN ('.implode(',', $staff_card_ids).')';
+		$this->where[] = 'id IN (SELECT card_id FROM access_user_role WHERE role_id=1)';
 
 		return $this->get_list();
 	}
@@ -383,14 +372,8 @@ class CardM extends MY_Model {
 			),
 		);
 
-		//get id on Card table
-		$card_ids = $this->AclM->get_card_ids_in_role('Client');
-
-		//if there are no card_ids, return a blank result.
-		if (count($card_ids) == 0) return array();
-
-		//limit results to card_ids
-		$this->where[] = 'id IN ('.implode(',', $card_ids).')';
+		//limit results to card_ids IN Client, Client+ role
+		$this->where[] = 'id IN (SELECT card_id FROM access_user_role WHERE role_id IN (2,3))';
 
 		//retrieve only id, first_name and last_name
 		$this->select_fields = array('id', 'first_name', 'last_name', 'display_name');

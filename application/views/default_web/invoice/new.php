@@ -145,7 +145,7 @@
 					<select id="terms_id" name="terms_id" class="right">
 						<option value="">Pre Define Terms</option>
 						<?php foreach ($terms as $r): ?>
-						<option value="<?php echo $r->id ?>"><?php echo $r->name ?></option>
+						<option value="<?php echo $r['id'] ?>"><?php echo $r['name'] ?></option>
 						<?php endforeach ?>
 					</select>
 				</div>

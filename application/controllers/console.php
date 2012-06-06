@@ -282,4 +282,11 @@ class Console extends MY_Controller {
 		echo "Deleted user from DB.\n";
 		$this->acl_rebuild('ro');
 	}
+
+	function search_customer($string) {
+		$this->load->model('CardM');
+		$results = $this->CardM->search_customer($string);
+		echo print_r($results, TRUE);
+		echo "\n";
+	}
 }

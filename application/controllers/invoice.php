@@ -6,13 +6,17 @@ class Invoice extends MY_Controller {
 		parent::__construct();
 
 		$this->load->model('InvoiceM');
+		$this->load->model('Invoice_TermsM');
 		$this->load->model('TaxM');
 		$this->load->model('Tax_UseM');
 	}
 
 	function index() {
+		$is_client = $this->UserM->is_client();
+
 		$total = $this->InvoiceM->get_min_max_invoice_total();
 		$data = array(
+			'is_client' => $is_client,
 			'total_min' => floor($total['min']),
 			'total_max' => ceil($total['max'])
 		);
@@ -22,11 +26,14 @@ class Invoice extends MY_Controller {
 	}
 
 	function card($id) {
+		$is_client = $this->UserM->is_client();
+
 		$this->load->model('CardM');
 		$customer_card_name = $this->CardM->get_name($id);
 
 		$total = $this->InvoiceM->get_min_max_invoice_total();
 		$data = array(
+			'is_client' => $is_client,
 			'customer_card_id' => $id,
 			'customer_card_name' => $customer_card_name,
 			'total_min' => floor($total['min']),
@@ -35,12 +42,6 @@ class Invoice extends MY_Controller {
 		$this->data['content'] = $this->load->view(get_template().'/invoice/index', $data, true);
 
 		$this->_do_output();
-	}
-
-	function test($id) {
-		$this->InvoiceM->sett_fill_card_info = TRUE;
-		$data = $this->InvoiceM->get($id);
-		echo '<pre>', print_r($data, TRUE), '</pre>';
 	}
 
 	function search() {
@@ -61,6 +62,11 @@ class Invoice extends MY_Controller {
 			//'page' => $page,
 			//'row_per_page' => $row_per_page
 		);
+
+		if ($this->UserM->is_client()) {
+			$search_param['customer_id'] = $this->UserM->get_card_id();
+			$search_param['customer_name'] = '';
+		}
 
 		//$total_record = $this->InvoiceM->search($search_param, true);
 		//$data = array(
@@ -105,9 +111,9 @@ class Invoice extends MY_Controller {
 		$data['quickjump'] = $this->load->view(get_template().'/card/quickjump', $card, TRUE);
 
 		if ($invoice['terms_id']) {
-			$terms = $this->InvoiceM->get_terms_by_id($invoice['terms_id']);
+			$terms = $this->Invoice_TermsM->get($invoice['terms_id']);
 			if ($terms) {
-				$data['invoice_terms'] = $terms->content;
+				$data['invoice_terms'] = $terms['content'];
 			}
 		} else {
 			$data['invoice_terms'] = $invoice['terms_content'];
@@ -135,9 +141,9 @@ class Invoice extends MY_Controller {
 		//}
 
 		if ($invoice['terms_id']) {
-			$terms = $this->InvoiceM->get_terms_by_id($invoice['terms_id']);
+			$terms = $this->Invoice_TermsM->get($invoice['terms_id']);
 			if ($terms) {
-				$data['invoice_terms'] = $terms->content;
+				$data['invoice_terms'] = $terms['content'];
 			}
 		} else {
 			$data['invoice_terms'] = $invoice['terms_content'];
@@ -164,9 +170,9 @@ class Invoice extends MY_Controller {
 		//}
 
 		if ($invoice['terms_id']) {
-			$terms = $this->InvoiceM->get_terms_by_id($invoice['terms_id']);
+			$terms = $this->Invoice_TermsM->get($invoice['terms_id']);
 			if ($terms) {
-				$data['invoice_terms'] = $terms->content;
+				$data['invoice_terms'] = $terms['content'];
 			}
 		} else {
 			$data['invoice_terms'] = $invoice['terms_content'];
@@ -185,14 +191,14 @@ class Invoice extends MY_Controller {
 			'duration_type' => $this->InvoiceM->get_duration_type(),
 			'tax' => $this->TaxM->get_list(),
 			'tax_use' => $this->Tax_UseM->get_list(),
-			'terms' => $this->InvoiceM->get_terms(),
+			'terms' => $this->Invoice_TermsM->get_list(),
 			'invoice_terms' => ''
 		);
 
 		if ($invoice['terms_id']) {
-			$terms = $this->InvoiceM->get_terms_by_id($invoice['terms_id']);
+			$terms = $this->Invoice_TermsM->get($invoice['terms_id']);
 			if ($terms) {
-				$data['invoice_terms'] = $terms->content;
+				$data['invoice_terms'] = $terms['content'];
 			}
 		} else {
 			$data['invoice_terms'] = $invoice['terms_content'];
@@ -210,7 +216,7 @@ class Invoice extends MY_Controller {
 			'duration_type' => $this->InvoiceM->get_duration_type(),
 			'tax' => $this->TaxM->get_list(),
 			'tax_use' => $this->Tax_UseM->get_list(),
-			'terms' => $this->InvoiceM->get_terms()
+			'terms' => $this->Invoice_TermsM->get_list()
 		);
 
 		$this->data['content'] = $this->load->view(get_template().'/invoice/new', $data, true);
@@ -219,7 +225,9 @@ class Invoice extends MY_Controller {
 	}
 
 	function save() {
-		if ($this->InvoiceM->validate() == FALSE) {
+		$data = $this->InvoiceM->get_form_data();
+
+		if ($this->InvoiceM->is_valid($data) == FALSE) {
 			$this->RespM
 				->set_success(FALSE)
 				->set_message($this->InvoiceM->get_error_string())
@@ -228,8 +236,9 @@ class Invoice extends MY_Controller {
 			exit;
 		}
 
-		$invoice_id = $this->InvoiceM->save();
-		if ($invoice_id === false) {
+		$this->InvoiceM->sett_skip_validation = TRUE;
+		$invoice_id = $this->InvoiceM->save($data);
+		if ($invoice_id === FALSE) {
 			echo '<pre>'.print_r($this->InvoiceM->errors).'</pre>';die;
 		}
 
@@ -254,12 +263,24 @@ class Invoice extends MY_Controller {
 	function pay_save() {
 		$this->load->model('Invoice_PayM');
 
-		$invoice_pay_id = $this->Invoice_PayM->save();
-		if ($invoice_pay_id === false) {
+		$data = $this->Invoice_PayM->get_form_data();
+
+		if ($this->Invoice_PayM->is_valid($data) == FALSE) {
+			$this->RespM
+				->set_success(FALSE)
+				->set_message($this->Invoice_PayM->get_error_string())
+				->set_details($this->Invoice_PayM->field_errors)
+				->output_json();
+			exit;
+		}
+
+		$this->Invoice_PayM->sett_skip_validation = TRUE;
+		$invoice_pay_id = $this->Invoice_PayM->save($data);
+		if ($invoice_pay_id === FALSE) {
 			echo '<pre>'.print_r($this->Invoice_PayM->errors).'</pre>';die;
 		}
 
-		$item = $this->input->post('addon_item');
+		$item = $data['addon_item'];
 		if (count($item) == 1) {
 			$url = '/invoice/view/'.$item[0]['invoice_id'];
 		} else {
@@ -276,31 +297,11 @@ class Invoice extends MY_Controller {
 
 	function get_terms($id) {
 		$content = '';
-		$terms = $this->InvoiceM->get_terms_by_id($id);
+		$terms = $this->Invoice_TermsM->get($id);
 		if ($terms) {
-			$content = $terms->content;
+			$content = $terms['content'];
 		}
 		echo $content;
-	}
-
-	function get_customer() {
-		$term = $this->input->get('term');
-
-		$this->load->model('CardM');
-		$customer_list = $this->CardM->search_customer($term);
-
-		$content = array();
-		if ($customer_list) {
-			foreach ($customer_list as $customer) {
-				$content[] = array(
-					'id' => $customer['id'],
-					'label' => trim($customer['first_name'].' '.$customer['last_name']),
-					'value' => trim($customer['first_name'].' '.$customer['last_name'])
-				);
-			}
-		}
-
-		echo json_encode($content);
 	}
 
 	function get_product() {

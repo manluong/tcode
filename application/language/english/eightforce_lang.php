@@ -478,6 +478,26 @@ $lang['a_invoice_item-duration_type'] = 'Duration Type';
 $lang['a_invoice_item-acc_code'] = 'Acc Code';
 
 
+// a_invoice_pay
+$lang['a_invoice_pay-id'] = 'Id';
+$lang['a_invoice_pay-transaction_stamp'] = 'Transaction Stamp';
+$lang['a_invoice_pay-transaction_number'] = 'Transaction Number';
+$lang['a_invoice_pay-amount'] = 'Amount';
+$lang['a_invoice_pay-status'] = 'Status';
+$lang['a_invoice_pay-docs_id'] = 'Docs Id';
+$lang['a_invoice_pay-void_type'] = 'Void Type';
+$lang['a_invoice_pay-void_stamp'] = 'Void Stamp';
+$lang['a_invoice_pay-void_docs_id'] = 'Void Docs Id';
+$lang['a_invoice_pay-note'] = 'Note';
+
+
+// a_invoice_payitem
+$lang['a_invoice_payitem-id'] = 'Id';
+$lang['a_invoice_payitem-invoice_pay_id'] = 'Invoice Pay Id';
+$lang['a_invoice_payitem-invoice_id'] = 'Invoice Id';
+$lang['a_invoice_payitem-amount'] = 'Amount';
+
+
 // comment
 $lang['a_helpdesk_comment-id'] = 'Id';
 $lang['a_helpdesk_comment-helpdesk_id'] = 'Helpdesk Id';
