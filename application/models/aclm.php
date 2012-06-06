@@ -1091,7 +1091,15 @@ class AclM extends MY_Model {
 		return $result;
 	}
 
+	function is_client($card_id) {
+		$rs = $this->db->select('id')
+				->from('access_user_role')
+				->where('card_id', $card_id)
+				->where_in('role_id', array(2,3))
+				->get();
 
+		return ($rs->num_rows() > 0);
+	}
 
 
 
