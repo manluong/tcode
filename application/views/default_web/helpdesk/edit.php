@@ -166,8 +166,8 @@
 			<p style="display:none;">Shows you how to use the core plupload API.</p>
 			<div id="container" >
 				<div id="pickfiles" class="btn_attach"></div>
-				<div id="uploadfiles" class="btn_plupload">Upload File</div>
-				<div id="filelist" style="float:left ;margin:23px 0 0 -154px;"></div>
+				<div style="display:none;" id="uploadfiles"></div>
+				<div id="filelist" style="float:left ;margin:23px 0 0 -80px;"></div>
 			</div>
 		</div>
 	</div>
@@ -256,4 +256,7 @@
 		return false;
 	};
 	uploader.init();
+	jQuery('input[type="file"]').change(function(){
+	   uploader.start();
+	});
 </script>

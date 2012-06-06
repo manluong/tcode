@@ -108,11 +108,11 @@ $lang['card_notes-note'] = 'Note';
 
 
 // builder
-$lang['core_apps-core_apps_id'] = 'Id';
-$lang['core_apps-core_apps_status'] = 'Status';
-$lang['core_apps-core_apps_showmenu'] = 'Showmenu';
-$lang['core_apps-core_apps_menusort'] = 'Menusort';
-$lang['core_apps-core_apps_name'] = 'Name';
+$lang['core_apps-id'] = 'Id';
+$lang['core_apps-status'] = 'Status';
+$lang['core_apps-display'] = 'Showmenu';
+$lang['core_apps-sort_order'] = 'Menusort';
+$lang['core_apps-name'] = 'Name';
 $lang['core_dataset-id'] = 'Id';
 $lang['core_dataset-dataset_name'] = 'Dataset Name';
 $lang['core_dataset-app_name'] = 'App Name';
