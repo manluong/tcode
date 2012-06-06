@@ -7,10 +7,14 @@ class Invoice_Pay_ItemM extends MY_Model {
 			'type' => 'id'
 		),
 		'invoice_id' => array(
-			'type' => 'id'
+			'type' => 'id',
+			'required' => true,
+			'allow_blank' => false,
 		),
 		'amount' => array(
-			'type' => 'numeric'
+			'type' => 'numeric',
+			'required' => true,
+			'allow_blank' => false
 		)
 	);
 

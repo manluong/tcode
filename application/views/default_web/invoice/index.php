@@ -93,6 +93,7 @@
 		<div class="ClearLeft"></div>
 		<div id="input_data_fillter">
 			<ul>
+				<?php if (!$is_client): ?>
 				<li>
 					<span class="input_data_label">Customer</span>
 					<span class="fillter_input">
@@ -100,6 +101,7 @@
 						<input type="text" id="customer_name" name="customer_name" value="<?php echo isset($customer_card_name) ? $customer_card_name : '' ?>" class="inv-field" />
 					</span>
 				</li>
+				<?php endif ?>
 				<li>
 					<span class="input_data_label">Invoice #</span>
 					<span class="fillter_input"><input type="text" name="invoice_id" class="inv-field" /></span>

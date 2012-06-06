@@ -7,7 +7,9 @@ class Invoice_PayM extends MY_Model {
 			'type' => 'text'
 		),
 		'transaction_number' => array(
-			'type' => 'text'
+			'type' => 'text',
+			'required' => true,
+			'allow_blank' => false
 		),
 		'amount' => array(
 			'type' => 'text'
@@ -52,6 +54,7 @@ class Invoice_PayM extends MY_Model {
 
 	function get($id) {
 		$result = parent::get($id);
+		if ($result === FALSE) return FALSE;
 
 		$this->fill_addons($result);
 
@@ -60,6 +63,7 @@ class Invoice_PayM extends MY_Model {
 
 	function get_list() {
 		$result = parent::get_list();
+		if ($result === FALSE) return FALSE;
 
 		$this->fill_addons($result, MULTIPLE_DATA);
 
@@ -96,6 +100,86 @@ class Invoice_PayM extends MY_Model {
 				$data = $data[0];
 			}
 		}
+	}
+
+	function get_form_data() {
+		$data = parent::get_form_data();
+
+		foreach ($this->addons AS $name => $model) {
+			$form_addon = FALSE;
+			if (isset($data['addon_'.$name])) $form_addon = $data['addon_'.$name];			//check if it's in $data
+			if ($form_addon === FALSE) $form_addon = $this->input->post('addon_'.$name);	//if not, check if it's post var
+			if ($form_addon === FALSE) continue;											//if not, skip to next addon
+
+			foreach ($form_addon AS $fa) {
+				if ($this->is_empty_array($fa)) continue;
+
+				$addon_set = array();
+				foreach ($this->$model->data_fields AS $key => $detail) {
+					if (isset($fa[$key])) $addon_set[$key] = $fa[$key];
+				}
+
+				$data['addon_'.$name][] = $addon_set;
+			}
+		}
+
+		return $data;
+	}
+
+	function is_valid(&$data) {
+		$has_error = FALSE;
+
+		//filter out any addon data
+		$set = array();
+		foreach ($data AS $k => $v) {
+			$k = str_replace('addon_', '', $k);
+			if (in_array($k, array_keys($this->addons))) continue;
+			$set[$k] = $v;
+		}
+		if (parent::is_valid($set) == FALSE) {
+			$has_error = TRUE;
+		}
+
+		$count_item = 0;
+
+		foreach ($this->addons AS $name => $model) {
+			if (!isset($data['addon_'.$name])) continue;
+
+			foreach ($data['addon_'.$name] AS $addon_set) {
+				if ($this->$model->is_valid($addon_set) == FALSE) {
+					$this->errors[] = $this->$model->get_error_string();
+					$this->field_errors['addon_'.$name] = $this->$model->field_errors;
+					$has_error = TRUE;
+				}
+
+				if ($name == 'item') {
+					if (!isset($this->field_errors['addon_item']['invoice_id']) && !isset($this->field_errors['addon_item']['amount'])) {
+						$total = $this->InvoiceM->get_invoice_total($addon_set['invoice_id']);
+						if ($total === FALSE) {
+							$this->errors[] = 'Invoice not exist';
+							$this->field_errors['invoice_id'] = array('Invoice not exist');
+							$has_error = TRUE;
+						} else {
+							if ($addon_set['amount'] > $total) {
+								$this->errors[] = 'Invoice #'.$addon_set['invoice_id'].' Amount paying must less than the outstanding amount';
+								$this->field_errors['amount'] = array('Invoice #'.$addon_set['invoice_id'].' Amount paying must less than the outstanding amount');
+								$has_error = TRUE;
+							}
+						}
+					}
+
+					$count_item += 1;
+				}
+			}
+		}
+
+		if ($count_item == 0) {
+			$this->errors[] = 'Please add invoice';
+			$this->field_errors['addon_item'] = array('Please add invoice');
+			$has_error = TRUE;
+		}
+
+		return !$has_error;
 	}
 
 	function save($data = FALSE) {

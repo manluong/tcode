@@ -67,6 +67,7 @@ class InvoiceM extends MY_Model {
 
 	function get($id) {
 		$result = parent::get($id);
+		if ($result === FALSE) return FALSE;
 
 		$this->fill_addons($result);
 
@@ -75,6 +76,7 @@ class InvoiceM extends MY_Model {
 
 	function get_list() {
 		$result = parent::get_list();
+		if ($result === FALSE) return FALSE;
 
 		$this->fill_addons($result, MULTIPLE_DATA);
 
@@ -194,6 +196,7 @@ class InvoiceM extends MY_Model {
 		$this->load->model('Tax_UseM');
 
 		$invoice = $this->InvoiceM->get($id);
+		if ($invoice === FALSE) return FALSE;
 
 		$sub_total = 0;
 		$invoice_total = 0;
@@ -250,26 +253,6 @@ class InvoiceM extends MY_Model {
 		return $query->result();
 	}
 
-	function get_terms() {
-		$this->db->select('*');
-		$query = $this->db->get('a_invoice_terms');
-
-		return $query->result();
-	}
-
-	function get_terms_by_id($id) {
-		$this->db->select('*');
-		$this->db->where('id', $id);
-		$query = $this->db->get('a_invoice_terms');
-
-		$result = $query->result();
-		if ($result) {
-			return $result[0];
-		} else {
-			return false;
-		}
-	}
-
 	function get_customer_by_id($id) {
 		$this->db->select('id, first_name, last_name');
 		$this->db->where('id', $id);
@@ -310,23 +293,8 @@ class InvoiceM extends MY_Model {
 		return array('min' => $min, 'max' => $max);
 	}
 
-	function validate($data = FALSE) {
-		$has_error = FALSE;
-
-		if ($data === FALSE) $data = $this->get_form_data();
-
-		//filter out any addon data
-		$invoice = array();
-		foreach ($data AS $k => $v) {
-			$k = str_replace('addon_', '', $k);
-			if (in_array($k, array_keys($this->addons))) continue;
-			$invoice[$k] = $v;
-		}
-		if ($this->InvoiceM->is_valid($data) == FALSE) {
-			$has_error = TRUE;
-		}
-
-		$count_item = 0;
+	function get_form_data() {
+		$data = parent::get_form_data();
 
 		foreach ($this->addons AS $name => $model) {
 			$form_addon = FALSE;
@@ -342,6 +310,33 @@ class InvoiceM extends MY_Model {
 					if (isset($fa[$key])) $addon_set[$key] = $fa[$key];
 				}
 
+				$data['addon_'.$name][] = $addon_set;
+			}
+		}
+
+		return $data;
+	}
+
+	function is_valid(&$data) {
+		$has_error = FALSE;
+
+		//filter out any addon data
+		$set = array();
+		foreach ($data AS $k => $v) {
+			$k = str_replace('addon_', '', $k);
+			if (in_array($k, array_keys($this->addons))) continue;
+			$set[$k] = $v;
+		}
+		if (parent::is_valid($set) == FALSE) {
+			$has_error = TRUE;
+		}
+
+		$count_item = 0;
+
+		foreach ($this->addons AS $name => $model) {
+			if (!isset($data['addon_'.$name])) continue;
+
+			foreach ($data['addon_'.$name] AS $addon_set) {
 				if ($this->$model->is_valid($addon_set) == FALSE) {
 					$this->errors[] = $this->$model->get_error_string();
 					$this->field_errors['addon_'.$name] = $this->$model->field_errors;
