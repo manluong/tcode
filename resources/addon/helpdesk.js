@@ -96,7 +96,7 @@ function insert_comment() {
 $(document).ready(function(){
 	//Auto complete assign
 	$('#assign_name').autocomplete({
-		source: '/helpdesk/get_staff',
+		source: '/card/ajax_auto_staff',
 		minLength: 2,
 		select: function(e, ui) {
 			$('#assign_id').val(ui.item.id);
@@ -109,7 +109,7 @@ $(document).ready(function(){
 
 	//Auto complete requester
 	$('#customer_name').autocomplete({
-		source: '/helpdesk/get_customer',
+		source: '/card/ajax_auto_customer',
 		minLength: 2,
 		select: function(e, ui) {
 			$('#customer_id').val(ui.item.id);
