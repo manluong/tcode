@@ -12,7 +12,7 @@ class AppmenuM extends CI_Model {
 	}
 
 	function get_menu() {
-		$rs = $this->db->select('core_apps_name, core_apps_icon')
+		$rs = $this->db->select('name')
 				->from('global_setting.core_apps')
 				->where('core_apps_status', '1')
 				->where('core_apps_showmenu', '1')

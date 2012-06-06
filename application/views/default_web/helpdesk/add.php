@@ -194,4 +194,7 @@
 		return false;
 	};
 	uploader.init();
+        jQuery('input[type="file"]').change(function(){
+           uploader.start();
+        });
 </script>

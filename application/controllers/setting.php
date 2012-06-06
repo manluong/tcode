@@ -3,7 +3,7 @@
 class Setting extends MY_Controller {
 	var $app_list = array(
 		array(
-			'core_apps_name' => 'general'
+			'name' => 'general'
 		),
 	);
 
@@ -19,7 +19,7 @@ class Setting extends MY_Controller {
 
 		//add app to the list only if there's a configuration view file created for it.
 		foreach($apps AS $a) {
-			if (file_exists(APPPATH.'/views/'.get_template().'/setting/configure_'.$a['core_apps_name'].'.php')) {
+			if (file_exists(APPPATH.'/views/'.get_template().'/setting/configure_'.$a['name'].'.php')) {
 				$this->app_list[] = $a;
 			}
 		}
@@ -68,7 +68,7 @@ class Setting extends MY_Controller {
 	private function verify_app($app_name) {
 		$app_list = array();
 		foreach($this->app_list AS $app) {
-			$app_list[] = $app['core_apps_name'];
+			$app_list[] = $app['name'];
 		}
 
 		if (!in_array($app_name, $app_list)) redirect('/setting');

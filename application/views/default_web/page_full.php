@@ -150,7 +150,9 @@
 	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/plugins.js"></script>
 	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/script.js"></script>
         <script type="text/javascript" src="/resources/template/<?=get_template()?>/js/strophe.js"></script>
+        <script type="text/javascript" src="/resources/template/<?=get_template()?>/js/buzz.js"></script>
         <script type="text/javascript" src="/resources/template/<?=get_template()?>/js/chat.js"></script>
+        
 	<script>
 
 	</script>

@@ -563,15 +563,17 @@ class MY_Model extends CI_Model {
 
 		$this->db->from($this->database.$this->table);
 
+		$temp = array();
 		foreach($this->search_fields AS $sf) {
 			if (count($sf) == 1) {
 				$sf = array_shift($sf);
-				$this->db->or_like($sf, $search_string, 'after');
+				$temp[] = $sf." LIKE '".$search_string."%'";
 			} else {
 				$sf = implode(",' ',", $sf);
-				$this->db->or_like("CONCAT($sf)", $search_string, 'after');
+				$temp[] = "CONCAT($sf) LIKE '$search_string%'";
 			}
 		}
+		if (count($temp)>0) $this->where[] = "(".implode(' OR ',$temp).")";
 
 		if ($this->sett_has_system_fields && $this->sett_filter_deleted) {
 			$this->db->where('deleted', 0);
