@@ -208,7 +208,7 @@ class UserM extends MY_Model {
 
 	//refresh current user's info. used when he updates his particulars
 	public function refresh_info() {
-		if ($this->id === FALSE) return FALSE;
+		if ($this->id === FALSE || $this->id === NULL) return FALSE;
 
 		$this->info = $this->get_info($this->id);
 		$this->session->set_userdata('user_info', $this->info);
@@ -219,7 +219,7 @@ class UserM extends MY_Model {
 		// Already Login
 		$this->id = $this->session->userdata('id');
 
-		if ($this->id === FALSE) {
+		if ($this->id === FALSE || $this->id === NULL) {
 			if ($this->input->cookie('ci_session') && $this->has_return) {
 				$this->status = 8;
 			}
