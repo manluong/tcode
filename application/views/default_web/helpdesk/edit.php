@@ -22,27 +22,7 @@
 </div>
 
 <div id="content_top">
-	<div id="user_profile">
-		<div id="user_avatar"><image alt="avatar" src="<?=site_url('resources/template/default_web/img/invoice')?>/invoice-avatar.jpg"/></div>
-		<div id="user_info">
-			<ul>
-				<li class="user_sex">Mr.</li>
-				<li class="user_name">Albert Z</li>
-				<li class="user_position">Facebook Inc. <span style="font-weight:normal;">CEO</span></li>
-			</ul>
-		</div>
-	</div>
-	<div id="customer_list">
-		<div class="btn-group">
-		  <a href="#" class="btn btn-inverse">CUSTOMER</a>
-		  <a href="#" data-toggle="dropdown" class="btn btn-inverse dropdown-toggle"><span class="caret"></span></a>
-		  <ul class="dropdown-menu">
-			<li><a href="#"><i class="icon-pencil"></i> Edit</a></li>
-			<li><a href="#"><i class="icon-trash"></i> Delete</a></li>
-			<li><a href="#"><i class="icon-ban-circle"></i> Ban</a></li>
-		  </ul>
-		</div>
-	</div>
+	<?//=$quickjump?>
 </div>
 
 <div id="boxes">
@@ -110,7 +90,7 @@
 				<li>
 					<span class="fillter_label">Status</span>
 					<span class="fillter_input">
-						<select disabled="disabled" name="status" id="status">
+						<select name="status" id="status">
 							<option value="">- - - Something - - -</option>
 							<?php if(!empty($status)) {
 									if(!empty($result['status'])) {
@@ -118,9 +98,9 @@
 									} else {
 										$value_status = 0;
 									}
-									foreach($status as $k) {
+									for($i = 0; $i < count($status); $i++){
 							?>
-							<option <?=($value_status == $k->id?'selected=selected':'' )?> value="<?=$k->id?>"><?=$k->name?></option>
+							<option <?=($value_status == $status[$i]['id']?'selected=selected':'' )?> value="<?=$status[$i]['id']?>"><?=$status[$i]['name']?></option>
 							<?php }}?>
 						</select>
 					</span>
@@ -136,9 +116,9 @@
 									} else {
 										$value_group = 0;
 									}
-									foreach($group as $k) {
+									for($i = 0; $i < count($group); $i++){
 							?>
-							<option <?=($value_group == $k->id?'selected=selected':'' )?> value="<?=$k->id?>"><?=$k->name?></option>
+							<option <?=($value_group == $group[$i]['id']?'selected=selected':'' )?> value="<?=$group[$i]['id']?>"><?=$group[$i]['name']?></option>
 							<?php }}?>
 						</select>
 					</span>
@@ -154,9 +134,9 @@
 									} else {
 											$value_type= 0;
 									}
-									foreach($type as $k) {
+									for($i = 0; $i < count($type); $i++){
 							?>
-							<option <?=($value_type == $k->id?'selected=selected':'' )?> value="<?=$k->id?>"><?=$k->name?></option>
+							<option <?=($value_type == $type[$i]['id']?'selected=selected':'' )?> value="<?=$type[$i]['id']?>"><?=$type[$i]['name']?></option>
 							<?php }}?>
 						</select>
 					</span>
@@ -172,9 +152,9 @@
 									} else {
 											$value_pri= 0;
 									}
-									foreach($priority as $k) {
+									for($i = 0; $i < count($priority); $i++){
 							?>
-							<option <?=($value_pri == $k->id?'selected=selected':'' )?> value="<?=$k->id?>"><?=$k->name?></option>
+							<option <?=($value_pri == $priority[$i]['id']?'selected=selected':'' )?> value="<?=$priority[$i]['id']?>"><?=$priority[$i]['name']?></option>
 							<?php }}?>
 						</select>
 					</span>
@@ -210,14 +190,26 @@
 				<?php if (!empty($comment)) {
 						foreach ($comment as $k) {
 						$date = strtotime($k->created_stamp);
-						$date = (time() - $date)%60 ;
+						$minute = (int)((time() - $date)/60) ;
+						
+						$day = 0;
+						$hour = 0;
+						
+						if($minute > 60){
+							$hour = (int)($date/60);
+							$minute = ($date%60);
+						}
+						if($hour > 24){
+							$day = (int)($hour/24);
+							$hour = ($hour%24);
+						}
 				?>
 				<div class="comment_info">
 					<div class="comment_info_user">
 						<div class="comment_user_avatar"><image src="<?=site_url('resources/template/default_web/img/helpdesk')?>/comment_avatar.png"/></div>
 						<div class="comment_user_name">
 							<div style="color:#444444;font-size:13px;width:100%;height:14px;"><strong>Tim C.</strong> Apple Inc.</div>
-							<div style="font-size:11px;color:#b0b0b0;"><?=$date?> minutes ago</div>
+							<div style="font-size:11px;color:#b0b0b0;"><?=($day>0 ? $day.' day ' : '')?><?=($hour>0 ? $hour.' hour ' : '')?><?=$minute.' minute'?> ago</div>
 						</div>
 					</div>
 					<div class="comment_content">

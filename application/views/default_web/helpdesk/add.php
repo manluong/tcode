@@ -90,9 +90,9 @@
 						<select name="status" id="status">
 							<option value="">- - - Something - - -</option>
 							<?php if(!empty($status)) {
-									foreach($status as $k) {
+									for($i = 0; $i < count($status); $i++){
 							?>
-							<option value="<?=$k->id?>"><?=$k->name?></option>
+							<option value="<?=$status[$i]['id']?>"><?=$status[$i]['name']?></option>
 							<?php }}?>
 						</select>
 					</span>
@@ -104,9 +104,9 @@
 						<select name="group" id="group">
 							<option value="">- - - Something - - -</option>
 							<?php if(!empty($group)) {
-									foreach($group as $k) {
+									for($i = 0; $i < count($group); $i++){
 							?>
-							<option value="<?=$k->id?>"><?=$k->name?></option>
+							<option value="<?=$group[$i]['id']?>"><?=$group[$i]['name']?></option>
 							<?php }}?>
 						</select>
 					</span>
@@ -118,9 +118,9 @@
 						<select name="type" id="type">
 							<option value="">- - - Something - - -</option>
 							<?php if(!empty($type)) {
-									foreach($type as $k) {
+									for($i = 0; $i < count($type); $i++){
 							?>
-							<option value="<?=$k->id?>"><?=$k->name?></option>
+							<option value="<?=$type[$i]['id']?>"><?=$type[$i]['name']?></option>
 							<?php }}?>
 						</select>
 					</span>
@@ -131,10 +131,10 @@
 					<span class="fillter_input">
 						<select name="priority" id="priority">
 							<option value="">- - - Something - - -</option>
-							 <?php if(!empty($priority)) {								
-									foreach($priority as $k) {
+							 <?php if(!empty($priority)) {	
+									for($i = 0; $i < count($priority); $i++){
 							?>
-							<option value="<?=$k->id?>"><?=$k->name?></option>
+							<option value="<?=$priority[$i]['id']?>"><?=$priority[$i]['name']?></option>
 							<?php }}?>
 						</select>
 					</span>
@@ -165,6 +165,7 @@
 	function getid(id) {
 		return document.getElementById(id);
 	}
+	
 	var uploader = new plupload.Uploader({
 		runtimes : 'gears,html5,flash,silverlight,browserplus',
 		browse_button : 'pickfiles',
@@ -177,14 +178,17 @@
 			{title : "Zip files", extensions : "zip"}
 		]
 	});
+	
 	uploader.bind('FilesAdded', function(up, files) {
 		for (var i in files) {
 			getid('filelist').innerHTML += '<div id="' + files[i].id + '">' + files[i].name + ' (' + plupload.formatSize(files[i].size) + ') <b></b></div>';
 		}
 	});
+	
 	uploader.bind('UploadProgress', function(up, file) {
 		getid(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
 	});
+	
 	getid('uploadfiles').onclick = function() {
 		uploader.start();
 		return false;

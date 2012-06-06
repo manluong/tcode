@@ -13,6 +13,16 @@ function submit_insert_helpdesk() {
 	var priority = $('#priority').val();
 
 	var url = '/helpdesk/save_insert_helpdesk';
+	//Validate input data
+	
+	if(subject == ''){
+		alert('Please input subject !');
+		return false;
+	}
+
+	if(multiEmail(cc_email) == false){
+		return false;
+	}
 
 	$.post(url,{
 			id : id,
@@ -28,12 +38,25 @@ function submit_insert_helpdesk() {
 			if(comment != ''){
 				insert_comment();
 			}else{
-				window.location='helpdesk';
+				window.location='/helpdesk/edit/'+id;
 			}
 
 		}
 	);
 }
+
+function multiEmail(email_field) {
+	var emailReg = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+	
+	var email = email_field.split(';');
+	for (var i = 0; i < email.length; i++) {
+		if (!emailReg.test(email[i])) {
+			alert('one or more email addresses entered is invalid');
+			return false;
+		}
+	}
+	return true;
+} 
 
 function insert_comment() {
 	var comment = $('#comment').val();
@@ -63,7 +86,7 @@ function insert_comment() {
 			priority : priority_comment,
 		},function(data){
 			if (data != '') {
-				window.location= 'helpdesk';
+				window.location= '/helpdesk/edit/'+id_helpdesk;
 			}
 		}
 	);
@@ -73,7 +96,7 @@ function insert_comment() {
 $(document).ready(function(){
 	//Auto complete assign
 	$('#assign_name').autocomplete({
-		source: '/helpdesk/get_staff',
+		source: '/card/ajax_auto_staff',
 		minLength: 2,
 		select: function(e, ui) {
 			$('#assign_id').val(ui.item.id);
@@ -86,7 +109,7 @@ $(document).ready(function(){
 
 	//Auto complete requester
 	$('#customer_name').autocomplete({
-		source: '/helpdesk/get_customer',
+		source: '/card/ajax_auto_customer',
 		minLength: 2,
 		select: function(e, ui) {
 			$('#customer_id').val(ui.item.id);

@@ -5,8 +5,7 @@
 		$.extend( $.fn.dataTableExt.oStdClasses, {
 				    "sWrapper": "dataTables_wrapper form-inline"
 				} );
-		var result = '<?=$result?>';
-		load_helpdesk_list(result);
+		helpdesk_fillter();
 	});
 </script>
 
@@ -63,9 +62,9 @@
 						<select name="status" id="status" onchange="helpdesk_fillter();">
 							<option value="">- - - Something - - -</option>
 							<?php if(!empty($status)) {
-									foreach($status as $k) {
+									for($i = 0; $i < count($status); $i++){
 							?>
-							<option value="<?=$k->id?>"><?=$k->name?></option>
+							<option value="<?=$status[$i]['id']?>"><?=$status[$i]['name']?></option>
 							<?php }}?>
 						</select>
 					</span>
@@ -76,9 +75,9 @@
 						<select name="group" id="group" onchange="helpdesk_fillter();">
 							<option value="">- - - Something - - -</option>
 							<?php if(!empty($group)) {
-									foreach($group as $k) {
+									for($i = 0; $i < count($group); $i++){
 							?>
-							<option value="<?=$k->id?>"><?=$k->name?></option>
+							<option value="<?=$group[$i]['id']?>"><?=$group[$i]['name']?></option>
 							<?php }}?>
 						</select>
 					</span>
@@ -89,9 +88,9 @@
 						<select name="type" id="type" onchange="helpdesk_fillter();">
 							<option value="">- - - Something - - -</option>
 							<?php if(!empty($type)) {
-									foreach($type as $k) {
+									for($i = 0; $i < count($type); $i++){
 							?>
-							<option value="<?=$k->id?>"><?=$k->name?></option>
+							<option value="<?=$type[$i]['id']?>"><?=$type[$i]['name']?></option>
 							<?php }}?>
 						</select>
 					</span>
@@ -101,10 +100,10 @@
 					<span class="fillter_input">
 						<select name="priority" id="priority" onchange="helpdesk_fillter();">
 							<option value="">- - - Something - - -</option>
-							 <?php if(!empty($priority)) {								
-									foreach($priority as $k) {
+							 <?php if(!empty($priority)) {	
+									for($i = 0; $i < count($priority); $i++){
 							?>
-							<option value="<?=$k->id?>"><?=$k->name?></option>
+							<option value="<?=$priority[$i]['id']?>"><?=$priority[$i]['name']?></option>
 							<?php }}?>
 						</select>
 					</span>
