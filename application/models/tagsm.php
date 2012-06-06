@@ -52,7 +52,7 @@ class TagsM extends MY_Model {
 
 			$temp = array(
 				'app_id' => $key['app_id'],
-				'app_name' => $apps[$key['app_id']]['core_apps_name'],
+				'app_name' => $apps[$key['app_id']]['name'],
 				'app_data_id' => $key['app_data_id'],
 				'app_data_id_encoded' => encode_id($key['app_data_id']),
 				'app_data_name' => $this->$apps[$key['app_id']]['ci_model']->get_data_name($key['app_data_id']),
