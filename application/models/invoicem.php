@@ -331,6 +331,14 @@ class InvoiceM extends MY_Model {
 			$has_error = TRUE;
 		}
 
+		if (!isset($this->field_errors['customer_card_id'])) {
+			if ($this->AclM->is_client($set['customer_card_id']) == FALSE) {
+				$this->errors[] = 'Non-customer cannot have invoice';
+				$this->field_errors['customer_card_id'] = array('Non-customer cannot have invoice');
+				$has_error = TRUE;
+			}
+		}
+
 		$count_item = 0;
 
 		foreach ($this->addons AS $name => $model) {
