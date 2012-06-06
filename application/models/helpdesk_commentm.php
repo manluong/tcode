@@ -9,61 +9,6 @@ class Helpdesk_CommentM extends MY_Model {
         $this->sett_filter_deleted = FALSE;
 	}
 
-	function get_list() {
-		$this->db->select('*');
-		$query = $this->db->get('a_helpdesk');
-
-		if ($query->result()) {
-			return $query->result();
-		} else {
-			return false;
-		}
-	}
-
-	function get_group() {
-		$this->db->select('*');
-		$query = $this->db->get('access_ro');
-
-		if ($query->result()) {
-			return $query->result();
-		} else {
-			return false;
-		}
-	}
-
-	function get_status() {
-		$this->db->select('*');
-		$query = $this->db->get('a_status');
-
-		if ($query->result()) {
-			return $query->result();
-		} else {
-			return false;
-		}
-	}
-
-	function get_type() {
-		$this->db->select('*');
-		$query = $this->db->get('a_type');
-
-		if ($query->result()) {
-			return $query->result();
-		} else {
-			return false;
-		}
-	}
-
-	function get_priority() {
-		$this->db->select('*');
-		$query = $this->db->get('a_priority');
-
-		if ($query->result()) {
-			return $query->result();
-		} else {
-			return false;
-		}
-	}
-
 	function get_assign() {
 		$this->db->select('id,display_name');
 		$query = $this->db->get('card');
@@ -78,6 +23,7 @@ class Helpdesk_CommentM extends MY_Model {
 	function get_content($id) {
 		$this->db->select('*');
 		$this->db->where('helpdesk_id',$id);
+		$this->db->where('active',0);
 		$query = $this->db->get($this->table);
 
 		if ($query->result()) {
@@ -115,7 +61,24 @@ class Helpdesk_CommentM extends MY_Model {
 			return false;
 		}
 	}
+	
+	function get_priority_type($id) {
+		$this->db->select('name');
+		$this->db->where('id',$id);
+		$query = $this->db->get('a_priority');
 
+		if ($query->result()) {
+			$tmp = $query->result();
+			if (!empty($tmp)) {
+				foreach($tmp as $k) {
+					return $k->name;
+				}
+			}
+		} else {
+			return false;
+		}
+	}
+	
     function get_comment_not_use() {
 		$this->db->select('id');
 		$this->db->where('active', 1);

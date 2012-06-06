@@ -15,7 +15,7 @@
 	<div id="top_button" style="width:210px;">
 		<ul>
 			<li><a href="<?=site_url('helpdesk')?>" class="btn btn-inverse" href="#">LIST</a></li>
-			<li><a class="btn btn-inverse" href="#">MY CASE</a></li>
+			<li><a onclick="helpdesk_fillter(<?=$card_id?>);" class="btn btn-inverse" href="#">MY CASE</a></li>
 			<li><a href="<?=site_url('helpdesk/add')?>" class="btn btn-inverse" href="#">NEW</a></li>
 		</ul>
 	</div>
@@ -59,19 +59,8 @@
 				<li>
 					<span style="font-weight:normal;" class="input_data_label">Assigned</span>
 					<span class="fillter_input">
-						<select  name="assign" id="assign">
-							<option value="">something</option>
-							<?php if (!empty($assign)) {
-									if (!empty($result['assign_id'])) {
-										$value_assign = $result['assign_id'];
-									} else {
-										$value_assign = 0;
-									}
-									foreach ($assign as $k) {
-							?>
-							<option <?=($value_assign == $k->id?'selected=selected':'' )?> value="<?=$k->id?>"><?=$k->display_name?></option>
-							<?php }}?>
-						</select>
+						<input type="hidden" id="assign_id" name="assign_id" />
+						<input type="text" id="assign_name" name="assign_name" class="inv-field" />
 					</span>
 				</li>
 				<li style="height:22px;">
@@ -188,21 +177,23 @@
 		<div id="helpdesk_fillter">
 			<div id="wap_comment_list">
 				<?php if (!empty($comment)) {
-						foreach ($comment as $k) {
-						$date = strtotime($k->created_stamp);
+						for($i = 0; $i < count($comment) ; $i++){
+						$pri = $comment[$i]['priority'] ;
+						$date = strtotime($comment[$i]['created_stamp']);
 						$minute = (int)((time() - $date)/60) ;
 						
 						$day = 0;
 						$hour = 0;
 						
 						if($minute > 60){
-							$hour = (int)($date/60);
-							$minute = ($date%60);
+							$hour = (int)($minute/60);
+							$minute = ($minute%60);
 						}
 						if($hour > 24){
 							$day = (int)($hour/24);
 							$hour = ($hour%24);
 						}
+						
 				?>
 				<div class="comment_info">
 					<div class="comment_info_user">
@@ -213,10 +204,12 @@
 						</div>
 					</div>
 					<div class="comment_content">
-						<div class="wap_comment_content"><?=$k->comment?></div>
-						<div style="float:left;width:50px;margin:-22px 0 0 -48px" id="arrow_comment_<?=$k->id?>" onclick="show_detail_comment(<?=$k->id?>);" class="up_arrow"></div>
-						<div id="comment_detail_<?=$k->id?>" class="comment_detail">
-							<p>Type set to Incident</p>
+						<div class="wap_comment_content"><?=$comment[$i]['comment']?></div>
+						<div style="float:left;width:50px;margin:-22px 0 0 -48px" id="arrow_comment_<?=$comment[$i]['id']?>" onclick="show_detail_comment(<?=$comment[$i]['id']?>);" class="up_arrow"></div>
+						<div id="comment_detail_<?=$comment[$i]['id']?>" class="comment_detail">
+							<?php if(!empty($pri)){?>
+							<p>Priority set to <?=$this->Helpdesk_CommentM->get_priority_type($pri)?></p>
+							<?php }?>
 							<p>Subject set to '<?=$result['subject']?>'</p>
 							<p>Email send to '<?=$result['cc_email']?>'</p><br/>
 							<span style="font-size:11px;">

@@ -17,6 +17,7 @@ class Helpdesk extends MY_Controller {
 
 	function index() {
 		$content = array(
+			'card_id' => $this->UserM->get_card_id(),
 			'group' =>  $this->Helpdesk_GroupM->get_list(),
 			'status' => $this->Helpdesk_StatusM->get_list(),
 			'priority' => $this->Helpdesk_PriorityM->get_list(),
@@ -31,6 +32,11 @@ class Helpdesk extends MY_Controller {
 		$this->HelpdeskM->set_order_by($order_by);
 		
 		$where = array();
+		$card_id = $this->input->post('card_id');
+		if(!empty($card_id)){
+			$where[] = "created_card_id='$card_id'";
+		}
+		
 		$status = $this->input->post('status');
 		if(!empty($status)){
 			$where[] = "status='$status'";
@@ -203,6 +209,7 @@ class Helpdesk extends MY_Controller {
 
 		//get data for add new helpdesk
 		$content = array(
+			'card_id' => $this->UserM->get_card_id(),
 			'comment_id' => $insert_comment_id,
 			'helpdesk_id' => $helpdesk_id,
 			'group' =>  $this->Helpdesk_GroupM->get_list(),
@@ -235,17 +242,23 @@ class Helpdesk extends MY_Controller {
 		$comment_id = $this->Helpdesk_CommentM->save($comment_data);
 		$result = $this->HelpdeskM->get($id);
 		
+		$where_comment[] = "active = 0";
+		$where_comment[] = "helpdesk_id='$id'";
+		$this->Helpdesk_CommentM->where = $where_comment;
+		$comment = $this->Helpdesk_CommentM->get_list();
+
 		$content = array(
+			'card_id' => $this->UserM->get_card_id(),
 			'id' => $id,
 			'comment_id' => $comment_id,
 			'group' =>  $this->Helpdesk_GroupM->get_list(),
 			'status' => $this->Helpdesk_StatusM->get_list(),
 			'priority' => $this->Helpdesk_PriorityM->get_list(),
 			'type' => $this->Helpdesk_TypeM->get_list(),
-			'comment' => $this->Helpdesk_CommentM->get_content($id),
+			'comment' => $comment,
 			'result' => $result,
 			'assign' => $this->Helpdesk_CommentM->get_assign(),
-			'file_attach' => $this->Helpdesk_CommentM->get_comment_files($id),
+			'file_attach' => $this->Helpdesk_CommentM->get_comment_files($comment_id),
 		);
 		//echo '<pre>';
 		//print_r($result['created_card_id']);
@@ -343,7 +356,18 @@ class Helpdesk extends MY_Controller {
 		$ajax_content = $this->load->view(get_template().'/helpdesk/ajax_updateInfoHelpdesk',$content ,true);
 		echo $ajax_content;
 	}
-
+	
+	function resave_helpdesk_info() {
+		$id = $this->input->post('id');
+		$data = array(
+			'id'=>$id,
+			'status' => $this->input->post('status'),
+			'priority' => $this->input->post('priority'),
+		);
+		$id_save = $this->HelpdeskM->save($data);
+		return $id_save;
+	}
+	
 	function upload($comment_id){
 	   $this->load->library('filel');
 	   $file = $this->filel->save('file', 'Helpdesk');

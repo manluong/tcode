@@ -21,7 +21,7 @@
 	<div id="top_button" style="width:210px;">
 		<ul>
 			<li><a href="<?=site_url('helpdesk')?>" class="btn btn-inverse" href="#">LIST</a></li>
-			<li><a class="btn btn-inverse" href="#">MY CASE</a></li>
+			<li><a onclick="helpdesk_fillter(<?=$card_id?>);" class="btn btn-inverse" href="#">MY CASE</a></li>
 			<li><a href="<?=site_url('helpdesk/add')?>" class="btn btn-inverse" href="#">NEW</a></li>
 		</ul>
 	</div> 

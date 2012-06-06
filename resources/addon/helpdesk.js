@@ -13,13 +13,12 @@ function submit_insert_helpdesk() {
 	var priority = $('#priority').val();
 
 	var url = '/helpdesk/save_insert_helpdesk';
-	//Validate input data
 	
+	//Validate data input
 	if(subject == ''){
 		alert('Please input subject !');
 		return false;
 	}
-
 	if(multiEmail(cc_email) == false){
 		return false;
 	}
@@ -50,8 +49,8 @@ function multiEmail(email_field) {
 	
 	var email = email_field.split(';');
 	for (var i = 0; i < email.length; i++) {
-		if (!emailReg.test(email[i])) {
-			alert('one or more email addresses entered is invalid');
+		if (!emailReg.test(email[i].trim())) {
+			alert('One or more email addresses entered is invalid');
 			return false;
 		}
 	}
@@ -149,7 +148,7 @@ function load_helpdesk_list(data){
 	load_datatable(content);
 }
 
-function helpdesk_fillter(){
+function helpdesk_fillter(card_id){
 	var status = $('#status').val();
 	var group = $('#group').val();
 	var type = $('#type').val();
@@ -162,6 +161,7 @@ function helpdesk_fillter(){
 			group : group,
 			type : type,
 			priority : priority,
+			card_id : card_id,
 		},function(data){
 			var json = jQuery.parseJSON(data);
 			var content = new Array();
@@ -253,7 +253,7 @@ function load_datatable(data){
 	}})
 }
 
-//EDIT
+//HELPDESK EDIT
 
 $(document).ready(function(){
 	$("#helpdesk_change_info").click(function(){
@@ -263,11 +263,20 @@ $(document).ready(function(){
 
 	$("#helpdesk_save_info").click(function(){
 		var subject = $('#subject').val();
-		var assign = $('#assign').val();
+		var assign = $('#assign_id').val();
 		var cc_email = $('#cc_email').val();
 		var id = $('#hiddenIdAdmincp').val();
 
 		var url = '/helpdesk/ajaxChangeInfoHelpDesk';
+		
+		//Validate data input
+		if(subject == ''){
+			alert('Please input subject !');
+			return false;
+		}
+		if(multiEmail(cc_email) == false){
+			return false;
+		}
 		$.post(url,{
 				id : id,
 				assign : assign,
@@ -290,6 +299,17 @@ function submit_comment(){
 	var status = $('#status').val();
 	var type = $('#type').val();
 
+	//Change helpdesk info
+	var url1 = '/helpdesk/resave_helpdesk_info';
+	$.post(url1,{
+			id : id,
+			status : status,
+			priority : priority,
+		},function(data){
+			alert(data);
+		}
+	);	
+	
 	if ($('#private').is(':checked')) {
 		var pri = 1;
 	} else {
