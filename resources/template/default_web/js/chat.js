@@ -150,7 +150,7 @@ jQuery(document).ready(function(){
             jQuery("#show_hide_chat").removeClass('active');
         }
     });
-     window.isActive = true;
+    window.isActive = true;
     jQuery(window).focus(function() {this.isActive = true;});
     jQuery(window).blur(function() {this.isActive = false;});
    //
@@ -221,8 +221,10 @@ jQuery("#status_offline").click(function(){
 function chatWith(id,name,body){
     if(!checkWindow()){
         console.log('play a sound');
-        jQuery('embed').remove();
-        jQuery('body').append('<embed src="http://apple.telcoson.local/resources/sound/chat.wav" autostart="true" hidden="true" loop="false">');
+        var mySound = new buzz.sound( "/resources/sound/chat", {
+        formats: [ "wav"]
+        });
+        mySound.play();
     }
     if(jQuery("#chat_"+id).length > 0){
 		if(jQuery("#chat_"+id+" .chatBoxIner").attr('style') == 'display: none;'){
