@@ -5,9 +5,18 @@ class SettingM extends MY_Model {
 
 	var $settings = array(
 		'general' => array(
-			'company_name',
-			'timezone'
+			'company_name' => array(
+				'type' => 'string'
+			),
+			'timezone' => array(
+				'type' => 'string'
+			)
 		),
+		'helpdesk' => array(
+			'priority' => array(
+				'type' => 'selection'
+			)
+		)
 	);
 
 	function __construct() {
@@ -120,12 +129,14 @@ class SettingM extends MY_Model {
 			$data = array();
 			$sql = 'INSERT INTO global_setting.setting (app_id, card_id, setting_level, setting_name, setting_value, can_override) VALUES ';
 
-			foreach($this->settings[$app_name] AS $s) {
+			foreach($this->settings[$app_name] AS $s => $s_details) {
 				$field = $this->input->post('global-'.$s);
 
 				if ($field !== FALSE) {
 					$field_override = $this->input->post('global-'.$s.'-override');
 					if ($field_override === FALSE) $field_override = 1;
+
+					if ($s_details['type'] == 'selection') $field = json_encode($field);
 
 					$data[] = "(".$app_id.",0,'global','".$s."','".$field."',".$field_override.")";
 				}
@@ -142,11 +153,13 @@ class SettingM extends MY_Model {
 		$data = array();
 		$sql = 'INSERT INTO setting (app_id, card_id, setting_level, setting_name, setting_value, can_override) VALUES ';
 		foreach($levels AS $l) {
-			foreach($this->settings[$app_name] AS $s) {
+			foreach($this->settings[$app_name] AS $s => $s_details) {
 				$field = $this->input->post($l.'-'.$s);
 				if ($field !== FALSE) {
 					$field_override = $this->input->post($l.'-'.$s.'-override');
 					if ($field_override === FALSE) $field_override = 1;
+
+					if ($s_details['type'] == 'selection') $field = json_encode($field);
 
 					$data[] = "(".$app_id.",".$card_id.",'".$l."','".$s."','".$field."',".$field_override.")";
 				}
