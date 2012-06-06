@@ -220,7 +220,6 @@ jQuery("#status_offline").click(function(){
 // make chat window
 function chatWith(id,name,body){
     if(!checkWindow()){
-        console.log('play a sound');
         var mySound = new buzz.sound( "/resources/sound/chat", {
         formats: [ "wav"]
         });
