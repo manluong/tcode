@@ -22,16 +22,22 @@ class Invoice_ItemM extends MY_Model {
 			'type' => 'text'
 		),
 		'unit_price' => array(
-			'type' => 'numeric'
+			'type' => 'numeric',
+			'required' => true,
+			'allow_blank' => false
 		),
 		'quantity' => array(
-			'type' => 'numeric'
+			'type' => 'numeric',
+			'required' => true,
+			'allow_blank' => false
 		),
 		'discount' => array(
 			'type' => 'text'
 		),
 		'total' => array(
-			'type' => 'numeric'
+			'type' => 'numeric',
+			'required' => true,
+			'allow_blank' => false
 		),
 		'subscription_start_stamp' => array(
 			'type' => 'datetime'

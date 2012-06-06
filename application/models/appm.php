@@ -81,7 +81,7 @@ class AppM extends MY_Model {
 
 	//Get list of Apps, with License restrictions applied.
 	//TODO: add ACL restriction.
-	function get_apps($show_hidden_apps=FALSE) {
+	function get_apps() {
 		if (!$this->UserM->is_logged_in()) return array();
 
 		if (APP_ROLE == 'TSUB') {
@@ -92,8 +92,6 @@ class AppM extends MY_Model {
 		$this->db->select()
 			->from('global_setting.core_apps')
 			->where('status', 1);
-
-		if (!$show_hidden_apps) $this->db->where('display', 1);
 
 		if (APP_ROLE == 'TSUB') {
 			$this->db->where_in('id', $accessible_app_ids);
@@ -107,7 +105,7 @@ class AppM extends MY_Model {
 		foreach($rs->result_array() AS $row) {
 			if (!$this->AclM->check($row['name'])) continue;
 
-			$results[] = $row['name'];
+			$results[] = $row;
 
 			$this->app_cache[$row['id']] = $row;
 			$this->app_cache[$row['name']] = $row;

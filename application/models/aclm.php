@@ -26,8 +26,8 @@ class AclM extends MY_Model {
 			$app = $this->url['app'];
 			$acl_app_list = $this->AppM->acl_app_list;
 			$has_access = FALSE;
-			foreach($acl_app_list AS $app_name) {
-				if ($app_name == $app) $has_access = TRUE;
+			foreach($acl_app_list AS $app_list_item) {
+				if ($app_list_item['name'] == $app) $has_access = TRUE;
 			}
 			if (!$has_access) {
 				die('You do not have the permissions to access this app');
@@ -847,6 +847,9 @@ class AclM extends MY_Model {
 				'a_helpdesk',
 				'a_helpdesk_comment',
 				'a_helpdesk_re',
+			),
+			'setting' => array(
+				'setting'
 			)
 		);
 
@@ -927,6 +930,8 @@ class AclM extends MY_Model {
 
 		// ===================================================================== Installing RoCo, "Rules"
 		$this->deny('DEFAULT', 'DEFAULT');
+		$this->grant('DEFAULT', 'DEFAULT/setting');
+		$this->grant('DEFAULT', 'DEFAULT/api');
 		$this->grant('DEFAULT/Staff', 'DEFAULT');
 		$this->grant('DEFAULT/Vendor', 'DEFAULT/dashboard');
 		$this->grant('DEFAULT/Vendor', 'DEFAULT/helpdesk');

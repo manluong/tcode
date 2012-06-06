@@ -61,7 +61,7 @@ class Card extends MY_Controller {
 
 		$view_data['social_label'] = 'Social';
 		$view_data['social_type_options'] = $this->Card_SocialM->get_options('type');
-		
+
 		//$content = $this->load->view(get_template().'/card/edit', $view_data, TRUE);
 		//echo $content;
 		$this->data['content'] = $this->load->view(get_template().'/card/edit', $view_data, TRUE);
@@ -77,7 +77,7 @@ class Card extends MY_Controller {
 			redirect('/card/view/'.$id);
 		}
 	}
-	
+
 	function upload($card_id){
 	   $this->load->library('filel');
 	   $file = $this->filel->save('file', 'CardM');
@@ -86,7 +86,7 @@ class Card extends MY_Controller {
 		   echo $file['hash'];
 		}
 	}
-	
+
 	function ajax_get_list() {
 		$limit = $this->input->post('limit');
 		$offset = $this->input->post('offset');
@@ -161,5 +161,55 @@ class Card extends MY_Controller {
 		$this->RespM->set_success(TRUE)
 				->set_details($list)
 				->output_json();
+	}
+
+	function ajax_auto_staff() {
+		$term = $this->input->get('term');
+		$list = $this->CardM->search_staff($term);
+
+		$data = array();
+		if (count($list)) {
+			foreach ($list as $v) {
+				if (strlen($v['display_name'])) {
+					$name = $v['display_name'];
+				} else {
+					$name = $v['first_name'].' '.$v['last_name'];
+				}
+
+				$data[] = array(
+					'id' => $v['id'],
+					'label' => $name,
+					'value' => $name
+				);
+			}
+		}
+
+		echo json_encode($data);
+		exit;
+	}
+
+	function ajax_auto_customer() {
+		$term = $this->input->get('term');
+		$list = $this->CardM->search_customer($term);
+
+		$data = array();
+		if (count($list)) {
+			foreach ($list as $v) {
+				if (strlen($v['display_name'])) {
+					$name = $v['display_name'];
+				} else {
+					$name = $v['first_name'].' '.$v['last_name'];
+				}
+
+				$data[] = array(
+					'id' => $v['id'],
+					'label' => $name,
+					'value' => $name
+				);
+			}
+		}
+
+		echo json_encode($data);
+		exit;
 	}
 }
