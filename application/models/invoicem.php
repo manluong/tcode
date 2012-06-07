@@ -105,6 +105,7 @@ class InvoiceM extends MY_Model {
 				$this->db->join('a_product_durationtype', 'a_invoice_item.duration_type = a_product_durationtype.a_product_durationtype_id', 'left');
 				$this->db->join('tax_use', 'a_invoice_item.tax_use_id = tax_use.id', 'left');
 				$this->db->where('a_invoice_item.invoice_id IN ('.implode(',', $invoice_ids).')');
+				$this->db->order_by('a_invoice_item.sort_order ASC');
 				$query = $this->db->get();
 
 				$addons = $query->result_array();
@@ -306,6 +307,8 @@ class InvoiceM extends MY_Model {
 				if ($this->is_empty_array($fa)) continue;
 
 				$addon_set = array();
+				if (isset($fa[$this->$model->id_field])) $addon_set[$this->$model->id_field] = $fa[$this->$model->id_field];
+
 				foreach ($this->$model->data_fields AS $key => $detail) {
 					if (isset($fa[$key])) $addon_set[$key] = $fa[$key];
 				}
@@ -471,7 +474,8 @@ class InvoiceM extends MY_Model {
 	private function is_empty_array($array) {
 		$is_empty = !empty($array);
 
-		foreach ($array as $v) {
+		foreach ($array as $k => $v) {
+			if ($k == 'sort_order') continue;
 			if ($v != '') {
 				$is_empty = FALSE;
 			}

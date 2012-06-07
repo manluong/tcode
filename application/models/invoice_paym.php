@@ -115,6 +115,8 @@ class Invoice_PayM extends MY_Model {
 				if ($this->is_empty_array($fa)) continue;
 
 				$addon_set = array();
+				if (isset($fa[$this->$model->id_field])) $addon_set[$this->$model->id_field] = $fa[$this->$model->id_field];
+
 				foreach ($this->$model->data_fields AS $key => $detail) {
 					if (isset($fa[$key])) $addon_set[$key] = $fa[$key];
 				}

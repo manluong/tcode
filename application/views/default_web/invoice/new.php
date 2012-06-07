@@ -175,6 +175,7 @@
 				<input type="hidden" name="addon_item[{xxxxx}][id]" />
 				<input type="hidden" name="addon_item[{xxxxx}][product_id]" class="product_id" />
 				<input type="text" name="addon_item[{xxxxx}][product_name]" class="col-2 inv-field product_name" />
+				<input type="hidden" name="addon_item[{xxxxx}][sort_order]" class="sort_order" />
 			</div>
 			<div><input type="text" name="addon_item[{xxxxx}][description]" class="col-3" /></div>
 			<div><input type="text" name="addon_item[{xxxxx}][unit_price]" class="col-4 unit_price cal" /></div>

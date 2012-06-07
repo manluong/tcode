@@ -13,7 +13,7 @@ function add_last_row() {
 	$('#invoice_item_count').val(parseInt(c) + 1);
 }
 
-function add_row(object) {
+/*function add_row(object) {
 	var html = $('#invoice_item_template').html();
 	var item = $(object).closest('div.invoice_item');
 	$(item).after(html);
@@ -21,7 +21,7 @@ function add_row(object) {
 	var new_item = $('#invoice_item_list .temp');
 	new_item.removeClass('temp');
 	bind_event_row(new_item);
-}
+}*/
 
 function remove_row(object) {
 	var item = $(object).closest('div.invoice_item');
@@ -107,7 +107,7 @@ function cal_invoice_total() {
 		tax_detail.push({id: tax['id'], name: tax['name'], amount: 0});
 	});
 
-	$('#invoice_item_list .invoice_item').not('.header').each(function(index, item) {
+	$('#invoice_item_list .invoice_item').each(function(index, item) {
 		var price = parseFloat($(item).find('.unit_price').val()) || 0;
 		var qty = parseInt($(item).find('.qty').val()) || 0;
 		var discount = parseInt($(item).find('.discount').val()) || 0;
@@ -200,6 +200,15 @@ function search_invoice() {
 		url: $('#frm_search').attr('action'),
 		data: $('#frm_search').serialize(),
 		dataType: 'json',
+		beforeSend: function() {
+			$('#loader').show();
+			$('#invoice_list').hide();
+		},
+		complete: function() {
+			$('#loader').hide();
+			$('#invoice_list').show();
+			$('#tbl_invoice').css('width', '100%');
+		},
 		success: function(resp) {
 			//$('#invoice_list').html(resp);
 			//$('#page').val(1);
@@ -429,7 +438,7 @@ $(document).ready(function() {
 		opacity: 0.7
 	});
 
-	$('#invoice_item_list .invoice_item').not('.header').each(function(index, item) {
+	$('#invoice_item_list .invoice_item').each(function(index, item) {
 		bind_event_row(item);
 	});
 	if ($('#invoice_item_list').length > 0) {
@@ -442,6 +451,10 @@ $(document).ready(function() {
 	search_invoice();
 
 	$('#btn_submit').click(function() {
+		$('#invoice_item_list .invoice_item').each(function(index, item) {
+			$(this).find('.sort_order').val(index);
+		});
+
 		var frm = $(this).closest('form');
 		$.ajax({
 			type: 'POST',

@@ -149,8 +149,9 @@ class Invoice extends MY_Controller {
 			$data['invoice_terms'] = $invoice['terms_content'];
 		}
 
-		$content = $this->load->view(get_template().'/invoice/print', $data, true);
-		output_pdf($content);
+		$content = $this->load->view(get_template().'/invoice/pdf', $data, true);
+		output_pdf2($content, 'invoice-'.$invoice['id'].'.pdf');
+		exit;
 	}
 
 	function print_invoice($id) {
