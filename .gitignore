@@ -17,4 +17,4 @@ tmp/*
 application/logs/*
 
 #Netbeans folder#
-/nbproject
+nbproject
