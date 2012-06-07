@@ -273,7 +273,7 @@ function chatWith(id,name,body){
             mess += '<div class="chatBoxItem fl pv5 ph10 bgN">';
             mess += '<div class="fr">';
             mess += '<a href="javascript:void(0);" onclick="min(\''+id+'\');"><i class="iChat iChat5 fl mr10 mt5"></i></a>';
-            mess += '<a href="javascript:void(0);" onclick="close(\''+id+'\');"><i class="iChat iChat6 fl"></i></a>';
+            mess += '<a href="javascript:void(0);" onclick="chat_close(\''+id+'\');"><i class="iChat iChat6 fl"></i></a>';
             mess += '</div>';
             mess += '</div>';
             mess += '<div class="chatScroll">';
@@ -299,7 +299,7 @@ function min(id){
         jQuery("#chat_"+id+" .active").removeClass('active');
 	jQuery("#chat_"+id+" .chatBoxIner").hide();
 }
-function close(id){
+function chat_close(id){
     jQuery("#chat_"+id).remove();
 }
 function selectChat(id){
@@ -371,7 +371,7 @@ function openChat(id,name){
             mess += '<div class="chatBoxItem fl pv5 ph10 bgN">';
             mess += '<div class="fr">';
             mess += '<a href="javascript:void(0);" onclick="min(\''+id+'\');"><i class="iChat iChat5 fl mr10 mt5"></i></a>';
-            mess += '<a href="javascript:void(0);" onclick="close(\''+id+'\');"><i class="iChat iChat6 fl"></i></a>';
+            mess += '<a href="javascript:void(0);" onclick="chat_close(\''+id+'\');"><i class="iChat iChat6 fl"></i></a>';
             mess += '</div>';
             mess += '</div>';
             mess += '<div class="chatScroll">';
