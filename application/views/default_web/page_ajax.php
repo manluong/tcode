@@ -1,5 +1,5 @@
 <div class="mainContent">
-	<?=$breadcrumb?>
+	<?=$app_title?>
 
 	<?=$content?>
 </div>

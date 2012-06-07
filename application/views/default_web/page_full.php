@@ -44,7 +44,7 @@
 
 	<div role="main" id="main" class="clearfix">
 		<div class="mainContent">
-			<?//=$breadcrumb?>
+			<?=$app_title?>
 
 			<?=$content?>
 		</div>
@@ -152,10 +152,10 @@
         <script type="text/javascript" src="/resources/template/<?=get_template()?>/js/strophe.js"></script>
         <script type="text/javascript" src="/resources/template/<?=get_template()?>/js/buzz.js"></script>
         <script type="text/javascript" src="/resources/template/<?=get_template()?>/js/chat.js"></script>
-        
+
 	<script>
 
 	</script>
-        
+
 </body>
 </html>

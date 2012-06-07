@@ -141,11 +141,11 @@ class MY_Controller extends CI_Controller {
 		$html['debug'] = $this->debug;
 		$html['user_controls'] = '';
 		$html['sidebar'] = '';
-		$html['breadcrumb'] = '';
+		$html['app_title'] = '';
 		$html['app_menu'] = '';
 
 		if ($this->UserM->is_logged_in()) {
-			$html['breadcrumb'] = $this->load->view(get_template().'/breadcrumb', $this->data, TRUE);
+			$html['app_title'] = $this->load->view(get_template().'/app_title', $this->data, TRUE);
 		}
 
 		if ($this->is_pjax) {
