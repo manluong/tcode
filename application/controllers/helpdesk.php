@@ -8,7 +8,7 @@ class Helpdesk extends MY_Controller {
 		$this->load->model('Helpdesk_CommentM');
 		$this->load->model('HelpdeskM');
 		$this->load->model('CardM');
-		
+
 		$this->load->model('Helpdesk_StatusM');
 		$this->load->model('Helpdesk_GroupM');
 		$this->load->model('Helpdesk_TypeM');
@@ -24,19 +24,37 @@ class Helpdesk extends MY_Controller {
 			'type' => $this->Helpdesk_TypeM->get_list(),
 		);
 		$this->data['content'] = $this->load->view(get_template().'/helpdesk/index',$content, TRUE);
+
+		$this->data['app_menu'] = array(
+			array(
+				'url' => '/helpdesk',
+				'extra' => '',
+				'title' => 'List',
+			),
+			array(
+				'url' => '#',
+				'extra' => 'onclick="helpdesk_fillter('.$this->UserM->get_card_id().');"',
+				'title' => 'My Cases',
+			),
+			array(
+				'url' => '/helpdesk/add',
+				'extra' => '',
+				'title' => 'New',
+			),
+		);
 		$this->_do_output();
 	}
 
 	function helpdesk_fillter(){
 		$order_by = 'created_stamp  DESC';
 		$this->HelpdeskM->set_order_by($order_by);
-		
+
 		$where = array();
 		$card_id = $this->input->post('card_id');
 		if(!empty($card_id)){
 			$where[] = "created_card_id='$card_id'";
 		}
-		
+
 		$status = $this->input->post('status');
 		if(!empty($status)){
 			$where[] = "status='$status'";
@@ -112,7 +130,7 @@ class Helpdesk extends MY_Controller {
 		$this->HelpdeskM->where = $where;
 
 		$result = $this->HelpdeskM->get_list();
-		
+
 		$data = json_encode($result);
 		echo $data;
 	}
@@ -241,7 +259,7 @@ class Helpdesk extends MY_Controller {
 		);
 		$comment_id = $this->Helpdesk_CommentM->save($comment_data);
 		$result = $this->HelpdeskM->get($id);
-		
+
 		$where_comment[] = "active = 0";
 		$where_comment[] = "helpdesk_id='$id'";
 		$this->Helpdesk_CommentM->where = $where_comment;
@@ -264,10 +282,10 @@ class Helpdesk extends MY_Controller {
 		//print_r($result['created_card_id']);
 		//echo '</pre>';
 		//die;
-		
+
 		//$card = $this->CardM->get_quickjump($result['created_card_id']);
 		//$content['quickjump'] = $this->load->view(get_template().'/card/quickjump', $card, TRUE);
-		
+
 		$this->data['content'] = $this->load->view(get_template().'/helpdesk/edit',$content, TRUE);
 		$this->_do_output();
 	}
@@ -356,7 +374,7 @@ class Helpdesk extends MY_Controller {
 		$ajax_content = $this->load->view(get_template().'/helpdesk/ajax_updateInfoHelpdesk',$content ,true);
 		echo $ajax_content;
 	}
-	
+
 	function resave_helpdesk_info() {
 		$id = $this->input->post('id');
 		$data = array(
@@ -367,7 +385,7 @@ class Helpdesk extends MY_Controller {
 		$id_save = $this->HelpdeskM->save($data);
 		return $id_save;
 	}
-	
+
 	function upload($comment_id){
 	   $this->load->library('filel');
 	   $file = $this->filel->save('file', 'Helpdesk');
