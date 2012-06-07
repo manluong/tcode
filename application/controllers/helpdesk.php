@@ -244,13 +244,8 @@ class Helpdesk extends MY_Controller {
 				die;
 			}
 		}
-		
 		//Delete NULL COMMENT
-		$this->delete_comment() ;
-		//echo '<pre>';
-		//print_r($result);
-		//echo '</pre>';
-		//die;
+		$this->delete_comment();
 		
 		//Create NULL COMMENT for upload attach file
 	   $comment_data = array (
@@ -280,10 +275,8 @@ class Helpdesk extends MY_Controller {
 			'comment' => $comment,
 			'result' => $result,
 			'assign' => $this->Helpdesk_CommentM->get_assign(),
-			'file_attach' => $this->Helpdesk_CommentM->get_comment_files($comment_id),
+			'file_attach' => $this->Helpdesk_CommentM->get_comment_files(),
 		);
-		
-		
 		//$card = $this->CardM->get_quickjump($result['created_card_id']);
 		//$content['quickjump'] = $this->load->view(get_template().'/card/quickjump', $card, TRUE);
 		
@@ -327,19 +320,20 @@ class Helpdesk extends MY_Controller {
 		);
 		$this->Helpdesk_CommentM->save($data);
 
-		$result[0] = array();
 		if($id_helpdesk!=0){
-			$result = $this->Helpdesk_CommentM->get_content_helpdesk($id_helpdesk);
+			$where_comment[] = "active = 0";
+			$where_comment[] = "helpdesk_id='$id_helpdesk'";
+			$this->Helpdesk_CommentM->where = $where_comment;
+			$result = $this->Helpdesk_CommentM->get_list();
 		}
 		$data_ajax = array(
-           'comment' => $this->Helpdesk_CommentM->get_content($id_helpdesk),
-		   'result' => $result[0],
+           'comment' => $this->Helpdesk_CommentM->get_list($id_helpdesk),
+		   'result' => $result,
 		);
 
 		$ajax_content = $this->load->view(get_template().'/helpdesk/ajax_updateComment',$data_ajax ,true);
 		echo $ajax_content  ;
 	}
-
 
 	function save_insert_helpdesk(){
 		$data = array(

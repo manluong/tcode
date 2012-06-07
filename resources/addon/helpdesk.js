@@ -306,7 +306,6 @@ function submit_comment(){
 			status : status,
 			priority : priority,
 		},function(data){
-			alert(data);
 		}
 	);	
 	

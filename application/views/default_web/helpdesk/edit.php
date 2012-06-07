@@ -211,8 +211,15 @@
 							<p>Priority set to <?=$this->Helpdesk_CommentM->get_priority_type($pri)?></p>
 							<?php }?>
 							<p>Subject set to '<?=$result['subject']?>'</p>
-							<p>Email send to '<?=$result['cc_email']?>'</p><br/>
-							<span style="font-size:11px;">
+							<p>Email send to '<?=$result['cc_email']?>'</p>
+							<?php 
+								$file = $this->Helpdesk_CommentM->get_comment_files($comment[$i]['id']);
+								if(!empty($file)){
+									foreach($file as $f){
+							?>
+							<p><?= '<a href="/docs/view/'.$f->id.set_return_url(TRUE).'">View Document</a>'; ?></p>
+							<?php }}?>
+							<br/><span style="font-size:11px;">
 								<p>Client: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.7; rv:12.0) Gecko/20100101 Firefox/12.0</p>
 								<p>IP address: 115.66.148.168</p>
 								<p>Location: Singapore, 00, Singapore</p>
@@ -240,7 +247,9 @@
 
 		filters : [
 			{title : "Image files", extensions : "jpg,gif,png"},
-			{title : "Zip files", extensions : "zip"}
+			{title : "Zip files", extensions : "zip"},
+			{title : "Pdf files", extensions : "pdf"},
+			{title : "Doc files", extensions : "doc,docx"}
 		]
 	});
 	uploader.bind('FilesAdded', function(up, files) {
