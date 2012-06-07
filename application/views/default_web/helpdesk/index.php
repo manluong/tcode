@@ -9,24 +9,6 @@
 	});
 </script>
 
-<div id="breadcrumb">
-	<div id="module_name" style="width:650px;">
-		<ul>
-			<li><a style="width:173px;" href="#" class="main">HELPDESK</a></li>
-			<li class="arrow"></li>
-			<li class="curent_page">List</li>
-			<li><a href="#" id="favoriteIcon" class="on" title="Remove from favorites"></a></li>
-		</ul>
-	</div>
-	<div id="top_button" style="width:210px;">
-		<ul>
-			<li><a href="<?=site_url('helpdesk')?>" class="btn btn-inverse" href="#">LIST</a></li>
-			<li><a onclick="helpdesk_fillter(<?=$card_id?>);" class="btn btn-inverse" href="#">MY CASE</a></li>
-			<li><a href="<?=site_url('helpdesk/add')?>" class="btn btn-inverse" href="#">NEW</a></li>
-		</ul>
-	</div> 
-</div>
-
 <div id="content_top">
 	<div id="user_profile">
 		<div id="user_avatar"><image alt="avatar" src="<?=site_url('resources/template/default_web/img/invoice')?>/invoice-avatar.jpg"/></div>
@@ -100,7 +82,7 @@
 					<span class="fillter_input">
 						<select name="priority" id="priority" onchange="helpdesk_fillter();">
 							<option value="">- - - Something - - -</option>
-							 <?php if(!empty($priority)) {	
+							 <?php if(!empty($priority)) {
 									for($i = 0; $i < count($priority); $i++){
 							?>
 							<option value="<?=$priority[$i]['id']?>"><?=$priority[$i]['name']?></option>
@@ -109,7 +91,7 @@
 					</span>
 				</li>
 				<li style="width:27px; margin:26px 0 0 72px;"><div id="arrow" class="down_arrow"></div></li>
-			</ul>						
+			</ul>
 		</div>
 		<div class="ClearLeft"></div>
 		<div style="height:193px;" id="input_data_fillter">
@@ -132,7 +114,7 @@
 					<span class="input_data_label">Subject</span>
 					<span class="fillter_input"><input id="subject" class="inv-field" type="text"/></span>
 				</li>
-				
+
 				<li>
 					<span class="input_data_label">Comments</span>
 					<span class="fillter_input">
@@ -140,7 +122,7 @@
 						<input type="text" id="comment_content" name="comment_content" class="inv-field" />
 					</span>
 				</li>
-				
+
 				<li style="padding-left:119px;">
 					<span class="">
 						<button onclick="helpdesk_fillter_all();" href="javascript:void(0)" class="btn btn-primary">SUBMIT</button>
@@ -149,14 +131,14 @@
 			</ul>
 		</div>
 	</div>
-	
+
 	<div id="invoice_cases">
 		<div id="top_cases">
 			<div class="invoice_title" style="width:550px;"><span class="arrow_title"></span><span>Cases</span></div>
 		</div>
-		
+
 		<div id="main_cases">
-			
+
 		</div>
 	</div>
 </div>
