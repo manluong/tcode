@@ -7,7 +7,8 @@ function ajax_content(url, divid) {
 			if (divid == 'page'){
 				$.pjax({
 					url: url,
-					container: '#content-container'
+					container: '#content-container',
+					timeout: 5000
 				});
 			} else {
 				ajax_content_json(loader, divid);

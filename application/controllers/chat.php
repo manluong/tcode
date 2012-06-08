@@ -9,7 +9,7 @@
            $this->ChatM->forward();
         }
         function index(){
-            $this->ChatM->add_user();
+            //$this->ChatM->add_user('','apple','');
         }
     }
 

@@ -8,13 +8,11 @@ class Helpdesk extends MY_Controller {
 		$this->load->model('Helpdesk_CommentM');
 		$this->load->model('HelpdeskM');
 		$this->load->model('CardM');
-
 		$this->load->model('Helpdesk_StatusM');
 		$this->load->model('Helpdesk_GroupM');
 		$this->load->model('Helpdesk_TypeM');
 		$this->load->model('Helpdesk_PriorityM');
 	}
-
 	function index() {
 		$content = array(
 			'card_id' => $this->UserM->get_card_id(),
