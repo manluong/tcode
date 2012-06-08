@@ -19,10 +19,11 @@ function submit_insert_helpdesk() {
 		alert('Please input subject !');
 		return false;
 	}
-	if(multiEmail(cc_email) == false){
-		return false;
+	if(cc_email != ''){
+		if(multiEmail(cc_email) == false){
+			return false;
+		}
 	}
-
 	$.post(url,{
 			id : id,
 			subject : subject,
@@ -171,7 +172,9 @@ function helpdesk_fillter(card_id){
 				 row[0] = '<a href="/helpdesk/edit/'+item.id+'">'+item.subject+'</a>';
 				 row[1] = item.cc_email;
 				 row[2] = item.assign_id;
-				 row[3] = item.created_stamp;
+				 var date = item.created_stamp;
+				 date = date.split('-');
+				 row[3] = date[0]+'/'+date[1]+'/'+date[2];
 				 content.push(row);
 			}
 			load_datatable(content);
@@ -211,15 +214,16 @@ function helpdesk_fillter_all(){
 				 row[0] = '<a href="/helpdesk/edit/'+item.id+'">'+item.subject+'</a>';
 				 row[1] = item.cc_email;
 				 row[2] = item.assign_id;
-				 row[3] = item.created_stamp;
+				 var date = item.created_stamp;
+				 date = date.split('-');
+				 row[3] = date[0]+'/'+date[1]+'/'+date[2];
 				 content.push(row);
 			}
 			load_datatable(content);
 		}
 	);
 }
-
-
+		
 function load_datatable(data){
 	$('#example').dataTable( {
 		"sDom": "<<'pull-right'p>>t<<'pull-right'p>lfi>",
@@ -227,6 +231,7 @@ function load_datatable(data){
 		"iDisplayLength": 10,
 		"bDestroy": true,
 		"aaData": data,
+		"aaSorting": [[ 3, "desc" ]],
 		"aoColumns": [
 			{ "sTitle": "Subject" },
 			{ "sTitle": "CC Email" },
@@ -306,7 +311,6 @@ function submit_comment(){
 			status : status,
 			priority : priority,
 		},function(data){
-			alert(data);
 		}
 	);	
 	
