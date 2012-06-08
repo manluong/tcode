@@ -63,6 +63,10 @@ class InvoiceM extends MY_Model {
 		foreach ($this->addons AS $name => $model) {
 			$this->load->model($model);
 		}
+
+		if ($this->UserM->is_client()) {
+			$this->set_where('customer_card_id = '.$this->UserM->get_card_id());
+		}
 	}
 
 	function get($id) {
@@ -93,10 +97,6 @@ class InvoiceM extends MY_Model {
 			}
 
 			$invoice_ids = get_distinct('id', $data);
-			//$addons = $this->$model
-			//			->set_where('invoice_id IN ('.implode(',', $invoice_ids).')')
-			//			->get_list();
-
 			if ($name == 'item') {
 				$this->db->select('a_invoice_item.*, a_product.name, a_product_pricetype.a_product_pricetype_name, a_product_durationtype.a_product_durationtype_name, tax_use.name as tax_use_name');
 				$this->db->from('a_invoice_item');
@@ -177,6 +177,10 @@ class InvoiceM extends MY_Model {
 		$this->db->join('(SELECT invoice_id, SUM(total) AS total FROM a_invoice_item GROUP BY invoice_id) invoice_total', 'a_invoice.id = invoice_total.invoice_id', 'left');
 		$this->db->where('a_invoice.deleted', 0);
 
+		if ($this->UserM->is_client()) {
+			$this->db->where('customer_card_id = '.$this->UserM->get_card_id());
+		}
+
 		if ($count) {
 			return $this->db->count_all_results();
 		} else {
@@ -233,13 +237,6 @@ class InvoiceM extends MY_Model {
 		return $invoice_total;
 	}
 
-	function get_customer() {
-		$this->db->select('id, first_name, last_name');
-		$query = $this->db->get('card');
-
-		return $query->result();
-	}
-
 	function get_price_type() {
 		$this->db->select('*');
 		$query = $this->db->get('a_product_pricetype');
@@ -252,19 +249,6 @@ class InvoiceM extends MY_Model {
 		$query = $this->db->get('a_product_durationtype');
 
 		return $query->result();
-	}
-
-	function get_customer_by_id($id) {
-		$this->db->select('id, first_name, last_name');
-		$this->db->where('id', $id);
-		$query = $this->db->get('card');
-
-		$result = $query->result();
-		if ($result) {
-			return $result[0];
-		} else {
-			return false;
-		}
 	}
 
 	function get_product_by_name($name) {

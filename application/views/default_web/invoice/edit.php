@@ -20,27 +20,7 @@
 </div>
 
 <div id="content_top">
-	<div id="user_profile">
-		<div id="user_avatar"><img alt="avatar" src="/resources/template/default_web/img/invoice/invoice-avatar.jpg"/></div>
-		<div id="user_info">
-			<ul>
-				<li class="user_sex">Mr.</li>
-				<li class="user_name">Albert Z</li>
-				<li class="user_position">Facebook Inc. <span style="font-weight: normal;">CEO</span></li>
-			</ul>
-		</div>
-	</div>
-	<div id="customer_list">
-		<div class="btn-group">
-			<a href="#" class="btn btn-inverse">CUSTOMER</a>
-			<a href="#" data-toggle="dropdown" class="btn btn-inverse dropdown-toggle"><span class="caret"></span></a>
-			<ul class="dropdown-menu">
-				<li><a href="#"><i class="icon-pencil"></i> Edit</a></li>
-				<li><a href="#"><i class="icon-trash"></i> Delete</a></li>
-				<li><a href="#"><i class="icon-ban-circle"></i> Ban</a></li>
-			</ul>
-		</div>
-	</div>
+	<?php echo $quickjump ?>
 </div>
 
 <div id="title_item_edit"><span style="color:#2a9611;">Draft</span> Invoice #<?php echo $invoice['id'] ?></div>
@@ -226,7 +206,7 @@
 						<?php endforeach ?>
 					</select>
 				</div>
-				<div style="width:100%;"><textarea rows="3" id="terms_content" name="terms_content" class="input-xlarge"><?php echo $invoice_terms ?></textarea></div>
+				<div style="width:100%;"><textarea rows="3" id="terms_content" name="terms_content" class="input-xlarge"><?php echo $terms_content ?></textarea></div>
 			</div>
 			<div id="note_customer">
 				<div style="width:100%;float:left;height:37px;">Notes for Customers</div>

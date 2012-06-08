@@ -19,6 +19,10 @@
 	</div>
 </div>
 
+<div id="content_top">
+	<?php echo $quickjump ?>
+</div>
+
 <div id="title_item_edit">Invoice #<?php echo $invoice_id ?></div>
 
 <div id="boxes">

@@ -18,4 +18,11 @@ class Invoice_TermsM extends MY_Model {
 		$this->cache_enabled = TRUE;
 		$this->sett_has_system_fields = FALSE;
 	}
+
+	function get_content($id) {
+		$term = $this->get($id);
+		if ($term === FALSE) return FALSE;
+
+		return $term['content'];
+	}
 }

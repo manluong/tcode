@@ -20,7 +20,7 @@
 </div>
 
 <div id="content_top">
-	<?=$quickjump?>
+	<?php echo $quickjump ?>
 </div>
 
 <div id="boxes" class="clearfix">
@@ -167,7 +167,7 @@
 
 			<div class="info_title">Terms &amp; Conditions:</div>
 			<div class="info_content">
-				<?php echo $invoice_terms ?>
+				<?php echo $terms_content ?>
 			</div>
 		</div>
 	</div>
