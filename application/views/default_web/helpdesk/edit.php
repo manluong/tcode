@@ -45,9 +45,9 @@
 				<li id="helpdesk_change_info">Change Info</li>
 			</ul>
 		</div>
-		<!-- Hidden id-->
+		<!-- Hidden Helpdesk Id-->
 		<input type="hidden" value="<?=$id?>" name="hiddenIdAdmincp" id="hiddenIdAdmincp" />
-		<input type="hidden" value="<?=$comment_id?>" name="hiddenCommentId" id="hiddenCommentId" />
+		<!-- End Hidden Helpdesk Id-->
 		<div id="input_data_info" style="display:none;">
 			<ul>
 				<li>
@@ -176,6 +176,9 @@
 		<div class="invoice_title" style="height:20px;"><span class="arrow_title"></span><span>COMMENTS / EVENTS</span></div>
 		<div id="helpdesk_fillter">
 			<div id="wap_comment_list">
+				<!-- Hidden Comment Id-->
+				<input type="hidden" value="<?=$comment_id?>" name="hiddenCommentId" id="hiddenCommentId" />
+				<!-- End Hidden Comment Id-->
 				<?php if (!empty($comment)) {
 						for($i = 0; $i < count($comment) ; $i++){
 						$pri = $comment[$i]['priority'] ;

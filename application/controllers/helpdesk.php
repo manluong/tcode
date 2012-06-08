@@ -278,7 +278,7 @@ class Helpdesk extends MY_Controller {
 		//Delete NULL COMMENT
 		$this->delete_comment();
 		
-		//Create NULL COMMENT for upload attach file
+		//Create NULL COMMENT for upload file attach
 	   $comment_data = array (
 			'group' => '',
 			'status' => '',
@@ -351,7 +351,20 @@ class Helpdesk extends MY_Controller {
             'active' => 0,
 		);
 		$this->Helpdesk_CommentM->save($data);
-
+		
+		//Create NULL COMMENT for upload file attach
+	   $comment_data = array (
+			'group' => '',
+			'status' => '',
+			'type' => '',
+			'priority' => '',
+			'comment' => '',
+			'private' => '',
+			'helpdesk_id' => $id_helpdesk ,
+            'active' => 1,
+		);
+		$comment_id = $this->Helpdesk_CommentM->save($comment_data);
+		
 		if($id_helpdesk!=0){
 			//Get data comment
 			$where_comment[] = "active = 0";
@@ -362,9 +375,11 @@ class Helpdesk extends MY_Controller {
 			//Get data helpdesk
 			$result = $this->HelpdeskM->get($id_helpdesk);
 		}
+		
 		$data_ajax = array(
            'comment' => $comment,
 		   'result' => $result,
+		   'comment_id' => $comment_id,
 		);
 
 		$ajax_content = $this->load->view(get_template().'/helpdesk/ajax_updateComment',$data_ajax ,true);
