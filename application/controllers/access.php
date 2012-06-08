@@ -56,7 +56,7 @@ class Access extends MY_Controller {
 		$this->RespM->set_message($this->lang->line('access-login_status-'.$this->UserM->status))
 			->set_success($success)
 			->set_title('Login')
-			->set_detail($user)
+			->set_details($user)
 			->output_json();
 	}
 
