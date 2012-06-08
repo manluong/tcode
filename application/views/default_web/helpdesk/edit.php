@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/helpdesk.css" />
 <script type="text/javascript" src="/resources/addon/helpdesk.js"></script>
 <script type="text/javascript" src="/resources/addon/plupload/js/plupload.full.js"></script>
 <script type="text/javascript" src="/resources/addon/plupload/js/jquery.plupload.queue/jquery.plupload.queue.js"></script>

@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/helpdesk.css" />
 <script type="text/javascript" src="/resources/addon/helpdesk.js"></script>
 <script type="text/javascript" src="/resources/addon/plupload/js/plupload.full.js"></script>
 <script type="text/javascript" src="/resources/addon/plupload/js/jquery.plupload.queue/jquery.plupload.queue.js"></script>
@@ -46,7 +47,7 @@
 </div>
 
 <div id="boxes">
-	<div id="invoice_fillter" style="height:224px;">
+	<div id="invoice_fillter" style="height:280px;">
 		<div class="invoice_title"><span class="arrow_title"></span><span>NEW CASE INFORMATION</span></div>
 		<div id="input_data_info">
 			<ul>

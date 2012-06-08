@@ -232,5 +232,8 @@ select{
 .hide_page{
 	display:none !important;
 }
-
+#content_top {
+    width: 860px;
+	float:left !important;
+}
 
