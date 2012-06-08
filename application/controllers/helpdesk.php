@@ -29,22 +29,22 @@ class Helpdesk extends MY_Controller {
 			array(
 				'url' => '/helpdesk',
 				'extra' => '',
-				'title' => 'List',
+				'title' => 'List Test',
 			),
 			array(
 				'url' => '#',
 				'extra' => 'onclick="helpdesk_fillter('.$this->UserM->get_card_id().');"',
-				'title' => 'My Cases',
+				'title' => 'My Cases Test',
 			),
 			array(
 				'url' => '/helpdesk/add',
 				'extra' => '',
-				'title' => 'New',
+				'title' => 'New Test',
 			),
 		);
 		$this->_do_output();
 	}
-	
+
 	function card() {
 		$content = array(
 			'helpdesk_card_id' => $this->uri->segment(3),
@@ -57,13 +57,13 @@ class Helpdesk extends MY_Controller {
 		$this->data['content'] = $this->load->view(get_template().'/helpdesk/index',$content, TRUE);
 		$this->_do_output();
 	}
-	
-	
+
+
 	function helpdesk_fillter(){
-		//Set order 
+		//Set order
 		$order_by = 'created_stamp  DESC';
 		$this->HelpdeskM->set_order_by($order_by);
-		$where = array();	
+		$where = array();
 		//Check Customer
 		if($this->UserM->is_client() == TRUE){
 			$card_id = $this->UserM->get_card_id();
@@ -268,7 +268,7 @@ class Helpdesk extends MY_Controller {
 		$result = $this->HelpdeskM->get($id);
 		//Check Customer id
 		$card_id = $this->UserM->get_card_id();
-		
+
 		if($this->UserM->is_client() == TRUE){
 			if($result['created_card_id'] != $card_id){
 				header("location: /helpdesk");
@@ -277,7 +277,7 @@ class Helpdesk extends MY_Controller {
 		}
 		//Delete NULL COMMENT
 		$this->delete_comment();
-		
+
 		//Create NULL COMMENT for upload attach file
 	   $comment_data = array (
 			'group' => '',
@@ -289,12 +289,12 @@ class Helpdesk extends MY_Controller {
 			'helpdesk_id' => $id ,
             'active' => 1,
 		);
-		$comment_id = $this->Helpdesk_CommentM->save($comment_data);	
+		$comment_id = $this->Helpdesk_CommentM->save($comment_data);
 		$where_comment[] = "active = 0";
 		$where_comment[] = "helpdesk_id='$id'";
 		$this->Helpdesk_CommentM->where = $where_comment;
 		$comment = $this->Helpdesk_CommentM->get_list();
-		
+
 		$content = array(
 			'card_id' => $card_id,
 			'id' => $id,
@@ -310,7 +310,7 @@ class Helpdesk extends MY_Controller {
 		);
 		//$card = $this->CardM->get_quickjump($result['created_card_id']);
 		//$content['quickjump'] = $this->load->view(get_template().'/card/quickjump', $card, TRUE);
-		
+
 
 		$this->data['content'] = $this->load->view(get_template().'/helpdesk/edit',$content, TRUE);
 		$this->_do_output();
