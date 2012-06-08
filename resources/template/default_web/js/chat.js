@@ -156,10 +156,10 @@ jQuery(document).ready(function(){
    //
    // Chat
    if(jQuery("#chat").length > 0){
-    $(document).trigger("connect", {
-                user: 'test1',
-                company: 'company1'
-            });
+//    $(document).trigger("connect", {
+//                user: 'test1',
+//                company: 'company1'
+//            });
    }
 
 

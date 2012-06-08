@@ -42,6 +42,7 @@ class MY_Controller extends CI_Controller {
 		'content_left' => '',
 		'content_right' => '',
 	);
+	
 	var $layout = array(
 		'type' => 'full',	// full left right tmode split
 		'javascript_src' => array(),
