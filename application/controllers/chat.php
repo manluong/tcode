@@ -11,6 +11,13 @@
         function index(){
             //$this->ChatM->add_user('','apple','');
         }
+        function get(){
+            $domain = explode('.',$_SERVER['HTTP_HOST']);
+            $domain = $domain[0];
+            echo $this->UserM->get_id().'|'.$domain;
+            
+            
+        }
     }
 
 ?>

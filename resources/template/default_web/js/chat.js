@@ -2,6 +2,8 @@
 
 var telcoson = {
     connection: null,
+    company : '',
+    username :'',
     jid_to_id: function (jid) {
         return Strophe.getBareJidFromJid(jid)
             .replace("@", "-")
@@ -133,8 +135,8 @@ jQuery(document).ready(function(){
         if(document.getElementById('list_chat').style.display == 'none'){
             if(jQuery("#show_hide_chat i").hasClass('iChat7')){
                 $(document).trigger("connect", {
-                user: 'test1',
-                company: 'company1'
+                 user: telcoson.username,
+                company: telcoson.company
                 });
                 jQuery("#set_status").hide();
                 jQuery("#chat_status").html('Online');
@@ -156,10 +158,22 @@ jQuery(document).ready(function(){
    //
    // Chat
    if(jQuery("#chat").length > 0){
-//    $(document).trigger("connect", {
-//                user: 'test1',
-//                company: 'company1'
-//            });
+       jQuery.post("/chat/get",{},function(data){
+          if(data == 'You do not have the permissions to access this app'){
+              console.log('You do not have the permissions to access this app');
+          } 
+          else {
+              var username = data.split('|')[0];
+              var company = data.split('|')[1];
+              telcoson.username = username;
+              telcoson.company = company;
+            $(document).trigger("connect", {
+                user: telcoson.username,
+                company: telcoson.company
+            });
+          }
+       });
+
    }
 
 
