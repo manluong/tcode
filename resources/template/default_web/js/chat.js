@@ -49,7 +49,7 @@ var telcoson = {
 			var name = $(this).attr("name") || jid;
 			var jid_id = telcoson.jid_to_id(jid);
                         var contact = $('<div class="chatBoxItem fl pv5 ph10 userchat" id="user_'+jid_id+'" onclick="openChat(\''+jid_id+'\',\''+name+'\');"><div class="avatar rounded14 fl mr5"><img src="/resources/template/default_web/img/avatar.png" alt="" width="28" class=" rounded14"></div><span class="fl dpb ofh cf1 mt5 fwb">'+name+'</span><div class="tools fr"><a href="#" class="fl mr5 mt3"><i class="iChat iChat3"></i></a><a href="#" class="fl w18 mt7" style="display:none;"><input type="checkbox" class="" /></a></div></div>');
-			jQuery("#list_chat div.chatBoxIner").append(contact);
+			jQuery("#list_chat div.chatScroll").append(contact);
 			//telcoson.insert_contact(contact)
 				});
 		telcoson.connection.addHandler(telcoson.on_presence, null, 'presence');

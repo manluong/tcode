@@ -104,6 +104,8 @@
 								<a href="#" class="fl w18 mt7 " style="display:none;" ><input type="checkbox" class="" /></a>
 							</div>
 						</div>
+                                                <div class="chatScroll">
+                                                </div>
 					</div>
 				</div>
 				<!-- end show chat box -->
