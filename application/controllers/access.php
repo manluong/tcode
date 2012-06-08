@@ -49,7 +49,7 @@ class Access extends MY_Controller {
 
 		if ($this->UserM->is_valid_password($email, $password)) {
 			$this->UserM->login($email);
-			$user = $this->UserM->info();
+			$user = $this->UserM->info;
 			$success = true;
 		}
 
