@@ -167,7 +167,7 @@
 			<div id="container" >
 				<div id="pickfiles" class="btn_attach"></div>
 				<div style="display:none;" id="uploadfiles"></div>
-				<div id="filelist" style="float:left ;margin:23px 0 0 -80px;"></div>
+				<div id="filelist" style="float:left ;margin:23px 0 0 0;"></div>
 			</div>
 		</div>
 	</div>

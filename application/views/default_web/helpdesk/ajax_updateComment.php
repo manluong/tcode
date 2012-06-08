@@ -1,4 +1,7 @@
 <?php if (!empty($comment)) {
+		//echo '<pre>';
+		//print_r($result);
+		//echo '</pre>';
 		for($i = 0; $i < count($comment) ; $i++){
 		$pri = $comment[$i]['priority'] ;
 		$date = strtotime($comment[$i]['created_stamp']);

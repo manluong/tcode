@@ -353,13 +353,17 @@ class Helpdesk extends MY_Controller {
 		$this->Helpdesk_CommentM->save($data);
 
 		if($id_helpdesk!=0){
+			//Get data comment
 			$where_comment[] = "active = 0";
 			$where_comment[] = "helpdesk_id='$id_helpdesk'";
 			$this->Helpdesk_CommentM->where = $where_comment;
-			$result = $this->Helpdesk_CommentM->get_list();
+			$comment = $this->Helpdesk_CommentM->get_list();
+			
+			//Get data helpdesk
+			$result = $this->HelpdeskM->get($id_helpdesk);
 		}
 		$data_ajax = array(
-           'comment' => $this->Helpdesk_CommentM->get_list($id_helpdesk),
+           'comment' => $comment,
 		   'result' => $result,
 		);
 
