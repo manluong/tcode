@@ -22,6 +22,10 @@
             if($realname == ''){
                 $realname = $this->UserM->get_name();
             }
+            if($name == ''){
+                $name = $this->UserM->get_id();
+            }
+
             $context = stream_context_create(array(
                     'http' => array(
                             'header'  => "Authorization: Basic bGFtcHA6dGVsY29zb25AMTk=" 
