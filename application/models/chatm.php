@@ -18,4 +18,7 @@
             $output = curl_exec($ch);
             echo $output;
 	}
+        function add_user(){
+            $this->UserM->debug();
+        }
     }
