@@ -137,7 +137,7 @@
 
 			<div class="info_title">Terms &amp; Conditions:</div>
 			<div class="info_content">
-				<?php echo $invoice_terms ?>
+				<?php echo $terms_content ?>
 			</div>
 		</div>
 	</div>

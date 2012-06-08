@@ -45,17 +45,18 @@ class Access extends MY_Controller {
 		$password = $this->input->post('login_password');
 
 		$success = false;
+		$user = array();
 
 		if ($this->UserM->is_valid_password($email, $password)) {
 			$this->UserM->login($email);
+			$user = $this->UserM->info;
 			$success = true;
 		}
 
 		$this->RespM->set_message($this->lang->line('access-login_status-'.$this->UserM->status))
-			->set_type('view')
-			->set_template('')
 			->set_success($success)
 			->set_title('Login')
+			->set_details($user)
 			->output_json();
 	}
 

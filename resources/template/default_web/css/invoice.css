@@ -87,7 +87,6 @@ html, body{
 }
 #content_top{
 	width:860px;
-	height:95px;
 }
 #user_profile{
 	float:left;
@@ -581,37 +580,6 @@ input {
 	margin-left: 10px;
 }
 
-.btn_pay {
-	width: 47px;
-	height: 27px;
-	background: url(../img/invoice/invoice-view-btn_pay.jpg);
-	cursor: pointer;
-}
-.btn_edit {
-	width: 47px;
-	height: 27px;
-	background: url(../img/invoice/invoice-view-btn_edit.jpg);
-	cursor: pointer;
-}
-.btn_email{
-	width: 52px;
-	height: 27px;
-	background: url(../img/invoice/invoice-view-btn_email.jpg);
-	cursor: pointer;
-}
-.btn_pdf{
-	width: 42px;
-	height: 27px;
-	background: url(../img/invoice/invoice-view-btn_pdf.jpg);
-	cursor: pointer;
-}
-.btn_print{
-	width: 49px;
-	height: 27px;
-	background: url(../img/invoice/invoice-view-btn_print.jpg);
-	cursor: pointer;
-}
-
 .bold {
 	font-weight: bold !important;
 }
@@ -759,5 +727,3 @@ input {
 }
 
 /*END INVOICE VIEW CSS */
-
-
