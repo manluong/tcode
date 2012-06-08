@@ -19,6 +19,9 @@
             echo $output;
 	}
         function add_user($name,$company,$realname){
+            if($realname == ''){
+                $realname = $this->UserM->get_name();
+            }
             $context = stream_context_create(array(
                     'http' => array(
                             'header'  => "Authorization: Basic bGFtcHA6dGVsY29zb25AMTk=" 

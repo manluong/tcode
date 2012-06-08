@@ -9,7 +9,8 @@
            $this->ChatM->forward();
         }
         function index(){
-            $this->ChatM->delete_user('admin','apple');
+            //$this->ChatM->delete_user('test3','company1');
+            $this->UserM->debug();
         }
     }
 
