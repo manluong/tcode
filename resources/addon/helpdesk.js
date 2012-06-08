@@ -19,10 +19,11 @@ function submit_insert_helpdesk() {
 		alert('Please input subject !');
 		return false;
 	}
-	if(multiEmail(cc_email) == false){
-		return false;
+	if(cc_email != ''){
+		if(multiEmail(cc_email) == false){
+			return false;
+		}
 	}
-
 	$.post(url,{
 			id : id,
 			subject : subject,
@@ -171,7 +172,9 @@ function helpdesk_fillter(card_id){
 				 row[0] = '<a href="/helpdesk/edit/'+item.id+'">'+item.subject+'</a>';
 				 row[1] = item.cc_email;
 				 row[2] = item.assign_id;
-				 row[3] = item.created_stamp;
+				 var date = item.created_stamp;
+				 date = date.split('-');
+				 row[3] = date[0]+'/'+date[1]+'/'+date[2];
 				 content.push(row);
 			}
 			load_datatable(content);
@@ -211,61 +214,16 @@ function helpdesk_fillter_all(){
 				 row[0] = '<a href="/helpdesk/edit/'+item.id+'">'+item.subject+'</a>';
 				 row[1] = item.cc_email;
 				 row[2] = item.assign_id;
-				 row[3] = item.created_stamp;
+				 var date = item.created_stamp;
+				 date = date.split('-');
+				 row[3] = date[0]+'/'+date[1]+'/'+date[2];
 				 content.push(row);
 			}
 			load_datatable(content);
 		}
 	);
 }
-
-jQuery.fn.dataTableExt.aTypes.unshift(
-	function ( sData )
-	{
-		var sValidChars = "0123456789-,";
-		var Char;
-		var bDecimal = false;
 		
-		/* Check the numeric part */
-		for ( i=0 ; i<sData.length ; i++ )
-		{
-			Char = sData.charAt(i);
-			if (sValidChars.indexOf(Char) == -1)
-			{
-				return null;
-			}
-			
-			/* Only allowed one decimal place... */
-			if ( Char == "," )
-			{
-				if ( bDecimal )
-				{
-					return null;
-				}
-				bDecimal = true;
-			}
-		}
-		
-		return 'numeric-comma';
-	}
-);
-
-jQuery.fn.dataTableExt.oSort['numeric-comma-asc']  = function(a,b) {
-	var x = (a == "-") ? 0 : a.replace( /,/, "." );
-	var y = (b == "-") ? 0 : b.replace( /,/, "." );
-	x = parseFloat( x );
-	y = parseFloat( y );
-	return ((x < y) ? -1 : ((x > y) ?  1 : 0));
-};
-
-jQuery.fn.dataTableExt.oSort['numeric-comma-desc'] = function(a,b) {
-	var x = (a == "-") ? 0 : a.replace( /,/, "." );
-	var y = (b == "-") ? 0 : b.replace( /,/, "." );
-	x = parseFloat( x );
-	y = parseFloat( y );
-	return ((x < y) ?  1 : ((x > y) ? -1 : 0));
-};
-			
 function load_datatable(data){
 	$('#example').dataTable( {
 		"sDom": "<<'pull-right'p>>t<<'pull-right'p>lfi>",
@@ -273,12 +231,12 @@ function load_datatable(data){
 		"iDisplayLength": 10,
 		"bDestroy": true,
 		"aaData": data,
+		"aaSorting": [[ 3, "desc" ]],
 		"aoColumns": [
 			{ "sTitle": "Subject" },
 			{ "sTitle": "CC Email" },
 			{ "sTitle": "Assign ID" },
 			{ "sTitle": "Created" },
-			{ "sType": "numeric-comma" },
 		],
 		"oLanguage": {
 			"sSearch" : "<div class=\"input-prepend\"><span class=\"add-on\"><i class=\"icon-filter\"></i></span></i>_INPUT_</div>",

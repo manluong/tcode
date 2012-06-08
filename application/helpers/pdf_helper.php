@@ -1,6 +1,6 @@
-<?php 
+<?php
 	function output_pdf ($html) {
-	
+
 		//OUT PUT PDF FILE
 		require_once('tcpdf/config/lang/eng.php');
 		require_once('tcpdf/tcpdf.php');
@@ -9,13 +9,13 @@
 
 		$title = 'PDF Helpdesk';
 		$author = 'Telcoson Company';
-		
+
 		// set document information
 		$pdf->SetCreator(PDF_CREATOR);
 		$pdf->SetAuthor($author);
 		$pdf->SetTitle($title);
 		$pdf->SetSubject('TCPDF Tutorial');
-		
+
 		// set default header data
 		$pdf->SetHeaderData(TELCOSON_LOGO, PDF_HEADER_LOGO_WIDTH, $title, $author);
 
@@ -58,12 +58,21 @@
 		// Set some content to print
 
 		// Print text using writeHTMLCell()
-		
+
 		$pdf->writeHTML($html, true, false, true, false, '');
 		// ---------------------------------------------------------
 
 		// Close and output PDF document
 		// This method has several options, check the source code documentation for more information.
 		$pdf->Output('telcoson.pdf', 'I');
+	}
+
+	function output_pdf2($html, $file_name) {
+		require_once("dompdf/dompdf_config.inc.php");
+
+		$dompdf = new DOMPDF();
+		$dompdf->load_html($html);
+		$dompdf->render();
+		$dompdf->stream($file_name, array("Attachment" => 0));
 	}
 ?>

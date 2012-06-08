@@ -101,6 +101,7 @@
 							<input type="hidden" name="addon_item[<?php echo $c ?>][invoice_id]" value="<?php echo $invoice_item['invoice_id'] ?>" />
 							<input type="hidden" name="addon_item[<?php echo $c ?>][product_id]" value="<?php echo $invoice_item['product_id'] ?>" class="product_id" />
 							<input type="text" name="addon_item[<?php echo $c ?>][product_name]" value="<?php echo $invoice_item['name'] ?>" class="col-2 inv-field product_name" />
+							<input type="hidden" name="addon_item[<?php echo $c ?>][sort_order]" value="<?php echo $invoice_item['sort_order'] ?>" class="sort_order" />
 						</div>
 						<div><input type="text" name="addon_item[<?php echo $c ?>][description]" value="<?php echo $invoice_item['description'] ?>" class="col-3" /></div>
 						<div><input type="text" name="addon_item[<?php echo $c ?>][unit_price]" value="<?php echo (float)$invoice_item['unit_price'] ?>" class="col-4 unit_price cal" /></div>
@@ -251,6 +252,7 @@
 				<input type="hidden" name="addon_item[{xxxxx}][id]" />
 				<input type="hidden" name="addon_item[{xxxxx}][product_id]" class="product_id" />
 				<input type="text" name="addon_item[{xxxxx}][product_name]" class="col-2 inv-field product_name" />
+				<input type="hidden" name="addon_item[{xxxxx}][sort_order]" class="sort_order" />
 			</div>
 			<div><input type="text" name="addon_item[{xxxxx}][description]" class="col-3" /></div>
 			<div><input type="text" name="addon_item[{xxxxx}][unit_price]" class="col-4 unit_price cal" /></div>

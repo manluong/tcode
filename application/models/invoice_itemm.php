@@ -39,6 +39,11 @@ class Invoice_ItemM extends MY_Model {
 			'required' => true,
 			'allow_blank' => false
 		),
+		'sort_order' => array(
+			'type' => 'numeric',
+			'required' => true,
+			'allow_blank' => false
+		),
 		'subscription_start_stamp' => array(
 			'type' => 'datetime'
 		),
@@ -61,7 +66,7 @@ class Invoice_ItemM extends MY_Model {
 		$this->sett_has_system_fields = FALSE;
 	}
 
-	function get_by_invoice_id($invoice_id) {
+	/*function get_by_invoice_id($invoice_id) {
 		$this->db->select('a_invoice_item.*, a_product.name, a_product_pricetype.a_product_pricetype_name, a_product_durationtype.a_product_durationtype_name');
 		$this->db->from('a_invoice_item');
 		$this->db->join('a_product', 'a_invoice_item.product_id = a_product.id');
@@ -76,5 +81,5 @@ class Invoice_ItemM extends MY_Model {
 	function delete_by_invoice_id($invoice_id) {
 		$this->db->where('invoice_id', $invoice_id);
 		$this->db->delete($this->table);
-	}
+	}*/
 }

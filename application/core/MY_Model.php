@@ -303,7 +303,7 @@ class MY_Model extends CI_Model {
 							$has_error = TRUE;
 						}
 						break;
-					case 'boolen':
+					case 'boolean':
 						//TODO: bool validation. use is_bool?
 						break;
 					case 'email':
