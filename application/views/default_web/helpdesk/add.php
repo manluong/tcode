@@ -172,10 +172,12 @@
 		container: 'container',
 		max_file_size : '10mb',
 		url : '/helpdesk/upload/'+$('#hiddenCommentID').attr('value'),
-
+		
 		filters : [
 			{title : "Image files", extensions : "jpg,gif,png"},
-			{title : "Zip files", extensions : "zip"}
+			{title : "Zip files", extensions : "zip"},
+			{title : "Pdf files", extensions : "pdf"},
+			{title : "Doc files", extensions : "doc,docx"},
 		]
 	});
 	

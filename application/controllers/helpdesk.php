@@ -44,12 +44,35 @@ class Helpdesk extends MY_Controller {
 		);
 		$this->_do_output();
 	}
-
+	
+	function card() {
+		$content = array(
+			'helpdesk_card_id' => $this->uri->segment(3),
+			'card_id' => $this->UserM->get_card_id(),
+			'group' =>  $this->Helpdesk_GroupM->get_list(),
+			'status' => $this->Helpdesk_StatusM->get_list(),
+			'priority' => $this->Helpdesk_PriorityM->get_list(),
+			'type' => $this->Helpdesk_TypeM->get_list(),
+		);
+		$this->data['content'] = $this->load->view(get_template().'/helpdesk/index',$content, TRUE);
+		$this->_do_output();
+	}
+	
+	
 	function helpdesk_fillter(){
+		//Set order 
 		$order_by = 'created_stamp  DESC';
 		$this->HelpdeskM->set_order_by($order_by);
+		$where = array();	
+		//Check Customer
+		if($this->UserM->is_client() == TRUE){
+			$card_id = $this->UserM->get_card_id();
+			if(!empty($card_id)){
+				$where[] = "created_card_id='$card_id'";
+			}
+		}
 
-		$where = array();
+		//Fillter MY CASE of Staff
 		$card_id = $this->input->post('card_id');
 		if(!empty($card_id)){
 			$where[] = "created_card_id='$card_id'";
@@ -168,7 +191,6 @@ class Helpdesk extends MY_Controller {
 				);
 			}
 		}
-
 		echo json_encode($content);
 	}
 
@@ -242,10 +264,20 @@ class Helpdesk extends MY_Controller {
 	}
 
 	function edit(){
-		//Delete NULL COMMENT
-		$this->delete_comment() ;
-
 		$id = $this->uri->segment(3);
+		$result = $this->HelpdeskM->get($id);
+		//Check Customer id
+		$card_id = $this->UserM->get_card_id();
+		
+		if($this->UserM->is_client() == TRUE){
+			if($result['created_card_id'] != $card_id){
+				header("location: /helpdesk");
+				die;
+			}
+		}
+		//Delete NULL COMMENT
+		$this->delete_comment();
+		
 		//Create NULL COMMENT for upload attach file
 	   $comment_data = array (
 			'group' => '',
@@ -257,16 +289,14 @@ class Helpdesk extends MY_Controller {
 			'helpdesk_id' => $id ,
             'active' => 1,
 		);
-		$comment_id = $this->Helpdesk_CommentM->save($comment_data);
-		$result = $this->HelpdeskM->get($id);
-
+		$comment_id = $this->Helpdesk_CommentM->save($comment_data);	
 		$where_comment[] = "active = 0";
 		$where_comment[] = "helpdesk_id='$id'";
 		$this->Helpdesk_CommentM->where = $where_comment;
 		$comment = $this->Helpdesk_CommentM->get_list();
-
+		
 		$content = array(
-			'card_id' => $this->UserM->get_card_id(),
+			'card_id' => $card_id,
 			'id' => $id,
 			'comment_id' => $comment_id,
 			'group' =>  $this->Helpdesk_GroupM->get_list(),
@@ -276,15 +306,11 @@ class Helpdesk extends MY_Controller {
 			'comment' => $comment,
 			'result' => $result,
 			'assign' => $this->Helpdesk_CommentM->get_assign(),
-			'file_attach' => $this->Helpdesk_CommentM->get_comment_files($comment_id),
+			'file_attach' => $this->Helpdesk_CommentM->get_comment_files(),
 		);
-		//echo '<pre>';
-		//print_r($result['created_card_id']);
-		//echo '</pre>';
-		//die;
-
 		//$card = $this->CardM->get_quickjump($result['created_card_id']);
 		//$content['quickjump'] = $this->load->view(get_template().'/card/quickjump', $card, TRUE);
+		
 
 		$this->data['content'] = $this->load->view(get_template().'/helpdesk/edit',$content, TRUE);
 		$this->_do_output();
@@ -326,19 +352,20 @@ class Helpdesk extends MY_Controller {
 		);
 		$this->Helpdesk_CommentM->save($data);
 
-		$result[0] = array();
 		if($id_helpdesk!=0){
-			$result = $this->Helpdesk_CommentM->get_content_helpdesk($id_helpdesk);
+			$where_comment[] = "active = 0";
+			$where_comment[] = "helpdesk_id='$id_helpdesk'";
+			$this->Helpdesk_CommentM->where = $where_comment;
+			$result = $this->Helpdesk_CommentM->get_list();
 		}
 		$data_ajax = array(
-           'comment' => $this->Helpdesk_CommentM->get_content($id_helpdesk),
-		   'result' => $result[0],
+           'comment' => $this->Helpdesk_CommentM->get_list($id_helpdesk),
+		   'result' => $result,
 		);
 
 		$ajax_content = $this->load->view(get_template().'/helpdesk/ajax_updateComment',$data_ajax ,true);
 		echo $ajax_content  ;
 	}
-
 
 	function save_insert_helpdesk(){
 		$data = array(
@@ -419,7 +446,6 @@ class Helpdesk extends MY_Controller {
 				}
 			}
 		}
-
 	}
 
 }
