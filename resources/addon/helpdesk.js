@@ -298,7 +298,8 @@ $(document).ready(function(){
 
 function submit_comment(){
 	var comment = $('#comment').val();
-	var id = $('#hiddenIdAdmincp').val();
+	var id_helpdesk = $('#hiddenIdAdmincp').val() ;
+	var id_comment = $('#hiddenCommentId').val() ;
 	var priority = $('#priority').val();
 	var group = $('#group').val();
 	var status = $('#status').val();
@@ -307,7 +308,7 @@ function submit_comment(){
 	//Change helpdesk info
 	var url1 = '/helpdesk/resave_helpdesk_info';
 	$.post(url1,{
-			id : id,
+			id : id_helpdesk,
 			status : status,
 			priority : priority,
 		},function(data){
@@ -326,7 +327,8 @@ function submit_comment(){
 	var url = '/helpdesk/save_comment';
 
 	$.post(url,{
-			id : id,
+			id : id_helpdesk,
+			id_comment : id_comment,
 			comment: comment,
 			pri: pri,
 			group : group,
