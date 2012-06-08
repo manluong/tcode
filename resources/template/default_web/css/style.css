@@ -1179,6 +1179,142 @@ div#main .mainContent {
 	float: left;
 }
 
+/* Settings box */
+#overlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 999;
+	background: url(../img/overlay.png) repeat;
+	display: none;
+}
+#settings {
+	display: none;
+	z-index: 1000;
+	background: white;
+	overflow-y: scroll;
+	overflow-x: hidden;
+	position: absolute;
+	height: auto;
+	bottom: 0;
+	top: 0;
+	left: 0;
+	right: 0;
+	margin-top: 150px;
+	margin-bottom: 150px;
+	margin-right: auto;
+	margin-left: auto;
+	width: 600px;
+	-webkit-box-shadow: 0px 0px 30px 0px rgba(119, 119, 119, 0.7);
+	-moz-box-shadow: 0px 0px 30px 0px rgba(119, 119, 119, 0.7);
+	box-shadow: 0px 0px 30px 0px rgba(119, 119, 119, 0.7);
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+
+#settings .step1, #settings .step2 {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 600px;
+}
+
+#settings .step2 {
+	display: none;
+}
+
+#settings .title {
+	background: none;
+	margin: 15px 0 0 20px;
+}
+
+#settings form {
+	padding: 30px 0 0 60px;
+}
+
+#settings .actionButtons {
+	padding-left: 90px;
+}
+
+#settings ul.icons {
+	list-style: none;
+	margin: 0;
+	padding: 20px 20px 0 20px;
+}
+
+#settings ul.icons li {
+	width: 25%;
+	float: left;
+	display: inline;
+}
+
+#settings ul.icons li a {
+	display: block;
+	color: #7b8385;
+	font-size: 10px;
+	text-transform: uppercase;
+	text-decoration: none;
+	padding-top: 50px;
+	text-align: center;
+	background: url('../img/sprite-1.png') no-repeat;
+	width:58px;
+}
+
+#settings ul.icons li a.home {
+	background-position: 5px -5px;
+}
+
+#settings ul.icons li a.activity {
+	background-position: 5px -62px;
+}
+
+#settings ul.icons li a.calendar {
+	background-position: 5px -112px;
+}
+
+#settings ul.icons li a.contacts {
+	background-position: 5px -163px;
+}
+
+#settings ul.icons li a:hover {
+	background-position-y: -100px;
+}
+
+#settings .closeModal {
+	color: white!important;
+	z-index: 1002220;
+	cursor: pointer;
+	text-decoration: none;
+	position: absolute;
+	right: 0;
+	top: 0;
+	font-style: normal;
+	font-size: 13px;
+	width: 24px;
+	margin: auto;
+	padding: 0 0 3px 0;
+	text-align: center;
+	background: #8f8f8f;
+	background: -moz-linear-gradient(top, #8f8f8f 0%, #707070 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#8f8f8f), color-stop(100%,#707070));
+	background: -webkit-linear-gradient(top, #8f8f8f 0%,#707070 100%);
+	background: -o-linear-gradient(top, #8f8f8f 0%,#707070 100%);
+	background: -ms-linear-gradient(top, #8f8f8f 0%,#707070 100%);
+	background: linear-gradient(top, #8f8f8f 0%,#707070 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#8f8f8f', endColorstr='#707070',GradientType=0 );
+	-webkit-box-shadow: inset 3px 3px 5px 0px #777777;
+  box-shadow: inset 3px 3px 5px 0px #777777;
+  border-radius: 0 5px 0 0;
+}
+
+@-moz-document url-prefix() {
+	#settings .closeModal {
+		border-radius: 0;
+	}
+}
+
 /* Footer */
 footer {
 	height: 47px;

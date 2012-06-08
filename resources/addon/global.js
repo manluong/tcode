@@ -36,7 +36,7 @@ $(document).ready(function(){
 
 		$.post(
 			'/comments/ajax_load_more_comments',
-			{ last_id: last_id, threaded:threaded, app_id: app_id, app_data_id: app_data_id },
+			{last_id: last_id, threaded:threaded, app_id: app_id, app_data_id: app_data_id},
 			function(result) {
 				if (result.success) {
 					var new_posts = '';
@@ -98,7 +98,7 @@ $(document).ready(function(){
 
 		$.post(
 			'/comments/ajax_save_comment',
-			{ app_id: app_id, app_data_id: app_data_id, parent_id: parent_id, text: text },
+			{app_id: app_id, app_data_id: app_data_id, parent_id: parent_id, text: text},
 			function(result) {
 				if (result.success) {
 					textbox.val('');
@@ -120,6 +120,74 @@ $(document).ready(function(){
 		//prevent enter key from submitting the form
 		e.preventDefault();
 	});
+
+
+	// Settings
+	var is_settings_loaded = false;
+	$('.userDropdownPadding .settings').on('click', function() {
+		if (!is_settings_loaded) {
+			$.get(
+				'/setting/ajax_index',
+				function(resp) {
+					$('#settings div.step1').html(resp);
+					is_settings_loaded = true;
+				},
+				'html'
+			);
+		}
+		$('#settings, #overlay').fadeIn('fast');
+		$('.userDropdownPadding').hide();
+		return false;
+	});
+
+	$(document).on('click', '#settings .icons a', function() {
+		$('#settings .step1').hide();
+		var app = $(this).attr('class');
+		$.get(
+			'/setting/ajax_configure/'+app,
+			function(resp) {
+				$('#settings div.step2').html(resp).fadeIn('fast');
+			},
+			'html'
+		);
+		return false;
+	});
+
+	$(document).on('click', '#settings .save', function() {
+		var button = $(this);
+		var form = button.parents('form');
+		button.attr('disabled', 'disabled').addClass('disabled').html('Saving...');
+		$.post(
+			form.attr('action'),
+			form.serializeArray(),
+			function(resp) {
+				if (resp.success) {
+					button.html('Saved!').delay('500').removeAttr('disabled').removeClass('disabled').delay('500').promise().done(function () {
+						$('#settings .step2').hide();
+						$('#settings .step1').fadeIn('fast');
+					});
+				}
+			},
+			'json'
+		);
+		return false;
+	});
+
+	$(document).on('click', '#settings .cancel', function() {
+		$('#settings .step2').hide();
+		$('#settings .step1').fadeIn('fast');
+		return false;
+	});
+
+	$(document).on('click', '#overlay, .closeModal', function() {
+		$('#settings .step2').hide();
+		$('#settings .step1').fadeIn('fast');
+		$('#settings, #overlay').fadeOut('fast');
+		return false;
+	});
+
+
+
 
 
 

@@ -27,41 +27,30 @@ class Setting extends MY_Controller {
 		$this->load->model('SettingM');
 	}
 
-	function index() {
+	function ajax_index() {
 		$app_list['list'] = $this->app_list;
-		$this->data['content_left'] = $this->load->view(get_template().'/setting/app_list', $app_list, TRUE);
-		$this->data['content_right'] = 'Begin by selecting an application from the list on the left.';
-
-		$this->layout['type'] = 'right';
-
-		$this->_do_output();
+		$this->load->view(get_template().'/setting/app_list', $app_list);
 	}
 
-	function configure($app_name) {
+	function ajax_configure($app_name) {
 		$this->verify_app($app_name);
-
-		$app_list['list'] = $this->app_list;
-		$app_list['selected'] = $app_name;
-		$this->data['content_left'] = $this->load->view(get_template().'/setting/app_list', $app_list, TRUE);
 
 		//load the view file that has the configuration options
 		$data_configure['app_name'] = $app_name;
 		$data_configure['is_admin'] = $this->UserM->is_admin();
 		$data_configure['settings'] = $this->SettingM->get_for_configuration($app_name);
 		$data_configure['override_options'] = $this->override;
-		$this->data['content_right'] = $this->load->view(get_template().'/setting/configure_'.$app_name, $data_configure, TRUE);
 
-		$this->layout['type'] = 'right';
-
-		$this->_do_output();
+		$this->load->view(get_template().'/setting/configure_'.$app_name, $data_configure);
 	}
 
-	function save($app_name) {
+	function ajax_save($app_name) {
 		$this->verify_app($app_name);
 
 		$this->SettingM->save($app_name);
 
-		redirect('/setting/configure/'.$app_name);
+		$this->RespM->set_success(TRUE)
+				->output_json();
 	}
 
 	//make sure the $app_name is valid

@@ -5,8 +5,8 @@ class AppM extends MY_Model {
 	var $actions = array();
 
 	var $app_cache = array(
-		0 => 'general',
-		'general' => 0,
+		0 => array('id'=>0, 'name'=>'general'),
+		'general' => array('id'=>0, 'name'=>'general'),
 	);
 
 	var $acl_app_list = array(); //An ACL/Licensed controlled App List

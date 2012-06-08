@@ -4,7 +4,7 @@
 	</div>
 	<div class="widget-body">
 		<?php
-			echo form_open('/setting/save/'.$app_name , array('class'=>'form-horizontal'));
+			echo form_open('/setting/ajax_save/'.$app_name , array('class'=>'form-horizontal'));
 		?>
 
 		<?php if (APP_ROLE == 'TBOSS' && $is_admin) { ?>
@@ -47,7 +47,7 @@
 		<?php } ?>
 
 		<div class="form-actions">
-			<button type="submit" class="btn btn-primary">Save</button>
+			<button type="submit" class="btn btn-primary save">Save</button> or <button type="button" class="cancel">go back</button>
 		</div>
 
 		</form>
