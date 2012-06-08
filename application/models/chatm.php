@@ -24,7 +24,7 @@
                             'header'  => "Authorization: Basic bGFtcHA6dGVsY29zb25AMTk=" 
                     )
             ));
-            $content = file_get_contents("http://46.137.219.16/xmpp/create.php?name=$name&realname=".base64_encode($realname)."&company=$company",false,$context);
+            $content = file_get_contents("http://46.137.219.16:8080/xmpp/create.php?name=$name&realname=".base64_encode($realname)."&company=$company",false,$context);
             return $content;
         }
         function delete_user($name,$company){
@@ -33,7 +33,7 @@
                             'header'  => "Authorization: Basic bGFtcHA6dGVsY29zb25AMTk=" 
                     )
             ));
-            $content = file_get_contents("http://46.137.219.16/xmpp/delete.php?name=$name&company=$company",false,$context);
+            $content = file_get_contents("http://46.137.219.16:8080/xmpp/delete.php?name=$name&company=$company",false,$context);
             return $content;
         }
     }
