@@ -26,13 +26,26 @@ class Helpdesk extends MY_Controller {
 		$this->data['content'] = $this->load->view(get_template().'/helpdesk/index',$content, TRUE);
 		$this->_do_output();
 	}
-
+	
+	function card() {
+		$content = array(
+			'helpdesk_card_id' => $this->uri->segment(3),
+			'card_id' => $this->UserM->get_card_id(),
+			'group' =>  $this->Helpdesk_GroupM->get_list(),
+			'status' => $this->Helpdesk_StatusM->get_list(),
+			'priority' => $this->Helpdesk_PriorityM->get_list(),
+			'type' => $this->Helpdesk_TypeM->get_list(),
+		);
+		$this->data['content'] = $this->load->view(get_template().'/helpdesk/index',$content, TRUE);
+		$this->_do_output();
+	}
+	
+	
 	function helpdesk_fillter(){
 		//Set order 
-		$order_by = 'created_stamp  DESC';
-		$this->HelpdeskM->set_order_by($order_by);
-		
-		$where = array();
+		//$order_by = 'created_stamp  DESC';
+		//$this->HelpdeskM->set_order_by($order_by);
+		$where = array();	
 		//Check Customer
 		if($this->UserM->is_client() == TRUE){
 			$card_id = $this->UserM->get_card_id();
@@ -414,7 +427,6 @@ class Helpdesk extends MY_Controller {
 				}
 			}
 		}
-
 	}
 
 }

@@ -38,7 +38,7 @@
 				if(!empty($file)){
 					foreach($file as $f){
 			?>
-			<p><?= '<a href="/docs/view/'.$f->id.set_return_url(TRUE).'">View Document</a>'; ?></p>
+			<p><?= '<a href="/file/read/'.$f->filename.'">View Document</a>'; ?></p>
 			<?php }}?>
 			<br/><span style="font-size:11px;">
 				<p>Client: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.7; rv:12.0) Gecko/20100101 Firefox/12.0</p>

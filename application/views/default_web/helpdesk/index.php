@@ -5,7 +5,7 @@
 		$.extend( $.fn.dataTableExt.oStdClasses, {
 				    "sWrapper": "dataTables_wrapper form-inline"
 				} );
-		helpdesk_fillter();
+		helpdesk_fillter(<?=(!empty($helpdesk_card_id)?$helpdesk_card_id:'')?>);
 	});
 </script>
 
