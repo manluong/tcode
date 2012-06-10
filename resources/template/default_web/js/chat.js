@@ -163,6 +163,7 @@ jQuery(document).ready(function(){
               console.log('You do not have the permissions to access this app');
           } 
           else {
+              
               var username = data.split('|')[0];
               var company = data.split('|')[1];
               telcoson.username = username;
@@ -355,10 +356,10 @@ function sendMess(event,id,mess){
             $("#chat_"+id+" .chatScroll").animate({scrollTop: $("#chat_"+id+" .chatScroll")[0].scrollHeight});
     }
     else {
-                 message = mess.replace(/^\s+|\s+$/g,"");
-		var jid = telcoson.id_to_jid(id);
-		 var notify = $msg({to: jid, "type": "chat"})
-                .c("composing", {xmlns: "http://jabber.org/protocol/chatstates"}).c("body").t(message);
+            message = mess.replace(/^\s+|\s+$/g,"");
+            var jid = telcoson.id_to_jid(id);
+            var notify = $msg({to: jid, "type": "chat"})
+            .c("composing", {xmlns: "http://jabber.org/protocol/chatstates"}).c("body").t(message);
             telcoson.connection.send(notify);
     }
 }
@@ -380,24 +381,24 @@ function openChat(id,name){
         jQuery(".chatSlider").append(chat);
         //----------- Add first Messenge ---------------
         var mess = '';
-            mess += '<div class="chatBox poa ">';
-            mess += '<div class="chatBoxIner pb5 rounded7 fl abigChat" style="">';
-            mess += '<div class="chatBoxItem fl pv5 ph10 bgN">';
-            mess += '<div class="fr">';
-            mess += '<a href="javascript:void(0);" onclick="min(\''+id+'\');"><i class="iChat iChat5 fl mr10 mt5"></i></a>';
-            mess += '<a href="javascript:void(0);" onclick="chat_close(\''+id+'\');"><i class="iChat iChat6 fl"></i></a>';
-            mess += '</div>';
-            mess += '</div>';
-            mess += '<div class="chatScroll">';
-            mess += '</div>';
-            mess += '<div class="chatBoxItem fl pv1 ph10 bgN mess">';
-            mess += '<input class="inv-field w95p mt10" type="text" onclick="value=\'\'" onblur="if(value==\'\'){value=\'This is description\'};" value="This is description" onkeyup="sendMess(event,\''+id+'\',this.value)">';
-            mess += '</div>'
-            mess += '</div>';
-            mess += '</div>';
-            jQuery("#chat_"+id).prepend(mess);
-            jQuery("#list_chat").hide();
-            jQuery("#show_hide_chat").removeClass('active');
+        mess += '<div class="chatBox poa ">';
+        mess += '<div class="chatBoxIner pb5 rounded7 fl abigChat" style="">';
+        mess += '<div class="chatBoxItem fl pv5 ph10 bgN">';
+        mess += '<div class="fr">';
+        mess += '<a href="javascript:void(0);" onclick="min(\''+id+'\');"><i class="iChat iChat5 fl mr10 mt5"></i></a>';
+        mess += '<a href="javascript:void(0);" onclick="chat_close(\''+id+'\');"><i class="iChat iChat6 fl"></i></a>';
+        mess += '</div>';
+        mess += '</div>';
+        mess += '<div class="chatScroll">';
+        mess += '</div>';
+        mess += '<div class="chatBoxItem fl pv1 ph10 bgN mess">';
+        mess += '<input class="inv-field w95p mt10" type="text" onclick="value=\'\'" onblur="if(value==\'\'){value=\'This is description\'};" value="This is description" onkeyup="sendMess(event,\''+id+'\',this.value)">';
+        mess += '</div>'
+        mess += '</div>';
+        mess += '</div>';
+        jQuery("#chat_"+id).prepend(mess);
+        jQuery("#list_chat").hide();
+        jQuery("#show_hide_chat").removeClass('active');
         }
         else {
             selectChat(id);
