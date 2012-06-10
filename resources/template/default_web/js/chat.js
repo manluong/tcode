@@ -270,9 +270,9 @@ function chatWith(id,name,body){
         // create chat area
                 var chat = '';
                 chat += '<div class="chatItemWrapper por fl mr1 ac" id="chat_'+id+'" >';
-                chat += '<div class="chatItem fl cp h50 ph10 por active">';
+                chat += '<div class="chatItem fl cp h50 ph10 por active" onclick="selectChat(\''+id+'\');">';
 		chat += '<span class="count bg2 fs12 fwb tac rounded7 lhn poa dpb" style="display: none;"></span>';
-                chat += '<a href="javascript:void(0);" onclick="selectChat(\''+id+'\');" class="dpb mt10">';
+                chat += '<a href="javascript:void(0);" class="dpb mt10">';
                 chat += '<div class="avatar rounded14 fl mr5"><img src="/resources/template/default_web/img/avatar.png" alt="" width="28" class="rounded14"></div>';
                 chat += '<span class="fl dpb ofh cf1 mt5 fwb">'+name+'</span>';
                 chat += '</a>';
@@ -368,9 +368,9 @@ function openChat(id,name){
         // create chat area
         var chat = '';
         chat += '<div class="chatItemWrapper por fl mr1 ac" id="chat_'+id+'" >';
-        chat += '<div class="chatItem fl cp h50 ph10 por active">';
+        chat += '<div class="chatItem fl cp h50 ph10 por active" onclick="selectChat(\''+id+'\');">';
         chat += '<span class="count bg2 fs12 fwb tac rounded7 lhn poa dpb" style="display: none;"></span>';
-        chat += '<a href="javascript:void(0);" onclick="selectChat(\''+id+'\');" class="dpb mt10">';
+        chat += '<a href="javascript:void(0);"  class="dpb mt10">';
         chat += '<div class="avatar rounded14 fl mr5"><img src="/resources/template/default_web/img/avatar.png" alt="" width="28" class="rounded14"></div>';
         chat += '<span class="fl dpb ofh cf1 mt5 fwb">'+name+'</span>';
         chat += '</a>';
