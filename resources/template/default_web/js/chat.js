@@ -240,8 +240,8 @@ function chatWith(id,name,body){
         mySound.play();
     }
     if(jQuery("#chat_"+id).length > 0){
-		if(jQuery("#chat_"+id+" .chatBoxIner").attr('style') == 'display: none;'){
-			if(jQuery("#chat_"+id+" .count").attr('style') == 'display: none;'){
+		if(jQuery.trim(jQuery("#chat_"+id+" .chatBoxIner").attr('style')) == 'display: none;'){
+			if(jQuery.trim(jQuery("#chat_"+id+" .count").attr('style')) == 'display: none;'){
 				var count = 1;
 				jQuery("#chat_"+id+" .count").removeAttr('style');
 			}
@@ -317,7 +317,7 @@ function chat_close(id){
     jQuery("#chat_"+id).remove();
 }
 function selectChat(id){
-	if(jQuery("#chat_"+id+" .chatBoxIner").attr('style') == 'display: none;'){
+        if(jQuery.trim(jQuery("#chat_"+id+" .chatBoxIner").attr('style')) == 'display: none;'){
 		jQuery(".ac .chatBoxIner").hide();
 		jQuery(".ac .chatItem").removeClass('active');
 		jQuery("#chat_"+id+" .chatBoxIner").show();
