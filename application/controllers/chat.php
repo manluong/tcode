@@ -10,6 +10,7 @@
         }
         function index(){
            echo 'chat screen';
+           $this->AclM->check('card',1,'delete');
             
         }
         function get(){
