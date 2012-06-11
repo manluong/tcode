@@ -61,6 +61,7 @@ class InvoiceM extends MY_Model {
 	function __construct() {
 		parent::__construct();
 
+		$this->app = 'invoice';
 		$this->table = 'a_invoice';
 		$this->cache_enabled = TRUE;
 		$this->sett_fill_card_info = TRUE;

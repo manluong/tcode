@@ -26,6 +26,7 @@ class Helpdesk_GroupM extends MY_Model {
 	function __construct() {
 		parent::__construct();
 
+		$this->app = 'helpdesk';
 		$this->table = 'access_ro';
 		$this->cache_enabled = TRUE;
 		$this->sett_has_system_fields = FALSE;
