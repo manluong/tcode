@@ -531,3 +531,4 @@ $lang['error-no_save_data'] = 'There is no data to be saved';
 $lang['error-min_length'] = 'You must enter at least #char# characters.';
 $lang['error-max_length'] = 'You cannot enter more than #char# characters.';
 $lang['error-already_has_role'] = 'This user has already been assigned a role.';
+$lang['error-card_record_has_related_data'] = 'You cannot delete this contact because it has data associated with it in the other applications.';

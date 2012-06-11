@@ -244,6 +244,25 @@ class CardM extends MY_Model {
 		return $result;
 	}
 
+	public function delete($card_id, $actual_delete=FALSE) {
+		$has_records = FALSE;
+
+		//Go through each modules and check if it has data for the $card_id
+		$modules = array('HelpdeskM', 'InvoiceM');
+		foreach($modules AS $m) {
+			$this->load->model($m);
+			$this->$m->where('card_id', $card_id);
+			if ($this->$m->get_total_records() > 0) $has_records = TRUE;
+		}
+
+		if ($has_records) {
+			$this->errors[] = $this->lang->line('error-card_record_has_related_data');
+			return FALSE;
+		}
+
+		return parent::delete($card_id, $actual_delete);
+	}
+
 	private function fill_addons(&$data, $mode=SINGLE_DATA) {
 		if (count($data) == 0 || $data === FALSE) return FALSE;
 
