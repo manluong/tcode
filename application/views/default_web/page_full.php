@@ -44,7 +44,7 @@
 
 	<div role="main" id="main" class="clearfix">
 		<div class="mainContent">
-			<?//=$breadcrumb?>
+			<?=$app_title?>
 
 			<?=$content?>
 		</div>
