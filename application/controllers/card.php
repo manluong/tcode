@@ -20,8 +20,9 @@ class Card extends MY_Controller {
 		$this->CardM->sett_fill_notes = FALSE;
 		$this->CardM->sett_fill_social = FALSE;
 		$this->CardM->sett_fill_tel = FALSE;
+		$this->CardM->sett_fill_roles = TRUE;
 
-		$result =  $this->CardM->get_list();
+		$this->CardM->order_by[] = 'first_name ASC';
 		$view_data = array(
 			'list' => $this->CardM->get_list(),
 		);
