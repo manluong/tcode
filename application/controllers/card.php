@@ -42,6 +42,30 @@ class Card extends MY_Controller {
 		$this->data['content'] = $this->load->view(get_template().'/card/view', $view_data, TRUE);
 		$this->_do_output();
 	}
+	
+	function add($id) {
+		//if (!$this->AclM->check('card', $id, 'edit')) die('you cannot edit this data');
+
+		$view_data['data'] = $this->CardM->get($id);
+		$view_data['is_new'] = FALSE;
+		$view_data['countries'] = $this->Card_AddressM->get_country_list();
+
+		$view_data['tel_label'] = $this->Card_TelM->get_label('number');
+		$view_data['tel_type_options'] = $this->Card_TelM->get_options('type');
+
+		$view_data['email_label'] = $this->Card_EmailM->get_label('email');
+		$view_data['email_type_options'] = $this->Card_EmailM->get_options('type');
+
+		$view_data['address_label'] = 'Address';
+		$view_data['address_type_options'] = $this->Card_AddressM->get_options('type');
+
+		$view_data['social_label'] = 'Social';
+		$view_data['social_type_options'] = $this->Card_SocialM->get_options('type');
+
+		//$this->load->view(get_template().'/card/add', $view_data);
+		$this->data['content'] = $this->load->view(get_template().'/card/add', $view_data, TRUE);
+		$this->_do_output();
+	}
 
 	function edit($id) {
 		//if (!$this->AclM->check('card', $id, 'edit')) die('you cannot edit this data');
@@ -62,10 +86,9 @@ class Card extends MY_Controller {
 		$view_data['social_label'] = 'Social';
 		$view_data['social_type_options'] = $this->Card_SocialM->get_options('type');
 
-		//$content = $this->load->view(get_template().'/card/edit', $view_data, TRUE);
-		//echo $content;
-		$this->data['content'] = $this->load->view(get_template().'/card/edit', $view_data, TRUE);
-		$this->_do_output();
+		$this->load->view(get_template().'/card/edit', $view_data);
+		//$this->data['content'] = $this->load->view(get_template().'/card/edit', $view_data, TRUE);
+		//$this->_do_output();
 	}
 
 	function save() {
@@ -77,7 +100,30 @@ class Card extends MY_Controller {
 			redirect('/card/view/'.$id);
 		}
 	}
-
+	
+	function confirm_delete($card_id) {
+		//$staff_id = $this->UserM->get_card_id();
+		$per = $this->AclM->check('card',0,'delete');
+		$data = array(
+			'per' => $per, 
+			'card_id' => $card_id,
+		);
+		$this->load->view(get_template().'/card/confirm_delete', $data);
+	}
+	
+	function delete($card_id){
+		$per_helpdesk = $this->AclM->check('helpdesk',0,'delete');
+		$per_invoice = $this->AclM->check('invoice',0,'delete');
+		if($per_helpdesk == TRUE && $per_invoice == TRUE){
+			$this->CardM->delete($card_id);
+			$per = TRUE;
+		}else{
+			$per = FALSE;
+		}
+		$data['per'] = $per;
+		$this->load->view(get_template().'/card/delete', $data);
+	}
+	
 	function upload($card_id){
 	   $this->load->library('filel');
 	   $file = $this->filel->save('file', 'CardM');

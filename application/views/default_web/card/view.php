@@ -4,11 +4,22 @@ function ajax_edit(id){
 	$.pjax({
 		url: '/card/edit/'+id,
 		container: '#contact_info_detail',
-		timeout: 10000
+		timeout: 100000
+	});
+}
+function confirm_delete(id){
+	$.pjax({
+		url: '/card/confirm_delete/'+id,
+		container: '#contact_info_detail',
+		timeout: 100000
 	});
 }
 </script>
-
+<?php 
+	//echo '<pre>';
+	//print_r($data);
+	//echo '</pre>';
+?>
 <div id="breadcrumb">
 	<div id="module_name" style="width:650px;">
 		<ul>
@@ -189,6 +200,7 @@ function ajax_edit(id){
 				<?php }}?>
 				<li style="margin:10px 0 0 95px;">
 					<button onclick="ajax_edit(<?=$data['id']?>);" style="height:20px;line-height:12px;" class="btn btn-inverse" href="#">EDIT DETAILS</button>
+					<span style="cursor:pointer;color:#aaaaaa;" onclick="confirm_delete(<?=$data['id']?>);">or delete</span>
 				</li>
 				<li style="margin-top:10px;">
 					<span class="input_data_label">Birthday</span>
