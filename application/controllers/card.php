@@ -20,7 +20,7 @@ class Card extends MY_Controller {
 		$this->CardM->sett_fill_notes = FALSE;
 		$this->CardM->sett_fill_social = FALSE;
 		$this->CardM->sett_fill_tel = FALSE;
-		
+
 		$result =  $this->CardM->get_list();
 		$view_data = array(
 			'list' => $this->CardM->get_list(),
@@ -145,7 +145,12 @@ class Card extends MY_Controller {
 		$details = '/card/view/'.$id;
 		if (!$success) {
 			$message = $this->CardM->get_error_string();
-			$details = $this->CardM->field_errors;
+
+			$errors = array();
+			foreach($this->CardM->field_errors AS $field => $message) {
+				$errors[$field] = implode('<br />', $message);
+			}
+			$details = $errors;
 		}
 
 		$this->RespM->set_message($message)
