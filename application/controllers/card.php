@@ -40,6 +40,16 @@ class Card extends MY_Controller {
 			'card_address' => $this->CardM->get_card_address($id),
 		);
 		$this->data['content'] = $this->load->view(get_template().'/card/view', $view_data, TRUE);
+
+		$this->data['breadcrumb'][] = array(
+			'title' => $view_data['data']['first_name'],
+			'url' => '/card/view/'.$id,
+		);
+		$this->data['breadcrumb'][] = array(
+			'title' => 'Contact Information',
+			'url' => '',
+		);
+
 		$this->_do_output();
 	}
 

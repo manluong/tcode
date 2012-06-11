@@ -7,10 +7,16 @@
 				if ($count_breadcrumb > 0) {
 					echo '<li class="arrow"></li>';
 					$x = 1;
-					foreach($breadcrumb AS $b) {
+					foreach($breadcrumb AS $bc) {
 						echo '<li';
-						if ($x == $count_breadcrumb) echo ' class="curent_page"';
-						echo '>'.$bc['title'].'</li>';
+						//if ($x == $count_breadcrumb) echo ' class="curent_page"';
+						echo ' class="curent_page"';
+						echo '>';
+						if (!empty($bc['url'])) echo '<a href="',$bc['url'],'">';
+						echo $bc['title'];
+						if (!empty($bc['url'])) echo '</a>';
+						echo '</li>';
+						if ($x != $count_breadcrumb) echo '<li class="arrow"></li>';
 						$x++;
 					}
 				}
