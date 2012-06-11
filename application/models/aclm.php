@@ -327,7 +327,7 @@ class AclM extends MY_Model {
 	}
 
 	//simpler node creation
-	function add_node($path) {
+	function add_co_node($path) {
 		$temp = explode('/', $path);
 		if (count($temp) == 1) return FALSE;
 
