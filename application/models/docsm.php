@@ -5,6 +5,8 @@ class docsM extends MY_Model {
 	var $upload_source = 'web';
 
 	function __construct() {
+		$this->table = 'a_docs';
+
 		parent::__construct();
 	}
 
@@ -691,7 +693,9 @@ class docsM extends MY_Model {
 		return $result['id'];
 	}
 
-	function delete($hash_or_id) {
+	// $actual_delete parameter is not used, but added in order to suppress
+	// errors saying that it should be similar to MY_Model's delete()
+	function delete($hash_or_id, $actual_delete=FALSE) {
 		$data = array(
 			'modified_card_id' => $this->UserM->get_card_id(),
 			'modified_stamp' => get_current_stamp(),

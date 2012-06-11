@@ -177,7 +177,7 @@ class Docs extends MY_Controller {
 		$this->data['content'] = '<div>';
 		$this->data['content'] .= $this->load->view(get_template().'/docs/docs_view_html', $vars, TRUE);
 		$this->data['content'] .= $this->load->view(get_template().'/docs/docs_js', $vars, TRUE);
-		$this->data['content'] .= '<div>';
+		$this->data['content'] .= '</div>';
 
 		$this->_do_output();
 	}
@@ -189,7 +189,7 @@ class Docs extends MY_Controller {
 		$this->data['content'] = '<div>';
 		$this->data['content'] .= $this->load->view(get_template().'/docs/docs_view_html', $vars, TRUE);
 		$this->data['content'] .= $this->load->view(get_template().'/docs/docs_js', $vars, TRUE);
-		$this->data['content'] .= '<div>';
+		$this->data['content'] .= '</div>';
 
 		$this->_do_output();
 	}
@@ -202,7 +202,7 @@ class Docs extends MY_Controller {
 		$this->data['content'] = '<div>';
 		$this->data['content'] .= $this->load->view(get_template().'/docs/docs_file_html', $vars, TRUE);
 		$this->data['content'] .= $this->load->view(get_template().'/docs/docs_js', $vars, TRUE);
-		$this->data['content'] .= '<div>';
+		$this->data['content'] .= '</div>';
 
 		$this->_do_output();
 	}

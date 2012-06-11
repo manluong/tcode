@@ -42,7 +42,7 @@ class Helpdesk extends MY_Controller {
 		);
 		$this->_do_output();
 	}
-	
+
 	function card() {
 		$content = array(
 			'helpdesk_card_id' => $this->uri->segment(3),
@@ -55,13 +55,13 @@ class Helpdesk extends MY_Controller {
 		$this->data['content'] = $this->load->view(get_template().'/helpdesk/index',$content, TRUE);
 		$this->_do_output();
 	}
-	
-	
+
+
 	function helpdesk_fillter(){
-		//Set order 
+		//Set order
 		$order_by = 'created_stamp  DESC';
 		$this->HelpdeskM->set_order_by($order_by);
-		$where = array();	
+		$where = array();
 		//Check Customer
 		if($this->UserM->is_client() == TRUE){
 			$card_id = $this->UserM->get_card_id();
@@ -266,7 +266,7 @@ class Helpdesk extends MY_Controller {
 		$result = $this->HelpdeskM->get($id);
 		//Check Customer id
 		$card_id = $this->UserM->get_card_id();
-		
+
 		if($this->UserM->is_client() == TRUE){
 			if($result['created_card_id'] != $card_id){
 				header("location: /helpdesk");
@@ -275,7 +275,7 @@ class Helpdesk extends MY_Controller {
 		}
 		//Delete NULL COMMENT
 		$this->delete_comment();
-		
+
 		//Create NULL COMMENT for upload file attach
 	   $comment_data = array (
 			'group' => '',
@@ -287,12 +287,12 @@ class Helpdesk extends MY_Controller {
 			'helpdesk_id' => $id ,
             'active' => 1,
 		);
-		$comment_id = $this->Helpdesk_CommentM->save($comment_data);	
+		$comment_id = $this->Helpdesk_CommentM->save($comment_data);
 		$where_comment[] = "active = 0";
 		$where_comment[] = "helpdesk_id='$id'";
 		$this->Helpdesk_CommentM->where = $where_comment;
 		$comment = $this->Helpdesk_CommentM->get_list();
-		
+
 		$content = array(
 			'card_id' => $card_id,
 			'id' => $id,
@@ -308,7 +308,7 @@ class Helpdesk extends MY_Controller {
 		);
 		//$card = $this->CardM->get_quickjump($result['created_card_id']);
 		//$content['quickjump'] = $this->load->view(get_template().'/card/quickjump', $card, TRUE);
-		
+
 
 		$this->data['content'] = $this->load->view(get_template().'/helpdesk/edit',$content, TRUE);
 		$this->_do_output();
@@ -349,7 +349,7 @@ class Helpdesk extends MY_Controller {
             'active' => 0,
 		);
 		$this->Helpdesk_CommentM->save($data);
-		
+
 		//Create NULL COMMENT for upload file attach
 	   $comment_data = array (
 			'group' => '',
@@ -362,18 +362,18 @@ class Helpdesk extends MY_Controller {
             'active' => 1,
 		);
 		$comment_id = $this->Helpdesk_CommentM->save($comment_data);
-		
+
 		if($id_helpdesk!=0){
 			//Get data comment
 			$where_comment[] = "active = 0";
 			$where_comment[] = "helpdesk_id='$id_helpdesk'";
 			$this->Helpdesk_CommentM->where = $where_comment;
 			$comment = $this->Helpdesk_CommentM->get_list();
-			
+
 			//Get data helpdesk
 			$result = $this->HelpdeskM->get($id_helpdesk);
 		}
-		
+
 		$data_ajax = array(
            'comment' => $comment,
 		   'result' => $result,
