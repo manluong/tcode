@@ -121,6 +121,22 @@ class CardM extends MY_Model {
 			$result['sub_roles'] = $this->AclM->get_user_subroles($id);
 		}
 
+		//final_display_name
+		if (strlen($result['display_name']) > 0) {
+			$result['final_display_name'] = $result['display_name'];
+		} else {
+			$result['final_display_name'] = $result['first_name'].' '.$result['last_name'];
+		}
+
+		//initials
+		if (strlen($result['first_name']) > 0 && strlen($result['last_name']) > 0) {
+			$result['initials'] = strtoupper(substr($result['first_name'],0,1).substr($result['last_name'],0,1));
+		} elseif (strlen($result['first_name']) > 0 && strlen($result['last_name']) == 0) {
+			$result['initials'] = ucfirst(strtolower(substr($result['first_name'],0,2)));
+		} elseif (strlen($result['first_name']) == 0 && strlen($result['last_name']) > 0) {
+			$result['initials'] = ucfirst(strtolower(substr($result['last_name'],0,2)));
+		}
+
 		return $result;
 	}
 
@@ -136,6 +152,23 @@ class CardM extends MY_Model {
 				$result[$k]['sub_roles'] = $this->AclM->get_user_subroles($v['id']);
 			}
 		}
+
+		foreach($result AS $k=>$v) {
+			if (strlen($result[$k]['display_name']) > 0) {
+				$result[$k]['final_display_name'] = $result[$k]['display_name'];
+			} else {
+				$result[$k]['final_display_name'] = $result[$k]['first_name'].' '.$result[$k]['last_name'];
+			}
+
+			if (strlen($result[$k]['first_name']) > 0 && strlen($result[$k]['last_name']) > 0) {
+				$result[$k]['initials'] = strtoupper(substr($result[$k]['first_name'],0,1).substr($result[$k]['last_name'],0,1));
+			} elseif (strlen($result[$k]['first_name']) > 0 && strlen($result[$k]['last_name']) == 0) {
+				$result[$k]['initials'] = ucfirst(strtolower(substr($result[$k]['first_name'],0,2)));
+			} elseif (strlen($result[$k]['first_name']) == 0 && strlen($result[$k]['last_name']) > 0) {
+				$result[$k]['initials'] = ucfirst(strtolower(substr($result[$k]['last_name'],0,2)));
+			}
+		}
+
 		return $result;
 	}
 
