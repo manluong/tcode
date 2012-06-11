@@ -445,6 +445,7 @@ $lang['a_helpdesk-assign_id'] = 'Assigned';
 $lang['a_invoice-id'] = 'Id';
 $lang['a_invoice-customer_card_id'] = 'Customer Card Id';
 $lang['a_invoice-invoice_stamp'] = 'Invoice Stamp';
+$lang['a_invoice-total'] = 'Total';
 $lang['a_invoice-payment_due_stamp'] = 'Payment Due Stamp';
 $lang['a_invoice-currency'] = 'Currency';
 $lang['a_invoice-tax_id'] = 'Tax Id';
@@ -496,6 +497,13 @@ $lang['a_invoice_payitem-id'] = 'Id';
 $lang['a_invoice_payitem-invoice_pay_id'] = 'Invoice Pay Id';
 $lang['a_invoice_payitem-invoice_id'] = 'Invoice Id';
 $lang['a_invoice_payitem-amount'] = 'Amount';
+
+
+//a_invoice_tax
+$lang['a_invoice_tax-id'] = 'Id';
+$lang['a_invoice_tax-invoice_id'] = 'Invoice Id';
+$lang['a_invoice_tax-tax_id'] = 'Invoice Tax Id';
+$lang['a_invoice_tax-amount'] = 'Amount';
 
 
 // comment

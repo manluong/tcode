@@ -130,6 +130,7 @@ function cal_invoice_total() {
 		invoice_total += price*qty*(100-discount)/100+tax;
 	});
 
+	$('#invoice_total').val(invoice_total.toFixed(2));
 	$('#lbl_sub_total').html(format_money(sub_total));
 	$('#lbl_invoice_total').html(format_money(invoice_total));
 	$('#lbl_balance').html(format_money(invoice_total));
@@ -215,8 +216,14 @@ function search_invoice() {
 			var data = new Array();
 			for (i in resp.details) {
 				var item = resp.details[i];
+				var name = '';
+				if (item.display_name) {
+					name = item.display_name;
+				} else {
+					name = item.first_name+' '+item.last_name;
+				}
 				var row = new Array();
-				row[0] = (item.first_name+' '+item.last_name).trim();
+				row[0] = name;
 				row[1] = '<a href="/invoice/view/'+item.id+'">'+item.id+'</a>';
 				var date = new Date((item.payment_due_stamp).substring(0, 10));
 				row[2] = $.datepicker.formatDate('yy-mm-dd', date);
@@ -422,8 +429,8 @@ $(document).ready(function() {
 		if ($('#invoice_item_list div.invoice_item').length == 0) {
 			add_last_row();
 		}
-		cal_invoice_total();
-		//hide_tax();
+		//cal_invoice_total();
+		hide_tax();
 	}
 	search_invoice();
 

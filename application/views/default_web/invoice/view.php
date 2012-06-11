@@ -91,6 +91,7 @@
 			</thead>
 			<tbody>
 				<?php if (isset($invoice['addon_item'])): ?>
+				<?php $sub_total = 0 ?>
 				<?php foreach ($invoice['addon_item'] as $invoice_item): ?>
 				<tr>
 					<td><?php echo $invoice_item['name'] ?></td>
@@ -123,6 +124,7 @@
 					<td><?php echo $invoice_item['quantity'] ?></td>
 					<td class="total"><?php echo '$'.number_format($invoice_item['total'], 2) ?></td>
 				</tr>
+				<?php $sub_total += $invoice_item['total'] ?>
 				<?php endforeach ?>
 				<?php endif ?>
 			</tbody>
@@ -131,7 +133,7 @@
 		<table id="total" class="clearfix">
 			<tr>
 				<th>Sub Total</th>
-				<td>$906.60</td>
+				<td><?php echo '$'.number_format($sub_total, 2) ?></td>
 			</tr>
 			<?php if (isset($invoice['addon_tax'])): ?>
 			<?php foreach ($tax as $r): ?>
@@ -147,15 +149,15 @@
 			<?php endif ?>
 			<tr id="invoice_total">
 				<th class="bold">Invoice Total</th>
-				<td class="bold">$976.50</td>
+				<td class="bold"><?php echo '$'.number_format($invoice['total'], 2) ?></td>
 			</tr>
 			<tr>
 				<th>Paid</th>
-				<td>$0</td>
+				<td>$0.00</td>
 			</tr>
 			<tr id="balance">
 				<th class="bold">Balance</th>
-				<td class="bold">$976.50</td>
+				<td class="bold"><?php echo '$'.number_format($invoice['total'], 2) ?></td>
 			</tr>
 		</table>
 

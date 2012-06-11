@@ -97,13 +97,16 @@
 							<span id="lbl_tax_<?php echo $r['id'] ?>_total">$0.00</span>
 							<input type="hidden" name="addon_tax[<?php echo $r['id'] ?>][id]" />
 							<input type="hidden" name="addon_tax[<?php echo $r['id'] ?>][tax_id]" value="<?php echo $r['id'] ?>" />
-							<input type="hidden" id="tax_<?php echo $r['id'] ?>_total" name="addon_tax[<?php echo $r['id'] ?>][amount]" />
+							<input type="hidden" id="tax_<?php echo $r['id'] ?>_total" name="addon_tax[<?php echo $r['id'] ?>][amount]" value="0" />
 						</div>
 					</li>
 					<?php endforeach ?>
 					<li style="font-size:18px;">
 						<div class="total_label">Invoice Total</div>
-						<div class="total_price"><span id="lbl_invoice_total">$0.00</span></div>
+						<div class="total_price">
+							<span id="lbl_invoice_total">$0.00</span>
+							<input type="hidden" id="invoice_total" name="total" />
+						</div>
 					</li>
 					<li>
 						<div class="total_label">Paid</div>
