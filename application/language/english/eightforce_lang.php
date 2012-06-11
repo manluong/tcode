@@ -294,6 +294,8 @@ $lang['core_select-select-unit-year'] = 'Year';
 $lang['core_select-select-unit-minute'] = 'Minute';
 $lang['core_select-select-unit-hour'] = 'Hour';
 
+$lang['core-return_to_app'] = 'Return to #app_name#';
+
 
 
 // access

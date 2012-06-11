@@ -87,8 +87,10 @@ class CardM extends MY_Model {
 	function __construct() {
 		parent::__construct();
 
+		$this->app = 'card';
 		$this->table = 'card';
 		$this->cache_enabled = TRUE;
+		$this->sett_row_level_acl = TRUE;
 
 		foreach($this->addons AS $name=>$model) {
 			$this->load->model($model);

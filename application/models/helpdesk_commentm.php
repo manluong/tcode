@@ -4,6 +4,7 @@ class Helpdesk_CommentM extends MY_Model {
 	function __construct() {
 		parent::__construct();
 
+		$this->app = 'helpdesk';
 		$this->table = 'a_helpdesk_comment';
 		$this->cache_enabled = TRUE;
         $this->sett_filter_deleted = FALSE;
@@ -61,7 +62,7 @@ class Helpdesk_CommentM extends MY_Model {
 			return false;
 		}
 	}
-	
+
 	function get_priority_type($id) {
 		$this->db->select('name');
 		$this->db->where('id',$id);
@@ -78,7 +79,7 @@ class Helpdesk_CommentM extends MY_Model {
 			return false;
 		}
 	}
-	
+
     function get_comment_not_use() {
 		$this->db->select('id');
 		$this->db->where('active', 1);

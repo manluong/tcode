@@ -20,8 +20,9 @@ class Card extends MY_Controller {
 		$this->CardM->sett_fill_notes = FALSE;
 		$this->CardM->sett_fill_social = FALSE;
 		$this->CardM->sett_fill_tel = FALSE;
+		$this->CardM->sett_fill_roles = TRUE;
 
-		$result =  $this->CardM->get_list();
+		$this->CardM->order_by[] = 'first_name ASC';
 		$view_data = array(
 			'list' => $this->CardM->get_list(),
 		);
@@ -40,6 +41,16 @@ class Card extends MY_Controller {
 			'card_address' => $this->CardM->get_card_address($id),
 		);
 		$this->data['content'] = $this->load->view(get_template().'/card/view', $view_data, TRUE);
+
+		$this->data['breadcrumb'][] = array(
+			'title' => $view_data['data']['first_name'],
+			'url' => '/card/view/'.$id,
+		);
+		$this->data['breadcrumb'][] = array(
+			'title' => 'Contact Information',
+			'url' => '',
+		);
+
 		$this->_do_output();
 	}
 

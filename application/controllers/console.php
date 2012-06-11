@@ -167,6 +167,15 @@ class Console extends MY_Controller {
 		echo "\n";
 	}
 
+	function acl_grant($ro, $co) {
+		$this->load->model('AclM');
+		$ro = str_replace('-', '/', $ro);
+		$co = str_replace('-', '/', $co);
+		$result = $this->AclM->grant($ro, $co);
+		echo ($result) ? 'success' : 'error';
+		echo "\n";
+	}
+
 	function acl_test() {
 		$this->load->model('AclM');
 

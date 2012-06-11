@@ -26,6 +26,7 @@ class Card_EmailM extends MY_Model {
 	function __construct() {
 		parent::__construct();
 
+		$this->app = 'card';
 		$this->table = 'card_email';
 		$this->cache_enabled = TRUE;
 		$this->sett_has_system_fields = FALSE;

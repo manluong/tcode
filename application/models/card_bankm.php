@@ -26,6 +26,7 @@ class Card_BankM extends MY_Model {
 	function __construct() {
 		parent::__construct();
 
+		$this->app = 'card';
 		$this->table = 'card_bank';
 		$this->cache_enabled = TRUE;
 		$this->sett_has_system_fields = FALSE;
