@@ -1073,7 +1073,7 @@ class AclM extends MY_Model {
 				echo $this->db->last_query();
 			}
 
-			die('error loading role info.');
+			return array();
 		}
 
 		$result = array();
