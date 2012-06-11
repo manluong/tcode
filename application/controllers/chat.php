@@ -9,12 +9,15 @@
            $this->ChatM->forward();
         }
         function index(){
-            //$this->ChatM->add_user('','apple','');
+           echo 'chat screen';
+            
         }
         function get(){
             $domain = explode('.',$_SERVER['HTTP_HOST']);
             $domain = $domain[0];
-            echo $this->UserM->get_id().'|'.$domain;
+            $data['domain'] = $domain;
+            $data['id'] = $this->UserM->get_id();
+            echo json_encode($data);
             
             
         }

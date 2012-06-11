@@ -163,9 +163,9 @@ jQuery(document).ready(function(){
               console.log('You do not have the permissions to access this app');
           } 
           else {
-              
-              var username = data.split('|')[0];
-              var company = data.split('|')[1];
+              var user_array = jQuery.parseJSON(data);
+              var username = user_array.id;
+              var company = user_array.domain;
               telcoson.username = username;
               telcoson.company = company;
             $(document).trigger("connect", {
