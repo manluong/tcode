@@ -160,6 +160,13 @@ class InvoiceM extends MY_Model {
 		if (array_key_exists('date_range_to', $param) && $param['date_range_to']) {
 			$this->db->where('payment_due_stamp <=', $param['date_range_to']);
 		}
+		if (array_key_exists('status', $param) && $param['status'] != -1) {
+			if ($param['status'] == 1) {
+				$this->db->where('IF(invoice_pay.amount IS NULL, 0, invoice_pay.amount) >= total');
+			} elseif ($param['status'] == 0) {
+				$this->db->where('IF(invoice_pay.amount IS NULL, 0, invoice_pay.amount) < total');
+			}
+		}
 		if (array_key_exists('total_min', $param) && $param['total_min']) {
 			$this->db->where('total >=', $param['total_min']);
 			//$this->db->where('invoice_total.total >=', $param['total_min']);
@@ -178,11 +185,12 @@ class InvoiceM extends MY_Model {
 			$this->db->where('memo LIKE', '%'.$param['notes'].'%');
 		}
 
-		$this->db->select('a_invoice.*, card.display_name, card.first_name, card.last_name');
+		$this->db->select('a_invoice.*, card.display_name, card.first_name, card.last_name, IF(IF(invoice_pay.amount IS NULL, 0, invoice_pay.amount) >= total, 1, 0) AS paid_status', FALSE);
 		//$this->db->select('a_invoice.*, card.first_name, card.last_name, invoice_total.total');
 		$this->db->from('a_invoice');
 		$this->db->join('card', 'a_invoice.customer_card_id = card.id', 'left');
 		//$this->db->join('(SELECT invoice_id, SUM(total) AS total FROM a_invoice_item GROUP BY invoice_id) invoice_total', 'a_invoice.id = invoice_total.invoice_id', 'left');
+		$this->db->join('(SELECT invoice_id, SUM(amount) AS amount FROM a_invoice_payitem GROUP BY invoice_id) invoice_pay', 'a_invoice.id = invoice_pay.invoice_id', 'left');
 		$this->db->where('a_invoice.deleted', 0);
 
 		if ($this->UserM->is_client()) {

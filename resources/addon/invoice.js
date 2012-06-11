@@ -228,7 +228,7 @@ function search_invoice() {
 				var date = new Date((item.payment_due_stamp).substring(0, 10));
 				row[2] = $.datepicker.formatDate('yy-mm-dd', date);
 				row[3] = format_money(item.total);
-				row[4] = '';
+				row[4] = (item.paid_status == 1) ? 'Paid' : 'Unpaid';
 				row[5] = '<a href="/invoice/edit/'+item.id+'">Edit</a></td>';
 				data.push(row);
 			}
@@ -302,6 +302,11 @@ $(document).ready(function() {
 	});
 	$('#customer_name').on('change', function(e) {
 		$('#customer_id').val('');
+	});
+
+	$('#status-group button').on('click', function() {
+		$('#status').val($(this).data('value'));
+		search_invoice();
 	});
 
 	$('#slider-range').slider({

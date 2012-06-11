@@ -7,7 +7,7 @@
 				if ($count_breadcrumb > 0) {
 					echo '<li class="arrow"></li>';
 					$x = 1;
-					foreach($breadcrumb AS $b) {
+					foreach($breadcrumb AS $bc) {
 						echo '<li';
 						if ($x == $count_breadcrumb) echo ' class="curent_page"';
 						echo '>'.$bc['title'].'</li>';
