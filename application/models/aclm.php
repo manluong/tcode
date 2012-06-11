@@ -295,6 +295,7 @@ class AclM extends MY_Model {
 		}
 	}
 
+	//low level node creation
 	function create_node($parent_id, $node, $type) {
 		$this->check_type($type);
 
@@ -323,6 +324,25 @@ class AclM extends MY_Model {
 		}
 
 		return $new_id;
+	}
+
+	//simpler node creation
+	function add_node($path) {
+		$temp = explode('/', $path);
+		if (count($temp) == 1) return FALSE;
+
+		$co = array();
+		if (is_numeric($temp[count($temp)-1])) {
+			$co['foreign_key'] = array_pop($temp);
+		}
+		$co['name'] = array_pop($temp);
+
+		$parent_co = array(
+			'name' => array_pop($temp)
+		);
+		$parent_id = $this->get_co_id($parent_co);
+
+		return $this->create_node($parent_id, $co, 'co');
 	}
 
 	//$type = co|ro
