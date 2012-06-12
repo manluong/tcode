@@ -1,6 +1,7 @@
 <?php if (!defined('BASEPATH')) exit('No direct access allowed.');
 
 class MY_Model extends CI_Model {
+	public $app = '';
 	public $table = '';
 	public $database = '';
 	public $id_field = 'id';
@@ -23,6 +24,7 @@ class MY_Model extends CI_Model {
 	public $sett_fill_card_info = FALSE;
 	public $sett_fill_details = TRUE;
 	public $sett_skip_validation = FALSE;
+	public $sett_row_level_acl = FALSE;
 
 	public $data_fields = array();
 	public $search_fields = array();
@@ -423,7 +425,7 @@ class MY_Model extends CI_Model {
 
 			$rs = $this->db->insert($this->database.$this->table, $data);
 			$this->last_sql = $this->db->last_query();
-			return $this->db->insert_id();
+			$affected_id = $this->db->insert_id();
 		} else {
 			$id = $data[$this->id_field];
 
@@ -438,8 +440,14 @@ class MY_Model extends CI_Model {
 			$rs = $this->db->where($this->id_field, $id)
 					->update($this->database.$this->table, $data);
 			$this->last_sql = $this->db->last_query();
-			return $id;
+			$affected_id = $id;
 		}
+
+		if ($this->sett_row_level_acl && !empty($this->app) && !empty($this->table)) {
+			$this->AclM->add_co_node('DEFAULT/'.$this->app.'/'.$this->table.'/'.$affected_id);
+		}
+
+		return $affected_id;
 	}
 
 

@@ -20,8 +20,9 @@ class Card extends MY_Controller {
 		$this->CardM->sett_fill_notes = FALSE;
 		$this->CardM->sett_fill_social = FALSE;
 		$this->CardM->sett_fill_tel = FALSE;
-		
-		$result =  $this->CardM->get_list();
+		$this->CardM->sett_fill_roles = TRUE;
+
+		$this->CardM->order_by[] = 'first_name ASC';
 		$view_data = array(
 			'list' => $this->CardM->get_list(),
 		);
@@ -40,6 +41,16 @@ class Card extends MY_Controller {
 			'card_address' => $this->CardM->get_card_address($id),
 		);
 		$this->data['content'] = $this->load->view(get_template().'/card/view', $view_data, TRUE);
+
+		$this->data['breadcrumb'][] = array(
+			'title' => $view_data['data']['first_name'],
+			'url' => '/card/view/'.$id,
+		);
+		$this->data['breadcrumb'][] = array(
+			'title' => 'Contact Information',
+			'url' => '',
+		);
+
 		$this->_do_output();
 	}
 	
@@ -191,7 +202,12 @@ class Card extends MY_Controller {
 		$details = '/card/view/'.$id;
 		if (!$success) {
 			$message = $this->CardM->get_error_string();
-			$details = $this->CardM->field_errors;
+
+			$errors = array();
+			foreach($this->CardM->field_errors AS $field => $message) {
+				$errors[$field] = implode('<br />', $message);
+			}
+			$details = $errors;
 		}
 
 		$this->RespM->set_message($message)

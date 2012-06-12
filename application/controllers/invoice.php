@@ -10,6 +10,11 @@ class Invoice extends MY_Controller {
 		$this->load->model('TaxM');
 		$this->load->model('Tax_UseM');
 		$this->load->model('CardM');
+
+		$this->data['app_menu'] = array(
+			array('url' => '/invoice', 'extra' => '', 'title' => 'List'),
+			array('url' => '/invoice/add', 'extra' => '', 'title' => 'New')
+		);
 	}
 
 	function index() {
@@ -21,6 +26,7 @@ class Invoice extends MY_Controller {
 			'quickjump' => $this->get_quickjump()
 		);
 
+		$this->data['breadcrumb'] = array(array('title' => 'List'));
 		$this->data['content'] = $this->load->view(get_template().'/invoice/index', $content, TRUE);
 		$this->_do_output();
 	}
@@ -38,6 +44,7 @@ class Invoice extends MY_Controller {
 			'quickjump' => $this->get_quickjump()
 		);
 
+		$this->data['breadcrumb'] = array(array('title' => 'List'));
 		$this->data['content'] = $this->load->view(get_template().'/invoice/index', $content, TRUE);
 		$this->_do_output();
 	}
@@ -52,6 +59,7 @@ class Invoice extends MY_Controller {
 			'date_range' => $this->input->post('date_range'),
 			'date_range_from' => $this->format_date($this->input->post('date_range_from')),
 			'date_range_to' => $this->format_date($this->input->post('date_range_to')),
+			'status' => $this->input->post('status'),
 			'total_min' => $this->input->post('total_min'),
 			'total_max' => $this->input->post('total_max'),
 			'invoice_id' => $this->input->post('invoice_id'),
@@ -79,6 +87,7 @@ class Invoice extends MY_Controller {
 			'quickjump' => $this->get_quickjump()
 		);
 
+		$this->data['breadcrumb'] = array(array('title' => 'View'));
 		$this->data['content'] = $this->load->view(get_template().'/invoice/view', $content, TRUE);
 		$this->_do_output();
 	}
@@ -124,6 +133,7 @@ class Invoice extends MY_Controller {
 			'quickjump' => $this->get_quickjump()
 		);
 
+		$this->data['breadcrumb'] = array(array('title' => 'New'));
 		$this->data['content'] = $this->load->view(get_template().'/invoice/new', $content, TRUE);
 		$this->_do_output();
 	}
@@ -143,6 +153,7 @@ class Invoice extends MY_Controller {
 			'quickjump' => $this->get_quickjump()
 		);
 
+		$this->data['breadcrumb'] = array(array('title' => 'Edit'));
 		$this->data['content'] = $this->load->view(get_template().'/invoice/edit', $content, TRUE);
 		$this->_do_output();
 	}
@@ -180,6 +191,7 @@ class Invoice extends MY_Controller {
 			'quickjump' => $this->get_quickjump()
 		);
 
+		$this->data['breadcrumb'] = array(array('title' => 'Pay'));
 		$this->data['content'] = $this->load->view(get_template().'/invoice/pay', $content, TRUE);
 		$this->_do_output();
 	}

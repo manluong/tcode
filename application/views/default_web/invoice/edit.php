@@ -2,23 +2,6 @@
 <link rel="stylesheet" href="/resources/addon/jqueryui/aristo/ui.css" />
 <script type="text/javascript" src="/resources/addon/invoice.js"></script>
 
-<div id="breadcrumb">
-	<div id="module_name">
-		<ul>
-			<li><a href="/invoice" class="main">INVOICE</a></li>
-			<li class="arrow"></li>
-			<li class="curent_page">Edit</li>
-			<li><a href="#" id="favoriteIcon" class="on" title="Remove from favorites"></a></li>
-		</ul>
-	</div>
-	<div id="top_button">
-		<ul>
-			<li><a href="/invoice"><button class="btn btn-inverse">LIST</button></a></li>
-			<li><a href="/invoice/add"><button class="btn btn-inverse">NEW</button></a></li>
-		</ul>
-	</div>
-</div>
-
 <div id="content_top">
 	<?php echo $quickjump ?>
 </div>
@@ -66,6 +49,7 @@
 			<div id="invoice_item_list">
 				<?php $c = 0 ?>
 				<?php if (isset($invoice['addon_item'])): ?>
+				<?php $sub_total = 0 ?>
 				<?php foreach ($invoice['addon_item'] as $invoice_item): ?>
 				<div class="invoice_item clearfix">
 					<div class="col-1">
@@ -121,6 +105,7 @@
 						</div>
 					</div>
 				</div>
+				<?php $sub_total += $invoice_item['total'] ?>
 				<?php $c++ ?>
 				<?php endforeach ?>
 				<?php endif ?>
@@ -151,7 +136,7 @@
 				<ul>
 					<li>
 						<div class="total_label">Sub Total</div>
-						<div class="total_price"><span id="lbl_sub_total">$0.00</span></div>
+						<div class="total_price"><span id="lbl_sub_total"><?php echo '$'.number_format($sub_total, 2) ?></span></div>
 					</li>
 					<?php foreach ($tax as $r): ?>
 					<li class="total_hide">
@@ -173,14 +158,17 @@
 								<span id="lbl_tax_<?php echo $r['id'] ?>_total">$0.00</span>
 								<input type="hidden" name="addon_tax[<?php echo $r['id'] ?>][id]" />
 								<input type="hidden" name="addon_tax[<?php echo $r['id'] ?>][tax_id]" value="<?php echo $r['id'] ?>" />
-								<input type="hidden" id="tax_<?php echo $r['id'] ?>_total" name="addon_tax[<?php echo $r['id'] ?>][amount]" />
+								<input type="hidden" id="tax_<?php echo $r['id'] ?>_total" name="addon_tax[<?php echo $r['id'] ?>][amount]" value="0" />
 							<?php endif ?>
 						</div>
 					</li>
 					<?php endforeach ?>
 					<li style="font-size:18px;">
 						<div class="total_label">Invoice Total</div>
-						<div class="total_price"><span id="lbl_invoice_total">$0.00</span></div>
+						<div class="total_price">
+							<span id="lbl_invoice_total"><?php echo '$'.number_format($invoice['total'], 2) ?></span>
+							<input type="hidden" id="invoice_total" name="total" value="<?php echo $invoice['total'] ?>" />
+						</div>
 					</li>
 					<li>
 						<div class="total_label">Paid</div>
@@ -188,7 +176,7 @@
 					</li>
 					<li style="font-weight:bold;">
 						<div class="total_label">Balance</div>
-						<div class="total_price"><span id="lbl_balance">$0.00</span></div>
+						<div class="total_price"><span id="lbl_balance"><?php echo '$'.number_format($invoice['total'], 2) ?></span></div>
 					</li>
 				</ul>
 			</div>

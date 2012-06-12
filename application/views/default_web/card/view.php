@@ -20,50 +20,6 @@ function confirm_delete(id){
 	//print_r($data);
 	//echo '</pre>';
 ?>
-<div id="breadcrumb">
-	<div id="module_name" style="width:650px;">
-		<ul>
-			<li><a style="width:165px;" href="#" class="main">CONTACT</a></li>
-			<li class="arrow"></li>
-			<li class="curent_page">Albert Z</li>
-			<li class="arrow"></li>
-			<li class="curent_page">Contact Information</li>
-			<li><a href="#" id="favoriteIcon" class="on" title="Remove from favorites"></a></li>
-		</ul>
-	</div>
-	<div id="top_button" style="width:210px;">
-		<ul>
-			<li><button class="btn btn-inverse" href="#">LIST</button></li>
-			<li><button class="btn btn-inverse" href="#">MY CASE</button></li>
-			<li><button class="btn btn-inverse" href="#">NEW</button></li>
-		</ul>
-	</div> 
-</div>
-
-<div id="content_top">
-	<div id="user_profile">
-		<div id="user_avatar"><image alt="avatar" src="<?=site_url('resources/template/default_web/img/invoice')?>/invoice-avatar.jpg"/></div>
-		<div id="user_info">
-			<ul>
-				<li class="user_sex">Mr.</li>
-				<li class="user_name">Albert Z</li>
-				<li class="user_position">Facebook Inc. <span style="font-weight:normal;">CEO</span></li>
-			</ul>
-		</div>
-	</div>
-	<div id="customer_list">
-		<div class="btn-group">
-		  <a href="#" class="btn btn-inverse">CUSTOMER</a>
-		  <a href="#" data-toggle="dropdown" class="btn btn-inverse dropdown-toggle"><span class="caret"></span></a>
-		  <ul class="dropdown-menu">
-			<li><a href="#"><i class="icon-pencil"></i> Edit</a></li>
-			<li><a href="#"><i class="icon-trash"></i> Delete</a></li>
-			<li><a href="#"><i class="icon-ban-circle"></i> Ban</a></li>
-		  </ul>
-		</div>
-	</div>
-</div>
-
 <div id="payment_boxes">
 	<div class="payment_detail">
 		<div class="payment_label">INVOICE</div>
@@ -75,7 +31,7 @@ function confirm_delete(id){
 			</ul>
 		</div>
 	</div>
-	
+
 	<div class="payment_detail payment_active">
 		<div class="payment_label">INVOICE</div>
 		<div class="payment_price">
@@ -86,7 +42,7 @@ function confirm_delete(id){
 			</ul>
 		</div>
 	</div>
-	
+
 	<div class="payment_detail" style="margin-right:0px;">
 		<div class="payment_label">INVOICE</div>
 		<div class="payment_price">
@@ -97,7 +53,7 @@ function confirm_delete(id){
 			</ul>
 		</div>
 	</div>
-	
+
 	<div class="payment_detail">
 		<div class="payment_label" style="text-transform:uppercase;">INVOICE</div>
 		<div class="payment_price">
@@ -209,7 +165,7 @@ function confirm_delete(id){
 			</ul>
 		</div>
 	</div>
-	
+
 	<div id="customer_detail">
 		<div style="width:100%;" class="invoice_title">
 			<span class="arrow_title"></span>
@@ -237,5 +193,5 @@ function confirm_delete(id){
 			</li>
 		</ul>
 	</div>
-	
+
 </div>

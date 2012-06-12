@@ -61,6 +61,7 @@ class Invoice_ItemM extends MY_Model {
 	function __construct() {
 		parent::__construct();
 
+		$this->app = 'invoice';
 		$this->table = 'a_invoice_item';
 		$this->cache_enabled = TRUE;
 		$this->sett_has_system_fields = FALSE;

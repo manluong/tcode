@@ -41,6 +41,7 @@ class Card_ExtraM extends MY_Model {
 	function __construct() {
 		parent::__construct();
 
+		$this->app = 'card';
 		$this->table = 'card_extra';
 		$this->cache_enabled = TRUE;
 		$this->sett_has_system_fields = FALSE;

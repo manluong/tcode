@@ -87,8 +87,10 @@ class CardM extends MY_Model {
 	function __construct() {
 		parent::__construct();
 
+		$this->app = 'card';
 		$this->table = 'card';
 		$this->cache_enabled = TRUE;
+		$this->sett_row_level_acl = TRUE;
 
 		foreach($this->addons AS $name=>$model) {
 			$this->load->model($model);
@@ -119,6 +121,22 @@ class CardM extends MY_Model {
 			$result['sub_roles'] = $this->AclM->get_user_subroles($id);
 		}
 
+		//final_display_name
+		if (strlen($result['display_name']) > 0) {
+			$result['final_display_name'] = $result['display_name'];
+		} else {
+			$result['final_display_name'] = $result['first_name'].' '.$result['last_name'];
+		}
+
+		//initials
+		if (strlen($result['first_name']) > 0 && strlen($result['last_name']) > 0) {
+			$result['initials'] = strtoupper(substr($result['first_name'],0,1).substr($result['last_name'],0,1));
+		} elseif (strlen($result['first_name']) > 0 && strlen($result['last_name']) == 0) {
+			$result['initials'] = ucfirst(strtolower(substr($result['first_name'],0,2)));
+		} elseif (strlen($result['first_name']) == 0 && strlen($result['last_name']) > 0) {
+			$result['initials'] = ucfirst(strtolower(substr($result['last_name'],0,2)));
+		}
+
 		return $result;
 	}
 
@@ -134,6 +152,23 @@ class CardM extends MY_Model {
 				$result[$k]['sub_roles'] = $this->AclM->get_user_subroles($v['id']);
 			}
 		}
+
+		foreach($result AS $k=>$v) {
+			if (strlen($result[$k]['display_name']) > 0) {
+				$result[$k]['final_display_name'] = $result[$k]['display_name'];
+			} else {
+				$result[$k]['final_display_name'] = $result[$k]['first_name'].' '.$result[$k]['last_name'];
+			}
+
+			if (strlen($result[$k]['first_name']) > 0 && strlen($result[$k]['last_name']) > 0) {
+				$result[$k]['initials'] = strtoupper(substr($result[$k]['first_name'],0,1).substr($result[$k]['last_name'],0,1));
+			} elseif (strlen($result[$k]['first_name']) > 0 && strlen($result[$k]['last_name']) == 0) {
+				$result[$k]['initials'] = ucfirst(strtolower(substr($result[$k]['first_name'],0,2)));
+			} elseif (strlen($result[$k]['first_name']) == 0 && strlen($result[$k]['last_name']) > 0) {
+				$result[$k]['initials'] = ucfirst(strtolower(substr($result[$k]['last_name'],0,2)));
+			}
+		}
+
 		return $result;
 	}
 
@@ -242,6 +277,25 @@ class CardM extends MY_Model {
 		}
 
 		return $result;
+	}
+
+	public function delete($card_id, $actual_delete=FALSE) {
+		$has_records = FALSE;
+
+		//Go through each modules and check if it has data for the $card_id
+		$modules = array('HelpdeskM', 'InvoiceM');
+		foreach($modules AS $m) {
+			$this->load->model($m);
+			$this->$m->where('card_id', $card_id);
+			if ($this->$m->get_total_records() > 0) $has_records = TRUE;
+		}
+
+		if ($has_records) {
+			$this->errors[] = $this->lang->line('error-card_record_has_related_data');
+			return FALSE;
+		}
+
+		return parent::delete($card_id, $actual_delete);
 	}
 
 	private function fill_addons(&$data, $mode=SINGLE_DATA) {

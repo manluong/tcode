@@ -294,6 +294,8 @@ $lang['core_select-select-unit-year'] = 'Year';
 $lang['core_select-select-unit-minute'] = 'Minute';
 $lang['core_select-select-unit-hour'] = 'Hour';
 
+$lang['core-return_to_app'] = 'Return to #app_name#';
+
 
 
 // access
@@ -445,6 +447,7 @@ $lang['a_helpdesk-assign_id'] = 'Assigned';
 $lang['a_invoice-id'] = 'Id';
 $lang['a_invoice-customer_card_id'] = 'Customer Card Id';
 $lang['a_invoice-invoice_stamp'] = 'Invoice Stamp';
+$lang['a_invoice-total'] = 'Total';
 $lang['a_invoice-payment_due_stamp'] = 'Payment Due Stamp';
 $lang['a_invoice-currency'] = 'Currency';
 $lang['a_invoice-tax_id'] = 'Tax Id';
@@ -498,6 +501,13 @@ $lang['a_invoice_payitem-invoice_id'] = 'Invoice Id';
 $lang['a_invoice_payitem-amount'] = 'Amount';
 
 
+//a_invoice_tax
+$lang['a_invoice_tax-id'] = 'Id';
+$lang['a_invoice_tax-invoice_id'] = 'Invoice Id';
+$lang['a_invoice_tax-tax_id'] = 'Invoice Tax Id';
+$lang['a_invoice_tax-amount'] = 'Amount';
+
+
 // comment
 $lang['a_helpdesk_comment-id'] = 'Id';
 $lang['a_helpdesk_comment-helpdesk_id'] = 'Helpdesk Id';
@@ -531,3 +541,4 @@ $lang['error-no_save_data'] = 'There is no data to be saved';
 $lang['error-min_length'] = 'You must enter at least #char# characters.';
 $lang['error-max_length'] = 'You cannot enter more than #char# characters.';
 $lang['error-already_has_role'] = 'This user has already been assigned a role.';
+$lang['error-card_record_has_related_data'] = 'You cannot delete this contact because it has data associated with it in the other applications.';

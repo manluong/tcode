@@ -14,6 +14,7 @@ class Card_NotesM extends MY_Model {
 	function __construct() {
 		parent::__construct();
 
+		$this->app = 'card';
 		$this->table = 'card_notes';
 		$this->cache_enabled = TRUE;
 		$this->sett_has_system_fields = FALSE;

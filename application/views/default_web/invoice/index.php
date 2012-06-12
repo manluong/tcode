@@ -2,23 +2,6 @@
 <link rel="stylesheet" href="/resources/addon/jqueryui/aristo/ui.css" />
 <script type="text/javascript" src="/resources/addon/invoice.js"></script>
 
-<div id="breadcrumb">
-	<div id="module_name">
-		<ul>
-			<li><a href="/invoice" class="main">INVOICE</a></li>
-			<li class="arrow"></li>
-			<li class="curent_page">List</li>
-			<li><a href="#" id="favoriteIcon" class="on" title="Remove from favorites"></a></li>
-		</ul>
-	</div>
-	<div id="top_button">
-		<ul>
-			<li><a href="/invoice"><button class="btn btn-inverse">LIST</button></a></li>
-			<li><a href="/invoice/add"><button class="btn btn-inverse">NEW</button></a></li>
-		</ul>
-	</div>
-</div>
-
 <div id="content_top">
 	<?php echo $quickjump ?>
 </div>
@@ -49,10 +32,11 @@
 				<li style="width:150px;margin-left:10px;">
 					<span class="fillter_label">Payment</span>
 					<span class="fillter_input">
-						<div data-toggle="buttons-radio" class="btn-group">
-							<button type="button" class="btn">All</button>
-							<button type="button" class="btn">Paid</button>
-							<button type="button" class="btn">Unpaid</button>
+						<div id="status-group" data-toggle="buttons-radio" class="btn-group">
+							<button type="button" class="btn active" data-value="-1">All</button>
+							<button type="button" class="btn" data-value="1">Paid</button>
+							<button type="button" class="btn" data-value="0">Unpaid</button>
+							<input type="hidden" id="status" name="status" value="-1" />
 						</div>
 					</span>
 				</li>

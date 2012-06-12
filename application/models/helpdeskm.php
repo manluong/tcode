@@ -4,11 +4,12 @@ class HelpdeskM extends MY_Model {
 	function __construct() {
 		parent::__construct();
 
+		$this->app = 'helpdesk';
 		$this->table = 'a_helpdesk';
 		$this->cache_enabled = TRUE;
 		$this->sett_filter_deleted = FALSE;
 		$this->sett_fill_card_info = TRUE;
-		
+
 		foreach($this->addons AS $name=>$model) {
 			$this->load->model($model);
 		}
@@ -66,7 +67,7 @@ class HelpdeskM extends MY_Model {
 
 	private function fill_addons(&$data, $mode=SINGLE_DATA) {
 		if (count($data) == 0 || $data === FALSE) return FALSE;
-		
+
 		if ($mode == SINGLE_DATA) {
 			$data = array($data);
 		}
