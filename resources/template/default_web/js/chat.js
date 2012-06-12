@@ -64,14 +64,20 @@ var telcoson = {
 				.removeClass('iChat9')
 				.removeClass('iChat2')
 				.removeClass('iChat3');
-			if (ptype === 'unavailable') {
+			if (ptype === 'unavailable' ) {
 				contact.addClass('iChat3');
                         } else {
 				var show = $(presence).find('show').text();
-				if (show === '' || show === 'chat') {
+                                if (show === '' || show === 'chat') {
 					contact.addClass('iChat2');
 				} else {
-					contact.addClass('iChat9');
+                                    if(show === 'invisible'){
+                                        contact.addClass('iChat3');
+                                    }
+                                    else {
+                                        contact.addClass('iChat9');
+                                    }
+					
  				}
 			}
 		}
