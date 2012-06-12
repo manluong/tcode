@@ -4,11 +4,22 @@ function ajax_edit(id){
 	$.pjax({
 		url: '/card/edit/'+id,
 		container: '#contact_info_detail',
-		timeout: 10000
+		timeout: 100000
+	});
+}
+function confirm_delete(id){
+	$.pjax({
+		url: '/card/confirm_delete/'+id,
+		container: '#contact_info_detail',
+		timeout: 100000
 	});
 }
 </script>
-
+<?php 
+	echo '<pre>';
+	print_r($data);
+	echo '</pre>';
+?>
 <div id="payment_boxes">
 	<div class="payment_detail">
 		<div class="payment_label">INVOICE</div>
@@ -65,6 +76,30 @@ function ajax_edit(id){
 		</div>
 		<div id="contact_info_detail">
 			<ul>
+				<li>
+					<span class="input_data_label">Role</span>
+					<span class="fillter_input">
+						<?php
+							$role = $data['addon_access_user_role']['role_id'];
+							$role_name = '';
+							switch($role){
+								case 0:
+									$role_name = 'None';
+									break;
+								case 2:
+									$role_name = 'Staff';
+									break;
+								case 3:
+									$role_name = 'Customer';
+									break;
+								case 5:
+									$role_name = 'Vendor';
+									break;
+							}
+							echo $role_name;
+						?>
+					</span>
+				</li>
 				<li>
 					<span class="input_data_label">First Name</span>
 					<span class="fillter_input"><?=$data['first_name']?></span>
@@ -147,6 +182,7 @@ function ajax_edit(id){
 				<?php }}?>
 				<li style="margin:10px 0 0 95px;">
 					<button onclick="ajax_edit(<?=$data['id']?>);" style="height:20px;line-height:12px;" class="btn btn-inverse" href="#">EDIT DETAILS</button>
+					<span style="cursor:pointer;color:#aaaaaa;" onclick="confirm_delete(<?=$data['id']?>);">or delete</span>
 				</li>
 				<li style="margin-top:10px;">
 					<span class="input_data_label">Birthday</span>

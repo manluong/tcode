@@ -130,3 +130,20 @@
 	cursor:pointer;
 	margin-left:85px;
 }
+.alert_yellow{
+	float:left;
+	width:350px;
+	padding:10px;
+	border:1px solid #fbeed6;
+	background-color:#fcf8e3;
+	color:#c19975;
+	margin-bottom:20px;
+}
+.alert_pink{
+	padding:10px;
+	border:1px solid #efd4d7;
+	background-color:#f2dede;
+	color:#c04a49;
+	float:left;
+	margin-bottom:20px;
+}

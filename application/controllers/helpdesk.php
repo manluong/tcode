@@ -13,6 +13,7 @@ class Helpdesk extends MY_Controller {
 		$this->load->model('Helpdesk_TypeM');
 		$this->load->model('Helpdesk_PriorityM');
 	}
+	
 	function index() {
 		$content = array(
 			'card_id' => $this->UserM->get_card_id(),
@@ -55,10 +56,9 @@ class Helpdesk extends MY_Controller {
 		$this->data['content'] = $this->load->view(get_template().'/helpdesk/index',$content, TRUE);
 		$this->_do_output();
 	}
-
-
+	
 	function helpdesk_fillter(){
-		//Set order
+		//Set order 
 		$order_by = 'created_stamp  DESC';
 		$this->HelpdeskM->set_order_by($order_by);
 		$where = array();
@@ -463,6 +463,24 @@ class Helpdesk extends MY_Controller {
 				}
 			}
 		}
+	}
+	
+	function send_mail(){
+		$this->allow_unauthed_access = TRUE;
+		$this->load->library('EmailL');
+		$this->emaill->set_type('card')
+            ->set_type_id(array(2))
+            ->set_to(array('luongtheman87@yahoo.com'))
+            ->set_toname(array('roygmail'))
+			->set_bcc(array('roy.wong.80@gmail.com'))
+            ->set_template('testplate')
+            ->set_subject('test')
+            ->set_attachment_id(array(2=>'')) // docs_id => ver_id or just docs_id => ''
+            ->set_replace_value(array('keys'=>array('%name%', '%result%'), 'values'=>array(array('Roy'), array('Success!!'))))
+            ->set_from('docs@telcoson.com')
+            ->set_fromname('Docs');
+			//$this->emaill->debug(); // prints the parameters to send
+			$i = $this->emaill->send_email(); var_dump($i);// actual email sending returns TRUE or FALSE
 	}
 
 }

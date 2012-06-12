@@ -1,6 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Console extends MY_Controller {
+	public $database = '';
 
 	function __construct() {
 		$this->allow_unauthed_access = TRUE;
@@ -20,6 +21,7 @@ class Console extends MY_Controller {
 //		}
 
 		$this->_setup_db($domain);
+		$this->database = 't_'.$domain;
 
 
 		if (method_exists($this, $method)) {
@@ -297,5 +299,17 @@ class Console extends MY_Controller {
 		$results = $this->CardM->search_customer($string);
 		echo print_r($results, TRUE);
 		echo "\n";
+	}
+
+	function license_update($tenant_id) {
+		if ($this->database != 't_my' && $this->database != 't_my2') {
+			echo "Can only run this command on TBOSS databases.\n";
+			return;
+		}
+
+		echo "Updating License on Tenant's DB\n";
+		$this->load->model('LicenseM');
+		$this->LicenseM->export_license_rules($tenant_id);
+		echo "Done\n";
 	}
 }
