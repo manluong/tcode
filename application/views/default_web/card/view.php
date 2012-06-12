@@ -21,16 +21,18 @@ function ajax_edit(id){
 		</div>
 	</div>
 
+	<?php if ($invoice_summary['all_count']): ?>
 	<div class="payment_detail payment_active">
 		<div class="payment_label">INVOICE</div>
 		<div class="payment_price">
 			<ul>
-				<li style="font-weight:bold;">2 DUE</li>
-				<li class="red_price">$345.60</li>
-				<li class="total">ALL INVOICES $1569.0</li>
+				<li style="font-weight:bold;"><?php echo $invoice_summary['unpaid_count'] ?> DUE</li>
+				<li class="red_price"><?php echo '$'.number_format($invoice_summary['unpaid_total'], 2) ?></li>
+				<li class="total">ALL INVOICES <?php echo '$'.number_format($invoice_summary['all_total'], 2) ?></li>
 			</ul>
 		</div>
 	</div>
+	<?php endif ?>
 
 	<div class="payment_detail" style="margin-right:0px;">
 		<div class="payment_label">INVOICE</div>

@@ -40,6 +40,10 @@ class Card extends MY_Controller {
 			'card_phone' => $this->CardM->get_card_phone($id),
 			'card_address' => $this->CardM->get_card_address($id),
 		);
+
+		$this->load->model('InvoiceM');
+		$view_data['invoice_summary'] = $this->InvoiceM->get_invoice_summary($id);
+
 		$this->data['content'] = $this->load->view(get_template().'/card/view', $view_data, TRUE);
 
 		$this->data['breadcrumb'][] = array(

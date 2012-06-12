@@ -254,6 +254,21 @@ class InvoiceM extends MY_Model {
 		return $invoice_total;
 	}
 
+	function get_invoice_summary($card_id) {
+		$this->db->select('
+			COUNT(*) AS all_count,
+			SUM(total) AS all_total,
+			SUM(IF(IF(invoice_pay.amount IS NULL, 0, invoice_pay.amount) < total, 1, 0)) AS unpaid_count,
+			SUM(IF(IF(invoice_pay.amount IS NULL, 0, invoice_pay.amount) < total, total - IF(invoice_pay.amount IS NULL, 0, invoice_pay.amount), 0)) AS unpaid_total', FALSE);
+		$this->db->from('a_invoice');
+		$this->db->join('(SELECT invoice_id, SUM(amount) AS amount FROM a_invoice_payitem GROUP BY invoice_id) invoice_pay', 'a_invoice.id = invoice_pay.invoice_id', 'left');
+		$this->db->where('deleted', 0);
+		$this->db->where('customer_card_id', $card_id);
+
+		$query = $this->db->get();
+		return $query->row_array();
+	}
+
 	function get_price_type() {
 		$this->db->select('*');
 		$query = $this->db->get('a_product_pricetype');

@@ -443,6 +443,24 @@ $lang['a_helpdesk-modified_card_id'] = 'Modified card id';
 $lang['a_helpdesk-assign_id'] = 'Assigned';
 
 
+// a_product
+$lang['a_product-id'] = 'Id';
+$lang['a_product-category_id'] = 'Category Id';
+$lang['a_product-name'] = 'Name';
+$lang['a_product-sku'] = 'SKU';
+$lang['a_product-type'] = 'Type';
+$lang['a_product-status'] = 'Status';
+$lang['a_product-charge_type'] = 'Charge Type';
+$lang['a_product-tax_id'] = 'Tax Id';
+
+
+// a_product_category
+$lang['a_product_category-id'] = 'Id';
+$lang['a_product_category-parent_id'] = 'Parent Id';
+$lang['a_product_category-name'] = 'Name';
+$lang['a_product_category-extra'] = 'Extra';
+
+
 // invoice
 $lang['a_invoice-id'] = 'Id';
 $lang['a_invoice-customer_card_id'] = 'Customer Card Id';
