@@ -57,7 +57,6 @@ var telcoson = {
 	},
 	on_presence: function (presence) {
 		var ptype = $(presence).attr('type');
-                console.log(ptype);
 		var from = $(presence).attr('from');
 		var to = $(presence).attr('to');
 		if (ptype !== 'error') {
