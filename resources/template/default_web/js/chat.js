@@ -57,6 +57,7 @@ var telcoson = {
 	},
 	on_presence: function (presence) {
 		var ptype = $(presence).attr('type');
+                console.log(ptype);
 		var from = $(presence).attr('from');
 		var to = $(presence).attr('to');
 		if (ptype !== 'error') {
@@ -64,14 +65,20 @@ var telcoson = {
 				.removeClass('iChat9')
 				.removeClass('iChat2')
 				.removeClass('iChat3');
-			if (ptype === 'unavailable') {
+			if (ptype === 'unavailable' ) {
 				contact.addClass('iChat3');
                         } else {
 				var show = $(presence).find('show').text();
-				if (show === '' || show === 'chat') {
+                                if (show === '' || show === 'chat') {
 					contact.addClass('iChat2');
 				} else {
-					contact.addClass('iChat9');
+                                    if(show === 'invisible'){
+                                        contact.addClass('iChat3');
+                                    }
+                                    else {
+                                        contact.addClass('iChat9');
+                                    }
+					
  				}
 			}
 		}
