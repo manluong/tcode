@@ -319,9 +319,17 @@ function chatWith(id,name,body){
 function min(id){
         jQuery("#chat_"+id+" .active").removeClass('active');
 	jQuery("#chat_"+id+" .chatBoxIner").hide();
+        var jid = telcoson.id_to_jid(id);
+            var notify = $msg({to: jid, "type": "chat"})
+            .c("composing", {xmlns: "http://jabber.org/protocol/chatstates"}).c("body").t(message);
+            telcoson.connection.send(notify);
 }
 function chat_close(id){
     jQuery("#chat_"+id).remove();
+    var jid = telcoson.id_to_jid(id);
+            var notify = $msg({to: jid, "type": "chat"})
+            .c("composing", {xmlns: "http://jabber.org/protocol/chatstates"}).c("body").t(message);
+            telcoson.connection.send(notify);
 }
 function selectChat(id){
         if(jQuery.trim(jQuery("#chat_"+id+" .chatBoxIner").attr('style')) == 'display: none;'){
