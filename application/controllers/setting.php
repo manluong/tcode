@@ -3,7 +3,10 @@
 class Setting extends MY_Controller {
 	var $app_list = array(
 		array(
-			'name' => 'general'
+			'name' => 'general',
+		),
+	);
+
 		),
 	);
 
@@ -15,6 +18,7 @@ class Setting extends MY_Controller {
 	function __construct() {
 		parent::__construct();
 
+		//App list, ACL controlled
 		$apps = $this->AppM->get_apps();
 
 		//add app to the list only if there's a configuration view file created for it.
@@ -22,6 +26,11 @@ class Setting extends MY_Controller {
 			if (file_exists(APPPATH.'/views/'.get_template().'/setting/configure_'.$a['name'].'.php')) {
 				$this->app_list[] = $a;
 			}
+		}
+
+		//loop again but checking if the app will manage the settings in it's own controller
+		foreach($apps AS $a) {
+			if (isset($this->custom_app_list[$a['name']])) $this->app_list[] = $this->custom_app_list[$a['name']];
 		}
 
 		$this->load->model('SettingM');

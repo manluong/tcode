@@ -142,9 +142,9 @@ $(document).ready(function(){
 
 	$(document).on('click', '#settings .icons a', function() {
 		$('#settings .step1').hide();
-		var app = $(this).attr('class');
+		var url = $(this).attr('href');
 		$.get(
-			'/setting/ajax_configure/'+app,
+			url,
 			function(resp) {
 				$('#settings div.step2').html(resp).fadeIn('fast');
 			},
