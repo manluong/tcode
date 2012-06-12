@@ -42,7 +42,7 @@ class MY_Controller extends CI_Controller {
 		'content_left' => '',
 		'content_right' => '',
 	);
-	
+
 	var $layout = array(
 		'type' => 'full',	// full left right tmode split
 		'javascript_src' => array(),
@@ -143,7 +143,6 @@ class MY_Controller extends CI_Controller {
 		$html['user_controls'] = '';
 		$html['sidebar'] = '';
 		$html['app_title'] = '';
-		$html['app_menu'] = '';
 
 		if ($this->UserM->is_logged_in()) {
 			$html['app_title'] = $this->load->view(get_template().'/app_title', $this->data, TRUE);
@@ -155,7 +154,6 @@ class MY_Controller extends CI_Controller {
 			if ($this->UserM->is_logged_in()) {
 				$html['user_controls'] = $this->load->view(get_template().'/user_controls', $this->data, TRUE);
 				$html['sidebar'] = $this->load->view(get_template().'/sidebar', $this->data, TRUE);
-				$html['app_menu'] = $this->load->view(get_template().'/app_menu', $this->data, TRUE);
 			}
 
 			$this->load->view(get_template().'/page_full', $html);
