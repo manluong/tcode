@@ -25,6 +25,8 @@ var telcoson = {
 		}
 		else {
 			if(confirm("Are you sure you want to logoff ? ")){
+                                jQuery("#show_hide_chat i").removeClass('iChat1').removeClass('iChat7').removeClass('iChat8').addClass('iChat7');
+                                jQuery("#chat_status").html('Offline');
 				telcoson.logoff();
 			}
 
@@ -64,14 +66,20 @@ var telcoson = {
 				.removeClass('iChat9')
 				.removeClass('iChat2')
 				.removeClass('iChat3');
-			if (ptype === 'unavailable') {
+			if (ptype === 'unavailable' ) {
 				contact.addClass('iChat3');
                         } else {
 				var show = $(presence).find('show').text();
-				if (show === '' || show === 'chat') {
+                                if (show === '' || show === 'chat') {
 					contact.addClass('iChat2');
 				} else {
-					contact.addClass('iChat9');
+                                    if(show === 'invisible'){
+                                        contact.addClass('iChat3');
+                                    }
+                                    else {
+                                        contact.addClass('iChat9');
+                                    }
+					
  				}
 			}
 		}
@@ -228,8 +236,6 @@ jQuery("#status_busy").click(function(){
 });
 jQuery("#status_offline").click(function(){
     telcoson.status('offline');
-    jQuery("#show_hide_chat i").removeClass('iChat1').removeClass('iChat7').removeClass('iChat8').addClass('iChat7');
-    jQuery("#chat_status").html('Offline');
     jQuery("#set_status").slideUp();
 });
 // make chat window
@@ -313,9 +319,17 @@ function chatWith(id,name,body){
 function min(id){
         jQuery("#chat_"+id+" .active").removeClass('active');
 	jQuery("#chat_"+id+" .chatBoxIner").hide();
+        var jid = telcoson.id_to_jid(id);
+            var notify = $msg({to: jid, "type": "chat"})
+            .c("composing", {xmlns: "http://jabber.org/protocol/chatstates"}).c("body").t(message);
+            telcoson.connection.send(notify);
 }
 function chat_close(id){
     jQuery("#chat_"+id).remove();
+    var jid = telcoson.id_to_jid(id);
+            var notify = $msg({to: jid, "type": "chat"})
+            .c("composing", {xmlns: "http://jabber.org/protocol/chatstates"}).c("body").t(message);
+            telcoson.connection.send(notify);
 }
 function selectChat(id){
         if(jQuery.trim(jQuery("#chat_"+id+" .chatBoxIner").attr('style')) == 'display: none;'){
