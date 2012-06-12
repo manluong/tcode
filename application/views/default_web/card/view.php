@@ -16,9 +16,9 @@ function confirm_delete(id){
 }
 </script>
 <?php 
-	//echo '<pre>';
-	//print_r($data);
-	//echo '</pre>';
+	echo '<pre>';
+	print_r($data);
+	echo '</pre>';
 ?>
 <div id="payment_boxes">
 	<div class="payment_detail">
@@ -74,6 +74,30 @@ function confirm_delete(id){
 		</div>
 		<div id="contact_info_detail">
 			<ul>
+				<li>
+					<span class="input_data_label">Role</span>
+					<span class="fillter_input">
+						<?php
+							$role = $data['addon_access_user_role']['role_id'];
+							$role_name = '';
+							switch($role){
+								case 0:
+									$role_name = 'None';
+									break;
+								case 2:
+									$role_name = 'Staff';
+									break;
+								case 3:
+									$role_name = 'Customer';
+									break;
+								case 5:
+									$role_name = 'Vendor';
+									break;
+							}
+							echo $role_name;
+						?>
+					</span>
+				</li>
 				<li>
 					<span class="input_data_label">First Name</span>
 					<span class="fillter_input"><?=$data['first_name']?></span>

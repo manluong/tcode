@@ -1,12 +1,13 @@
+<link rel="stylesheet" href="/resources/addon/jqueryui/aristo/ui.css" />
 <script type="text/javascript" src="/resources/addon/plupload/js/plupload.full.js"></script>
 <script type="text/javascript" src="/resources/addon/plupload/js/jquery.plupload.queue/jquery.plupload.queue.js"></script>
 <link href="/resources/addon/plupload/js/jquery.plupload.queue/css/jquery.plupload.queue.css" media="screen" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/contact.css" />
 
 <?php
-	//echo '<pre>';
-	//print_r($data);
-	//echo '</pre>';
+	echo '<pre>';
+	print_r($data);
+	echo '</pre>';
 ?>
 <div  id="contact_edit" class="container">
 	<div class="row span6">
@@ -15,6 +16,24 @@
 				if (!$is_new) echo form_hidden('id', $data['id']);
 			?>
 			<fieldset>
+				<div class="control-group" style="padding-left:160px;">
+					<?php 
+						$role_id = $data['addon_access_user_role'][0]['role_id'];
+						foreach($role as $role_value => $role_label){
+							$checked = ($role_value==$role_id?'checked=checked':'');
+							echo '<input type="radio" name="role" '.$checked.' class="role" value="'.$role_value.'" /> '.$role_label.'&nbsp;&nbsp;';
+						}
+					?>
+					<input type="hidden" name="addon_access_user_role[0][role_id]" id="addon_role" value="<?=$role_id?>">
+					<script>
+						$(document).ready(function() {
+							$('.role').on('click', function() {
+								$('#addon_role').val($(this).attr('value'));
+							});
+						});
+					</script>
+				</div>
+				
 				<div class="control-group" style="position:relative;">
 					<h1 style="display:none;">Custom example</h1>
 					<p style="display:none;">Shows you how to use the core plupload API.</p>
@@ -379,7 +398,7 @@
 				<div class="control-group">
 					<label class="control-label" for="birth_date">Birthday</label>
 					<div class="controls">
-						<?=form_input('birth_date', $data['addon_extra'][0]['birth_date'], 'id="birth_date"')?>
+						<?=form_input('addon_extra[0][birth_date]', $data['addon_extra'][0]['birth_date'], 'id="addon_extra_birth_date"')?>
 					</div>
 				</div>
 				<div style="margin-top:20px;" class="control-group">
@@ -397,7 +416,7 @@
 
 <script type="text/javascript">
 	$(function() {
-		$( "#birth_date" ).datepicker();
+		$("#addon_extra_birth_date").datepicker();
 	});
 	
 	$(document).ready(function() {

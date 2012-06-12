@@ -57,8 +57,26 @@ class Card extends MY_Controller {
 	function add($id) {
 		//if (!$this->AclM->check('card', $id, 'edit')) die('you cannot edit this data');
 
-		$view_data['data'] = $this->CardM->get($id);
-		$view_data['is_new'] = FALSE;
+		$view_data['title_option'] = array(
+			0 => '',
+			1 => 'Mr.',
+			2 => 'Miss.',
+			3 => 'Mrs.',
+			4 => 'Dr.',
+		);
+		$view_data['gender'] = array(
+			0 => '&nbsp;&nbsp;',
+			1 => 'Female',
+			2 => 'Male'
+		);
+		$view_data['role'] = array(
+			0 => 'None',
+			2 => 'Staff',
+			3 => 'Customer',
+			5 => 'Vendor',
+		);
+		$view_data['title'] = $data_fields['title'];
+		$view_data['is_new'] = TRUE;
 		$view_data['countries'] = $this->Card_AddressM->get_country_list();
 
 		$view_data['tel_label'] = $this->Card_TelM->get_label('number');
@@ -72,8 +90,6 @@ class Card extends MY_Controller {
 
 		$view_data['social_label'] = 'Social';
 		$view_data['social_type_options'] = $this->Card_SocialM->get_options('type');
-
-		//$this->load->view(get_template().'/card/add', $view_data);
 		$this->data['content'] = $this->load->view(get_template().'/card/add', $view_data, TRUE);
 		$this->_do_output();
 	}
@@ -82,6 +98,13 @@ class Card extends MY_Controller {
 		//if (!$this->AclM->check('card', $id, 'edit')) die('you cannot edit this data');
 
 		$view_data['data'] = $this->CardM->get($id);
+		$view_data['role'] = array(
+			0 => 'None',
+			2 => 'Staff',
+			3 => 'Customer',
+			5 => 'Vendor',
+		);
+		
 		$view_data['is_new'] = FALSE;
 		$view_data['countries'] = $this->Card_AddressM->get_country_list();
 

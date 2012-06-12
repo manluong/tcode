@@ -68,9 +68,10 @@ class CardM extends MY_Model {
 	public $sett_fill_notes = TRUE;
 	public $sett_fill_social = TRUE;
 	public $sett_fill_tel = TRUE;
-
+	public $sett_fill_access_user_role = TRUE;
+	public $sett_fill_role = FALSE;	
 	public $sett_fill_invoice = FALSE;
-	public $sett_fill_roles = FALSE;
+	
 	public $sett_fill_access_user = FALSE;
 
 	private $addons = array(
@@ -81,6 +82,7 @@ class CardM extends MY_Model {
 		'notes' => 'Card_NotesM',
 		'social' => 'Card_SocialM',
 		'tel' => 'Card_TelM',
+		'access_user_role' => 'Card_RoleM',
 		'access_user' => 'Access_UserM',	//used in adding role access in console add_user, saving password
 	);
 
