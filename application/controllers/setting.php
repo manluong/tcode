@@ -7,6 +7,11 @@ class Setting extends MY_Controller {
 		),
 	);
 
+	//apps here use their own controller to manage setting configurations
+	var $custom_app_list = array(
+		'tax' => array(
+			'name' => 'tax',
+			'url' => '/tax/ajax_setting'
 		),
 	);
 
