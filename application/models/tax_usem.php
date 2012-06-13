@@ -20,7 +20,10 @@ class Tax_UseM extends MY_Model {
 		),
 		'tax_3_compound' => array(
 			'type' => 'boolean'
-		)
+		),
+		'disabled' => array(
+			'type' => 'boolean'
+		),
 	);
 
 	function __construct() {
@@ -67,5 +70,19 @@ class Tax_UseM extends MY_Model {
 
 		$result[] = array('id' => '0', 'name' => 'Total', 'amount' => $tax_1 + $tax_2 + $tax_3);
 		return $result;
+	}
+
+	function save_disabled_setting($setting) {
+		$ids = array_keys($setting);
+
+		$this->db->query("UPDATE ".$this->table." SET disabled=1");
+
+		$data = array(
+			'disabled' => 0,
+		);
+		$this->db->where_in('id', $ids)
+				->update($this->table, $data);
+
+		return TRUE;
 	}
 }

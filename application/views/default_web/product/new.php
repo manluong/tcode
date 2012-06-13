@@ -15,7 +15,10 @@
 				<ul>
 					<li>
 						<span class="input_data_label">Category</span>
-						<span class="fillter_input"><input type="text" name="parent_id" class="inv-field" /></span>
+						<span class="fillter_input">
+							<span class="clearfix" style="line-height: 28px;"><?php echo $parent_name ?></span>
+							<input type="hidden" name="parent_id" value="<?php echo $parent_id ?>" />
+						</span>
 					</li>
 					<li>
 						<span class="input_data_label">Name</span>
@@ -30,7 +33,10 @@
 				<ul>
 					<li>
 						<span class="input_data_label">Category</span>
-						<span class="fillter_input"><input type="text" name="category_id" class="inv-field" /></span>
+						<span class="fillter_input">
+							<span class="clearfix" style="line-height: 28px;"><?php echo $parent_name ?></span>
+							<input type="hidden" name="category_id" value="<?php echo $parent_id ?>" />
+						</span>
 					</li>
 					<li>
 						<span class="input_data_label">Name</span>

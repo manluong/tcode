@@ -3,6 +3,7 @@
 
 <div id="boxes">
 	<form id="frm_search" action="/product/search" method="post">
+		<input type="hidden" name="parent_id" value="<?php echo $parent_id ?>" />
 	</form>
 
 	<div id="invoice_cases">
