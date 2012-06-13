@@ -70,6 +70,12 @@ class SettingM extends MY_Model {
 		return $results;
 	}
 
+	function get_setting($app_name, $setting_name) {
+		$setting = $this->get($app_name);
+
+		return $setting[$setting_name];
+	}
+
 
 
 	//combines settings from different levels but does not overwrite each
