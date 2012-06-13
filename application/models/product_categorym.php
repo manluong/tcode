@@ -26,4 +26,9 @@ class Product_CategoryM extends MY_Model {
 		$this->cache_enabled = TRUE;
 		$this->sett_has_system_fields = FALSE;
 	}
+
+	function get_sub_category($parent_id) {
+		$this->set_where('parent_id = '.$parent_id);
+		return $this->get_list();
+	}
 }

@@ -25,23 +25,29 @@ function search_product() {
 				var item = resp.details[i];
 				var name = '';
 				if (item.type == 'category') {
-					name = '<strong>'+item.name+'</strong>';
+					name = '<a href="'+item.list_url+'"><strong>'+item.name+'</strong></a>';
 				} else {
 					name = item.name;
 				}
 				var row = new Array();
-				row[0] = name;
-				row[1] = item.price;
+				row[0] = item.type;
+				row[1] = name;
+				row[2] = item.price;
+				row[3] = '<a href="'+item.view_url+'">View</a>';
 				data.push(row);
 			}
 
 			$('#tbl_product').dataTable({
 				"bDestroy" : true,
 				"aaData": data,
+				"aaSorting": [[0, "asc"], [1, "asc"]],
 				"aoColumns": [
+					{ "sTitle": "Type" },
 					{ "sTitle": "Name" },
-					{ "sTitle": "Price" }
+					{ "sTitle": "Price" },
+					{ "sTitle": "Detail" }
 				],
+				"aoColumnDefs": [{"bSearchable": false, "bVisible": false, "aTargets": [0]}],
 				"sDom": "<<'pull-right'p>>t<<'pull-right'p>lfi>",
 				"sPaginationType": "bootstrap",
 				"iDisplayLength": 10,
@@ -82,7 +88,7 @@ $(document).ready(function() {
 			dataType: 'json',
 			success: function(resp) {
 				if (resp.success) {
-//					document.location.href = resp.details;
+					document.location.href = resp.details;
 				} else {
 					alert(resp.message);
 				}

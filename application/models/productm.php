@@ -40,4 +40,9 @@ class ProductM extends MY_Model {
 		$this->cache_enabled = TRUE;
 		$this->sett_has_system_fields = FALSE;
 	}
+
+	function get_product_in_category($category_id) {
+		$this->set_where('category_id = '.$category_id);
+		return $this->get_list();
+	}
 }

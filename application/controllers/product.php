@@ -15,29 +15,52 @@ class Product extends MY_Controller {
 	}
 
 	function index() {
-		$this->data['breadcrumb'] = array(array('title' => 'List'));
-		$this->data['content'] = $this->load->view(get_template().'/product/index', NULL, TRUE);
+		$content = array(
+			'parent_id' => 0
+		);
+
+		$this->data['content'] = $this->load->view(get_template().'/product/index', $content, TRUE);
+		$this->_do_output();
+	}
+
+	function category($parent_id) {
+		$content = array(
+			'parent_id' => $parent_id
+		);
+
+		$this->data['breadcrumb'] = $this->get_breadcrumb($parent_id);
+		$this->data['app_menu'][1]['url'] = '/product/add/category/'.$parent_id;
+		$this->data['content'] = $this->load->view(get_template().'/product/index', $content, TRUE);
 		$this->_do_output();
 	}
 
 	function search() {
+		$parent_id = $this->input->post('parent_id');
+
 		$data = array();
-		foreach ($this->Product_CategoryM->get_list() as $r) {
-			$data[] = array(
-				'type' => 'category',
-				'id' => $r['id'],
-				'name' => $r['name'],
-				'price' => ''
-			);
+		if ($category_list = $this->Product_CategoryM->get_sub_category($parent_id)) {
+			foreach ($category_list as $r) {
+				$data[] = array(
+					'type' => 'category',
+					'id' => $r['id'],
+					'name' => $r['name'],
+					'price' => '',
+					'list_url' => '/product/category/'.$r['id'],
+					'view_url' => '/product/category_view/'.$r['id']
+				);
+			}
 		}
 
-		foreach ($this->ProductM->get_list() as $r) {
-			$data[] = array(
-				'type' => 'product',
-				'id' => $r['id'],
-				'name' => $r['name'],
-				'price' => ''
-			);
+		if ($product_list = $this->ProductM->get_product_in_category($parent_id)) {
+			foreach ($product_list as $r) {
+				$data[] = array(
+					'type' => 'product',
+					'id' => $r['id'],
+					'name' => $r['name'],
+					'price' => '',
+					'view_url' => '/product/view/'.$r['id']
+				);
+			}
 		}
 
 		$this->RespM->set_success(TRUE)
@@ -45,21 +68,101 @@ class Product extends MY_Controller {
 			->output_json();
 	}
 
-	function view() {
-		$this->data['breadcrumb'] = array(array('title' => 'View'));
-		$this->data['content'] = $this->load->view(get_template().'/product/view', NULL, TRUE);
+	function view($id) {
+		$product = $this->ProductM->get($id);
+
+		$breadcrumb = $this->get_breadcrumb($product['category_id']);
+		$parent_name = '';
+		foreach ($breadcrumb as $bc) {
+			$parent_name .= $bc['title'].' > ';
+		}
+
+		$content = array(
+			'product' => $product,
+			'parent_name' => rtrim($parent_name, ' >')
+		);
+
+		$this->data['breadcrumb'] = array_merge($breadcrumb, array(array('title' => $product['name'])));
+		$this->data['content'] = $this->load->view(get_template().'/product/view', $content, TRUE);
+		$this->_do_output();
+	}
+
+	function category_view($id) {
+		$category = $this->Product_CategoryM->get($id);
+
+		$breadcrumb = $this->get_breadcrumb($category['parent_id']);
+		$parent_name = '';
+		foreach ($breadcrumb as $bc) {
+			$parent_name .= $bc['title'].' > ';
+		}
+
+		$content = array(
+			'category' => $category,
+			'parent_name' => rtrim($parent_name, ' >')
+		);
+
+		$this->data['breadcrumb'] = array_merge($breadcrumb, array(array('title' => $category['name'])));
+		$this->data['content'] = $this->load->view(get_template().'/product/category_view', $content, TRUE);
 		$this->_do_output();
 	}
 
 	function add() {
-		$this->data['breadcrumb'] = array(array('title' => 'New'));
-		$this->data['content'] = $this->load->view(get_template().'/product/new', NULL, TRUE);
+		$parent_id = 0;
+		if ($this->uri->segment(3) == 'category') {
+			$parent_id = $this->uri->segment(4);
+		}
+
+		$breadcrumb = $this->get_breadcrumb($parent_id);
+		$parent_name = '';
+		foreach ($breadcrumb as $bc) {
+			$parent_name .= $bc['title'].' > ';
+		}
+
+		$content = array(
+			'parent_id' => $parent_id,
+			'parent_name' => rtrim($parent_name, ' >')
+		);
+
+		$this->data['breadcrumb'] = array_merge($breadcrumb, array(array('title' => 'New')));
+		$this->data['content'] = $this->load->view(get_template().'/product/new', $content, TRUE);
 		$this->_do_output();
 	}
 
-	function edit() {
-		$this->data['breadcrumb'] = array(array('title' => 'Edit'));
-		$this->data['content'] = $this->load->view(get_template().'/product/edit', NULL, TRUE);
+	function edit($id) {
+		$product = $this->ProductM->get($id);
+
+		$breadcrumb = $this->get_breadcrumb($product['category_id']);
+		$parent_name = '';
+		foreach ($breadcrumb as $bc) {
+			$parent_name .= $bc['title'].' > ';
+		}
+
+		$content = array(
+			'product' => $product,
+			'parent_name' => rtrim($parent_name, ' >')
+		);
+
+		$this->data['breadcrumb'] = array_merge($breadcrumb, array(array('title' => $product['name'])));
+		$this->data['content'] = $this->load->view(get_template().'/product/edit', $content, TRUE);
+		$this->_do_output();
+	}
+
+	function category_edit($id) {
+		$category = $this->Product_CategoryM->get($id);
+
+		$breadcrumb = $this->get_breadcrumb($category['parent_id']);
+		$parent_name = '';
+		foreach ($breadcrumb as $bc) {
+			$parent_name .= $bc['title'].' > ';
+		}
+
+		$content = array(
+			'category' => $category,
+			'parent_name' => rtrim($parent_name, ' >')
+		);
+
+		$this->data['breadcrumb'] = array_merge($breadcrumb, array(array('title' => $category['name'])));
+		$this->data['content'] = $this->load->view(get_template().'/product/category_edit', $content, TRUE);
 		$this->_do_output();
 	}
 
@@ -113,5 +216,21 @@ class Product extends MY_Controller {
 		$this->RespM->set_success(TRUE)
 			->set_details('/product/category_view/'.$category_id)
 			->output_json();
+	}
+
+	private function get_breadcrumb($category_id) {
+		$breadcrumb = array();
+
+		while ($category_id) {
+			$category = $this->Product_CategoryM->get($category_id);
+			if ($category) {
+				$breadcrumb[] = array('title' => $category['name'], 'url' => '/product/category/'.$category['id']);
+				$category_id = $category['parent_id'];
+			} else {
+				break;
+			}
+		}
+
+		return array_reverse($breadcrumb);
 	}
 }
