@@ -5,9 +5,9 @@
 <link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/contact.css" />
 
 <?php
-	echo '<pre>';
-	print_r($data);
-	echo '</pre>';
+	//echo '<pre>';
+	//print_r($data);
+	//echo '</pre>';
 ?>
 <div  id="contact_edit" class="container">
 	<div class="row span6">
@@ -278,7 +278,7 @@
 										'<input type="text" name="addon_address['+address_index+'][country]" style="margin-left:43px; width:197px;">';
 									'</li></ul></div>'+
 								'</div>';
-							$('#addon_address').html(new_address);
+							$('#addon_address').append(new_address);
 						});
 
 						$('#addon_address').on('click', '.address_is_default_radio', function() {
@@ -289,7 +289,7 @@
 					});
 
 				</script>
-				<br /><br />
+				<br/><br/>
 				<!-- END ADDON ADDRESS -->
 				
 				<!-- END ADDON SOCIAL -->

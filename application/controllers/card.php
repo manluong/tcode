@@ -30,7 +30,26 @@ class Card extends MY_Controller {
 		$this->data['content'] = $this->load->view(get_template().'/card/index', $view_data, TRUE);
 		$this->_do_output();
 	}
+	
+	function contact_list(){
+		$this->CardM->sett_fill_address = FALSE;
+		$this->CardM->sett_fill_bank = FALSE;
+		$this->CardM->sett_fill_email = FALSE;
+		$this->CardM->sett_fill_extra = FALSE;
+		$this->CardM->sett_fill_notes = FALSE;
+		$this->CardM->sett_fill_social = FALSE;
+		$this->CardM->sett_fill_tel = FALSE;
+		$this->CardM->sett_fill_roles = TRUE;
 
+		$this->CardM->order_by[] = 'first_name ASC';
+		$view_data = array(
+			'list' => $this->CardM->get_list(),
+		);
+		
+		$this->data['content'] = $this->load->view(get_template().'/card/contact_list',$view_data, TRUE);
+		$this->_do_output();
+	}
+	
 	function view($id) {
 		$view_data = array(
 			'title' => 'Contact View',

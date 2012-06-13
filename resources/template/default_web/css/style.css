@@ -1460,13 +1460,11 @@ table.dataTable th:active {
 
 #contactsPanel .leftPanel {
 	width: 278px;
-	overflow-y: scroll;
-	overflow-x: hidden;
 	position: absolute;
-	height: auto;
+	height: 510px;
 	bottom: 0;
 	top: 0;
-	left: -484px;
+	left: -628px;
 	right: 0;
 	margin-top: 90px;
 	margin-bottom: 25px;
@@ -1493,14 +1491,11 @@ table.dataTable th:active {
 
 #contactsPanel .rightPanel {
 	width: 544px;
-	background: #f9f9f9;
-	overflow-y: scroll;
-	overflow-x: hidden;
 	position: absolute;
-	height: auto;
+	height: 515px;
 	bottom: 0;
 	top: 0;
-	left: 345px;
+	left: 240px;
 	right: 0;
 	margin-top: 90px;
 	margin-bottom: 25px;
@@ -1602,8 +1597,6 @@ table.dataTable th:active {
 #contentTabCard .center {
 	background: url(../img/contactsDetailsCenter.png) repeat-y right;
 	width: 460px;
-	overflow-y: scroll;
-	overflow-x: hidden;
 	position: absolute;
 	height: auto;
 	bottom: 0;
@@ -1722,7 +1715,7 @@ table.dataTable th:active {
 }
 
 .leftPanel nav a:hover {
-	text-decoration: underline;
+	color: #8c8c8c;
 }
 
 .leftPanel ul.addressBook {
@@ -1746,8 +1739,6 @@ ul.addressBook li.active .contactType {
 ul.addressBook li img {
 	margin: 8px 0 0 10px;
 	float: left;
-	-moz-border-radius: 16px;
-	border-radius: 16px;
 }
 
 ul.addressBook li.active {
@@ -1923,3 +1914,26 @@ form .giveMePaddingLeft {
 	-webkit-box-shadow:  0px 0px 14px 0px #cccccc;
 	box-shadow:  0px 0px 14px 0px #cccccc;
 }
+#contact_info{
+	width:100%;
+	float:left;
+	margin-left:-55px;
+	margin-top:20px;
+}
+#contact_info ul li{
+	width:100%;
+	float:left;
+}
+#contact_info .input_data_label{
+	font-weight:normal;
+	font-style:normal;
+	color:#787878;
+	line-height:24px;
+}
+#contact_info .fillter_input{
+	font-weight:bold;
+	font-style:normal;
+	font-size:16px;
+	color:#787878;
+}
+

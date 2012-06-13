@@ -1,0 +1,145 @@
+.btn {
+	text-shadow: none;
+	background-image: none;
+	-webkit-box-shadow:  1px 1px 2px 0px #e1e1e1;
+  				box-shadow:  1px 1px 2px 0px #e1e1e1;
+	text-transform: uppercase;
+	text-decoration: none;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+	display: block;
+	font-size: 10px;
+	padding: 0 8px;
+	background: #fbfbfb;
+	border: 1px solid #d8d8d8;
+	-moz-border-radius: 4px;
+			 border-radius: 4px;
+	color: #737373;
+}
+
+.btn:hover,
+.btn:active,
+.btn.active,
+.btn.disabled,
+.btn[disabled] {
+  background-color: #fbfbfb;
+}
+
+.btn.primary {
+	background: #485152;
+	color: #dee6e8;
+	font-size: 10px;
+	line-height: 10px;
+	padding: 8px 14px;
+}
+
+input[type=text], textarea {
+	background: white;
+	border: 1px solid #f5f5f5;
+	color: #ababab!important;
+	font-size: 14px!important;
+	font-weight: normal;
+	font-style: italic;
+	padding: 6px;
+	font-family: "Helvetica", sans-serif;
+	-webkit-box-shadow: inset 1px 1px 4px 0px #cccccc;      
+	box-shadow: inset 1px 1px 4px 0px #cccccc;
+}
+
+input:focus,
+textarea:focus {
+  border-color: rgba(168, 104, 42, 0.8);
+  outline: 0;
+  outline: thin dotted \9;
+  /* IE6-9 */
+
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(168, 104, 42, 0.6);
+     -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(168, 104, 42, 0.6);
+          box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(168, 104, 42, 0.6);
+}
+
+.rightPanel input.xlarge {
+	font-size: 25px!important;
+	padding: 10px 8px;
+	font-weight: 100!important;
+}
+
+.rightPanel form label {
+	float: left;
+	display: block;
+	width: 100px;
+	text-align: right;
+	color: #777;
+	padding: 7px 7px 0 0;
+}
+
+form .clearfix {
+	padding-bottom: 5px;
+}
+
+.rightPanel form .inputRadios label {
+	width: auto;
+	padding: 0;
+	float: left;
+}
+
+.rightPanel form .inputRadios input[type=radio] {
+	float: left;
+}
+
+form .inputRadios span {
+	display: inline-block;
+	padding: 5px 0 0 5px;
+	margin-right: 25px;
+}
+
+form .inputs-list {
+	margin: 0;
+	padding: 0 0 0 3px;
+}
+
+form select {
+	font-size: 13px;
+}
+
+.inputs-list input {
+	float: left;
+}
+
+.inputs-list span {
+	display: inline-block;
+	padding-left: 5px;
+	color: #999;
+	font-size: 12px;
+}
+
+form label {
+	float: left;
+	text-align: right;
+	width: 80px;
+	color: #808080;
+	padding: 6px 10px 0 0;
+	margin: 0;
+}
+
+form.form-stacked label {
+	display: block;
+	float: none;
+	text-align: left;
+	width: auto;
+}
+
+input.error {
+	
+}
+
+div.error {
+	padding-top: 5px;
+	margin-bottom: 5px;
+	border: 1px solid #e78d8d;
+	background: #faeeee;
+}
+
+div.error label {
+	color: #a62d2d;
+}
