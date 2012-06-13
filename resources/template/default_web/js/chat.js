@@ -9,13 +9,16 @@ var telcoson = {
             .replace("@", "-")
             .replace(".", "-");
     },
-	logoff: function(){
+	logoff: function(check){
 		telcoson.connection.disconnect();
                 jQuery("#list_chat").hide();
                 jQuery("#show_hide_chat").removeClass('active');
                 jQuery(".ac .chatBoxIner").hide();
                 jQuery(".ac").remove();
                 jQuery("#list_chat div.userchat").remove();
+                if(check){
+                    window.location='/access/logout';
+                }
                 
 	},
 	status: function(status){

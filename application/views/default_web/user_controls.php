@@ -26,7 +26,9 @@
 				<li><?=$current_user['first_name'].' '.$current_user['last_name']?></li>
 				<li><a class="settings" href="/setting">Settings</a></li>
 				<li><a class="support" href="#">Support</a></li>
-				<li><a class="logout last" href="/access/logout">Logout</a></li>
+<!--				<li><a class="logout last" href="/access/logout">Logout</a></li>-->
+                                <!-- new change from Leo -->
+                                <li><a class="logout last" href="javascript:void(0);" onclick="telcoson.logoff(true);">Logout</a></li>
 			</ul>
 		</div>
 	</div>
