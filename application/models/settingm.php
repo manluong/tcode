@@ -1,7 +1,7 @@
 <?php
 
 class SettingM extends MY_Model {
-	var $data = '';
+	var $cache = '';
 
 	var $settings = array(
 		'general' => array(
@@ -33,6 +33,8 @@ class SettingM extends MY_Model {
 			? $this->url['app_id']
 			: $this->AppM->get_id($app_name);
 
+		if (isset($this->cache[$app_id])) return $this->cache[$app_id];
+
 		$results = array();
 
 		$card_id = $this->UserM->get_card_id();
@@ -63,7 +65,15 @@ class SettingM extends MY_Model {
 			$results[$s['setting_name']] = $s['setting_value'];
 		}
 
+		$this->cache[$app_id] = $results;
+
 		return $results;
+	}
+
+	function get_setting($app_name, $setting_name) {
+		$setting = $this->get($app_name);
+
+		return $setting[$setting_name];
 	}
 
 
