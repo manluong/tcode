@@ -27,7 +27,7 @@ class MY_Controller extends CI_Controller {
 	var $data = array(
 		//filled in by system automatically
 		'title' => '8Force', //HTML <title>
-		'company_name' => 'Telcoson',
+		'company_name' => '',
 		'company_logo' => '',
 		'current_user' => array(),
 		'sidebar' => '',
@@ -99,6 +99,7 @@ class MY_Controller extends CI_Controller {
 		$this->load->model('LogM');
 		$this->load->model('LicenseM');
 		$this->load->model('RespM');
+		$this->load->model('SettingM');
 
 		if (!$this->is_cli) {
 			$this->UserM->setup();
@@ -128,6 +129,7 @@ class MY_Controller extends CI_Controller {
 		$this->data['current_user'] = $this->UserM->info;
 		$this->data['title'] = '8Force';
 		$this->data['tenant'] = array();
+		$this->data['company_name'] = $this->SettingM->get_setting('general', 'company_name');
 
 		$this->data['app_list'] = $this->AppM->acl_app_list;
 		$this->data['active_app'] = $this->url['app'];
