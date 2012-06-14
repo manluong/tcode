@@ -125,8 +125,8 @@ class Invoice extends MY_Controller {
 
 	function add() {
 		$content = array(
-			'price_type' => $this->InvoiceM->get_price_type(),
-			'duration_type' => $this->InvoiceM->get_duration_type(),
+// 			'price_type' => $this->InvoiceM->get_price_type(),
+// 			'duration_type' => $this->InvoiceM->get_duration_type(),
 			'tax' => $this->TaxM->get_list(),
 			'tax_use' => $this->Tax_UseM->get_list(),
 			'terms' => $this->Invoice_TermsM->get_list(),
@@ -144,8 +144,8 @@ class Invoice extends MY_Controller {
 
 		$content = array(
 			'invoice' => $invoice,
-			'price_type' => $this->InvoiceM->get_price_type(),
-			'duration_type' => $this->InvoiceM->get_duration_type(),
+// 			'price_type' => $this->InvoiceM->get_price_type(),
+// 			'duration_type' => $this->InvoiceM->get_duration_type(),
 			'tax' => $this->TaxM->get_list(),
 			'tax_use' => $this->Tax_UseM->get_list(),
 			'terms' => $this->Invoice_TermsM->get_list(),
@@ -185,9 +185,11 @@ class Invoice extends MY_Controller {
 	}
 
 	function pay($id) {
+		$invoice = $this->InvoiceM->get($id);
+		if ($invoice === FALSE) die('404 Not found');
+
 		$content = array (
-			'invoice_id' => $id,
-			'invoice_total' => $this->InvoiceM->get_invoice_total($id),
+			'invoice' => $invoice,
 			'quickjump' => $this->get_quickjump()
 		);
 

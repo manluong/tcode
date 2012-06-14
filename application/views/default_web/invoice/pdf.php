@@ -8,13 +8,14 @@
 <!--
 html body {
 	background-color: #FFF;
-	width: 820px;
-	margin-left: auto;
-	margin-right: auto;
+	margin: 0 auto;
+	max-width: 780px;
+	width: 100%;
 }
 
 #boxes {
-	width: 820px;
+	max-width: 780px;
+	width: 100%;
 }
 -->
 </style>
@@ -87,14 +88,6 @@ html body {
 						<div class="sub_desc">
 							<?php if ($invoice_item['subscription_start_stamp']): ?>
 								<?php echo date('Y-m-d', strtotime($invoice_item['subscription_start_stamp'])).' to '.date('Y-m-d', strtotime($invoice_item['subscription_end_stamp'])) ?>
-								<br />
-							<?php endif ?>
-							<?php if ($invoice_item['a_product_durationtype_name']): ?>
-								<?php echo $invoice_item['a_product_durationtype_name'] ?>
-								<br />
-							<?php endif ?>
-							<?php if ($invoice_item['a_product_pricetype_name']): ?>
-								<?php echo $invoice_item['a_product_pricetype_name'] ?>
 								<br />
 							<?php endif ?>
 							<?php if ($invoice_item['discount']): ?>

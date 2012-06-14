@@ -7,6 +7,7 @@
 		<div id="input_data_info">
 			<div id="category" class="product_ul">
 				<form id="frm_category" action="/product/category_save" method="post">
+				<input type="hidden" name="id" value="<?php echo $category['id'] ?>" />
 				<ul>
 					<li>
 						<span class="input_data_label">Category</span>
@@ -20,10 +21,9 @@
 						<span class="fillter_input"><input type="text" name="name" value="<?php echo $category['name'] ?>" class="inv-field" /></span>
 					</li>
 				</ul>
+				<button type="button" id="btn_submit" class="btn btn-primary pull-right">SUBMIT</button>
 				</form>
 			</div>
 		</div>
-
-		<button type="button" id="btn_submit" class="btn btn-primary pull-right">SUBMIT</button>
 	</div>
 </div>

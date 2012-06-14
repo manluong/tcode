@@ -164,6 +164,9 @@ function bind_event_row(item) {
 		select: function(e, ui) {
 			var item = $(this).closest('div.invoice_item');
 			item.find('.product_id').val(ui.item.product.id);
+			if (item.find('.qty').val() == '' || item.find('.qty').val() == 0) {
+				item.find('.qty').val(1);
+			}
 			item.find('.unit_price').val(ui.item.product.price).change();
 		}
 	});

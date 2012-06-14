@@ -104,11 +104,12 @@ class InvoiceM extends MY_Model {
 
 			$invoice_ids = get_distinct('id', $data);
 			if ($name == 'item') {
-				$this->db->select('a_invoice_item.*, a_product.name, a_product_pricetype.a_product_pricetype_name, a_product_durationtype.a_product_durationtype_name, tax_use.name as tax_use_name');
+				$this->db->select('a_invoice_item.*, a_product.name, tax_use.name as tax_use_name');
+// 				$this->db->select('a_invoice_item.*, a_product.name, a_product_pricetype.a_product_pricetype_name, a_product_durationtype.a_product_durationtype_name, tax_use.name as tax_use_name');
 				$this->db->from('a_invoice_item');
 				$this->db->join('a_product', 'a_invoice_item.product_id = a_product.id');
-				$this->db->join('a_product_pricetype', 'a_invoice_item.price_type = a_product_pricetype.a_product_pricetype_id', 'left');
-				$this->db->join('a_product_durationtype', 'a_invoice_item.duration_type = a_product_durationtype.a_product_durationtype_id', 'left');
+// 				$this->db->join('a_product_pricetype', 'a_invoice_item.price_type = a_product_pricetype.a_product_pricetype_id', 'left');
+// 				$this->db->join('a_product_durationtype', 'a_invoice_item.duration_type = a_product_durationtype.a_product_durationtype_id', 'left');
 				$this->db->join('tax_use', 'a_invoice_item.tax_use_id = tax_use.id', 'left');
 				$this->db->where('a_invoice_item.invoice_id IN ('.implode(',', $invoice_ids).')');
 				$this->db->order_by('a_invoice_item.sort_order ASC');
@@ -213,46 +214,46 @@ class InvoiceM extends MY_Model {
 		}
 	}
 
-	function get_invoice_total($id) {
-		$this->load->model('TaxM');
-		$this->load->model('Tax_UseM');
+// 	function get_invoice_total($id) {
+// 		$this->load->model('TaxM');
+// 		$this->load->model('Tax_UseM');
 
-		$invoice = $this->InvoiceM->get($id);
-		if ($invoice === FALSE) return FALSE;
+// 		$invoice = $this->InvoiceM->get($id);
+// 		if ($invoice === FALSE) return FALSE;
 
-		$sub_total = 0;
-		$invoice_total = 0;
+// 		$sub_total = 0;
+// 		$invoice_total = 0;
 
-		$tax_detail = array();
-		foreach ($this->TaxM->get_list() as $tax) {
-			$tax_detail[] = array('id' => $tax['id'], 'name' => $tax['name'], 'amount' => 0);
-		}
+// 		$tax_detail = array();
+// 		foreach ($this->TaxM->get_list() as $tax) {
+// 			$tax_detail[] = array('id' => $tax['id'], 'name' => $tax['name'], 'amount' => 0);
+// 		}
 
-		foreach ($invoice['addon_item'] as $item) {
-			$price = $item['unit_price'];
-			$qty = $item['quantity'];
-			$discount = $item['discount'];
+// 		foreach ($invoice['addon_item'] as $item) {
+// 			$price = $item['unit_price'];
+// 			$qty = $item['quantity'];
+// 			$discount = $item['discount'];
 
-			$tax = 0;
-			if ($item['tax_use_id']) {
-				$t = $this->Tax_UseM->calculate_tax($item['tax_use_id'], $price * $qty * (100 - $discount) / 100);
-				$tax = $t[count($t) - 1]['amount'];
+// 			$tax = 0;
+// 			if ($item['tax_use_id']) {
+// 				$t = $this->Tax_UseM->calculate_tax($item['tax_use_id'], $price * $qty * (100 - $discount) / 100);
+// 				$tax = $t[count($t) - 1]['amount'];
 
-				foreach ($tax_detail as $item_1) {
-					foreach ($t as $item_2) {
-						if ($item_1['id'] == $item_2['id']) {
-							$item_1['amount'] += $item_2['amount'];
-						}
-					}
-				}
-			}
+// 				foreach ($tax_detail as $item_1) {
+// 					foreach ($t as $item_2) {
+// 						if ($item_1['id'] == $item_2['id']) {
+// 							$item_1['amount'] += $item_2['amount'];
+// 						}
+// 					}
+// 				}
+// 			}
 
-			$sub_total += $price * $qty * (100 - $discount) / 100;
-			$invoice_total += $price * $qty * (100 - $discount) / 100 + $tax;
-		}
+// 			$sub_total += $price * $qty * (100 - $discount) / 100;
+// 			$invoice_total += $price * $qty * (100 - $discount) / 100 + $tax;
+// 		}
 
-		return $invoice_total;
-	}
+// 		return $invoice_total;
+// 	}
 
 	function get_invoice_summary($card_id) {
 		$this->db->select('
@@ -269,19 +270,19 @@ class InvoiceM extends MY_Model {
 		return $query->row_array();
 	}
 
-	function get_price_type() {
-		$this->db->select('*');
-		$query = $this->db->get('a_product_pricetype');
+// 	function get_price_type() {
+// 		$this->db->select('*');
+// 		$query = $this->db->get('a_product_pricetype');
 
-		return $query->result();
-	}
+// 		return $query->result();
+// 	}
 
-	function get_duration_type() {
-		$this->db->select('*');
-		$query = $this->db->get('a_product_durationtype');
+// 	function get_duration_type() {
+// 		$this->db->select('*');
+// 		$query = $this->db->get('a_product_durationtype');
 
-		return $query->result();
-	}
+// 		return $query->result();
+// 	}
 
 	function get_product_by_name($name) {
 		$this->db->select('a_product.*, a_product_price.amount');

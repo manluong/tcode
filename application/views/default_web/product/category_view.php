@@ -20,9 +20,8 @@
 						</span>
 					</li>
 				</ul>
+				<a href="/product/category_edit/<?php echo $category['id'] ?>" class="btn btn-inverse pull-right">EDIT</a>
 			</div>
 		</div>
-
-		<button type="button" id="btn_submit" class="btn btn-primary pull-right">EDIT</button>
 	</div>
 </div>

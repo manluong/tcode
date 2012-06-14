@@ -86,7 +86,8 @@ html, body{
 	cursor:pointer;
 }
 #content_top{
-	width:860px;
+	height: auto;
+	width: 860px;
 }
 #user_profile{
 	float:left;
