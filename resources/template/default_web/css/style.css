@@ -1798,12 +1798,20 @@ ul.addressBook li .info {
 	padding: 16px 0 0 5px;
 }
 
+ul.addressBook li .info a {
+	font-weight: bold;
+	font-size: 13px;
+	color: #485152;
+	text-decoration:none;
+}
+
 ul.addressBook li.active .info {
 	color: #6e5519;
 }
 
 ul.addressBook li .info.hasCompany {
 	padding-top: 9px;
+	width:117px;
 }
 
 ul.addressBook li .company {
