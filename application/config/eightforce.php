@@ -29,7 +29,7 @@ $config['file_folder'] = 'file/';
 |
 */
 $config['sendgrid_api_user'] = 'tcsteam';
-$config['sendgrid_api_key'] = 'express08)*';
+$config['sendgrid_api_key'] = 'express0810';
 
 /*
 |--------------------------------------------------------------------------
