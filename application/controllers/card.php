@@ -51,7 +51,6 @@ class Card extends MY_Controller {
 	}
 	
 	function ajax_contact_info($id){
-		
 		$card_id = $this->input->post('id');
 		$view_data = array(
 			'detail' => $this->CardM->get($card_id),
@@ -59,12 +58,14 @@ class Card extends MY_Controller {
 		$this->load->view(get_template().'/card/ajax_contact_info',$view_data);
 	}
 	
-	function contact_fillter($role_id){
-		//$role_id = $this->input->post('role_id');
-		$where = array();
-		$where[] = "role_id='$role_id'";
-		$this->Card_RoleM->where =  $where;
-		
+	function contact_fillter(){
+		$role_id = $this->input->post('role_id');
+		if($role_id != 0){
+			$where = array();
+			$where[] = "role_id='$role_id'";
+			$this->Card_RoleM->where =  $where;
+		}
+
 		$result = $this->Card_RoleM->get_list();
 		
 		$list_id = '';
@@ -75,14 +76,12 @@ class Card extends MY_Controller {
 			$list_id .= ','.$result[$i]['card_id'];
 		}
 		$list_id = split(',',$list_id);
-		$data = $this->CardM->get_batch($list_id,TRUE);
-		
-		echo '<pre>';
-		print_r($data);
-		echo '</pre>';
-		die;
-		
-		$this->load->view(get_template().'/card/ajax_contact_info',$view_data);
+		$list = $this->CardM->get_batch($list_id,TRUE);
+
+		$view_data = array(
+			'list' => $list,
+		);
+		$this->load->view(get_template().'/card/ajax_contact_list',$view_data);
 	}
 	
 	function view($id) {

@@ -1,3 +1,4 @@
+
 //AJAX LOAD CONTACT INFO
 function load_contact_info(id){
 	var url = '/card/ajax_contact_info';
@@ -10,8 +11,6 @@ function load_contact_info(id){
 }
 //CONTACT LIST FILLTER
 function contact_fillter(role_id){
-	alert(id);
-	return false;
 	var url = '/card/contact_fillter';
 	$.post(url,{
 			role_id : role_id,
