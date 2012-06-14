@@ -50,6 +50,40 @@ class Card extends MY_Controller {
 		$this->_do_output();
 	}
 	
+	function ajax_contact_info($id){
+		$card_id = $this->input->post('id');
+		$view_data = array(
+			'detail' => $this->CardM->get($card_id),
+		);
+		$this->load->view(get_template().'/card/ajax_contact_info',$view_data);
+	}
+	
+	function contact_fillter(){
+		$role_id = $this->input->post('role_id');
+		if($role_id != 0){
+			$where = array();
+			$where[] = "role_id='$role_id'";
+			$this->Card_RoleM->where =  $where;
+		}
+
+		$result = $this->Card_RoleM->get_list();
+		
+		$list_id = '';
+		for($i = 0 ; $i < count($result) ; $i++){
+			if($i == 0 ){
+				$list_id = $result[$i]['card_id'];
+			}
+			$list_id .= ','.$result[$i]['card_id'];
+		}
+		$list_id = split(',',$list_id);
+		$list = $this->CardM->get_batch($list_id,TRUE);
+
+		$view_data = array(
+			'list' => $list,
+		);
+		$this->load->view(get_template().'/card/ajax_contact_list',$view_data);
+	}
+	
 	function view($id) {
 		$view_data = array(
 			'title' => 'Contact View',

@@ -131,7 +131,7 @@ class SettingM extends MY_Model {
 	}
 
 
-	function save($app_name) {
+	function save_bk($app_name) {
 		$app_id = $this->AppM->get_id($app_name);
 		$card_id = $this->UserM->get_card_id();
 
