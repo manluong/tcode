@@ -89,7 +89,7 @@ class FileL {
 			if ($docs_id !== FALSE) $dir_id_or_name = $existing_file_info['dir_id'];
 
 			$dir_info = $this->CI->DocsM->get_dir_detail($dir_id_or_name);
-			$overwrite = ($dir_info['has_versioning'] == 1);
+			$overwrite = ($dir_info['has_versioning'] == 0);
 		}
 
 		//update CI file upload configuration
@@ -143,7 +143,7 @@ class FileL {
 			if ($docs_id !== FALSE) $dir_id_or_name = $existing_file_info['dir_id'];
 
 			$dir_info = $this->CI->DocsM->get_dir_detail($dir_id_or_name);
-			$overwrite = ($dir_info['has_versioning'] == 1);
+			$overwrite = ($dir_info['has_versioning'] == 0);
 		}
 
 		//update CI file upload configuration
@@ -153,7 +153,6 @@ class FileL {
 		if ($overwrite && $docs_id !== FALSE) {
 			$config['file_name'] = $existing_file_info['hash'];
 		}
-
 
 		//save to temp
 		$filepath = $this->write_to_temp($content, $filehash);
