@@ -147,7 +147,17 @@ class CardM extends MY_Model {
 	}
 
 	function get_batch($card_ids, $id_as_key=FALSE) {
-		$results = parent::get_batch($ids, $id_as_key);
+		$results = parent::get_batch($card_ids, $id_as_key);
+
+		$this->fill_addons($results, MULTIPLE_DATA);
+
+		//TODO: inefficiency here
+		if ($this->sett_fill_roles) {
+			foreach($results AS $k=>$v) {
+				$results[$k]['role'] = $this->AclM->get_user_role_info($v['id']);
+				$results[$k]['sub_roles'] = $this->AclM->get_user_subroles($v['id']);
+			}
+		}
 
 		$this->add_extra_fields($results, MULTIPLE_DATA);
 
