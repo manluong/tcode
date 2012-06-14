@@ -180,6 +180,8 @@ class SettingM extends MY_Model {
 			$sql .= " ON DUPLICATE KEY UPDATE setting_value=VALUES(setting_value), can_override=VALUES(can_override)";
 			$this->db->query($sql);
 		}
+
+		return TRUE;
 	}
 
 
