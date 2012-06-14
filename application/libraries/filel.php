@@ -156,6 +156,7 @@ class FileL {
 
 		$this->load->helper('file');
 		//data of the newly uploaded file
+		if ($filename == '') $filename = $filehash;
 		$new_file_data = array(
 			'file_name' => $filename,
 			'file_type' => get_mime_by_extension($filename),
