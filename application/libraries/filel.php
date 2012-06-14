@@ -146,12 +146,9 @@ class FileL {
 			$overwrite = ($dir_info['has_versioning'] == 0);
 		}
 
-		//update CI file upload configuration
-		$config['overwrite'] = $overwrite;
-
 		//if Docs ID given and want to Overwrite, update CI file upload config to use filename same one has the existing file
 		if ($overwrite && $docs_id !== FALSE) {
-			$config['file_name'] = $existing_file_info['hash'];
+			$filehash = $existing_file_info['hash'];
 		}
 
 		//save to temp
