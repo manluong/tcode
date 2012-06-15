@@ -1,3 +1,23 @@
+/*------- Upload avatar -------*/
+$(document).ready(function(){
+	$('#contact_close').click(function(){
+		$("#upload_avatar").overlay().close();
+	});
+});
+
+function load_upload_form(){
+	$("#upload_avatar").overlay({
+	  mask: {
+			color: '#000',
+			loadSpeed: 200,
+			opacity: 0.3
+	  },
+	  top: '10%',
+	});
+	$("#upload_avatar").overlay().load();
+}
+
+/*------- End Upload avatar -------*/
 
 //AJAX LOAD CONTACT INFO
 function load_contact_info(id){

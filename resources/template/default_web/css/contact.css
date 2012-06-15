@@ -147,3 +147,27 @@
 	float:left;
 	margin-bottom:20px;
 }
+#upload_avatar{
+	background-color:white;
+	width:560px;
+	height:560px;
+	display:none;
+	position:relative;
+	padding:20px;
+}
+#contact_close{
+	position:absolute;
+	left:577px;
+	top:0px;
+	background:url(../img/contact_close.png);
+	width:24px;
+	height:21px;
+	cursor:pointer;
+}
+#contact_select_file{
+	width:78px;
+	height:20px;
+	position:absolute;
+	left:27px;
+	top:90px;
+}

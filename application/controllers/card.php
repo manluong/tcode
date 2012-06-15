@@ -50,6 +50,15 @@ class Card extends MY_Controller {
 		$this->_do_output();
 	}
 	
+	function upload($comment_id){
+	   $this->load->library('filel');
+	   $file = $this->filel->save('file', 'Helpdesk');
+		if($comment_id != 0){
+		   $insert_id = $this->HelpdeskM->insert_upload_file($file['hash'],$comment_id);
+		   echo $file['hash'];
+		}
+	}
+	
 	function ajax_contact_info($id){
 		$card_id = $this->input->post('id');
 		$view_data = array(

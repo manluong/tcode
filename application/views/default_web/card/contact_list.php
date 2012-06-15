@@ -72,36 +72,10 @@ $(document).ready(function(){
 		</div>
 		<!-- End Contacts' list -->
 		
-		<div class="rightPanel" id="rightPanel">
-			<div id="user_profile">
-				<div id="user_avatar"><image alt="avatar" src="<?=site_url('resources/template/default_web/img/invoice')?>/invoice-avatar.jpg"/></div>
-				<div id="user_info">
-					<ul>
-						<li class="user_sex">Mr.</li>
-						<li class="user_name">Albert Z</li>
-						<li class="user_position">Facebook Inc. CEO</li>
-					</ul>
-				</div>
-			</div>
-			<div id="contact_info">
-				<ul>
-					<li>
-						<span class="input_data_label">Phone</span>
-						<span class="fillter_input">555-23332</span>
-					</li>
-					<li>
-						<span class="input_data_label">Office</span>
-						<span class="fillter_input">555-23332</span>
-					</li>
-					<li>
-						<span class="input_data_label">Email</span>
-						<span class="fillter_input">555-23332</span>
-					</li>
-					<li style="margin:10px 0 0 121px;">
-						<button style="width:50px; height:20px;line-height:10px;" class="btn btn-inverse">View</button>
-					</li>	
-				</ul>
-			</div>
+		<div class="rightPanel" id="rightPanel"></div>
+		
+		<div id="add_new_contact">
+			<a href="<?=site_url('card/add/')?>" style="width:106px; height:10px;line-height:10px;" class="btn btn-inverse">ADD NEW CONTACT</a>
 		</div>
 		
 	</div>

@@ -1,6 +1,7 @@
 <link rel="stylesheet" href="/resources/addon/jqueryui/aristo/ui.css" />
 <script type="text/javascript" src="/resources/addon/plupload/js/plupload.full.js"></script>
 <script type="text/javascript" src="/resources/addon/plupload/js/jquery.plupload.queue/jquery.plupload.queue.js"></script>
+<script type="text/javascript" src="/resources/addon/contacts.js"></script>
 <link href="/resources/addon/plupload/js/jquery.plupload.queue/css/jquery.plupload.queue.css" media="screen" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/contact.css" />
 
@@ -9,7 +10,7 @@
 	//print_r($data);
 	//echo '</pre>';
 ?>
-<div  id="contact_edit" class="container">
+<div id="contact_edit" class="container">
 	<div class="row span6">
 		<form method="post" action="/card/save" class="form-horizontal" id="card-edit-form" data-ajax_save="/card/ajax_save">
 			<?php
@@ -32,12 +33,9 @@
 					</script>
 				</div>
 				<div class="control-group" style="position:relative;">
-					<h1 style="display:none;">Custom example</h1>
-					<p style="display:none;">Shows you how to use the core plupload API.</p>
-					<div id="container" >
-						<label id="pickfiles" class="control-label btn_upload"></label>
+					<div>
+						<label onclick="load_upload_form()" class="control-label btn_upload"></label>
 						<div id="uploadfiles">Upload File</div>
-						<div id="filelist"></div>
 					</div>
 					<div class="controls" style="margin-top:24px;">
 						<div class="btn-group" data-toggle="buttons-radio">
@@ -376,6 +374,29 @@
 			</fieldset>
 		</form>
 
+	</div>
+</div>
+
+<div id="upload_avatar">
+	<div id="contact_close"></div>
+	<div id="contact_select_file">
+		<h1 style="display:none;">Custom example</h1>
+		<p style="display:none;">Shows you how to use the core plupload API.</p>
+		<div id="container" >
+			<button id="pickfiles" style="width:85px; height:25px;line-height:10px;" class="btn btn-inverse">Select File</button>
+			<div style="display:none;" id="uploadfiles"></div>
+			<div id="filelist" style="float:left ;margin:-57px 0 0 -66px;"></div>
+		</div>	
+	</div>
+	<div id="breadcrumb">
+		<div id="module_name" style="width:650px;">
+			<ul>
+				<li><a style="width:173px;" href="#" class="main">CONTACT</a></li>
+				<li class="arrow"></li>
+				<li class="curent_page">Upload Avatar</li>
+				<li><a href="#" id="favoriteIcon" class="on" title="Remove from favorites"></a></li>
+			</ul>
+		</div>
 	</div>
 </div>
 
