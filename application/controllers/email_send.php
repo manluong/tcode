@@ -33,11 +33,13 @@ class Email_send extends MY_Controller {
 			//->set_type('card')
             //->set_type_id('')
             ->set_to('erik@telcoson.com', 'Erik Yeoh')
-			->set_bcc('erikyang@gmail.com')
+			->set_to('erikyang@gmail.com', 'Erik Yeoh G')
+			->set_bcc('erik.yeoh@wyred.nu')
+			->set_bcc('admin@tarutarutimes-online.net')
             ->set_template('testplate')
             ->set_subject('test')
-            //->set_attachment_id(array(2=>'')) // docs_id => ver_id or just docs_id => ''
-            ->set_replace_value(array('keys'=>array('%name%', '%result%'), 'values'=>array(array('Roy'), array('Success!!'))))
+            ->set_attachment_id('ac57b26f30fcb8a3134416f6744fce07')
+            ->set_replace_value(array('keys'=>array('%name%', '%result%'), 'values'=>array(array('Boo'), array('Success!!'))))
             ->set_from('docs@telcoson.com', 'Docs');
 			//$this->emaill->debug(); // prints the parameters to send
 			$i = $this->emaill->send_email(); var_dump($i);// actual email sending returns TRUE or FALSE
@@ -67,6 +69,8 @@ class Email_send extends MY_Controller {
 		$request .= '&api_key='.$pass;
 		$request .= '&to[]=erik@telcoson.com';
 		$request .= '&toname[]=Erik%20Telcoson';
+		$request .= '&to[]=erikyang@gmail.com';
+		$request .= '&toname[]=Erik%20Gmail';
 		echo $request;
 
 		// Generate curl request

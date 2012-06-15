@@ -21,9 +21,9 @@ class EmailM extends MY_Model {
 		return $this->db->insert_id();
 	}
 
-	function update_email($id, $data) {
+	function update_log($id, $data) {
 		$this->db->where('id', $id)
-			->update('email', $data);
+			->update('log_email', $data);
 
 		return $this->db->affected_rows();
 	}
@@ -116,11 +116,16 @@ class EmailM extends MY_Model {
 		return $i['result'];
 	}
 
-	function update_email_events_result($data, $email_id) {
-		$this->db->where('id', $email_id)
-			->update('email', $data);
+	function update_status($log_email_id, $email, $event, $timestamp) {
+		$data = array(
+			'event' => $event,
+			'event_stamp' => parse_timestamp($timestamp, 'MYSQL'),
+		);
 
-		return $this->db->affected_rows();
+		return $this->db->where('log_email_id', $log_email_id)
+						->where('to', $email)
+						->update('email', $data)
+						->affected_rows();
 	}
 
 	// Functions for email email_parser

@@ -77,6 +77,12 @@ class UserM extends MY_Model {
 		return $this->id;
 	}
 
+	// add by Leo
+	public function get_id(){
+		if (!$this->logged_in) return '';
+		return $this->id;
+	}
+
 	public function get_timezone() {
 		return $this->info['timezone'];
 	}
@@ -90,11 +96,6 @@ class UserM extends MY_Model {
 
 		return $this->info['first_name'].' '.$this->info['last_name'];
 	}
-        // add by Leo
-        public function get_id(){
-            if (!$this->logged_in) return '';
-            return $this->id;
-        }
 
 	public function get_data_name($card_id) {
 		$rs = $this->db->select('first_name, middle_name, last_name')

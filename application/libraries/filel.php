@@ -154,7 +154,7 @@ class FileL {
 		//save to temp
 		$filepath = $this->write_to_temp($content, $filehash);
 
-		$this->load->helper('file');
+		$this->CI->load->helper('file');
 		//data of the newly uploaded file
 		if ($filename == '') $filename = $filehash;
 		$new_file_data = array(
@@ -236,7 +236,7 @@ class FileL {
 	}
 
 	private function write_to_temp(&$content, $filename) {
-		$filepath = $this->_temp_dir.$filename;
+		$filepath = $this->temp_dir.$filename;
 		$fp = fopen($filepath, 'wb');
 
 		if ( ! fwrite($fp, $content)) {
