@@ -124,8 +124,7 @@ class EmailM extends MY_Model {
 
 		return $this->db->where('log_email_id', $log_email_id)
 						->where('to', $email)
-						->update('email', $data)
-						->affected_rows();
+						->update('email', $data);
 	}
 
 	// Functions for email email_parser

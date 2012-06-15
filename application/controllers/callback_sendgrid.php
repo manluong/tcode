@@ -17,15 +17,18 @@ class Callback_sendgrid extends MY_Controller {
 
 		//$this->emaill->log_sendgrid('events');
 
-		// Split response into json_result
+		//Split response into json_result
 		$json_result = array();
 		preg_match_all('/\{.*\}/', file_get_contents('php://input'), $json_result);
 
-		foreach($json_result AS $json) {
-			$sendgrid_response = json_decode($json);
-
-			$log_email_id = $sendgrid_response['log_email_id'];
-			$this->EmailM->update_status($log_email_id, $sendgrid_response['email'], $sendgrid_response['event'], $sendgrid_response['timestamp']);
+		foreach($json_result[0] AS $json) {
+			$sendgrid_response = json_decode($json, TRUE);
+			$this->EmailM->update_status(
+					$sendgrid_response['log_email_id'],
+					$sendgrid_response['email'],
+					$sendgrid_response['event'],
+					$sendgrid_response['timestamp']
+				);
 		}
 
 		$this->output->set_header('HTTP/1.1 200');

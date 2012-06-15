@@ -221,7 +221,6 @@ class EmailL {
 			'headers' => '',
 			'x-smtpapi' => '',
 			'respond' => '',
-			'result' => '',
 			'query' => '',
 		);
 		$this->_log_id = $this->_ci->EmailM->create_log($data);
