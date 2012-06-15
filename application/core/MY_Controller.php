@@ -86,7 +86,7 @@ class MY_Controller extends CI_Controller {
 		$this->setup_url();
 		$this->setup_language();
 
-		if (!$this->is_cli && !$this->is_callback) {
+		if (!$this->is_cli) {
 			$this->_setup_db();
 
 			$this->check_mobile_app();
