@@ -48,6 +48,7 @@ class UserM extends MY_Model {
 	}
 
 	public function is_admin() {
+		if (!isset($this->info['role']['name'])) return FALSE;
 		if ($this->info['role']['name'] !== 'Staff') return FALSE;
 
 		foreach($this->info['sub_roles'] AS $role_id=>$role_name) {
