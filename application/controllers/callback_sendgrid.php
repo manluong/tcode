@@ -4,70 +4,77 @@ class Callback_sendgrid extends MY_Controller {
 
 	function __construct() {
 		$this->allow_unauthed_access = TRUE;
+		$this->is_callback = TRUE;
 
 		parent::__construct();
-		$this->load->spark('curl/1.2.0');
 		$this->load->library('EmailL');
 		$this->load->model('EmailM');
 	}
 
 	// Updates email result in serailized array
 	function event_parser() {
+		if ($_SERVER['HTTP_USER_AGENT'] !== 'SendGrid Event API') return NULL;
+
 		$this->emaill->log_sendgrid('events');
 		$result = file_get_contents('php://input');
-		if ($_SERVER['HTTP_USER_AGENT'] === 'SendGrid Event API') {
-			// Split response into individual json_result
-			preg_match_all('/\{.*\}/', $result, $json_result);
-			log_message('debug', 'JSON_result: '.print_r($json_result,true));
-			// Get exisiting result array
-			$i = json_decode($json_result[0][0],true);
-			$email_id = $i['email_id'];
-			$i = $this->EmailM->get_result_arr($email_id);
-			//log_message('debug', '$i'.print_r($i,true));
-			$result_arr = ($i !== '') ? unserialize($i) : array();
-			log_message('debug', 'First $result_arr = '.print_r($result_arr,true));
-			$key_exists = FALSE;
-			foreach ($json_result[0] as $result) {
-				$i = json_decode($result,true);
-				foreach ($i as $key => $val) {
-					if ($key === 'email') $k[] = $val;
-					if ($key === 'event') $v[] = $val;
-				}
-				$combined_arr = array_combine($k, $v);
-				log_message('debug', '$combined_arr = '.print_r($combined_arr,true));
-				// Before pushing, check if key already exists
-				if ( ! empty($result_arr)) {
-					log_message('debug', 'Result array = '.print_r($result_arr, true));
-					$i = 0;
-					foreach($result_arr as &$email) {
-						foreach ($email as $key => &$val) {
-							/*
-							log_message('debug', 'key = '.$key);
-							log_message('debug', 'val = '.$val);
-							log_message('debug', 'k[0] = '.$k[0]);
-							log_message('debug', 'v[0] = '.$v[0]); */
-							if ($key === $k[0]) {
-								$key_exists = TRUE;
-								// Replace previous status
-								$email[$k[0]] = $v[0];
-								$i++;
-							}
+
+		return NULL;
+
+
+		// Split response into individual json_result
+		$json_result = array();
+		preg_match_all('/\{.*\}/', $result, $json_result);
+		log_message('debug', 'JSON_result: '.print_r($json_result,true));
+
+		// Get existing result array
+		$i = json_decode($json_result[0][0],true);
+		$log_email_id = $i['log_email_id'];
+		$i = $this->EmailM->get_result_arr($email_id);
+		//log_message('debug', '$i'.print_r($i,true));
+		$result_arr = ($i !== '') ? unserialize($i) : array();
+		log_message('debug', 'First $result_arr = '.print_r($result_arr,true));
+
+		$key_exists = FALSE;
+		foreach ($json_result[0] as $result) {
+			$i = json_decode($result,true);
+			foreach ($i as $key => $val) {
+				if ($key === 'email') $k[] = $val;
+				if ($key === 'event') $v[] = $val;
+			}
+			$combined_arr = array_combine($k, $v);
+			log_message('debug', '$combined_arr = '.print_r($combined_arr,true));
+			// Before pushing, check if key already exists
+			if ( ! empty($result_arr)) {
+				log_message('debug', 'Result array = '.print_r($result_arr, true));
+				$i = 0;
+				foreach($result_arr as &$email) {
+					foreach ($email as $key => &$val) {
+						/*
+						log_message('debug', 'key = '.$key);
+						log_message('debug', 'val = '.$val);
+						log_message('debug', 'k[0] = '.$k[0]);
+						log_message('debug', 'v[0] = '.$v[0]); */
+						if ($key === $k[0]) {
+							$key_exists = TRUE;
+							// Replace previous status
+							$email[$k[0]] = $v[0];
+							$i++;
 						}
 					}
-
 				}
-				if ( ! $key_exists) array_push($result_arr, $combined_arr);
-				unset($k);
-				unset($v);
-				$key_exists = FALSE;
+
 			}
-			// Update result array
-			log_message('debug', '$new_result_arr = '.print_r($result_arr,true));
-			$data = array('result' => serialize($result_arr));
-			if ($this->EmailM->update_email_events_result($data, $email_id))
-				log_message('debug', 'Email events updated');
-			$this->output->set_header('HTTP/1.1 200');
+			if ( ! $key_exists) array_push($result_arr, $combined_arr);
+			unset($k);
+			unset($v);
+			$key_exists = FALSE;
 		}
+		// Update result array
+		log_message('debug', '$new_result_arr = '.print_r($result_arr,true));
+		$data = array('result' => serialize($result_arr));
+		if ($this->EmailM->update_email_events_result($data, $email_id))
+			log_message('debug', 'Email events updated');
+		$this->output->set_header('HTTP/1.1 200');
 	}
 
 	function email_parser() {
