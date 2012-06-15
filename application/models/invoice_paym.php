@@ -157,13 +157,13 @@ class Invoice_PayM extends MY_Model {
 
 				if ($name == 'item') {
 					if (!isset($this->field_errors['addon_item']['invoice_id']) && !isset($this->field_errors['addon_item']['amount'])) {
-						$total = $this->InvoiceM->get_invoice_total($addon_set['invoice_id']);
-						if ($total === FALSE) {
+						$invoice = $this->InvoiceM->get($addon_set['invoice_id']);
+						if ($invoice === FALSE) {
 							$this->errors[] = 'Invoice not exist';
 							$this->field_errors['invoice_id'] = array('Invoice not exist');
 							$has_error = TRUE;
 						} else {
-							if ($addon_set['amount'] > $total) {
+							if ($addon_set['amount'] > $invoice['total']) {
 								$this->errors[] = 'Invoice #'.$addon_set['invoice_id'].' Amount paying must less than the outstanding amount';
 								$this->field_errors['amount'] = array('Invoice #'.$addon_set['invoice_id'].' Amount paying must less than the outstanding amount');
 								$has_error = TRUE;

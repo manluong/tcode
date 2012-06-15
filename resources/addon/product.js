@@ -80,7 +80,12 @@ $(document).ready(function() {
 	});
 
 	$('#btn_submit').click(function() {
-		var frm = $('#frm_'+$('#product_radio input[type=radio]:checked').data('name'));
+		var frm = null;
+		if ($('#product_radio').length > 0) {
+			frm = $('#frm_'+$('#product_radio input[type=radio]:checked').data('name'));
+		} else {
+			frm = $(this).closest('form');
+		}
 		$.ajax({
 			type: 'POST',
 			url: $(frm).attr('action'),

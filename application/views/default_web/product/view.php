@@ -38,9 +38,8 @@
 						</span>
 					</li>
 				</ul>
+				<a href="/product/edit/<?php echo $product['id'] ?>" class="btn btn-inverse pull-right">EDIT</a>
 			</div>
 		</div>
-
-		<button type="button" id="btn_submit" class="btn btn-primary pull-right">EDIT</button>
 	</div>
 </div>

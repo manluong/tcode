@@ -60,12 +60,10 @@ class Signup extends MY_Controller {
 			//send welcome email
 			$welcome_message = '<p>You can now access your account at: <a href="http://'.$signup_info['domain'].'.8force.net/">http://'.$signup_info['domain'].'.8force.net/</a></p>';
 			$this->load->library('EmailL');
-			$this->emaill->set_to(array($signup_info['email']))
-					->set_toname(array($signup_info['name']))
+			$this->emaill->set_to($signup_info['email'], $signup_info['name'])
 					->set_subject('Welcome to 8force')
 					->set_content($welcome_message)
-					->set_from('support@8force.com')
-					->set_fromname('8Force')
+					->set_from('support@8force.com', '8Force')
 					->send_email();
 
 			$this->session->unset_userdata('signup_info');

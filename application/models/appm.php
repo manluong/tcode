@@ -68,6 +68,8 @@ class AppM extends MY_Model {
 
 		$result = $this->get($app_name);
 
+		if ($result === FALSE) return 0;
+
 		return $result['id'];
 	}
 

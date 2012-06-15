@@ -154,22 +154,6 @@
 		<div class="invoice_item_sub clear" style="display: none;">
 			<div><input type="text" name="addon_item[{xxxxx}][subscription_start_stamp]" class="col-7 item_datepicker" /></div>
 			<div><input type="text" name="addon_item[{xxxxx}][subscription_end_stamp]" class="col-8 item_datepicker" /></div>
-			<div>
-				<select name="addon_item[{xxxxx}][duration_type]" class="col-9">
-					<option value="">Period</option>
-					<?php foreach ($duration_type as $r): ?>
-					<option value="<?php echo $r->a_product_durationtype_id ?>"><?php echo $r->a_product_durationtype_name ?></option>
-					<?php endforeach ?>
-				</select>
-			</div>
-			<div>
-				<select name="addon_item[{xxxxx}][price_type]" class="col-10">
-					<option value="">Price Type</option>
-					<?php foreach ($price_type as $r): ?>
-					<option value="<?php echo $r->a_product_pricetype_id ?>"><?php echo $r->a_product_pricetype_name ?></option>
-					<?php endforeach ?>
-				</select>
-			</div>
 			<div><input type="text" name="addon_item[{xxxxx}][discount]" class="col-11 discount cal" /></div>
 			<div>
 				<select name="addon_item[{xxxxx}][tax_use_id]" class="col-12 tax cal">

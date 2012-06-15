@@ -65,11 +65,11 @@
 		<table id="invoice_item">
 			<thead>
 				<tr>
-					<th style="width: 220px;">Product</th>
-					<th style="width: 360px;">Description</th>
-					<th style="width: 85px;">Unit Price</th>
-					<th style="width: 70px;">Qty</th>
-					<th style="width: 85px;">Total</th>
+					<th style="width: 25%;">Product</th>
+					<th style="width: 45%;">Description</th>
+					<th style="width: 10%;">Unit Price</th>
+					<th style="width: 10%;">Qty</th>
+					<th style="width: 10%;">Total</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -83,14 +83,6 @@
 						<div class="sub_desc">
 							<?php if ($invoice_item['subscription_start_stamp']): ?>
 								<?php echo date('Y-m-d', strtotime($invoice_item['subscription_start_stamp'])).' to '.date('Y-m-d', strtotime($invoice_item['subscription_end_stamp'])) ?>
-								<br />
-							<?php endif ?>
-							<?php if ($invoice_item['a_product_durationtype_name']): ?>
-								<?php echo $invoice_item['a_product_durationtype_name'] ?>
-								<br />
-							<?php endif ?>
-							<?php if ($invoice_item['a_product_pricetype_name']): ?>
-								<?php echo $invoice_item['a_product_pricetype_name'] ?>
 								<br />
 							<?php endif ?>
 							<?php if ($invoice_item['discount']): ?>
@@ -157,7 +149,6 @@
 		</div>
 	</div>
 
-	<?php if (isset($invoice['addon_pay_item'])): ?>
 	<div style="margin-top: 40px;">
 		<div class="invoice_title"><span class="arrow_title"></span><span>PAYMENT INFORMATION</span></div>
 		<table cellpadding="0" cellspacing="0" border="0" class="table table-striped">
@@ -169,6 +160,7 @@
 				</tr>
 			</thead>
 			<tbody>
+				<?php if (isset($invoice['addon_pay_item'])): ?>
 				<?php foreach ($invoice['addon_pay_item'] as $pay_item): ?>
 				<tr>
 					<td><?php echo date('Y-m-d', strtotime($pay_item['transaction_stamp'])) ?></td>
@@ -176,8 +168,12 @@
 					<td><?php echo '$'.number_format($pay_item['amount'], 2) ?></td>
 				</tr>
 				<?php endforeach ?>
+				<?php else: ?>
+				<tr>
+					<td colspan="3">No Payment for this invoice yet</td>
+				</tr>
+				<?php endif ?>
 			</tbody>
 		</table>
 	</div>
-	<?php endif ?>
 </div>

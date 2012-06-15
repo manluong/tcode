@@ -4,6 +4,22 @@
 <link rel="stylesheet" href="/resources/template/<?php echo get_template() ?>/css/all-module.css" />
 <link rel="stylesheet" href="/resources/template/<?php echo get_template() ?>/css/invoice.css" />
 
+<style type="text/css">
+<!--
+html body {
+	background-color: #FFF;
+	margin: 0 auto;
+	max-width: 780px;
+	width: 100%;
+}
+
+#boxes {
+	max-width: 780px;
+	width: 100%;
+}
+-->
+</style>
+
 <div id="boxes" class="clearfix">
 	<div id="invoice_container" class="clearfix">
 		<div id="invoice_detail">
@@ -54,11 +70,11 @@
 		<table id="invoice_item">
 			<thead>
 				<tr>
-					<th style="width: 220px;">Product</th>
-					<th style="width: 360px;">Description</th>
-					<th style="width: 85px;">Unit Price</th>
-					<th style="width: 70px;">Qty</th>
-					<th style="width: 85px;">Total</th>
+					<th style="width: 25%;">Product</th>
+					<th style="width: 45%;">Description</th>
+					<th style="width: 10%;">Unit Price</th>
+					<th style="width: 10%;">Qty</th>
+					<th style="width: 10%;">Total</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -72,14 +88,6 @@
 						<div class="sub_desc">
 							<?php if ($invoice_item['subscription_start_stamp']): ?>
 								<?php echo date('Y-m-d', strtotime($invoice_item['subscription_start_stamp'])).' to '.date('Y-m-d', strtotime($invoice_item['subscription_end_stamp'])) ?>
-								<br />
-							<?php endif ?>
-							<?php if ($invoice_item['a_product_durationtype_name']): ?>
-								<?php echo $invoice_item['a_product_durationtype_name'] ?>
-								<br />
-							<?php endif ?>
-							<?php if ($invoice_item['a_product_pricetype_name']): ?>
-								<?php echo $invoice_item['a_product_pricetype_name'] ?>
 								<br />
 							<?php endif ?>
 							<?php if ($invoice_item['discount']): ?>

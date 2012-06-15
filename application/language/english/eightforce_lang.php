@@ -461,6 +461,24 @@ $lang['a_product_category-name'] = 'Name';
 $lang['a_product_category-extra'] = 'Extra';
 
 
+// a_product_desp
+$lang['a_product_desp-id'] = 'Id';
+$lang['a_product_desp-product_id'] = 'Product Id';
+$lang['a_product_desp-lang'] = 'Lang';
+$lang['a_product_desp-content'] = 'Description';
+
+
+// a_product_price
+$lang['a_product_price-id'] = 'Id';
+$lang['a_product_price-product_id'] = 'Product Id';
+$lang['a_product_price-pricelist_id'] = 'Pricelist Id';
+$lang['a_product_price-currency'] = 'Currency';
+$lang['a_product_price-price_type_id'] = 'Price Type Id';
+$lang['a_product_price-amount'] = 'Price';
+$lang['a_product_price-quantity'] = 'Quantity';
+$lang['a_product_price-duration_type'] = 'Duration Type';
+
+
 // invoice
 $lang['a_invoice-id'] = 'Id';
 $lang['a_invoice-customer_card_id'] = 'Customer Card Id';

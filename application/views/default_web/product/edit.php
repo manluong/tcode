@@ -21,7 +21,9 @@
 					</li>
 					<li>
 						<span class="input_data_label">Description</span>
-						<span class="fillter_input"><input type="text" name="description" class="inv-field" /></span>
+						<span class="fillter_input">
+							<input type="text" name="addon_desp[0][content]" class="inv-field" />
+						</span>
 					</li>
 					<li>
 						<span class="input_data_label">SKU</span>
@@ -29,13 +31,14 @@
 					</li>
 					<li>
 						<span class="input_data_label">Price</span>
-						<span class="fillter_input"><input type="text" name="price" class="inv-field" /></span>
+						<span class="fillter_input">
+							<input type="text" name="addon_price[0][amount]" class="inv-field" />
+						</span>
 					</li>
 				</ul>
+				<button type="button" id="btn_submit" class="btn btn-primary pull-right">SUBMIT</button>
 				</form>
 			</div>
 		</div>
-
-		<button type="button" id="btn_submit" class="btn btn-primary pull-right">SUBMIT</button>
 	</div>
 </div>

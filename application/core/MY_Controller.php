@@ -63,6 +63,7 @@ class MY_Controller extends CI_Controller {
 
 	var $is_pjax = FALSE;
 	var $is_cli = FALSE;
+	var $is_callback = FALSE;
 	var $is_mobile_app = FALSE;
 	var $allow_unauthed_access = FALSE;
 
@@ -101,7 +102,7 @@ class MY_Controller extends CI_Controller {
 		$this->load->model('RespM');
 		$this->load->model('SettingM');
 
-		if (!$this->is_cli) {
+		if (!$this->is_cli && !$this->is_callback) {
 			$this->UserM->setup();
 			$this->AppM->setup();
 

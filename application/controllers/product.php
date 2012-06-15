@@ -83,6 +83,7 @@ class Product extends MY_Controller {
 		);
 
 		$this->data['breadcrumb'] = array_merge($breadcrumb, array(array('title' => $product['name'])));
+		$this->data['app_menu'][1]['url'] = '/product/add/category/'.$product['category_id'];
 		$this->data['content'] = $this->load->view(get_template().'/product/view', $content, TRUE);
 		$this->_do_output();
 	}
@@ -102,6 +103,7 @@ class Product extends MY_Controller {
 		);
 
 		$this->data['breadcrumb'] = array_merge($breadcrumb, array(array('title' => $category['name'])));
+		$this->data['app_menu'][1]['url'] = '/product/add/category/'.$category['parent_id'];
 		$this->data['content'] = $this->load->view(get_template().'/product/category_view', $content, TRUE);
 		$this->_do_output();
 	}
@@ -124,6 +126,7 @@ class Product extends MY_Controller {
 		);
 
 		$this->data['breadcrumb'] = array_merge($breadcrumb, array(array('title' => 'New')));
+		$this->data['app_menu'][1]['url'] = '/product/add'.($parent_id ? '/category/'.$parent_id : '');
 		$this->data['content'] = $this->load->view(get_template().'/product/new', $content, TRUE);
 		$this->_do_output();
 	}
@@ -143,6 +146,7 @@ class Product extends MY_Controller {
 		);
 
 		$this->data['breadcrumb'] = array_merge($breadcrumb, array(array('title' => $product['name'])));
+		$this->data['app_menu'][1]['url'] = '/product/add/category/'.$product['category_id'];
 		$this->data['content'] = $this->load->view(get_template().'/product/edit', $content, TRUE);
 		$this->_do_output();
 	}
@@ -162,6 +166,7 @@ class Product extends MY_Controller {
 		);
 
 		$this->data['breadcrumb'] = array_merge($breadcrumb, array(array('title' => $category['name'])));
+		$this->data['app_menu'][1]['url'] = '/product/add/category/'.$category['parent_id'];
 		$this->data['content'] = $this->load->view(get_template().'/product/category_edit', $content, TRUE);
 		$this->_do_output();
 	}
