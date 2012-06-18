@@ -35,10 +35,8 @@ class Callback_sendgrid extends MY_Controller {
 	}
 
 	function incoming_emails() {
-
 		if ( ! $this->input->post('to')) return '';
 
-		// Log to
 		$i = explode('@', $this->input->post('to'));
 		$app_name = $i[0];
 
@@ -66,7 +64,8 @@ class Callback_sendgrid extends MY_Controller {
 
 		$data = array(
 			'app_id' => $app_id,
-			
+			'status' => 0,
+
 			'headers' => $this->input->post('headers'),
 			'text' => $this->input->post('text'),
 			'html' => $this->input->post('html'),
@@ -83,14 +82,9 @@ class Callback_sendgrid extends MY_Controller {
 			'attachments' => $this->input->post('attachments') ? $this->input->post('attachments') : 0,
 			'attachment-info' => $this->input->post('attachment-info') ? $this->input->post('attachment-info') : 0,
 			'attachments_hash' => json_encode($attachments),
-			'status' => 1,
 		);
-		$insert_id = $this->EmailM->save_received_email($data);
-		log_message('debug', 'Received email saved id:'.$insert_id.' app: '.$app_name);
 
-		// Redirect to respective app
-		// fixed method appname/receive_email
-		//redirect($app.'/receive_email?id='.$insert_id);
+		$this->EmailM->save_received_email($data);
 	}
 
 }
