@@ -207,7 +207,11 @@ class ProductM extends MY_Model {
 			} else {
 				$this->$model->where[] = 'product_id = '.$product_id;
 				$existing_set = $this->$model->get_list();
-				$existing_ids = get_distinct('id', $existing_set);
+				if ($existing_set === FALSE) {
+					$existing_ids = array();
+				} else {
+					$existing_ids = get_distinct('id', $existing_set);
+				}
 				$form_ids = get_distinct('id', $form_addon);
 
 				$deleted_ids = array_diff($existing_ids, $form_ids);
