@@ -47,6 +47,8 @@ class Callback_sendgrid extends MY_Controller {
 
 		$this->_setup_db($domain);
 
+		$app_id = $this->AppM->get_id($app_name);
+
 		//$this->emaill->log_sendgrid('email');
 
 		// Uploads attachment
@@ -63,6 +65,8 @@ class Callback_sendgrid extends MY_Controller {
 		}
 
 		$data = array(
+			'app_id' => $app_id,
+			
 			'headers' => $this->input->post('headers'),
 			'text' => $this->input->post('text'),
 			'html' => $this->input->post('html'),
@@ -80,7 +84,6 @@ class Callback_sendgrid extends MY_Controller {
 			'attachment-info' => $this->input->post('attachment-info') ? $this->input->post('attachment-info') : 0,
 			'attachments_hash' => json_encode($attachments),
 			'status' => 1,
-			'app_id' => 1,
 		);
 		$insert_id = $this->EmailM->save_received_email($data);
 		log_message('debug', 'Received email saved id:'.$insert_id.' app: '.$app_name);
