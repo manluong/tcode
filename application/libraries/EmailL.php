@@ -194,10 +194,10 @@ class EmailL {
 			}
 
 			//read the current file
-			$file = $this->filel->read($id_or_hash);
+			$file = $this->_ci->filel->read($id_or_hash);
 
 			//store a copy of the current file into the email attachments directory
-			$file_hash_id = $this->filel->save_raw($file['contents'], $docs_detail['file_name'].$docs_detail['file_ext'], $this->_email_attachments_dir);
+			$file_hash_id = $this->_ci->filel->save_raw($file['contents'], $docs_detail['file_name'].$docs_detail['file_ext'], $this->_email_attachments_dir);
 
 			// Start populating the $_files[] variable
 			$this->_files[] = array('name' => $docs_detail['file_name'].$docs_detail['file_ext'],
@@ -207,7 +207,7 @@ class EmailL {
 	}
 
 	private function _log_email() {
-		$content_file_id_hash = $this->filel->save_raw($this->_content, '', $this->_email_storage_dir);
+		$content_file_id_hash = $this->_ci->filel->save_raw($this->_content, '', $this->_email_storage_dir);
 
 		$data = array(
 			'app_id' => $this->_ci->url['app_id'],
@@ -221,7 +221,6 @@ class EmailL {
 			'headers' => '',
 			'x-smtpapi' => '',
 			'respond' => '',
-			'result' => '',
 			'query' => '',
 		);
 		$this->_log_id = $this->_ci->EmailM->create_log($data);
@@ -232,7 +231,6 @@ class EmailL {
 				'to' => $to,
 				'toname' => $this->_toname[$x],
 				'is_bcc' => 0,
-				'result' => ''
 			);
 
 			$this->_ci->EmailM->insert_new_email($data);
@@ -244,7 +242,6 @@ class EmailL {
 				'to' => $to,
 				'toname' => '',
 				'is_bcc' => 1,
-				'result' => ''
 			);
 
 			$this->_ci->EmailM->insert_new_email($data);
@@ -258,7 +255,7 @@ class EmailL {
 			'respond' => $respond,
 		);
 
-		$this->_ci->EmailM->update_email($this->_log_id, $data);
+		$this->_ci->EmailM->update_log($this->_log_id, $data);
 	}
 
 	private function _build_email() {
@@ -301,21 +298,6 @@ class EmailL {
 			$data['files['.$file['name'].']'] = '@'.$file['path'];
 		}
 		$this->_query_post = $data;
-	}
-
-	function debug() {
-		$this->_get_to();
-		$this->_get_bcc();
-		$this->_get_content();
-		$this->_get_replace_value();
-		$this->_get_attachments();
-
-		$this->_log_email();
-		$this->_build_email();
-		$this->_update_log();
-
-		echo '<pre>', print_r($this->_query_str, TRUE), '</pre>';
-		echo '<pre>', print_r($this->_query_post, TRUE), '</pre>';
 	}
 
 	function send_email () {

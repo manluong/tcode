@@ -11,69 +11,26 @@ class Callback_sendgrid extends MY_Controller {
 		$this->load->model('EmailM');
 	}
 
-	// Updates email result in serailized array
+	//Sendgrid calls this to update us on the result of emails sent
 	function event_parser() {
 		if ($_SERVER['HTTP_USER_AGENT'] !== 'SendGrid Event API') return NULL;
 
-		$this->emaill->log_sendgrid('events');
-		$result = file_get_contents('php://input');
+		//$this->emaill->log_sendgrid('events');
 
-		return NULL;
-
-
-		// Split response into individual json_result
+		//Split response into json_result
 		$json_result = array();
-		preg_match_all('/\{.*\}/', $result, $json_result);
-		log_message('debug', 'JSON_result: '.print_r($json_result,true));
+		preg_match_all('/\{.*\}/', file_get_contents('php://input'), $json_result);
 
-		// Get existing result array
-		$i = json_decode($json_result[0][0],true);
-		$log_email_id = $i['log_email_id'];
-		$i = $this->EmailM->get_result_arr($email_id);
-		//log_message('debug', '$i'.print_r($i,true));
-		$result_arr = ($i !== '') ? unserialize($i) : array();
-		log_message('debug', 'First $result_arr = '.print_r($result_arr,true));
-
-		$key_exists = FALSE;
-		foreach ($json_result[0] as $result) {
-			$i = json_decode($result,true);
-			foreach ($i as $key => $val) {
-				if ($key === 'email') $k[] = $val;
-				if ($key === 'event') $v[] = $val;
-			}
-			$combined_arr = array_combine($k, $v);
-			log_message('debug', '$combined_arr = '.print_r($combined_arr,true));
-			// Before pushing, check if key already exists
-			if ( ! empty($result_arr)) {
-				log_message('debug', 'Result array = '.print_r($result_arr, true));
-				$i = 0;
-				foreach($result_arr as &$email) {
-					foreach ($email as $key => &$val) {
-						/*
-						log_message('debug', 'key = '.$key);
-						log_message('debug', 'val = '.$val);
-						log_message('debug', 'k[0] = '.$k[0]);
-						log_message('debug', 'v[0] = '.$v[0]); */
-						if ($key === $k[0]) {
-							$key_exists = TRUE;
-							// Replace previous status
-							$email[$k[0]] = $v[0];
-							$i++;
-						}
-					}
-				}
-
-			}
-			if ( ! $key_exists) array_push($result_arr, $combined_arr);
-			unset($k);
-			unset($v);
-			$key_exists = FALSE;
+		foreach($json_result[0] AS $json) {
+			$sendgrid_response = json_decode($json, TRUE);
+			$this->EmailM->update_status(
+					$sendgrid_response['log_email_id'],
+					$sendgrid_response['email'],
+					$sendgrid_response['event'],
+					$sendgrid_response['timestamp']
+				);
 		}
-		// Update result array
-		log_message('debug', '$new_result_arr = '.print_r($result_arr,true));
-		$data = array('result' => serialize($result_arr));
-		if ($this->EmailM->update_email_events_result($data, $email_id))
-			log_message('debug', 'Email events updated');
+
 		$this->output->set_header('HTTP/1.1 200');
 	}
 
@@ -119,16 +76,4 @@ class Callback_sendgrid extends MY_Controller {
 		//redirect($app.'/receive_email?id='.$insert_id);
 	}
 
-	function test () {
-		$this->emaill->set_type('card')
-			->set_type_id(array(2))
-			->set_template('testplate')
-			->set_subject('test')
-			//->set_attachment_id(array(5=>4)) // docs_id => ver_id or just docs_id => ''
-			->set_replace_value(array('keys'=>array('%name%', '%result%'), 'values'=>array(array('Roy'), array('Success!!'))))
-			->set_from('docs@telcoson.com')
-			->set_fromname('Docs');
-		//$this->emaill->debug();die();
-		var_dump($this->emaill->send_email());
-	}
 }
