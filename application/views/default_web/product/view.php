@@ -7,34 +7,34 @@
 		<div id="input_data_info">
 			<div id="product" class="product_ul">
 				<ul>
-					<li>
+					<li class="clearfix">
 						<span class="input_data_label">Category</span>
 						<span class="fillter_input">
-							<span class="clearfix" style="line-height: 28px;"><?php echo $parent_name ?></span>
+							<span style="line-height: 28px;"><?php echo $parent_name ?></span>
 						</span>
 					</li>
-					<li>
+					<li class="clearfix">
 						<span class="input_data_label">Name</span>
 						<span class="fillter_input">
-							<span class="clearfix" style="line-height: 28px;"><?php echo $product['name'] ?></span>
+							<span style="line-height: 28px;"><?php echo $product['name'] ?></span>
 						</span>
 					</li>
-					<li>
+					<li class="clearfix">
 						<span class="input_data_label">Description</span>
 						<span class="fillter_input">
-							<span class="clearfix" style="line-height: 28px;"><?php echo isset($product['addon_desp']) ? $product['addon_desp'][0]['content'] : '' ?></span>
+							<span style="line-height: 28px;"><?php echo isset($product['addon_desp']) ? $product['addon_desp'][0]['content'] : '' ?></span>
 						</span>
 					</li>
-					<li>
+					<li class="clearfix">
 						<span class="input_data_label">SKU</span>
 						<span class="fillter_input">
-							<span class="clearfix" style="line-height: 28px;"><?php echo $product['sku'] ?></span>
+							<span style="line-height: 28px;"><?php echo $product['sku'] ?></span>
 						</span>
 					</li>
-					<li>
+					<li class="clearfix">
 						<span class="input_data_label">Price</span>
 						<span class="fillter_input">
-							<span class="clearfix" style="line-height: 28px;"><?php echo isset($product['addon_price']) ? '$'.number_format($product['addon_price'][0]['amount'], 2) : '' ?></span>
+							<span style="line-height: 28px;"><?php echo isset($product['addon_price']) ? '$'.number_format($product['addon_price'][0]['amount'], 2) : '' ?></span>
 						</span>
 					</li>
 				</ul>

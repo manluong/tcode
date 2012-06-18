@@ -7,16 +7,16 @@
 		<div id="input_data_info">
 			<div id="category" class="product_ul">
 				<ul>
-					<li>
+					<li class="clearfix">
 						<span class="input_data_label">Category</span>
 						<span class="fillter_input">
-							<span class="clearfix" style="line-height: 28px;"><?php echo $parent_name ?></span>
+							<span style="line-height: 28px;"><?php echo $parent_name ?></span>
 						</span>
 					</li>
-					<li>
+					<li class="clearfix">
 						<span class="input_data_label">Name</span>
 						<span class="fillter_input">
-							<span class="clearfix" style="line-height: 28px;"><?php echo $category['name'] ?></span>
+							<span style="line-height: 28px;"><?php echo $category['name'] ?></span>
 						</span>
 					</li>
 				</ul>

@@ -1,18 +1,18 @@
 <form id="frm_product" action="/product/save" method="post">
 <input type="hidden" name="id" value="<?php echo $product['id'] ?>" />
 <ul>
-	<li>
+	<li class="clearfix">
 		<span class="input_data_label">Category</span>
 		<span class="fillter_input">
-			<span class="clearfix" style="line-height: 28px;"><?php echo $parent_name ?></span>
+			<span style="line-height: 28px;"><?php echo $parent_name ?></span>
 			<input type="hidden" name="category_id" value="<?php echo $product['category_id'] ?>" />
 		</span>
 	</li>
-	<li>
+	<li class="clearfix">
 		<span class="input_data_label">Name</span>
 		<span class="fillter_input"><input type="text" name="name" value="<?php echo $product['name'] ?>" class="inv-field" /></span>
 	</li>
-	<li>
+	<li class="clearfix">
 		<span class="input_data_label">Description</span>
 		<span class="fillter_input">
 			<?php if (isset($product['addon_desp'])): ?>
@@ -24,11 +24,11 @@
 			<?php endif ?>
 		</span>
 	</li>
-	<li>
+	<li class="clearfix">
 		<span class="input_data_label">SKU</span>
 		<span class="fillter_input"><input type="text" name="sku" value="<?php echo $product['sku'] ?>" class="inv-field" /></span>
 	</li>
-	<li>
+	<li class="clearfix">
 		<span class="input_data_label">Price</span>
 		<span class="fillter_input">
 			<?php if (isset($product['addon_price'])): ?>

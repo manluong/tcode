@@ -13,14 +13,14 @@
 			<div id="category" class="product_ul">
 				<form id="frm_category" action="/product/category_save" method="post">
 				<ul>
-					<li>
+					<li class="clearfix">
 						<span class="input_data_label">Category</span>
 						<span class="fillter_input">
-							<span class="clearfix" style="line-height: 28px;"><?php echo $parent_name ?></span>
+							<span style="line-height: 28px;"><?php echo $parent_name ?></span>
 							<input type="hidden" name="parent_id" value="<?php echo $parent_id ?>" />
 						</span>
 					</li>
-					<li>
+					<li class="clearfix">
 						<span class="input_data_label">Name</span>
 						<span class="fillter_input"><input type="text" name="name" class="inv-field" /></span>
 					</li>
@@ -31,26 +31,26 @@
 			<div id="product" class="product_ul" style="display: none;">
 				<form id="frm_product" action="/product/save" method="post">
 				<ul>
-					<li>
+					<li class="clearfix">
 						<span class="input_data_label">Category</span>
 						<span class="fillter_input">
-							<span class="clearfix" style="line-height: 28px;"><?php echo $parent_name ?></span>
+							<span style="line-height: 28px;"><?php echo $parent_name ?></span>
 							<input type="hidden" name="category_id" value="<?php echo $parent_id ?>" />
 						</span>
 					</li>
-					<li>
+					<li class="clearfix">
 						<span class="input_data_label">Name</span>
 						<span class="fillter_input"><input type="text" name="name" class="inv-field" /></span>
 					</li>
-					<li>
+					<li class="clearfix">
 						<span class="input_data_label">Description</span>
 						<span class="fillter_input"><input type="text" name="addon_desp[0][content]" class="inv-field" /></span>
 					</li>
-					<li>
+					<li class="clearfix">
 						<span class="input_data_label">SKU</span>
 						<span class="fillter_input"><input type="text" name="sku" class="inv-field" /></span>
 					</li>
-					<li>
+					<li class="clearfix">
 						<span class="input_data_label">Price</span>
 						<span class="fillter_input"><input type="text" name="addon_price[0][amount]" class="inv-field" /></span>
 					</li>
