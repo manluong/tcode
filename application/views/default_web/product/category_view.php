@@ -20,7 +20,7 @@
 						</span>
 					</li>
 				</ul>
-				<a href="/product/category_edit/<?php echo $category['id'] ?>" class="btn btn-inverse pull-right">EDIT</a>
+				<button class="btn btn-inverse btn-mini btn_edit" style="margin-left: 120px;" data-url="/product/category_edit/<?php echo $category['id'] ?>" data-container="category">EDIT DETAILS</button>
 			</div>
 		</div>
 	</div>

@@ -38,7 +38,7 @@
 						</span>
 					</li>
 				</ul>
-				<a href="/product/edit/<?php echo $product['id'] ?>" class="btn btn-inverse pull-right">EDIT</a>
+				<button class="btn btn-inverse btn-mini btn_edit" style="margin-left: 120px;" data-url="/product/edit/<?php echo $product['id'] ?>" data-container="product">EDIT DETAILS</button>
 			</div>
 		</div>
 	</div>

@@ -83,8 +83,8 @@ class Product extends MY_Controller {
 		);
 
 		$this->data['breadcrumb'] = array_merge($breadcrumb, array(array('title' => $product['name'])));
-		$this->data['app_menu'][0]['url'] = '/product/category/'.$product['category_id'];
-		$this->data['app_menu'][1]['url'] = '/product/add/category/'.$product['category_id'];
+		$this->data['app_menu'][0]['url'] = '/product'.($product['category_id'] ? '/category/'.$product['category_id'] : '');
+		$this->data['app_menu'][1]['url'] = '/product/add'.($product['category_id'] ? '/category/'.$product['category_id'] : '');
 		$this->data['content'] = $this->load->view(get_template().'/product/view', $content, TRUE);
 		$this->_do_output();
 	}
@@ -104,8 +104,8 @@ class Product extends MY_Controller {
 		);
 
 		$this->data['breadcrumb'] = array_merge($breadcrumb, array(array('title' => $category['name'])));
-		$this->data['app_menu'][0]['url'] = '/product/category/'.$category['parent_id'];
-		$this->data['app_menu'][1]['url'] = '/product/add/category/'.$category['parent_id'];
+		$this->data['app_menu'][0]['url'] = '/product'.($category['parent_id'] ? '/category/'.$category['parent_id'] : '');
+		$this->data['app_menu'][1]['url'] = '/product/add'.($category['parent_id'] ? '/category/'.$category['parent_id'] : '');
 		$this->data['content'] = $this->load->view(get_template().'/product/category_view', $content, TRUE);
 		$this->_do_output();
 	}
@@ -148,11 +148,7 @@ class Product extends MY_Controller {
 			'parent_name' => rtrim($parent_name, ' >')
 		);
 
-		$this->data['breadcrumb'] = array_merge($breadcrumb, array(array('title' => $product['name'])));
-		$this->data['app_menu'][0]['url'] = '/product/category/'.$product['category_id'];
-		$this->data['app_menu'][1]['url'] = '/product/add/category/'.$product['category_id'];
-		$this->data['content'] = $this->load->view(get_template().'/product/edit', $content, TRUE);
-		$this->_do_output();
+		echo $this->load->view(get_template().'/product/edit', $content, TRUE);
 	}
 
 	function category_edit($id) {
@@ -169,11 +165,7 @@ class Product extends MY_Controller {
 			'parent_name' => rtrim($parent_name, ' >')
 		);
 
-		$this->data['breadcrumb'] = array_merge($breadcrumb, array(array('title' => $category['name'])));
-		$this->data['app_menu'][0]['url'] = '/product/category/'.$category['parent_id'];
-		$this->data['app_menu'][1]['url'] = '/product/add/category/'.$category['parent_id'];
-		$this->data['content'] = $this->load->view(get_template().'/product/category_edit', $content, TRUE);
-		$this->_do_output();
+		echo $this->load->view(get_template().'/product/category_edit', $content, TRUE);
 	}
 
 	function save() {
