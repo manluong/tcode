@@ -59,14 +59,6 @@ class Card extends MY_Controller {
 		}
 	}
 	
-	function ajax_contact_info($id){
-		$card_id = $this->input->post('id');
-		$view_data = array(
-			'detail' => $this->CardM->get($card_id),
-		);
-		$this->load->view(get_template().'/card/ajax_contact_info',$view_data);
-	}
-	
 	function contact_fillter(){
 		$role_id = $this->input->post('role_id');
 		if($role_id != 0){
@@ -222,15 +214,6 @@ class Card extends MY_Controller {
 		}
 		$data['per'] = $per;
 		$this->load->view(get_template().'/card/delete', $data);
-	}
-	
-	function upload($card_id){
-	   $this->load->library('filel');
-	   $file = $this->filel->save('file', 'CardM');
-		if($card_id != 0){
-		   $insert_id = $this->CardM->insert_upload_file($file['hash'],$card_id);
-		   echo $file['hash'];
-		}
 	}
 
 	function ajax_get_list() {
