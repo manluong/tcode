@@ -32,7 +32,7 @@ function search_product() {
 				var row = new Array();
 				row[0] = item.type;
 				row[1] = name;
-				row[2] = item.price;
+				row[2] = item.price ? format_money(item.price) : '';
 				row[3] = '<a href="'+item.view_url+'">View</a>';
 				data.push(row);
 			}
@@ -71,6 +71,17 @@ function search_product() {
 			}});
 		}
 	});
+}
+
+function format_money(n, c, d, t, q) {
+	c = isNaN(c = Math.abs(c)) ? 2 : c;
+	d = d == undefined ? '.' : d;
+	t = t == undefined ? ',' : t;
+	q = q == undefined ? '$' : q;
+	s = n < 0 ? '-' : '';
+	i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + '';
+	j = (j = i.length) > 3 ? j % 3 : 0;
+	return s + q + (j ? i.substr(0, j) + t : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, '$1' + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : '');
 }
 
 $(document).ready(function() {

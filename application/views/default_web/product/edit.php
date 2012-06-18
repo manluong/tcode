@@ -7,6 +7,7 @@
 		<div id="input_data_info">
 			<div id="product" class="product_ul">
 				<form id="frm_product" action="/product/save" method="post">
+				<input type="hidden" name="id" value="<?php echo $product['id'] ?>" />
 				<ul>
 					<li>
 						<span class="input_data_label">Category</span>
@@ -22,7 +23,13 @@
 					<li>
 						<span class="input_data_label">Description</span>
 						<span class="fillter_input">
+							<?php if (isset($product['addon_desp'])): ?>
+							<input type="hidden" name="addon_desp[0][id]" value="<?php echo $product['addon_desp'][0]['id'] ?>" class="inv-field" />
+							<input type="text" name="addon_desp[0][content]" value="<?php echo $product['addon_desp'][0]['content'] ?>" class="inv-field" />
+							<?php else: ?>
+							<input type="hidden" name="addon_desp[0][id]" class="inv-field" />
 							<input type="text" name="addon_desp[0][content]" class="inv-field" />
+							<?php endif ?>
 						</span>
 					</li>
 					<li>
@@ -32,7 +39,13 @@
 					<li>
 						<span class="input_data_label">Price</span>
 						<span class="fillter_input">
+							<?php if (isset($product['addon_price'])): ?>
+							<input type="hidden" name="addon_price[0][id]" value="<?php echo $product['addon_price'][0]['id'] ?>" class="inv-field" />
+							<input type="text" name="addon_price[0][amount]" value="<?php echo $product['addon_price'][0]['amount'] ?>" class="inv-field" />
+							<?php else: ?>
+							<input type="hidden" name="addon_price[0][id]" class="inv-field" />
 							<input type="text" name="addon_price[0][amount]" class="inv-field" />
+							<?php endif ?>
 						</span>
 					</li>
 				</ul>

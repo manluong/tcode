@@ -22,7 +22,7 @@
 					<li>
 						<span class="input_data_label">Description</span>
 						<span class="fillter_input">
-							<span class="clearfix" style="line-height: 28px;"></span>
+							<span class="clearfix" style="line-height: 28px;"><?php echo isset($product['addon_desp']) ? $product['addon_desp'][0]['content'] : '' ?></span>
 						</span>
 					</li>
 					<li>
@@ -34,7 +34,7 @@
 					<li>
 						<span class="input_data_label">Price</span>
 						<span class="fillter_input">
-							<span class="clearfix" style="line-height: 28px;"></span>
+							<span class="clearfix" style="line-height: 28px;"><?php echo isset($product['addon_price']) ? '$'.number_format($product['addon_price'][0]['amount'], 2) : '' ?></span>
 						</span>
 					</li>
 				</ul>
