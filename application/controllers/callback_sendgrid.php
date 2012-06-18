@@ -47,7 +47,20 @@ class Callback_sendgrid extends MY_Controller {
 
 		$this->_setup_db($domain);
 
-		$this->emaill->log_sendgrid('email');
+		//$this->emaill->log_sendgrid('email');
+
+		// Uploads attachment
+		$attachments_count = (int)$this->input->post('attachments');
+		$attachments = array();
+		if ($attachments_count > 0) {
+			$this->load->library('filel');
+
+			$files = json_decode($this->input->post('attachment-info'), true);
+			foreach($files AS $k => $v) {
+				$temp = $this->filel->save_raw(file_get_contents($_FILES[$k]['tmp_name']), $v['filename'], 'Email_Attachments');
+				$attachments[] = $temp['hash'];
+			}
+		}
 
 		$data = array(
 			'headers' => $this->input->post('headers'),
@@ -65,24 +78,12 @@ class Callback_sendgrid extends MY_Controller {
 			'spam_report' => $this->input->post('spam_report'),
 			'attachments' => $this->input->post('attachments') ? $this->input->post('attachments') : 0,
 			'attachment-info' => $this->input->post('attachment-info') ? $this->input->post('attachment-info') : 0,
+			'attachments_hash' => json_encode($attachments),
 			'status' => 1,
 			'app_id' => 1,
 		);
 		$insert_id = $this->EmailM->save_received_email($data);
 		log_message('debug', 'Received email saved id:'.$insert_id.' app: '.$app_name);
-
-		// Uploads attachment to s3: bucket/email/content/attachments
-		/*
-		if ($this->input->post('attachments')) {
-			$attach = $this->input->post('attachments');
-			settype($attach, 'int'); // explicitly set it to int
-			if ($attach !== 0) {
-				$files = json_decode($this->input->post('attachment-info'), true);
-				$this->emaill->upload_attachment_s3($_FILES, $files);
-			}
-		}
-		 */
-
 
 		// Redirect to respective app
 		// fixed method appname/receive_email
