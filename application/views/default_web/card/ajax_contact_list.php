@@ -1,3 +1,4 @@
+<script type="text/javascript" src="/resources/addon/contacts.js"></script>
 <li class="letter staff customers vendors a-title">a</li>
 <?php
 	$current_alphabet = 0;
