@@ -6,6 +6,9 @@
 <script type="text/javascript" src="/resources/addon/contacts.js"></script>
 <script>
 $(document).ready(function(){
+	//LOAD CONTACT INFO FIRST 
+	load_contact_info(1);
+	
 	$(".nano").nanoScroller();
 });
 </script>

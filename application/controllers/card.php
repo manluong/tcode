@@ -31,6 +31,10 @@ class Card extends MY_Controller {
 		$this->_do_output();
 	}
 	
+	function upload_crop(){
+		$this->load->view(get_template().'/card/upload_crop');
+	}
+	
 	function contact_list(){
 		$this->CardM->sett_fill_address = FALSE;
 		$this->CardM->sett_fill_bank = FALSE;
@@ -57,6 +61,14 @@ class Card extends MY_Controller {
 		   $insert_id = $this->HelpdeskM->insert_upload_file($file['hash'],$comment_id);
 		   echo $file['hash'];
 		}
+	}
+	
+	function ajax_contact_info($id){
+		$card_id = $this->input->post('id');
+		$view_data = array(
+		'detail' => $this->CardM->get($card_id),
+		);
+		$this->load->view(get_template().'/card/ajax_contact_info',$view_data);
 	}
 	
 	function contact_fillter(){

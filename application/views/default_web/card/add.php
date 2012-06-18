@@ -737,6 +737,47 @@ $(window).load(function () {
 </script>
 <?php }?>
 
+<div id="upload_crop">
+	<?php
+	//Display error message if there are any
+	if(strlen($error)>0){
+		echo "<ul><li><strong>Error!</strong></li><li>".$error."</li></ul>";
+	}
+	if(strlen($large_photo_exists)>0 && strlen($thumb_photo_exists)>0){
+		echo $large_photo_exists."&nbsp;".$thumb_photo_exists;
+		echo "<p><a href=\"".$_SERVER["PHP_SELF"]."?a=delete&t=".$_SESSION['random_key'].$_SESSION['user_file_ext']."\">Delete images</a></p>";
+		echo "<p><a href=\"".$_SERVER["PHP_SELF"]."\">Upload another</a></p>";
+		//Clear the time stamp session and user file extension
+		$_SESSION['random_key']= "";
+		$_SESSION['user_file_ext']= "";
+	}else{
+			if(strlen($large_photo_exists)>0){?>
+			<h2>Create Thumbnail</h2>
+			<div align="center">
+				<img src="<?php echo $upload_path.$large_image_name.$_SESSION['user_file_ext'];?>" style="float: left; margin-right: 10px;" id="thumbnail" alt="Create Thumbnail" />
+				<div style="border:1px #e5e5e5 solid; float:left; position:relative; overflow:hidden; width:<?php echo $thumb_width;?>px; height:<?php echo $thumb_height;?>px;">
+					<img src="<?php echo $upload_path.$large_image_name.$_SESSION['user_file_ext'];?>" style="position: relative;" alt="Thumbnail Preview" />
+				</div>
+				<br style="clear:both;"/>
+				<form name="thumbnail" action="<?=site_url('card/add')?>" method="post">
+					<input type="hidden" name="x1" value="" id="x1" />
+					<input type="hidden" name="y1" value="" id="y1" />
+					<input type="hidden" name="x2" value="" id="x2" />
+					<input type="hidden" name="y2" value="" id="y2" />
+					<input type="hidden" name="w" value="" id="w" />
+					<input type="hidden" name="h" value="" id="h" />
+					<input type="submit" name="upload_thumbnail" value="Save Thumbnail" id="save_thumb" />
+				</form>
+			</div>
+		<hr />
+		<?php 	} ?>
+		<h2>Upload Photo</h2>
+		<form name="photo" enctype="multipart/form-data" action="<?=site_url('card/add')?>" method="post">
+		Photo <input type="file" name="image" size="30" /> <input type="submit" name="upload" value="Upload" />
+		</form>
+	<?php } ?>
+</div>
+		
 <div id="upload_avatar">
 	<div id="contact_close"></div>
 	<div id="contact_select_file">
@@ -760,41 +801,3 @@ $(window).load(function () {
 	</div>
 </div>
 
-<?php
-//Display error message if there are any
-if(strlen($error)>0){
-	echo "<ul><li><strong>Error!</strong></li><li>".$error."</li></ul>";
-}
-if(strlen($large_photo_exists)>0 && strlen($thumb_photo_exists)>0){
-	echo $large_photo_exists."&nbsp;".$thumb_photo_exists;
-	echo "<p><a href=\"".$_SERVER["PHP_SELF"]."?a=delete&t=".$_SESSION['random_key'].$_SESSION['user_file_ext']."\">Delete images</a></p>";
-	echo "<p><a href=\"".$_SERVER["PHP_SELF"]."\">Upload another</a></p>";
-	//Clear the time stamp session and user file extension
-	$_SESSION['random_key']= "";
-	$_SESSION['user_file_ext']= "";
-}else{
-		if(strlen($large_photo_exists)>0){?>
-		<h2>Create Thumbnail</h2>
-		<div align="center">
-			<img src="<?php echo $upload_path.$large_image_name.$_SESSION['user_file_ext'];?>" style="float: left; margin-right: 10px;" id="thumbnail" alt="Create Thumbnail" />
-			<div style="border:1px #e5e5e5 solid; float:left; position:relative; overflow:hidden; width:<?php echo $thumb_width;?>px; height:<?php echo $thumb_height;?>px;">
-				<img src="<?php echo $upload_path.$large_image_name.$_SESSION['user_file_ext'];?>" style="position: relative;" alt="Thumbnail Preview" />
-			</div>
-			<br style="clear:both;"/>
-			<form name="thumbnail" action="<?php echo $_SERVER["PHP_SELF"];?>" method="post">
-				<input type="hidden" name="x1" value="" id="x1" />
-				<input type="hidden" name="y1" value="" id="y1" />
-				<input type="hidden" name="x2" value="" id="x2" />
-				<input type="hidden" name="y2" value="" id="y2" />
-				<input type="hidden" name="w" value="" id="w" />
-				<input type="hidden" name="h" value="" id="h" />
-				<input type="submit" name="upload_thumbnail" value="Save Thumbnail" id="save_thumb" />
-			</form>
-		</div>
-	<hr />
-	<?php 	} ?>
-	<h2>Upload Photo</h2>
-	<form name="photo" enctype="multipart/form-data" action="<?php echo $_SERVER["PHP_SELF"];?>" method="post">
-	Photo <input type="file" name="image" size="30" /> <input type="submit" name="upload" value="Upload" />
-	</form>
-<?php } ?>
