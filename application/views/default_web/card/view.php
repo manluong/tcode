@@ -68,7 +68,7 @@ function confirm_delete(id){
 	</div>
 </div>
 
-<div id="boxes">
+<div id="boxes" style="float:left;margin-left:54px;">
 	<div id="contact_info">
 		<div style="width:100%;" class="invoice_title">
 			<span class="arrow_title"></span>
