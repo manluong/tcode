@@ -1956,11 +1956,15 @@ form .giveMePaddingLeft {
 	font-size:16px;
 	color:#787878;
 }
+
 #add_new_contact{
 	position:absolute;
 	width:100px;
 	height:50px;
 	left:1000px;
 	top:40px;
+}
+.imgareaselect-outer{
+	z-index:9999;
 }
 

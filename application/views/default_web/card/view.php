@@ -16,9 +16,9 @@ function confirm_delete(id){
 }
 </script>
 <?php 
-	echo '<pre>';
-	print_r($data);
-	echo '</pre>';
+	//echo '<pre>';
+	//print_r($data);
+	//echo '</pre>';
 ?>
 <div id="payment_boxes">
 	<div class="payment_detail">

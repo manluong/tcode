@@ -29,6 +29,7 @@ function load_contact_info(id){
 		}
 	);
 }
+
 //CONTACT LIST FILLTER
 function contact_fillter(role_id){
 	var url = '/card/contact_fillter';
@@ -47,10 +48,7 @@ $(document).ready(function(){
 		$('nav a').removeClass('active');
 		$(this).addClass('active');
 	});
-
-
-	//LOAD CONTACT INFO FIRST 
-	load_contact_info(1);
+	
 	//ADD ACTICE FOR CONTACT SELECTED
 	$(".addressBook li").click(function(){
 		if (!$(this).hasClass("letter")) {
