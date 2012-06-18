@@ -1964,4 +1964,7 @@ form .giveMePaddingLeft {
 	left:1000px;
 	top:40px;
 }
+.imgareaselect-outer{
+	z-index:9999;
+}
 
