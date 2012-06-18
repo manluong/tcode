@@ -11,31 +11,8 @@ class Card extends MY_Controller {
 		$this->load->model('Card_SocialM');
 		$this->load->model('Card_TelM');
 	}
-
-	function index() {
-		$this->CardM->sett_fill_address = FALSE;
-		$this->CardM->sett_fill_bank = FALSE;
-		$this->CardM->sett_fill_email = FALSE;
-		$this->CardM->sett_fill_extra = FALSE;
-		$this->CardM->sett_fill_notes = FALSE;
-		$this->CardM->sett_fill_social = FALSE;
-		$this->CardM->sett_fill_tel = FALSE;
-		$this->CardM->sett_fill_role = TRUE;
-
-		$this->CardM->order_by[] = 'first_name ASC';
-		$view_data = array(
-			'list' => $this->CardM->get_list(),
-		);
-
-		$this->data['content'] = $this->load->view(get_template().'/card/index', $view_data, TRUE);
-		$this->_do_output();
-	}
 	
-	function upload_crop(){
-		$this->load->view(get_template().'/card/upload_crop');
-	}
-	
-	function contact_list(){
+	function index(){
 		$this->CardM->sett_fill_address = FALSE;
 		$this->CardM->sett_fill_bank = FALSE;
 		$this->CardM->sett_fill_email = FALSE;
@@ -50,8 +27,12 @@ class Card extends MY_Controller {
 			'list' => $this->CardM->get_list(),
 		);
 		
-		$this->data['content'] = $this->load->view(get_template().'/card/contact_list',$view_data, TRUE);
+		$this->data['content'] = $this->load->view(get_template().'/card/index',$view_data, TRUE);
 		$this->_do_output();
+	}
+	
+	function upload_crop(){
+		$this->load->view(get_template().'/card/upload_crop');
 	}
 	
 	function contact_list_json() {
