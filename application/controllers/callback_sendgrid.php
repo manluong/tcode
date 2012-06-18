@@ -35,7 +35,7 @@ class Callback_sendgrid extends MY_Controller {
 	}
 
 	function incoming_emails() {
-		$this->emaill->log_sendgrid('email');
+
 		if ( ! $this->input->post('to')) return '';
 
 		// Log to
@@ -46,6 +46,8 @@ class Callback_sendgrid extends MY_Controller {
 		$domain = $i[0];
 
 		$this->_setup_db($domain);
+
+		$this->emaill->log_sendgrid('email');
 
 		$data = array(
 			'headers' => $this->input->post('headers'),
