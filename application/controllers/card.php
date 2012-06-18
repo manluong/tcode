@@ -20,7 +20,7 @@ class Card extends MY_Controller {
 		$this->CardM->sett_fill_notes = FALSE;
 		$this->CardM->sett_fill_social = FALSE;
 		$this->CardM->sett_fill_tel = FALSE;
-		$this->CardM->sett_fill_role = TRUE;
+		$this->CardM->sett_fill_roles = TRUE;
 
 		$this->CardM->order_by[] = 'first_name ASC';
 		$view_data = array(
@@ -30,11 +30,11 @@ class Card extends MY_Controller {
 		$this->data['content'] = $this->load->view(get_template().'/card/index', $view_data, TRUE);
 		$this->_do_output();
 	}
-	
+
 	function upload_crop(){
 		$this->load->view(get_template().'/card/upload_crop');
 	}
-	
+
 	function contact_list(){
 		$this->CardM->sett_fill_address = FALSE;
 		$this->CardM->sett_fill_bank = FALSE;
@@ -43,17 +43,17 @@ class Card extends MY_Controller {
 		$this->CardM->sett_fill_notes = FALSE;
 		$this->CardM->sett_fill_social = FALSE;
 		$this->CardM->sett_fill_tel = FALSE;
-		$this->CardM->sett_fill_role = TRUE;
+		$this->CardM->sett_fill_roles = TRUE;
 
 		$this->CardM->order_by[] = 'first_name ASC';
 		$view_data = array(
 			'list' => $this->CardM->get_list(),
 		);
-		
+
 		$this->data['content'] = $this->load->view(get_template().'/card/contact_list',$view_data, TRUE);
 		$this->_do_output();
 	}
-	
+
 	function contact_list_json() {
 		$this->CardM->sett_fill_address = FALSE;
 		$this->CardM->sett_fill_bank = FALSE;
@@ -62,13 +62,13 @@ class Card extends MY_Controller {
 		$this->CardM->sett_fill_notes = FALSE;
 		$this->CardM->sett_fill_social = FALSE;
 		$this->CardM->sett_fill_tel = FALSE;
-		$this->CardM->sett_fill_role = TRUE;
+		$this->CardM->sett_fill_roles = TRUE;
 
 		$this->CardM->order_by[] = 'first_name ASC';
 		$list = $this->CardM->get_list();
 		echo json_encode($list);
 	}
-	
+
 	function upload($comment_id){
 	   $this->load->library('filel');
 	   $file = $this->filel->save('file', 'Helpdesk');
@@ -77,7 +77,7 @@ class Card extends MY_Controller {
 		   echo $file['hash'];
 		}
 	}
-	
+
 	function ajax_contact_info($id){
 		$card_id = $this->input->post('id');
 		$view_data = array(
@@ -85,7 +85,7 @@ class Card extends MY_Controller {
 		);
 		$this->load->view(get_template().'/card/ajax_contact_info',$view_data);
 	}
-	
+
 	function contact_fillter(){
 		$role_id = $this->input->post('role_id');
 		if($role_id != 0){
@@ -95,7 +95,7 @@ class Card extends MY_Controller {
 		}
 
 		$result = $this->Card_RoleM->get_list();
-		
+
 		$list_id = '';
 		for($i = 0 ; $i < count($result) ; $i++){
 			if($i == 0 ){
@@ -111,7 +111,7 @@ class Card extends MY_Controller {
 		);
 		$this->load->view(get_template().'/card/ajax_contact_list',$view_data);
 	}
-	
+
 	function view($id) {
 		$view_data = array(
 			'title' => 'Contact View',
@@ -138,7 +138,7 @@ class Card extends MY_Controller {
 
 		$this->_do_output();
 	}
-	
+
 	function view_json($id){
 		$view_data = array(
 			'data' => $this->CardM->get($id),
@@ -149,7 +149,7 @@ class Card extends MY_Controller {
 		);
 		echo json_encode($view_data);
 	}
-	
+
 	function add($id) {
 		//if (!$this->AclM->check('card', $id, 'edit')) die('you cannot edit this data');
 
@@ -200,7 +200,7 @@ class Card extends MY_Controller {
 			3 => 'Customer',
 			5 => 'Vendor',
 		);
-		
+
 		$view_data['is_new'] = FALSE;
 		$view_data['countries'] = $this->Card_AddressM->get_country_list();
 
@@ -230,17 +230,17 @@ class Card extends MY_Controller {
 			redirect('/card/view/'.$id);
 		}
 	}
-	
+
 	function confirm_delete($card_id) {
 		//$staff_id = $this->UserM->get_card_id();
 		$per = $this->AclM->check('card',0,'delete');
 		$data = array(
-			'per' => $per, 
+			'per' => $per,
 			'card_id' => $card_id,
 		);
 		$this->load->view(get_template().'/card/confirm_delete', $data);
 	}
-	
+
 	function delete($card_id){
 		$per_helpdesk = $this->AclM->check('helpdesk',0,'delete');
 		$per_invoice = $this->AclM->check('invoice',0,'delete');

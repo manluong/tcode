@@ -69,7 +69,7 @@ class CardM extends MY_Model {
 	public $sett_fill_social = TRUE;
 	public $sett_fill_tel = TRUE;
 	public $sett_fill_access_user_role = TRUE;
-	public $sett_fill_role = FALSE;
+	public $sett_fill_roles = FALSE;
 	public $sett_fill_invoice = FALSE;
 
 	public $sett_fill_access_user = FALSE;
