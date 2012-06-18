@@ -90,7 +90,18 @@ $(document).ready(function() {
 		$('#'+$(this).data('name')).show();
 	});
 
-	$('#btn_submit').click(function() {
+	$('.btn_edit').click(function() {
+		var obj = this;
+		$.ajax({
+			type: 'GET',
+			url: $(obj).data('url'),
+			success: function(resp) {
+				$('#'+$(obj).data('container')).html(resp);
+			}
+		});
+	});
+
+	$('#btn_submit').live('click', function() {
 		var frm = null;
 		if ($('#product_radio').length > 0) {
 			frm = $('#frm_'+$('#product_radio input[type=radio]:checked').data('name'));
