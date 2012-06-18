@@ -20,7 +20,7 @@ class Card extends MY_Controller {
 		$this->CardM->sett_fill_notes = FALSE;
 		$this->CardM->sett_fill_social = FALSE;
 		$this->CardM->sett_fill_tel = FALSE;
-		$this->CardM->sett_fill_roles = TRUE;
+		$this->CardM->sett_fill_role = TRUE;
 
 		$this->CardM->order_by[] = 'first_name ASC';
 		$view_data = array(
@@ -43,7 +43,7 @@ class Card extends MY_Controller {
 		$this->CardM->sett_fill_notes = FALSE;
 		$this->CardM->sett_fill_social = FALSE;
 		$this->CardM->sett_fill_tel = FALSE;
-		$this->CardM->sett_fill_roles = TRUE;
+		$this->CardM->sett_fill_role = TRUE;
 
 		$this->CardM->order_by[] = 'first_name ASC';
 		$view_data = array(
@@ -52,6 +52,21 @@ class Card extends MY_Controller {
 		
 		$this->data['content'] = $this->load->view(get_template().'/card/contact_list',$view_data, TRUE);
 		$this->_do_output();
+	}
+	
+	function contact_list_json() {
+		$this->CardM->sett_fill_address = FALSE;
+		$this->CardM->sett_fill_bank = FALSE;
+		$this->CardM->sett_fill_email = FALSE;
+		$this->CardM->sett_fill_extra = FALSE;
+		$this->CardM->sett_fill_notes = FALSE;
+		$this->CardM->sett_fill_social = FALSE;
+		$this->CardM->sett_fill_tel = FALSE;
+		$this->CardM->sett_fill_role = TRUE;
+
+		$this->CardM->order_by[] = 'first_name ASC';
+		$list = $this->CardM->get_list();
+		echo json_encode($list);
 	}
 	
 	function upload($comment_id){
@@ -122,6 +137,17 @@ class Card extends MY_Controller {
 		);
 
 		$this->_do_output();
+	}
+	
+	function view_json($id){
+		$view_data = array(
+			'data' => $this->CardM->get($id),
+			'card_email' => $this->CardM->get_card_email($id),
+			'card_social' => $this->CardM->get_card_social($id),
+			'card_phone' => $this->CardM->get_card_phone($id),
+			'card_address' => $this->CardM->get_card_address($id),
+		);
+		echo json_encode($view_data);
 	}
 	
 	function add($id) {
