@@ -34,12 +34,19 @@ class Callback_sendgrid extends MY_Controller {
 		$this->output->set_header('HTTP/1.1 200');
 	}
 
-	function email_parser() {
+	function incoming_emails() {
 		$this->emaill->log_sendgrid('email');
 		if ( ! $this->input->post('to')) return '';
+
 		// Log to
 		$i = explode('@', $this->input->post('to'));
-		$app = $i[0];
+		$app_name = $i[0];
+
+		$i = explode('.', $i[1]);
+		$domain = $i[0];
+
+		$this->_setup_db($domain);
+
 		$data = array(
 			'headers' => $this->input->post('headers'),
 			'text' => $this->input->post('text'),
@@ -60,9 +67,10 @@ class Callback_sendgrid extends MY_Controller {
 			'app_id' => 1,
 		);
 		$insert_id = $this->EmailM->save_received_email($data);
-		log_message('debug', 'Received email saved id:'.$insert_id.' app: '.$app);
+		log_message('debug', 'Received email saved id:'.$insert_id.' app: '.$app_name);
 
 		// Uploads attachment to s3: bucket/email/content/attachments
+		/*
 		if ($this->input->post('attachments')) {
 			$attach = $this->input->post('attachments');
 			settype($attach, 'int'); // explicitly set it to int
@@ -71,6 +79,9 @@ class Callback_sendgrid extends MY_Controller {
 				$this->emaill->upload_attachment_s3($_FILES, $files);
 			}
 		}
+		 */
+
+
 		// Redirect to respective app
 		// fixed method appname/receive_email
 		//redirect($app.'/receive_email?id='.$insert_id);
