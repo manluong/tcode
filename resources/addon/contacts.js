@@ -37,8 +37,26 @@ function contact_fillter(role_id){
 			role_id : role_id,
 		},function(data){
 			$('#contact_list').html(data);
+			hide_empty_contact();
 		}
 	);
+}
+
+function hide_empty_contact() {
+	$(".addressBook li.letter").each(function(index) {
+		var letter = $(this).html();
+
+		shouldhideit = 0;
+		$(".addressBook ."+letter+"-contact:visible").each(function(indexInterior){
+			shouldhideit++;
+		});
+
+		if (shouldhideit > 0) {
+			$(this).show();
+		} else {
+			$(this).hide();
+		}
+	});
 }
 
 //SELECT CONTACT
@@ -48,7 +66,7 @@ $(document).ready(function(){
 		$('nav a').removeClass('active');
 		$(this).addClass('active');
 	});
-	
+
 	//ADD ACTICE FOR CONTACT SELECTED
 	$(".addressBook li").click(function(){
 		if (!$(this).hasClass("letter")) {
@@ -76,12 +94,12 @@ $(document).ready(function(){
 	// Various
 	$(".addNewField").click(function(){
 		var newField = $('.sampleToDuplicate').clone();
-		
+
 		// Change labels and IDs here
 		newField.removeClass("sampleToDuplicate").find("label").html("Other Field")
-		
+
 		$('.sampleToDuplicate').after(newField);
-		
+
 		return false;
 	});
 
@@ -102,21 +120,21 @@ $(document).ready(function(){
 		});
 
 		jo.show();
-		
+
 		$(".addressBook li.letter").each(function(index) {
 				var letter = $(this).html();
-				
+
 				shouldhideit = 0;
 				$(".addressBook ."+letter+"-contact:visible").each(function(indexInterior){
 					shouldhideit++;
 				});
-				
+
 				if (shouldhideit > 0) {
 					$(this).show();
 				} else {
 					$(this).hide();
 				}
-					
+
 			});
 
 	}).focus(function(){
