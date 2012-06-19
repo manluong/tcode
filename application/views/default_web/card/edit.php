@@ -5,9 +5,9 @@
 <link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/contact.css" />
 
 <?php
-	echo '<pre>';
-	print_r($data);
-	echo '</pre>';
+	//echo '<pre>';
+	//print_r($data);
+	//echo '</pre>';
 ?>
 <div  id="contact_edit" class="container">
 	<div class="row span6">

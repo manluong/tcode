@@ -126,3 +126,25 @@ $(document).ready(function(){
 	}).css({"color":"#C0C0C0"});
 
 });
+
+/*------- CONTACT VIEW -------*/
+	$(document).ready(function(){
+		$('#btn_view_active').click(function(){
+			$('#view_active').hide();
+			$('#edit_active').show();
+		});
+	});
+
+	function ajax_change_status(id){
+		var active = $('#select_active').val();
+		var url = '/card/ajax_change_status';
+		
+		$.post(url,{
+				id : id,
+				active : active,
+			},function(data){
+				$('#customer_detail').html(data);
+			}
+		);
+	}
+/*------- END CONTACT VIEW -------*/

@@ -10,6 +10,8 @@ class Card extends MY_Controller {
 		$this->load->model('Card_EmailM');
 		$this->load->model('Card_SocialM');
 		$this->load->model('Card_TelM');
+		$this->load->model('InvoiceM');
+		$this->load->model('HelpdeskM');
 	}
 	
 	function index(){
@@ -66,7 +68,22 @@ class Card extends MY_Controller {
 		);
 		$this->load->view(get_template().'/card/ajax_contact_info',$view_data);
 	}
-
+	
+	function ajax_change_status(){
+		$id = $this->input->post('id');
+		$this->load->model('aclM');
+		$role = $this->AclM->get_user_role_info($id);
+		$data = array (
+			'id' => $id ,
+            'active' => $this->input->post('active'),
+		);
+		
+		$save_id = $this->CardM->save($data);
+		$view_data['role'] = $role['name'];
+		$view_data['data'] = $this->CardM->get($save_id);
+		$this->load->view(get_template().'/card/ajax_status',$view_data);
+	}
+	
 	function contact_fillter(){
 		$role_id = $this->input->post('role_id');
 		if($role_id != 0){
@@ -94,7 +111,10 @@ class Card extends MY_Controller {
 	}
 
 	function view($id) {
+		$this->load->model('aclM');
+		$role = $this->AclM->get_user_role_info($id);
 		$view_data = array(
+			'card_role' => $role['name'],
 			'title' => 'Contact View',
 			'data' => $this->CardM->get($id),
 			'card_email' => $this->CardM->get_card_email($id),
@@ -102,9 +122,6 @@ class Card extends MY_Controller {
 			'card_phone' => $this->CardM->get_card_phone($id),
 			'card_address' => $this->CardM->get_card_address($id),
 		);
-
-		$this->load->model('InvoiceM');
-		$this->load->model('HelpdeskM');
 		
 		$where = array();
 		$where[] = "created_card_id='$id'";
