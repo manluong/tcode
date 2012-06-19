@@ -22,12 +22,12 @@ function confirm_delete(id){
 ?>
 <div id="payment_boxes">
 	<div class="payment_detail">
-		<div class="payment_label">INVOICE</div>
-		<div class="payment_price">
+		<div class="payment_label">HELPDESK</div>
+		<div class="payment_price" style="width:115px;">
 			<ul>
-				<li style="font-weight:bold;">2 DUE</li>
-				<li class="red_price">$345.60</li>
-				<li class="total">ALL INVOICES $1569.0</li>
+				<li style="font-weight:bold;">OPEN</li>
+				<li class="green_price"><?=($helpdesk_summary>0?$helpdesk_summary:'')?></li>
+				<li class="total">TOTAL <?=($helpdesk_summary>0?$helpdesk_summary:'')?></li>
 			</ul>
 		</div>
 	</div>
@@ -45,27 +45,6 @@ function confirm_delete(id){
 	</div>
 	<?php endif ?>
 
-	<div class="payment_detail" style="margin-right:0px;">
-		<div class="payment_label">INVOICE</div>
-		<div class="payment_price">
-			<ul>
-				<li style="font-weight:bold;">2 DUE</li>
-				<li class="green_price">$345.60</li>
-				<li class="total">ALL INVOICES $1569.0</li>
-			</ul>
-		</div>
-	</div>
-
-	<div class="payment_detail">
-		<div class="payment_label" style="text-transform:uppercase;">INVOICE</div>
-		<div class="payment_price">
-			<ul>
-				<li style="font-weight:bold;">2 DUE</li>
-				<li class="green_price">$345.60</li>
-				<li class="total">ALL INVOICES $1569.0</li>
-			</ul>
-		</div>
-	</div>
 </div>
 
 <div id="boxes" style="float:left;margin-left:54px;">
@@ -200,18 +179,6 @@ function confirm_delete(id){
 		<ul>
 			<li>
 				<span class="input_data_label">Skype</span>
-				<span class="fillter_input">mark@facebook.com</span>
-			</li>
-			<li>
-				<span class="input_data_label">Facebook</span>
-				<span class="fillter_input">mark@facebook.com</span>
-			</li>
-			<li>
-				<span class="input_data_label">Gender</span>
-				<span class="fillter_input">mark@facebook.com</span>
-			</li>
-			<li>
-				<span class="input_data_label">Birthday</span>
 				<span class="fillter_input">mark@facebook.com</span>
 			</li>
 			<li style="margin:10px 0 0 95px;">

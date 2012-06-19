@@ -59,10 +59,10 @@ class Card extends MY_Controller {
 		}
 	}
 
-	function ajax_contact_info($id){
+	function ajax_contact_info(){
 		$card_id = $this->input->post('id');
 		$view_data = array(
-		'detail' => $this->CardM->get($card_id),
+			'detail' => $this->CardM->get($card_id),
 		);
 		$this->load->view(get_template().'/card/ajax_contact_info',$view_data);
 	}
@@ -104,10 +104,17 @@ class Card extends MY_Controller {
 		);
 
 		$this->load->model('InvoiceM');
+		$this->load->model('HelpdeskM');
+		
+		$where = array();
+		$where[] = "created_card_id='$id'";
+		$this->HelpdeskM->where = $where;
+
 		$view_data['invoice_summary'] = $this->InvoiceM->get_invoice_summary($id);
-
+		$view_data['helpdesk_summary'] = count($this->HelpdeskM->get_list($id));
+		
 		$this->data['content'] = $this->load->view(get_template().'/card/view', $view_data, TRUE);
-
+		
 		$this->data['breadcrumb'][] = array(
 			'title' => $view_data['data']['first_name'],
 			'url' => '/card/view/'.$id,
