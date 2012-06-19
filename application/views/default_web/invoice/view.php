@@ -12,7 +12,9 @@
 		<a href="/invoice/pdf/<?php echo $invoice['id'] ?>" target="_blank"><button class="btn btn-primary">PDF</button></a>
 		<button class="btn btn-primary">EMAIL</button>
 		<a href="/invoice/edit/<?php echo $invoice['id'] ?>"><button class="btn btn-primary">EDIT</button></a>
+		<?php if ($invoice['final_total'] > 0): ?>
 		<a href="/invoice/pay/<?php echo $invoice['id'] ?>"><button class="btn btn-primary">PAY</button></a>
+		<?php endif ?>
 		<iframe id="iframe_print" src="" style="display: none; height:0px; width: 0px"></iframe>
 	</div>
 

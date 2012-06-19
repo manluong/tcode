@@ -398,12 +398,13 @@ $(document).ready(function() {
 
 	$('#apply_all_tax').on('change', function() {
 		var val = $(this).val();
+		if (val != -1) {
+			$('#invoice_item_list .tax').each(function(index, item) {
+				$(this).val(val);
+			});
 
-		$('#invoice_item_list .tax').each(function(index, item) {
-			$(this).val(val);
-		});
-
-		cal_invoice_total();
+			cal_invoice_total();
+		}
 	});
 
 	$('#terms_id').on('change', function(e) {

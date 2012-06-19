@@ -481,13 +481,13 @@ html, body{
 }
 #add_row{
 	float:left;
-	width: 186px;
+	width: 144px;
 	margin-left:29px;
 }
 #all_discount{
 	float:left;
 	padding-top: 5px;
-	width: 405px;
+	width: 447px;
 }
 #all_discount ul li{
 	float:left;
@@ -728,3 +728,12 @@ input {
 }
 
 /*END INVOICE VIEW CSS */
+
+.pull-right a {
+	color: #aaa;
+	font-weight: normal;
+}
+
+.pull-right a:hover {
+	text-decoration: underline !important;
+}

@@ -185,6 +185,7 @@ class Invoice extends MY_Controller {
 	}
 
 	function pay($id) {
+		$this->InvoiceM->sett_fill_pay_item = TRUE;
 		$invoice = $this->InvoiceM->get($id);
 		if ($invoice === FALSE) die('404 Not found');
 

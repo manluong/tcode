@@ -57,7 +57,8 @@
 						<li>Apply to all items</li>
 						<li><input type="text" id="apply_all_discount" class="inv-field" /></li>
 						<li>
-							<select id="apply_all_tax" style="width: 158px;">
+							<select id="apply_all_tax" style="width: 200px;">
+								<option value="-1">-- Update Tax for All Items --</option>
 								<option value="">No Tax</option>
 								<?php foreach ($tax_use as $r): ?>
 								<option value="<?php echo $r['id'] ?>"><?php echo $r['name'] ?></option>

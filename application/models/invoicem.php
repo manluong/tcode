@@ -81,6 +81,18 @@ class InvoiceM extends MY_Model {
 
 		$this->fill_addons($result);
 
+		if ($this->sett_fill_pay_item) {
+			$paid_total = 0;
+			if (isset($result['addon_pay_item'])) {
+				foreach ($result['addon_pay_item'] as $r) {
+					$paid_total += $r['amount'];
+				}
+			}
+
+			$result['paid_total'] = $paid_total;
+			$result['final_total'] = $result['total'] - $paid_total;
+		}
+
 		return $result;
 	}
 
