@@ -18,18 +18,18 @@ function confirm_delete(id){
 </script>
 <?php 
 	//echo '<pre>';
-	//print count($helpdesk_summary);
+	//var_dump ($helpdesk_summary);
 	//echo '</pre>';
 ?>
 <div id="payment_boxes">
-	<?php (!empty($helpdesk_summary)?$total_helpdesk = count($helpdesk_summary) : $total_helpdes = 0)?>
+	<?php ($helpdesk_summary == FALSE ? $helpdesk_total = 0 : $helpdesk_total = count($helpdesk_summary))?>
 	<div class="payment_detail">
 		<div class="payment_label">HELPDESK</div>
 		<div class="payment_price" style="width:115px;">
 			<ul>
 				<li style="font-weight:bold;">OPEN</li>
-				<li class="green_price"><?=$total_helpdesk?></li>
-				<li class="total">TOTAL <?=$total_helpdesk?></li>
+				<li class="green_price"><?=$helpdesk_total?></li>
+				<li class="total">TOTAL <?=$helpdesk_total?></li>
 			</ul>
 		</div>
 	</div>
