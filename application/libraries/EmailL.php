@@ -3,27 +3,28 @@
 class EmailL {
 	private $_ci; // private CI instance
 
+	private $_cards = array();
 	private $_to = array();
 	private $_toname = array();
-	private $_type_id = array();
+	private $_from = 'hello@8force.net';
+	private $_fromname = '8Force';
 	private $_bcc = array();
+
 	private $_replace_value = array();
-	private $_files = array();
-	private $_type = '';
-	private $_from = '';
-	private $_fromname = '';
 	private $_template = '';
+
 	private $_subject = '';
 	private $_content = '';
 	private $_attachment_id = array();
-	private $_log_id = '';
+	private $_files = array();
 
 	private $_email_storage_dir = 'Email_Content';
 	private $_email_attachments_dir = 'Email_Attachments';
-	private $temp_dir = '';
+	private $_temp_dir = '';
 	private $_api_user = '';
 	private $_api_key = '';
 
+	private $_log_id = '';
 	private $_query_str = '';
 	private $_query_post = array();
 
@@ -36,14 +37,13 @@ class EmailL {
 		$this->_ci->load->model('EmailM');
 		$this->_ci->load->library(array('SmtpApiHeaderL', 'FileL'));
 
-		$this->temp_dir = $this->_ci->eightforce_config['temp_folder'].$this->_ci->domain.'/';
-		if ( ! file_exists($this->temp_dir)) mkdir($this->temp_dir, 0777, true);
+		$this->_temp_dir = $this->_ci->eightforce_config['temp_folder'].$this->_ci->domain.'/';
+		if ( ! file_exists($this->_temp_dir)) mkdir($this->_temp_dir, 0777, true);
 	}
 
 	/*
 	 * Takes the following
 	 * @param type				string client or card
-	 * @param type_id			array client_id or card_id
 	 * @param to				array append address to client email if given
 	 * @param toname			array
 	 * @param template			template name
@@ -57,27 +57,21 @@ class EmailL {
 	 */
 
 	function set_to($email, $name) {
-		$this->_to[] = $email;
-		$this->_toname[] = $name;
+		$this->_to[] = trim($email);
+		$this->_toname[] = trim($name);
 
 		return $this;
 	}
 
 	function set_from($email, $name) {
-		$this->_from = $email;
-		$this->_fromname = $name;
+		$this->_from = trim($email);
+		$this->_fromname = trim($name);
 
 		return $this;
 	}
 
-	function set_type($type) {
-		$this->_type = $type;
-
-		return $this;
-	}
-
-	function set_type_id($type_id) {
-		$this->_type_id[] = $type_id;
+	function set_card($card_id) {
+		$this->_cards[] = $card_id;
 
 		return $this;
 	}
@@ -91,7 +85,7 @@ class EmailL {
 	function set_bcc($bcc) {
 		if (strlen($bcc) == 0) return $this;
 
-		$this->_bcc[] = $bcc;
+		$this->_bcc[] = trim($bcc);
 
 		return $this;
 	}
@@ -109,12 +103,7 @@ class EmailL {
 	}
 
 	/**
-	 * Example
-	 * 1. Version
-	 * array(docs_id=>ver_id)
-	 *
-	 * 2. Docs (non versioning)
-	 * array(docs_id=>'')
+		hash or id of File
 	 */
 	function set_attachment_id($attachment_id) {
 		$this->_attachment_id[] = $attachment_id;
@@ -142,21 +131,44 @@ class EmailL {
 		return $this;
 	}
 
-	private function _get_to() {
-		if ( $this->_type === '' || empty($this->_type_id)) return NULL;
+	private function _load_to() {
+		if (count($this->_cards) == 0) return NULL;
 
-		$to_arr = $this->_ci->EmailM->get_emailaddress_from_type($this->_type, $this->_type_id);
-		$this->set_to($to_arr['to'], $to_arr['toname']);
-	}
+		$this->_ci->load->model('CardM');
+		$this->_ci->CardM->sett_fill_address = FALSE;
+		$this->_ci->CardM->sett_fill_bank = FALSE;
+		$this->_ci->CardM->sett_fill_extra = FALSE;
+		$this->_ci->CardM->sett_fill_notes = FALSE;
+		$this->_ci->CardM->sett_fill_social = FALSE;
+		$this->_ci->CardM->sett_fill_tel = FALSE;
+		$this->_ci->CardM->sett_fill_access_user_role = FALSE;
 
-	private function _get_bcc() {
-		$bcc_arr = explode(',', $this->_ci->EmailM->check_bcc());
-		foreach($bcc_arr AS $bcc) {
-			$this->set_bcc($bcc);
+		foreach($this->_cards AS $card_id) {
+			$card = $this->_ci->CardM->get($card_id);
+
+			$name = $card['first_name'].' '.$card['last_name'];
+			$email = '';
+
+			foreach($card['addon_email'] AS $e) {
+				if ($e['is_default']) $email = $e['email'];
+			}
+
+			$this->set_to($email, $name);
 		}
 	}
 
-	private function _get_content() {
+	//Check settings for any email addresses to be always included in the BCC
+	private function _load_bcc() {
+		$bcc = $this->_ci->SettingM->get_setting('email', 'always_bcc');
+		if ($bcc === NULL) return;
+
+		$bcc_arr = explode(',', $bcc);
+		foreach($bcc_arr AS $email) {
+			$this->set_bcc($email);
+		}
+	}
+
+	private function _load_content() {
 		if ($this->_content === '' && $this->_template === '') {
 			log_message('error', 'Content or template must be specified.');
 			exit();
@@ -167,7 +179,7 @@ class EmailL {
 		}
 	}
 
-	private function _get_replace_value() {
+	private function _load_replace_value() {
 		if (count($this->_replace_value) == 0) return NULL;
 
 		for($i=0; $i<count($this->_replace_value['keys']); $i++) {
@@ -177,9 +189,8 @@ class EmailL {
 
 	/**
 	 * File size must be less than 7mb - http://docs.sendgrid.com/documentation/api/web-api/mail/
-	 * Get file from s3, save to tmp folder for attaching
 	 */
-	private function _get_attachments() {
+	private function _load_attachments() {
 		$this->_ci->load->model('DocsM');
 
 		foreach($this->_attachment_id AS $id_or_hash) {
@@ -201,7 +212,7 @@ class EmailL {
 
 			// Start populating the $_files[] variable
 			$this->_files[] = array('name' => $docs_detail['file_name'].$docs_detail['file_ext'],
-				'path' => $this->temp_dir.$file_hash_id['hash'],
+				'path' => $this->_temp_dir.$file_hash_id['hash'],
 			);
 		}
 	}
@@ -303,11 +314,11 @@ class EmailL {
 	function send_email () {
 		$api_url = 'http://sendgrid.com/api/mail.send.json';
 
-		$this->_get_to();
-		$this->_get_bcc();
-		$this->_get_content();
-		$this->_get_replace_value();
-		$this->_get_attachments();
+		$this->_load_to();
+		$this->_load_bcc();
+		$this->_load_content();
+		$this->_load_replace_value();
+		$this->_load_attachments();
 
 		$this->_log_email();
 		$this->_build_email();
@@ -322,17 +333,8 @@ class EmailL {
 		$i = json_decode($i, true);
 
 		$this->_update_log($i['message']);
-		$this->log_send_response($i);
 
 		return ($i['message'] === 'success');
-	}
-
-	function log_send_response($response) {
-		$str = date('F j, Y, g:i a') .": ";
-		$str .= 'Sendgrid response: '.print_r($response, true)."\n";
-		$fp = fopen($this->temp_dir.'sendgrid_send_response.log','a+');
-		fwrite($fp, $str);
-		fclose($fp);
 	}
 
 	// Log incoming sendgrid Events
@@ -351,7 +353,7 @@ class EmailL {
 		$str .= "====================\n\n";
 		$str .= '$_SERVER = '.print_r($_SERVER, true);
 		$str .= "====================\n\n";
-		$fp = fopen($this->temp_dir.'sendgrid_'.$type.'.log','a+');
+		$fp = fopen($this->_temp_dir.'sendgrid_'.$type.'.log','a+');
 		fwrite($fp, $str);
 		fclose($fp);
 	}

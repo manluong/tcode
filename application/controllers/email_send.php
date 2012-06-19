@@ -28,70 +28,20 @@ class Email_send extends MY_Controller {
 			->set_output(json_encode(array('success' => $result ? '1' : '0')));
 	}
 
-	function test2() {
-	$this->emaill
-			//->set_type('card')
-            //->set_type_id('')
-            ->set_to('erik@telcoson.com', 'Erik Yeoh')
-			->set_to('erikyang@gmail.com', 'Erik Yeoh G')
-			->set_bcc('erik.yeoh@wyred.nu')
-			->set_bcc('admin@tarutarutimes-online.net')
-            ->set_template('testplate')
-            ->set_subject('test')
-            ->set_attachment_id('ac57b26f30fcb8a3134416f6744fce07')
-            ->set_replace_value(array('keys'=>array('%name%', '%result%'), 'values'=>array(array('Boo'), array('Success!!'))))
-            ->set_from('docs@telcoson.com', 'Docs');
-			//$this->emaill->debug(); // prints the parameters to send
-			$i = $this->emaill->send_email(); var_dump($i);// actual email sending returns TRUE or FALSE
-
-	}
-
 	function test() {
-		$url = 'http://sendgrid.com/';
-		$user = $this->eightforce_config['sendgrid_api_user'];
-		$pass = $this->eightforce_config['sendgrid_api_key'];
-
-		$fileName = 'ac57b26f30fcb8a3134416f6744fce07';
-		$filePath = $this->eightforce_config['temp_folder'].$this->domain.'/';
-
-		$params = array(
-			'subject'   => 'test of file sends',
-			'html'      => '<p> the HTML </p>',
-			'text'      => 'the plain text',
-			'from'      => 'example@sendgrid.com',
-			'files[henrietta.jpg]' => '@'.$filePath.'/'.$fileName
+		$replace = array(
+			'keys' => array('%name%', '%result%'),
+			'values' => array(array('Boo1', 'Boo2'), array('Success1', 'Success2'))
 		);
 
-		//echo '<pre>', print_r($params, TRUE), '</pre>';
+		$this->emaill
+			->set_card(211)
+			->set_subject('test')
+			->set_attachment_id('ac57b26f30fcb8a3134416f6744fce07')
+			->set_template('testplate')
+			->set_replace_value($replace)
+			->set_from('docs@telcoson.com', 'Docs');
 
-		$request =  $url.'api/mail.send.json';
-		$request .= '?api_user='.$user;
-		$request .= '&api_key='.$pass;
-		$request .= '&to[]=erik@telcoson.com';
-		$request .= '&toname[]=Erik%20Telcoson';
-		$request .= '&to[]=erikyang@gmail.com';
-		$request .= '&toname[]=Erik%20Gmail';
-		echo $request;
-
-		// Generate curl request
-		$session = curl_init($request);
-
-		// Tell curl to use HTTP POST
-		curl_setopt ($session, CURLOPT_POST, true);
-
-		// Tell curl that this is the body of the POST
-		curl_setopt ($session, CURLOPT_POSTFIELDS, $params);
-
-		// Tell curl not to return headers, but do return the response
-		curl_setopt($session, CURLOPT_HEADER, false);
-		curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
-
-		// obtain response
-		$response = curl_exec($session);
-		curl_close($session);
-
-		// print everything out
-		echo 'Response: <pre>', print_r($response, TRUE), '</pre>';
-		//var_dump($response);
+		echo ($this->emaill->send_email()) ? 'sent' : 'not sent';
 	}
 }
