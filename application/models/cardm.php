@@ -298,12 +298,22 @@ class CardM extends MY_Model {
 		$has_records = FALSE;
 
 		//Go through each modules and check if it has data for the $card_id
-		$modules = array('HelpdeskM', 'InvoiceM');
+		$this->load->model('HelpdeskM');
+		$this->HelpdeskM->where[] = 'created_card_id='.$card_id;
+		if ($this->HelpdeskM->get_total_records() > 0) $has_records = TRUE;
+
+		$this->load->model('InvoiceM');
+		$this->InvoiceM->where[] = 'customer_card_id='.$card_id;
+		if ($this->InvoiceM->get_total_records() > 0) $has_records = TRUE;
+
+		/*
+		 * $modules = array('HelpdeskM', 'InvoiceM');
 		foreach($modules AS $m) {
 			$this->load->model($m);
 			$this->$m->where[] = 'card_id='.$card_id;
 			if ($this->$m->get_total_records() > 0) $has_records = TRUE;
 		}
+		 */
 
 		if ($has_records) {
 			$this->errors[] = $this->lang->line('error-card_record_has_related_data');
