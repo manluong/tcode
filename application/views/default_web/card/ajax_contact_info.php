@@ -1,9 +1,9 @@
 <div id="user_profile">
-	<div id="user_avatar"><image alt="avatar" src="<?=site_url('resources/template/default_web/img/invoice')?>/invoice-avatar.jpg"/></div>
+	<div id="user_avatar"><img alt="avatar" src="<?=site_url('resources/template/default_web/img/invoice')?>/invoice-avatar.jpg"/></div>
 	<div id="user_info">
 		<ul>
 			<li class="user_sex">Mr.</li>
-			<li class="user_name"><?=(!empty($detail['display_name'])?$detail['display_name']:'')?></li>
+			<li class="user_name"><?=(!empty($detail['final_display_name'])?$detail['final_display_name']:'')?></li>
 			<li class="user_position"><?=(!empty($detail['organization_name'])?$detail['organization_name']:'')?></li>
 		</ul>
 	</div>
@@ -16,7 +16,7 @@
 					$t = $detail['addon_tel'][0];
 					$tel = $t['extension'].'-'.$t['area'].'-'.$t['country'].'-'.$t['number'];
 			?>
-			<span class="fillter_input"><?=$tel?>/span>
+			<span class="fillter_input"><?=$tel?></span>
 			<?php }?>
 		</li>
 		<li>
@@ -39,6 +39,6 @@
 		</li>
 		<li style="margin:10px 0 0 121px;">
 			<a href="<?=site_url('card/view/'.$detail['id'])?>" style="width:30px; height:10px;line-height:10px;" class="btn btn-inverse">View</a>
-		</li>	
+		</li>
 	</ul>
 </div>

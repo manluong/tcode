@@ -16,7 +16,21 @@ class SettingM extends MY_Model {
 			'priority' => array(
 				'type' => 'selection'
 			)
-		)
+		),
+		'email' => array(
+			'always_bcc' => array(
+				'type' => 'string'
+			),
+			'domain' => array(
+				'type' => 'string'
+			),
+			'from_email_default' => array(
+				'type' => 'string'
+			),
+			'from_name_default' => array(
+				'type' => 'string'
+			),
+		),
 	);
 
 	function __construct() {
@@ -72,6 +86,8 @@ class SettingM extends MY_Model {
 
 	function get_setting($app_name, $setting_name) {
 		$setting = $this->get($app_name);
+
+		if (!isset($setting[$setting_name])) return NULL;
 
 		return $setting[$setting_name];
 	}
@@ -131,7 +147,7 @@ class SettingM extends MY_Model {
 	}
 
 
-	function save_bk($app_name) {
+	function save($app_name) {
 		$app_id = $this->AppM->get_id($app_name);
 		$card_id = $this->UserM->get_card_id();
 

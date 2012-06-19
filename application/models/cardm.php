@@ -148,6 +148,7 @@ class CardM extends MY_Model {
 
 	function get_batch($card_ids, $id_as_key=FALSE) {
 		$results = parent::get_batch($card_ids, $id_as_key);
+		if ($results === FALSE) return FALSE;
 
 		$this->fill_addons($results, MULTIPLE_DATA);
 

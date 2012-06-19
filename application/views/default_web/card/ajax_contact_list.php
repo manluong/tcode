@@ -1,16 +1,18 @@
-<script type="text/javascript" src="/resources/addon/contacts.js"></script>
+<?php if ($list): ?>
 <li class="letter staff customers vendors a-title">a</li>
 <?php
 	$current_alphabet = 0;
 	$alphabets = array('a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z');
 
 	$list_count = count($list);
-	foreach($list as $l){
+	for($start=0; $start<$list_count; $start++) {
+		$l = $list[$start];
+
 		if (strtolower(substr($l['first_name'], 0, 1)) != $alphabets[$current_alphabet]) {
 			$current_alphabet++;
 			echo '<li class="letter staff customers vendors ',$alphabets[$current_alphabet],'-title">',$alphabets[$current_alphabet],'</li>';
-			//$start--;
-			//continue;
+			$start--;
+			continue;
 		}
 
 		if (!isset($l['role']['name'])) {
@@ -27,3 +29,4 @@
 		echo '</li>';
 	}
 ?>
+<?php endif ?>

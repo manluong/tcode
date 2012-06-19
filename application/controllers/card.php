@@ -13,7 +13,7 @@ class Card extends MY_Controller {
 		$this->load->model('InvoiceM');
 		$this->load->model('HelpdeskM');
 	}
-	
+
 	function index(){
 		$this->CardM->sett_fill_address = FALSE;
 		$this->CardM->sett_fill_bank = FALSE;
@@ -28,7 +28,7 @@ class Card extends MY_Controller {
 		$view_data = array(
 			'list' => $this->CardM->get_list(),
 		);
-		
+
 		$this->data['content'] = $this->load->view(get_template().'/card/index',$view_data, TRUE);
 		$this->_do_output();
 	}
@@ -85,11 +85,22 @@ class Card extends MY_Controller {
 	}
 	
 	function contact_fillter(){
+		$this->CardM->sett_fill_address = FALSE;
+		$this->CardM->sett_fill_bank = FALSE;
+		$this->CardM->sett_fill_email = FALSE;
+		$this->CardM->sett_fill_extra = FALSE;
+		$this->CardM->sett_fill_notes = FALSE;
+		$this->CardM->sett_fill_social = FALSE;
+		$this->CardM->sett_fill_tel = FALSE;
+		$this->CardM->sett_fill_roles = TRUE;
+
 		$role_id = $this->input->post('role_id');
-		if($role_id != 0){
-			$where = array();
-			$where[] = "role_id='$role_id'";
-			$this->Card_RoleM->where =  $where;
+		if (is_array($role_id)) {
+			$this->Card_RoleM->set_where('role_id IN ('.implode(',', $role_id).')');
+		} else if ($role_id == -1) {
+			$this->Card_RoleM->set_where('role_id > 4');
+		} else if ($role_id != 0) {
+			$this->Card_RoleM->set_where('role_id = '.$role_id);
 		}
 
 		$result = $this->Card_RoleM->get_list();
@@ -101,8 +112,9 @@ class Card extends MY_Controller {
 			}
 			$list_id .= ','.$result[$i]['card_id'];
 		}
-		$list_id = split(',',$list_id);
-		$list = $this->CardM->get_batch($list_id,TRUE);
+		$this->db->order_by('first_name ASC');
+		$list_id = explode(',',$list_id);
+		$list = $this->CardM->get_batch($list_id);
 
 		$view_data = array(
 			'list' => $list,

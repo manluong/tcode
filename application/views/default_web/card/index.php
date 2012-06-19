@@ -6,13 +6,14 @@
 <script type="text/javascript" src="/resources/addon/contacts.js"></script>
 <script>
 $(document).ready(function(){
-	//LOAD CONTACT INFO FIRST 
+	//LOAD CONTACT INFO FIRST
+	hide_empty_contact();
 	load_contact_info(1);
-	
+
 	$(".nano").nanoScroller();
 });
 </script>
-<?php 
+<?php
 //echo '<pre>';
 //print_r($list);
 //echo '</pre>';
@@ -26,17 +27,17 @@ $(document).ready(function(){
 			<input type="text" id="searchContacts" onclick="value =''" onblur="(value =='' ? value='Search contacts':value=value)" value="Search contacts" />
 			<nav>
 				<a onclick="contact_fillter(0)" href="javascript:void(0)" class="active">all</a>
-				<a onclick="contact_fillter(2)" href="javascript:void(0)">staff</a>
-				<a onclick="contact_fillter(3)" href="javascript:void(0)">customers</a>
-				<a onclick="contact_fillter(5)" href="javascript:void(0)">vendors</a>
-				<a onclick="contact_fillter(6)" href="javascript:void(0)">rest</a>
+				<a onclick="contact_fillter(1)" href="javascript:void(0)">staff</a>
+				<a onclick="contact_fillter([2,3])" href="javascript:void(0)">customers</a>
+				<a onclick="contact_fillter(4)" href="javascript:void(0)">vendors</a>
+				<a onclick="contact_fillter(-1)" href="javascript:void(0)">rest</a>
 			</nav>
 			<div class="test" style="display: none;">
-			
+
 			</div>
-			
+
 			<div class="test">
-			
+
 			</div>
 			<div style="height:437px;" class="nano">
 				<ul id="contact_list" class="addressBook content">
@@ -74,13 +75,13 @@ $(document).ready(function(){
 			</div>
 		</div>
 		<!-- End Contacts' list -->
-		
+
 		<div class="rightPanel" id="rightPanel"></div>
-		
+
 		<div id="add_new_contact">
 			<a href="<?=site_url('card/add/')?>" style="width:106px; height:10px;line-height:10px;" class="btn btn-inverse">ADD NEW CONTACT</a>
 		</div>
-		
+
 	</div>
 	<!-- End Contacts Panels -->
 </div>
