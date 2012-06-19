@@ -140,7 +140,7 @@ class Card extends MY_Controller {
 		$this->HelpdeskM->where = $where;
 
 		$view_data['invoice_summary'] = $this->InvoiceM->get_invoice_summary($id);
-		$view_data['helpdesk_summary'] = count($this->HelpdeskM->get_list($id));
+		$view_data['helpdesk_summary'] = $this->HelpdeskM->get_list($id);
 		
 		$this->data['content'] = $this->load->view(get_template().'/card/view', $view_data, TRUE);
 		
@@ -178,15 +178,14 @@ class Card extends MY_Controller {
 			4 => 'Dr.',
 		);
 		$view_data['gender'] = array(
-			0 => '&nbsp;&nbsp;',
-			1 => 'Female',
-			2 => 'Male'
+			0 => 'Female',
+			1 => 'Male'
 		);
 		$view_data['role'] = array(
 			0 => 'None',
-			2 => 'Staff',
-			3 => 'Customer',
-			5 => 'Vendor',
+			1 => 'Staff',
+			2 => 'Customer',
+			4 => 'Vendor',
 		);
 		$view_data['title'] = $data_fields['title'];
 		$view_data['is_new'] = TRUE;
@@ -213,9 +212,9 @@ class Card extends MY_Controller {
 		$view_data['data'] = $this->CardM->get($id);
 		$view_data['role'] = array(
 			0 => 'None',
-			2 => 'Staff',
-			3 => 'Customer',
-			5 => 'Vendor',
+			1 => 'Staff',
+			2 => 'Customer',
+			4 => 'Vendor',
 		);
 
 		$view_data['is_new'] = FALSE;

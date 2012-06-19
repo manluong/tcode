@@ -8,7 +8,6 @@
 
 
 <?php
-error_reporting (E_ALL ^ E_NOTICE);
 session_start(); //Do not remove this
 //only assign a new timestamp if the session variable is empty
 if (!isset($_SESSION['random_key']) || strlen($_SESSION['random_key'])==0){
@@ -369,17 +368,17 @@ foreach ($allowed_image_ext as $mime_type => $ext) {
 						<div class="btn-group" data-toggle="buttons-radio">
 							<?php
 								foreach($gender AS $title_val => $title_label) {
-									echo '<button type="button" class="btn title_button';
+									echo '<button type="button" class="btn gender_button';
 									echo '" id="title_',$title_val,'" value="',$title_val,'">';
 									echo $title_label,'</button>';
 								}
 							?>
 						</div>
-						<input type="hidden" name="addon_extra[0][gender]" id="addon_gender" value="">
+						<input type="hidden" name="addon_extra[0][gender]" id="gender" value="<?=$data['title']?>">
 						<script>
 							$(document).ready(function() {
-								$('.title_button').on('click', function() {
-									$('#addon_gender').val($(this).attr('value'));
+								$('.gender_button').on('click', function() {
+									$('#gender').val($(this).attr('value'));
 								});
 							});
 						</script>
@@ -389,6 +388,12 @@ foreach ($allowed_image_ext as $mime_type => $ext) {
 					<label class="control-label" for="birth_date">Birthday</label>
 					<div class="controls">
 						<?=form_input('addon_extra[0][birth_date]', '', 'id="addon_extra_birth_date"')?>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="birth_date">Note</label>
+					<div class="controls">
+						<?=form_input('addon_notes[0][note]','', 'id="addon_notes_note"')?>
 					</div>
 				</div>
 				<div style="margin-top:20px;" class="control-group">

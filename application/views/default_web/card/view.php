@@ -18,17 +18,18 @@ function confirm_delete(id){
 </script>
 <?php 
 	//echo '<pre>';
-	//print_r($role);
+	//var_dump ($helpdesk_summary);
 	//echo '</pre>';
 ?>
 <div id="payment_boxes">
+	<?php ($helpdesk_summary == FALSE ? $helpdesk_total = 0 : $helpdesk_total = count($helpdesk_summary))?>
 	<div class="payment_detail">
 		<div class="payment_label">HELPDESK</div>
 		<div class="payment_price" style="width:115px;">
 			<ul>
 				<li style="font-weight:bold;">OPEN</li>
-				<li class="green_price"><?=($helpdesk_summary>0?$helpdesk_summary:'')?></li>
-				<li class="total">TOTAL <?=($helpdesk_summary>0?$helpdesk_summary:'')?></li>
+				<li class="green_price"><?=$helpdesk_total?></li>
+				<li class="total">TOTAL <?=$helpdesk_total?></li>
 			</ul>
 		</div>
 	</div>
@@ -58,27 +59,7 @@ function confirm_delete(id){
 			<ul>
 				<li>
 					<span class="input_data_label">Role</span>
-					<span class="fillter_input">
-						<?php
-							$role = $data['addon_access_user_role']['role_id'];
-							$role_name = '';
-							switch($role){
-								case 0:
-									$role_name = 'None';
-									break;
-								case 2:
-									$role_name = 'Staff';
-									break;
-								case 3:
-									$role_name = 'Customer';
-									break;
-								case 5:
-									$role_name = 'Vendor';
-									break;
-							}
-							echo $role_name;
-						?>
-					</span>
+					<span class="fillter_input"><?=$card_role?></span>
 				</li>
 				<li>
 					<span class="input_data_label">First Name</span>
@@ -160,13 +141,18 @@ function confirm_delete(id){
 					<span class="fillter_input" style="<?=($k->is_default == 1?'color:red':'')?>"><?=$k->extension.' - '.$k->area.' - '.$k->country.' - '.$k->number?></span>
 				</li>
 				<?php }}?>
+				
+				<li>
+					<span class="input_data_label">Birthday</span>
+					<span class="fillter_input"><?=$data['addon_extra'][0]['birth_date']?></span>
+				</li>
 				<li style="margin:10px 0 0 95px;">
 					<button onclick="ajax_edit(<?=$data['id']?>);" style="height:20px;line-height:12px;" class="btn btn-inverse" href="#">EDIT DETAILS</button>
 					<span style="cursor:pointer;color:#aaaaaa;" onclick="confirm_delete(<?=$data['id']?>);">or delete</span>
 				</li>
 				<li style="margin-top:10px;">
-					<span class="input_data_label">Birthday</span>
-					<span class="fillter_input" style="font-size:13px; font-weight:bold;">This is the notes for this guy. bah bah bah. Click to edit this notes.</span>
+					<span class="input_data_label">Note</span>
+					<span class="fillter_input" style="font-size:13px;"><?=$data['addon_notes'][0]['note']?></span>
 				</li>
 			</ul>
 		</div>
