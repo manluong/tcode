@@ -1,4 +1,5 @@
 <link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/contact.css" />
+<script type="text/javascript" src="/resources/addon/contacts.js"></script>
 <script type="text/javascript">
 function ajax_edit(id){
 	$.pjax({
@@ -17,17 +18,17 @@ function confirm_delete(id){
 </script>
 <?php 
 	//echo '<pre>';
-	//print_r($data);
+	//print_r($role);
 	//echo '</pre>';
 ?>
 <div id="payment_boxes">
 	<div class="payment_detail">
-		<div class="payment_label">INVOICE</div>
-		<div class="payment_price">
+		<div class="payment_label">HELPDESK</div>
+		<div class="payment_price" style="width:115px;">
 			<ul>
-				<li style="font-weight:bold;">2 DUE</li>
-				<li class="red_price">$345.60</li>
-				<li class="total">ALL INVOICES $1569.0</li>
+				<li style="font-weight:bold;">OPEN</li>
+				<li class="green_price"><?=($helpdesk_summary>0?$helpdesk_summary:'')?></li>
+				<li class="total">TOTAL <?=($helpdesk_summary>0?$helpdesk_summary:'')?></li>
 			</ul>
 		</div>
 	</div>
@@ -45,27 +46,6 @@ function confirm_delete(id){
 	</div>
 	<?php endif ?>
 
-	<div class="payment_detail" style="margin-right:0px;">
-		<div class="payment_label">INVOICE</div>
-		<div class="payment_price">
-			<ul>
-				<li style="font-weight:bold;">2 DUE</li>
-				<li class="green_price">$345.60</li>
-				<li class="total">ALL INVOICES $1569.0</li>
-			</ul>
-		</div>
-	</div>
-
-	<div class="payment_detail">
-		<div class="payment_label" style="text-transform:uppercase;">INVOICE</div>
-		<div class="payment_price">
-			<ul>
-				<li style="font-weight:bold;">2 DUE</li>
-				<li class="green_price">$345.60</li>
-				<li class="total">ALL INVOICES $1569.0</li>
-			</ul>
-		</div>
-	</div>
 </div>
 
 <div id="boxes" style="float:left;margin-left:54px;">
@@ -191,33 +171,59 @@ function confirm_delete(id){
 			</ul>
 		</div>
 	</div>
-
-	<div id="customer_detail">
-		<div style="width:100%;" class="invoice_title">
-			<span class="arrow_title"></span>
-			<span style="text-transform:uppercase;">CUSTOMER DETAILS</span>
+	<div style="float:left;width:250px;">
+		<div id="customer_detail" style="margin-top:20px;">
+			<div style="width:100%;" class="invoice_title">
+				<span class="arrow_title"></span>
+				<span style="text-transform:uppercase;"><?=$card_role?> DETAILS</span>
+			</div>
+			
+			<ul id="view_active">
+				<li>
+					<span class="input_data_label">Status</span>
+					<span class="fillter_input"><?=($data['active']==1?'Active':'Unactive')?></span>
+				</li>
+				<li style="margin:10px 0 0 95px;">
+					<button id="btn_view_active" style="height:20px;line-height:12px;" class="btn btn-inverse" href="#">EDIT DETAILS</button>
+				</li>
+			</ul>
+			
+			<ul id="edit_active" style="display:none;">
+				<li>
+					<span class="input_data_label">Status</span>
+					<span class="fillter_input">
+						<select id="select_active">
+							<option value=""> Change status</option>
+							<option <?=($data['active']==1?'selected="selected"':'')?> value="1">Active</option>
+							<option <?=($data['active']==0?'selected="selected"':'')?> value="0">Unactive</option>
+						</select>
+					</span>
+				</li>
+				<li style="margin:10px 0 0 95px;">
+					<button id="btn_edit_active" onclick="ajax_change_status(<?=$data['id']?>);" style="height:20px;line-height:12px;" class="btn btn-inverse" href="#">EDIT DETAILS</button>
+				</li>
+			</ul>
 		</div>
-		<ul>
-			<li>
-				<span class="input_data_label">Skype</span>
-				<span class="fillter_input">mark@facebook.com</span>
-			</li>
-			<li>
-				<span class="input_data_label">Facebook</span>
-				<span class="fillter_input">mark@facebook.com</span>
-			</li>
-			<li>
-				<span class="input_data_label">Gender</span>
-				<span class="fillter_input">mark@facebook.com</span>
-			</li>
-			<li>
-				<span class="input_data_label">Birthday</span>
-				<span class="fillter_input">mark@facebook.com</span>
-			</li>
-			<li style="margin:10px 0 0 95px;">
-				<button style="height:20px;line-height:12px;" class="btn btn-inverse" href="#">EDIT DETAILS</button>
-			</li>
-		</ul>
+		
+		<div id="password_detail" style="margin-top:20px;width:250px;float:left;">
+			<div style="width:100%;" class="invoice_title">
+				<span class="arrow_title"></span>
+				<span style="text-transform:uppercase;">LOGIN</span>
+			</div>
+			
+			<ul>
+				<li>
+					<span class="input_data_label">Password</span>
+					<span class="fillter_input">Active</span>
+				</li>
+				<li>
+					<span class="input_data_label">Expiry Date</span>
+					<span class="fillter_input">21/12/2012</span>
+				</li>
+				<li style="margin:10px 0 0 95px;">
+					<button id="btn_view_active" style="height:20px;line-height:12px;" class="btn btn-inverse" href="#">EDIT DETAILS</button>
+				</li>
+			</ul>
+		</div>
 	</div>
-
 </div>

@@ -10,6 +10,8 @@ class Card extends MY_Controller {
 		$this->load->model('Card_EmailM');
 		$this->load->model('Card_SocialM');
 		$this->load->model('Card_TelM');
+		$this->load->model('InvoiceM');
+		$this->load->model('HelpdeskM');
 	}
 
 	function index(){
@@ -62,11 +64,26 @@ class Card extends MY_Controller {
 	function ajax_contact_info(){
 		$card_id = $this->input->post('id');
 		$view_data = array(
-		'detail' => $this->CardM->get($card_id),
+			'detail' => $this->CardM->get($card_id),
 		);
 		$this->load->view(get_template().'/card/ajax_contact_info',$view_data);
 	}
-
+	
+	function ajax_change_status(){
+		$id = $this->input->post('id');
+		$this->load->model('aclM');
+		$role = $this->AclM->get_user_role_info($id);
+		$data = array (
+			'id' => $id ,
+            'active' => $this->input->post('active'),
+		);
+		
+		$save_id = $this->CardM->save($data);
+		$view_data['role'] = $role['name'];
+		$view_data['data'] = $this->CardM->get($save_id);
+		$this->load->view(get_template().'/card/ajax_status',$view_data);
+	}
+	
 	function contact_fillter(){
 		$this->CardM->sett_fill_address = FALSE;
 		$this->CardM->sett_fill_bank = FALSE;
@@ -106,7 +123,10 @@ class Card extends MY_Controller {
 	}
 
 	function view($id) {
+		$this->load->model('aclM');
+		$role = $this->AclM->get_user_role_info($id);
 		$view_data = array(
+			'card_role' => $role['name'],
 			'title' => 'Contact View',
 			'data' => $this->CardM->get($id),
 			'card_email' => $this->CardM->get_card_email($id),
@@ -114,12 +134,16 @@ class Card extends MY_Controller {
 			'card_phone' => $this->CardM->get_card_phone($id),
 			'card_address' => $this->CardM->get_card_address($id),
 		);
+		
+		$where = array();
+		$where[] = "created_card_id='$id'";
+		$this->HelpdeskM->where = $where;
 
-		$this->load->model('InvoiceM');
 		$view_data['invoice_summary'] = $this->InvoiceM->get_invoice_summary($id);
-
+		$view_data['helpdesk_summary'] = count($this->HelpdeskM->get_list($id));
+		
 		$this->data['content'] = $this->load->view(get_template().'/card/view', $view_data, TRUE);
-
+		
 		$this->data['breadcrumb'][] = array(
 			'title' => $view_data['data']['first_name'],
 			'url' => '/card/view/'.$id,

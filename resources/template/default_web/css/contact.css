@@ -93,6 +93,13 @@
 #contact_edit .control-group{
 	margin-bottom:10px;
 }
+#password_detail ul li{
+	float:left;
+	width:100%;
+}
+#password_detail ul li .fillter_input{
+	line-height:28px;
+}
 .button_add{
 	float:left;
 	margin-left:405px;
@@ -170,4 +177,7 @@
 	position:absolute;
 	left:27px;
 	top:90px;
+}
+#edit_active select{
+	width:120px;
 }

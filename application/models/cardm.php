@@ -301,7 +301,7 @@ class CardM extends MY_Model {
 		$modules = array('HelpdeskM', 'InvoiceM');
 		foreach($modules AS $m) {
 			$this->load->model($m);
-			$this->$m->where('card_id', $card_id);
+			$this->$m->where[] = 'card_id='.$card_id;
 			if ($this->$m->get_total_records() > 0) $has_records = TRUE;
 		}
 
