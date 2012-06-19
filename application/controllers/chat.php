@@ -17,7 +17,7 @@
             $domain = explode('.',$_SERVER['HTTP_HOST']);
             $domain = $domain[0];
             $data['domain'] = $domain;
-            $data['id'] = $this->UserM->get_id();
+            $data['id'] = $this->UserM->get_card_id();
             echo json_encode($data);
             
             
