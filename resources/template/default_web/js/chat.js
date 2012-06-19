@@ -309,7 +309,7 @@ function chatWith(id,name,body){
             mess += '</div>';
             mess += '</div>';
             mess += '<div class="chatBoxItem fl pv1 ph10 bgN mess">';
-            mess += '<input class="inv-field w95p mt10" type="text" onclick="value=\'\'" onblur="if(value==\'\'){value=\'This is description\'};" value="This is description" onkeyup="sendMess(event,\''+id+'\',this.value)">';
+            mess += '<input class="inv-field w95p mt10" type="text" onclick="value=\'\'" onblur="if(value==\'\'){value=\'This is description\'};" value="This is description" onkeypress="sendMess(event,\''+id+'\',this.value)" onkeyup="sendMess(event,\''+id+'\',this.value)">';
             mess += '</div>'
             mess += '</div>';
             mess += '</div>';
@@ -351,7 +351,16 @@ function selectChat(id){
 	}
 }
 function sendMess(event,id,mess){
-    if(event.keyCode == 13){
+        if(window.event) // IE8 and earlier
+	{
+            keynum = event.keyCode;
+	}
+        else if(event.which) // IE9/Firefox/Chrome/Opera/Safari
+	{
+            keynum = event.which;
+	}
+
+    if(event.keyCode == 13 && mess != ''){
         var jid = telcoson.id_to_jid(id);
         mess = mess.replace(/^\s+|\s+$/g,"");
                   telcoson.connection.send($msg({
@@ -373,6 +382,7 @@ function sendMess(event,id,mess){
             $("#chat_"+id+" .chatScroll").animate({scrollTop: $("#chat_"+id+" .chatScroll")[0].scrollHeight});
     }
     else {
+            
             message = mess.replace(/^\s+|\s+$/g,"");
             var jid = telcoson.id_to_jid(id);
             var notify = $msg({to: jid, "type": "chat"})
@@ -409,7 +419,7 @@ function openChat(id,name){
         mess += '<div class="chatScroll">';
         mess += '</div>';
         mess += '<div class="chatBoxItem fl pv1 ph10 bgN mess">';
-        mess += '<input class="inv-field w95p mt10" type="text" onclick="value=\'\'" onblur="if(value==\'\'){value=\'This is description\'};" value="This is description" onkeyup="sendMess(event,\''+id+'\',this.value)">';
+        mess += '<input class="inv-field w95p mt10" type="text" onclick="value=\'\'" onblur="if(value==\'\'){value=\'This is description\'};" value="This is description" onkeypress="sendMess(event,\''+id+'\',this.value)" onkeyup="sendMess(event,\''+id+'\',this.value)" >';
         mess += '</div>'
         mess += '</div>';
         mess += '</div>';
