@@ -77,13 +77,6 @@ class UserM extends MY_Model {
 	public function get_card_id() {
 		return $this->id;
 	}
-
-	// add by Leo
-	public function get_id(){
-		if (!$this->logged_in) return '';
-		return $this->id;
-	}
-
 	public function get_timezone() {
 		return $this->info['timezone'];
 	}
