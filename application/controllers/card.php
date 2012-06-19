@@ -251,6 +251,8 @@ class Card extends MY_Controller {
 		$per_invoice = $this->AclM->check('invoice',0,'delete');
 		if($per_helpdesk == TRUE && $per_invoice == TRUE){
 			$this->CardM->delete($card_id);
+			print 'aaa';
+			die;
 			$per = TRUE;
 		}else{
 			$per = FALSE;

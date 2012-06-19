@@ -42,7 +42,7 @@
 	color:#28ac0e;
 }
 #contact_info{
-	width:445px;
+	width:550px;
 	float:left;
 }
 #contact_info_detail ul li{
@@ -96,6 +96,12 @@
 #password_detail ul li{
 	float:left;
 	width:100%;
+}
+#password_detail .input_data_label{
+	font-weight:normal;
+}
+#password_detail .fillter_input{
+	font-weight:bold;
 }
 #password_detail ul li .fillter_input{
 	line-height:28px;

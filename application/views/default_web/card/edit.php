@@ -113,7 +113,7 @@
 					$x = 0;
 					foreach($data['addon_tel'] AS $e) {
 						echo '<div class="control-group">';
-							//echo '<button class="btn btn-mini pull-left remove">X</button>';
+							echo '<button class="btn btn-mini pull-left remove">X</button>';
 							echo '<label class="control-label" for="tel_',$e['id'],'">','Phone','</label>';
 							echo '<div class="controls">';
 								echo form_hidden('addon_tel['.$x.'][id]', $e['id']);
@@ -183,7 +183,7 @@
 					$x = 0;
 					foreach($data['addon_email'] AS $e) {
 						echo '<div class="control-group">';
-							//echo '<button class="btn btn-mini pull-left remove">X</button>';
+							echo '<button class="btn btn-mini pull-left remove">X</button>';
 							echo '<label class="control-label" for="email_',$e['id'],'">',$e['email_label'],'</label>';
 							echo '<div class="controls">';
 								echo form_hidden('addon_email['.$x.'][id]', $e['id']);
@@ -246,7 +246,7 @@
 					$x = 0;
 					foreach($data['addon_address'] AS $e) {
 						echo '<div class="control-group">';
-							//echo '<button class="btn btn-mini pull-left remove">X</button>';
+							echo '<button class="btn btn-mini pull-left remove">X</button>';
 							echo '<label class="control-label" for="address_',$e['id'],'">',$address_label,'</label>';
 							echo '<div id="contact_address" class="controls">';
 								echo '<ul><li>';
@@ -378,18 +378,18 @@
 							<?php
 								foreach($data['addon_extra'][0]['gender_options'] AS $title_val => $title_label) {
 								
-									echo '<button type="button" class="btn title_button';
+									echo '<button type="button" class="btn gender_button';
 									if ($data['addon_extra'][0]['gender'] == $title_val) echo " active";
 									echo '" id="title_',$title_val,'" value="',$title_val,'">';
 									echo $title_label,'</button>';
 								}
 							?>
 						</div>
-						<input type="hidden" name="title" id="title" value="<?=$data['title']?>">
+						<input type="hidden" name="addon_extra[0][gender]" id="gender" value="<?=$data['title']?>">
 						<script>
 							$(document).ready(function() {
-								$('.title_button').on('click', function() {
-									$('#title').val($(this).attr('value'));
+								$('.gender_button').on('click', function() {
+									$('#gender').val($(this).attr('value'));
 								});
 							});
 						</script>
@@ -399,6 +399,12 @@
 					<label class="control-label" for="birth_date">Birthday</label>
 					<div class="controls">
 						<?=form_input('addon_extra[0][birth_date]', $data['addon_extra'][0]['birth_date'], 'id="addon_extra_birth_date"')?>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="birth_date">Note</label>
+					<div class="controls">
+						<?=form_input('addon_notes[0][note]', $data['addon_notes'][0]['note'], 'id="addon_notes_note"')?>
 					</div>
 				</div>
 				<div style="margin-top:20px;" class="control-group">
