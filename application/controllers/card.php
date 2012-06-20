@@ -125,8 +125,9 @@ class Card extends MY_Controller {
 	function view($id) {
 		$this->load->model('aclM');
 		$role = $this->AclM->get_user_role_info($id);
+		
 		$view_data = array(
-			'card_role' => $role['name'],
+			'user_role' => $role,
 			'title' => 'Contact View',
 			'data' => $this->CardM->get($id),
 			'card_email' => $this->CardM->get_card_email($id),
@@ -134,14 +135,23 @@ class Card extends MY_Controller {
 			'card_phone' => $this->CardM->get_card_phone($id),
 			'card_address' => $this->CardM->get_card_address($id),
 		);
-		
+		//$result = $this->CardM->get($id);
+		//echo '<pre>';
+		//print_r($result);
+		//echo '</pre>';
+		//die;
 		$where = array();
 		$where[] = "created_card_id='$id'";
 		$this->HelpdeskM->where = $where;
 
 		$view_data['invoice_summary'] = $this->InvoiceM->get_invoice_summary($id);
 		$view_data['helpdesk_summary'] = $this->HelpdeskM->get_list($id);
-		
+		$view_data['role'] = array(
+			0 => 'None',
+			1 => 'Staff',
+			2 => 'Customer',
+			4 => 'Vendor',
+		);
 		$this->data['content'] = $this->load->view(get_template().'/card/view', $view_data, TRUE);
 		
 		$this->data['breadcrumb'][] = array(
@@ -166,7 +176,17 @@ class Card extends MY_Controller {
 		);
 		echo json_encode($view_data);
 	}
-
+	
+	function save_role(){
+		$this->load->model('Card_roleM');
+		$data = array(
+			'card_id' => $this->input->post('id'),
+			'role_id' => $this->input->post('role'),
+		);
+		$id_save = $this->Card_roleM->save($data);
+		echo $id_save;
+	}
+	
 	function add($id) {
 		//if (!$this->AclM->check('card', $id, 'edit')) die('you cannot edit this data');
 

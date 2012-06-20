@@ -165,4 +165,19 @@ $(document).ready(function(){
 			}
 		);
 	}
+	
+	function save_role(id){
+		var role = $('#addon_role').val();
+		var url = '/card/save_role';
+		$.post(url,{
+				id : id,
+				role : role,
+			},function(data){
+				if(data != ''){
+					window.location = '/card/view/'+id;
+				}
+			}
+		);
+		
+	}
 /*------- END CONTACT VIEW -------*/

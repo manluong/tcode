@@ -18,7 +18,7 @@ function confirm_delete(id){
 </script>
 <?php 
 	//echo '<pre>';
-	//var_dump ($helpdesk_summary);
+	//print_r($user_role['role_id']);
 	//echo '</pre>';
 ?>
 <div id="payment_boxes">
@@ -157,11 +157,42 @@ function confirm_delete(id){
 			</ul>
 		</div>
 	</div>
+	<?php if($user_role['role_id'] == 0 || $user_role['role_id'] == ''){?>
+	<div id="customer_detail" style="margin-top:20px;">
+		<div style="width:100%;" class="invoice_title">
+			<span class="arrow_title"></span>
+			<span style="text-transform:uppercase;">CONTACT TYPE</span>
+		</div>
+		<div class="control-group" style="padding-top:10px;">
+			<?php 
+				$i = 0;
+				foreach($role as $role_value => $role_label){
+					$i++;
+					echo '<input '.($i==1?'checked="checked" ':'').'type="radio" name="role" class="role" value="'.$role_value.'" /> '.$role_label.'&nbsp;&nbsp;';
+				}
+			?>
+			<input type="hidden" name="addon_access_user_role[0][role_id]" id="addon_role" value="">
+			<script>
+				$(document).ready(function() {
+					$('.role').on('click', function() {
+						$('#addon_role').val($(this).attr('value'));
+					});
+				});
+			</script>
+		</div>
+		<div style="margin-top:20px;" class="control-group">
+			<label class="control-label"></label>
+			<div class="controls">
+				<button onclick="save_role(<?=$data['id']?>);" type="submit" class="btn btn-inverse">Save</button>
+			</div>
+		</div>
+	</div>
+	<?php }else { ?>
 	<div style="float:left;width:250px;">
 		<div id="customer_detail" style="margin-top:20px;">
 			<div style="width:100%;" class="invoice_title">
 				<span class="arrow_title"></span>
-				<span style="text-transform:uppercase;"><?=$card_role?> DETAILS</span>
+				<span style="text-transform:uppercase;"><?=$user_role['name']?> DETAILS</span>
 			</div>
 			
 			<ul id="view_active">
@@ -212,4 +243,5 @@ function confirm_delete(id){
 			</ul>
 		</div>
 	</div>
+	<?php }?>
 </div>
