@@ -374,7 +374,7 @@ foreach ($allowed_image_ext as $mime_type => $ext) {
 								}
 							?>
 						</div>
-						<input type="hidden" name="addon_extra[0][gender]" id="gender" value="<?=$data['title']?>">
+						<input type="hidden" name="addon_extra[0][gender]" id="gender" value="0">
 						<script>
 							$(document).ready(function() {
 								$('.gender_button').on('click', function() {
