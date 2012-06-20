@@ -1,4 +1,5 @@
 <link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/contact.css" />
+<link rel="stylesheet" href="/resources/addon/jqueryui/aristo/ui.css" />
 <script type="text/javascript" src="/resources/addon/contacts.js"></script>
 <script type="text/javascript">
 function ajax_edit(id){
@@ -18,7 +19,7 @@ function confirm_delete(id){
 </script>
 <?php 
 	//echo '<pre>';
-	//print_r($user_role['role_id']);
+	//print_r($data);
 	//echo '</pre>';
 ?>
 <div id="payment_boxes">
@@ -228,20 +229,39 @@ function confirm_delete(id){
 				<span style="text-transform:uppercase;">LOGIN</span>
 			</div>
 			
-			<ul>
+			<ul id="view_pass">
 				<li>
 					<span class="input_data_label">Password</span>
-					<span class="fillter_input">Active</span>
+					<span class="fillter_input">xxxxxx</span>
 				</li>
 				<li>
 					<span class="input_data_label">Expiry Date</span>
-					<span class="fillter_input">21/12/2012</span>
+					<span class="fillter_input"><?=$data['addon_access_user'][0]['expire_stamp']?></span>
 				</li>
 				<li style="margin:10px 0 0 95px;">
-					<button id="btn_view_active" style="height:20px;line-height:12px;" class="btn btn-inverse" href="#">EDIT DETAILS</button>
+					<button id="btn_view_pass" style="height:20px;line-height:12px;" class="btn btn-inverse">EDIT DETAILS</button>
+				</li>
+			</ul>
+			
+			<ul id="edit_pass" style="display:none;">
+				<li>
+					<span class="input_data_label">Password</span>
+					<span class="fillter_input"><input type="password" id="access_pass" value=""/></span>
+				</li>
+				<li>
+					<span class="input_data_label">Expiry Date</span>
+					<span class="fillter_input"><input type="text" id="expiry_date" value=""/></span>
+				</li>
+				<li style="margin:10px 0 0 95px;">
+					<button onclick="ajax_change_pass(<?=$data['addon_access_user'][0]['id']?>);" id="btn_view_active" style="height:20px;line-height:12px;" class="btn btn-inverse">SAVE</button>
 				</li>
 			</ul>
 		</div>
 	</div>
 	<?php }?>
 </div>
+<script type="text/javascript">
+	$(function() {
+		$( "#expiry_date" ).datepicker();
+	});
+</script>

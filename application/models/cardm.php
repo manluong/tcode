@@ -72,7 +72,7 @@ class CardM extends MY_Model {
 	public $sett_fill_roles = FALSE;
 	public $sett_fill_invoice = FALSE;
 
-	public $sett_fill_access_user = FALSE;
+	public $sett_fill_access_user = TRUE;
 
 	private $addons = array(
 		'address' => 'Card_addressM',

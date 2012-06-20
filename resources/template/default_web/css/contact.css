@@ -187,3 +187,6 @@
 #edit_active select{
 	width:120px;
 }
+#edit_pass input{
+	width:100px;
+}

@@ -151,6 +151,11 @@ $(document).ready(function(){
 			$('#view_active').hide();
 			$('#edit_active').show();
 		});
+		$('#btn_view_pass').click(function(){
+			$('#view_pass').hide();
+			$('#edit_pass').show();
+		});
+		
 	});
 
 	function ajax_change_status(id){
@@ -162,6 +167,23 @@ $(document).ready(function(){
 				active : active,
 			},function(data){
 				$('#customer_detail').html(data);
+			}
+		);
+	}
+	
+	function ajax_change_pass(id){
+		var pass = $('#access_pass').val();
+		var expiry_date = $('#expiry_date').val();
+		var url = '/card/ajax_change_pass';
+		
+		$.post(url,{
+				id : id,
+				pass : pass,
+				expiry_date : expiry_date,
+			},function(data){
+				alert(data);
+				$('#edit_pass').hide();
+				$('#view_pass').show();
 			}
 		);
 	}

@@ -84,6 +84,21 @@ class Card extends MY_Controller {
 		$this->load->view(get_template().'/card/ajax_status',$view_data);
 	}
 	
+	function ajax_change_pass(){
+		$this->load->model('Access_UserM');
+		
+		$data = array (
+			'id' => $this->input->post('id'),
+            'password' => md5($this->input->post('pass')),
+			'expire_stamp' => $this->input->post('expiry_date') ,
+		);
+		$id_save = $this->Access_UserM->save($data);
+		echo $id_save;
+		//$view_data['data'] = $this->Access_userM->get($this->input->post('id'));
+		//$data = $this->Access_userM->get($this->input->post('id'));
+		
+	}
+	
 	function contact_fillter(){
 		$this->CardM->sett_fill_address = FALSE;
 		$this->CardM->sett_fill_bank = FALSE;
@@ -230,13 +245,14 @@ class Card extends MY_Controller {
 		//if (!$this->AclM->check('card', $id, 'edit')) die('you cannot edit this data');
 
 		$view_data['data'] = $this->CardM->get($id);
+		$data = $this->CardM->get($id);
 		$view_data['role'] = array(
 			0 => 'None',
 			1 => 'Staff',
 			2 => 'Customer',
 			4 => 'Vendor',
 		);
-
+		
 		$view_data['is_new'] = FALSE;
 		$view_data['countries'] = $this->Card_AddressM->get_country_list();
 
