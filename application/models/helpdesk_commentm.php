@@ -20,7 +20,23 @@ class Helpdesk_CommentM extends MY_Model {
 			return false;
 		}
 	}
-
+	
+	function get_comment_list($id){
+		$this->db->select('a_helpdesk_comment.id, a_helpdesk_comment.comment, a_helpdesk_comment.created_stamp, card.display_name, card.organization_name');
+		$this->db->from('a_helpdesk_comment');
+		$this->db->join('card', 'card.id = a_helpdesk_comment.created_card_id');
+		$this->db->where('helpdesk_id',$id);
+		$this->db->where('a_helpdesk_comment.active',0);
+		
+		$query = $this->db->get();
+		
+		if ($query->result_array()) {
+			return $query->result_array();
+		} else {
+			return false;
+		}
+	}
+	
 	function get_content($id) {
 		$this->db->select('*');
 		$this->db->where('helpdesk_id',$id);

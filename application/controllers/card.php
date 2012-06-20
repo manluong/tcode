@@ -149,11 +149,7 @@ class Card extends MY_Controller {
 			'card_phone' => $this->CardM->get_card_phone($id),
 			'card_address' => $this->CardM->get_card_address($id),
 		);
-		//$result = $this->CardM->get($id);
-		//echo '<pre>';
-		//print_r($result);
-		//echo '</pre>';
-		//die;
+	
 		$where = array();
 		$where[] = "created_card_id='$id'";
 		$this->HelpdeskM->where = $where;
@@ -424,6 +420,31 @@ class Card extends MY_Controller {
 	function ajax_auto_customer() {
 		$term = $this->input->get('term');
 		$list = $this->CardM->search_customer($term);
+
+		$data = array();
+		if (count($list)) {
+			foreach ($list as $v) {
+				if (strlen($v['display_name'])) {
+					$name = $v['display_name'];
+				} else {
+					$name = $v['first_name'].' '.$v['last_name'];
+				}
+
+				$data[] = array(
+					'id' => $v['id'],
+					'label' => $name,
+					'value' => $name
+				);
+			}
+		}
+
+		echo json_encode($data);
+		exit;
+	}
+	
+	function ajax_auto_all_contact() {
+		$term = $this->input->get('term');
+		$list = $this->CardM->search_all_contact($term);
 
 		$data = array();
 		if (count($list)) {

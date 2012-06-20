@@ -459,5 +459,26 @@ class CardM extends MY_Model {
 
 		return parent::search($search_string);
 	}
+	
+	function search_all_contact($search_string) {
+		//search first_name + last_name only
+		$this->search_fields = array(
+			array(
+				'first_name',
+				'last_name',
+			),
+			array(
+				'display_name'
+			),
+		);
+
+		//Search all User in contact list
+		//$this->where[] = 'id IN (SELECT card_id FROM access_user_role WHERE role_id IN (2,3))';
+
+		//retrieve only id, first_name and last_name
+		$this->select_fields = array('id', 'first_name', 'last_name', 'display_name');
+
+		return parent::search($search_string);
+	}
 
 }

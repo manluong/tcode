@@ -109,7 +109,7 @@ $(document).ready(function(){
 
 	//Auto complete requester
 	$('#customer_name').autocomplete({
-		source: '/card/ajax_auto_customer',
+		source: '/card/ajax_auto_all_contact',
 		minLength: 2,
 		select: function(e, ui) {
 			$('#customer_id').val(ui.item.id);

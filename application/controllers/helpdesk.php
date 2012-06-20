@@ -158,7 +158,6 @@ class Helpdesk extends MY_Controller {
 
 	function get_customer() {
 		$term = $this->input->get('term');
-
 		$this->load->model('CardM');
 		$customer_list = $this->CardM->search_customer($term);
 
@@ -288,11 +287,7 @@ class Helpdesk extends MY_Controller {
             'active' => 1,
 		);
 		$comment_id = $this->Helpdesk_CommentM->save($comment_data);
-		$where_comment[] = "active = 0";
-		$where_comment[] = "helpdesk_id='$id'";
-		$this->Helpdesk_CommentM->where = $where_comment;
-		$comment = $this->Helpdesk_CommentM->get_list();
-
+		$comment = $this->Helpdesk_CommentM->get_comment_list($id);
 		$content = array(
 			'card_id' => $card_id,
 			'id' => $id,
@@ -364,12 +359,7 @@ class Helpdesk extends MY_Controller {
 		$comment_id = $this->Helpdesk_CommentM->save($comment_data);
 
 		if($id_helpdesk!=0){
-			//Get data comment
-			$where_comment[] = "active = 0";
-			$where_comment[] = "helpdesk_id='$id_helpdesk'";
-			$this->Helpdesk_CommentM->where = $where_comment;
-			$comment = $this->Helpdesk_CommentM->get_list();
-
+			$comment = $this->Helpdesk_CommentM->get_comment_list($id_helpdesk);
 			//Get data helpdesk
 			$result = $this->HelpdeskM->get($id_helpdesk);
 		}

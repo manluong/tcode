@@ -203,7 +203,7 @@
 					<div class="comment_info_user">
 						<div class="comment_user_avatar"><image src="<?=site_url('resources/template/default_web/img/helpdesk')?>/comment_avatar.png"/></div>
 						<div class="comment_user_name">
-							<div style="color:#444444;font-size:13px;width:100%;height:14px;"><strong>Tim C.</strong> Apple Inc.</div>
+							<div style="color:#444444;font-size:13px;width:100%;height:14px;"><strong><?=$comment[$i]['display_name']?></strong> <?=$comment[$i]['organization_name']?></div>
 							<div style="font-size:11px;color:#b0b0b0;"><?=($day>0 ? $day.' day ' : '')?><?=($hour>0 ? $hour.' hour ' : '')?><?=$minute.' minute'?> ago</div>
 						</div>
 					</div>
