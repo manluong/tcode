@@ -175,6 +175,12 @@ class SettingM extends MY_Model {
 		$data = array();
 		$sql = 'INSERT INTO setting (app_id, card_id, setting_level, setting_name, setting_value, can_override) VALUES ';
 		foreach($levels AS $l) {
+			if ($l == 'tenant') {
+				$card_id = 0;
+			} else {
+				$card_id = $this->UserM->get_card_id();
+			}
+
 			foreach($this->settings[$app_name] AS $s => $s_details) {
 				$field = $this->input->post($l.'-'.$s);
 				if ($field !== FALSE) {
