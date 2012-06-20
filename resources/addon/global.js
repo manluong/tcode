@@ -140,7 +140,7 @@ $(document).ready(function(){
 		return false;
 	});
 
-	$(document).on('click', '#settings .icons a', function() {
+	$(document).on('click', '#settings .cont-icon a', function() {
 		$('#settings .step1').hide();
 		var url = $(this).attr('href');
 		$.get(
@@ -179,7 +179,7 @@ $(document).ready(function(){
 		return false;
 	});
 
-	$(document).on('click', '#overlay, .closeModal', function() {
+	$(document).on('click', '#overlay, .btnX', function() {
 		$('#settings .step2').hide();
 		$('#settings .step1').fadeIn('fast');
 		$('#settings, #overlay').fadeOut('fast');

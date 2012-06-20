@@ -398,7 +398,13 @@
 				<div class="control-group">
 					<label class="control-label" for="birth_date">Birthday</label>
 					<div class="controls">
-						<?=form_input('addon_extra[0][birth_date]', $data['addon_extra'][0]['birth_date'], 'id="addon_extra_birth_date"')?>
+						<?php
+                                                  // -- Leo fix
+                                                  $birthday = explode('-',$data['addon_extra'][0]['birth_date']);
+                                                  $birthday = $birthday[1].'/'.$birthday[2].'/'.$birthday[0];
+                                                  // -- End
+                                                echo form_input('addon_extra[0][birth_date]', $birthday, 'id="addon_extra_birth_date"');
+                                                ?>
 					</div>
 				</div>
 				<div class="control-group">

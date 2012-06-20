@@ -124,7 +124,7 @@
 	<div id="overlay"></div>
 	<div id="settings" class="hide">
 		<div class="relativeMe">
-			<a href="#" class="closeModal">x</a>
+			<!-- <a href="#" class="closeModal">x</a> -->
 			<div class="step1"></div>
 			<div class="step2"></div>
 		</div>
@@ -186,14 +186,10 @@
 	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/jquery.smooth-scroll.min.js"></script>
 	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/plugins.js"></script>
 	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/script.js"></script>
-        <script type="text/javascript" src="/resources/template/<?=get_template()?>/js/strophe.js"></script>
-        <script type="text/javascript" src="/resources/template/<?=get_template()?>/js/strophe.xdomainrequest.js"></script>
-        <script type="text/javascript" src="/resources/template/<?=get_template()?>/js/buzz.js"></script>
-        <script type="text/javascript" src="/resources/template/<?=get_template()?>/js/chat.js"></script>
-
-	<script>
-
-	</script>
+	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/strophe.js"></script>
+	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/strophe.xdomainrequest.js"></script>
+	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/buzz.js"></script>
+	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/chat.js"></script>
 
 </body>
 </html>
