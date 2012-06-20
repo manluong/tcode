@@ -238,7 +238,7 @@ class EmailL {
 
 		foreach($this->_to AS $x=>$to) {
 			$data = array(
-				'log_email_id' => $this->_log_id,
+				'email_sent_log_id' => $this->_log_id,
 				'to' => $to,
 				'toname' => $this->_toname[$x],
 				'is_bcc' => 0,
@@ -249,7 +249,7 @@ class EmailL {
 
 		foreach($this->_bcc AS $to) {
 			$data = array(
-				'log_email_id' => $this->_log_id,
+				'email_sent_log_id' => $this->_log_id,
 				'to' => $to,
 				'toname' => '',
 				'is_bcc' => 1,
@@ -272,7 +272,7 @@ class EmailL {
 	private function _build_email() {
 		$this->_ci->smtpapiheaderl->addFilterSetting('domainkeys', 'enable', 1);
 		$this->_ci->smtpapiheaderl->addFilterSetting('domainkeys', 'domain', 'www.8force.com');
-		$this->_ci->smtpapiheaderl->setUniqueArgs(array('log_email_id'=>$this->_log_id));
+		$this->_ci->smtpapiheaderl->setUniqueArgs(array('email_sent_log_id'=>$this->_log_id));
 
 		// Start converting arrays to strings
 		$to = array();
