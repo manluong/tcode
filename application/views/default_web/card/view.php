@@ -145,7 +145,13 @@ function confirm_delete(id){
 				
 				<li>
 					<span class="input_data_label">Birthday</span>
-					<span class="fillter_input"><?=$data['addon_extra'][0]['birth_date']?></span>
+					<span class="fillter_input"><?php
+                                        // -- Leo fix
+                                            $birthday = explode('-',$data['addon_extra'][0]['birth_date']);
+                                            $birthday = $birthday[1].'/'.$birthday[2].'/'.$birthday[0];
+                                        // -- End
+                                        echo $birthday;
+                                        ?></span>
 				</li>
 				<li style="margin:10px 0 0 95px;">
 					<button onclick="ajax_edit(<?=$data['id']?>);" style="height:20px;line-height:12px;" class="btn btn-inverse" href="#">EDIT DETAILS</button>
