@@ -183,6 +183,7 @@ $(document).ready(function(){
 			},function(data){
 				$('#edit_pass').hide();
 				$('#view_pass').show();
+				$('#view_pass').html(data);
 			}
 		);
 	}

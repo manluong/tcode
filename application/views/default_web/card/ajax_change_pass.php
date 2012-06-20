@@ -1,3 +1,4 @@
+<script type="text/javascript" src="/resources/addon/contacts.js"></script>
 <li>
 	<span class="input_data_label">Password</span>
 	<span class="fillter_input">xxxxxx</span>
