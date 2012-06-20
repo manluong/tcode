@@ -12,11 +12,7 @@ class SettingM extends MY_Model {
 				'type' => 'string'
 			)
 		),
-		'helpdesk' => array(
-			'priority' => array(
-				'type' => 'selection'
-			)
-		),
+
 		'email' => array(
 			'always_bcc' => array(
 				'type' => 'string'
@@ -162,7 +158,7 @@ class SettingM extends MY_Model {
 					$field_override = $this->input->post('global-'.$s.'-override');
 					if ($field_override === FALSE) $field_override = 1;
 
-					if ($s_details['type'] == 'selection') $field = json_encode($field);
+					//if ($s_details['type'] == 'selection') $field = json_encode($field);
 
 					$data[] = "(".$app_id.",0,'global','".$s."','".$field."',".$field_override.")";
 				}
@@ -185,7 +181,7 @@ class SettingM extends MY_Model {
 					$field_override = $this->input->post($l.'-'.$s.'-override');
 					if ($field_override === FALSE) $field_override = 1;
 
-					if ($s_details['type'] == 'selection') $field = json_encode($field);
+					//if ($s_details['type'] == 'selection') $field = json_encode($field);
 
 					$data[] = "(".$app_id.",".$card_id.",'".$l."','".$s."','".$field."',".$field_override.")";
 				}
