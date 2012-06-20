@@ -360,7 +360,7 @@ class Card extends MY_Controller {
                  * Leo Fix
                  */
                  $date = explode('/',$_POST['addon_extra'][0]['birth_date']);
-                 $date = $date[2].'-'.$date[1].'-'.$date[0];
+                 $date = $date[2].'-'.$date[0].'-'.$date[1];
                  $_POST['addon_extra'][0]['birth_date'] = $date;
                  /*
                   * End Fix
