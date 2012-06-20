@@ -202,7 +202,84 @@ class SettingM extends MY_Model {
 		return TRUE;
 	}
 
+	function get_options($app_name, $name) {
+		$results_array = $this->db->select('key, value, language_key')
+							->from('core_select')
+							->where('app_id', $this->AppM->get_id($app_name))
+							->where('name', $name)
+							->order_by('sort_order', 'ASC')
+							->get()
+							->result_array();
 
+		$results = array();
+		foreach($results_array AS $r) {
+			$results[$r['key']] = ( empty($r['language_key']) )
+									? $r['value']
+									: $this->lang->line($r['language_key']);
+		}
+
+		return $results;
+	}
+
+	function get_options_for_configuration($app_name, $name, $id_as_key=FALSE) {
+		$app_id = $this->AppM->get_id($app_name);
+
+		$results = $this->db->select('id, value, language_key')
+					->from('core_select')
+					->where('app_id', $app_id)
+					->where('name', $name)
+					->order_by('sort_order', 'ASC')
+					->get()
+					->result_array();
+
+		if ($id_as_key) {
+			$temp = array();
+			foreach($results AS $r) {
+				$temp[$r['id']] = $r;
+			}
+			$results = $temp;
+		}
+
+		return $results;
+	}
+
+	function delete_option($id) {
+		$this->db->where('id', $id)
+				->limit(1)
+				->delete('core_select');
+
+		return TRUE;
+	}
+
+	function add_option($data) {
+		$this->db->insert('core_select', $data);
+		$new_id = $this->db->insert_id();
+
+		$this->db->set('key', $new_id)
+				->where('id', $new_id)
+				->update('core_select');
+
+		return TRUE;
+	}
+
+	function save_options() {
+		//$app_id = $this->AppM->get_id($app_name);
+		$values = $this->input->get_post('value');
+		$sort_order = $this->input->get_post('sort_order');
+
+		$data = array();
+		foreach($values AS $id=>$value) {
+			$data[] = array(
+				'id' => $id,
+				'value' => $value,
+				'sort_order' => $sort_order[$id],
+			);
+		}
+
+		$this->db->update_batch('core_select', $data, 'id');
+
+		return TRUE;
+	}
 
 }
 
