@@ -47,7 +47,7 @@
 </div>
 
 <div id="boxes">
-	<div id="invoice_fillter" style="height:280px;">
+	<div id="invoice_fillter" style="height:220px;float:left;">
 		<div class="invoice_title"><span class="arrow_title"></span><span>NEW CASE INFORMATION</span></div>
 		<div id="input_data_info">
 			<ul>

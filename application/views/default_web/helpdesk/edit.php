@@ -60,8 +60,8 @@
 				<li>
 					<span style="font-weight:normal;" class="input_data_label">Assigned</span>
 					<span class="fillter_input">
-						<input type="hidden" id="assign_id" name="assign_id" />
-						<input type="text" id="assign_name" name="assign_name" class="inv-field" />
+						<input type="hidden" id="assign_id" value="<?=$result['assign_id']?>" name="assign_id" />
+						<input type="text" id="assign_name" value="<?=$this->Helpdesk_CommentM->get_assigname($result['assign_id'])?>" name="assign_name" class="inv-field" />
 					</span>
 				</li>
 				<li style="height:22px;">

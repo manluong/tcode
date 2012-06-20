@@ -63,7 +63,7 @@ class Helpdesk_CommentM extends MY_Model {
 	}
 
 	function get_assigname($id) {
-		$this->db->select('display_name');
+		$this->db->select('first_name, last_name');
 		$this->db->where('id',$id);
 		$query = $this->db->get('card');
 
@@ -71,7 +71,7 @@ class Helpdesk_CommentM extends MY_Model {
 			$tmp = $query->result();
 			if (!empty($tmp)) {
 				foreach($tmp as $k) {
-					return $k->display_name;
+					return $k->first_name.' '.$k->last_name;
 				}
 			}
 		} else {

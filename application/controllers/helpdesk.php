@@ -1,55 +1,426 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Card extends MY_Controller {
+class Helpdesk extends MY_Controller {
 
 	function __construct() {
 		parent::__construct();
 
-		$this->load->model('CardM');
-		$this->load->model('Card_AddressM');
-		$this->load->model('Card_EmailM');
-		$this->load->model('Card_SocialM');
-		$this->load->model('Card_TelM');
-		$this->load->model('InvoiceM');
+		$this->load->model('Helpdesk_CommentM');
 		$this->load->model('HelpdeskM');
+		$this->load->model('CardM');
+		$this->load->model('Helpdesk_StatusM');
+		$this->load->model('Helpdesk_GroupM');
+		$this->load->model('Helpdesk_TypeM');
+		$this->load->model('Helpdesk_PriorityM');
 	}
 
-	function index(){
-		$this->CardM->sett_fill_address = FALSE;
-		$this->CardM->sett_fill_bank = FALSE;
-		$this->CardM->sett_fill_email = FALSE;
-		$this->CardM->sett_fill_extra = FALSE;
-		$this->CardM->sett_fill_notes = FALSE;
-		$this->CardM->sett_fill_social = FALSE;
-		$this->CardM->sett_fill_tel = FALSE;
-		$this->CardM->sett_fill_roles = TRUE;
-
-		$this->CardM->order_by[] = 'first_name ASC';
-		$view_data = array(
-			'list' => $this->CardM->get_list(),
+	function index() {
+		$content = array(
+			'card_id' => $this->UserM->get_card_id(),
+			'group' =>  $this->Helpdesk_GroupM->get_list(),
+			'status' => $this->Helpdesk_StatusM->get_list(),
+			'priority' => $this->Helpdesk_PriorityM->get_list(),
+			'type' => $this->Helpdesk_TypeM->get_list(),
 		);
+		$this->data['content'] = $this->load->view(get_template().'/helpdesk/index',$content, TRUE);
 
-		$this->data['content'] = $this->load->view(get_template().'/card/index',$view_data, TRUE);
+		$this->data['app_menu'] = array(
+			array(
+				'url' => '/helpdesk',
+				'extra' => '',
+				'title' => 'List',
+			),
+			array(
+				'url' => '#',
+				'extra' => 'onclick="helpdesk_fillter('.$this->UserM->get_card_id().');"',
+				'title' => 'My Cases',
+			),
+			array(
+				'url' => '/helpdesk/add',
+				'extra' => '',
+				'title' => 'New',
+			),
+		);
 		$this->_do_output();
 	}
 
-	function upload_crop(){
-		$this->load->view(get_template().'/card/upload_crop');
+	function card() {
+		$content = array(
+			'helpdesk_card_id' => $this->uri->segment(3),
+			'card_id' => $this->UserM->get_card_id(),
+			'group' =>  $this->Helpdesk_GroupM->get_list(),
+			'status' => $this->Helpdesk_StatusM->get_list(),
+			'priority' => $this->Helpdesk_PriorityM->get_list(),
+			'type' => $this->Helpdesk_TypeM->get_list(),
+		);
+		$this->data['content'] = $this->load->view(get_template().'/helpdesk/index',$content, TRUE);
+		$this->_do_output();
 	}
 
-	function contact_list_json() {
-		$this->CardM->sett_fill_address = FALSE;
-		$this->CardM->sett_fill_bank = FALSE;
-		$this->CardM->sett_fill_email = FALSE;
-		$this->CardM->sett_fill_extra = FALSE;
-		$this->CardM->sett_fill_notes = FALSE;
-		$this->CardM->sett_fill_social = FALSE;
-		$this->CardM->sett_fill_tel = FALSE;
-		$this->CardM->sett_fill_roles = TRUE;
+	function helpdesk_fillter(){
+		//Set order
+		$order_by = 'created_stamp  DESC';
+		$this->HelpdeskM->set_order_by($order_by);
+		$where = array();
+		//Check Customer
+		if($this->UserM->is_client() == TRUE){
+			$card_id = $this->UserM->get_card_id();
+			if(!empty($card_id)){
+				$where[] = "created_card_id='$card_id'";
+			}
+		}
 
-		$this->CardM->order_by[] = 'first_name ASC';
-		$list = $this->CardM->get_list();
-		echo json_encode($list);
+		//Fillter MY CASE of Staff
+		$card_id = $this->input->post('card_id');
+		if(!empty($card_id)){
+			$where[] = "created_card_id='$card_id'";
+		}
+
+		$status = $this->input->post('status');
+		if(!empty($status)){
+			$where[] = "status='$status'";
+		}
+
+		$group = $this->input->post('group');
+		if(!empty($group)){
+			$where[] = "`group`='$group'";
+		}
+
+		$type = $this->input->post('type');
+		if(!empty($type)){
+			$where[] = "type='$type'";
+		}
+
+		$priority = $this->input->post('priority');
+		if(!empty($priority)){
+			$where[] = "priority='$priority'";
+		}
+
+		$this->HelpdeskM->where = $where;
+
+		$result = $this->HelpdeskM->get_list();
+		$data = json_encode($result);
+		echo $data;
+	}
+
+	function helpdesk_fillter_all(){
+		$where = array();
+
+		$status = $this->input->post('status');
+		if(!empty($status)){
+			$where[] = "status='$status'";
+		}
+
+		$group = $this->input->post('group');
+		if(!empty($group)){
+			$where[] = "`group`='$group'";
+		}
+
+		$type = $this->input->post('type');
+		if(!empty($type)){
+			$where[] = "type='$type'";
+		}
+
+		$priority = $this->input->post('priority');
+		if(!empty($priority)){
+			$where[] = "priority='$priority'";
+		}
+
+		$customer = $this->input->post('customer');
+		if(!empty($customer)){
+			$where[] = "created_card_id='$customer'";
+		}
+
+		$assigned = $this->input->post('assigned');
+		if(!empty($assigned)){
+			$where[] = "assign_id='$assigned'";
+		}
+
+		$subject = $this->input->post('subject');
+		if(!empty($subject)){
+			$where[] = "subject LIKE '$subject%'";
+		}
+
+		$comments = $this->input->post('comments');
+		if(!empty($comments)){
+			$results = $this->Helpdesk_CommentM->search_comment($comments);
+			$helpdesk_ids = get_distinct('helpdesk_id', $results);
+			$where[] = 'id IN ('.implode(',', $helpdesk_ids).')';
+		}
+
+		$this->HelpdeskM->where = $where;
+
+		$result = $this->HelpdeskM->get_list();
+
+		$data = json_encode($result);
+		echo $data;
+	}
+
+	function get_customer() {
+		$term = $this->input->get('term');
+
+		$this->load->model('CardM');
+		$customer_list = $this->CardM->search_customer($term);
+
+		$content = array();
+		if ($customer_list) {
+			foreach ($customer_list as $customer) {
+				$content[] = array(
+					'id' => $customer['id'],
+					'label' => trim($customer['first_name'].' '.$customer['last_name']),
+					'value' => trim($customer['first_name'].' '.$customer['last_name'])
+				);
+			}
+		}
+		echo json_encode($content);
+	}
+
+	function get_comment() {
+		$term = $this->input->get('term');
+		$comment_list = $this->Helpdesk_CommentM->search_comment($term);
+
+		$content = array();
+		if ($comment_list) {
+			foreach ($comment_list as $k) {
+				$content[] = array(
+					'id' => $k['id'],
+					'label' => $k['comment'],
+					'value' =>  $k['comment'],
+				);
+			}
+		}
+		echo json_encode($content);
+	}
+
+	function get_staff() {
+		$term = $this->input->get('term');
+
+		$this->load->model('CardM');
+		$customer_list = $this->Card->ajax_search_staff($term);
+
+		$content = array();
+		if ($customer_list) {
+			foreach ($customer_list as $customer) {
+				$content[] = array(
+					'id' => $customer['id'],
+					'label' => trim($customer['first_name'].' '.$customer['last_name']),
+					'value' => trim($customer['first_name'].' '.$customer['last_name'])
+				);
+			}
+		}
+
+		echo json_encode($content);
+	}
+
+	function add() {
+		//Delete NULL HELPDESK
+		$this->delete_helpdesk();
+
+		//Delete NULL COMMENT
+		$this->delete_comment();
+
+		//Create NULL HELPDESK
+		$helpdesk_data = array(
+			'subject' => '',
+			'assign_id' => '',
+			'cc_email' => '',
+			'group' => '',
+			'status' => '',
+			'type' => '',
+			'priority' => '',
+			'active' => 1,
+		);
+
+	   $helpdesk_id = $this->HelpdeskM->save($helpdesk_data);
+	   //Create NULL COMMENT
+	   $comment_data = array (
+			'group' => '',
+			'status' => '',
+			'type' => '',
+			'priority' => '',
+			'comment' => '',
+			'private' => '',
+			'helpdesk_id' => $helpdesk_id ,
+            'active' => 1,
+		);
+		$insert_comment_id = $this->Helpdesk_CommentM->save($comment_data);
+
+		//get data for add new helpdesk
+		$content = array(
+			'card_id' => $this->UserM->get_card_id(),
+			'comment_id' => $insert_comment_id,
+			'helpdesk_id' => $helpdesk_id,
+			'group' =>  $this->Helpdesk_GroupM->get_list(),
+			'status' => $this->Helpdesk_StatusM->get_list(),
+			'priority' => $this->Helpdesk_PriorityM->get_list(),
+			'type' => $this->Helpdesk_TypeM->get_list(),
+			'assign' => $this->Helpdesk_CommentM->get_assign(),
+		);
+
+		$this->data['content'] = $this->load->view(get_template().'/helpdesk/add',$content, TRUE);
+		$this->_do_output();
+	}
+
+	function edit(){
+		$id = $this->uri->segment(3);
+		$result = $this->HelpdeskM->get($id);
+		//Check Customer id
+		$card_id = $this->UserM->get_card_id();
+
+		if($this->UserM->is_client() == TRUE){
+			if($result['created_card_id'] != $card_id){
+				header("location: /helpdesk");
+				die;
+			}
+		}
+		//Delete NULL COMMENT
+		$this->delete_comment();
+
+		//Create NULL COMMENT for upload file attach
+	   $comment_data = array (
+			'group' => '',
+			'status' => '',
+			'type' => '',
+			'priority' => '',
+			'comment' => '',
+			'private' => '',
+			'helpdesk_id' => $id ,
+            'active' => 1,
+		);
+		$comment_id = $this->Helpdesk_CommentM->save($comment_data);
+
+		$comment = $this->Helpdesk_CommentM->get_comment_list($id);
+		$content = array(
+			'card_id' => $card_id,
+			'id' => $id,
+			'comment_id' => $comment_id,
+			'group' =>  $this->Helpdesk_GroupM->get_list(),
+			'status' => $this->Helpdesk_StatusM->get_list(),
+			'priority' => $this->Helpdesk_PriorityM->get_list(),
+			'type' => $this->Helpdesk_TypeM->get_list(),
+			'comment' => $comment,
+			'result' => $result,
+			'assign' => $this->Helpdesk_CommentM->get_assign(),
+			'file_attach' => $this->Helpdesk_CommentM->get_comment_files(),
+		);
+		//$card = $this->CardM->get_quickjump($result['created_card_id']);
+		//$content['quickjump'] = $this->load->view(get_template().'/card/quickjump', $card, TRUE);
+
+
+		$this->data['content'] = $this->load->view(get_template().'/helpdesk/edit',$content, TRUE);
+		$this->_do_output();
+	}
+
+	function out_put_pdf($id) {
+		$result[0] = array();
+		if($id!=0){
+			$result = $this->Helpdesk_CommentM->get_content_helpdesk($id);
+		}
+		$content = array(
+			'id' => $id,
+			'group' =>  $this->Helpdesk_CommentM->get_group(),
+			'status' => $this->Helpdesk_CommentM->get_status(),
+			'priority' => $this->Helpdesk_CommentM->get_priority(),
+			'type' => $this->Helpdesk_CommentM->get_type(),
+			'comment' => $this->Helpdesk_CommentM->get_content($id),
+			'result' => $result[0],
+			'assign' => $this->Helpdesk_CommentM->get_assign(),
+			'file_attach' => $this->HelpdeskM->get_helpdesk_files($id),
+		);
+
+		$html = $this->load->view(get_template().'/helpdesk/pdf_comment',$content, TRUE);
+		output_pdf($html);
+	}
+
+	function save_comment(){
+		$id_helpdesk = $this->input->post('id');
+		$data = array(
+            'id' => $this->input->post('id_comment'),
+			'group' => $this->input->post('group'),
+			'status' => $this->input->post('status'),
+			'type' => $this->input->post('type'),
+			'priority' => $this->input->post('priority'),
+			'comment' => $this->input->post('comment'),
+			'private' => $this->input->post('pri'),
+			'helpdesk_id' => $id_helpdesk ,
+            'active' => 0,
+		);
+		$this->Helpdesk_CommentM->save($data);
+
+		//Create NULL COMMENT for upload file attach
+	   $comment_data = array (
+			'group' => '',
+			'status' => '',
+			'type' => '',
+			'priority' => '',
+			'comment' => '',
+			'private' => '',
+			'helpdesk_id' => $id_helpdesk ,
+            'active' => 1,
+		);
+		$comment_id = $this->Helpdesk_CommentM->save($comment_data);
+
+		if($id_helpdesk!=0){
+		
+			$comment = $this->Helpdesk_CommentM->get_comment_list($id);
+			//Get data helpdesk
+			$result = $this->HelpdeskM->get($id_helpdesk);
+		}
+
+		$data_ajax = array(
+           'comment' => $comment,
+		   'result' => $result,
+		   'comment_id' => $comment_id,
+		);
+
+		$ajax_content = $this->load->view(get_template().'/helpdesk/ajax_updateComment',$data_ajax ,true);
+		echo $ajax_content  ;
+	}
+
+	function save_insert_helpdesk(){
+		$data = array(
+			'id' => $this->input->post('id'),
+			'subject' => $this->input->post('subject'),
+			'assign_id' => $this->input->post('assign'),
+			'cc_email' => $this->input->post('cc_email'),
+			'`group`' => $this->input->post('group'),
+			'status' => $this->input->post('status'),
+			'type' => $this->input->post('type'),
+			'priority' => $this->input->post('priority'),
+			'created_card_id' => $this->input->post('requester'),
+			'active' => 0,
+		);
+		$insert_id = $this->HelpdeskM->save($data);
+		echo $insert_id;
+	}
+
+	function ajaxChangeInfoHelpDesk() {
+		$id = $this->input->post('id');
+		$data = array(
+			'id'=>$id,
+			'subject' => $this->input->post('subject'),
+			'assign_id' => $this->input->post('assign'),
+			'cc_email' => $this->input->post('cc_email'),
+		);
+		$this->HelpdeskM->save($data);
+
+		$content = array (
+			'info' => $this->HelpdeskM->get_content($id),
+		);
+
+		$ajax_content = $this->load->view(get_template().'/helpdesk/ajax_updateInfoHelpdesk',$content ,true);
+		echo $ajax_content;
+	}
+
+	function resave_helpdesk_info() {
+		$id = $this->input->post('id');
+		$data = array(
+			'id'=>$id,
+			'status' => $this->input->post('status'),
+			'priority' => $this->input->post('priority'),
+		);
+		$id_save = $this->HelpdeskM->save($data);
+		return $id_save;
 	}
 
 	function upload($comment_id){
@@ -61,409 +432,45 @@ class Card extends MY_Controller {
 		}
 	}
 
-	function ajax_contact_info(){
-		$card_id = $this->input->post('id');
-		$view_data = array(
-			'detail' => $this->CardM->get($card_id),
-		);
-		$this->load->view(get_template().'/card/ajax_contact_info',$view_data);
-	}
-	
-	function ajax_change_status(){
-		$id = $this->input->post('id');
-		$this->load->model('aclM');
-		$role = $this->AclM->get_user_role_info($id);
-		$data = array (
-			'id' => $id ,
-            'active' => $this->input->post('active'),
-		);
-		
-		$save_id = $this->CardM->save($data);
-		$view_data['role'] = $role['name'];
-		$view_data['data'] = $this->CardM->get($save_id);
-		$this->load->view(get_template().'/card/ajax_status',$view_data);
-	}
-	
-	function ajax_change_pass(){
-		$this->load->model('Access_UserM');
-		$date = $this->input->post('expiry_date');
-		$date = split('/',$date);
-		$data = array (
-			'id' => $this->input->post('id'),
-            'password' => md5($this->input->post('pass')),
-			'expire_stamp' => $date[2].'-'.$date[1].'-'.$date[0].' 00:00:00',
-		);
-		$this->Access_UserM->save($data);
-		$view_data['data'] = $this->Access_UserM->get($this->input->post('id'));
-		$this->load->view(get_template().'/card/ajax_change_pass',$view_data);
-	}
-	
-	function contact_fillter(){
-		$this->CardM->sett_fill_address = FALSE;
-		$this->CardM->sett_fill_bank = FALSE;
-		$this->CardM->sett_fill_email = FALSE;
-		$this->CardM->sett_fill_extra = FALSE;
-		$this->CardM->sett_fill_notes = FALSE;
-		$this->CardM->sett_fill_social = FALSE;
-		$this->CardM->sett_fill_tel = FALSE;
-		$this->CardM->sett_fill_roles = TRUE;
-
-		$role_id = $this->input->post('role_id');
-		if (is_array($role_id)) {
-			$this->Card_RoleM->set_where('role_id IN ('.implode(',', $role_id).')');
-		} else if ($role_id == -1) {
-			$this->Card_RoleM->set_where('role_id > 4');
-		} else if ($role_id != 0) {
-			$this->Card_RoleM->set_where('role_id = '.$role_id);
-		}
-
-		$result = $this->Card_RoleM->get_list();
-
-		$list_id = '';
-		for($i = 0 ; $i < count($result) ; $i++){
-			if($i == 0 ){
-				$list_id = $result[$i]['card_id'];
+	function delete_helpdesk() {
+		$result = $this->HelpdeskM->get_helpdesk_not_use();
+		if (!empty($result)) {
+			foreach($result as $k) {
+				$this->HelpdeskM->delete($k->id,TRUE);
 			}
-			$list_id .= ','.$result[$i]['card_id'];
-		}
-		$this->db->order_by('first_name ASC');
-		$list_id = explode(',',$list_id);
-		$list = $this->CardM->get_batch($list_id);
-
-		$view_data = array(
-			'list' => $list,
-		);
-		$this->load->view(get_template().'/card/ajax_contact_list',$view_data);
-	}
-
-	function view($id) {
-		$this->load->model('aclM');
-		$role = $this->AclM->get_user_role_info($id);
-		
-		$view_data = array(
-			'user_role' => $role,
-			'title' => 'Contact View',
-			'data' => $this->CardM->get($id),
-			'card_email' => $this->CardM->get_card_email($id),
-			'card_social' => $this->CardM->get_card_social($id),
-			'card_phone' => $this->CardM->get_card_phone($id),
-			'card_address' => $this->CardM->get_card_address($id),
-		);
-	
-		$where = array();
-		$where[] = "created_card_id='$id'";
-		$this->HelpdeskM->where = $where;
-
-		$view_data['invoice_summary'] = $this->InvoiceM->get_invoice_summary($id);
-		$view_data['helpdesk_summary'] = $this->HelpdeskM->get_list($id);
-		$view_data['role'] = array(
-			0 => 'None',
-			1 => 'Staff',
-			2 => 'Customer',
-			4 => 'Vendor',
-		);
-		$this->data['content'] = $this->load->view(get_template().'/card/view', $view_data, TRUE);
-		
-		$this->data['breadcrumb'][] = array(
-			'title' => $view_data['data']['first_name'],
-			'url' => '/card/view/'.$id,
-		);
-		$this->data['breadcrumb'][] = array(
-			'title' => 'Contact Information',
-			'url' => '',
-		);
-
-		$this->_do_output();
-	}
-
-	function view_json($id){
-		$view_data = array(
-			'data' => $this->CardM->get($id),
-			'card_email' => $this->CardM->get_card_email($id),
-			'card_social' => $this->CardM->get_card_social($id),
-			'card_phone' => $this->CardM->get_card_phone($id),
-			'card_address' => $this->CardM->get_card_address($id),
-		);
-		echo json_encode($view_data);
-	}
-	
-	function save_role(){
-		$this->load->model('Card_roleM');
-		$data = array(
-			'card_id' => $this->input->post('id'),
-			'role_id' => $this->input->post('role'),
-		);
-		$id_save = $this->Card_roleM->save($data);
-		echo $id_save;
-	}
-	
-	function add($id) {
-		//if (!$this->AclM->check('card', $id, 'edit')) die('you cannot edit this data');
-
-		$view_data['title_option'] = array(
-			0 => '',
-			1 => 'Mr.',
-			2 => 'Miss.',
-			3 => 'Mrs.',
-			4 => 'Dr.',
-		);
-		$view_data['gender'] = array(
-			0 => 'Female',
-			1 => 'Male'
-		);
-		$view_data['role'] = array(
-			0 => 'None',
-			1 => 'Staff',
-			2 => 'Customer',
-			4 => 'Vendor',
-		);
-		$view_data['title'] = $data_fields['title'];
-		$view_data['is_new'] = TRUE;
-		$view_data['countries'] = $this->Card_AddressM->get_country_list();
-
-		$view_data['tel_label'] = $this->Card_TelM->get_label('number');
-		$view_data['tel_type_options'] = $this->Card_TelM->get_options('type');
-
-		$view_data['email_label'] = $this->Card_EmailM->get_label('email');
-		$view_data['email_type_options'] = $this->Card_EmailM->get_options('type');
-
-		$view_data['address_label'] = 'Address';
-		$view_data['address_type_options'] = $this->Card_AddressM->get_options('type');
-
-		$view_data['social_label'] = 'Social';
-		$view_data['social_type_options'] = $this->Card_SocialM->get_options('type');
-		$this->data['content'] = $this->load->view(get_template().'/card/add', $view_data, TRUE);
-		$this->_do_output();
-	}
-
-	function edit($id) {
-		//if (!$this->AclM->check('card', $id, 'edit')) die('you cannot edit this data');
-
-		$view_data['data'] = $this->CardM->get($id);
-		$data = $this->CardM->get($id);
-		$view_data['role'] = array(
-			0 => 'None',
-			1 => 'Staff',
-			2 => 'Customer',
-			4 => 'Vendor',
-		);
-		
-		$view_data['is_new'] = FALSE;
-		$view_data['countries'] = $this->Card_AddressM->get_country_list();
-
-		$view_data['tel_label'] = $this->Card_TelM->get_label('number');
-		$view_data['tel_type_options'] = $this->Card_TelM->get_options('type');
-
-		$view_data['email_label'] = $this->Card_EmailM->get_label('email');
-		$view_data['email_type_options'] = $this->Card_EmailM->get_options('type');
-
-		$view_data['address_label'] = 'Address';
-		$view_data['address_type_options'] = $this->Card_AddressM->get_options('type');
-
-		$view_data['social_label'] = 'Social';
-		$view_data['social_type_options'] = $this->Card_SocialM->get_options('type');
-
-		$this->load->view(get_template().'/card/edit', $view_data);
-		//$this->data['content'] = $this->load->view(get_template().'/card/edit', $view_data, TRUE);
-		//$this->_do_output();
-	}
-
-	function save() {
-		$id = $this->CardM->save();
-		if ($id == FALSE) {
-			echo 'error saving.';
-			echo '<pre>', print_r($this->CardM->errors, TRUE), '</pre>';
-		} else {
-			redirect('/card/view/'.$id);
 		}
 	}
 
-	function confirm_delete($card_id) {
-		//$staff_id = $this->UserM->get_card_id();
-		$per = $this->AclM->check('card',0,'delete');
-		$data = array(
-			'per' => $per,
-			'card_id' => $card_id,
-		);
-		$this->load->view(get_template().'/card/confirm_delete', $data);
-	}
-
-	function delete($card_id){
-		$per_helpdesk = $this->AclM->check('helpdesk',0,'delete');
-		$per_invoice = $this->AclM->check('invoice',0,'delete');
-		if($per_helpdesk == TRUE && $per_invoice == TRUE){
-			$this->CardM->delete($card_id);
-			$per = TRUE;
-		}else{
-			$per = FALSE;
-		}
-		$data['per'] = $per;
-		$this->load->view(get_template().'/card/delete', $data);
-	}
-
-	function ajax_get_list() {
-		$limit = $this->input->post('limit');
-		$offset = $this->input->post('offset');
-
-		$this->CardM->limit = $limit;
-		$this->CardM->offset = $offset;
-
-		$this->CardM->sett_fill_address = FALSE;
-		$this->CardM->sett_fill_bank = FALSE;
-		$this->CardM->sett_fill_email = FALSE;
-		$this->CardM->sett_fill_extra = FALSE;
-		$this->CardM->sett_fill_notes = FALSE;
-		$this->CardM->sett_fill_social = FALSE;
-		$this->CardM->sett_fill_tel = FALSE;
-		$list = $this->CardM->get_list();
-
-		$this->RespM->set_message()
-				->set_type('list')
-				->set_template('')
-				->set_success(true)
-				->set_title('Contacts List')
-				->set_details($list)
-				->output_json();
-	}
-
-	function ajax_get() {
-		$id = $this->input->post('id');
-		$result = $this->CardM->get($id);
-
-		$this->RespM->set_message('')
-			->set_type('')
-			->set_template('')
-			->set_success(TRUE)
-			->set_title('Contact Info')
-			->set_details($result)
-			->output_json();
-	}
-
-	function ajax_save() {
-		/*
-		//test code for client-side validation
-		$errors = array(
-			'first_name' => 'test error first name'
-		);
-		$this->RespM->set_success(FALSE)
-				->set_details($errors)
-				->output_json();
-		return;
-		*/
-            
-            
-		/*
-		 * Leo Fix
-		 */
-		 $date = explode('/',$_POST['addon_extra'][0]['birth_date']);
-		 $date = $date[2].'-'.$date[1].'-'.$date[0];
-		 $_POST['addon_extra'][0]['birth_date'] = $date;
-		 /*
-		  * End Fix
-		  */
-		$id = $this->CardM->save();
-
-		$success = ($id !== FALSE);
-
-		$message = '';
-		$details = '/card/view/'.$id;
-		if (!$success) {
-			$message = $this->CardM->get_error_string();
-
-			$errors = array();
-			foreach($this->CardM->field_errors AS $field => $message) {
-				$errors[$field] = implode('<br />', $message);
-			}
-			$details = $errors;
-		}
-
-		$this->RespM->set_message($message)
-				->set_success($success)
-				->set_details($details)
-				->output_json();
-	}
-
-	function ajax_search_staff() {
-		$search_string = $this->input->get_post('search_string');
-		$list = $this->CardM->search_staff($search_string);
-
-		$this->RespM->set_success(TRUE)
-				->set_details($list)
-				->output_json();
-	}
-
-	function ajax_auto_staff() {
-		$term = $this->input->get('term');
-		$list = $this->CardM->search_staff($term);
-
-		$data = array();
-		if (count($list)) {
-			foreach ($list as $v) {
-				if (strlen($v['display_name'])) {
-					$name = $v['display_name'];
-				} else {
-					$name = $v['first_name'].' '.$v['last_name'];
+	function delete_comment() {
+		//$this->load->library('filel');
+		$result = $this->Helpdesk_CommentM->get_comment_not_use();
+		if (!empty($result)) {
+			foreach ($result as $k) {
+				$this->Helpdesk_CommentM->delete($k->id,TRUE);
+				$file = $this->Helpdesk_CommentM->get_comment_files($k->id);
+				if (!empty($file)) {
+					foreach ($file as $v) {
+						$this->filel->delete($v->filename);
+						$this->Helpdesk_CommentM->delete_files_not_use($v->id);
+					}
 				}
-
-				$data[] = array(
-					'id' => $v['id'],
-					'label' => $name,
-					'value' => $name
-				);
 			}
 		}
-
-		echo json_encode($data);
-		exit;
 	}
 
-	function ajax_auto_customer() {
-		$term = $this->input->get('term');
-		$list = $this->CardM->search_customer($term);
-
-		$data = array();
-		if (count($list)) {
-			foreach ($list as $v) {
-				if (strlen($v['display_name'])) {
-					$name = $v['display_name'];
-				} else {
-					$name = $v['first_name'].' '.$v['last_name'];
-				}
-
-				$data[] = array(
-					'id' => $v['id'],
-					'label' => $name,
-					'value' => $name
-				);
-			}
-		}
-
-		echo json_encode($data);
-		exit;
+	function send_mail(){
+		$this->allow_unauthed_access = TRUE;
+		$this->load->library('EmailL');
+		$this->emaill->set_type('card')
+            ->set_type_id(array(2))
+            ->set_to('luongtheman87@yahoo.com', 'luong')
+            ->set_template('testplate')
+            ->set_subject('test')
+            ->set_attachment_id(array(2=>'')) // docs_id => ver_id or just docs_id => ''
+            ->set_replace_value(array('keys'=>array('%name%', '%result%'), 'values'=>array(array('Roy'), array('Success!!'))))
+            ->set_from('docs@telcoson.com', 'Docs');
+			//$this->emaill->debug(); // prints the parameters to send
+			$i = $this->emaill->send_email(); var_dump($i);// actual email sending returns TRUE or FALSE
 	}
-	
-	function ajax_auto_all_contact() {
-		$term = $this->input->get('term');
-		$list = $this->CardM->search_all_contact($term);
 
-		$data = array();
-		if (count($list)) {
-			foreach ($list as $v) {
-				if (strlen($v['display_name'])) {
-					$name = $v['display_name'];
-				} else {
-					$name = $v['first_name'].' '.$v['last_name'];
-				}
-
-				$data[] = array(
-					'id' => $v['id'],
-					'label' => $name,
-					'value' => $name
-				);
-			}
-		}
-
-		echo json_encode($data);
-		exit;
-	}
 }
