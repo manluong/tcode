@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Card extends MY_Controller {
@@ -895,5 +894,5 @@ class Card extends MY_Controller {
 		echo json_encode($data);
 		exit;
 	}
->>>>>>> fix birthday display ( module )
+
 }
