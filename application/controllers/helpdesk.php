@@ -340,7 +340,7 @@ class Helpdesk extends MY_Controller {
 			'status' => $this->input->post('status'),
 			'type' => $this->input->post('type'),
 			'priority' => $this->input->post('priority'),
-			'comment' => $this->input->post('comment'),
+			'comment' => strip_tags($this->input->post('comment')),
 			'private' => $this->input->post('pri'),
 			'helpdesk_id' => $id_helpdesk ,
             'active' => 0,
