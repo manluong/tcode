@@ -352,15 +352,15 @@ class Card extends MY_Controller {
 		*/
             
             
-		/*
-		 * Leo Fix
-		 */
-		 $date = explode('/',$_POST['addon_extra'][0]['birth_date']);
-		 $date = $date[2].'-'.$date[1].'-'.$date[0];
-		 $_POST['addon_extra'][0]['birth_date'] = $date;
-		 /*
-		  * End Fix
-		  */
+                /*
+                 * Leo Fix
+                 */
+                 $date = explode('/',$_POST['addon_extra'][0]['birth_date']);
+                 $date = $date[2].'-'.$date[0].'-'.$date[1];
+                 $_POST['addon_extra'][0]['birth_date'] = $date;
+                 /*
+                  * End Fix
+                  */
 		$id = $this->CardM->save();
 
 		$success = ($id !== FALSE);

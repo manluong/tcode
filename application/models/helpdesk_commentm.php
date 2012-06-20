@@ -27,6 +27,7 @@ class Helpdesk_CommentM extends MY_Model {
 		$this->db->join('card', 'card.id = a_helpdesk_comment.created_card_id');
 		$this->db->where('helpdesk_id',$id);
 		$this->db->where('a_helpdesk_comment.active',0);
+		$this->db->order_by('created_stamp','DESC');
 		
 		$query = $this->db->get();
 		

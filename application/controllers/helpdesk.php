@@ -362,7 +362,7 @@ class Helpdesk extends MY_Controller {
 
 		if($id_helpdesk!=0){
 		
-			$comment = $this->Helpdesk_CommentM->get_comment_list($id);
+			$comment = $this->Helpdesk_CommentM->get_comment_list($id_helpdesk);
 			//Get data helpdesk
 			$result = $this->HelpdeskM->get($id_helpdesk);
 		}
