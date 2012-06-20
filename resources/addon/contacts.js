@@ -181,7 +181,6 @@ $(document).ready(function(){
 				pass : pass,
 				expiry_date : expiry_date,
 			},function(data){
-				alert(data);
 				$('#edit_pass').hide();
 				$('#view_pass').show();
 			}

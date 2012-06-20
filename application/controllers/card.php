@@ -86,17 +86,16 @@ class Card extends MY_Controller {
 	
 	function ajax_change_pass(){
 		$this->load->model('Access_UserM');
-		
+		$date = $this->input->post('expiry_date');
+		$date = split('/',$date);
 		$data = array (
 			'id' => $this->input->post('id'),
             'password' => md5($this->input->post('pass')),
-			'expire_stamp' => $this->input->post('expiry_date') ,
+			'expire_stamp' => $date[2].'-'.$date[1].'-'.$date[0].' 00:00:00',
 		);
-		$id_save = $this->Access_UserM->save($data);
-		echo $id_save;
-		//$view_data['data'] = $this->Access_userM->get($this->input->post('id'));
-		//$data = $this->Access_userM->get($this->input->post('id'));
-		
+		$this->Access_UserM->save($data);
+		$view_data['data'] = $this->Access_UserM->get($this->input->post('id'));
+		$this->load->view(get_template().'/card/ajax_change_pass',$view_data);
 	}
 	
 	function contact_fillter(){
