@@ -1198,29 +1198,45 @@ div#main .mainContent {
 	background: url(../img/overlay.png) repeat;
 	display: none;
 }
-#settings {
-	display: none;
-	z-index: 1000;
-	background: white;
-	overflow-y: scroll;
-	overflow-x: hidden;
-	position: absolute;
-	height: auto;
-	bottom: 0;
-	top: 0;
-	left: 0;
-	right: 0;
-	margin-top: 150px;
-	margin-bottom: 150px;
-	margin-right: auto;
-	margin-left: auto;
-	width: 600px;
-	-webkit-box-shadow: 0px 0px 30px 0px rgba(119, 119, 119, 0.7);
-	-moz-box-shadow: 0px 0px 30px 0px rgba(119, 119, 119, 0.7);
-	box-shadow: 0px 0px 30px 0px rgba(119, 119, 119, 0.7);
-	-moz-border-radius: 5px;
-	border-radius: 5px;
-}
+
+
+
+*{padding:0; margin:0}
+
+#settings{background: none repeat scroll 0 0 white;
+    border-radius: 5px 5px 5px 5px;
+    bottom: 0;
+    box-shadow: 0 0 30px 0 rgba(119, 119, 119, 0.7);
+    display: none;
+    height: auto;
+    left: 0;
+    margin: 150px auto;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 600px;
+    z-index: 1000;
+	}
+	
+	
+.top-setting {height:65px; background:#475152; width: 585px; overflow:hidden; padding-top:10px; position:fixed;
+ z-index:5; border-radius: 5px 5px 0 0;}
+.top-setting div{width:80%;float:left; overflow:hidden; padding-top:10px}
+.top-setting h2{font-family: Helvetica,Arial, sans-serif; font-size:30px; color:#fff; font-weight:normal; 
+padding:0 10px; float:left; border-bottom:3px double #666}
+.top-setting span{ color:#fff; display:block; float:left; padding-top:8px}
+.top-setting input[type=button]{float:right; border:0; margin:3px 20px; background:url(../img/close.png) no-repeat; width:48px; height:48px}
+.cont-icon {position:absolute; padding-top:85px}
+.cont-icon ul{padding-left:10px; overflow:hidden}
+.cont-icon ul li{float:left; padding:5px 12px; list-style:none; width:82px; min-height:110px; text-align:center;}
+.cont-icon ul li img{width:82px; height:82px;}
+.cont-icon ul li a{text-decoration:none}
+.cont-icon ul li span {display:block; color:#555555; font-family:"Lato"; text-transform:uppercase; font-weight:bolder; font-size:10px}
+
+
+
 
 #settings .step1, #settings .step2 {
 	position: absolute;
@@ -1235,7 +1251,8 @@ div#main .mainContent {
 
 #settings .title {
 	background: none;
-	margin: 15px 0 0 20px;
+	margin: 0px 0 0 20px;
+	color: #FFF;
 }
 
 #settings form {
@@ -1295,7 +1312,6 @@ div#main .mainContent {
 }
 
 #settings .closeModal {
-	color: white!important;
 	z-index: 1002220;
 	cursor: pointer;
 	text-decoration: none;
@@ -1308,17 +1324,7 @@ div#main .mainContent {
 	margin: auto;
 	padding: 0 0 3px 0;
 	text-align: center;
-	background: #8f8f8f;
-	background: -moz-linear-gradient(top, #8f8f8f 0%, #707070 100%);
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#8f8f8f), color-stop(100%,#707070));
-	background: -webkit-linear-gradient(top, #8f8f8f 0%,#707070 100%);
-	background: -o-linear-gradient(top, #8f8f8f 0%,#707070 100%);
-	background: -ms-linear-gradient(top, #8f8f8f 0%,#707070 100%);
-	background: linear-gradient(top, #8f8f8f 0%,#707070 100%);
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#8f8f8f', endColorstr='#707070',GradientType=0 );
-	-webkit-box-shadow: inset 3px 3px 5px 0px #777777;
-  box-shadow: inset 3px 3px 5px 0px #777777;
-  border-radius: 0 5px 0 0;
+	
 }
 
 @-moz-document url-prefix() {
