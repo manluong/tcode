@@ -1,7 +1,8 @@
 <div class="top-setting">
-	<div class="title">SETTINGS</div>
+	<div><h2>SETTINGS</h2></div>
 	<input type="button" class="btnX" />
 </div>
+
 <div class="cont-icon">
 	<ul>
 	<?php foreach ($list AS $app): ?>
