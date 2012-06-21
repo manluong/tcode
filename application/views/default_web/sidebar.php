@@ -9,7 +9,7 @@
 				echo '<li>';
 			}
 
-	?><div class="activeTab"><a href="<?=base_url().$app['name']?>" data-app_name="<?=$app['name']?>" class="ajax <?=$app['name']?>"><?=lang('core_apps-name-'.$app['name'])?></a></div></li><?php
+	?><div class="activeTab"><a href="<?=base_url().$app['name']?>" data-app_name="<?=$app['name']?>" class="<?=$app['name']?>"><?=lang('core_apps-name-'.$app['name'])?></a></div></li><?php
 		}
 	?>
 </ul>
