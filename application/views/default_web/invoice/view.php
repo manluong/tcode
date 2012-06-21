@@ -67,11 +67,11 @@
 		<table id="invoice_item">
 			<thead>
 				<tr>
-					<th style="width: 25%;">Product</th>
-					<th style="width: 45%;">Description</th>
-					<th style="width: 10%;">Unit Price</th>
-					<th style="width: 10%;">Qty</th>
-					<th style="width: 10%;">Total</th>
+					<th style="width: 220px;">Product</th>
+					<th style="width: 360px;">Description</th>
+					<th style="width: 85px;">Unit Price</th>
+					<th style="width: 70px;">Qty</th>
+					<th style="width: 85px;">Total</th>
 				</tr>
 			</thead>
 			<tbody>
