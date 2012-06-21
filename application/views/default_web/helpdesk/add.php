@@ -3,7 +3,7 @@
 <script type="text/javascript" src="/resources/addon/plupload/js/plupload.full.js"></script>
 <script type="text/javascript" src="/resources/addon/plupload/js/jquery.plupload.queue/jquery.plupload.queue.js"></script>
 <link href="/resources/addon/plupload/js/jquery.plupload.queue/css/jquery.plupload.queue.css" media="screen" rel="stylesheet" type="text/css" />
-
+<!--
 <div id="breadcrumb">
 	<div id="module_name" style="width:650px;">
 		<ul>
@@ -21,7 +21,7 @@
 		</ul>
 	</div> 
 </div>
-
+-->
 <div id="content_top">
 	<div id="user_profile">
 		<div id="user_avatar"><image alt="avatar" src="<?=site_url('resources/template/default_web/img/invoice')?>/invoice-avatar.jpg"/></div>

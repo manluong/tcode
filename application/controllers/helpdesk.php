@@ -256,7 +256,25 @@ class Helpdesk extends MY_Controller {
 			'type' => $this->Helpdesk_TypeM->get_list(),
 			'assign' => $this->Helpdesk_CommentM->get_assign(),
 		);
-
+		
+		$this->data['app_menu'] = array(
+			array(
+				'url' => '/helpdesk',
+				'extra' => '',
+				'title' => 'List',
+			),
+			array(
+				'url' => '#',
+				'extra' => 'onclick="helpdesk_fillter('.$this->UserM->get_card_id().');"',
+				'title' => 'My Cases',
+			),
+			array(
+				'url' => '/helpdesk/add',
+				'extra' => '',
+				'title' => 'New',
+			),
+		);
+		
 		$this->data['content'] = $this->load->view(get_template().'/helpdesk/add',$content, TRUE);
 		$this->_do_output();
 	}
@@ -306,7 +324,24 @@ class Helpdesk extends MY_Controller {
 		//$card = $this->CardM->get_quickjump($result['created_card_id']);
 		//$content['quickjump'] = $this->load->view(get_template().'/card/quickjump', $card, TRUE);
 
-
+		$this->data['app_menu'] = array(
+			array(
+				'url' => '/helpdesk',
+				'extra' => '',
+				'title' => 'List',
+			),
+			array(
+				'url' => '#',
+				'extra' => 'onclick="helpdesk_fillter('.$this->UserM->get_card_id().');"',
+				'title' => 'My Cases',
+			),
+			array(
+				'url' => '/helpdesk/add',
+				'extra' => '',
+				'title' => 'New',
+			),
+		);
+		
 		$this->data['content'] = $this->load->view(get_template().'/helpdesk/edit',$content, TRUE);
 		$this->_do_output();
 	}
