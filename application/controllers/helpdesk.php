@@ -264,8 +264,8 @@ class Helpdesk extends MY_Controller {
 				'title' => 'List',
 			),
 			array(
-				'url' => '#',
-				'extra' => 'onclick="helpdesk_fillter('.$this->UserM->get_card_id().');"',
+				'url' => '/helpdesk/card/'.$this->UserM->get_card_id(),
+				'extra' => '',
 				'title' => 'My Cases',
 			),
 			array(
@@ -331,8 +331,8 @@ class Helpdesk extends MY_Controller {
 				'title' => 'List',
 			),
 			array(
-				'url' => '#',
-				'extra' => 'onclick="helpdesk_fillter('.$this->UserM->get_card_id().');"',
+				'url' => '/helpdesk/card/'.$this->UserM->get_card_id(),
+				'extra' => '',
 				'title' => 'My Cases',
 			),
 			array(
