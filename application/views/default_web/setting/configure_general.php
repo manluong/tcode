@@ -1,60 +1,68 @@
-<div class="title">Settings</div> <span class="arrow"></span> <span class="simple">General</span>
+<div class="top-setting">
+	<div><h2>SETTINGS</h2><span> General</span></div>
+	<input type="button" class="btnX" />
+</div>
 
+<div class="content">
 <?php
 	echo form_open('/setting/ajax_save/'.$app_name , array('class'=>'form-horizontal'));
 ?>
 
-<?php if (APP_ROLE == 'TBOSS' && $is_admin) { ?>
-<fieldset>
-	<legend>Global Level Settings <p class="pull-right" style="margin-top:15px;">Changes made here will apply to everyone including tenants.</p></legend>
+<?php //if (APP_ROLE == 'TBOSS' && $is_admin) { ?>
+<div class="dtitle">
+	<span class="upper">Global Level Settings</span>
+	<span>Changes made here will apply to everyone including tenants.</span>
+</div>
+<div class="form">
 	<p>There are no configuration settings for this section at the moment.</p>
-</fieldset>
-<?php } ?>
+</div>
+<?php //} ?>
 
-<?php if ($is_admin) { ?>
-<fieldset>
-	<legend>Admin Level Settings <p class="pull-right" style="margin-top:15px;">Changes made here will apply to all users.</p></legend>
+<?php //if ($is_admin) { ?>
+<div class="dtitle">
+	<span class="upper">Admin Level Settings</span>
+	<span>Changes made here will apply to all users.</span>
+</div>
+<div class="form">
+	<ul>
+		<li>
+			<span class="lb">Company Name</span>
+			<span class="fillter_input">
+				<input type="text" name="tenant-company_name" value="<?=(isset($settings['tenant']['company_name']['value']))?$settings['tenant']['company_name']['value']:''?>" class="inv-field" />
+				<input type="hidden" name="tenant-company_name-override" value="0" />
+			</span>
+		</li>
+		<li>
+			<span class="lb">Time Zone</span>
+			<span class="fillter_input">
+				<input type="text" name="tenant-timezone" value="<?=(isset($settings['tenant']['timezone']['value']))?$settings['tenant']['timezone']['value']:'0'?>" class="inv-field" />
+				<?=form_dropdown('tenant-timezone-override', $override_options, (isset($settings['tenant']['timezone']['can_override']))?$settings['tenant']['timezone']['can_override']:1);?>
+			</span>
+		</li>
+	</ul>
+</div>
+<?php //} ?>
 
-	<div class="control-group">
-		<label class="control-label">Company Name</label>
-		<div class="controls">
-			<input type="text" name="tenant-company_name" value="<?=(isset($settings['tenant']['company_name']['value']))?$settings['tenant']['company_name']['value']:''?>" />
-			<input type="hidden" name="tenant-company_name-override" value="0" />
-		</div>
-	</div>
-	<div class="control-group">
-		<label class="control-label">Time Zone</label>
-		<div class="controls">
-			<input type="text" name="tenant-timezone" value="<?=(isset($settings['tenant']['timezone']['value']))?$settings['tenant']['timezone']['value']:'0'?>" />
-			<?=form_dropdown('tenant-timezone-override', $override_options, (isset($settings['tenant']['timezone']['can_override']))?$settings['tenant']['timezone']['can_override']:1);?>
-		</div>
-	</div>
-</fieldset>
-<?php } ?>
-
-<fieldset>
-	<legend>User Level Settings <p class="pull-right" style="margin-top:15px;">Changes made here will apply to you only.</p></legend>
-
-	<?php
-		if (!isset($settings['tenant']['timezone']['can_override']) || $settings['tenant']['timezone']['can_override']==1) {
-	?>
-		<div class="control-group">
-			<label class="control-label">Time Zone</label>
-			<div class="controls">
+<div class="dtitle">
+	<span class="upper">User Level Settings</span>
+	<span>Changes made here will apply to you only.</span>
+</div>
+<div class="form">
+	<?php //if (!isset($settings['tenant']['timezone']['can_override']) || $settings['tenant']['timezone']['can_override']==1) { ?>
+	<ul>
+		<li>
+			<span class="lb">Time Zone</span>
+			<span class="fillter_input">
 				<input type="text" name="user-timezone" value="<?=(isset($settings['user']['timezone']['value']))?$settings['user']['timezone']['value']:'0'?>" />
-			</div>
-		</div>
-	<?php
-		}
-	?>
-</fieldset>
-
-<div class="control-group">
-	<label class="control-label"></label>
-	<div class="controls">
-		<button type="submit" class="btn btn-primary save">Save</button> or <a href="#" class="cancel">go back</a>
-	</div>
+			</span>
+		</li>
+	</ul>
+	<?php //} ?>
 </div>
 
+<div class="bot">
+	<button type="submit" class="btn btn-primary save">Save</button> or <a href="#" class="cancel">go back</a>
+</div>
 
 </form>
+</div>

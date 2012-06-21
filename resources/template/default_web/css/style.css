@@ -1212,7 +1212,7 @@ div#main .mainContent {
     left: 0;
     margin: 150px auto;
     overflow-x: hidden;
-    overflow-y: scroll;
+    overflow-y: hidden;
     position: absolute;
     right: 0;
     top: 0;
@@ -1221,20 +1221,134 @@ div#main .mainContent {
 	}
 	
 	
-.top-setting {height:65px; background:#475152; width: 585px; overflow:hidden; padding-top:10px; position:fixed;
+.top-setting {height:65px; background:#475152; width: 600px; overflow:hidden; padding-top:10px; position:fixed;
  z-index:5; border-radius: 5px 5px 0 0;}
 .top-setting div{width:80%;float:left; overflow:hidden; padding-top:10px}
-.top-setting h2{font-family: Helvetica,Arial, sans-serif; font-size:30px; color:#fff; font-weight:normal; 
+.top-setting h2{font-family: "Lato", Helvetica,Arial, sans-serif; font-size:30px; color:#fff; font-weight:normal; 
 padding:0 10px; float:left; border-bottom:3px double #666}
-.top-setting span{ color:#fff; display:block; float:left; padding-top:8px}
-.top-setting input[type=button]{float:right; border:0; margin:3px 20px; background:url(../img/close.png) no-repeat; width:48px; height:48px}
-.cont-icon {position:absolute; padding-top:85px}
-.cont-icon ul{padding-left:10px; overflow:hidden}
+.top-setting span{ 
+	display: inline-block;
+	width: 4px;
+	height: 18px;
+	margin: 0 10px;
+	position: relative;
+	top: -3px;
+	background: url(../img/breadcrumbArrow.png) no-repeat;
+	color:#FFFFFF;
+	padding-left:10px;
+	top:12px;
+	font-family: "Lato"; font-size:14px; color:#fff; font-weight:normal; 
+}
+.top-setting input[type=button]{float:right; border:0; margin:10px 0px; background:url(../img/close.png) no-repeat; width:48px; height:48px}
+.cont-icon {position:absolute;top:75px;overflow-y: scroll; width:600px; height:300px;}
+.cont-icon ul{padding-left:10px;}
 .cont-icon ul li{float:left; padding:5px 12px; list-style:none; width:82px; min-height:110px; text-align:center;}
 .cont-icon ul li img{width:82px; height:82px;}
 .cont-icon ul li a{text-decoration:none}
 .cont-icon ul li span {display:block; color:#555555; font-family:"Lato"; text-transform:uppercase; font-weight:bolder; font-size:10px}
 
+
+
+.content {position:absolute;top:75px;overflow-y: scroll; overflow-x: hidden; width:600px; height:300px;font-family:Arial, Helvetica, sans-serif}
+.dtitle{border-bottom:1px solid #eee; padding:10px; width:100%;font-size:12px; overflow:hidden;color:#A8682A;}
+.dtitle span {float:right; padding-right:20px}
+.dtitle button{float:right; margin-right:20px}
+.dtitle .upper{background:url(../img/arrow_title.png) no-repeat 5px 2px; padding-left:15px; 
+  font-weight:bold;text-transform:uppercase; float:left }
+.form ul {padding:5px}
+.form ul li {overflow:hidden}
+.form ul li .lb{margin-top:5px; display:block; font-weight:bolder; text-align:right; float:left; width:150px; padding-right:10px}
+.content .bot {text-align:center; padding-bottom:10px}
+
+
+.tbList {font-weight:bold; width:100%}
+.tbList tr td{padding:5px; vertical-align:middle; border-bottom:1px solid #eee; padding-left:10px}
+.tbList tr td img {width:32px; height:32px}
+.tbList .act{color:#005580}
+.tbList .inact{color:#ccc}
+.tbList .name {width:100px}
+
+/*Tabs*/
+
+.ui-helper-clearfix:before, .ui-helper-clearfix:after { content: ""; display: table; }
+.ui-helper-clearfix:after { clear: both; }
+.ui-helper-clearfix { zoom: 1; }
+.ui-helper-zfix { width: 100%; height: 100%; top: 0; left: 0; position: absolute; opacity: 0; filter:Alpha(Opacity=0); }
+
+.ui-tabs { position: relative; padding: .2em; zoom: 1; } /* position: relative prevents IE scroll bug (element with position: relative inside container with overflow: auto appear as "fixed") */
+.ui-tabs .ui-tabs-nav { margin: 0; padding: .2em .2em 0; }
+.ui-tabs .ui-tabs-nav li { list-style: none; float: left; position: relative; top: 1px; margin: 0 .2em 1px 0; border-bottom: 0 !important; padding: 0; white-space: nowrap; }
+.ui-tabs .ui-tabs-nav li a { float: left; padding: .5em 1em; text-decoration: none; }
+.ui-tabs .ui-tabs-nav li.ui-tabs-selected { margin-bottom: 0; padding-bottom: 1px; }
+.ui-tabs .ui-tabs-nav li.ui-tabs-selected a, .ui-tabs .ui-tabs-nav li.ui-state-disabled a, .ui-tabs .ui-tabs-nav li.ui-state-processing a { cursor: text; }
+.ui-tabs .ui-tabs-nav li a, .ui-tabs.ui-tabs-collapsible .ui-tabs-nav li.ui-tabs-selected a { cursor: pointer; } /* first selector in group seems obsolete, but required to overcome bug in Opera applying cursor: text overall if defined elsewhere... */
+.ui-tabs .ui-tabs-panel { display: block; border-width: 0; padding: 1em 1.4em; background: none; }
+.ui-tabs .ui-tabs-hide { display: none !important; }
+
+/* Component containers
+----------------------------------*/
+.ui-widget { font-family: Verdana,Arial,sans-serif/*{ffDefault}*/; font-size: 1.1em/*{fsDefault}*/; }
+.ui-widget .ui-widget { font-size: 1em; }
+.ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button { font-family: Verdana,Arial,sans-serif/*{ffDefault}*/; font-size: 1em; }
+
+.ui-widget-content a { color: #222222/*{fcContent}*/; }
+.ui-widget-header { border-bottom: 1px solid #aaaaaa/*{borderColorHeader}*/; color: #222222/*{fcHeader}*/; font-weight: bold; }
+.ui-widget-header a { color: #222222/*{fcHeader}*/; }
+
+/* Interaction states
+----------------------------------*/
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {  font-weight: normal/*{fwDefault}*/; color: #005580/*{fcDefault}*/; }
+.ui-state-default a, .ui-state-default a:link, .ui-state-default a:visited { color: #005580/*{fcDefault}*/; text-decoration: none; }
+.ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content 
+.ui-state-hover a, .ui-state-hover a:hover { color: #212121/*{fcHover}*/; text-decoration: none; }
+.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active { border: 1px solid #aaaaaa/*{borderColorActive}*/; background: #ffffff; font-weight: normal/*{fwDefault}*/; color: #212121/*{fcActive}*/; }
+.ui-state-active a, .ui-state-active a:link, .ui-state-active a:visited { color: #212121/*{fcActive}*/; text-decoration: none; }
+.ui-widget :active { outline: none; }
+
+
+
+
+#boxcontent{
+    min-height: 127px;
+    width: 860px;
+}
+#boxcontent .boxcontent_title {
+    color: #A8682A;
+    font-size: 12px;
+    font-weight: bold;
+    height: 24px;
+	padding-left: 20px;
+}
+
+
+#boxcontent .arrow_title {
+    background: url("../img/arrow_title.png") no-repeat scroll 0 0 transparent;
+    height: 10px;
+    margin-top: 3px;
+    width: 10px;
+}
+
+#boxcontent .label {
+    float: left;
+    margin-bottom: 5px;
+    width: 100%;
+	background:#FFF;
+}
+
+#boxcontent .input{
+	font-weight:bold;
+	font-style:normal;
+	font-size:16px;
+	color:#787878;
+}
+
+
+#boxcontent .input_data_label{
+	font-weight:normal;
+	font-style:normal;
+	color:#787878;
+	line-height:24px;
+}
 
 
 
