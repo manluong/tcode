@@ -1,4 +1,5 @@
-//ADD
+var ROOT = 'http://apple.8force.net/tcode/';
+
 function submit_insert_helpdesk() {
 	var comment = $('#comment').val();
 	var requester = $('#customer_id').val();
@@ -345,15 +346,28 @@ function submit_comment(){
 
 function parse_comment_list(data){
 	var json = jQuery.parseJSON(data);
-	var html ='<input type="hidden" value="<?=$comment_id?>" name="hiddenCommentId" id="hiddenCommentId" />';
+	var html ='';
+	var input_hidden = '';
 	for (i in json) {	
 		 var item = json[i];
 		 var display_name = (item.display_name == null ? '' : item.display_name);
 		 var organization_name = (item.organization_name == null ? '' : item.organization_name);
-
+		 input_hidden = '<input type="hidden" value="'+item.id+'" name="hiddenCommentId" id="hiddenCommentId" />';
+		 var pri = '';
+		 switch (item.priority){
+			case 1:
+				pri = 'Low';
+				break;
+			case 2: 
+				pri = 'Mid';
+				break;
+			case 3:
+				pri = 'High';
+				break;
+		 }
 		 html += '<div class="comment_info">'+
 						'<div class="comment_info_user">'+
-							'<div class="comment_user_avatar"><image src="resources/template/default_web/img/helpdesk/comment_avatar.png"/></div>'+
+							'<div class="comment_user_avatar"><image src="'+ROOT+'resources/template/default_web/img/helpdesk/comment_avatar.png"/></div>'+
 								'<div class="comment_user_name">'+
 								'<div style="color:#444444;font-size:13px;width:100%;height:14px;"><strong>'+display_name+'</strong>'+organization_name+'</div>'+
 								'<div style="font-size:11px;color:#b0b0b0;">'+prettyDate(item.created_stamp)+'</div>'+
@@ -363,9 +377,9 @@ function parse_comment_list(data){
 							'<div class="wap_comment_content">'+item.comment+'</div>'+
 							'<div style="float:left;width:50px;margin:-22px 0 0 -48px" id="arrow_comment_'+item.id+'" onclick="show_detail_comment('+item.id+');" class="up_arrow"></div>'+
 							'<div id="comment_detail_'+item.id+'" class="comment_detail">'+
-								'<p>Priority set to '+item.priority+'</p>'+
-								'<p>Subject set to '+item.subject+'</p>'+
-								'<p>Email send to '+item.cc_email+'</p>'+
+								'<p>Priority set to '+pri+'</p>'+
+								'<p>Subject set to "'+item.subject+'"</p>'+
+								'<p>Email send to "'+item.cc_email+'"</p>'+
 							'<br/><span style="font-size:11px;">'+
 							'<p>Client: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.7; rv:12.0) Gecko/20100101 Firefox/12.0</p>'+
 							'<p>IP address: 115.66.148.168</p>'+
@@ -375,7 +389,7 @@ function parse_comment_list(data){
 					'</div>'+
 				'</div>';
 	}
-	$('#wap_comment_list').html(html);
+	$('#wap_comment_list').html(input_hidden+html);
 	$('#comment').attr('value','');
 }
 
