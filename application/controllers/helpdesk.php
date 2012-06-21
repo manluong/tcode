@@ -361,12 +361,14 @@ class Helpdesk extends MY_Controller {
 		$comment_id = $this->Helpdesk_CommentM->save($comment_data);
 
 		if($id_helpdesk!=0){
-		
 			$comment = $this->Helpdesk_CommentM->get_comment_list($id_helpdesk);
 			//Get data helpdesk
 			$result = $this->HelpdeskM->get($id_helpdesk);
 		}
-
+		
+		echo json_encode($comment);
+		die ;
+		/*
 		$data_ajax = array(
            'comment' => $comment,
 		   'result' => $result,
@@ -375,6 +377,7 @@ class Helpdesk extends MY_Controller {
 
 		$ajax_content = $this->load->view(get_template().'/helpdesk/ajax_updateComment',$data_ajax ,true);
 		echo $ajax_content  ;
+		*/
 	}
 
 	function save_insert_helpdesk(){

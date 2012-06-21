@@ -15,7 +15,6 @@
 			$day = (int)($hour/24);
 			$hour = ($hour%24);
 		}
-		
 ?>
 <div class="comment_info">
 	<div class="comment_info_user">
