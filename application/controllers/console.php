@@ -312,4 +312,10 @@ class Console extends MY_Controller {
 		$this->LicenseM->export_license_rules($tenant_id);
 		echo "Done\n";
 	}
+
+	function run_model_function($model, $function, $params='') {
+		$this->load->model($model);
+		$result = $this->$model->$function($params);
+		echo print_r($result, TRUE);
+	}
 }

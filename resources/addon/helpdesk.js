@@ -336,10 +336,66 @@ function submit_comment(){
 			type : type,
 			priority : priority,
 		},function(data){
-			$('#wap_comment_list').html(data);
-			$('#comment').attr('value','');
+			//$('#wap_comment_list').html(data);
+			//$('#comment').attr('value','');
+			parse_comment_list(data);
 		}
 	);
+}
+
+function parse_comment_list(data){
+	var json = jQuery.parseJSON(data);
+	var html ='<input type="hidden" value="<?=$comment_id?>" name="hiddenCommentId" id="hiddenCommentId" />';
+	for (i in json) {	
+		 var item = json[i];
+		 var display_name = (item.display_name == null ? '' : item.display_name);
+		 var organization_name = (item.organization_name == null ? '' : item.organization_name);
+
+		 html += '<div class="comment_info">'+
+						'<div class="comment_info_user">'+
+							'<div class="comment_user_avatar"><image src="resources/template/default_web/img/helpdesk/comment_avatar.png"/></div>'+
+								'<div class="comment_user_name">'+
+								'<div style="color:#444444;font-size:13px;width:100%;height:14px;"><strong>'+display_name+'</strong>'+organization_name+'</div>'+
+								'<div style="font-size:11px;color:#b0b0b0;">'+prettyDate(item.created_stamp)+'</div>'+
+							'</div>'+
+						'</div>'+
+						'<div class="comment_content">'+
+							'<div class="wap_comment_content">'+item.comment+'</div>'+
+							'<div style="float:left;width:50px;margin:-22px 0 0 -48px" id="arrow_comment_'+item.id+'" onclick="show_detail_comment('+item.id+');" class="up_arrow"></div>'+
+							'<div id="comment_detail_'+item.id+'" class="comment_detail">'+
+								'<p>Priority set to '+item.priority+'</p>'+
+								'<p>Subject set to '+item.subject+'</p>'+
+								'<p>Email send to '+item.cc_email+'</p>'+
+							'<br/><span style="font-size:11px;">'+
+							'<p>Client: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.7; rv:12.0) Gecko/20100101 Firefox/12.0</p>'+
+							'<p>IP address: 115.66.148.168</p>'+
+							'<p>Location: Singapore, 00, Singapore</p>'+
+							'</span>'+
+						'</div>'+
+					'</div>'+
+				'</div>';
+	}
+	$('#wap_comment_list').html(html);
+	$('#comment').attr('value','');
+}
+
+function prettyDate(time){
+	var date = new Date((time || "").replace(/-/g,"/").replace(/[TZ]/g," ")),
+		diff = (((new Date()).getTime() - date.getTime()) / 1000),
+		day_diff = Math.floor(diff / 86400);
+			
+	if ( isNaN(day_diff) || day_diff < 0 || day_diff >= 31 )
+		return;
+			
+	return day_diff == 0 && (
+			diff < 60 && "just now" ||
+			diff < 120 && "1 minute ago" ||
+			diff < 3600 && Math.floor( diff / 60 ) + " minutes ago" ||
+			diff < 7200 && "1 hour ago" ||
+			diff < 86400 && Math.floor( diff / 3600 ) + " hours ago") ||
+		day_diff == 1 && "Yesterday" ||
+		day_diff < 7 && day_diff + " days ago" ||
+		day_diff < 31 && Math.ceil( day_diff / 7 ) + " weeks ago";
 }
 
 function show_detail_comment(id){
