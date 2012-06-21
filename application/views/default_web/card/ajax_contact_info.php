@@ -38,7 +38,7 @@
 			<?php }?>
 		</li>
 		<li style="margin:10px 0 0 121px;">
-			<a href="<?=site_url('card/view/'.$detail['id'])?>" style="width:30px; height:10px;line-height:10px;" class="btn btn-inverse">View</a>
+			<a href="<?=site_url('card/view/'.$detail['id'])?>" style="width:30px; height:10px;line-height:10px;" class="btn btn-inverse pjax">View</a>
 		</li>
 	</ul>
 </div>

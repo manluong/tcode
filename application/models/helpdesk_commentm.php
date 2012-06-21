@@ -22,7 +22,7 @@ class Helpdesk_CommentM extends MY_Model {
 	}
 	
 	function get_comment_list($id){
-		$this->db->select('a_helpdesk_comment.id, a_helpdesk_comment.comment, a_helpdesk_comment.created_stamp, a_helpdesk_comment.priority , card.display_name, card.organization_name, a_helpdesk.subject, a_helpdesk.cc_email, filename');
+		$this->db->select('a_helpdesk_comment.id, a_helpdesk_comment.comment, a_helpdesk_comment.created_stamp, a_helpdesk_comment.priority , card.display_name, card.organization_name, a_helpdesk.subject, a_helpdesk.cc_email');
 		$this->db->from('a_helpdesk_comment');
 		$this->db->join('card', 'card.id = a_helpdesk_comment.created_card_id');
 		$this->db->join('a_helpdesk', 'a_helpdesk.id = a_helpdesk_comment.helpdesk_id');

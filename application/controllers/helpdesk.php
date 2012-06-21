@@ -367,7 +367,7 @@ class Helpdesk extends MY_Controller {
 		}
 		
 		echo json_encode($comment);
-		die ;
+		
 		/*
 		$data_ajax = array(
            'comment' => $comment,
