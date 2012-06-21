@@ -67,6 +67,67 @@ class Setting extends MY_Controller {
 				->output_json();
 	}
 
+	//Each app's controller will have a function like this for editing options
+	/*
+	function ajax_configure_options($app_name, $name) {
+		$this->verify_app($app_name);
+
+		$data_configure['app_name'] = $app_name;
+		$data_configure['is_admin'] = $this->UserM->is_admin();
+		$data_configure['settings'] = $this->SettingM->get_options_for_configuration($app_name, $name);
+
+		$this->load->view(get_template().'/setting/edit_options', $data_configure);
+	}
+	 */
+
+	//Save only the value and sort_order
+	//FORM POST: value[id], sort_order[id]
+	function ajax_save_options($app_name, $name) {
+		$this->verify_app($app_name);
+
+		$this->SettingM->save_options($app_name, $name);
+
+		$this->RespM->set_success(TRUE)
+				->output_json();
+	}
+
+	//FORM POST: app_name, name, value, sort_order
+	function ajax_add_option() {
+		$result = FALSE;
+
+		if ($this->UserM->is_admin()) {
+			$app_id = $this->AppM->get_id($this->input->post('app_name'));
+
+			$data = array(
+				'app_id' => $app_id,
+				'name' => $this->input->post('name'),
+				'value' => $this->input->post('value'),
+				'sort_order' => $this->input->post('sort_order'),
+			);
+
+			$result = $this->SettingM->add_option($data);
+		}
+
+		$this->RespM->set_success($result)
+				->output_json();
+	}
+
+	// Deleting options will be handled by each app's controller: <app_controller>/ajax_delete_option/<id>
+	// The function in that controller will check for data that's using the option
+	// If there's no data, then call the SettingM->delete_option() function to delete it
+	/*
+	function ajax_delete_option($id) {
+		$result = FALSE;
+
+		if ($this->UserM->is_admin()) {
+			$result = $this->SettingM->delete_option($id);
+		}
+
+		$this->RespM->set_success($result)
+				->output_json();
+	}
+	 */
+
 	//make sure the $app_name is valid
 	private function verify_app($app_name) {
 		$app_list = array();

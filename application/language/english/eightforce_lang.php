@@ -565,6 +565,13 @@ $lang['a_helpdesk_comment-modified_stamp'] = 'Modified Stamp';
 $lang['a_helpdesk_comment-created_card_id'] = 'Created Card Id';
 $lang['a_helpdesk_comment-created_stamp'] = 'Created Stamp';
 
+
+//Email Template Names
+$lang['email_template-new_case'] = 'New Case';
+$lang['email_template-closed_case'] = 'Closed Case';
+$lang['email_template-rejected_case'] = 'Rejected Case';
+
+
 //buttons
 $lang['button_login'] = 'Login';
 $lang['button_edit'] = 'Edit';
