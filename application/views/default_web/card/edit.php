@@ -146,7 +146,7 @@
 					$(document).ready(function() {
 						$('#tel_add').on('click', function() {
 							var new_tel = '<div class="control-group">'+
-												'<label class="control-label contact" for="tel_'+tel_index+'">'+tel_label+'</label>'+
+												'<label class="control-label" for="tel_'+tel_index+'">'+tel_label+'</label>'+
 												'<div class="controls">'+
 													'<input type="hidden" name="addon_tel['+tel_index+'][id]" value="" />'+
 													'<select name="addon_tel['+tel_index+'][type]" class="input-small">';
@@ -213,7 +213,7 @@
 					$(document).ready(function() {
 						$('#email_add').on('click', function() {
 							var new_email = '<div class="control-group">'+
-												'<label class="control-label  contact" for="email_'+email_index+'">'+email_label+'</label>'+
+												'<label class="control-label" for="email_'+email_index+'">'+email_label+'</label>'+
 												'<div class="controls">'+
 													'<input type="hidden" name="addon_email['+email_index+'][id]" value="" />'+
 													'<select name="addon_email['+email_index+'][type]" class="input-small">';
@@ -352,7 +352,7 @@
 					$(document).ready(function() {
 						$('#social_add').on('click', function() {
 							var new_social = '<div class="control-group">'+
-												'<label class="control-label contact" for="social_'+social_index+'">'+social_label+'</label>'+
+												'<label class="control-label" for="social_'+social_index+'">'+social_label+'</label>'+
 												'<div class="controls">'+
 													'<input type="hidden" name="addon_social['+social_index+'][id]" value="" />'+
 													'<select name="addon_social['+social_index+'][type]" class="input-small">';

@@ -256,7 +256,7 @@ foreach ($allowed_image_ext as $mime_type => $ext) {
 
 					$(document).ready(function() {
 						var new_address = '<div class="control-group">'+
-												'<label class="control-label  contact" for="address_'+address_index+'">'+address_label+'</label>'+
+												'<label class="control-label contact" for="address_'+address_index+'">'+address_label+'</label>'+
 												'<div id="contact_address" class="controls"><ul><li>'+
 													'<input type="hidden" name="addon_address['+address_index+'][id]" value="" />'+
 													'<select name="addon_address['+address_index+'][type]" class="input-small">';
