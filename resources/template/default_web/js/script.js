@@ -59,7 +59,8 @@ $(".tabsNavigation li a").click(function(){
 	console.log('loading: '+url);
 	$.pjax({
 		url: url,
-		container: '#main'
+		container: '#main',
+		timeout: 5000
 	});
 
 	return false;

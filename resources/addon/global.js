@@ -1,6 +1,10 @@
 $(document).ready(function(){
 	$.timeago.settings.allowFuture = true;
 
+	$('.pjax').pjax({
+		container: '#main',
+		timeout: 5000
+	});
 /*
 	$('#content-container').on('click', 'button.show_more_replies', function(e){
 		var id = $(this).attr('data-parent_id');
