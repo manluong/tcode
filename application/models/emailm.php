@@ -28,6 +28,24 @@ class EmailM extends MY_Model {
 		return $this->db->affected_rows();
 	}
 
+	function get_template_list() {
+		$results = $this->db->select('t.id, t.app_id, t.name, a.name AS app_name')
+					->from('email_template AS t')
+					->join('global_setting.core_apps AS a', 'a.id=t.app_id', 'left')
+					->order_by('t.sort_order', 'ASC')
+					->get()
+					->result_array();
+
+		foreach($results AS $k => $v) {
+			$app_lang = $this->lang->line('core_apps-name-'.$v['app_name']);
+			$template_lang = $this->lang->line('email_template-'.$v['name']);
+			$results[$k]['display_name'] = $app_lang.' > '.$template_lang;
+		}
+
+		return $results;
+	}
+
+	//TODO: change to use app_name + template_name?
 	function get_template_content($template) {
 		$query = $this->db->select('content')
 			->from('email_template')
