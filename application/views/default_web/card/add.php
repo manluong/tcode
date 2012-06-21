@@ -137,7 +137,7 @@ foreach ($allowed_image_ext as $mime_type => $ext) {
 
 					$(document).ready(function() {
 						var new_tel = '<div class="control-group">'+
-												'<label class="control-label" for="tel_'+tel_index+'">'+tel_label+'</label>'+
+												'<label class="control-label  contact" for="tel_'+tel_index+'">'+tel_label+'</label>'+
 												'<div class="controls">'+
 													'<input type="hidden" name="addon_tel['+tel_index+'][id]" value="" />'+
 													'<select name="addon_tel['+tel_index+'][type]" class="input-small">';
@@ -219,7 +219,7 @@ foreach ($allowed_image_ext as $mime_type => $ext) {
 						$('#email_add').on('click', function() {
 							email_index++;
 							var new_email = '<div class="control-group">'+
-												'<label class="control-label" for="email_'+email_index+'">'+email_label+'</label>'+
+												'<label class="control-label contact" for="email_'+email_index+'">'+email_label+'</label>'+
 												'<div class="controls">'+
 													'<input type="hidden" name="addon_email['+email_index+'][id]" value="" />'+
 													'<select name="addon_email['+email_index+'][type]" class="input-small">';
@@ -256,7 +256,7 @@ foreach ($allowed_image_ext as $mime_type => $ext) {
 
 					$(document).ready(function() {
 						var new_address = '<div class="control-group">'+
-												'<label class="control-label" for="address_'+address_index+'">'+address_label+'</label>'+
+												'<label class="control-label  contact" for="address_'+address_index+'">'+address_label+'</label>'+
 												'<div id="contact_address" class="controls"><ul><li>'+
 													'<input type="hidden" name="addon_address['+address_index+'][id]" value="" />'+
 													'<select name="addon_address['+address_index+'][type]" class="input-small">';
