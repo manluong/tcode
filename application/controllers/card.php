@@ -66,9 +66,9 @@ class Card extends MY_Controller {
 		$view_data = array(
 			'detail' => $this->CardM->get($card_id),
 		);
-		$this->load->view(get_template().'/card/ajax_contact_info',$view_data);
+                $this->load->view(get_template().'/card/ajax_contact_info',$view_data);
 	}
-	
+
 	function ajax_change_status(){
 		$id = $this->input->post('id');
 		$this->load->model('aclM');
@@ -77,13 +77,13 @@ class Card extends MY_Controller {
 			'id' => $id ,
             'active' => $this->input->post('active'),
 		);
-		
+
 		$save_id = $this->CardM->save($data);
 		$view_data['role'] = $role['name'];
 		$view_data['data'] = $this->CardM->get($save_id);
 		$this->load->view(get_template().'/card/ajax_status',$view_data);
 	}
-	
+
 	function ajax_change_pass(){
 		$this->load->model('Access_UserM');
 		$date = $this->input->post('expiry_date');
@@ -97,7 +97,7 @@ class Card extends MY_Controller {
 		$view_data['data'] = $this->Access_UserM->get($this->input->post('id'));
 		$this->load->view(get_template().'/card/ajax_change_pass',$view_data);
 	}
-	
+
 	function contact_fillter(){
 		$this->CardM->sett_fill_address = FALSE;
 		$this->CardM->sett_fill_bank = FALSE;
@@ -139,7 +139,7 @@ class Card extends MY_Controller {
 	function view($id) {
 		$this->load->model('aclM');
 		$role = $this->AclM->get_user_role_info($id);
-		
+
 		$view_data = array(
 			'user_role' => $role,
 			'title' => 'Contact View',
@@ -149,7 +149,7 @@ class Card extends MY_Controller {
 			'card_phone' => $this->CardM->get_card_phone($id),
 			'card_address' => $this->CardM->get_card_address($id),
 		);
-	
+
 		$where = array();
 		$where[] = "created_card_id='$id'";
 		$this->HelpdeskM->where = $where;
@@ -163,7 +163,7 @@ class Card extends MY_Controller {
 			4 => 'Vendor',
 		);
 		$this->data['content'] = $this->load->view(get_template().'/card/view', $view_data, TRUE);
-		
+
 		$this->data['breadcrumb'][] = array(
 			'title' => $view_data['data']['first_name'],
 			'url' => '/card/view/'.$id,
@@ -186,7 +186,7 @@ class Card extends MY_Controller {
 		);
 		echo json_encode($view_data);
 	}
-	
+
 	function save_role(){
 		$this->load->model('Card_roleM');
 		$data = array(
@@ -196,7 +196,7 @@ class Card extends MY_Controller {
 		$id_save = $this->Card_roleM->save($data);
 		echo $id_save;
 	}
-	
+
 	function add($id) {
 		//if (!$this->AclM->check('card', $id, 'edit')) die('you cannot edit this data');
 
@@ -247,7 +247,7 @@ class Card extends MY_Controller {
 			2 => 'Customer',
 			4 => 'Vendor',
 		);
-		
+
 		$view_data['is_new'] = FALSE;
 		$view_data['countries'] = $this->Card_AddressM->get_country_list();
 
@@ -350,8 +350,8 @@ class Card extends MY_Controller {
 				->output_json();
 		return;
 		*/
-            
-            
+
+
                 /*
                  * Leo Fix
                  */
@@ -441,7 +441,7 @@ class Card extends MY_Controller {
 		echo json_encode($data);
 		exit;
 	}
-	
+
 	function ajax_auto_all_contact() {
 		$term = $this->input->get('term');
 		$list = $this->CardM->search_all_contact($term);
