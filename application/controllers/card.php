@@ -63,10 +63,14 @@ class Card extends MY_Controller {
 
 	function ajax_contact_info(){
 		$card_id = $this->input->post('id');
+		$data = $this->CardM->get($card_id);
+		echo json_encode($data);
+		/*
 		$view_data = array(
 			'detail' => $this->CardM->get($card_id),
 		);
-                $this->load->view(get_template().'/card/ajax_contact_info',$view_data);
+        $this->load->view(get_template().'/card/ajax_contact_info',$view_data);
+		*/
 	}
 
 	function ajax_change_status(){
@@ -95,14 +99,18 @@ class Card extends MY_Controller {
 		if($this->input->post('card_id') != ''){
 			$data['card_id'] = $this->input->post('card_id');
 		}
-		
-		$data = array (
-            'password' => md5($this->input->post('pass')),
-			'expire_stamp' => $date[2].'-'.$date[1].'-'.$date[0].' 00:00:00',
-		);
+
+//		$data = array (
+//			'password' => $this->input->post('pass'),
+//			'expire_stamp' => $date[2].'-'.$date[1].'-'.$date[0].' 00:00:00',
+//		);
+		// Leo fix
+		    $data['password'] = $this->input->post('pass');
+		    $data['expire_stamp'] = $date[2].'-'.$date[0].'-'.$date[1].' 00:00:00';
+		// End fix
 		$save_id = $this->Access_UserM->save($data);
-		$view_data['data'] = $this->Access_UserM->get($save_id);
-		$this->load->view(get_template().'/card/ajax_change_pass',$view_data);
+//		$view_data['data'] = $this->Access_UserM->get($save_id);
+//		$this->load->view(get_template().'/card/ajax_change_pass',$view_data);
 	}
 
 	function contact_fillter(){
@@ -200,6 +208,9 @@ class Card extends MY_Controller {
 			'card_id' => $this->input->post('id'),
 			'role_id' => $this->input->post('role'),
 		);
+		if($this->input->post('id_role') != ''){
+			$data['id'] = $this->input->post('id_role');
+		}
 		$id_save = $this->Card_roleM->save($data);
 		echo $id_save;
 	}

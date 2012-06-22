@@ -24,7 +24,9 @@
 	<?//=$head?>
 
 </head>
-
+<script type="text/javascript">
+	var ROOT = '<?=PATH_URL?>';
+</script>
 <div id="popup_message" class="alert"></div>
 
 <body class="fullwidth">

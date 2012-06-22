@@ -25,9 +25,102 @@ function load_contact_info(id){
 	$.post(url,{
 			id : id,
 		},function(data){
-			$('#rightPanel').html(data);
+			parse_contact_list(data);
+			//$('#rightPanel').html(data);
 		}
 	);
+}
+
+//PARSE JSON CONTACT LIST INFO
+function parse_contact_list(data){
+	var json = jQuery.parseJSON(data);
+	//console.log(json);
+	var html = '';
+	 var title = '';
+	 if(json.title != null){
+		switch(title){
+			case 1:
+				title = 'Mr.';
+				break;
+			case 2:
+				title = 'Miss.';
+				break;
+			case 3:
+				title = 'Mrs.';
+				break;
+			case 4:
+				title = 'Dr.';
+				break;
+		}
+	 }
+	 
+	 var display_name = '';
+	 if(json.final_display_name != null){
+		display_name = json.final_display_name;
+	 }
+	 var organization_name = '';
+	 if(json.organization_name != null){
+		organization_name = json.organization_name;
+	 }
+	 var tel = '';
+	 if(json.addon_tel != ''){
+		var extension = '';
+		if(json.addon_tel[0].extension != null){
+			extension = json.addon_tel[0].extension+'-';
+		}
+		var are = '';
+		if(json.addon_tel[0].are != null){
+			are = json.addon_tel[0].are+'-';
+		}
+		var country = '';
+		if(json.addon_tel[0].country != null){
+			country = json.addon_tel[0].country+'-';
+		}
+		var number = '';
+		if(json.addon_tel[0].number != null){
+			number = json.addon_tel[0].number;
+		}
+		tel = extension+are+country+number;
+	 }
+	 
+	 var off = '';
+	 if(json.addon_address != ''){
+		off = json.addon_address[0].line_1;
+	 }
+	 var email = '';
+	 if(json.addon_email != ''){
+		email = json.addon_email[0].email;
+	 }
+	 html += '<div id="user_profile">'+
+				'<div id="user_avatar"><img alt="avatar" src="/resources/template/default_web/img/invoice/invoice-avatar.jpg"/></div>'+
+				'<div id="user_info">'+
+					'<ul>'+
+						'<li class="user_sex">'+title+'</li>'+
+						'<li class="user_name">'+display_name+'</li>'+
+						'<li class="user_position">'+organization_name+'</li>'+
+					'</ul>'+
+				'</div>'+
+			'</div>'+
+			'<div id="contact_info">'+
+				'<ul>'+
+					'<li>'+
+						'<span class="input_data_label">Phone</span>'+
+						'<span class="fillter_input">'+tel+'</span>'+
+					'</li>'+
+					'<li>'+
+						'<span class="input_data_label">Office</span>'+
+						'<span class="fillter_input">'+off+'</span>'+
+					'</li>'+
+					'<li>'+
+						'<span class="input_data_label">Email</span>'+
+						'<span class="fillter_input">'+email+'</span>'+
+					'</li>'+
+					'<li style="margin:10px 0 0 121px;">'+
+						'<a href="/card/view/'+json.id+'" style="width:30px; height:10px;line-height:10px;" class="btn btn-inverse pjax">View</a>'+
+					'</li>'+
+				'</ul>'+
+			'</div>';
+	$('#rightPanel').html(html);
 }
 
 //CONTACT LIST FILLTER
@@ -155,28 +248,36 @@ $(document).ready(function(){
 			$('#view_pass').hide();
 			$('#edit_pass').show();
 		});
-		
+
 	});
 
 	function ajax_change_status(id){
 		var active = $('#select_active').val();
 		var url = '/card/ajax_change_status';
-		
+
 		$.post(url,{
 				id : id,
 				active : active,
 			},function(data){
-				$('#customer_detail').html(data);
+				// Leo fix
+				    jQuery("#view_active").show();
+				    jQuery("#edit_active").hide();
+				    if(parseInt(active) == 0)
+					jQuery("#view_active .fillter_input").html('Unactive');
+				    else
+					jQuery("#view_active .fillter_input").html('Active');
+				// End fix
+				//$('#customer_detail').html(data);
 			}
 		);
 	}
-	
+
 	function ajax_change_pass(id){
 		var pass = $('#access_pass').val();
 		var expiry_date = $('#expiry_date').val();
 		var url = '/card/ajax_change_pass';
 		var card_id = $('#access_card_id').val();
-		
+
 		$.post(url,{
 				id : id,
 				pass : pass,
@@ -185,23 +286,32 @@ $(document).ready(function(){
 			},function(data){
 				$('#edit_pass').hide();
 				$('#view_pass').show();
-				$('#view_pass').html(data);
+				// Leo fix
+				    jQuery.each(jQuery("#view_pass .fillter_input"),function(index,value){
+					if(index == 1){
+					    jQuery(this).html(expiry_date);
+					}
+				    });
+				// End fix
+				//$('#view_pass').html(data);
 			}
 		);
 	}
-	
+
 	function save_role(id){
 		var role = $('#addon_role').val();
+		var id_role = $('#id_user_role').val();
 		var url = '/card/save_role';
 		$.post(url,{
 				id : id,
 				role : role,
+				id_role : id_role,
 			},function(data){
 				if(data != ''){
 					window.location = '/card/view/'+id;
 				}
 			}
 		);
-		
+
 	}
 /*------- END CONTACT VIEW -------*/
