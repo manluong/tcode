@@ -25,9 +25,63 @@ function load_contact_info(id){
 	$.post(url,{
 			id : id,
 		},function(data){
-			$('#rightPanel').html(data);
+			parse_contact_list(data);
+			//$('#rightPanel').html(data);
 		}
 	);
+}
+
+//PARSE JSON CONTACT LIST INFO
+function parse_contact_list(data){
+	
+	var json = jQuery.parseJSON(data);
+	console.log(json);
+	var html = '';
+	 var display_name = (json.display_name != null ? json.display_name : '');
+	 var organization_name = (json.organization_name != null ? json.organization_name : '');
+	 var tel = '';
+	 if(json.addon_tel != ''){
+		tel = json.addon_tel[0].extension+'-'+json.addon_tel[0].are+'-'+json.addon_tel[0].country+'-'+json.addon_tel[0].number;
+	 }
+	 var off = '';
+	 if(json.addon_address != ''){
+		off = json.addon_address[0].line_1;
+	 }
+	 var email = '';
+	 if(json.addon_email != ''){
+		email = json.addon_email[0].email;
+	 }
+	 html += '<div id="user_profile">'+
+				'<div id="user_avatar"><img alt="avatar" src="'+ROOT+'resources/template/default_web/img/invoice/invoice-avatar.jpg"/></div>'+
+				'<div id="user_info">'+
+					'<ul>'+
+						'<li class="user_sex">Mr.</li>'+
+						'<li class="user_name">'+display_name+'</li>'+
+						'<li class="user_position">'+organization_name+'</li>'+
+					'</ul>'+
+				'</div>'+
+			'</div>'+
+			'<div id="contact_info">'+
+				'<ul>'+
+					'<li>'+
+						'<span class="input_data_label">Phone</span>'+
+						'<span class="fillter_input">'+tel+'</span>'+
+					'</li>'+
+					'<li>'+
+						'<span class="input_data_label">Office</span>'+
+						'<span class="fillter_input">'+off+'</span>'+
+					'</li>'+
+					'<li>'+
+						'<span class="input_data_label">Email</span>'+
+						'<span class="fillter_input">'+email+'</span>'+
+					'</li>'+
+					'<li style="margin:10px 0 0 121px;">'+
+						'<a href="/card/view/'+json.id+'" style="width:30px; height:10px;line-height:10px;" class="btn btn-inverse pjax">View</a>'+
+					'</li>'+
+				'</ul>'+
+			'</div>';
+	
+	$('#rightPanel').html(html);
 }
 
 //CONTACT LIST FILLTER

@@ -18,9 +18,9 @@ function confirm_delete(id){
 }
 </script>
 <?php
-	//echo '<pre>';
-	//print_r($data);
-	//echo '</pre>';
+	echo '<pre>';
+	print_r($data);
+	echo '</pre>';
 ?>
 <div id="payment_boxes">
 	<?php ($helpdesk_summary == FALSE ? $helpdesk_total = 0 : $helpdesk_total = count($helpdesk_summary))?>
@@ -60,7 +60,7 @@ function confirm_delete(id){
 			<ul>
 				<li>
 					<span class="input_data_label">Role</span>
-					<span class="fillter_input"><?=$card_role?></span>
+					<span class="fillter_input"><?=$user_role['name']?></span>
 				</li>
 				<li>
 					<span class="input_data_label">First Name</span>
