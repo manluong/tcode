@@ -14,7 +14,7 @@
 	<span>Changes made here will apply to all users.</span>
 </div>
 <div class="form">
-	<p>Select which of the following tax settings to use in 8force.</p>
+	<div class="textcontent">Select which of the following tax settings to use in 8force.</div>
 	<?php foreach($tax_use AS $t) { ?>
 	<ul>
 		<li>
