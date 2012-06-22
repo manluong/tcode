@@ -35,7 +35,7 @@ function load_contact_info(id){
 function parse_contact_list(data){
 	
 	var json = jQuery.parseJSON(data);
-	console.log(json);
+	//console.log(json);
 	var html = '';
 	 var title = '';
 	 if(json.title != null){
@@ -76,7 +76,7 @@ function parse_contact_list(data){
 		email = json.addon_email[0].email;
 	 }
 	 html += '<div id="user_profile">'+
-				'<div id="user_avatar"><img alt="avatar" src="'+ROOT+'resources/template/default_web/img/invoice/invoice-avatar.jpg"/></div>'+
+				'<div id="user_avatar"><img alt="avatar" src="/resources/template/default_web/img/invoice/invoice-avatar.jpg"/></div>'+
 				'<div id="user_info">'+
 					'<ul>'+
 						'<li class="user_sex">'+title+'</li>'+
