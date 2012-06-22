@@ -33,10 +33,6 @@ class LogM extends CI_Model {
 		$total_time = $this->_end_timer();
 		$this->_update_log($total_time);
 		if ($this->_log_data['log_type']) {
-			if ($this->_log_data['log_type']['event']) {
-				$log_event_insert_id = $this->_insert_log_event();
-			}
-
 			if ($this->_log_data['log_type']['history']) {
 				$this->_insert_log_history();
 				$this->_remove_extra_history();
@@ -126,50 +122,7 @@ class LogM extends CI_Model {
 				->update('log', $data);
 	}
 
-	private function _insert_log_event() {
-		$data = array(
-			'log_type_id' => $this->_log_data['log_type']['id'],
-			'app_id' => $this->url['app_id'],
-			'app_data_id' => $this->url['id_plain'],
-			'saveid' => $this->_log_data['saveid'],
-			'card_id' => $this->UserM->get_card_id(),
-			'type' => 'standard',
-			'gpmid' => $this->UserM->info['role']['role_id'],
-			'timeline' => $this->_log_data['log_type']['timeline'],
-			'stamp' => get_current_stamp(),
-			'lastupdate' => get_current_stamp(),
-		);
-		$this->db->insert('log_event', $data);
-		return $this->db->insert_id();
-	}
 
-	function insert_wall_post($text) {
-		$data = array(
-			'log_type_id' => $this->_log_data['log_type']['id'],
-			'app_id' => $this->url['app_id'],
-			'app_data_id' => $this->url['id_plain'],
-			'saveid' => $this->_log_data['saveid'],
-			'card_id' => $this->UserM->get_card_id(),
-			'sub_group' => '',
-			'type' => 'text',
-			'applink' => '',
-			'msg' => $text,
-			'html' => '',
-			'gpmid' => $this->UserM->info['role']['role_id'],
-			'timeline' => $this->_log_data['log_type']['timeline'],
-			'stamp' => get_current_stamp(),
-			'lastupdate' => get_current_stamp(),
-			'priority' => 0,
-		);
-
-		$this->db->insert('log_event', $data);
-		$data['id'] = $this->db->insert_id();
-		$data['card_name'] = $this->UserM->get_data_name($data['card_id']);
-		$data['created_stamp_iso8601'] = parse_user_date($data['stamp'], 'ISO_8601');
-		$data['created_stamp_iso'] = parse_user_date($data['stamp'], 'ISO');
-
-		return $data;
-	}
 
 	private function _insert_log_history() {
 		if ($this->_log_data['log_type']['history']) {
@@ -291,48 +244,6 @@ class LogM extends CI_Model {
 		return $total_time;
 	}
 
-	public function get_wall($id='', $limit=10) {
-		$this->db->select('log_event.*, global_setting.log_type.app, global_setting.log_type.tag, global_setting.log_type.action, global_setting.log_type.subaction')
-			->from('log_event')
-			->join('global_setting.log_type', 'log_type.id = log_event.log_type_id')
-			->order_by('log_event.lastupdate', 'desc')
-			->limit($limit);
-
-		if ($id != '') $this->db->where('log_event.id <', $id);
-
-		$query = $this->db->get();
-
-		$result = array();
-		foreach ($query->result_array() as $event) {
-			$furi = '/'.$event['app'].'/'.$event['action'].'/'.$event['app_data_id'].'/'.$event['subaction'];
-			if ($event['type'] == 'text') {
-				$msg = $event['msg'];
-			} else {
-				if ($event['msg'] !== '') {
-					$msg = $this->_get_custom_msg($event['msg']);
-				} else {
-					$msg = $this->_get_default_msg($event['subaction'], $event['app'], $event['app_data_id']);
-					$msg .= $event['stamp'];
-				}
-			}
-
-			$result[$event['id']]['id'] = $event['id'];
-			$result[$event['id']]['card_name'] = $this->UserM->get_data_name($event['card_id']);
-			$result[$event['id']]['msg'] = $msg;
-			$result[$event['id']]['furi'] = $furi;
-			$result[$event['id']]['type'] = $event['type'];
-			$result[$event['id']]['app'] = $event['app'];
-			$result[$event['id']]['tag'] = $event['tag'];
-			$result[$event['id']]['priority'] = $event['priority'];
-			$result[$event['id']]['stamp'] = $event['stamp'];
-			$result[$event['id']]['created_stamp_iso8601'] = parse_user_date($event['stamp'], 'ISO_8601');
-			$result[$event['id']]['created_stamp_iso'] = parse_user_date($event['stamp'], 'ISO');
-			$result[$event['id']]['lastupdate'] = $event['lastupdate'];
-		}
-
-		return $result;
-	}
-
 	function get_history(&$limit = 10) {
 		$query = $this->db->select()
 			->from('log_history')
@@ -361,6 +272,7 @@ class LogM extends CI_Model {
 		$this->db->insert('favorite', $data);
 		return $this->db->insert_id();
 	}
+
 	//	private function _get_request_uri() {
 	//		$url = explode("?", $_SERVER['REQUEST_URI'],2);
 	//        $log['furi'] = $uri[1];
