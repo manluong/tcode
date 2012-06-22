@@ -1249,12 +1249,16 @@ padding:0 10px; float:left; border-bottom:3px double #666}
 
 
 
-.content {position:absolute;top:75px;overflow-y: scroll; overflow-x: hidden; width:600px; height:300px;font-family:Arial, Helvetica, sans-serif}
+.content {position:absolute;top:75px;overflow-y: scroll; overflow-x: hidden; width:600px; height:300px;font-family:Arial, Helvetica, sans-serif;}
 .dtitle{border-bottom:1px solid #eee; padding:10px; width:100%;font-size:12px; overflow:hidden;color:#A8682A;}
 .dtitle span {float:right; padding-right:20px}
 .dtitle button{float:right; margin-right:20px}
 .dtitle .upper{background:url(../img/arrow_title.png) no-repeat 5px 2px; padding-left:15px; 
-  font-weight:bold;text-transform:uppercase; float:left }
+  font-weight:bold;text-transform:uppercase; float:left } 
+
+
+.textcontent{padding:10px; width:100%;font-size:12px; overflow:hidden;font-family: Arial, Helvetica, sans-serif; font-size:12px; color:#333333; font-weight:normal}
+
 .form ul {padding:5px}
 .form ul li {overflow:hidden}
 .form ul li .lb{margin-top:5px; display:block; font-weight:bolder; text-align:right; float:left; width:150px; padding-right:10px}
@@ -1367,10 +1371,6 @@ padding:0 10px; float:left; border-bottom:3px double #666}
 	background: none;
 	margin: 0px 0 0 20px;
 	color: #FFF;
-}
-
-#settings form {
-	padding: 5px 40px 5px 20px;
 }
 
 #settings form button.save {

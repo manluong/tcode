@@ -1,55 +1,53 @@
-<div class="widget">
-	<div class="widget-header">
-		Helpdesk
-	</div>
-	<div class="widget-body">
-		<?php
-			echo form_open('/setting/ajax_save/'.$app_name , array('class'=>'form-horizontal'));
-		?>
+<div class="top-setting">
+	<div><h2>SETTINGS</h2><span> Helpdesk</span></div>
+	<input type="button" class="btnX" />
+</div>
 
-		<?php if (APP_ROLE == 'TBOSS' && $is_admin) { ?>
-		<fieldset>
-			<legend>Global Level Settings <p class="pull-right" style="margin-top:15px;">Changes made here will apply to everyone including tenants.</p></legend>
+<div class="content">
+<?php
+	echo form_open('/setting/ajax_save/'.$app_name , array('class'=>'form-horizontal'));
+?>
 
-			<!--
-			<div class="control-group">
-				<label class="control-label">Test</label>
-				<div class="controls">
-					<input type="text">
-				</div>
-			</div>
-			-->
-			<p>There are no configuration settings for this section at the moment.</p>
-		</fieldset>
-		<?php } ?>
+<?php //if (APP_ROLE == 'TBOSS' && $is_admin) { ?>
+<div class="dtitle">
+	<span class="upper">Global Level Settings</span>
+	<span>Changes made here will apply to everyone including tenants.</span>
+</div>
+<div class="form">
+	<div class="textcontent">There are no configuration settings for this section at the moment.</div>
+</div>
+<?php //} ?>
 
-		<?php if ($is_admin) { ?>
-		<fieldset>
-			<legend>Admin Level Settings <p class="pull-right" style="margin-top:15px;">Changes made here will apply to all users.</p></legend>
+<?php //if ($is_admin) { ?>
+<div class="dtitle">
+	<span class="upper">Admin Level Settings</span>
+	<span>Changes made here will apply to all users.</span>
+</div>
+<div class="form">
+	<ul>
+		<li>
+			<span class="lb">Priority Options</span>
+			<span class="fillter_input">
+				<?php
+					$priority_options = (isset($settings['tenant']['priority']['value']))
+											? json_decode($settings['tenant']['priority']['value'])
+											: array();
 
-			<div class="control-group">
-				<label class="control-label">Priority Options</label>
-				<div class="controls">
-					<?php
-						$priority_options = (isset($settings['tenant']['priority']['value']))
-												? json_decode($settings['tenant']['priority']['value'])
-												: array();
+					foreach($priority_options AS $p) {
+						echo '<input type="text" name="tenant-priority[]" value="',$p,'" /><br />';
+					}
+				?>
+				<input type="text" name="tenant-priority[]" value="" />
+				<input type="hidden" name="tenant-priority-override" value="0" />
+			</span>
+		</li>
+	</ul>
+</div>
+<?php //} ?>
 
-						foreach($priority_options AS $p) {
-							echo '<input type="text" name="tenant-priority[]" value="',$p,'" /><br />';
-						}
-					?>
-					<input type="text" name="tenant-priority[]" value="" />
-					<input type="hidden" name="tenant-priority-override" value="0" />
-				</div>
-			</div>
-		</fieldset>
-		<?php } ?>
+<div class="bot">
+	<button type="submit" class="btn btn-primary save">Save</button> or <a href="#" class="cancel">go back</a>
+</div>
 
-		<div class="form-actions">
-			<button type="submit" class="btn btn-primary save">Save</button> or <button type="button" class="cancel">go back</button>
-		</div>
-
-		</form>
-	</div>
+</form>
 </div>
