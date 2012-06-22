@@ -244,7 +244,7 @@ function confirm_delete(id){
 					<span class="input_data_label">Expiry Date</span>
 					<span class="fillter_input"><?php
 					// Leo fix
-					    $ex_pass = explode('-',substr($data['addon_access_user'][0]['expire_stamp'],10));
+					    $ex_pass = explode('-',substr($data['addon_access_user'][0]['expire_stamp'],0,10));
 					    $ex_pass = $ex_pass[1].'/'.$ex_pass[0].'/'.$ex_pass[2];
 					// End fix
 					echo $ex_pass;
