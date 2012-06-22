@@ -33,9 +33,8 @@ function load_contact_info(id){
 
 //PARSE JSON CONTACT LIST INFO
 function parse_contact_list(data){
-	
 	var json = jQuery.parseJSON(data);
-	console.log(json);
+	//console.log(json);
 	var html = '';
 	 var title = '';
 	 if(json.title != null){
