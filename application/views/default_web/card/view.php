@@ -245,7 +245,7 @@ function confirm_delete(id){
 					<span class="fillter_input"><?php
 					// Leo fix
 					    $ex_pass = explode('-',substr($data['addon_access_user'][0]['expire_stamp'],0,10));
-					    $ex_pass = $ex_pass[1].'/'.$ex_pass[0].'/'.$ex_pass[2];
+					    $ex_pass = $ex_pass[1].'/'.$ex_pass[2].'/'.$ex_pass[0];
 					// End fix
 					echo $ex_pass;
 					?></span>
@@ -265,7 +265,7 @@ function confirm_delete(id){
 				</li>
 				<li>
 					<span class="input_data_label">Expiry Date</span>
-					<span class="fillter_input"><input type="text" id="expiry_date" value=""/></span>
+					<span class="fillter_input"><input type="text" id="expiry_date" value="<?php echo $ex_pass;?>" /></span>
 				</li>
 				<li style="margin:10px 0 0 95px;">
 					<button onclick="ajax_change_pass(<?=$data['addon_access_user'][0]['id']?>);" id="btn_view_active" style="height:20px;line-height:12px;" class="btn btn-inverse">SAVE</button>
