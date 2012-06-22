@@ -507,6 +507,12 @@
 		return false;
 	};
 	uploader.init();
+	// leo fix
+	    var role = jQuery("input[class='role']:checked").val();
+		role = parseInt(role);
+		if(role == 0)
+		    jQuery("#customer_detail").hide();
+	// end
 
-	
+
 </script>
