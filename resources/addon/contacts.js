@@ -35,7 +35,7 @@ function load_contact_info(id){
 function parse_contact_list(data){
 	
 	var json = jQuery.parseJSON(data);
-	//console.log(json);
+	console.log(json);
 	var html = '';
 	 var title = '';
 	 if(json.title != null){
@@ -65,8 +65,25 @@ function parse_contact_list(data){
 	 }
 	 var tel = '';
 	 if(json.addon_tel != ''){
-		tel = json.addon_tel[0].extension+'-'+json.addon_tel[0].are+'-'+json.addon_tel[0].country+'-'+json.addon_tel[0].number;
+		var extension = '';
+		if(json.addon_tel[0].extension != null){
+			extension = json.addon_tel[0].extension+'-';
+		}
+		var are = '';
+		if(json.addon_tel[0].are != null){
+			are = json.addon_tel[0].are+'-';
+		}
+		var country = '';
+		if(json.addon_tel[0].country != null){
+			country = json.addon_tel[0].country+'-';
+		}
+		var number = '';
+		if(json.addon_tel[0].number != null){
+			number = json.addon_tel[0].number;
+		}
+		tel = extension+are+country+number;
 	 }
+	 
 	 var off = '';
 	 if(json.addon_address != ''){
 		off = json.addon_address[0].line_1;
@@ -104,7 +121,6 @@ function parse_contact_list(data){
 					'</li>'+
 				'</ul>'+
 			'</div>';
-	
 	$('#rightPanel').html(html);
 }
 
