@@ -5,7 +5,16 @@
 <script type="text/javascript" src="/resources/addon/jquery.imgareaselect.min.js"></script>
 <link href="/resources/addon/plupload/js/jquery.plupload.queue/css/jquery.plupload.queue.css" media="screen" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/contact.css" />
-
+<style>
+.control-group{
+	position:relative !important;
+}
+.remove{
+	position:absolute !important;
+	left:0px ;
+	top:0px ;
+}
+</style>
 
 <?php
 session_start(); //Do not remove this
@@ -159,6 +168,7 @@ foreach ($allowed_image_ext as $mime_type => $ext) {
 						$('#tel_add').on('click', function() {
 							tel_index++;
 							var new_tel = '<div class="control-group">'+
+												'<button class="btn btn-mini pull-left remove">X</button>'+
 												'<label class="control-label" for="tel_'+tel_index+'">'+tel_label+'</label>'+
 												'<div class="controls">'+
 													'<input type="hidden" name="addon_tel['+tel_index+'][id]" value="" />'+
@@ -219,6 +229,7 @@ foreach ($allowed_image_ext as $mime_type => $ext) {
 						$('#email_add').on('click', function() {
 							email_index++;
 							var new_email = '<div class="control-group">'+
+												'<button class="btn btn-mini pull-left remove">X</button>'+
 												'<label class="control-label contact" for="email_'+email_index+'">'+email_label+'</label>'+
 												'<div class="controls">'+
 													'<input type="hidden" name="addon_email['+email_index+'][id]" value="" />'+
@@ -282,6 +293,7 @@ foreach ($allowed_image_ext as $mime_type => $ext) {
 						$('#address_add').on('click', function() {
 							address_index++;
 							var new_address = '<div class="control-group">'+
+												'<button class="btn btn-mini pull-left remove">X</button>'+
 												'<label class="control-label" for="address_'+address_index+'">'+address_label+'</label>'+
 												'<div id="contact_address" class="controls"><ul><li>'+
 													'<input type="hidden" name="addon_address['+address_index+'][id]" value="" />'+
@@ -343,6 +355,7 @@ foreach ($allowed_image_ext as $mime_type => $ext) {
 						$('#social_add').on('click', function() {
 							social_index++;
 							var new_social = '<div class="control-group">'+
+												'<button class="btn btn-mini pull-left remove">X</button>'+
 												'<label class="control-label" for="social_'+social_index+'">'+social_label+'</label>'+
 												'<div class="controls">'+
 													'<input type="hidden" name="addon_social['+social_index+'][id]" value="" />'+
