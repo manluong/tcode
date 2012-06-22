@@ -102,11 +102,11 @@ class Card extends MY_Controller {
 //		);
 		// Leo fix
 		    $data['password'] = $this->input->post('pass');
-		    $data['expire_stamp'] = $date[2].'-'.$date[1].'-'.$date[0].' 00:00:00';
+		    $data['expire_stamp'] = $date[2].'-'.$date[0].'-'.$date[1].' 00:00:00';
 		// End fix
 		$save_id = $this->Access_UserM->save($data);
-		$view_data['data'] = $this->Access_UserM->get($save_id);
-		$this->load->view(get_template().'/card/ajax_change_pass',$view_data);
+//		$view_data['data'] = $this->Access_UserM->get($save_id);
+//		$this->load->view(get_template().'/card/ajax_change_pass',$view_data);
 	}
 
 	function contact_fillter(){

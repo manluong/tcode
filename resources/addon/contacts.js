@@ -155,13 +155,13 @@ $(document).ready(function(){
 			$('#view_pass').hide();
 			$('#edit_pass').show();
 		});
-		
+
 	});
 
 	function ajax_change_status(id){
 		var active = $('#select_active').val();
 		var url = '/card/ajax_change_status';
-		
+
 		$.post(url,{
 				id : id,
 				active : active,
@@ -170,13 +170,13 @@ $(document).ready(function(){
 			}
 		);
 	}
-	
+
 	function ajax_change_pass(id){
 		var pass = $('#access_pass').val();
 		var expiry_date = $('#expiry_date').val();
 		var url = '/card/ajax_change_pass';
 		var card_id = $('#access_card_id').val();
-		
+
 		$.post(url,{
 				id : id,
 				pass : pass,
@@ -185,11 +185,18 @@ $(document).ready(function(){
 			},function(data){
 				$('#edit_pass').hide();
 				$('#view_pass').show();
-				$('#view_pass').html(data);
+				// Leo fix
+				    jQuery.each(jQuery("#view_pass .fillter_input"),function(index,value){
+					if(index == 1){
+					    jQuery(this).html(expiry_date);
+					}
+				    });
+				// End fix
+				//$('#view_pass').html(data);
 			}
 		);
 	}
-	
+
 	function save_role(id){
 		var role = $('#addon_role').val();
 		var url = '/card/save_role';
@@ -202,6 +209,6 @@ $(document).ready(function(){
 				}
 			}
 		);
-		
+
 	}
 /*------- END CONTACT VIEW -------*/

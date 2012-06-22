@@ -242,7 +242,13 @@ function confirm_delete(id){
 				</li>
 				<li>
 					<span class="input_data_label">Expiry Date</span>
-					<span class="fillter_input"><?=$data['addon_access_user'][0]['expire_stamp']?></span>
+					<span class="fillter_input"><?php
+					// Leo fix
+					    $ex_pass = explode('-',substr($data['addon_access_user'][0]['expire_stamp'],10));
+					    $ex_pass = $ex_pass[1].'/'.$ex_pass[0].'/'.$ex_pass[2];
+					// End fix
+					echo $ex_pass;
+					?></span>
 				</li>
 				<li style="margin:10px 0 0 95px;">
 					<button id="btn_view_pass" style="height:20px;line-height:12px;" class="btn btn-inverse">EDIT DETAILS</button>
