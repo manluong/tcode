@@ -55,6 +55,11 @@ class Setting extends MY_Controller {
 		$data_configure['settings'] = $this->SettingM->get_for_configuration($app_name);
 		$data_configure['override_options'] = $this->override;
 
+		if ($app_name == 'helpdesk') {
+			$data_configure['priority_options'] = $this->SettingM->get_options_for_configuration($app_name, 'priority');
+			$data_configure['case_type_options'] = $this->SettingM->get_options_for_configuration($app_name, 'case_type');
+		}
+
 		$this->load->view(get_template().'/setting/configure_'.$app_name, $data_configure);
 	}
 
@@ -87,7 +92,14 @@ class Setting extends MY_Controller {
 
 		$this->SettingM->save_options($app_name, $name);
 
+		$results_array = $this->db->select('id, value, sort_order, language_key')
+					->from('core_select')
+					->where('id', $this->input->post('id'))
+					->get()
+					->result_array();
+
 		$this->RespM->set_success(TRUE)
+				->set_details(isset($results_array) ? $results_array : array())
 				->output_json();
 	}
 
@@ -95,7 +107,7 @@ class Setting extends MY_Controller {
 	function ajax_add_option() {
 		$result = FALSE;
 
-		if ($this->UserM->is_admin()) {
+// 		if ($this->UserM->is_admin()) {
 			$app_id = $this->AppM->get_id($this->input->post('app_name'));
 
 			$data = array(
@@ -105,10 +117,18 @@ class Setting extends MY_Controller {
 				'sort_order' => $this->input->post('sort_order'),
 			);
 
-			$result = $this->SettingM->add_option($data);
-		}
+			$new_id = NULL;
+			$result = $this->SettingM->add_option($data, $new_id);
+
+			$results_array = $this->db->select('id, value, sort_order, language_key')
+					->from('core_select')
+					->where('id', $new_id)
+					->get()
+					->result_array();
+// 		}
 
 		$this->RespM->set_success($result)
+				->set_details(isset($results_array) ? $results_array : array())
 				->output_json();
 	}
 

@@ -251,7 +251,7 @@ class SettingM extends MY_Model {
 		return TRUE;
 	}
 
-	function add_option($data) {
+	function add_option($data, &$new_id) {
 		$this->db->insert('core_select', $data);
 		$new_id = $this->db->insert_id();
 
