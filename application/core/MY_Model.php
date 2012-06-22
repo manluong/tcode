@@ -617,4 +617,17 @@ class MY_Model extends CI_Model {
 	function get_label($datafield) {
 		return $this->lang->line($this->table.'-'.$datafield);
 	}
+
+	//Like the Unix function touch, this function updates the modified_card_id
+	// to the user and the modified_stamp to the time this function is ran
+	function touch($id) {
+		if (!$this->sett_has_system_fields) return FALSE;
+
+		$this->db->set('modified_card_id', $this->UserM->get_card_id())
+				->set('modified_stamp', get_current_stamp())
+				->where('id', $id)
+				->update($this->table);
+
+		return TRUE;
+	}
 }
