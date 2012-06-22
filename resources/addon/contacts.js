@@ -244,7 +244,15 @@ $(document).ready(function(){
 				id : id,
 				active : active,
 			},function(data){
-				$('#customer_detail').html(data);
+				// Leo fix
+				    jQuery("#view_active").show();
+				    jQuery("#edit_active").hide();
+				    if(parseInt(active) == 0)
+					jQuery("#view_active .fillter_input").html('Unactive');
+				    else
+					jQuery("#view_active .fillter_input").html('Active');
+				// End fix
+				//$('#customer_detail').html(data);
 			}
 		);
 	}

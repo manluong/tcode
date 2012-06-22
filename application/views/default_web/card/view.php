@@ -217,7 +217,6 @@ function confirm_delete(id){
 					<span class="input_data_label">Status</span>
 					<span class="fillter_input">
 						<select id="select_active">
-							<option value=""> Change status</option>
 							<option <?=($data['active']==1?'selected="selected"':'')?> value="1">Active</option>
 							<option <?=($data['active']==0?'selected="selected"':'')?> value="0">Unactive</option>
 						</select>
