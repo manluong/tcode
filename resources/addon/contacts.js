@@ -175,11 +175,13 @@ $(document).ready(function(){
 		var pass = $('#access_pass').val();
 		var expiry_date = $('#expiry_date').val();
 		var url = '/card/ajax_change_pass';
+		var card_id = $('#access_card_id').val();
 		
 		$.post(url,{
 				id : id,
 				pass : pass,
 				expiry_date : expiry_date,
+				card_id : card_id,
 			},function(data){
 				$('#edit_pass').hide();
 				$('#view_pass').show();

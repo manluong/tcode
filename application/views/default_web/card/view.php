@@ -17,7 +17,7 @@ function confirm_delete(id){
 	});
 }
 </script>
-<?php 
+<?php
 	//echo '<pre>';
 	//print_r($data);
 	//echo '</pre>';
@@ -142,7 +142,7 @@ function confirm_delete(id){
 					<span class="fillter_input" style="<?=($k->is_default == 1?'color:red':'')?>"><?=$k->extension.' - '.$k->area.' - '.$k->country.' - '.$k->number?></span>
 				</li>
 				<?php }}?>
-				
+
 				<li>
 					<span class="input_data_label">Birthday</span>
 					<span class="fillter_input"><?php
@@ -171,7 +171,7 @@ function confirm_delete(id){
 			<span style="text-transform:uppercase;">CONTACT TYPE</span>
 		</div>
 		<div class="control-group" style="padding-top:10px;">
-			<?php 
+			<?php
 				$i = 0;
 				foreach($role as $role_value => $role_label){
 					$i++;
@@ -201,7 +201,7 @@ function confirm_delete(id){
 				<span class="arrow_title"></span>
 				<span style="text-transform:uppercase;"><?=$user_role['name']?> DETAILS</span>
 			</div>
-			
+
 			<ul id="view_active">
 				<li>
 					<span class="input_data_label">Status</span>
@@ -211,7 +211,7 @@ function confirm_delete(id){
 					<button id="btn_view_active" style="height:20px;line-height:12px;" class="btn btn-inverse" href="#">EDIT DETAILS</button>
 				</li>
 			</ul>
-			
+
 			<ul id="edit_active" style="display:none;">
 				<li>
 					<span class="input_data_label">Status</span>
@@ -228,13 +228,13 @@ function confirm_delete(id){
 				</li>
 			</ul>
 		</div>
-		
+
 		<div id="password_detail" style="margin-top:20px;width:250px;float:left;">
 			<div style="width:100%;" class="invoice_title">
 				<span class="arrow_title"></span>
 				<span style="text-transform:uppercase;">LOGIN</span>
 			</div>
-			
+
 			<ul id="view_pass">
 				<li>
 					<span class="input_data_label">Password</span>
@@ -248,8 +248,11 @@ function confirm_delete(id){
 					<button id="btn_view_pass" style="height:20px;line-height:12px;" class="btn btn-inverse">EDIT DETAILS</button>
 				</li>
 			</ul>
-			
+
 			<ul id="edit_pass" style="display:none;">
+				<?php if($data['addon_access_user'][0]['id'] == ''){?>
+				<input type="hidden" value="<?=$data['id']?>" id="access_card_id"/>
+				<?php }?>
 				<li>
 					<span class="input_data_label">Password</span>
 					<span class="fillter_input"><input type="password" id="access_pass" value=""/></span>

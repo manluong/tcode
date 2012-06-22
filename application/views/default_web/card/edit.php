@@ -17,7 +17,7 @@
 			?>
 			<fieldset>
 				<div class="control-group" style="padding-left:160px;">
-					<?php 
+					<?php
 						$role_id = $data['addon_access_user_role'][0]['role_id'];
 						foreach($role as $role_value => $role_label){
 							$checked = ($role_value==$role_id?'checked=checked':'');
@@ -33,7 +33,7 @@
 						});
 					</script>
 				</div>
-				
+
 				<div class="control-group" style="position:relative;">
 					<h1 style="display:none;">Custom example</h1>
 					<p style="display:none;">Shows you how to use the core plupload API.</p>
@@ -42,7 +42,7 @@
 						<div id="uploadfiles">Upload File</div>
 						<div id="filelist"></div>
 					</div>
-					
+
 					<div class="controls" style="margin-top:24px;">
 						<div class="btn-group" data-toggle="buttons-radio">
 							<?php
@@ -84,7 +84,7 @@
 						<?=form_input('last_name', $data['last_name'], 'id="last_name"')?>
 					</div>
 				</div>
-				
+
 				<div style="margin-top:20px;" class="control-group">
 					<label class="control-label" for="organization_name">Company</label>
 					<div class="controls">
@@ -370,14 +370,14 @@
 					});
 
 				</script>
-				
+
 				<div class="control-group">
 					<label class="control-label">Gender</label>
 					<div class="controls">
 						<div class="btn-group" data-toggle="buttons-radio">
 							<?php
 								foreach($data['addon_extra'][0]['gender_options'] AS $title_val => $title_label) {
-								
+
 									echo '<button type="button" class="btn gender_button';
 									if ($data['addon_extra'][0]['gender'] == $title_val) echo " active";
 									echo '" id="title_',$title_val,'" value="',$title_val,'">';
@@ -430,7 +430,7 @@
 	$(function() {
 		$("#addon_extra_birth_date").datepicker();
 	});
-	
+
 	$(document).ready(function() {
 		$('.remove').live('click', function() {
 			$(this).closest('.control-group').remove();
@@ -465,7 +465,7 @@
 			e.preventDefault();
 		});
 	});
-	
+
 	function getid(id) {
 		return document.getElementById(id);
 	}
@@ -494,5 +494,6 @@
 		return false;
 	};
 	uploader.init();
+
 	
 </script>

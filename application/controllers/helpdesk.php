@@ -53,6 +53,25 @@ class Helpdesk extends MY_Controller {
 			'priority' => $this->Helpdesk_PriorityM->get_list(),
 			'type' => $this->Helpdesk_TypeM->get_list(),
 		);
+		
+		$this->data['app_menu'] = array(
+			array(
+				'url' => '/helpdesk',
+				'extra' => '',
+				'title' => 'List',
+			),
+			array(
+				'url' => '/helpdesk/card/'.$this->UserM->get_card_id(),
+				'extra' => '',
+				'title' => 'My Cases',
+			),
+			array(
+				'url' => '/helpdesk/add',
+				'extra' => '',
+				'title' => 'New',
+			),
+		);
+		
 		$this->data['content'] = $this->load->view(get_template().'/helpdesk/index',$content, TRUE);
 		$this->_do_output();
 	}
