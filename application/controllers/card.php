@@ -88,13 +88,20 @@ class Card extends MY_Controller {
 		$this->load->model('Access_UserM');
 		$date = $this->input->post('expiry_date');
 		$date = split('/',$date);
+		$id = $this->input->post('id');
+		if($id != ''){
+			$data['id'] = $id ;
+		}
+		if($this->input->post('card_id') != ''){
+			$data['card_id'] = $this->input->post('card_id');
+		}
+		
 		$data = array (
-			'id' => $this->input->post('id'),
             'password' => md5($this->input->post('pass')),
 			'expire_stamp' => $date[2].'-'.$date[1].'-'.$date[0].' 00:00:00',
 		);
-		$this->Access_UserM->save($data);
-		$view_data['data'] = $this->Access_UserM->get($this->input->post('id'));
+		$save_id = $this->Access_UserM->save($data);
+		$view_data['data'] = $this->Access_UserM->get($save_id);
 		$this->load->view(get_template().'/card/ajax_change_pass',$view_data);
 	}
 

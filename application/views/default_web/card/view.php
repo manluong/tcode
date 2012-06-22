@@ -250,6 +250,9 @@ function confirm_delete(id){
 			</ul>
 			
 			<ul id="edit_pass" style="display:none;">
+				<?php if($data['addon_access_user'][0]['id'] == ''){?>
+				<input type="hidden" value="<?=$data['id']?>" id="access_card_id"/>
+				<?php }?>
 				<li>
 					<span class="input_data_label">Password</span>
 					<span class="fillter_input"><input type="password" id="access_pass" value=""/></span>
