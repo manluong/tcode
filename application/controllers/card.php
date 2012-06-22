@@ -208,6 +208,9 @@ class Card extends MY_Controller {
 			'card_id' => $this->input->post('id'),
 			'role_id' => $this->input->post('role'),
 		);
+		if($this->input->post('id_role') != ''){
+			$data['id'] = $this->input->post('id_role');
+		}
 		$id_save = $this->Card_roleM->save($data);
 		echo $id_save;
 	}

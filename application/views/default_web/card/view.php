@@ -178,6 +178,7 @@ function confirm_delete(id){
 					echo '<input '.($i==1?'checked="checked" ':'').'type="radio" name="role" class="role" value="'.$role_value.'" /> '.$role_label.'&nbsp;&nbsp;';
 				}
 			?>
+			<input type="hidden" name="id_user_role" id="id_user_role" value="<?=$data['addon_access_user_role'][0]['id']?>">
 			<input type="hidden" name="addon_access_user_role[0][role_id]" id="addon_role" value="">
 			<script>
 				$(document).ready(function() {

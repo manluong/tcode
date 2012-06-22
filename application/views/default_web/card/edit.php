@@ -251,7 +251,6 @@
 				</script>
 
 				<br/><br/>
-
 				<div id="addon_address">
 				<?php
 					$x = 0;
