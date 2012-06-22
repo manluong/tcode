@@ -37,8 +37,32 @@ function parse_contact_list(data){
 	var json = jQuery.parseJSON(data);
 	console.log(json);
 	var html = '';
-	 var display_name = (json.display_name != null ? json.display_name : '');
-	 var organization_name = (json.organization_name != null ? json.organization_name : '');
+	 var title = '';
+	 if(json.title != null){
+		switch(title){
+			case 1:
+				title = 'Mr.';
+				break;
+			case 2:
+				title = 'Miss.';
+				break;
+			case 3:
+				title = 'Mrs.';
+				break;
+			case 4:
+				title = 'Dr.';
+				break;
+		}
+	 }
+	 
+	 var display_name = '';
+	 if(json.final_display_name != null){
+		display_name = json.final_display_name;
+	 }
+	 var organization_name = '';
+	 if(json.organization_name != null){
+		organization_name = json.organization_name;
+	 }
 	 var tel = '';
 	 if(json.addon_tel != ''){
 		tel = json.addon_tel[0].extension+'-'+json.addon_tel[0].are+'-'+json.addon_tel[0].country+'-'+json.addon_tel[0].number;
@@ -55,7 +79,7 @@ function parse_contact_list(data){
 				'<div id="user_avatar"><img alt="avatar" src="'+ROOT+'resources/template/default_web/img/invoice/invoice-avatar.jpg"/></div>'+
 				'<div id="user_info">'+
 					'<ul>'+
-						'<li class="user_sex">Mr.</li>'+
+						'<li class="user_sex">'+title+'</li>'+
 						'<li class="user_name">'+display_name+'</li>'+
 						'<li class="user_position">'+organization_name+'</li>'+
 					'</ul>'+
@@ -209,13 +233,13 @@ $(document).ready(function(){
 			$('#view_pass').hide();
 			$('#edit_pass').show();
 		});
-		
+
 	});
 
 	function ajax_change_status(id){
 		var active = $('#select_active').val();
 		var url = '/card/ajax_change_status';
-		
+
 		$.post(url,{
 				id : id,
 				active : active,
@@ -224,13 +248,13 @@ $(document).ready(function(){
 			}
 		);
 	}
-	
+
 	function ajax_change_pass(id){
 		var pass = $('#access_pass').val();
 		var expiry_date = $('#expiry_date').val();
 		var url = '/card/ajax_change_pass';
 		var card_id = $('#access_card_id').val();
-		
+
 		$.post(url,{
 				id : id,
 				pass : pass,
@@ -239,11 +263,18 @@ $(document).ready(function(){
 			},function(data){
 				$('#edit_pass').hide();
 				$('#view_pass').show();
-				$('#view_pass').html(data);
+				// Leo fix
+				    jQuery.each(jQuery("#view_pass .fillter_input"),function(index,value){
+					if(index == 1){
+					    jQuery(this).html(expiry_date);
+					}
+				    });
+				// End fix
+				//$('#view_pass').html(data);
 			}
 		);
 	}
-	
+
 	function save_role(id){
 		var role = $('#addon_role').val();
 		var url = '/card/save_role';
@@ -256,6 +287,6 @@ $(document).ready(function(){
 				}
 			}
 		);
-		
+
 	}
 /*------- END CONTACT VIEW -------*/
