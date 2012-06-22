@@ -3,12 +3,6 @@
 <script type="text/javascript" src="/resources/addon/contacts.js"></script>
 <script type="text/javascript">
 function ajax_edit(id){
-	// leo fix
-	    var role = jQuery("#customer_detail input[type='radio']:checked").val();
-		role = parseInt(role);
-		if(role == 0)
-		    jQuery("#customer_detail").hide();
-	// end
 	$.pjax({
 		url: '/card/edit/'+id,
 		container: '#contact_info_detail',
