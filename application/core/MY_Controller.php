@@ -89,9 +89,6 @@ class MY_Controller extends CI_Controller {
 		if (!$this->is_cli && !$this->is_callback) {
 			$this->_setup_db();
 			$this->check_mobile_app();
-		}
-
-		if (!$this->is_cli) {
 			$this->load->library('session');
 		}
 
