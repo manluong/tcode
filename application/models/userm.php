@@ -86,26 +86,9 @@ class UserM extends MY_Model {
 
 		if ($this->id == 0) return 'system';
 
-		if (strlen($this->info['display_name']) > 0) return $this->info['display_name'];
-
 		return $this->info['first_name'].' '.$this->info['last_name'];
 	}
 
-	public function get_data_name($card_id) {
-		$rs = $this->db->select('first_name, middle_name, last_name')
-				->from($this->table)
-				->where('id', $card_id)
-				->limit(1)
-				->get();
-
-		$name = $rs->row_array();
-		$result = array();
-		foreach($name AS $n) {
-			if ($n != '') $result[] = $name;
-		}
-
-		return implode(' ', $name);
-	}
 
 	//$type = primary | secondary | all
 	public function get_email($card_id='', $type='primary') {
@@ -234,21 +217,8 @@ class UserM extends MY_Model {
 
 	//gets a user's card details and it's roles and subroles
 	public function get_info($card_id){
-		$rs = $this->db->select()
-				->from('card')
-				->where('id', $card_id)
-				->limit(1)
-				->get();
-
-		$result = $rs->row_array();
-
-		if ($result['first_name']){
-			$result['name'] = $result['first_name'];
-		} elseif ($result['last_name']){
-			$result['name'] = $result['last_name'];
-		} elseif ($result['organization_name']){
-			$result['name'] = $result['organization_name'];
-		}
+		$this->load->model('CardM');
+		$result = $this->CardM->get($card_id);
 
 		$result['role'] = $this->AclM->get_user_role_info($card_id);
 		$result['sub_roles'] = $this->AclM->get_user_subroles($card_id);
