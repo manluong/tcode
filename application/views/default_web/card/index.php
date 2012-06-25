@@ -40,7 +40,7 @@ $(document).ready(function(){
 
 			</div>
 			<div style="height:437px;" class="nano">
-				<ul id="contact_list" class="addressBook">
+				<ul id="contact_list" class="addressBook content">
 					<li class="letter staff customers vendors a-title">a</li>
 					<?php
 						$current_alphabet = 0;

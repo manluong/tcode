@@ -54,8 +54,11 @@ foreach ($allowed_image_ext as $mime_type => $ext) {
 			<fieldset>
 				<div class="control-group" style="padding-left:160px;">
 					<?php
+						$i = 0;
 						foreach($role as $role_value => $role_label){
-							echo '<input type="radio" name="role" class="role" value="'.$role_value.'" /> '.$role_label.'&nbsp;&nbsp;';
+							$i++;
+							$checked = ($i==1?'checked="checked"':'');
+							echo '<input '.$checked.'type="radio" name="role" class="role" value="'.$role_value.'" /> '.$role_label.'&nbsp;&nbsp;';
 						}
 					?>
 					<input type="hidden" name="addon_access_user_role[0][role_id]" id="addon_role" value="">
@@ -76,14 +79,15 @@ foreach ($allowed_image_ext as $mime_type => $ext) {
 						<div class="btn-group" data-toggle="buttons-radio">
 							<?php
 								foreach($title_option AS $title_val => $title_label) {
+									$active =  ($title_val==1?' active':'');
 									if ($title_val == 0) continue;
-									echo '<button type="button" class="btn title_button';
+									echo '<button type="button" class="btn title_button',$active;
 									echo '" id="title_',$title_val,'" value="',$title_val,'">';
 									echo $title_label,'</button>';
 								}
 							?>
 						</div>
-						<input type="hidden" name="title" id="title" value="<?=$data['title']?>">
+						<input type="hidden" name="title" id="title" value="1">
 						<script>
 							$(document).ready(function() {
 								$('.title_button').on('click', function() {
@@ -381,7 +385,8 @@ foreach ($allowed_image_ext as $mime_type => $ext) {
 						<div class="btn-group" data-toggle="buttons-radio">
 							<?php
 								foreach($gender AS $title_val => $title_label) {
-									echo '<button type="button" class="btn gender_button';
+									$active =  ($title_val==0?' active':'');
+									echo '<button type="button" class="btn gender_button',$active;
 									echo '" id="title_',$title_val,'" value="',$title_val,'">';
 									echo $title_label,'</button>';
 								}

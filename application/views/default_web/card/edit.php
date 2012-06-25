@@ -333,14 +333,13 @@
 					});
 
 				</script>
-
-				<br /><br />
-
+				<br/><br/>
 				<div id="addon_social">
 				<?php
 					$x = 0;
 					foreach($data['addon_social'] AS $e) {
 						echo '<div class="control-group">';
+							echo '<button class="btn btn-mini pull-left remove">X</button>';
 							echo '<label class="control-label" for="social_',$e['id'],'">',$social_label,'</label>';
 							echo '<div class="controls">';
 								echo form_hidden('addon_social['.$x.'][id]', $e['id']);
@@ -348,7 +347,6 @@
 								echo form_input('addon_social['.$x.'][name_id]', $e['name_id'], 'id="social_'.$e['id'].'"'),' ';
 							echo '</div>';
 						echo '</div>';
-
 						$x++;
 					}
 				?>
@@ -375,7 +373,6 @@
 										'<input type="text" name="addon_social['+social_index+'][name_id]" id="social_'+social_index+'" /> '+
 									'</div>'+
 								'</div>';
-
 							$('#addon_social').append(new_social);
 							social_index++;
 						});
@@ -411,12 +408,12 @@
 					<label class="control-label" for="birth_date">Birthday</label>
 					<div class="controls">
 						<?php
-                                                  // -- Leo fix
-                                                  $birthday = explode('-',$data['addon_extra'][0]['birth_date']);
-                                                  $birthday = $birthday[1].'/'.$birthday[2].'/'.$birthday[0];
-                                                  // -- End
-                                                echo form_input('addon_extra[0][birth_date]', $birthday, 'id="addon_extra_birth_date"');
-                                                ?>
+						  // -- Leo fix
+						  $birthday = explode('-',$data['addon_extra'][0]['birth_date']);
+						  $birthday = $birthday[1].'/'.$birthday[2].'/'.$birthday[0];
+						  // -- End
+						echo form_input('addon_extra[0][birth_date]', $birthday, 'id="addon_extra_birth_date"');
+						?>
 					</div>
 				</div>
 				<div class="control-group">
