@@ -807,8 +807,8 @@ $(window).load(function () {
 				</div>
 			<hr />
 			<?php 	} ?>
-			<form name="photo" enctype="multipart/form-data" action="<?=site_url('card/add')?>" method="post">
-			Photo <input type="file" name="image" size="30" /> <input type="submit" name="upload" value="Upload" />
+			<form name="photo" enctype="multipart/form-data" action="<?=site_url('card/add')?>" method="post" style="display:none;">
+			Photo <input type="file" name="image" size="30"  /> <input type="submit" name="upload" value="Upload" />
 			</form>
 		<?php } ?>
 	</div>

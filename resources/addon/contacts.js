@@ -42,6 +42,9 @@ function load_upload_form(){
 		return false;
 	};
 	uploader.init();
+	jQuery('input[type="file"]').change(function(){
+	   uploader.start();
+	});
 }
 
 /*------- End Upload avatar -------*/
