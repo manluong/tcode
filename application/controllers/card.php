@@ -61,7 +61,9 @@ class Card extends MY_Controller {
 	    || ($_FILES["file"]["type"] == "image/pjpeg")
 	    || ($_FILES["file"]["type"] == "image/png")))
 	    {
-		
+		$name = date('d-m-Y-h-i-s');
+		$file = pathinfo($_FILES["file"]["name"]);
+		$file = $name.'.'.$file['extension'];
 	    }
 	    else
 	    {
