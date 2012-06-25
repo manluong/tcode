@@ -462,38 +462,38 @@ foreach ($allowed_image_ext as $mime_type => $ext) {
 		});
 	});
 
-	function getid(id) {
-		return document.getElementById(id);
-	}
-	var uploader = new plupload.Uploader({
-		runtimes : 'gears,html5,flash,silverlight,browserplus',
-		browse_button : 'pickfiles',
-		container: 'container',
-		max_file_size : '10mb',
-		url : '/card/upload/',
-
-		filters : [
-			{title : "Image files", extensions : "jpg,gif,png"},
-			{title : "Zip files", extensions : "zip"}
-		]
-	});
-	uploader.bind('FilesAdded', function(up, files) {
-		for (var i in files) {
-			getid('filelist').innerHTML += '<div id="' + files[i].id + '">' + files[i].name + ' (' + plupload.formatSize(files[i].size) + ') <b></b></div>';
-		}
-	});
-	uploader.bind('UploadProgress', function(up, file) {
-		getid(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
-	});
-	getid('uploadfiles').onclick = function() {
-		uploader.start();
-		return false;
-	};
-	uploader.init();
+//	function getid(id) {
+//		return document.getElementById(id);
+//	}
+//	var uploader = new plupload.Uploader({
+//		runtimes : 'gears,html5,flash,silverlight,browserplus',
+//		browse_button : 'pickfiles',
+//		container: 'container',
+//		max_file_size : '10mb',
+//		url : '/card/upload/',
+//
+//		filters : [
+//			{title : "Image files", extensions : "jpg,gif,png"},
+//			{title : "Zip files", extensions : "zip"}
+//		]
+//	});
+//	uploader.bind('FilesAdded', function(up, files) {
+//		for (var i in files) {
+//			getid('filelist').innerHTML += '<div id="' + files[i].id + '">' + files[i].name + ' (' + plupload.formatSize(files[i].size) + ') <b></b></div>';
+//		}
+//	});
+//	uploader.bind('UploadProgress', function(up, file) {
+//		getid(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
+//	});
+//	getid('uploadfiles').onclick = function() {
+//		uploader.start();
+//		return false;
+//	};
+//	uploader.init();
 </script>
 
 <!-- Crop image function -->
-<?php
+<?php /*
 function resizeImage($image,$width,$height,$scale) {
 	list($imagewidth, $imageheight, $imageType) = getimagesize($image);
 	$imageType = image_type_to_mime_type($imageType);
@@ -750,7 +750,7 @@ $(window).load(function () {
 });
 
 </script>
-<?php }?>
+<?php  } */?>
 
 <div id="upload_avatar">
 	<div id="contact_close"></div>
