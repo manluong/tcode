@@ -235,7 +235,7 @@ class FileL {
 		}
 	}
 
-	private function write_to_temp(&$content, $filename) {
+	function write_to_temp(&$content, $filename) {
 		$filepath = $this->temp_dir.$filename;
 		$fp = fopen($filepath, 'wb');
 
