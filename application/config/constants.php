@@ -43,6 +43,5 @@ define('DOCUMENT_ROOT',		'.');
 
 define('SINGLE_DATA', 'single');
 define('MULTIPLE_DATA', 'multiple');
-define('PATH_URL', 'http://'.$_SERVER['HTTP_HOST'].'/tcode/');
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */
