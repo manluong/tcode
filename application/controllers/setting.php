@@ -105,7 +105,7 @@ class Setting extends MY_Controller {
 
 	//FORM POST: app_name, name, value, sort_order
 	function ajax_add_option() {
-		$result = FALSE;
+		$success = FALSE;
 
 // 		if ($this->UserM->is_admin()) {
 			$app_id = $this->AppM->get_id($this->input->post('app_name'));
@@ -117,8 +117,7 @@ class Setting extends MY_Controller {
 				'sort_order' => $this->input->post('sort_order'),
 			);
 
-			$new_id = NULL;
-			$result = $this->SettingM->add_option($data, $new_id);
+			$new_id = $this->SettingM->add_option($data);
 
 			$results_array = $this->db->select('id, value, sort_order, language_key')
 					->from('core_select')
@@ -127,7 +126,9 @@ class Setting extends MY_Controller {
 					->result_array();
 // 		}
 
-		$this->RespM->set_success($result)
+		$success = ($new_id !== FALSE);
+
+		$this->RespM->set_success($success)
 				->set_details(isset($results_array) ? $results_array : array())
 				->output_json();
 	}
