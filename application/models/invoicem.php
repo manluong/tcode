@@ -532,6 +532,6 @@ class InvoiceM extends MY_Model {
 
 	public function process_email($data) {
 		//plain content of email is in $data['text'];
-		log_message('error', 'email processed by invoice model: '. $data['text']);
+
 	}
 }
