@@ -53,9 +53,20 @@ class Card extends MY_Controller {
 	}
 
 	function upload(){
-	   $this->load->library('filel');
-	   $file = $this->filel->save('file', 'Contact');
-	   echo $file['hash'];
+//	   $this->load->library('filel');
+//	   $file = $this->filel->save('file', 'Contact');
+//	   echo $file['hash'];
+	    if ((($_FILES["file"]["type"] == "image/gif")
+	    || ($_FILES["file"]["type"] == "image/jpeg")
+	    || ($_FILES["file"]["type"] == "image/pjpeg")
+	    || ($_FILES["file"]["type"] == "image/png")))
+	    {
+		
+	    }
+	    else
+	    {
+		echo "error";
+	    }
 	}
 
 	function ajax_contact_info(){
