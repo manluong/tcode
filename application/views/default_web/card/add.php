@@ -53,7 +53,7 @@ foreach ($allowed_image_ext as $mime_type => $ext) {
 			?>
 			<fieldset>
 				<div class="control-group" style="padding-left:160px;">
-					<?php 
+					<?php
 						foreach($role as $role_value => $role_label){
 							echo '<input type="radio" name="role" class="role" value="'.$role_value.'" /> '.$role_label.'&nbsp;&nbsp;';
 						}
@@ -112,7 +112,7 @@ foreach ($allowed_image_ext as $mime_type => $ext) {
 						<?=form_input('last_name', '', 'id="last_name"')?>
 					</div>
 				</div>
-				
+
 				<div style="margin-top:20px;" class="control-group">
 					<label class="control-label" for="organization_name">Company</label>
 					<div class="controls">
@@ -162,9 +162,9 @@ foreach ($allowed_image_ext as $mime_type => $ext) {
 										'<input type="hidden" name="addon_tel['+tel_index+'][is_default]" value="0" class="tel_is_default_hidden" id="tel_is_default_'+tel_index+'" />'
 									'</div>'+
 								'</div>';
-								
+
 						$('#addon_tel').html(new_tel);
-						
+
 						$('#tel_add').on('click', function() {
 							tel_index++;
 							var new_tel = '<div class="control-group">'+
@@ -186,7 +186,7 @@ foreach ($allowed_image_ext as $mime_type => $ext) {
 									'</div>'+
 								'</div>';
 							$('#addon_tel').append(new_tel);
-						
+
 						});
 
 						$('#addon_tel').on('click', '.tel_is_default_radio', function() {
@@ -199,7 +199,7 @@ foreach ($allowed_image_ext as $mime_type => $ext) {
 				</script>
 				<br/><br/>
 				<!-- END ADDON TEL -->
-				
+
 				<!-- ADDON EMAIL -->
 				<div id="addon_email"></div>
 				<button type="button" class="btn btn-mini pull-right button_add " id="email_add">Add Email</button>
@@ -223,9 +223,9 @@ foreach ($allowed_image_ext as $mime_type => $ext) {
 										'<input type="hidden" name="addon_email['+email_index+'][is_default]" value="0" class="email_is_default_hidden" id="email_is_default_'+email_index+'" />'+
 									'</div>'+
 								'</div>';
-						
+
 						$('#addon_email').html(new_email);
-						
+
 						$('#email_add').on('click', function() {
 							email_index++;
 							var new_email = '<div class="control-group">'+
@@ -255,7 +255,7 @@ foreach ($allowed_image_ext as $mime_type => $ext) {
 				</script>
 				<br/><br/>
 				<!-- END ADDON EMAIL -->
-				
+
 				<!-- ADDON ADDRESS -->
 				<div id="addon_address"></div>
 				<button style="margin: -10px 0 0 376px;" type="button" class="btn btn-mini pull-right button_add" id="address_add">More Address</button>
@@ -287,9 +287,9 @@ foreach ($allowed_image_ext as $mime_type => $ext) {
 										'<input type="text" name="addon_address['+address_index+'][country]" style="margin-left:43px; width:197px;">';
 									'</li></ul></div>'+
 								'</div>';
-								
+
 						$('#addon_address').html(new_address);
-						
+
 						$('#address_add').on('click', function() {
 							address_index++;
 							var new_address = '<div class="control-group">'+
@@ -327,7 +327,7 @@ foreach ($allowed_image_ext as $mime_type => $ext) {
 				</script>
 				<br/><br/>
 				<!-- END ADDON ADDRESS -->
-				
+
 				<!-- END ADDON SOCIAL -->
 				<div id="addon_social"></div>
 				<button style="margin-left:396px" type="button" class="btn btn-mini pull-right button_add" id="social_add">More Social</button>
@@ -349,9 +349,9 @@ foreach ($allowed_image_ext as $mime_type => $ext) {
 										'<input type="text" name="addon_social['+social_index+'][name_id]" id="social_'+social_index+'" /> '+
 									'</div>'+
 								'</div>';
-								
+
 						$('#addon_social').html(new_social);
-						
+
 						$('#social_add').on('click', function() {
 							social_index++;
 							var new_social = '<div class="control-group">'+
@@ -374,7 +374,7 @@ foreach ($allowed_image_ext as $mime_type => $ext) {
 				</script>
 				<br/><br />
 				<!-- END ADDON SOCIAL -->
-				
+
 				<div class="control-group">
 					<label class="control-label">Gender</label>
 					<div class="controls">
@@ -426,7 +426,7 @@ foreach ($allowed_image_ext as $mime_type => $ext) {
 	$(function() {
 		$( "#addon_extra_birth_date" ).datepicker();
 	});
-	
+
 	$(document).ready(function() {
 		$('.remove').live('click', function() {
 			$(this).closest('.control-group').remove();
@@ -461,7 +461,7 @@ foreach ($allowed_image_ext as $mime_type => $ext) {
 			e.preventDefault();
 		});
 	});
-	
+
 	function getid(id) {
 		return document.getElementById(id);
 	}
@@ -492,265 +492,8 @@ foreach ($allowed_image_ext as $mime_type => $ext) {
 	uploader.init();
 </script>
 
-<!-- Crop image function -->
-<?php
-function resizeImage($image,$width,$height,$scale) {
-	list($imagewidth, $imageheight, $imageType) = getimagesize($image);
-	$imageType = image_type_to_mime_type($imageType);
-	$newImageWidth = ceil($width * $scale);
-	$newImageHeight = ceil($height * $scale);
-	$newImage = imagecreatetruecolor($newImageWidth,$newImageHeight);
-	switch($imageType) {
-		case "image/gif":
-			$source=imagecreatefromgif($image); 
-			break;
-	    case "image/pjpeg":
-		case "image/jpeg":
-		case "image/jpg":
-			$source=imagecreatefromjpeg($image); 
-			break;
-	    case "image/png":
-		case "image/x-png":
-			$source=imagecreatefrompng($image); 
-			break;
-  	}
-	imagecopyresampled($newImage,$source,0,0,0,0,$newImageWidth,$newImageHeight,$width,$height);
-	
-	switch($imageType) {
-		case "image/gif":
-	  		imagegif($newImage,$image); 
-			break;
-      	case "image/pjpeg":
-		case "image/jpeg":
-		case "image/jpg":
-	  		imagejpeg($newImage,$image,90); 
-			break;
-		case "image/png":
-		case "image/x-png":
-			imagepng($newImage,$image);  
-			break;
-    }
-	
-	chmod($image, 0777);
-	return $image;
-}
-//You do not need to alter these functions
-function resizeThumbnailImage($thumb_image_name, $image, $width, $height, $start_width, $start_height, $scale){
-	list($imagewidth, $imageheight, $imageType) = getimagesize($image);
-	$imageType = image_type_to_mime_type($imageType);
-	
-	$newImageWidth = ceil($width * $scale);
-	$newImageHeight = ceil($height * $scale);
-	$newImage = imagecreatetruecolor($newImageWidth,$newImageHeight);
-	switch($imageType) {
-		case "image/gif":
-			$source=imagecreatefromgif($image); 
-			break;
-	    case "image/pjpeg":
-		case "image/jpeg":
-		case "image/jpg":
-			$source=imagecreatefromjpeg($image); 
-			break;
-	    case "image/png":
-		case "image/x-png":
-			$source=imagecreatefrompng($image); 
-			break;
-  	}
-	imagecopyresampled($newImage,$source,0,0,$start_width,$start_height,$newImageWidth,$newImageHeight,$width,$height);
-	switch($imageType) {
-		case "image/gif":
-	  		imagegif($newImage,$thumb_image_name); 
-			break;
-      	case "image/pjpeg":
-		case "image/jpeg":
-		case "image/jpg":
-	  		imagejpeg($newImage,$thumb_image_name,90); 
-			break;
-		case "image/png":
-		case "image/x-png":
-			imagepng($newImage,$thumb_image_name);  
-			break;
-    }
-	chmod($thumb_image_name, 0777);
-	return $thumb_image_name;
-}
-//You do not need to alter these functions
-function getHeight($image) {
-	$size = getimagesize($image);
-	$height = $size[1];
-	return $height;
-}
-//You do not need to alter these functions
-function getWidth($image) {
-	$size = getimagesize($image);
-	$width = $size[0];
-	return $width;
-}
-
-//Image Locations
-$large_image_location = $upload_path.$large_image_name.$_SESSION['user_file_ext'];
-$thumb_image_location = $upload_path.$thumb_image_name.$_SESSION['user_file_ext'];
-
-//Create the upload directory with the right permissions if it doesn't exist
-if(!is_dir($upload_dir)){
-	mkdir($upload_dir, 0777);
-	chmod($upload_dir, 0777);
-}
-
-//Check to see if any images with the same name already exist
-if (file_exists($large_image_location)){
-	if(file_exists($thumb_image_location)){
-		$thumb_photo_exists = "<img src=\"".$upload_path.$thumb_image_name.$_SESSION['user_file_ext']."\" alt=\"Thumbnail Image\"/>";
-	}else{
-		$thumb_photo_exists = "";
-	}
-   	$large_photo_exists = "<img src=\"".$upload_path.$large_image_name.$_SESSION['user_file_ext']."\" alt=\"Large Image\"/>";
-} else {
-   	$large_photo_exists = "";
-	$thumb_photo_exists = "";
-}
-
-if (isset($_POST["upload"])) { 
-	//Get the file information
-	$userfile_name = $_FILES['image']['name'];
-	$userfile_tmp = $_FILES['image']['tmp_name'];
-	$userfile_size = $_FILES['image']['size'];
-	$userfile_type = $_FILES['image']['type'];
-	$filename = basename($_FILES['image']['name']);
-	$file_ext = strtolower(substr($filename, strrpos($filename, '.') + 1));
-	
-	if((!empty($_FILES["image"])) && ($_FILES['image']['error'] == 0)) {
-		
-		foreach ($allowed_image_types as $mime_type => $ext) {
-			if($file_ext==$ext && $userfile_type==$mime_type){
-				$error = "";
-				break;
-			}else{
-				$error = "Only <strong>".$image_ext."</strong> images accepted for upload<br />";
-			}
-		}
-		//check if the file size is above the allowed limit
-		if ($userfile_size > ($max_file*1048576)) {
-			$error.= "Images must be under ".$max_file."MB in size";
-		}
-	}else{
-		$error= "Select an image for upload";
-	}
-	//Everything is ok, so we can upload the image.
-	if (strlen($error)==0){
-		
-		if (isset($_FILES['image']['name'])){
-			//this file could now has an unknown file extension (we hope it's one of the ones set above!)
-			$large_image_location = $large_image_location.".".$file_ext;
-			$thumb_image_location = $thumb_image_location.".".$file_ext;
-			
-			//put the file ext in the session so we know what file to look for once its uploaded
-			$_SESSION['user_file_ext']=".".$file_ext;
-			
-			move_uploaded_file($userfile_tmp, $large_image_location);
-			chmod($large_image_location, 0777);
-			
-			$width = getWidth($large_image_location);
-			$height = getHeight($large_image_location);
-			//Scale the image if it is greater than the width set above
-			if ($width > $max_width){
-				$scale = $max_width/$width;
-				$uploaded = resizeImage($large_image_location,$width,$height,$scale);
-			}else{
-				$scale = 1;
-				$uploaded = resizeImage($large_image_location,$width,$height,$scale);
-			}
-			//Delete the thumbnail file so the user can create a new one
-			if (file_exists($thumb_image_location)) {
-				unlink($thumb_image_location);
-			}
-		}
-		//Refresh the page to show the new uploaded image
-		header("location:".$_SERVER["PHP_SELF"]);
-		exit();
-	}
-}
-
-if (isset($_POST["upload_thumbnail"]) && strlen($large_photo_exists)>0) {
-	//Get the new coordinates to crop the image.
-	$x1 = $_POST["x1"];
-	$y1 = $_POST["y1"];
-	$x2 = $_POST["x2"];
-	$y2 = $_POST["y2"];
-	$w = $_POST["w"];
-	$h = $_POST["h"];
-	//Scale the image to the thumb_width set above
-	$scale = $thumb_width/$w;
-	$cropped = resizeThumbnailImage($thumb_image_location, $large_image_location,$w,$h,$x1,$y1,$scale);
-	//Reload the page again to view the thumbnail
-	header("location:".$_SERVER["PHP_SELF"]);
-	exit();
-}
 
 
-if ($_GET['a']=="delete" && strlen($_GET['t'])>0){
-//get the file locations 
-	$large_image_location = $upload_path.$large_image_prefix.$_GET['t'];
-	$thumb_image_location = $upload_path.$thumb_image_prefix.$_GET['t'];
-	if (file_exists($large_image_location)) {
-		unlink($large_image_location);
-	}
-	if (file_exists($thumb_image_location)) {
-		unlink($thumb_image_location);
-	}
-	header("location:".$_SERVER["PHP_SELF"]);
-	exit(); 
-}
-?>
-
-<?php
-//Only display the javacript if an image has been uploaded
-if(strlen($large_photo_exists)>0){
-	$current_large_image_width = getWidth($large_image_location);
-	$current_large_image_height = getHeight($large_image_location);?>
-<script type="text/javascript">
-function preview(img, selection) { 
-	var scaleX = <?php echo $thumb_width;?> / selection.width; 
-	var scaleY = <?php echo $thumb_height;?> / selection.height; 
-	
-	$('#thumbnail + div > img').css({ 
-		width: Math.round(scaleX * <?php echo $current_large_image_width;?>) + 'px', 
-		height: Math.round(scaleY * <?php echo $current_large_image_height;?>) + 'px',
-		marginLeft: '-' + Math.round(scaleX * selection.x1) + 'px', 
-		marginTop: '-' + Math.round(scaleY * selection.y1) + 'px' 
-	});
-	$('#x1').val(selection.x1);
-	$('#y1').val(selection.y1);
-	$('#x2').val(selection.x2);
-	$('#y2').val(selection.y2);
-	$('#w').val(selection.width);
-	$('#h').val(selection.height);
-} 
-
-$(document).ready(function () { 
-	$('#save_thumb').click(function() {
-		var x1 = $('#x1').val();
-		var y1 = $('#y1').val();
-		var x2 = $('#x2').val();
-		var y2 = $('#y2').val();
-		var w = $('#w').val();
-		var h = $('#h').val();
-		if(x1=="" || y1=="" || x2=="" || y2=="" || w=="" || h==""){
-			alert("You must make a selection first");
-			return false;
-		}else{
-			return true;
-		}
-	});
-}); 
-
-$(window).load(function () { 
-	$('#thumbnail').imgAreaSelect({ aspectRatio: '1:<?php echo $thumb_height/$thumb_width;?>', onSelectChange: preview }); 
-});
-
-</script>
-<?php }?>
-		
 <div id="upload_avatar">
 	<div id="contact_close"></div>
 	<div id="contact_select_file">
@@ -760,7 +503,7 @@ $(window).load(function () {
 			<button id="pickfiles" style="width:85px; height:25px;line-height:10px;" class="btn btn-inverse">Select File</button>
 			<div style="display:none;" id="uploadfiles"></div>
 			<div id="filelist" style="float:left ;margin:-57px 0 0 -66px;"></div>
-		</div>	
+		</div>
 	</div>
 	<div id="breadcrumb">
 		<div id="module_name" style="width:650px;">
@@ -772,7 +515,7 @@ $(window).load(function () {
 			</ul>
 		</div>
 	</div>
-	
+
 	<div id="upload_crop">
 		<?php
 		//Display error message if there are any
