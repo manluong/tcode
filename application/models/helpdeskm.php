@@ -136,6 +136,10 @@ class HelpdeskM extends MY_Model {
 		} else {
 			return false;
 		}
-        }
+	}
 
+	public function process_email($data) {
+		//plain content of email is in $data['text'];
+
+	}
 }

@@ -4,7 +4,9 @@ $(document).ready(function(){
 		$("#upload_avatar").overlay().close();
 	});
 });
-
+function getid(id) {
+		return document.getElementById(id);
+	}
 function load_upload_form(){
 	$("#upload_avatar").overlay({
 	  mask: {
@@ -15,6 +17,34 @@ function load_upload_form(){
 	  top: '10%',
 	});
 	$("#upload_avatar").overlay().load();
+	var uploader = new plupload.Uploader({
+		runtimes : 'gears,html5,flash,silverlight,browserplus',
+		browse_button : 'pickfiles',
+		container: 'container',
+		max_file_size : '10mb',
+		url : '/card/upload/',
+
+		filters : [
+			{title : "Image files", extensions : "jpg,gif,png"},
+
+		]
+	});
+	uploader.bind('FilesAdded', function(up, files) {
+		for (var i in files) {
+			getid('filelist').innerHTML += '<div id="' + files[i].id + '">' + files[i].name + ' (' + plupload.formatSize(files[i].size) + ') <b></b></div>';
+		}
+	});
+	uploader.bind('UploadProgress', function(up, file) {
+		getid(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
+	});
+	getid('uploadfiles').onclick = function() {
+		uploader.start();
+		return false;
+	};
+	uploader.init();
+	jQuery('input[type="file"]').change(function(){
+	   uploader.start();
+	});
 }
 
 /*------- End Upload avatar -------*/
@@ -53,7 +83,7 @@ function parse_contact_list(data){
 				break;
 		}
 	 }
-	 
+
 	 var display_name = '';
 	 if(json.final_display_name != null){
 		display_name = json.final_display_name;
@@ -82,7 +112,7 @@ function parse_contact_list(data){
 		}
 		tel = extension+are+country+number;
 	 }
-	 
+
 	 var off = '';
 	 if(json.addon_address != ''){
 		off = json.addon_address[0].line_1;
