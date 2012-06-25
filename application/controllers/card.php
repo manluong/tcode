@@ -52,13 +52,10 @@ class Card extends MY_Controller {
 		echo json_encode($list);
 	}
 
-	function upload($comment_id){
+	function upload(){
 	   $this->load->library('filel');
-	   $file = $this->filel->save('file', 'Helpdesk');
-		if($comment_id != 0){
-		   $insert_id = $this->HelpdeskM->insert_upload_file($file['hash'],$comment_id);
-		   echo $file['hash'];
-		}
+	   $file = $this->filel->save('file', 'Contact');
+	   echo $file['hash'];
 	}
 
 	function ajax_contact_info(){
