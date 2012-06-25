@@ -319,6 +319,10 @@ $lang['access-user_status-1'] = 'Active';
 $lang['access_user_role-role_id'] = 'Role ID';
 $lang['access_user_role-card_id'] = 'Card ID';
 
+$lang['access_user-card_id'] = 'Card ID';
+$lang['access_user-password'] = 'Password';
+$lang['access_user-status'] = 'Status';
+
 
 // client
 $lang['core_select-select-clientstatus-Inactive'] = 'Inactive';
