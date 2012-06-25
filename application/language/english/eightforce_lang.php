@@ -84,6 +84,7 @@ $lang['card_address-city'] = 'City';
 $lang['card_address-line_1'] = 'Address Line 1';
 $lang['card_address-line_2'] = 'Address Line 2';
 $lang['card_address-geo'] = 'Geo';
+$lang['card_address-geo_lng'] = 'Longtitude';
 $lang['card_address-is_default'] = 'Default Address';
 $lang['card_associate-id'] = 'Id';
 $lang['card_associate-card_id'] = 'Card Id';
@@ -206,6 +207,8 @@ $lang['core_apps-name-docs'] = 'Documents';
 $lang['core_apps-name-core'] = 'Core';
 $lang['core_apps-name-helpdesk'] = 'Helpdesk';
 $lang['core_apps-name-calendar'] = 'Calendar';
+$lang['core_apps-name-chat'] = 'Chat';
+$lang['core_apps-name-api'] = 'API';
 
 $lang['core_apps_menu-appmenu_rights'] = 'Rights';
 $lang['core_apps_menu-appmenu_listuser'] = 'Listuser';
@@ -306,6 +309,7 @@ $lang['core_select-select-access_rights_type-Allow_All'] = 'Allow All';
 $lang['core_select-select-access_rights_type-Deny_All'] = 'Deny All';
 $lang['core_select-select-access_rights_type-Custom'] = 'Custom';
 
+$lang['access-login_status-2'] = 'Login OK';
 $lang['access-login_status-3'] = 'Wrong Password';
 $lang['access-login_status-6'] = 'Email does not exist';
 $lang['access-login_status-7'] = 'This user account has been disabled';
@@ -318,6 +322,10 @@ $lang['access-user_status-1'] = 'Active';
 
 $lang['access_user_role-role_id'] = 'Role ID';
 $lang['access_user_role-card_id'] = 'Card ID';
+
+$lang['access_user-card_id'] = 'Card ID';
+$lang['access_user-password'] = 'Password';
+$lang['access_user-status'] = 'Status';
 
 
 // client

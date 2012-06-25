@@ -235,7 +235,9 @@ class FileL {
 		}
 	}
 
-	private function write_to_temp(&$content, $filename) {
+	//$content = actual content of file, not filename or filepath
+	//$filename = the filename you want to save it as
+	function write_to_temp(&$content, $filename) {
 		$filepath = $this->temp_dir.$filename;
 		$fp = fopen($filepath, 'wb');
 

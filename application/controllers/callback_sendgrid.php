@@ -47,7 +47,6 @@ class Callback_sendgrid extends MY_Controller {
 
 		$this->_setup_db($domain);
 
-		//TODO: get app_id from email_routing DB Table
 		$app_id = $this->EmailM->get_app_id($to_email);
 
 		//$this->emaill->log_sendgrid('email');

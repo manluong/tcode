@@ -190,11 +190,7 @@ class CardM extends MY_Model {
 	function get_name($card_id) {
 		$user = $this->get($card_id);
 
-		if (strlen($user['display_name']) > 0) {
-			return $user['display_name'];
-		}
-
-		return $user['first_name'].' '.$user['last_name'];
+		return $user['final_display_name'];
 	}
 
 	function get_quickjump($card_id) {
@@ -459,7 +455,7 @@ class CardM extends MY_Model {
 
 		return parent::search($search_string);
 	}
-	
+
 	function search_all_contact($search_string) {
 		//search first_name + last_name only
 		$this->search_fields = array(

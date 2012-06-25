@@ -260,7 +260,7 @@ class CommentsM extends MY_Model {
 
 		$result = $rs->row_array();
 
-		return $this->UserM->get_data_name($result['created_card_id']);
+		return $this->CardM->get_name($result['created_card_id']);
 	}
 
 	function insert_timeago_stamp(&$result) {
