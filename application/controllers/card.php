@@ -144,11 +144,14 @@ class Card extends MY_Controller {
 		$this->db->order_by('first_name ASC');
 		$list_id = explode(',',$list_id);
 		$list = $this->CardM->get_batch($list_id);
-
+		
+		//echo json_encode($list);
+		
 		$view_data = array(
 			'list' => $list,
 		);
 		$this->load->view(get_template().'/card/ajax_contact_list',$view_data);
+		
 	}
 
 	function view($id) {
@@ -202,6 +205,27 @@ class Card extends MY_Controller {
 		echo json_encode($view_data);
 	}
 
+	function post_value(){
+		if($_POST){
+			$data = array(
+				'addon_email[0][email]' => $_POST['addon_email[0][email]'],
+				'addon_email[0][type]' => $_POST['addon_email[0][type]'],
+				'addon_tel[0][type]' => $_POST['addon_tel[0][type]'],
+				'addon_tel[0][number]' => $_POST['addon_tel[0][number]'],
+				'addon_socia[0][type]' => $_POST['addon_socia[0][type]'],
+				'addon_socia[0][name_id]' => $_POST['addon_socia[0][name_id]'],
+				'addon_notes[0][note]' => $_POST['addon_notes[0][note]'],
+				'addon_extra[0][gender]' => $_POST['addon_extra[0][gender]'],
+				'addon_extra[0][birth_date]' => $_POST['addon_extra[0][birth_date]'],
+				'addon_address[0][type]' => $_POST['addon_address[0][type]'],
+				'addon_address[0][line_1]' => $_POST['addon_address[0][line_1]'],
+				'addon_address[0][line_2]' => $_POST['addon_address[0][line_2]'],
+				
+			);
+			echo json_encode($data);
+		}
+	}
+	
 	function save_role(){
 		$this->load->model('Card_roleM');
 		$data = array(
@@ -296,6 +320,10 @@ class Card extends MY_Controller {
 		}
 	}
 
+	function iphone_save(){
+		$this->CardM->save();
+	}
+	
 	function confirm_delete($card_id) {
 		//$staff_id = $this->UserM->get_card_id();
 		$per = $this->AclM->check('card',0,'delete');
