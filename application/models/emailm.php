@@ -73,4 +73,28 @@ class EmailM extends MY_Model {
 
 		return $this->db->insert_id();
 	}
+
+	//Checks the email_routing DBTable for the app_id responsible for an email address
+	function get_app_id($email) {
+		//if the email is not from the default_email_domain, it is a custom domain.
+		$default_email_domain = $this->eightforce_config['default_email_domain'];
+		$is_custom = (substr($email, 0-strlen($default_email_domain)) !== $default_email_domain) ? 1 : 0;
+
+		if ($is_custom == 1) {
+			$email_name = $email;
+		} else {
+			$e = explode('@', $email);
+			$email_name = $e[0];
+		}
+
+		$row = $this->db->select('app_id')
+				->from('email_routing')
+				->where('is_custom', $is_custom)
+				->where('email_name', $email_name)
+				->limit(1)
+				->get()
+				->row_array();
+
+		return $row['app_id'];
+	}
 }

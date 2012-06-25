@@ -30,6 +30,7 @@ $config['file_folder'] = 'file/';
 */
 $config['sendgrid_api_user'] = 'tcsteam';
 $config['sendgrid_api_key'] = 'express0810';
+$config['default_email_domain'] = '.8force.net';
 
 /*
 |--------------------------------------------------------------------------

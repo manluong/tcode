@@ -9,6 +9,12 @@ class AppM extends MY_Model {
 		'general' => array('id'=>0, 'name'=>'general'),
 	);
 
+	//Hardcoded APP_ID <=> MODEL_NAME
+	var $app_model = array(
+		15 => 'InvoiceM',
+		39 => 'HelpdeskM',
+	);
+
 	var $acl_app_list = array(); //An ACL/Licensed controlled App List
 
 	function __construct() {
@@ -113,5 +119,11 @@ class AppM extends MY_Model {
 			$this->app_cache[$row['name']] = $row;
 		}
 		return $results;
+	}
+
+	function get_model($app_id) {
+		if (!isset($this->app_model[$app_id])) return FALSE;
+		
+		return $this->app_model[$app_id];
 	}
 }

@@ -37,7 +37,9 @@ class Callback_sendgrid extends MY_Controller {
 	function incoming_emails() {
 		if ( ! $this->input->post('to')) return '';
 
-		$i = explode('@', $this->input->post('to'));
+		$to_email = $this->input->post('to');
+
+		$i = explode('@', $to_email);
 		$app_name = $i[0];
 
 		$i = explode('.', $i[1]);
@@ -45,7 +47,8 @@ class Callback_sendgrid extends MY_Controller {
 
 		$this->_setup_db($domain);
 
-		$app_id = $this->AppM->get_id($app_name);
+		//TODO: get app_id from email_routing DB Table
+		$app_id = $this->EmailM->get_app_id($to_email);
 
 		//$this->emaill->log_sendgrid('email');
 
@@ -85,6 +88,12 @@ class Callback_sendgrid extends MY_Controller {
 		);
 
 		$this->EmailM->save_received_email($data);
+
+		//Find the model file based on app_id and process email
+		$model = $this->AppM->get_model($app_id);
+		if ($model === FALSE) return;
+		$this->load->model($model);
+		$this->$model->process_email($data);
 	}
 
 }
