@@ -145,13 +145,13 @@ class Card extends MY_Controller {
 		$list_id = explode(',',$list_id);
 		$list = $this->CardM->get_batch($list_id);
 		
-		//echo json_encode($list);
-		
+		echo json_encode($list);
+		/*
 		$view_data = array(
 			'list' => $list,
 		);
 		$this->load->view(get_template().'/card/ajax_contact_list',$view_data);
-		
+		*/
 	}
 
 	function view($id) {

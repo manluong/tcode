@@ -159,10 +159,61 @@ function contact_fillter(role_id){
 	$.post(url,{
 			role_id : role_id,
 		},function(data){
-			$('#contact_list').html(data);
-			hide_empty_contact();
+			//$('#contact_list').html(data);
+			parse_contact_fillter(data);
+			//hide_empty_contact();
 		}
 	);
+}
+
+function parse_contact_fillter(data){
+	var json = jQuery.parseJSON(data);
+	console.log(json);
+	var first_al = '<li class="letter staff customers vendors a-title">a</li>';
+	var html = '';
+	var  current_alphabet = 0;
+	var alphabets = new Array('a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z');
+	var i = 0;
+	for (i in json) {	
+		 var item = json[i];
+		 
+		 var organization_name = '';
+		 if(item.organization_name != null){
+			organization_name = item.organization_name;
+		 }
+		 var first_name = '';
+		 if(item.first_name != null){
+			first_name = item.first_name;
+		 }
+		 var last_name = '';
+		 if(item.last_name != null){
+			last_name = item.last_name;
+		 }
+		
+		 if (item.first_name.substring(0, 1).toLowerCase() != alphabets[current_alphabet]) {
+			current_alphabet++;
+			html += '<li class="letter staff customers vendors '+alphabets[current_alphabet]+'-title">'+alphabets[current_alphabet]+'</li>';
+			i--;
+			//continue;
+		}
+		
+		if(item.role.length > 0){
+			var role = '';
+			for(j in item.role){
+				if(item.role[j].name != ''){
+					role = item.role[j].name.toLowerCase();
+				}
+			}
+		}
+		
+		html += '<li onclick="load_contact_info('+item.id+')" class="contact '+role+' '+alphabets[current_alphabet]+'-contact">';
+			html+= '<div class="contactType">'+role+'</div>';
+			html+= '<img src="/resources/template/default_web/img/avatar.jpg" alt="" width="32" />';
+			html+= '<div class="info hasCompany"><a href="/card/view/'+item.id+'">'+first_name+' '+last_name+'</a></div>';
+			html+= '<div class="company">'+organization_name+'</div>';
+		html+= '</li>';
+	}
+	$('#contact_list').html(first_al+html);
 }
 
 function hide_empty_contact() {
