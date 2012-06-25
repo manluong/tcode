@@ -60,7 +60,7 @@ function confirm_delete(id){
 			<ul>
 				<li>
 					<span class="input_data_label">Role</span>
-					<span class="fillter_input"><?=$card_role?></span>
+					<span class="fillter_input"><?=$user_role['name']?></span>
 				</li>
 				<li>
 					<span class="input_data_label">First Name</span>
@@ -178,6 +178,7 @@ function confirm_delete(id){
 					echo '<input '.($i==1?'checked="checked" ':'').'type="radio" name="role" class="role" value="'.$role_value.'" /> '.$role_label.'&nbsp;&nbsp;';
 				}
 			?>
+			<input type="hidden" name="id_user_role" id="id_user_role" value="<?=$data['addon_access_user_role'][0]['id']?>">
 			<input type="hidden" name="addon_access_user_role[0][role_id]" id="addon_role" value="">
 			<script>
 				$(document).ready(function() {
@@ -217,7 +218,6 @@ function confirm_delete(id){
 					<span class="input_data_label">Status</span>
 					<span class="fillter_input">
 						<select id="select_active">
-							<option value=""> Change status</option>
 							<option <?=($data['active']==1?'selected="selected"':'')?> value="1">Active</option>
 							<option <?=($data['active']==0?'selected="selected"':'')?> value="0">Unactive</option>
 						</select>
@@ -244,8 +244,12 @@ function confirm_delete(id){
 					<span class="input_data_label">Expiry Date</span>
 					<span class="fillter_input"><?php
 					// Leo fix
-					    $ex_pass = explode('-',substr($data['addon_access_user'][0]['expire_stamp'],0,10));
-					    $ex_pass = $ex_pass[1].'/'.$ex_pass[2].'/'.$ex_pass[0];
+					    $ex_pass = '';
+					    if($data['addon_access_user'][0]['expire_stamp'] != ''){
+						$ex_pass = explode('-',substr($data['addon_access_user'][0]['expire_stamp'],0,10));
+						$ex_pass = $ex_pass[1].'/'.$ex_pass[2].'/'.$ex_pass[0];
+					    }
+
 					// End fix
 					echo $ex_pass;
 					?></span>

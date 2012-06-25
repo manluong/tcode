@@ -4,7 +4,9 @@ $(document).ready(function(){
 		$("#upload_avatar").overlay().close();
 	});
 });
-
+function getid(id) {
+		return document.getElementById(id);
+	}
 function load_upload_form(){
 	$("#upload_avatar").overlay({
 	  mask: {
@@ -15,6 +17,34 @@ function load_upload_form(){
 	  top: '10%',
 	});
 	$("#upload_avatar").overlay().load();
+	var uploader = new plupload.Uploader({
+		runtimes : 'gears,html5,flash,silverlight,browserplus',
+		browse_button : 'pickfiles',
+		container: 'container',
+		max_file_size : '10mb',
+		url : '/card/upload/',
+
+		filters : [
+			{title : "Image files", extensions : "jpg,gif,png"},
+
+		]
+	});
+	uploader.bind('FilesAdded', function(up, files) {
+		for (var i in files) {
+			getid('filelist').innerHTML += '<div id="' + files[i].id + '">' + files[i].name + ' (' + plupload.formatSize(files[i].size) + ') <b></b></div>';
+		}
+	});
+	uploader.bind('UploadProgress', function(up, file) {
+		getid(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
+	});
+	getid('uploadfiles').onclick = function() {
+		uploader.start();
+		return false;
+	};
+	uploader.init();
+	jQuery('input[type="file"]').change(function(){
+	   uploader.start();
+	});
 }
 
 /*------- End Upload avatar -------*/
@@ -25,9 +55,102 @@ function load_contact_info(id){
 	$.post(url,{
 			id : id,
 		},function(data){
-			$('#rightPanel').html(data);
+			parse_contact_list(data);
+			//$('#rightPanel').html(data);
 		}
 	);
+}
+
+//PARSE JSON CONTACT LIST INFO
+function parse_contact_list(data){
+	var json = jQuery.parseJSON(data);
+	//console.log(json);
+	var html = '';
+	 var title = '';
+	 if(json.title != null){
+		switch(title){
+			case 1:
+				title = 'Mr.';
+				break;
+			case 2:
+				title = 'Miss.';
+				break;
+			case 3:
+				title = 'Mrs.';
+				break;
+			case 4:
+				title = 'Dr.';
+				break;
+		}
+	 }
+
+	 var display_name = '';
+	 if(json.final_display_name != null){
+		display_name = json.final_display_name;
+	 }
+	 var organization_name = '';
+	 if(json.organization_name != null){
+		organization_name = json.organization_name;
+	 }
+	 var tel = '';
+	 if(json.addon_tel != ''){
+		var extension = '';
+		if(json.addon_tel[0].extension != null){
+			extension = json.addon_tel[0].extension+'-';
+		}
+		var are = '';
+		if(json.addon_tel[0].are != null){
+			are = json.addon_tel[0].are+'-';
+		}
+		var country = '';
+		if(json.addon_tel[0].country != null){
+			country = json.addon_tel[0].country+'-';
+		}
+		var number = '';
+		if(json.addon_tel[0].number != null){
+			number = json.addon_tel[0].number;
+		}
+		tel = extension+are+country+number;
+	 }
+
+	 var off = '';
+	 if(json.addon_address != ''){
+		off = json.addon_address[0].line_1;
+	 }
+	 var email = '';
+	 if(json.addon_email != ''){
+		email = json.addon_email[0].email;
+	 }
+	 html += '<div id="user_profile">'+
+				'<div id="user_avatar"><img alt="avatar" src="/resources/template/default_web/img/invoice/invoice-avatar.jpg"/></div>'+
+				'<div id="user_info">'+
+					'<ul>'+
+						'<li class="user_sex">'+title+'</li>'+
+						'<li class="user_name">'+display_name+'</li>'+
+						'<li class="user_position">'+organization_name+'</li>'+
+					'</ul>'+
+				'</div>'+
+			'</div>'+
+			'<div id="contact_info">'+
+				'<ul>'+
+					'<li>'+
+						'<span class="input_data_label">Phone</span>'+
+						'<span class="fillter_input">'+tel+'</span>'+
+					'</li>'+
+					'<li>'+
+						'<span class="input_data_label">Office</span>'+
+						'<span class="fillter_input">'+off+'</span>'+
+					'</li>'+
+					'<li>'+
+						'<span class="input_data_label">Email</span>'+
+						'<span class="fillter_input">'+email+'</span>'+
+					'</li>'+
+					'<li style="margin:10px 0 0 121px;">'+
+						'<a href="/card/view/'+json.id+'" style="width:30px; height:10px;line-height:10px;" class="btn btn-inverse pjax">View</a>'+
+					'</li>'+
+				'</ul>'+
+			'</div>';
+	$('#rightPanel').html(html);
 }
 
 //CONTACT LIST FILLTER
@@ -166,7 +289,15 @@ $(document).ready(function(){
 				id : id,
 				active : active,
 			},function(data){
-				$('#customer_detail').html(data);
+				// Leo fix
+				    jQuery("#view_active").show();
+				    jQuery("#edit_active").hide();
+				    if(parseInt(active) == 0)
+					jQuery("#view_active .fillter_input").html('Unactive');
+				    else
+					jQuery("#view_active .fillter_input").html('Active');
+				// End fix
+				//$('#customer_detail').html(data);
 			}
 		);
 	}
@@ -199,10 +330,12 @@ $(document).ready(function(){
 
 	function save_role(id){
 		var role = $('#addon_role').val();
+		var id_role = $('#id_user_role').val();
 		var url = '/card/save_role';
 		$.post(url,{
 				id : id,
 				role : role,
+				id_role : id_role,
 			},function(data){
 				if(data != ''){
 					window.location = '/card/view/'+id;

@@ -8,7 +8,7 @@
 	echo form_open('/setting/ajax_save/'.$app_name , array('class'=>'form-horizontal'));
 ?>
 
-<?php //if (APP_ROLE == 'TBOSS' && $is_admin) { ?>
+<?php if (APP_ROLE == 'TBOSS' && $is_admin) { ?>
 <div class="dtitle">
 	<span class="upper">Global Level Settings</span>
 	<span>Changes made here will apply to everyone including tenants.</span>
@@ -39,9 +39,9 @@
 		</li>
 	</ul>
 </div>
-<?php //} ?>
+<?php } ?>
 
-<?php //if ($is_admin) { ?>
+<?php if ($is_admin) { ?>
 <div class="dtitle">
 	<span class="upper">Admin Level Settings</span>
 	<span>Changes made here will apply to all users.</span>
@@ -80,7 +80,7 @@
 		</li>
 	</ul>
 </div>
-<?php //} ?>
+<?php } ?>
 
 <div class="dtitle">
 	<span class="upper">User Level Settings</span>

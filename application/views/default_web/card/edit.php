@@ -3,7 +3,16 @@
 <script type="text/javascript" src="/resources/addon/plupload/js/jquery.plupload.queue/jquery.plupload.queue.js"></script>
 <link href="/resources/addon/plupload/js/jquery.plupload.queue/css/jquery.plupload.queue.css" media="screen" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/contact.css" />
-
+<style>
+.control-group{
+	position:relative !important;
+}
+.remove{
+	position:absolute !important;
+	left:0px ;
+	top:0px ;
+}
+</style>
 <?php
 	//echo '<pre>';
 	//print_r($data);
@@ -146,6 +155,7 @@
 					$(document).ready(function() {
 						$('#tel_add').on('click', function() {
 							var new_tel = '<div class="control-group">'+
+												'<button class="btn btn-mini pull-left remove">X</button>'+
 												'<label class="control-label" for="tel_'+tel_index+'">'+tel_label+'</label>'+
 												'<div class="controls">'+
 													'<input type="hidden" name="addon_tel['+tel_index+'][id]" value="" />'+
@@ -213,6 +223,7 @@
 					$(document).ready(function() {
 						$('#email_add').on('click', function() {
 							var new_email = '<div class="control-group">'+
+												'<button class="btn btn-mini pull-left remove">X</button>'+
 												'<label class="control-label" for="email_'+email_index+'">'+email_label+'</label>'+
 												'<div class="controls">'+
 													'<input type="hidden" name="addon_email['+email_index+'][id]" value="" />'+
@@ -240,7 +251,6 @@
 				</script>
 
 				<br/><br/>
-
 				<div id="addon_address">
 				<?php
 					$x = 0;
@@ -289,6 +299,7 @@
 					$(document).ready(function() {
 						$('#address_add').on('click', function() {
 							var new_address = '<div class="control-group">'+
+												'<button class="btn btn-mini pull-left remove">X</button>'+
 												'<label class="control-label" for="address_'+address_index+'">'+address_label+'</label>'+
 												'<div id="contact_address" class="controls"><ul><li>'+
 													'<input type="hidden" name="addon_address['+address_index+'][id]" value="" />'+
@@ -352,6 +363,7 @@
 					$(document).ready(function() {
 						$('#social_add').on('click', function() {
 							var new_social = '<div class="control-group">'+
+												'<button class="btn btn-mini pull-left remove">X</button>'+
 												'<label class="control-label" for="social_'+social_index+'">'+social_label+'</label>'+
 												'<div class="controls">'+
 													'<input type="hidden" name="addon_social['+social_index+'][id]" value="" />'+
@@ -371,7 +383,7 @@
 
 				</script>
 
-				<div class="control-group">
+				<div style="margin-top:20px;" class="control-group">
 					<label class="control-label">Gender</label>
 					<div class="controls">
 						<div class="btn-group" data-toggle="buttons-radio">
@@ -494,6 +506,12 @@
 		return false;
 	};
 	uploader.init();
+	// leo fix
+	    var role = jQuery("input[class='role']:checked").val();
+		role = parseInt(role);
+		if(role == 0)
+		    jQuery("#customer_detail").hide();
+	// end
 
-	
+
 </script>

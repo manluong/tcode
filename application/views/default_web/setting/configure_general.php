@@ -8,7 +8,7 @@
 	echo form_open('/setting/ajax_save/'.$app_name , array('class'=>'form-horizontal'));
 ?>
 
-<?php //if (APP_ROLE == 'TBOSS' && $is_admin) { ?>
+<?php if (APP_ROLE == 'TBOSS' && $is_admin) { ?>
 <div class="dtitle">
 	<span class="upper">Global Level Settings</span>
 	<span>Changes made here will apply to everyone including tenants.</span>
@@ -16,9 +16,9 @@
 <div class="form">
 	<div class="textcontent">There are no configuration settings for this section at the moment.</div>
 </div>
-<?php //} ?>
+<?php } ?>
 
-<?php //if ($is_admin) { ?>
+<?php if ($is_admin) { ?>
 <div class="dtitle">
 	<span class="upper">Admin Level Settings</span>
 	<span>Changes made here will apply to all users.</span>
@@ -46,14 +46,14 @@
 		</li>
 	</ul>
 </div>
-<?php //} ?>
+<?php } ?>
 
 <div class="dtitle">
 	<span class="upper">User Level Settings</span>
 	<span>Changes made here will apply to you only.</span>
 </div>
 <div class="form">
-	<?php //if (!isset($settings['tenant']['timezone']['can_override']) || $settings['tenant']['timezone']['can_override']==1) { ?>
+	<?php if (!isset($settings['tenant']['timezone']['can_override']) || $settings['tenant']['timezone']['can_override']==1) { ?>
 	<ul>
 		<li>
 			<span class="lb">Time Zone</span>
@@ -62,7 +62,7 @@
 			</span>
 		</li>
 	</ul>
-	<?php //} ?>
+	<?php } ?>
 </div>
 
 <div class="bot">

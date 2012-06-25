@@ -63,10 +63,14 @@ class Card extends MY_Controller {
 
 	function ajax_contact_info(){
 		$card_id = $this->input->post('id');
+		$data = $this->CardM->get($card_id);
+		echo json_encode($data);
+		/*
 		$view_data = array(
 			'detail' => $this->CardM->get($card_id),
 		);
-                $this->load->view(get_template().'/card/ajax_contact_info',$view_data);
+        $this->load->view(get_template().'/card/ajax_contact_info',$view_data);
+		*/
 	}
 
 	function ajax_change_status(){
@@ -204,6 +208,9 @@ class Card extends MY_Controller {
 			'card_id' => $this->input->post('id'),
 			'role_id' => $this->input->post('role'),
 		);
+		if($this->input->post('id_role') != ''){
+			$data['id'] = $this->input->post('id_role');
+		}
 		$id_save = $this->Card_roleM->save($data);
 		echo $id_save;
 	}

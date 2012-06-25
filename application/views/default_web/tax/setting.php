@@ -8,7 +8,7 @@
 	echo form_open('/tax/ajax_save_setting/', array('class'=>'form-horizontal'));
 ?>
 
-<?php //if ($is_admin) { ?>
+<?php if ($is_admin) { ?>
 <div class="dtitle">
 	<span class="upper">Admin Level Settings</span>
 	<span>Changes made here will apply to all users.</span>
@@ -29,7 +29,7 @@
 	</ul>
 	<?php } ?>
 </div>
-<?php //} ?>
+<?php } ?>
 
 <div class="bot">
 	<button type="submit" class="btn btn-primary save">Save</button> or <a href="#" class="cancel">go back</a>
