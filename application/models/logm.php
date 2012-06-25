@@ -30,6 +30,8 @@ class LogM extends CI_Model {
 	}
 
 	public function stop_log() {
+		if ($this->is_cli || $this->is_callback) return;
+		
 		$total_time = $this->_end_timer();
 		$this->_update_log($total_time);
 		if ($this->_log_data['log_type']) {
