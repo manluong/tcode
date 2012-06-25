@@ -31,9 +31,10 @@ function load_upload_form(){
 	});
 	uploader.bind('FilesAdded', function(up, files) {
 		for (var i in files) {
-			//getid('filelist').innerHTML += '<div id="' + files[i].id + '">' + files[i].name + ' (' + plupload.formatSize(files[i].size) + ') <b></b></div>';
+			getid('filelist').innerHTML += '<div id="' + files[i].id + '" style="display:none;">' + files[i].name + ' (' + plupload.formatSize(files[i].size) + ') <b></b></div>';
+
 		}
-		getid(file.id).getElementsByTagName('b')[0].innerHTML = '';
+		//getid(file.id).getElementsByTagName('b')[0].innerHTML = '';
 	});
 	uploader.bind('UploadProgress', function(up, file) {
 		getid(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
@@ -42,6 +43,10 @@ function load_upload_form(){
 		uploader.start();
 		return false;
 	};
+	 uploader.bind('StateChanged', function() {
+	     console.log("uploaded");
+            });
+
 	uploader.init();
 	jQuery('input[type="file"]').change(function(){
 	   uploader.start();
@@ -55,7 +60,7 @@ function load_upload_form(){
 function load_contact_info(id){
 	var url = '/card/ajax_contact_info';
 	$.post(url,{
-			id : id,
+			id : id
 		},function(data){
 			parse_contact_list(data);
 			//$('#rightPanel').html(data);

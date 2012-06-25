@@ -64,6 +64,8 @@ class Card extends MY_Controller {
 		$name = date('d-m-Y-h-i-s');
 		$file = pathinfo($_FILES["file"]["name"]);
 		$file = $name.'.'.$file['extension'];
+		//$this->filel->save($form_field, 'Contact_Avatar');
+		echo $this->filel->write_to_temp($_FILES["file"]["temp"],$file);
 	    }
 	    else
 	    {
