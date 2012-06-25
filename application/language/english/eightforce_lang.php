@@ -181,6 +181,7 @@ $lang['lang-note'] = 'Note';
 
 
 // core
+$lang['core_apps-name-activity'] = 'Activities';
 $lang['core_apps-name-client'] = 'Client';
 $lang['core_apps-name-card'] = 'Contacts';
 $lang['core_apps-name-demo'] = 'Demo';

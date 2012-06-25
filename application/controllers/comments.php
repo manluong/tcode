@@ -40,9 +40,12 @@ class Comments extends MY_Controller {
 	}
 
 	function ajax_save_comment() {
+		$app_id = $this->input->post('app_id');
+		$app_data_id = $this->input->post('app_data_id');
+
 		$data = array(
-			'app_id' => $this->input->post('app_id'),
-			'app_data_id' => $this->input->post('app_data_id'),
+			'app_id' => $app_id,
+			'app_data_id' => $app_data_id,
 			'parent_id' => $this->input->post('parent_id'),
 			'text' => $this->input->post('text'),
 		);
@@ -52,6 +55,12 @@ class Comments extends MY_Controller {
 		$this->CommentsM->insert_timeago_stamp($data);
 		if ($data['parent_id'] != 0) {
 			$data['in_reply_to']['name'] = $this->CommentsM->get_reply_to_name($data['parent_id']);
+		}
+
+		//if it's activity feed app
+		if  ($app_id == 1) {
+			$this->load->model('ActivityM');
+			$this->ActivityM->touch($app_data_id);
 		}
 
 		$this->RespM->set_message('')
