@@ -31,7 +31,7 @@ class LogM extends CI_Model {
 
 	public function stop_log() {
 		if ($this->is_cli || $this->is_callback) return;
-		
+
 		$total_time = $this->_end_timer();
 		$this->_update_log($total_time);
 		if ($this->_log_data['log_type']) {
@@ -54,7 +54,6 @@ class LogM extends CI_Model {
             'gpmid' => isset($this->UserM->info['role']['role_id']) ? $this->UserM->info['role']['role_id'] : '',
             'app' => $this->url['app'],
             'action' => $this->url['action'],
-            'subaction' => $this->url['subaction'],
 			'stamp' => get_current_stamp(),
             'app_data_id' => $this->url['id_plain'],
 			'app_data_id_uri' => $this->uri->segment(3),
@@ -73,9 +72,7 @@ class LogM extends CI_Model {
 	function _get_log_type() {
 		$query = $this->db->select()
 				->from('global_setting.log_type')
-				->where(array('app'=>$this->url['app'],'action'=>$this->url['action'],
-						'subaction'=>$this->url['subaction']
-					))
+				->where(array('app'=>$this->url['app'],'action'=>$this->url['action']))
 				->limit(1)
 				->get();
 		return $query->row_array();
@@ -137,8 +134,6 @@ class LogM extends CI_Model {
 
 			if ($this->_log_data['log_type']['msg_history'] !== '') {
 				$text = $this->_get_custom_msg($this->lang->line('core'.$this->_log_data['log_type']['msg_history']));
-			} else {
-				$text = $this->_get_default_msg($this->url['subaction'], $this->url['app'], $this->url['id_plain']);
 			}
 			$data = array(
 				'log_type_id' => $this->_log_data['log_type']['id'],
@@ -196,28 +191,6 @@ class LogM extends CI_Model {
 		$replacements[3] = '';//$this->App_generalM->core_app_id2name("card",app_convertid("emailid","cardid",$field1['tid']),0);
 		$replacements[4] = parse_stamp(get_current_stamp());
 		return preg_replace($patterns, $replacements, $msg);
-	}
-
-	private function _get_default_msg($subaction, $app, $url_id) {
-		$default_lang = array(
-			'a' => 'corehis_add',
-			'v' => 'corehis_view',
-			'e' => 'corehis_edit',
-			'd' => 'corehis_delete',
-			'l' => 'corehis_list',
-			's' => 'corehis_search'
-		);
-
-		$text = $this->lang->line($default_lang[$subaction]);
-		$text .= ' '.$this->lang->line('coreapptitle_'.$app).' - ';
-
-		if (in_array($app, $this->_core_apps)) {
-			$text .= $this->App_generalM->core_app_id2name($app, $url_id,1);
-		} else {
-			$text .= $url['id_plain'];
-		}
-
-		return $text;
 	}
 
 	private function _get_old_history() {
@@ -280,7 +253,6 @@ class LogM extends CI_Model {
 	//        $log['furi'] = $uri[1];
 	//        $uri = preg_replace("/app=".$this->url['app']."/", "", $uri[1]);
 	//        $uri = preg_replace("/&an=".$this->url['action']."/", "", $uri);
-	//        $uri = preg_replace("/&aved=".$this->url['subaction']."/", "", $uri);
 	//        $uri = preg_replace("/&thisid=".$this->url['id_encrpted']."/", "", $uri);
 	//        if ($uri == "&") $uri = "";
 	//        $this->_request_uri = $uri;

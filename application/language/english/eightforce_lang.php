@@ -117,7 +117,6 @@ $lang['core_apps-name'] = 'Name';
 $lang['core_dataset-id'] = 'Id';
 $lang['core_dataset-dataset_name'] = 'Dataset Name';
 $lang['core_dataset-app_name'] = 'App Name';
-$lang['core_dataset-default_subaction'] = 'Default Subaction';
 $lang['core_dataset-add_id_field'] = 'Add Id Field';
 $lang['core_dataset-a'] = 'A';
 $lang['core_dataset-v'] = 'V';

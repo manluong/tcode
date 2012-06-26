@@ -6,7 +6,7 @@ class ActivityM extends MY_Model {
 		$this->table = 'activities';
 
 		parent::__construct();
-		
+
 		$this->load->model('CardM');
 	}
 
@@ -63,8 +63,6 @@ class ActivityM extends MY_Model {
 			if ($v['type'] != 'text') {
 				if ($v['content'] !== '') {
 					$msg = $this->_get_custom_msg($v['msg']);
-				} else {
-					$msg = $this->_get_default_msg($v['subaction'], $v['app'], $v['app_data_id']);
 					$msg .= $v['created_stamp'];
 				}
 			}

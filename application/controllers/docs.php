@@ -150,9 +150,6 @@ class Docs extends MY_Controller {
 	// updated by erik
 	function index() {
 		/*
-		if ($this->url['subaction'] === 'folder-view') {
-
-		} else {
 			$folder_exists = $this->DocsM->does_folder_exists($this->url['id_plain']);
 			if ( ! empty ($folder_exists)) {
 
@@ -167,7 +164,6 @@ class Docs extends MY_Controller {
 					redirect('/docs/view/'.encode_id($id).'/list-view');
 				}
 			}
-		}
 		*/
 
 

@@ -26,10 +26,6 @@ class Activity extends MY_Controller {
 	}
 
 	function new_post() {
-		$this->url['subaction'] = 'a';
-		//because the subaction was changed, we need to reload the logtype
-		$this->LogM->update_log_type();
-
 		$text = $this->input->post('text');
 
 		$post = $this->LogM->insert_wall_post($text);

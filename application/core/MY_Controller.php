@@ -13,14 +13,11 @@ class MY_Controller extends CI_Controller {
 		'id_plain' => 0,
 		'id_encrypted' => 0,
 		'id' => 0,	//original ID passed in by request
-
-		'subaction' => '',
 	);
 	var $re_url = array(
 		'app' => '',
 		'action' => '',
 		'id' => 0,
-		'subaction' => '',
 	);
 	var $has_return = FALSE;
 
@@ -70,9 +67,6 @@ class MY_Controller extends CI_Controller {
 	var $eightforce_config = array();
 
 	var $debug = array();
-
-	//valid subactions
-	var $subactions = array('a','v','e','d','l','s','as','es','ds');
 
 	function __construct() {
 		parent::__construct();
@@ -167,9 +161,6 @@ class MY_Controller extends CI_Controller {
 		//if method is not pass in, action is set to "index" by CI
 		$this->url['action'] = $this->router->fetch_method();
 
-		$this->url['subaction'] = $this->uri->segment(4, '');
-		if (!in_array($this->url['subaction'], $this->subactions)) $this->url['subaction'] = 'v';
-
 		$this->url['id'] = $id = $this->uri->segment(3, 0);
 
 		if (id_is_encrypted($id)) {
@@ -182,7 +173,6 @@ class MY_Controller extends CI_Controller {
 
 		$this->re_url['app'] = $this->input->get_post('re_app', TRUE);
 		$this->re_url['action'] = $this->input->get_post('re_action', TRUE);
-		$this->re_url['subaction'] = $this->input->get_post('re_subaction', TRUE);
 		$this->re_url['id'] = $this->input->get_post('re_id', TRUE);
 
 		if ($this->re_url['app'] !== FALSE && $this->re_url['action'] !== FALSE) $this->has_return = TRUE;

@@ -113,7 +113,7 @@ function get_return_url($default_url='') {
 
 	if (!$CI->has_return) return $default_url;
 
-	$seg = array('app','action','id','subaction');
+	$seg = array('app','action','id');
 
 	$result = array();
 	foreach($seg AS $s) {
@@ -127,7 +127,7 @@ function get_return_url($default_url='') {
 //		the next page what URL to return to
 //	Usually used in: view file
 function set_return_url($querystring=FALSE) {
-	$seg = array('app','action','id','subaction');
+	$seg = array('app','action','id');
 	$result = array();
 	$CI =& get_instance();
 
@@ -150,7 +150,7 @@ function set_return_url($querystring=FALSE) {
 //	If there are any return_urls passed in, re-use them again
 //	Usually used in: view file
 function reset_return_url_form() {
-	$seg = array('app','action','id','subaction');
+	$seg = array('app','action','id');
 	$result = array();
 	$CI =& get_instance();
 

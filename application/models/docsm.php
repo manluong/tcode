@@ -175,7 +175,6 @@ class docsM extends MY_Model {
 			'a_docs_dir_browsestyle' => isset($value['browsestyle']) ? $value['browsestyle'] : '',
 			'a_docs_dir_reapp' => isset($value['reapp']) ? $value['reapp'] : '',
 			'a_docs_dir_reaction' => isset($value['rean']) ? $value['rean'] : '',
-			'a_docs_dir_resubaction' => isset($value['reaved']) ? $value['reaved'] : '',
 			'a_docs_dir_noocrindex' => isset($value['noocrindex']) ? $value['noocrindex'] : '',
 		);
 		if (isset($values['id'])) {
