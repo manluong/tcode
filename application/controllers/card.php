@@ -329,14 +329,10 @@ class Card extends MY_Controller {
 			redirect('/card/view/'.$id);
 		}
 	}
-
-	function iphone_save(){
-		$this->CardM->save();
-	}
 	
 	function confirm_delete($card_id) {
 		//$staff_id = $this->UserM->get_card_id();
-		$per = $this->AclM->check('card',0,'delete');
+		$per = $this->AclM->check('card', 0, 'delete');
 		$data = array(
 			'per' => $per,
 			'card_id' => $card_id,
@@ -345,14 +341,7 @@ class Card extends MY_Controller {
 	}
 
 	function delete($card_id){
-		$per_helpdesk = $this->AclM->check('helpdesk',0,'delete');
-		$per_invoice = $this->AclM->check('invoice',0,'delete');
-		if($per_helpdesk == TRUE && $per_invoice == TRUE){
-			$this->CardM->delete($card_id);
-			$per = TRUE;
-		}else{
-			$per = FALSE;
-		}
+		$per = $this->CardM->delete($card_id, TRUE);
 		$data['per'] = $per;
 		$this->load->view(get_template().'/card/delete', $data);
 	}
@@ -408,15 +397,15 @@ class Card extends MY_Controller {
 		*/
 
 
-                /*
-                 * Leo Fix
-                 */
-                 $date = explode('/',$_POST['addon_extra'][0]['birth_date']);
-                 $date = $date[2].'-'.$date[0].'-'.$date[1];
-                 $_POST['addon_extra'][0]['birth_date'] = $date;
-                 /*
-                  * End Fix
-                  */
+		/*
+		 * Leo Fix
+		 */
+		 $date = explode('/',$_POST['addon_extra'][0]['birth_date']);
+		 $date = $date[2].'-'.$date[0].'-'.$date[1];
+		 $_POST['addon_extra'][0]['birth_date'] = $date;
+		 /*
+		  * End Fix
+		  */
 		$id = $this->CardM->save();
 
 		$success = ($id !== FALSE);
@@ -521,5 +510,28 @@ class Card extends MY_Controller {
 
 		echo json_encode($data);
 		exit;
+	}
+	
+	/*--Iphone--*/
+	
+	function iphone_save($id, $addon_email){
+		$_POST['id'] = $id;
+		$addon_email = explode(';',$addon_email);
+		for($i=0 ; $i<count($addon_email) ; $i++){
+			$email = explode(',',$addon_email[$i]);
+				$_POST['addon_email['.$i.'][email]'] = trim($email[0]);
+				$_POST['addon_email['.$i.'][type]'] = trim($email[1]);
+		}
+
+		$id = $this->CardM->save();
+		
+		echo '<pre>';
+		print_r($_POST);
+		echo '</pre>';
+	}
+	
+	function test_iphone(){
+		$addon_email = 'abc@ymail.com, 0; xyz@abc.com, 1 ; nv3@abc.com, 1 ; nv4@abc.com, 1';
+		$this->iphone_save(2,$addon_email);
 	}
 }

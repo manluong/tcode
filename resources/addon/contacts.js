@@ -170,7 +170,7 @@ function contact_fillter(role_id){
 
 function parse_contact_fillter(data){
 	var json = jQuery.parseJSON(data);
-	console.log(json);
+	//console.log(json);
 	var first_al = '<li class="letter staff customers vendors a-title">a</li>';
 	var html = '';
 	var  current_alphabet = 0;
@@ -199,9 +199,11 @@ function parse_contact_fillter(data){
 			//continue;
 		}
 		
-		if(item.role.length > 0){
-			var role = '';
+		var role = '';
+		
+		if(item.role != ''){
 			for(j in item.role){
+				//alert(item.role[j].name);
 				if(item.role[j].name != ''){
 					role = item.role[j].name.toLowerCase();
 				}

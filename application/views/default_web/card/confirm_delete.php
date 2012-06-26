@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/contact.css" />
 <div  id="contact_edit" class="container" style="width:350px;float:left;">
-	<?php if($per == TRUE){?>
+	<?php if($per == 1){?>
 	<div class="alert_yellow"> <strong>Confirm!</strong> Please confirm to delete this contact</div>
 	<div>
 		<button onclick="delete_card(<?=$card_id?>);" style="height:22px;line-height:12px;" class="btn btn-inverse">DELETE</button>
