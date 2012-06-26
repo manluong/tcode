@@ -62,6 +62,7 @@ foreach ($allowed_image_ext as $mime_type => $ext) {
 						}
 					?>
 					<input type="hidden" name="addon_access_user_role[0][role_id]" id="addon_role" value="">
+					
 					<script>
 						$(document).ready(function() {
 							$('.role').on('click', function() {

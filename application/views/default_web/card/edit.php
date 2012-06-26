@@ -23,11 +23,12 @@
 		<form method="post" action="/card/save" class="form-horizontal" id="card-edit-form" data-ajax_save="/card/ajax_save">
 			<?php
 				if (!$is_new) echo form_hidden('id', $data['id']);
+				$role_id = $data['addon_access_user_role'][0]['role_id'];
 			?>
 			<fieldset>
+				<?php if($role_id == 0){?>
 				<div class="control-group" style="padding-left:160px;">
 					<?php
-						$role_id = $data['addon_access_user_role'][0]['role_id'];
 						foreach($role as $role_value => $role_label){
 							$checked = ($role_value==$role_id?'checked=checked':'');
 							echo '<input type="radio" name="role" '.$checked.' class="role" value="'.$role_value.'" /> '.$role_label.'&nbsp;&nbsp;';
@@ -42,7 +43,8 @@
 						});
 					</script>
 				</div>
-
+				<?php }?>
+				
 				<div class="control-group" style="position:relative;">
 					<h1 style="display:none;">Custom example</h1>
 					<p style="display:none;">Shows you how to use the core plupload API.</p>

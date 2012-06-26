@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/contact.css" />
-<div  id="contact_edit" class="container" style="width:350px;float:left;">
+<div  id="contact_edit" class="container" style="width:200px;float:left;">
 	<?php if($per == TRUE){?>
 		<div class="alert_pink">You deleted successful !</div>
 		<div>

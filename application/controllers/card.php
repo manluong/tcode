@@ -190,8 +190,8 @@ class Card extends MY_Controller {
 			2 => 'Customer',
 			4 => 'Vendor',
 		);
+		
 		$this->data['content'] = $this->load->view(get_template().'/card/view', $view_data, TRUE);
-
 		$this->data['breadcrumb'][] = array(
 			'title' => $view_data['data']['first_name'],
 			'url' => '/card/view/'.$id,
