@@ -103,7 +103,7 @@
 <script>
 	$(document).ready(function() {
 		$.get(
-			'/dashboard/ajax_wall',
+			'/activity/ajax_wall',
 			function(resp) {
 				var posts = '';
 				var last_id = '';
