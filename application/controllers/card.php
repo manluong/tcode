@@ -53,7 +53,7 @@ class Card extends MY_Controller {
 	}
 
 	function upload(){
-//	   $this->load->library('filel');
+	   $this->load->library('filel');
 //	   $file = $this->filel->save('file', 'Contact');
 //	   echo $file['hash'];
 	    if ((($_FILES["file"]["type"] == "image/gif")
@@ -64,13 +64,22 @@ class Card extends MY_Controller {
 		$name = date('d-m-Y-h-i-s');
 		$file = pathinfo($_FILES["file"]["name"]);
 		$file = $name.'.'.$file['extension'];
+		$path = $this->filel->write_to_temp(file_get_contents($_FILES["file"]["tmp_name"]),$file);
+		echo $file;
 	    }
 	    else
 	    {
 		echo "error";
 	    }
 	}
-
+	function get_image($name){
+	    $this->load->library('filel');
+	    $this->CI = & get_instance();
+	    $temp_dir = $CI->eightforce_config['temp_folder'].$CI->domain.'/';
+	    echo $temp_dir;
+	    $file = file_get_contents();
+	    echo $file;
+	}
 	function ajax_contact_info(){
 		$card_id = $this->input->post('id');
 		$data = $this->CardM->get($card_id);
@@ -154,7 +163,7 @@ class Card extends MY_Controller {
 		$this->db->order_by('first_name ASC');
 		$list_id = explode(',',$list_id);
 		$list = $this->CardM->get_batch($list_id);
-		
+
 		echo json_encode($list);
 		/*
 		$view_data = array(
@@ -190,7 +199,7 @@ class Card extends MY_Controller {
 			2 => 'Customer',
 			4 => 'Vendor',
 		);
-		
+
 		$this->data['content'] = $this->load->view(get_template().'/card/view', $view_data, TRUE);
 		$this->data['breadcrumb'][] = array(
 			'title' => $view_data['data']['first_name'],
@@ -230,12 +239,12 @@ class Card extends MY_Controller {
 				'addon_address[0][type]' => $_POST['addon_address[0][type]'],
 				'addon_address[0][line_1]' => $_POST['addon_address[0][line_1]'],
 				'addon_address[0][line_2]' => $_POST['addon_address[0][line_2]'],
-				
+
 			);
 			echo json_encode($data);
 		}
 	}
-	
+
 	function save_role(){
 		$this->load->model('Card_roleM');
 		$data = array(
@@ -329,7 +338,7 @@ class Card extends MY_Controller {
 			redirect('/card/view/'.$id);
 		}
 	}
-	
+
 	function confirm_delete($card_id) {
 		//$staff_id = $this->UserM->get_card_id();
 		$per = $this->AclM->check('card', 0, 'delete');
