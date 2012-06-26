@@ -64,14 +64,22 @@ class Card extends MY_Controller {
 		$name = date('d-m-Y-h-i-s');
 		$file = pathinfo($_FILES["file"]["name"]);
 		$file = $name.'.'.$file['extension'];
-		echo $this->filel->write_to_temp(file_get_contents($_FILES["file"]["tmp_name"]),$name);
+		$path = $this->filel->write_to_temp(file_get_contents($_FILES["file"]["tmp_name"]),$file);
+		echo $file;
 	    }
 	    else
 	    {
 		echo "error";
 	    }
 	}
-
+	function get_image($name){
+	    $this->load->library('filel');
+	    $this->CI = & get_instance();
+	    $temp_dir = $CI->eightforce_config['temp_folder'].$CI->domain.'/';
+	    echo $temp_dir;
+	    $file = file_get_contents();
+	    echo $file;
+	}
 	function ajax_contact_info(){
 		$card_id = $this->input->post('id');
 		$data = $this->CardM->get($card_id);

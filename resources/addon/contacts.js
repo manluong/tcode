@@ -14,7 +14,7 @@ function load_upload_form(){
 			loadSpeed: 200,
 			opacity: 0.3
 	  },
-	  top: '10%',
+	  top: '10%'
 	});
 	$("#upload_avatar").overlay().load();
 	var uploader = new plupload.Uploader({
@@ -31,9 +31,9 @@ function load_upload_form(){
 	});
 	uploader.bind('FilesAdded', function(up, files) {
 		for (var i in files) {
-			//getid('filelist').innerHTML += '<div id="' + files[i].id + '">' + files[i].name + ' (' + plupload.formatSize(files[i].size) + ') <b></b></div>';
+			getid('filelist').innerHTML += '<div id="' + files[i].id + '" style="display:none;">' + files[i].name + ' (' + plupload.formatSize(files[i].size) + ') <b></b></div>';
 		}
-		getid(file.id).getElementsByTagName('b')[0].innerHTML = '';
+		//getid(file.id).getElementsByTagName('b')[0].innerHTML = '';
 	});
 	uploader.bind('UploadProgress', function(up, file) {
 		getid(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
@@ -176,9 +176,9 @@ function parse_contact_fillter(data){
 	var  current_alphabet = 0;
 	var alphabets = new Array('a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z');
 	var i = 0;
-	for (i in json) {	
+	for (i in json) {
 		 var item = json[i];
-		 
+
 		 var organization_name = '';
 		 if(item.organization_name != null){
 			organization_name = item.organization_name;
@@ -191,14 +191,14 @@ function parse_contact_fillter(data){
 		 if(item.last_name != null){
 			last_name = item.last_name;
 		 }
-		
+
 		 if (item.first_name.substring(0, 1).toLowerCase() != alphabets[current_alphabet]) {
 			current_alphabet++;
 			html += '<li class="letter staff customers vendors '+alphabets[current_alphabet]+'-title">'+alphabets[current_alphabet]+'</li>';
 			i--;
 			//continue;
 		}
-		
+
 		if(item.role.length > 0){
 			var role = '';
 			for(j in item.role){
@@ -207,7 +207,7 @@ function parse_contact_fillter(data){
 				}
 			}
 		}
-		
+
 		html += '<li onclick="load_contact_info('+item.id+')" class="contact '+role+' '+alphabets[current_alphabet]+'-contact">';
 			html+= '<div class="contactType">'+role+'</div>';
 			html+= '<img src="/resources/template/default_web/img/avatar.jpg" alt="" width="32" />';
