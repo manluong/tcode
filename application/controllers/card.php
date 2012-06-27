@@ -74,10 +74,8 @@ class Card extends MY_Controller {
 	}
 	function get_image($name){
 	    $this->load->library('filel');
-	    $this->CI = & get_instance();
-	    $temp_dir = $CI->eightforce_config['temp_folder'].$CI->domain.'/';
 	    echo $temp_dir;
-	    $file = file_get_contents();
+	    $file = file_get_contents($this->filel->get_temp_dir().'/'.$name);
 	    echo $file;
 	}
 	function ajax_contact_info(){
@@ -520,9 +518,9 @@ class Card extends MY_Controller {
 		echo json_encode($data);
 		exit;
 	}
-	
+
 	/*--Iphone--*/
-	
+
 	function iphone_save($id, $addon_email, $addon_tel, $addon_address, $addon_social, $addon_notes, $addon_extra){
 		$_POST['id'] = $id;
 		
@@ -580,7 +578,7 @@ class Card extends MY_Controller {
 				$_POST['addon_extra'][$i]['gender'] = trim($extra[1]);
 				$_POST['addon_extra'][$i]['birth_date'] = trim($extra[2]);
 		}
-		
+
 		$id_save = $this->CardM->save();
 		echo 'success';
 		
@@ -588,7 +586,7 @@ class Card extends MY_Controller {
 		//print_r($_POST);
 		//echo '</pre>';
 	}
-	
+
 	function test_iphone(){
 		$addon_email = '110, abc@ymail.com, 0, 0; ,xyz@abc.com, 1, 1;';
 		$addon_tel = ' , 0, 11, 22, 33, 44, 0; , 2, 111, 222, 333, 444, 1';
