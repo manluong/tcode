@@ -62,6 +62,8 @@ class ActivityM extends MY_Model {
 
 			$rs = $this->db->get();
 
+			if ($rs->num_rows() == 0) return $result;
+
 			foreach ($rs->result_array() as $k=>$v) {
 				$display = ($v['display'] == 1);
 				$bookmark_id = $v['id'];
@@ -98,6 +100,22 @@ class ActivityM extends MY_Model {
 	}
 
 	private function render_event($activity) {
+		//get the event language line. Return empty string if not found.
+		$action_line = $this->lang->line('events-'.$activity['type']);
+		if ($action_line === FALSE) return '';
 
+		//get various details of this action
+		$app_language_name = $this->AppM->get_language_name($activity['app_id']);
+		$app_model = $this->AppM->get_model($activity['app_id']);
+		$this->load->model($app_model);
+		$app_data_name = $this->$app_model->get_data_name($activity['app_data_id']);
+
+		$action_person = $this->CardM->get_name($activity['created_card_id']);
+
+		//update the event line with the details and return the result
+		$search = array('#app_name#', '#data_name#', '#action_person#');
+		$replace = array($app_language_name, $app_data_name, $action_person);
+
+		return str_replace($search, $replace, $action_line);
 	}
 }

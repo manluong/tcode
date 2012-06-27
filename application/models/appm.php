@@ -87,6 +87,14 @@ class AppM extends MY_Model {
 		return $result['name'];
 	}
 
+	function get_language_name($app_id) {
+		if (isset($this->app_cache[$app_id])) return $this->app_cache[$app_id]['name'];
+
+		$result = $this->get($app_id);
+
+		return $this->lang->line('core_apps-name-'.$result['name']);
+	}
+
 	//Get list of Apps, with License restrictions applied.
 	//TODO: add ACL restriction.
 	function get_apps() {
@@ -123,7 +131,7 @@ class AppM extends MY_Model {
 
 	function get_model($app_id) {
 		if (!isset($this->app_model[$app_id])) return FALSE;
-		
+
 		return $this->app_model[$app_id];
 	}
 }
