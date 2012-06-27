@@ -523,6 +523,8 @@ class Card extends MY_Controller {
 
 	function iphone_save(){
 		if(isset($_POST)){
+			print_r($_POST);
+			die;
 			//$_POST['id'] = $id;
 			$addon_email = $_POST['addon_email'];
 			$addon_tel = $_POST['addon_tel'];
