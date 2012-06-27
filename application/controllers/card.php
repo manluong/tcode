@@ -12,6 +12,7 @@ class Card extends MY_Controller {
 		$this->load->model('Card_TelM');
 		$this->load->model('InvoiceM');
 		$this->load->model('HelpdeskM');
+		//
 	}
 
 	function index(){
