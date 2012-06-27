@@ -42,6 +42,10 @@ function load_upload_form(){
 		uploader.start();
 		return false;
 	};
+	 uploader.bind('FileUploaded', function(up, file) {
+	    jQuery('#' + file.id + " b").html("100%");
+	    console.log("success");
+	});
 	uploader.init();
 	jQuery('input[type="file"]').change(function(){
 	   uploader.start();
