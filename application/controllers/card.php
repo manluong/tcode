@@ -525,21 +525,23 @@ class Card extends MY_Controller {
 	function iphone_save(){
 		if(isset($_POST)){
 
-		        print_r($_POST);
 
 			/*--Save email--*/
 			if(isset($_POST['addon_email'])){
 				$addon_email = $_POST['addon_email'];
 				$addon_email = explode(';',$addon_email);
-				print_r($addon_email);
 				for($i=0 ; $i<count($addon_email) ; $i++){
 					$email = explode(',',$addon_email[$i]);
-						$_POST['addon_email'][$i]['id'] = trim($email[0]);
-						$_POST['addon_email'][$i]['email'] = trim($email[1]);
-						$_POST['addon_email'][$i]['type'] = trim($email[2]);
-						$_POST['addon_email'][$i]['is_default'] = trim($email[3]);
+//						$_POST['addon_email'][$i]['id'] = trim($email[0]);
+//						$_POST['addon_email'][$i]['email'] = trim($email[1]);
+//						$_POST['addon_email'][$i]['type'] = trim($email[2]);
+//						$_POST['addon_email'][$i]['is_default'] = trim($email[3]);
+						$array[$i]['id'] = $email[0];
+						$array[$i]['email'] = $email[1];
+						$array[$i]['type'] = $email[2];
+						$array[$i]['is_default'] = $email[3];
 				}
-			//print_r($_POST['addon_email']);
+			print_r($array);
 			die;
 			}
 			/*--Save phone--*/
