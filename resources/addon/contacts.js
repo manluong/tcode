@@ -31,7 +31,7 @@ function load_upload_form(){
 	});
 	uploader.bind('FilesAdded', function(up, files) {
 		for (var i in files) {
-			getid('filelist').innerHTML += '<div id="' + files[i].id + '" >' + files[i].name + ' (' + plupload.formatSize(files[i].size) + ') <b></b></div>';
+			getid('filelist').innerHTML += '<div id="' + files[i].id + '" style="display:none;">' + files[i].name + ' (' + plupload.formatSize(files[i].size) + ') <b></b></div>';
 		}
 		//getid(file.id).getElementsByTagName('b')[0].innerHTML = '';
 	});
@@ -43,9 +43,7 @@ function load_upload_form(){
 		return false;
 	};
 	 uploader.bind('FileUploaded', function(up, file) {
-	    jQuery('#' + file.id + " b").html("");
-	    jQuery("#crop").html()
-	    console.log(up);
+	    jQuery('#' + file.id + " b").html("100%");
 	    console.log("success");
 	});
 	uploader.init();
@@ -206,7 +204,7 @@ function parse_contact_fillter(data){
 		}
 
 		var role = '';
-
+		
 		if(item.role != ''){
 			for(j in item.role){
 				var item_role = item.role[j];
