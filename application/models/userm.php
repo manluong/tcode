@@ -59,14 +59,26 @@ class UserM extends MY_Model {
 	}
 
 	public function is_staff() {
+		if (!isset($this->info['role']['name'])) {
+			log_message('error', 'This user does not have a role. CARD_ID: '.$this->id);
+			return FALSE;
+		}
 		return ($this->info['role']['name'] == 'Staff');
 	}
 
 	public function is_client() {
+		if (!isset($this->info['role']['name'])) {
+			log_message('error', 'This user does not have a role. CARD_ID: '.$this->id);
+			return FALSE;
+		}
 		return ($this->info['role']['name'] == 'Client' || $this->info['role']['name'] == 'Client (Additional)');
 	}
 
 	public function is_vendor() {
+		if (!isset($this->info['role']['name'])) {
+			log_message('error', 'This user does not have a role. CARD_ID: '.$this->id);
+			return FALSE;
+		}
 		return ($this->info['role']['name'] == 'Vendor');
 	}
 
@@ -232,5 +244,20 @@ class UserM extends MY_Model {
 			$this->loguid = time().rand(1000, 9999);
 			$this->session->set_userdata('loguid', $this->loguid);
 		}
+	}
+
+	public function get_follow_preferences() {
+		$rs = $this->db->select('event_type, data_id, display')
+				->from('card_follow_events')
+				->where('card_id', $this->id)
+				->get()
+				->result_array();
+
+		$results = array();
+		foreach($rs AS $row) {
+			$results[$row['event_type']][$row['data_id']] = $row['display'];
+		}
+
+		return $results;
 	}
 }
