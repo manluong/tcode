@@ -55,9 +55,15 @@ class Setting extends MY_Controller {
 		$data_configure['settings'] = $this->SettingM->get_for_configuration($app_name);
 		$data_configure['override_options'] = $this->override;
 
-		if ($app_name == 'helpdesk') {
-			$data_configure['priority_options'] = $this->SettingM->get_options_for_configuration($app_name, 'priority');
-			$data_configure['case_type_options'] = $this->SettingM->get_options_for_configuration($app_name, 'case_type');
+		if ($app_name == 'invoice') {
+			$data_configure['opts'] = array('payment_type' => 'Payment Type');
+		} else if ($app_name == 'helpdesk') {
+			$data_configure['opts'] = array('priority' => 'Priority', 'case_type' => 'Case Type');
+		}
+		if (isset($data_configure['opts'])) {
+			foreach ($data_configure['opts'] as $k => $v) {
+				$data_configure[$k.'_opts'] = $this->SettingM->get_options_for_configuration($app_name, $k);
+			}
 		}
 
 		$this->load->view(get_template().'/setting/configure_'.$app_name, $data_configure);

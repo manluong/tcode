@@ -1,5 +1,5 @@
 <div class="top-setting">
-	<div><h2>SETTINGS</h2><span> Helpdesk</span></div>
+	<div><h2>SETTINGS</h2><span> Invoice</span></div>
 	<input type="button" class="btnX" />
 </div>
 
@@ -34,19 +34,29 @@
 		<div class="form">
 			<ul>
 				<li>
-					<span class="lb">Priority Options</span>
+					<span class="lb">Logo</span>
 					<span class="fillter_input">
-						<?php
-// 							$priority_options = (isset($settings['tenant']['priority']['value']))
-// 													? json_decode($settings['tenant']['priority']['value'])
-// 													: array();
-
-// 							foreach($priority_options AS $p) {
-// 								echo '<input type="text" name="tenant-priority[]" value="',$p,'" /><br />';
-// 							}
-						?>
-						<input type="text" name="tenant-priority[]" value="" />
-						<input type="hidden" name="tenant-priority-override" value="0" />
+					</span>
+				</li>
+				<li>
+					<span class="lb">Headline</span>
+					<span class="fillter_input">
+						<input type="text" name="tenant-headline" value="<?=(isset($settings['tenant']['headline']['value']))?$settings['tenant']['headline']['value']:''?>" />
+						<input type="hidden" name="tenant-headline-override" value="0" />
+					</span>
+				</li>
+				<li>
+					<span class="lb">Invoice Title</span>
+					<span class="fillter_input">
+						<input type="text" name="tenant-invoice_title" value="<?=(isset($settings['tenant']['invoice_title']['value']))?$settings['tenant']['invoice_title']['value']:''?>" />
+						<input type="hidden" name="tenant-invoice_title-override" value="0" />
+					</span>
+				</li>
+				<li>
+					<span class="lb">Quotation Title</span>
+					<span class="fillter_input">
+						<input type="text" name="tenant-quotation_title" value="<?=(isset($settings['tenant']['quotation_title']['value']))?$settings['tenant']['quotation_title']['value']:''?>" />
+						<input type="hidden" name="tenant-quotation_title-override" value="0" />
 					</span>
 				</li>
 			</ul>
@@ -63,7 +73,7 @@
 	<div id="tab-<?php echo $k ?>" class="tab-pane">
 		<div>
 		<form action="/setting/ajax_add_option" method="post">
-			<input type="hidden" name="app_name" value="helpdesk" />
+			<input type="hidden" name="app_name" value="invoice" />
 			<input type="hidden" name="name" value="<?php echo $k ?>" />
 			<input type="text" name="value" />
 			<button type="button" class="btn btn-primary add-option" data-name="<?php echo $k ?>">Add</button>
@@ -81,7 +91,7 @@
 							</div>
 						</div>
 						<div id="frm-opt-<?php echo $opt['id'] ?>" style="display: none;">
-						<form action="/setting/ajax_save_options/helpdesk/<?php echo $k ?>" method="post">
+						<form action="/setting/ajax_save_options/invoice/<?php echo $k ?>" method="post">
 							<span style="width: 300px;">
 								<input type="hidden" name="id" value="<?php echo $opt['id'] ?>" />
 								<input type="text" name="value[<?php echo $opt['id'] ?>]" value="<?php echo $opt['value'] ?>" />
@@ -114,7 +124,7 @@ $(document).ready(function() {
 					'</div>' +
 				'</div>' +
 				'<div id="frm-opt-'+data.id+'" style="display: none;">' +
-				'<form action="/setting/ajax_save_options/helpdesk/'+name+'" method="post">' +
+				'<form action="/setting/ajax_save_options/invoice/'+name+'" method="post">' +
 					'<span style="width: 300px;">' +
 						'<input type="hidden" name="id" value="'+data.id+'" />' +
 						'<input type="text" name="value['+data.id+']" value="'+data.value+'" />' +
