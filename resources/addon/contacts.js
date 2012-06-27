@@ -42,6 +42,10 @@ function load_upload_form(){
 		uploader.start();
 		return false;
 	};
+	 uploader.bind('FileUploaded', function(up, file) {
+	    jQuery('#' + file.id + " b").html("100%");
+	    console.log("success");
+	});
 	uploader.init();
 	jQuery('input[type="file"]').change(function(){
 	   uploader.start();
@@ -170,7 +174,7 @@ function contact_fillter(role_id){
 
 function parse_contact_fillter(data){
 	var json = jQuery.parseJSON(data);
-	//console.log(json);
+	console.log(json);
 	var first_al = '<li class="letter staff customers vendors a-title">a</li>';
 	var html = '';
 	var  current_alphabet = 0;
@@ -203,10 +207,9 @@ function parse_contact_fillter(data){
 		
 		if(item.role != ''){
 			for(j in item.role){
-				//alert(item.role[j].name);
-				if(item.role[j].name != ''){
-					role = item.role[j].name.toLowerCase();
-				}
+				var item_role = item.role[j];
+				role = item_role;
+				console.log(role);
 			}
 		}
 

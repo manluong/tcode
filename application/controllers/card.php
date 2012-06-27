@@ -12,6 +12,7 @@ class Card extends MY_Controller {
 		$this->load->model('Card_TelM');
 		$this->load->model('InvoiceM');
 		$this->load->model('HelpdeskM');
+		//
 	}
 
 	function index(){
@@ -74,10 +75,8 @@ class Card extends MY_Controller {
 	}
 	function get_image($name){
 	    $this->load->library('filel');
-	    $this->CI = & get_instance();
-	    $temp_dir = $CI->eightforce_config['temp_folder'].$CI->domain.'/';
 	    echo $temp_dir;
-	    $file = file_get_contents();
+	    $file = file_get_contents($this->filel->get_temp_dir().'/'.$name);
 	    echo $file;
 	}
 	function ajax_contact_info(){
@@ -520,27 +519,107 @@ class Card extends MY_Controller {
 		echo json_encode($data);
 		exit;
 	}
-	
-	/*--Iphone--*/
-	
-	function iphone_save($id, $addon_email){
-		$_POST['id'] = $id;
-		$addon_email = explode(';',$addon_email);
-		for($i=0 ; $i<count($addon_email) ; $i++){
-			$email = explode(',',$addon_email[$i]);
-				$_POST['addon_email['.$i.'][email]'] = trim($email[0]);
-				$_POST['addon_email['.$i.'][type]'] = trim($email[1]);
-		}
 
-		$id = $this->CardM->save();
-		
-		echo '<pre>';
-		print_r($_POST);
-		echo '</pre>';
+	/*--Iphone--*/
+
+	function iphone_save(){
+		if(isset($_POST)){
+
+
+			/*--Save email--*/
+			if(isset($_POST['addon_email'])){
+				$addon_email = $_POST['addon_email'];
+				$addon_email = explode(';',$addon_email);
+				for($i=0 ; $i<count($addon_email) ; $i++){
+					$email = explode(',',$addon_email[$i]);
+//						$_POST['addon_email'][$i]['id'] = trim($email[0]);
+//						$_POST['addon_email'][$i]['email'] = trim($email[1]);
+//						$_POST['addon_email'][$i]['type'] = trim($email[2]);
+//						$_POST['addon_email'][$i]['is_default'] = trim($email[3]);
+						$array[$i]['id'] = $email[0];
+						$array[$i]['email'] = $email[1];
+						$array[$i]['type'] = $email[2];
+						$array[$i]['is_default'] = $email[3];
+				}
+			print_r($array);
+			die;
+			}
+			/*--Save phone--*/
+			if($_POST['addon_tel']){
+				$addon_tel = $_POST['addon_tel'];
+				$addon_tel = explode(';',$addon_tel);
+				for($i=0 ; $i<count($addon_tel) ; $i++){
+					$tel = explode(',',$addon_tel[$i]);
+						$_POST['addon_tel'][$i]['id'] = trim($tel[0]);
+						$_POST['addon_tel'][$i]['type'] = trim($tel[1]);
+						$_POST['addon_tel'][$i]['number'] = trim($tel[2]);
+						$_POST['addon_tel'][$i]['country'] = trim($tel[3]);
+						$_POST['addon_tel'][$i]['area'] = trim($tel[4]);
+						$_POST['addon_tel'][$i]['extension'] = trim($tel[5]);
+						$_POST['addon_tel'][$i]['is_default'] = trim($tel[6]);
+				}
+			}
+			/*--Save address--*/
+			if($_POST['addon_address']){
+				$addon_address = $_POST['addon_address'];
+				$addon_address = explode(';',$addon_address);
+				for($i=0 ; $i<count($addon_address) ; $i++){
+					$add = explode(',',$addon_address[$i]);
+						$_POST['addon_address'][$i]['id'] = trim($add[0]);
+						$_POST['addon_address'][$i]['type'] = trim($add[1]);
+						$_POST['addon_address'][$i]['line_1'] = trim($add[2]);
+						$_POST['addon_address'][$i]['line_2'] = trim($add[3]);
+						$_POST['addon_address'][$i]['is_default'] = trim($add[4]);
+				}
+			}
+			/*--Save social--*/
+			if($_POST['addon_social']){
+				$addon_social = $_POST['addon_social'];
+				$addon_social = explode(';',$addon_social);
+				for($i=0 ; $i<count($addon_social) ; $i++){
+					$social = explode(',',$addon_social[$i]);
+						$_POST['addon_social'][$i]['id'] = trim($social[0]);
+						$_POST['addon_social'][$i]['type'] = trim($social[1]);
+						$_POST['addon_social'][$i]['name_id'] = trim($social[2]);
+				}
+			}
+			/*--Save notes--*/
+			if($_POST['addon_notes']){
+				$addon_notes = $_POST['addon_notes'];
+				$addon_notes = explode(';',$addon_notes);
+				for($i=0 ; $i<count($addon_notes) ; $i++){
+					$note = explode(',',$addon_notes[$i]);
+						$_POST['addon_notes'][$i]['id'] = trim($note[0]);
+						$_POST['addon_notes'][$i]['note'] = trim($note[1]);
+				}
+			}
+			/*--Save extra--*/
+			if($_POST['addon_extra']){
+				$addon_extra = $_POST['addon_extra'];
+				$addon_extra = explode(';',$addon_extra);
+				for($i=0 ; $i<count($addon_extra) ; $i++){
+					$extra = explode(',',$addon_extra[$i]);
+						$_POST['addon_extra'][$i]['id'] = trim($extra[0]);
+						$_POST['addon_extra'][$i]['gender'] = trim($extra[1]);
+						$_POST['addon_extra'][$i]['birth_date'] = trim($extra[2]);
+				}
+			}
+
+			$id_save = $this->CardM->save();
+			echo 'success';
+		}
+		//echo '<pre>';
+		//print_r($_POST);
+		//echo '</pre>';
 	}
-	
+
 	function test_iphone(){
-		$addon_email = 'abc@ymail.com, 0; xyz@abc.com, 1 ; nv3@abc.com, 1 ; nv4@abc.com, 1';
-		$this->iphone_save(2,$addon_email);
+		$addon_email = '110, abc@ymail.com, 0, 0; ,xyz@abc.com, 1, 1;';
+		$addon_tel = ' , 0, 11, 22, 33, 44, 0; , 2, 111, 222, 333, 444, 1';
+		$addon_address = ' , 1, Dien Bien Phu, Dinh Bo Linh, 1;  , 0, Nguyen Van Dau, Nguyen Cong Tru, 0';
+		$addon_social = ', 1, nva@gmail.com; , 2, nvb@gmail.com; , 3, nvc@gmail.com';
+		$addon_notes = '126, hehehe';
+		$addon_extra = ' , 1, 2012-06-20';
+		$this->iphone_save(1, $addon_email, $addon_tel, $addon_address, $addon_social, $addon_notes, $addon_extra);
 	}
 }

@@ -62,7 +62,7 @@ foreach ($allowed_image_ext as $mime_type => $ext) {
 						}
 					?>
 					<input type="hidden" name="addon_access_user_role[0][role_id]" id="addon_role" value="">
-					
+
 					<script>
 						$(document).ready(function() {
 							$('.role').on('click', function() {
@@ -767,6 +767,7 @@ $(window).load(function () {
 			<button id="pickfiles" style="width:85px; height:25px;line-height:10px;" class="btn btn-inverse">Select File</button>
 			<div style="display:none;" id="uploadfiles"></div>
 			<div id="filelist" style="float:left ;margin:-57px 0 0 -66px;"></div>
+			<div>hehe</div>
 		</div>
 	</div>
 	<div id="breadcrumb">

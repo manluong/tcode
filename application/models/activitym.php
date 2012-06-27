@@ -38,44 +38,66 @@ class ActivityM extends MY_Model {
 		return $data;
 	}
 
-	public function get_wall($id=0, $limit=10, $card_id=0) {
+	public function get_wall($id=0, $limit=10, $card_id=0, $sticky=0) {
 		$this->load->model('CommentsM');
 		$this->CommentsM->results_per_page = 2;
 		$this->CommentsM->older_comments_top = TRUE;
 		$this->CommentsM->threaded = FALSE;
 
-		$this->db->select()
-			->from($this->table)
-			->order_by('modified_stamp', 'desc')
-			->limit($limit);
-
-		if ($id != 0) $this->db->where('id <', $id);
-		if ($card_id != 0) $this->db->where('created_card_id', $card_id);
-
-		$rs = $this->db->get();
-
-		if ($rs->num_rows() == 0) return array();
-
-		$results = $rs->result_array();
+		$prefs = $this->UserM->get_follow_preferences();
 
 		$result = array();
-		foreach ($results as $k=>$v) {
-			if ($v['type'] != 'text') {
-				if ($v['content'] !== '') {
-					$msg = $this->_get_custom_msg($v['msg']);
-					$msg .= $v['created_stamp'];
+
+		$bookmark_id = $id;
+
+		while(count($result) < $limit) {
+			$this->db->select()
+				->from($this->table)
+				->order_by('modified_stamp', 'desc')
+				->limit($limit);
+
+			if ($sticky != 0) $this->db->where('sticky', 1);
+			if ($bookmark_id != 0) $this->db->where('id <', $bookmark_id);
+			if ($card_id != 0) $this->db->where('created_card_id', $card_id);
+
+			$rs = $this->db->get();
+
+			foreach ($rs->result_array() as $k=>$v) {
+				$display = ($v['display'] == 1);
+				$bookmark_id = $v['id'];
+
+				//check prefs
+				if (isset($prefs[$v['type']][$v['app_data_id']])) {
+					$display = ($prefs[$v['type']][$v['app_data_id']] == 1);
+				} elseif (isset($prefs[$v['type']][0])) {
+					$display = ($prefs[$v['type']][0] == 1);
 				}
+
+				if (!$display) continue;
+
+				$temp = $v;
+				if ($v['type'] != 'text') {
+					$temp['content'] = $this->render_event($v);
+				}
+
+				$temp['card_name'] = $this->CardM->get_name($v['created_card_id']);
+				$temp['created_stamp_iso8601'] = parse_user_date($v['created_stamp'], 'ISO_8601');
+				$temp['created_stamp_iso'] = parse_user_date($v['created_stamp'], 'ISO');
+
+				$temp['comments'] = $this->CommentsM->get_page(1, $v['id'], 1, 0);
+				$comment_count = $this->CommentsM->get_comment_count(1, $v['id']);
+				$temp['comments_more'] = ($comment_count > 2);
+
+				$result[] = $temp;
+
+				if (count($result) == $limit) return $result;
 			}
-
-			$result[$k]['card_name'] = $this->CardM->get_name($v['created_card_id']);
-			$result[$k]['created_stamp_iso8601'] = parse_user_date($v['created_stamp'], 'ISO_8601');
-			$result[$k]['created_stamp_iso'] = parse_user_date($v['created_stamp'], 'ISO');
-
-			$result[$k]['comments'] = $this->CommentsM->get_page(1, $v['id'], 1, 0);
-			$comment_count = $this->CommentsM->get_comment_count(1, $v['id']);
-			$result[$k]['comments_more'] = ($comment_count > 2);
 		}
 
 		return $result;
+	}
+
+	private function render_event($activity) {
+
 	}
 }
