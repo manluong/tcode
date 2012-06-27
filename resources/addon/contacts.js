@@ -209,9 +209,7 @@ function parse_contact_fillter(data){
 			for(j in item.role){
 				var item_role = item.role[j];
 				role = item_role;
-				alert(item_role);
-				console.log(item_role);
-			
+				console.log(role);
 			}
 		}
 
