@@ -526,9 +526,9 @@ class Card extends MY_Controller {
 		if(isset($_POST)){
 
 		        print_r($_POST);
-			
+
 			/*--Save email--*/
-			if($_POST['addon_email']){
+			if(isset($_POST['addon_email'])){
 				$addon_email = $_POST['addon_email'];
 				$addon_email = explode(';',$addon_email);
 				for($i=0 ; $i<count($addon_email) ; $i++){
