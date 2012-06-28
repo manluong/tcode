@@ -272,7 +272,12 @@ class EmailL {
 	private function _build_email() {
 		$this->_ci->smtpapiheaderl->addFilterSetting('domainkeys', 'enable', 1);
 		$this->_ci->smtpapiheaderl->addFilterSetting('domainkeys', 'domain', 'www.8force.com');
-		$this->_ci->smtpapiheaderl->setUniqueArgs(array('email_sent_log_id'=>$this->_log_id));
+		$this->_ci->smtpapiheaderl->setUniqueArgs(
+			array(
+				'email_sent_log_id' => $this->_log_id,
+				'email_domain' => $this->_ci->domain
+			)
+		);
 
 		// Start converting arrays to strings
 		$to = array();
