@@ -525,7 +525,7 @@ class Card extends MY_Controller {
 	function iphone_save(){
 		if(isset($_POST)){
 
-			echo 'hello world 4';
+			echo 'hello world 5';
 
 			/*--Save email--*/
 			if(isset($_POST['addon_email'])){
@@ -542,7 +542,6 @@ class Card extends MY_Controller {
 					$data['addon_email'][$i]['type'] = trim($email[2]);
 					$data['addon_email'][$i]['is_default'] = trim($email[3]);
 				}
-			print_r($data);
 //			print_r($_POST);
 			}
 			/*--Save phone--*/
@@ -551,15 +550,16 @@ class Card extends MY_Controller {
 				$addon_tel = explode(';',$addon_tel);
 				for($i=0 ; $i<count($addon_tel) ; $i++){
 					$tel = explode(',',$addon_tel[$i]);
-						$_POST['addon_tel'][$i]['id'] = trim($tel[0]);
-						$_POST['addon_tel'][$i]['type'] = trim($tel[1]);
-						$_POST['addon_tel'][$i]['number'] = trim($tel[2]);
-						$_POST['addon_tel'][$i]['country'] = trim($tel[3]);
-						$_POST['addon_tel'][$i]['area'] = trim($tel[4]);
-						$_POST['addon_tel'][$i]['extension'] = trim($tel[5]);
-						$_POST['addon_tel'][$i]['is_default'] = trim($tel[6]);
+						$data['addon_tel'][$i]['id'] = trim($tel[0]);
+						$data['addon_tel'][$i]['type'] = trim($tel[1]);
+						$data['addon_tel'][$i]['number'] = trim($tel[2]);
+						$data['addon_tel'][$i]['country'] = trim($tel[3]);
+						$data['addon_tel'][$i]['area'] = trim($tel[4]);
+						$data['addon_tel'][$i]['extension'] = trim($tel[5]);
+						$data['addon_tel'][$i]['is_default'] = trim($tel[6]);
 				}
 			}
+			print_r($data);
 			/*--Save address--*/
 			if($_POST['addon_address']){
 				$addon_address = $_POST['addon_address'];
