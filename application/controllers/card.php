@@ -526,6 +526,7 @@ class Card extends MY_Controller {
 		if(isset($_POST)){
 
 			echo 'hello world';
+			die;
 			/*--Save email--*/
 			if(isset($_POST['addon_email'])){
 				$addon_email = $_POST['addon_email'];
@@ -538,7 +539,6 @@ class Card extends MY_Controller {
 						$_POST['addon_email'][$i]['is_default'] = trim($email[3]);
 				}
 			}
-			print_r($_POST);
 			/*--Save phone--*/
 			if($_POST['addon_tel']){
 				$addon_tel = $_POST['addon_tel'];
