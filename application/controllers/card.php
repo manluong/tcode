@@ -536,16 +536,9 @@ class Card extends MY_Controller {
 						$_POST['addon_email'][$i]['email'] = trim($email[1]);
 						$_POST['addon_email'][$i]['type'] = trim($email[2]);
 						$_POST['addon_email'][$i]['is_default'] = trim($email[3]);
-//						$array[$i]['id'] = $email[0];
-//						$array[$i]['email'] = $email[1];
-//						$array[$i]['type'] = $email[2];
-//						$array[$i]['is_default'] = $email[3];
 				}
-//			$_POST['addon_email'] = $array;
-
-			//print_r($array);
-
 			}
+			print_r($_POST);
 			/*--Save phone--*/
 			if($_POST['addon_tel']){
 				$addon_tel = $_POST['addon_tel'];
@@ -606,8 +599,7 @@ class Card extends MY_Controller {
 						$_POST['addon_extra'][$i]['birth_date'] = trim($extra[2]);
 				}
 			}
-			echo '<pre>';
-			print_r($_POST);
+
 			$id_save = $this->CardM->save();
 			echo 'success';
 		}
