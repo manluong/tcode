@@ -566,11 +566,11 @@ class Card extends MY_Controller {
 				$addon_address = explode(';',$addon_address);
 				for($i=0 ; $i<count($addon_address) ; $i++){
 					$add = explode(',',$addon_address[$i]);
-						$_POST['addon_address'][$i]['id'] = trim($add[0]);
-						$_POST['addon_address'][$i]['type'] = trim($add[1]);
-						$_POST['addon_address'][$i]['line_1'] = trim($add[2]);
-						$_POST['addon_address'][$i]['line_2'] = trim($add[3]);
-						$_POST['addon_address'][$i]['is_default'] = trim($add[4]);
+						$data['addon_address'][$i]['id'] = trim($add[0]);
+						$data['addon_address'][$i]['type'] = trim($add[1]);
+						$data['addon_address'][$i]['line_1'] = trim($add[2]);
+						$data['addon_address'][$i]['line_2'] = trim($add[3]);
+						$data['addon_address'][$i]['is_default'] = trim($add[4]);
 				}
 			}
 			/*--Save social--*/
@@ -579,9 +579,9 @@ class Card extends MY_Controller {
 				$addon_social = explode(';',$addon_social);
 				for($i=0 ; $i<count($addon_social) ; $i++){
 					$social = explode(',',$addon_social[$i]);
-						$_POST['addon_social'][$i]['id'] = trim($social[0]);
-						$_POST['addon_social'][$i]['type'] = trim($social[1]);
-						$_POST['addon_social'][$i]['name_id'] = trim($social[2]);
+						$data['addon_social'][$i]['id'] = trim($social[0]);
+						$data['addon_social'][$i]['type'] = trim($social[1]);
+						$data['addon_social'][$i]['name_id'] = trim($social[2]);
 				}
 			}
 			/*--Save notes--*/
@@ -590,8 +590,8 @@ class Card extends MY_Controller {
 				$addon_notes = explode(';',$addon_notes);
 				for($i=0 ; $i<count($addon_notes) ; $i++){
 					$note = explode(',',$addon_notes[$i]);
-						$_POST['addon_notes'][$i]['id'] = trim($note[0]);
-						$_POST['addon_notes'][$i]['note'] = trim($note[1]);
+						$data['addon_notes'][$i]['id'] = trim($note[0]);
+						$data['addon_notes'][$i]['note'] = trim($note[1]);
 				}
 			}
 			/*--Save extra--*/
@@ -600,13 +600,13 @@ class Card extends MY_Controller {
 				$addon_extra = explode(';',$addon_extra);
 				for($i=0 ; $i<count($addon_extra) ; $i++){
 					$extra = explode(',',$addon_extra[$i]);
-						$_POST['addon_extra'][$i]['id'] = trim($extra[0]);
-						$_POST['addon_extra'][$i]['gender'] = trim($extra[1]);
-						$_POST['addon_extra'][$i]['birth_date'] = trim($extra[2]);
+						$data['addon_extra'][$i]['id'] = trim($extra[0]);
+						$data['addon_extra'][$i]['gender'] = trim($extra[1]);
+						$data['addon_extra'][$i]['birth_date'] = trim($extra[2]);
 				}
 			}
 
-			$id_save = $this->CardM->save();
+			$id_save = $this->CardM->save($data);
 			echo 'success';
 		}
 		//echo '<pre>';
