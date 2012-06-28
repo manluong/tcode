@@ -606,7 +606,7 @@ class Card extends MY_Controller {
 						$_POST['addon_extra'][$i]['birth_date'] = trim($extra[2]);
 				}
 			}
-
+			print_r($_POST);
 			$id_save = $this->CardM->save();
 			echo 'success';
 		}
