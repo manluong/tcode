@@ -526,6 +526,7 @@ class Card extends MY_Controller {
 		if(isset($_POST)){
 
 			echo 'hello world';
+			print_r($_POST);
 			die;
 			/*--Save email--*/
 			if(isset($_POST['addon_email'])){
