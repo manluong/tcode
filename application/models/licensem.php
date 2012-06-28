@@ -41,7 +41,7 @@ class LicenseM extends MY_Model {
 
 
 	function get_license($license_id) {
-		if (APP_ROLE != 'TBOSS') return FALSE;
+		if (APP_ROLE != 'TBOSS' || APP_ROLE != 'TPROC') return FALSE;
 
 		$rs = $this->db->select()
 				->from($this->table)
@@ -94,7 +94,7 @@ class LicenseM extends MY_Model {
 	}
 
 	function assign_license($license_id_or_name, $tenant_id, $recurring=0, $start='', $end='') {
-		if (APP_ROLE != 'TBOSS') return FALSE;
+		if (APP_ROLE != 'TBOSS' || APP_ROLE != 'TPROC') return FALSE;
 
 		if (is_numeric($license_id_or_name)) {
 			$license_id = $license_id_or_name;
@@ -117,7 +117,7 @@ class LicenseM extends MY_Model {
 	}
 
 	function export_license_rules($tenant_id) {
-		if (APP_ROLE != 'TBOSS') return FALSE;
+		if (APP_ROLE != 'TBOSS' || APP_ROLE != 'TPROC') return FALSE;
 
 		$rs = $this->db->select()
 				->from('license_rules AS r')
