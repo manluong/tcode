@@ -542,7 +542,7 @@ class Card extends MY_Controller {
 						$array[$i]['is_default'] = $email[3];
 				}
 			print_r($array);
-			die;
+
 			}
 			/*--Save phone--*/
 			if($_POST['addon_tel']){

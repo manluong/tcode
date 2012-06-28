@@ -35,6 +35,7 @@
 </div>
 
 <div id="boxes">
+	
 	<div id="invoice_fillter">
 		<div class="invoice_title"><span class="arrow_title"></span><span>Fillter</span></div>
 		<div id="helpdesk_fillter">
@@ -134,7 +135,8 @@
 	</div>
 
 	<div id="invoice_cases">
-		<div id="top_cases">
+		<div id="top_cases" style="position:relative;">
+			<div id="helpdesk_loadding"></div>
 			<div class="invoice_title" style="width:550px;"><span class="arrow_title"></span><span>Cases</span></div>
 		</div>
 

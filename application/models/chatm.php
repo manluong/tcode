@@ -5,7 +5,7 @@
             parent::__construct();
 	}
         function forward(){
-            $ch = curl_init("http://46.137.219.16:5280/http-bind");
+            $ch = curl_init("http://jabber.8fcloud.net:5280/http-bind");
             curl_setopt($ch, CURLOPT_HEADER, 0);
             curl_setopt($ch, CURLOPT_POST, 1);
             curl_setopt($ch, CURLOPT_POSTFIELDS, file_get_contents('php://input'));
@@ -28,19 +28,19 @@
 
             $context = stream_context_create(array(
                     'http' => array(
-                            'header'  => "Authorization: Basic bGFtcHA6dGVsY29zb25AMTk=" 
+                            'header'  => "Authorization: Basic bGFtcHA6dGVsY29zb25AMTk="
                     )
             ));
-            $content = file_get_contents("http://46.137.219.16:8080/xmpp/create.php?name=$name&realname=".base64_encode($realname)."&company=$company",false,$context);
+            $content = file_get_contents("http://jabber.8fcloud.net:8080/xmpp/create.php?name=$name&realname=".base64_encode($realname)."&company=$company",false,$context);
             return $content;
         }
         function delete_user($name,$company){
             $context = stream_context_create(array(
                     'http' => array(
-                            'header'  => "Authorization: Basic bGFtcHA6dGVsY29zb25AMTk=" 
+                            'header'  => "Authorization: Basic bGFtcHA6dGVsY29zb25AMTk="
                     )
             ));
-            $content = file_get_contents("http://46.137.219.16:8080/xmpp/delete.php?name=$name&company=$company",false,$context);
+            $content = file_get_contents("http://jabber.8fcloud.net:8080/xmpp/delete.php?name=$name&company=$company",false,$context);
             return $content;
         }
     }

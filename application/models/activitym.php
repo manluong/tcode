@@ -54,7 +54,7 @@ class ActivityM extends MY_Model {
 			$this->db->select()
 				->from($this->table)
 				->order_by('modified_stamp', 'desc')
-				->limit($limit);
+				->limit($limit+10);
 
 			if ($sticky != 0) $this->db->where('sticky', 1);
 			if ($bookmark_id != 0) $this->db->where('id <', $bookmark_id);
@@ -64,7 +64,7 @@ class ActivityM extends MY_Model {
 
 			if ($rs->num_rows() == 0) return $result;
 
-			foreach ($rs->result_array() as $k=>$v) {
+			foreach ($rs->result_array() as $v) {
 				$display = ($v['display'] == 1);
 				$bookmark_id = $v['id'];
 
@@ -105,12 +105,20 @@ class ActivityM extends MY_Model {
 		if ($action_line === FALSE) return '';
 
 		//get various details of this action
+		$app_name = $this->AppM->get_name($activity['app_id']);
 		$app_language_name = $this->AppM->get_language_name($activity['app_id']);
 		$app_model = $this->AppM->get_model($activity['app_id']);
 		$this->load->model($app_model);
 		$app_data_name = $this->$app_model->get_data_name($activity['app_data_id']);
 
 		$action_person = $this->CardM->get_name($activity['created_card_id']);
+
+		//find out type of event
+		$type = explode('_', $activity['type']);
+		$data_active_events = array('create', 'update');
+		if (in_array($type[1], $data_active_events)) {
+			$app_data_name = '<a href="/'.$app_name.'/view/'.$activity['app_data_id'].'">'.$app_data_name.'</a>';
+		}
 
 		//update the event line with the details and return the result
 		$search = array('#app_name#', '#data_name#', '#action_person#');

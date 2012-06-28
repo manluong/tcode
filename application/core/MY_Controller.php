@@ -191,13 +191,16 @@ class MY_Controller extends CI_Controller {
 
 		//TBOSS - For internal use
 		//TSUB - Tenant software
+		//TPROC - For cron tasks
 		if ($this->domain === 'my') {
 			define('APP_ROLE', 'TBOSS');
-			$this->debug['app_role'] = 'TBOSS';
+		} elseif ($this->domain === 'process') {
+			define('APP_ROLE', 'TPROC');
 		} else {
 			define('APP_ROLE', 'TSUB');
-			$this->debug['app_role'] = 'TSUB';
 		}
+
+		$this->debug['app_role'] = APP_ROLE;
 	}
 
 	function _setup_db($domain='') {

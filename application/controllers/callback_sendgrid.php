@@ -24,7 +24,7 @@ class Callback_sendgrid extends MY_Controller {
 		foreach($json_result[0] AS $json) {
 			$sendgrid_response = json_decode($json, TRUE);
 			$this->EmailM->update_status(
-					$sendgrid_response['log_email_id'],
+					$sendgrid_response['email_sent_log_id'],
 					$sendgrid_response['email'],
 					$sendgrid_response['event'],
 					$sendgrid_response['timestamp']

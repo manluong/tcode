@@ -220,6 +220,7 @@ class FileL {
 
 	function read_from_s3($filename) {
 		$object = S3::getObject($this->bucket, $this->s3_path.$filename, FALSE);
+		$this->write_to_temp($object->body, $filename);	//store a copy in the temp folder
 		return $object->body;
 	}
 
