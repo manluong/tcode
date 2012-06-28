@@ -525,7 +525,7 @@ class Card extends MY_Controller {
 	function iphone_save(){
 		if(isset($_POST)){
 
-			echo 'hello world 3';
+			echo 'hello world 4';
 
 			/*--Save email--*/
 			if(isset($_POST['addon_email'])){
@@ -533,17 +533,17 @@ class Card extends MY_Controller {
 				$addon_email = explode(';',$addon_email);
 				for($i=0 ; $i<count($addon_email) ; $i++){
 					$email = explode(',',$addon_email[$i]);
-					$_POST['addon_email'][$i]['id'] = trim($email[0]);
-					$_POST['addon_email'][$i]['email'] = trim($email[1]);
-					$_POST['addon_email'][$i]['type'] = trim($email[2]);
-					$_POST['addon_email'][$i]['is_default'] = trim($email[3]);
+//					$_POST['addon_email'][$i]['id'] = trim($email[0]);
+//					$_POST['addon_email'][$i]['email'] = trim($email[1]);
+//					$_POST['addon_email'][$i]['type'] = trim($email[2]);
+//					$_POST['addon_email'][$i]['is_default'] = trim($email[3]);
 					$data['addon_email'][$i]['id'] = trim($email[0]);
 					$data['addon_email'][$i]['email'] = trim($email[1]);
 					$data['addon_email'][$i]['type'] = trim($email[2]);
 					$data['addon_email'][$i]['is_default'] = trim($email[3]);
 				}
 			print_r($data);
-			print_r($_POST);
+//			print_r($_POST);
 			}
 			/*--Save phone--*/
 			if($_POST['addon_tel']){
