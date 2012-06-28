@@ -240,6 +240,21 @@ class Invoice extends MY_Controller {
 			->output_json();
 	}
 
+	function ajax_save_terms() {
+		$terms_id = $this->Invoice_TermsM->save();
+		if ($terms_id === FALSE) {
+			$this->RespM->set_success(FALSE)
+				->set_message($this->Invoice_TermsM->get_error_string())
+				->set_details($this->Invoice_TermsM->field_errors)
+				->output_json();
+			exit;
+		}
+
+		$this->RespM->set_success(TRUE)
+			->set_details($this->Invoice_TermsM->get($terms_id))
+			->output_json();
+	}
+
 	function get_product() {
 		$term = $this->input->get('term');
 		$product_list = $this->InvoiceM->get_product_by_name($term);

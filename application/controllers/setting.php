@@ -55,10 +55,20 @@ class Setting extends MY_Controller {
 		$data_configure['settings'] = $this->SettingM->get_for_configuration($app_name);
 		$data_configure['override_options'] = $this->override;
 
-		if ($app_name == 'invoice') {
+		if ($app_name == 'email') {
+			$this->load->model('Email_TemplateM');
+			$data_configure['templates'] = $this->Email_TemplateM->get_list();
+		} else if ($app_name == 'invoice') {
+			$this->load->model('Invoice_TermsM');
+			$data_configure['terms_opts'] = $this->Invoice_TermsM->get_list();
 			$data_configure['opts'] = array('payment_type' => 'Payment Type');
 		} else if ($app_name == 'helpdesk') {
-			$data_configure['opts'] = array('priority' => 'Priority', 'case_type' => 'Case Type');
+			$data_configure['allow_new_case_opts'] = array(
+				1 => 'Customer Only',
+				2 => 'All Contact',
+				3 => 'Anyone'
+			);
+			$data_configure['opts'] = array('status' => 'Status', 'case_type' => 'Case Type', 'priority' => 'Priority');
 		}
 		if (isset($data_configure['opts'])) {
 			foreach ($data_configure['opts'] as $k => $v) {

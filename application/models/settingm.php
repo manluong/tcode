@@ -10,7 +10,7 @@ class SettingM extends MY_Model {
 			),
 			'timezone' => array(
 				'type' => 'string'
-			)
+			),
 		),
 
 		'email' => array(
@@ -37,8 +37,20 @@ class SettingM extends MY_Model {
 			),
 			'quotation_title' => array(
 				'type' => 'string'
-			)
-		)
+			),
+		),
+
+		'helpdesk' => array(
+			'mail_delimiter' => array(
+				'type' => 'string'
+			),
+			'allow_rating' => array(
+				'type' => 'boolean'
+			),
+			'allow_new_case' => array(
+				'type' => 'numeric'
+			),
+		),
 	);
 
 	function __construct() {
