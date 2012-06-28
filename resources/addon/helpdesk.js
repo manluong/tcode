@@ -149,6 +149,8 @@ function load_helpdesk_list(data){
 }
 
 function helpdesk_fillter(card_id){
+	$('#main_cases').hide();
+	$('#helpdesk_loadding').show();
 	var status = $('#status').val();
 	var group = $('#group').val();
 	var type = $('#type').val();
@@ -182,7 +184,8 @@ function helpdesk_fillter(card_id){
 }
 
 function helpdesk_fillter_all(){
-
+	$('#main_cases').hide();
+	$('#helpdesk_loadding').show();
 	var status = $('#status').val();
 	var group = $('#group').val();
 	var type = $('#type').val();
@@ -224,6 +227,8 @@ function helpdesk_fillter_all(){
 }
 
 function load_datatable(data){
+	$('#helpdesk_loadding').hide();
+	$('#main_cases').show();
 	$('#example').dataTable( {
 		"sDom": "<<'pull-right'p>>t<<'pull-right'p>lfi>",
 		"sPaginationType": "bootstrap",
@@ -255,6 +260,7 @@ function load_datatable(data){
 		'<option value="-1">All</option>'+
 		'</select>'
 	}})
+	
 }
 
 //HELPDESK EDIT

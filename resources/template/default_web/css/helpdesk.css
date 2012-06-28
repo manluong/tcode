@@ -236,4 +236,13 @@ select{
     width: 860px;
 	float:left !important;
 }
-
+#helpdesk_loadding{
+	width:127px;
+	height:127px;
+	background:url(../img/helpdesk_loading.gif);
+	position:absolute;
+	top:53px;
+	left:365px;
+	display:none;
+	z-index: 9999;
+}

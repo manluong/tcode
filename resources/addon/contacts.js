@@ -204,12 +204,9 @@ function parse_contact_fillter(data){
 		}
 
 		var role = '';
-		
 		if(item.role != ''){
 			for(j in item.role){
-				var item_role = item.role[j];
-				role = item_role;
-				console.log(role);
+				//role = item.role[j];
 			}
 		}
 
