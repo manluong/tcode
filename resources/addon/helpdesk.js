@@ -172,7 +172,14 @@ function helpdesk_fillter(card_id){
 				 var row  = new Array();
 				 row[0] = '<a href="/helpdesk/edit/'+item.id+'">'+item.subject+'</a>';
 				 row[1] = item.cc_email;
-				 row[2] = item.assign_id;
+				 row[2] = '';
+				 if(item.addon_card != null){
+					for(j in item.addon_card){
+						addon = item.addon_card[j];
+						console.log(addon);
+						row[2] = addon.first_name+' '+addon.last_name;
+					}
+				 }
 				 var date = item.created_stamp;
 				 date = date.split('-');
 				 row[3] = date[0]+'/'+date[1]+'/'+date[2];
@@ -215,7 +222,12 @@ function helpdesk_fillter_all(){
 				 var row  = new Array();
 				 row[0] = '<a href="/helpdesk/edit/'+item.id+'">'+item.subject+'</a>';
 				 row[1] = item.cc_email;
-				 row[2] = item.assign_id;
+				 if(item.addon_card != null){
+					for(j in item.addon_card){
+						addon = item.addon_card[j];
+						row[2] = addon.first_name+' '+addon.last_name;
+					}
+				 }
 				 var date = item.created_stamp;
 				 date = date.split('-');
 				 row[3] = date[0]+'/'+date[1]+'/'+date[2];

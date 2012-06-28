@@ -78,7 +78,7 @@ class Helpdesk extends MY_Controller {
 
 	function helpdesk_fillter(){
 		//Set order
-		$order_by = 'created_stamp  DESC';
+		$order_by = 'a_helpdesk.created_stamp  DESC';
 		$this->HelpdeskM->set_order_by($order_by);
 		$where = array();
 		//Check Customer
@@ -116,15 +116,18 @@ class Helpdesk extends MY_Controller {
 		}
 
 		$this->HelpdeskM->where = $where;
+		//$this->db->join('card','card.id = a_helpdesk.assign_id');
 
 		$result = $this->HelpdeskM->get_list();
+		//print_r($result);
+		//die;
 		$data = json_encode($result);
 		echo $data;
 	}
 
 	function helpdesk_fillter_all(){
 		$where = array();
-
+		
 		$status = $this->input->post('status');
 		if(!empty($status)){
 			$where[] = "status='$status'";
@@ -394,7 +397,7 @@ class Helpdesk extends MY_Controller {
 			'status' => $this->input->post('status'),
 			'type' => $this->input->post('type'),
 			'priority' => $this->input->post('priority'),
-			'comment' => strip_tags($this->input->post('comment')),
+			'comment' => htmlentities($this->input->post('comment')),
 			'private' => $this->input->post('pri'),
 			'helpdesk_id' => $id_helpdesk ,
             'active' => 0,
