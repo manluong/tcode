@@ -11,6 +11,7 @@ class EmailL {
 	private $_bcc = array();
 
 	private $_replace_value = array();
+	private $_app_name = 'email';
 	private $_template = '';
 
 	private $_subject = '';
@@ -90,7 +91,8 @@ class EmailL {
 		return $this;
 	}
 
-	function set_template($template) {
+	function set_template($app_name, $template) {
+		$this->_app_name = $app_name;
 		$this->_template = $template;
 
 		return $this;
@@ -175,7 +177,7 @@ class EmailL {
 		}
 
 		if ($this->_content === '') {
-			$this->_content = $this->_ci->EmailM->get_template_content($this->_template);
+			$this->_content = $this->_ci->EmailM->get_template_content($this->_app_name, $this->_template);
 		}
 	}
 

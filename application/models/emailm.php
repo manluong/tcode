@@ -45,10 +45,12 @@ class EmailM extends MY_Model {
 		return $results;
 	}
 
-	//TODO: change to use app_name + template_name?
-	function get_template_content($template) {
+	function get_template_content($app_name, $template) {
+		$app_id = $this->AppM->get_id($app_name);
+
 		$query = $this->db->select('content')
 			->from('email_template')
+			->where('app_id', $app_id)
 			->where('name', $template)
 			->get();
 		$i = $query->row_array();
