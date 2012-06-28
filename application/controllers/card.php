@@ -12,6 +12,7 @@ class Card extends MY_Controller {
 		$this->load->model('Card_TelM');
 		$this->load->model('InvoiceM');
 		$this->load->model('HelpdeskM');
+		//
 	}
 
 	function index(){
@@ -523,20 +524,25 @@ class Card extends MY_Controller {
 
 	function iphone_save(){
 		if(isset($_POST)){
-			//print_r($_POST);
-			//die;
-				
+
+
 			/*--Save email--*/
-			if($_POST['addon_email']){
+			if(isset($_POST['addon_email'])){
 				$addon_email = $_POST['addon_email'];
 				$addon_email = explode(';',$addon_email);
 				for($i=0 ; $i<count($addon_email) ; $i++){
 					$email = explode(',',$addon_email[$i]);
-						$_POST['addon_email'][$i]['id'] = trim($email[0]);
-						$_POST['addon_email'][$i]['email'] = trim($email[1]);
-						$_POST['addon_email'][$i]['type'] = trim($email[2]);
-						$_POST['addon_email'][$i]['is_default'] = trim($email[3]);
+//						$_POST['addon_email'][$i]['id'] = trim($email[0]);
+//						$_POST['addon_email'][$i]['email'] = trim($email[1]);
+//						$_POST['addon_email'][$i]['type'] = trim($email[2]);
+//						$_POST['addon_email'][$i]['is_default'] = trim($email[3]);
+						$array[$i]['id'] = $email[0];
+						$array[$i]['email'] = $email[1];
+						$array[$i]['type'] = $email[2];
+						$array[$i]['is_default'] = $email[3];
 				}
+			print_r($array);
+			die;
 			}
 			/*--Save phone--*/
 			if($_POST['addon_tel']){

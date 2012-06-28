@@ -27,6 +27,18 @@ class SettingM extends MY_Model {
 				'type' => 'string'
 			),
 		),
+
+		'invoice' => array(
+			'headline' => array(
+				'type' => 'string'
+			),
+			'invoice_title' => array(
+				'type' => 'string'
+			),
+			'quotation_title' => array(
+				'type' => 'string'
+			)
+		)
 	);
 
 	function __construct() {
@@ -224,7 +236,7 @@ class SettingM extends MY_Model {
 	function get_options_for_configuration($app_name, $name, $id_as_key=FALSE) {
 		$app_id = $this->AppM->get_id($app_name);
 
-		$results = $this->db->select('id, value, language_key')
+		$results = $this->db->select('id, value, sort_order, language_key')
 					->from('core_select')
 					->where('app_id', $app_id)
 					->where('name', $name)

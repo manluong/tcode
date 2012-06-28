@@ -534,4 +534,8 @@ class InvoiceM extends MY_Model {
 		//plain content of email is in $data['text'];
 
 	}
+
+	public function get_data_name($id) {
+		return 'Invoice Number: '.$id;
+	}
 }

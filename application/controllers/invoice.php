@@ -83,7 +83,7 @@ class Invoice extends MY_Controller {
 			'invoice' => $invoice,
 			//'customer_name' => '',
 			'tax' => $this->TaxM->get_list(),
-			'terms_content' => $invoice['terms_id'] ? $this->Invoice_TermsM->get_content($invoice['terms_id']) : '',
+			'terms_content' => $invoice['terms_id'] ? $this->Invoice_TermsM->get_content($invoice['terms_id']) : $invoice['terms_content'],
 			'quickjump' => $this->get_quickjump()
 		);
 
@@ -100,7 +100,7 @@ class Invoice extends MY_Controller {
 			'invoice' => $invoice,
 			//'customer_name' => '',
 			'tax' => $this->TaxM->get_list(),
-			'terms_content' => $invoice['terms_id'] ? $this->Invoice_TermsM->get_content($invoice['terms_id']) : ''
+			'terms_content' => $invoice['terms_id'] ? $this->Invoice_TermsM->get_content($invoice['terms_id']) : $invoice['terms_content']
 		);
 
 		$html = $this->load->view(get_template().'/invoice/pdf', $content, TRUE);
@@ -116,7 +116,7 @@ class Invoice extends MY_Controller {
 			'invoice' => $invoice,
 			//'customer_name' => '',
 			'tax' => $this->TaxM->get_list(),
-			'terms_content' => $invoice['terms_id'] ? $this->Invoice_TermsM->get_content($invoice['terms_id']) : ''
+			'terms_content' => $invoice['terms_id'] ? $this->Invoice_TermsM->get_content($invoice['terms_id']) : $invoice['terms_content']
 		);
 
 		$html = $this->load->view(get_template().'/invoice/print', $content, TRUE);
@@ -149,7 +149,7 @@ class Invoice extends MY_Controller {
 			'tax' => $this->TaxM->get_list(),
 			'tax_use' => $this->Tax_UseM->get_list(),
 			'terms' => $this->Invoice_TermsM->get_list(),
-			'terms_content' => $invoice['terms_id'] ? $this->Invoice_TermsM->get_content($invoice['terms_id']) : '',
+			'terms_content' => $invoice['terms_id'] ? $this->Invoice_TermsM->get_content($invoice['terms_id']) : $invoice['terms_content'],
 			'quickjump' => $this->get_quickjump()
 		);
 
