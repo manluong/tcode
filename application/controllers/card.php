@@ -541,7 +541,8 @@ class Card extends MY_Controller {
 						$array[$i]['type'] = $email[2];
 						$array[$i]['is_default'] = $email[3];
 				}
-			print_r($array);
+			print_r($_POST['addon_email']);
+			//print_r($array);
 
 			}
 			/*--Save phone--*/
