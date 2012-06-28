@@ -525,7 +525,7 @@ class Card extends MY_Controller {
 	function iphone_save(){
 		if(isset($_POST)){
 
-
+			echo 'hello world';
 			/*--Save email--*/
 			if(isset($_POST['addon_email'])){
 				$addon_email = $_POST['addon_email'];
