@@ -37,7 +37,7 @@ class Email_send extends MY_Controller {
 		$this->emaill
 			->set_card(211)
 			->set_subject('test')
-			->set_attachment_id('ac57b26f30fcb8a3134416f6744fce07')
+			//->set_attachment_id('ac57b26f30fcb8a3134416f6744fce07')
 			->set_template('testplate')
 			->set_replace_value($replace)
 			->set_from('docs@telcoson.com', 'Docs');
