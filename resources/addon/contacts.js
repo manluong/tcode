@@ -45,7 +45,7 @@ function load_upload_form(){
 	 uploader.bind('FileUploaded', function(up, file,response) {
 	    jQuery('#' + file.id + " b").html("");
 	     var filename = response.response;
-	     jQuery("#contact").html("<img src='/card/get_image/"+filename+"' />");
+	     jQuery("#avatar").html("<img src='/card/get_image/"+filename+"' />");
 	});
 	uploader.init();
 	jQuery('input[type="file"]').change(function(){

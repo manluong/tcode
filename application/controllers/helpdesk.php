@@ -416,28 +416,13 @@ class Helpdesk extends MY_Controller {
 		$where = array();
 		$where[] = "helpdesk_id='$id_helpdesk'";
 		$this->Helpdesk_CommentM->where = $where;
+		
 		$result = $this->Helpdesk_CommentM->get_list();
-		print_r($result);
-		die;
 		
-		if($id_helpdesk!=0){
-			$comment = $this->Helpdesk_CommentM->get_comment_list($id_helpdesk);
-			//Get data helpdesk
-			$result = $this->HelpdeskM->get($id_helpdesk);
-		}
+		//print_r($result);
+		//die;
+		echo json_encode($result);
 		
-		echo json_encode($comment);
-		
-		/*
-		$data_ajax = array(
-           'comment' => $comment,
-		   'result' => $result,
-		   'comment_id' => $comment_id,
-		);
-
-		$ajax_content = $this->load->view(get_template().'/helpdesk/ajax_updateComment',$data_ajax ,true);
-		echo $ajax_content  ;
-		*/
 	}
 
 	function save_insert_helpdesk(){

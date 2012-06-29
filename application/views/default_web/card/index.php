@@ -1,8 +1,6 @@
 <link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/nanoscroller.css" />
-<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/jquery.nanoscroller.min.js"></script>
-<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/jquery.smooth-scroll.min.js"></script>
-<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/overthrow.min"></script>
-<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/ga.js"></script>
+<script type="text/javascript" src="/resources/addon/jquery.nanoscroller.min.js"></script>
+<script type="text/javascript" src="/resources/addon/overthrow.min"></script>
 <script type="text/javascript" src="/resources/addon/contacts.js"></script>
 <script>
 $(document).ready(function(){
@@ -43,6 +41,7 @@ $(document).ready(function(){
 				<ul id="contact_list" class="addressBook content">
 					<li class="letter staff customers vendors a-title">a</li>
 					<?php
+						//TODO: This list should be implemented in the browser side. e.g. use $.get to pull list data from server.
 						$current_alphabet = 0;
 						$alphabets = array('a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z');
 
@@ -50,8 +49,10 @@ $(document).ready(function(){
 						for($start=0; $start<$list_count; $start++) {
 							$l = $list[$start];
 
+							//if the name does not match the current alphabet, it means it's time to move on to the next alphabet
 							if (strtolower(substr($l['first_name'], 0, 1)) != $alphabets[$current_alphabet]) {
 								$current_alphabet++;
+								if ($current_alphabet == 26) break;
 								echo '<li class="letter staff customers vendors ',$alphabets[$current_alphabet],'-title">',$alphabets[$current_alphabet],'</li>';
 								$start--;
 								continue;

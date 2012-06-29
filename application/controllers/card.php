@@ -12,7 +12,6 @@ class Card extends MY_Controller {
 		$this->load->model('Card_TelM');
 		$this->load->model('InvoiceM');
 		$this->load->model('HelpdeskM');
-		//
 	}
 
 	function index(){
@@ -519,13 +518,12 @@ class Card extends MY_Controller {
 		echo json_encode($data);
 		exit;
 	}
+	/*--Iphone--*/
 	
 	function iphone(){
 		$this->load->view(get_template().'/card/test_iphone');
 	}
 	
-	/*--Iphone--*/
-
 	function iphone_save(){
 		$data = array() ;
 		if(isset($_POST)){
