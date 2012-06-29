@@ -29,6 +29,9 @@ class SettingM extends MY_Model {
 		),
 
 		'invoice' => array(
+			'logo' => array(
+				'type' => 'string'
+			),
 			'headline' => array(
 				'type' => 'string'
 			),

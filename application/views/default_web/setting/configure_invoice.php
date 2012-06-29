@@ -1,3 +1,5 @@
+<script type="text/javascript" src="/resources/addon/plupload/js/plupload.full.js"></script>
+
 <div class="top-setting">
 	<div><h2>SETTINGS</h2><span> Invoice</span></div>
 	<input type="button" class="btnX" />
@@ -36,8 +38,17 @@
 			<ul>
 				<li>
 					<span class="lb">Logo</span>
-					<span class="fillter_input">
-					</span>
+					<div id="setting-upload">
+						<button type="button" id="select-file" class="btn btn-inverse btn-mini">SELECT FILE</button>
+						<div id="file-list"></div>
+						<div id="logo">
+							<?php if (isset($settings['tenant']['logo']['value'])): ?>
+							<img src="<?php echo $settings['tenant']['logo']['value'] ?>" />
+							<?php endif ?>
+						</div>
+						<input type="hidden" id="logo-input" name="tenant-logo" value="<?=(isset($settings['tenant']['logo']['value']))?$settings['tenant']['logo']['value']:''?>" />
+						<input type="hidden" name="tenant-logo-override" value="0" />
+					</div>
 				</li>
 				<li>
 					<span class="lb">Headline</span>
@@ -293,6 +304,42 @@ $(document).ready(function() {
 				}
 			}
 		});
+	});
+
+	var uploader = new plupload.Uploader({
+		runtimes : 'gears,html5,flash,silverlight,browserplus',
+		browse_button : 'select-file',
+		container: 'setting-upload',
+		max_file_size : '10mb',
+		url : '/setting/ajax_upload',
+		filters : [{title : "Image files", extensions : "jpg,gif,png"}]
+	});
+
+	uploader.bind('FilesAdded', function(up, files) {
+		var html = '';
+		for (var i in files) {
+			html += '<div id="'+files[i].id+'">'+files[i].name+'('+plupload.formatSize(files[i].size)+') <b></b></div>';
+		}
+		$('#file-list').html(html);
+	});
+
+	uploader.bind('UploadProgress', function(up, file) {
+		$('#'+file.id+' b').html('<span>'+file.percent+'%</span>');
+	});
+
+	uploader.bind('FileUploaded', function(up, file, data) {
+		var resp = $.parseJSON(data.response);
+		if (resp.success) {
+			$('#'+file.id).html('');
+			$('#logo-input').val('/file/read/'+resp.details.id);
+			$('#logo').html('<img src="/file/read/'+resp.details.id+'" />');
+		}
+	});
+
+	uploader.init();
+
+	$('input[type="file"]').change(function() {
+		uploader.start();
 	});
 });
 </script>

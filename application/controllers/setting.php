@@ -165,6 +165,22 @@ class Setting extends MY_Controller {
 	}
 	 */
 
+	function ajax_upload() {
+		$this->load->library('filel');
+		$file_info = $this->filel->save('file', $this->url['id_plain']);
+
+		if ($file_info === FALSE) {
+			$this->RespM->set_success(FALSE)
+				->set_message($this->filel->error_messages)
+				->output_json();
+			exit;
+		}
+
+		$this->RespM->set_success(TRUE)
+			->set_details($file_info)
+			->output_json();
+	}
+
 	//make sure the $app_name is valid
 	private function verify_app($app_name) {
 		$app_list = array();
