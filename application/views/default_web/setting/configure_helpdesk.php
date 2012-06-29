@@ -99,15 +99,15 @@
 		<table id="tbl-<?php echo $k ?>" cellspacing="0" cellpadding="0" class="tbList">
 			<tbody>
 				<?php foreach (${$k.'_opts'} as $opt): ?>
-				<tr id="tr-opt-<?php echo $opt['id'] ?>">
+				<tr class="tr-opt-<?php echo $opt['id'] ?>">
 					<td>
-						<div id="div-opt-<?php echo $opt['id'] ?>">
+						<div class="div-opt-<?php echo $opt['id'] ?>">
 							<span style="width: 490px;"><?php echo $opt['value'] ?></span>
 							<div class="pull-right">
-								<button type="button" class="btn btn-primary btn-mini change-option" data-id="<?php echo $opt['id'] ?>">Change</button>
+								<button type="button" class="btn btn-primary btn-mini change-option" data-name="<?php echo $k ?>" data-id="<?php echo $opt['id'] ?>">Change</button>
 							</div>
 						</div>
-						<div id="frm-opt-<?php echo $opt['id'] ?>" style="display: none;">
+						<div class="frm-opt-<?php echo $opt['id'] ?>" style="display: none;">
 						<form action="/setting/ajax_save_options/helpdesk/<?php echo $k ?>" method="post">
 							<span style="width: 300px;">
 								<input type="hidden" name="id" value="<?php echo $opt['id'] ?>" />
@@ -115,7 +115,7 @@
 								<input type="hidden" name="sort_order[<?php echo $opt['id'] ?>]" value="<?php echo $opt['sort_order'] ?>" />
 							</span>
 							<div class="pull-right">
-								<button type="button" class="btn btn-primary btn-mini save-option" data-name="<?php echo $k ?>" data-id="<?php echo $opt['id'] ?>">Save</button> or <a href="#" class="cancel-option" data-id="<?php echo $opt['id'] ?>">cancel</a>
+								<button type="button" class="btn btn-primary btn-mini save-option" data-name="<?php echo $k ?>" data-id="<?php echo $opt['id'] ?>">Save</button> or <a href="#" class="cancel-option" data-name="<?php echo $k ?>" data-id="<?php echo $opt['id'] ?>">cancel</a>
 							</div>
 						</form>
 						</div>
@@ -134,13 +134,13 @@ $(document).ready(function() {
 	function get_option_template(name, data, is_new) {
 		var html = '' +
 			'<td>' +
-				'<div id="div-opt-'+data.id+'">' +
+				'<div class="div-opt-'+data.id+'">' +
 					'<span style="width: 490px;">'+data.value+'</span>' +
 					'<div class="pull-right">' +
-						'<button type="button" class="btn btn-primary btn-mini change-option" data-id="'+data.id+'">Change</button>' +
+						'<button type="button" class="btn btn-primary btn-mini change-option" data-name="'+name+'" data-id="'+data.id+'">Change</button>' +
 					'</div>' +
 				'</div>' +
-				'<div id="frm-opt-'+data.id+'" style="display: none;">' +
+				'<div class="frm-opt-'+data.id+'" style="display: none;">' +
 				'<form action="/setting/ajax_save_options/helpdesk/'+name+'" method="post">' +
 					'<span style="width: 300px;">' +
 						'<input type="hidden" name="id" value="'+data.id+'" />' +
@@ -148,14 +148,14 @@ $(document).ready(function() {
 						'<input type="hidden" name="sort_order['+data.id+']" value="'+data.sort_order+'" />' +
 					'</span>' +
 					'<div class="pull-right">' +
-						'<button type="button" class="btn btn-primary btn-mini save-option" data-name="'+name+'" data-id="'+data.id+'">Save</button> or <a href="#" class="cancel-option" data-id="'+data.id+'">cancel</a>' +
+						'<button type="button" class="btn btn-primary btn-mini save-option" data-name="'+name+'" data-id="'+data.id+'">Save</button> or <a href="#" class="cancel-option" data-name="'+name+'" data-id="'+data.id+'">cancel</a>' +
 					'</div>' +
 				'</form>' +
 				'</div>' +
 			'</td>';
 
 		if (is_new) {
-			html = '<tr id="tr-opt-'+data.id+'">'+html+'</tr>';
+			html = '<tr class="tr-opt-'+data.id+'">'+html+'</tr>';
 		}
 		return html;
 	}
@@ -169,6 +169,11 @@ $(document).ready(function() {
 		var checked = $(this).is(':checked') ? 1 : 0;
 		$('input[name="'+$(this).data('name')+'"]').val(checked);
 	});
+
+	$('.add-option').die('click');
+	$('.change-option').die('click');
+	$('.cancel-option').die('click');
+	$('.save-option').die('click');
 
 	$('.add-option').on('click', function (e) {
 		var btn = $(this);
@@ -188,23 +193,25 @@ $(document).ready(function() {
 					var html = get_option_template(btn.data('name'), resp.details[0], true);
 					$('#tbl-' + btn.data('name') + ' tbody').append(html);
 				} else {
-					alert('Error');
+					alert(resp.message);
 				}
 			}
 		});
 	});
 
 	$('.change-option').live('click', function (e) {
+		var name = $(this).data('name');
 		var id = $(this).data('id');
-		$('#div-opt-'+id).hide();
-		$('#frm-opt-'+id).show();
+		$('#tbl-'+name+' .div-opt-'+id).hide();
+		$('#tbl-'+name+' .frm-opt-'+id).show();
 	});
 
 	$('.cancel-option').live('click', function (e) {
 		e.preventDefault();
+		var name = $(this).data('name');
 		var id = $(this).data('id');
-		$('#frm-opt-'+id).hide();
-		$('#div-opt-'+id).show();
+		$('#tbl-'+name+' .frm-opt-'+id).hide();
+		$('#tbl-'+name+' .div-opt-'+id).show();
 	});
 
 	$('.save-option').live('click', function (e) {
@@ -222,12 +229,13 @@ $(document).ready(function() {
 			success: function(resp) {
 				btn.html('Save').removeAttr('disabled').removeClass('disabled');
 				if (resp.success) {
+					var name = btn.data('name');
 					var id = btn.data('id');
-					$('#tr-opt-'+id).html(get_option_template(btn.data('name'), resp.details[0], false));
-					$('#frm-opt-'+id).hide();
-					$('#div-opt-'+id).show();
+					$('#tbl-'+name+' .tr-opt-'+id).html(get_option_template(btn.data('name'), resp.details[0], false));
+					$('#tbl-'+name+' .frm-opt-'+id).hide();
+					$('#tbl-'+name+' .div-opt-'+id).show();
 				} else {
-					alert('Error');
+					alert(resp.message);
 				}
 			}
 		});

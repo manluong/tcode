@@ -4,10 +4,14 @@ class Invoice_TermsM extends MY_Model {
 
 	public $data_fields = array(
 		'name' => array(
-			'type' => 'text'
+			'type' => 'text',
+			'required' => true,
+			'allow_blank' => false
 		),
 		'content' => array(
-			'type' => 'text'
+			'type' => 'text',
+			'required' => true,
+			'allow_blank' => false
 		)
 	);
 

@@ -215,6 +215,11 @@ $(document).ready(function() {
 		$(this).tab('show');
 	});
 
+	$('.add-option').die('click');
+	$('.change-option').die('click');
+	$('.cancel-option').die('click');
+	$('.save-option').die('click');
+
 	$('.add-option').on('click', function (e) {
 		var btn = $(this);
 		var frm = $(this).closest('form');
@@ -238,7 +243,7 @@ $(document).ready(function() {
 					}
 					$('#tbl-' + btn.data('name') + ' tbody').append(html);
 				} else {
-					alert('Error');
+					alert(resp.message);
 				}
 			}
 		});
@@ -284,7 +289,7 @@ $(document).ready(function() {
 					$('#tbl-'+name+' .frm-opt-'+id).hide();
 					$('#tbl-'+name+' .div-opt-'+id).show();
 				} else {
-					alert('Error');
+					alert(resp.message);
 				}
 			}
 		});
