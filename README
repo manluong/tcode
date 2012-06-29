@@ -1,0 +1,19 @@
+8Force CRM
+==========
+
+Explanation on branches:
+
+master
+------
+This branch contains production-ready code.
+**No commits should be done to this branch.**
+
+testing
+-------
+When features on the development branch are done, they are then merged into this branch for testing.
+When tests have completed successfully, this branch will then merge into master.
+**No commits should be done to this branch.**
+
+development
+-----------
+This is where all of us should commit our changes/fixes/feature developments into.

@@ -1,6 +1,44 @@
 <?php if (!defined('BASEPATH')) exit('No direct access allowed.');
 
 class Helpdesk_CommentM extends MY_Model {
+	public $data_fields = array(
+		'id' => array(
+			'type' => 'id'
+		),
+		'helpdesk_id' => array(
+			'type' => 'id'
+		),
+        'private' => array(
+			'type' => 'id'
+		),
+		 'log_id' => array(
+			'type' => 'id'
+		),
+		 'group' => array(
+			'type' => 'id'
+		),
+		 'status' => array(
+			'type' => 'id'
+		),
+		 'priority' => array(
+			'type' => 'id'
+		),
+		'type' => array(
+			'type' => 'id'
+		),
+		'active' => array(
+			'type' => 'id'
+		),
+	);
+	
+	public $sett_fill_card = TRUE;
+	public $sett_fill_helpdesk = TRUE;
+	
+	private $addons = array(
+		'card' => 'CardM',
+		'helpdesk' => 'HelpdeskM',
+	);
+	
 	function __construct() {
 		parent::__construct();
 
@@ -9,7 +47,60 @@ class Helpdesk_CommentM extends MY_Model {
 		$this->cache_enabled = TRUE;
         $this->sett_filter_deleted = FALSE;
 	}
+	
+	function get($id) {
+		$result = parent::get($id);
 
+		$this->fill_addons($result);
+
+		return $result;
+	}
+
+	function get_list() {
+		$result = parent::get_list();
+
+		$this->fill_addons($result, MULTIPLE_DATA);
+
+		return $result;
+	}
+
+	private function fill_addons(&$data, $mode=SINGLE_DATA) {
+		if (count($data) == 0 || $data === FALSE) return FALSE;
+
+		if ($mode == SINGLE_DATA) {
+			$data = array($data);
+		}
+
+		$helpdesk_id = get_distinct('helpdesk_id', $data);
+
+		foreach($this->addons AS $name=>$model) {
+			$sett_var = 'sett_fill_'.$name;
+			if ($this->$sett_var == FALSE) continue;
+
+			if(!empty($helpdesk_id)){
+				$addons = $this->$model
+						->set_where('id IN ('.implode(',', $helpdesk_id).')')
+						->get_list();
+
+
+				if ($addons !== FALSE && count($addons) > 0) {
+					foreach($data AS $k=>$v) {
+						foreach($addons AS $addon) {
+							if ($addon['id'] != $v['helpdesk_id']) continue;
+							$data[$k]['addon_'.$name][] = $addon;
+						}
+					}
+				}
+			}
+
+			$this->$model->reset();
+		}
+
+		if ($mode == SINGLE_DATA) {
+			$data = $data[0];
+		}
+	}
+	
 	function get_assign() {
 		$this->db->select('id,display_name');
 		$query = $this->db->get('card');
