@@ -176,7 +176,6 @@ function helpdesk_fillter(card_id){
 				 if(item.addon_card != null){
 					for(j in item.addon_card){
 						addon = item.addon_card[j];
-						console.log(addon);
 						row[2] = addon.first_name+' '+addon.last_name;
 					}
 				 }
@@ -222,6 +221,7 @@ function helpdesk_fillter_all(){
 				 var row  = new Array();
 				 row[0] = '<a href="/helpdesk/edit/'+item.id+'">'+item.subject+'</a>';
 				 row[1] = item.cc_email;
+				 row[2] = '';
 				 if(item.addon_card != null){
 					for(j in item.addon_card){
 						addon = item.addon_card[j];
@@ -251,7 +251,7 @@ function load_datatable(data){
 		"aoColumns": [
 			{ "sTitle": "Subject" },
 			{ "sTitle": "CC Email" },
-			{ "sTitle": "Assign ID" },
+			{ "sTitle": "Assign" },
 			{ "sTitle": "Created" },
 		],
 		"oLanguage": {
@@ -366,6 +366,12 @@ function parse_comment_list(data){
 	var input_hidden = '';
 	for (i in json) {
 		 var item = json[i];
+		 for(j in item.addon_helpdesk) {
+			var helpdesk = item.addon_helpdesk[j];
+			var display_name = '';
+			if(helpdesk.display_name != null)
+		 }
+		 
 		 var display_name = (item.display_name == null ? '' : item.display_name);
 		 var organization_name = (item.organization_name == null ? '' : item.organization_name);
 		 input_hidden = '<input type="hidden" value="'+item.id+'" name="hiddenCommentId" id="hiddenCommentId" />';

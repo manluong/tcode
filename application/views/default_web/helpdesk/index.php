@@ -121,7 +121,7 @@
 					<span class="input_data_label">Comments</span>
 					<span class="fillter_input">
 						<input type="hidden" id="helpdesk_id" name="helpdesk_id" />
-						<input type="text" id="comment_content" name="comment_content" class="inv-field" />
+						<input style="padding-bottom:0px;" type="text" id="comment_content" name="comment_content" class="inv-field" />
 					</span>
 				</li>
 

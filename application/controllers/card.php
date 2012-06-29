@@ -519,13 +519,15 @@ class Card extends MY_Controller {
 		echo json_encode($data);
 		exit;
 	}
-
+	
+	function iphone(){
+		$this->load->view(get_template().'/card/test_iphone');
+	}
+	
 	/*--Iphone--*/
 
 	function iphone_save(){
 		if(isset($_POST)){
-
-
 			/*--Save email--*/
 			if(isset($_POST['addon_email'])){
 				$addon_email = $_POST['addon_email'];
@@ -541,8 +543,6 @@ class Card extends MY_Controller {
 						$array[$i]['type'] = $email[2];
 						$array[$i]['is_default'] = $email[3];
 				}
-			print_r($array);
-			die;
 			}
 			/*--Save phone--*/
 			if($_POST['addon_tel']){

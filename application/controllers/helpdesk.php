@@ -116,11 +116,7 @@ class Helpdesk extends MY_Controller {
 		}
 
 		$this->HelpdeskM->where = $where;
-		//$this->db->join('card','card.id = a_helpdesk.assign_id');
-
 		$result = $this->HelpdeskM->get_list();
-		//print_r($result);
-		//die;
 		$data = json_encode($result);
 		echo $data;
 	}
@@ -416,7 +412,14 @@ class Helpdesk extends MY_Controller {
             'active' => 1,
 		);
 		$comment_id = $this->Helpdesk_CommentM->save($comment_data);
-
+		
+		$where = array();
+		$where[] = "helpdesk_id='$id_helpdesk'";
+		$this->Helpdesk_CommentM->where = $where;
+		$result = $this->Helpdesk_CommentM->get_list();
+		print_r($result);
+		die;
+		
 		if($id_helpdesk!=0){
 			$comment = $this->Helpdesk_CommentM->get_comment_list($id_helpdesk);
 			//Get data helpdesk
