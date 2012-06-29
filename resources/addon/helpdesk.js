@@ -366,27 +366,49 @@ function parse_comment_list(data){
 	var input_hidden = '';
 	for (i in json) {
 		 var item = json[i];
-		 for(j in item.addon_helpdesk) {
-			var helpdesk = item.addon_helpdesk[j];
-			var display_name = '';
-			if(helpdesk.display_name != null)
-		 }
-		 
 		 var display_name = (item.display_name == null ? '' : item.display_name);
 		 var organization_name = (item.organization_name == null ? '' : item.organization_name);
-		 input_hidden = '<input type="hidden" value="'+item.id+'" name="hiddenCommentId" id="hiddenCommentId" />';
-		 var pri = '';
-		 switch (item.priority){
-			case 1:
-				pri = 'Low';
-				break;
-			case 2:
-				pri = 'Mid';
-				break;
-			case 3:
-				pri = 'High';
-				break;
+		 
+		 for(j in item.addon_helpdesk) {
+			var helpdesk = item.addon_helpdesk[j];
+			console.log(helpdesk);
+			var display_name = '';
+			if(helpdesk.display_name != null){
+				display_name = helpdesk.display_name;
+			}
+			
+			var organization_name = '';
+			if(helpdesk.organization_name != null){
+				organization_name = helpdesk.organization_name;
+			}
+			
+			var subject = '';
+			if(helpdesk.subject != null){
+				subject = helpdesk.subject;
+			}
+			
+			var cc_email = '';
+			if(helpdesk.cc_email != null){
+				cc_email = helpdesk.cc_email;
+			}
+			
+			var priority = '';
+			if(helpdesk.priority != null){
+				pri = parseInt(helpdesk.priority);
+				switch (pri){
+					case 1:
+						priority = 'Low';
+						break;
+					case 2:
+						priority = 'Mid';
+						break;
+					case 3:
+						priority = 'High';
+						break;
+				 }
+			}
 		 }
+		 input_hidden = '<input type="hidden" value="'+item.id+'" name="hiddenCommentId" id="hiddenCommentId" />';
 		 html += '<div class="comment_info">'+
 						'<div class="comment_info_user">'+
 							'<div class="comment_user_avatar"><image src="/resources/template/default_web/img/helpdesk/comment_avatar.png"/></div>'+
@@ -399,9 +421,9 @@ function parse_comment_list(data){
 							'<div class="wap_comment_content">'+item.comment+'</div>'+
 							'<div style="float:left;width:50px;margin:-22px 0 0 -48px" id="arrow_comment_'+item.id+'" onclick="show_detail_comment('+item.id+');" class="up_arrow"></div>'+
 							'<div id="comment_detail_'+item.id+'" class="comment_detail">'+
-								'<p>Priority set to '+pri+'</p>'+
-								'<p>Subject set to "'+item.subject+'"</p>'+
-								'<p>Email send to "'+item.cc_email+'"</p>'+
+								'<p>Priority set to '+priority+'</p>'+
+								'<p>Subject set to "'+subject+'"</p>'+
+								'<p>Email send to "'+cc_email+'"</p>'+
 							'<br/><span style="font-size:11px;">'+
 							'<p>Client: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.7; rv:12.0) Gecko/20100101 Firefox/12.0</p>'+
 							'<p>IP address: 115.66.148.168</p>'+

@@ -33,10 +33,12 @@ class Helpdesk_CommentM extends MY_Model {
 	
 	public $sett_fill_card = TRUE;
 	public $sett_fill_helpdesk = TRUE;
+	public $sett_fill_file = TRUE;
 	
 	private $addons = array(
 		'card' => 'CardM',
 		'helpdesk' => 'HelpdeskM',
+		'comment_file' => 'Comment_FileM',
 	);
 	
 	function __construct() {
@@ -72,6 +74,7 @@ class Helpdesk_CommentM extends MY_Model {
 		}
 
 		$helpdesk_id = get_distinct('helpdesk_id', $data);
+		$comment_id = get_distinct('id_comment', $data);
 
 		foreach($this->addons AS $name=>$model) {
 			$sett_var = 'sett_fill_'.$name;
@@ -82,7 +85,6 @@ class Helpdesk_CommentM extends MY_Model {
 						->set_where('id IN ('.implode(',', $helpdesk_id).')')
 						->get_list();
 
-
 				if ($addons !== FALSE && count($addons) > 0) {
 					foreach($data AS $k=>$v) {
 						foreach($addons AS $addon) {
@@ -92,10 +94,10 @@ class Helpdesk_CommentM extends MY_Model {
 					}
 				}
 			}
-
 			$this->$model->reset();
 		}
-
+		//Get addon file
+		
 		if ($mode == SINGLE_DATA) {
 			$data = $data[0];
 		}

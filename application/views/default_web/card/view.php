@@ -18,9 +18,9 @@ function confirm_delete(id){
 }
 </script>
 <?php
-	echo '<pre>';
-	print_r($data);
-	echo '</pre>';
+	//echo '<pre>';
+	//print_r($data);
+	//echo '</pre>';
 ?>
 <div id="payment_boxes">
 	<?php ($helpdesk_summary == FALSE ? $helpdesk_total = 0 : $helpdesk_total = count($helpdesk_summary))?>
