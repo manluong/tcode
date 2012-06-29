@@ -17,7 +17,7 @@
 	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/bootstrap-responsive.min.css" />
 	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/bootstrap-8f.css" />
 	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/all-module.css" />
-	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/modernizr-2.5.3.min.js"></script>
+	<script type="text/javascript" src="/resources/addon/modernizr-2.5.3.min.js"></script>
 	<script type="text/javascript" src="/resources/addon/jquery.min.js"></script>
 	<!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>-->
 
@@ -175,20 +175,19 @@
 	<script type="text/javascript" src="/resources/addon/tpanel.js"></script>
 	<script type="text/javascript" src="/resources/addon/jquery-ui-timepicker-addon.js"></script>
 
-	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/dataTables.bootstrap-paging.js"></script>
-	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/jquery.cookie.js"></script>
-	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/theme-global.js"></script>
+	<script type="text/javascript" src="/resources/addon/bootstrap.min.js"></script>
+	<script type="text/javascript" src="/resources/addon/dataTables.bootstrap-paging.js"></script>
+	<script type="text/javascript" src="/resources/addon/theme-global.js"></script>
 
 	<!-- new theme stuff -->
-	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/custom-form-elements.js"></script>
-	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/jquery.smooth-scroll.min.js"></script>
-	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/plugins.js"></script>
-	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/script.js"></script>
-	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/strophe.js"></script>
-	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/strophe.xdomainrequest.js"></script>
-	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/buzz.js"></script>
-	<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/chat.js"></script>
+	<script type="text/javascript" src="/resources/addon/custom-form-elements.js"></script>
+	<script type="text/javascript" src="/resources/addon/jquery.smooth-scroll.min.js"></script>
+	<script type="text/javascript" src="/resources/addon/js/plugins.js"></script>
+	<script type="text/javascript" src="/resources/addon/script.js"></script>
+	<script type="text/javascript" src="/resources/addon/strophe.js"></script>
+	<script type="text/javascript" src="/resources/addon/strophe.xdomainrequest.js"></script>
+	<script type="text/javascript" src="/resources/addon/buzz.js"></script>
+	<script type="text/javascript" src="/resources/addon/chat.js"></script>
 
 </body>
 </html>

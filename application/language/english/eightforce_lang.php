@@ -548,13 +548,19 @@ $lang['a_invoice_payitem-invoice_id'] = 'Invoice Id';
 $lang['a_invoice_payitem-amount'] = 'Amount';
 
 
-//a_invoice_tax
+// a_invoice_tax
 $lang['a_invoice_tax-id'] = 'Id';
 $lang['a_invoice_tax-invoice_id'] = 'Invoice Id';
 $lang['a_invoice_tax-tax_id'] = 'Invoice Tax Id';
 $lang['a_invoice_tax-amount'] = 'Amount';
 $lang['tax-name'] = 'Tax Name';
 $lang['tax-percent'] = '%';
+
+
+// a_invoice_terms
+$lang['a_invoice_terms-id'] = 'Id';
+$lang['a_invoice_terms-name'] = 'Name';
+$lang['a_invoice_terms-content'] = 'Content';
 
 
 // comment

@@ -241,6 +241,7 @@ class Invoice extends MY_Controller {
 	}
 
 	function ajax_save_terms() {
+		$this->Invoice_TermsM->cache_enabled = FALSE;
 		$terms_id = $this->Invoice_TermsM->save();
 		if ($terms_id === FALSE) {
 			$this->RespM->set_success(FALSE)
