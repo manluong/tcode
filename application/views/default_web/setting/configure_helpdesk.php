@@ -5,13 +5,13 @@
 
 <div class="content">
 <ul id="tab-setting" class="nav nav-tabs">
-	<li class="active"><a href="#tab-1">General</a></li>
+	<li class="active"><a href="#tab-general">General</a></li>
 	<?php foreach ($opts as $k => $v): ?>
 	<li><a href="#tab-<?php echo $k ?>"><?php echo $v ?> Options</a></li>
 	<?php endforeach ?>
 </ul>
 <div class="tab-content">
-	<div id="tab-1" class="tab-pane active">
+	<div id="tab-general" class="tab-pane active">
 		<?php
 			echo form_open('/setting/ajax_save/'.$app_name , array('class'=>'form-horizontal'));
 		?>
@@ -33,7 +33,7 @@
 		</div>
 		<div class="form">
 			<ul>
-				<li>
+				<!-- <li>
 					<span class="lb">Priority Options</span>
 					<span class="fillter_input">
 						<?php
@@ -47,6 +47,33 @@
 						?>
 						<input type="text" name="tenant-priority[]" value="" />
 						<input type="hidden" name="tenant-priority-override" value="0" />
+					</span>
+				</li> -->
+				<li>
+					<span class="lb">Mail Delimiter</span>
+					<span class="fillter_input">
+						<input type="text" name="tenant-mail_delimiter" value="<?=(isset($settings['tenant']['mail_delimiter']['value']))?$settings['tenant']['mail_delimiter']['value']:''?>" />
+						<input type="hidden" name="tenant-mail_delimiter-override" value="0" />
+					</span>
+				</li>
+				<li>
+					<span class="lb">Allow Rating</span>
+					<span class="fillter_input">
+						<input type="checkbox" data-name="tenant-allow_rating" <?=(isset($settings['tenant']['allow_rating']['value']) && $settings['tenant']['allow_rating']['value'])?'checked="checked"':''?> />
+						<input type="hidden" name="tenant-allow_rating" value="<?=(isset($settings['tenant']['allow_rating']['value']))?$settings['tenant']['allow_rating']['value']:0?>" />
+						<input type="hidden" name="tenant-allow_rating-override" value="0" />
+					</span>
+				</li>
+				<li>
+					<span class="lb">Allow New Case</span>
+					<span class="fillter_input">
+						<select name="tenant-allow_new_case">
+							<option value="">- - - Select - - -</option>
+							<?php foreach ($allow_new_case_opts as $k => $v): ?>
+							<option value="<?php echo $k ?>" <?=(isset($settings['tenant']['allow_new_case']['value']) && $settings['tenant']['allow_new_case']['value'] == $k)?'selected="selected"':''?>><?php echo $v ?></option>
+							<?php endforeach ?>
+						</select>
+						<input type="hidden" name="tenant-allow_new_case-override" value="0" />
 					</span>
 				</li>
 			</ul>
@@ -136,6 +163,11 @@ $(document).ready(function() {
 	$('#tab-setting a').on('click', function (e) {
 		e.preventDefault();
 		$(this).tab('show');
+	});
+
+	$('input[type="checkbox"]').on('click', function (e) {
+		var checked = $(this).is(':checked') ? 1 : 0;
+		$('input[name="'+$(this).data('name')+'"]').val(checked);
 	});
 
 	$('.add-option').on('click', function (e) {

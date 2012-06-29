@@ -31,9 +31,11 @@ class FileL {
 			mkdir($this->temp_dir, 0777, true);
 		}
 	}
+
 	function get_temp_dir(){
-	    return $this->temp_dir;
+		return $this->temp_dir.$this->domain.'/';
 	}
+
 	function read($hash_or_id) {
 		if ($hash_or_id == '') return FALSE;
 

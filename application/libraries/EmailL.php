@@ -11,6 +11,7 @@ class EmailL {
 	private $_bcc = array();
 
 	private $_replace_value = array();
+	private $_app_name = 'email';
 	private $_template = '';
 
 	private $_subject = '';
@@ -90,7 +91,8 @@ class EmailL {
 		return $this;
 	}
 
-	function set_template($template) {
+	function set_template($app_name, $template) {
+		$this->_app_name = $app_name;
 		$this->_template = $template;
 
 		return $this;
@@ -175,7 +177,7 @@ class EmailL {
 		}
 
 		if ($this->_content === '') {
-			$this->_content = $this->_ci->EmailM->get_template_content($this->_template);
+			$this->_content = $this->_ci->EmailM->get_template_content($this->_app_name, $this->_template);
 		}
 	}
 
@@ -272,7 +274,12 @@ class EmailL {
 	private function _build_email() {
 		$this->_ci->smtpapiheaderl->addFilterSetting('domainkeys', 'enable', 1);
 		$this->_ci->smtpapiheaderl->addFilterSetting('domainkeys', 'domain', 'www.8force.com');
-		$this->_ci->smtpapiheaderl->setUniqueArgs(array('email_sent_log_id'=>$this->_log_id));
+		$this->_ci->smtpapiheaderl->setUniqueArgs(
+			array(
+				'email_sent_log_id' => $this->_log_id,
+				'email_domain' => $this->_ci->domain
+			)
+		);
 
 		// Start converting arrays to strings
 		$to = array();

@@ -16,6 +16,7 @@ class Callback_sendgrid extends MY_Controller {
 		if ($_SERVER['HTTP_USER_AGENT'] !== 'SendGrid Event API') return NULL;
 
 		//$this->emaill->log_sendgrid('events');
+		$to_email = $this->input->post('to');
 
 		//Split response into json_result
 		$json_result = array();
@@ -23,8 +24,12 @@ class Callback_sendgrid extends MY_Controller {
 
 		foreach($json_result[0] AS $json) {
 			$sendgrid_response = json_decode($json, TRUE);
+
+			$domain = $sendgrid_response['email_domain'];
+			$this->_setup_db($domain);
+
 			$this->EmailM->update_status(
-					$sendgrid_response['log_email_id'],
+					$sendgrid_response['email_sent_log_id'],
 					$sendgrid_response['email'],
 					$sendgrid_response['event'],
 					$sendgrid_response['timestamp']
