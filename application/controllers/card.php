@@ -527,26 +527,23 @@ class Card extends MY_Controller {
 	/*--Iphone--*/
 
 	function iphone_save(){
+		$data = array() ;
 		if(isset($_POST)){
-
-			echo 'hello world 5';
-
 			/*--Save email--*/
+			if(isset($_POST['id'])){
+				$data['id'] = $_POST['id'];
+			}
+			
 			if(isset($_POST['addon_email'])){
 				$addon_email = $_POST['addon_email'];
 				$addon_email = explode(';',$addon_email);
 				for($i=0 ; $i<count($addon_email) ; $i++){
 					$email = explode(',',$addon_email[$i]);
-//					$_POST['addon_email'][$i]['id'] = trim($email[0]);
-//					$_POST['addon_email'][$i]['email'] = trim($email[1]);
-//					$_POST['addon_email'][$i]['type'] = trim($email[2]);
-//					$_POST['addon_email'][$i]['is_default'] = trim($email[3]);
 					$data['addon_email'][$i]['id'] = trim($email[0]);
 					$data['addon_email'][$i]['email'] = trim($email[1]);
 					$data['addon_email'][$i]['type'] = trim($email[2]);
 					$data['addon_email'][$i]['is_default'] = trim($email[3]);
 				}
-//			print_r($_POST);
 			}
 			/*--Save phone--*/
 			if($_POST['addon_tel']){
@@ -563,7 +560,7 @@ class Card extends MY_Controller {
 						$data['addon_tel'][$i]['is_default'] = trim($tel[6]);
 				}
 			}
-			print_r($data);
+			
 			/*--Save address--*/
 			if($_POST['addon_address']){
 				$addon_address = $_POST['addon_address'];
@@ -609,17 +606,16 @@ class Card extends MY_Controller {
 						$data['addon_extra'][$i]['birth_date'] = trim($extra[2]);
 				}
 			}
-
 			$id_save = $this->CardM->save($data);
 			echo 'success';
+			echo '<pre>';
+			print_r($data);
+			echo '</pre>';
 		}
-		//echo '<pre>';
-		//print_r($_POST);
-		//echo '</pre>';
 	}
 
 	function test_iphone(){
-		$addon_email = '110, abc@ymail.com, 0, 0; ,xyz@abc.com, 1, 1;';
+		$addon_email = '110, abc@ymail.com, 0, 0; ,xyz@abc.com, 1, 1';
 		$addon_tel = ' , 0, 11, 22, 33, 44, 0; , 2, 111, 222, 333, 444, 1';
 		$addon_address = ' , 1, Dien Bien Phu, Dinh Bo Linh, 1;  , 0, Nguyen Van Dau, Nguyen Cong Tru, 0';
 		$addon_social = ', 1, nva@gmail.com; , 2, nvb@gmail.com; , 3, nvc@gmail.com';
