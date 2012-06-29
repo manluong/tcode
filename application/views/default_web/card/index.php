@@ -43,12 +43,15 @@ $(document).ready(function(){
 				<ul id="contact_list" class="addressBook content">
 					<li class="letter staff customers vendors a-title">a</li>
 					<?php
+						//TODO: This list should be implemented in the browser side. e.g. use $.get to pull list data from server.
 						$current_alphabet = 0;
 						$alphabets = array('a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z');
 
 						$list_count = count($list);
 						for($start=0; $start<$list_count; $start++) {
 							$l = $list[$start];
+
+							if (!isset($alphabets[$current_alphabet])) break;
 
 							if (strtolower(substr($l['first_name'], 0, 1)) != $alphabets[$current_alphabet]) {
 								$current_alphabet++;
