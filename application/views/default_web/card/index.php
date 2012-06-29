@@ -1,8 +1,6 @@
 <link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/nanoscroller.css" />
-<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/jquery.nanoscroller.min.js"></script>
-<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/jquery.smooth-scroll.min.js"></script>
-<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/overthrow.min"></script>
-<script type="text/javascript" src="/resources/template/<?=get_template()?>/js/ga.js"></script>
+<script type="text/javascript" src="/resources/addon/jquery.nanoscroller.min.js"></script>
+<script type="text/javascript" src="/resources/addon/overthrow.min"></script>
 <script type="text/javascript" src="/resources/addon/contacts.js"></script>
 <script>
 $(document).ready(function(){
@@ -51,10 +49,10 @@ $(document).ready(function(){
 						for($start=0; $start<$list_count; $start++) {
 							$l = $list[$start];
 
-							if (!isset($alphabets[$current_alphabet])) break;
-
+							//if the name does not match the current alphabet, it means it's time to move on to the next alphabet
 							if (strtolower(substr($l['first_name'], 0, 1)) != $alphabets[$current_alphabet]) {
 								$current_alphabet++;
+								if ($current_alphabet == 26) break;
 								echo '<li class="letter staff customers vendors ',$alphabets[$current_alphabet],'-title">',$alphabets[$current_alphabet],'</li>';
 								$start--;
 								continue;
