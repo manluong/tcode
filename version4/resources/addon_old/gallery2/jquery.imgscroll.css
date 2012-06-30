@@ -1,0 +1,274 @@
+﻿/*
+Item Name: imgScroll - jQuery Scrolling Gallery
+Author: Mapalla
+Author URI: http://codecanyon.net/user/Mapalla
+Version: 1.0
+*/
+
+/*
+TABLE OF CONTENTS:
+01. CONTAINER
+02. MAIN IMAGE
+03. DESCRIPTION
+04. THUMBNAIL
+05. LIGHTBOX
+*/
+
+/* ____________________________________________________ */
+
+/* CONTAINER */
+/* ____________________________________________________ */
+
+#gallery
+{
+	position :relative ;
+	margin :0 auto;
+	width :100%;
+	height :auto;
+	background :#000;
+	overflow :hidden ;
+}
+
+/* ____________________________________________________ */
+
+/* MAIN IMAGE */
+/* ____________________________________________________ */
+
+#gallery .main_image
+{
+	position :relative ;
+	float :left ;
+	width :640px;
+	height :480px;
+	overflow :hidden ;
+	color :#fff;
+}
+
+/* play button */
+.main_image .play
+{
+	position :absolute ;
+	top:10px;
+	right :10px;
+	width :32px;
+	height :32px;
+	background :#000 url("images/play.png") no-repeat center;
+	cursor :pointer ;
+}
+
+/* pause button */
+.main_image .pause
+{
+	position :absolute ;
+	top:10px;
+	right :10px;
+	width :32px;
+	height :32px;
+	background :#000 url("images/pause.png") no-repeat center;
+	cursor :pointer ;
+}
+
+/* _____________________________________________________________ */
+
+/* DESCRIPTION */
+/* _____________________________________________________________ */
+
+#gallery .main_description
+{
+	position :relative ;
+	float :left ;
+	width :200px;
+	height :480px;
+	padding :20px;
+	overflow :hidden ;
+	color :#fff;
+	font-family :Arial, Verdana ;
+	font-size :12px;
+	
+	/* background */
+	background: #fff;
+	//background: -moz-linear-gradient(top, #515151, #989898); /* Firefox */
+	//background: -ms-linear-gradient(#515151, #989898); /* IE10 */
+	//background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#515151), to(#989898)); /* Safari & Chrome */
+	//background: -webkit-linear-gradient(#515151, #989898); /* Safari 5.1+, Chrome 10+ */
+	//background: -o-linear-gradient(#515151, #989898); /* Opera 11.10 */
+	//background: linear-gradient(#515151, #989898); /* the standard */
+	//filter:  progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#515151', endColorstr='#989898'); /* IE6 & IE7 */
+	//-ms-filter: "progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#515151', endColorstr='#989898')"; /* IE8 */
+}
+
+#gallery .main_description p
+{
+	line-height :1.5em;
+	//color : #A8A8A8;
+}
+
+#gallery .main_description a
+{
+	text-decoration :none;
+	//color :#FFF;
+}
+
+#gallery .main_description a:hover
+{
+	//text-decoration :underline;
+}
+
+/* ____________________________________________________________ */
+
+/* THUMBNAIL */
+/* ____________________________________________________________ */
+
+/* thumbnail container */
+#gallery .thumbnail
+{
+	position :relative ;
+	float :left ;
+	width :100%;
+	height :120px;
+	overflow : scroll ;
+	outline :none;
+	
+	/* background */
+	background: #fff;
+	//background: -moz-linear-gradient(top, #BDBDBD, #757575); /* Firefox */
+	//background: -ms-linear-gradient(#BDBDBD, #757575); /* IE10 */
+	//background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#BDBDBD), to(#757575)); /* Safari & Chrome */
+	//background: -webkit-linear-gradient(#BDBDBD, #757575); /* Safari 5.1+, Chrome 10+ */
+	//background: -o-linear-gradient(#BDBDBD, #757575); /* Opera 11.10 */
+	//background: linear-gradient(#BDBDBD, #757575); /* the standard */
+	//filter:  progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#BDBDBD', endColorstr='#757575'); /* IE6 & IE7 */
+	//-ms-filter: "progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#BDBDBD', endColorstr='#757575')"; /* IE8 */
+}
+
+/* thumbnail list */
+#gallery .thumbnail ul
+{
+	margin :20px 0;
+	padding :0;
+	list-style :none;
+}
+
+#gallery .thumbnail ul li
+{
+	position :relative ;
+	width :100px;
+	height :75px;
+	margin :0 10px;
+	padding :0;
+	border :0;
+	float :left ;
+	cursor :pointer ;
+	background :#000 url("images/6-24.gif") no-repeat center;
+}
+
+#gallery .thumbnail ul li img
+{
+	width :100%;
+	height :100%;
+	border :0;
+}
+
+#gallery .thumbnail ul li a
+{
+	text-decoration :none;
+	border :0;
+	outline :0;
+}
+
+/* data container */
+#gallery .thumbnail ul li .data
+{
+	display :none;
+}
+
+/* thumbnail active state */
+#gallery .thumbnail_active
+{
+	position :absolute ;
+	top :0;
+	left :0;
+	border :solid 5px #BDBDBD;
+	width : 125px;
+	height :70px;
+	z-index :997;
+}
+
+/* thumbnail hover state */
+#gallery .thumbnail_hover
+{
+	position :absolute ;
+	top :0;
+	left :0;
+	border :solid 5px #000;
+	width : 125px;
+	height :70px;
+	z-index :999;
+	background :rgba(0, 0, 0, 0.5);
+	filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#92000000', endColorstr='#92000000');
+}
+
+/* thumbnail caption */
+.thumbnail_hover p
+{
+	color :#fff;
+	font-family :Arial, Verdana ;
+	font-size :12px;
+	font-weight :bold ;
+	margin :10px;
+}
+
+/* ________________________________________________________ */
+
+/* LIGHTBOX */
+/* ________________________________________________________ */
+
+/* lightbox ovelay */
+.lightboxOverlay
+{
+	opacity:0.5;
+	background :#000;
+	filter: progid:DXImageTransform.Microsoft.Alpha(opacity=50); /* IE6, IE7, and IE8 */
+}
+
+/* lightbox container */
+.lightboxContainer
+{
+	width:300px;
+	height :300px;
+	border : solid 10px #fff;
+	-webkit-box-shadow: 0px 0px 5px #000;  
+    -moz-box-shadow: 0px 0px 5px #000;  
+    box-shadow: 0px 0px 5px #000;
+    background: #000 url("images/6-32.gif") no-repeat center;
+}
+
+/* title */
+.lightboxTitle
+{
+	color :#000;
+	padding :10px 0;
+	font-family :Arial , Verdana ;
+	font-size :12px;
+	background :#fff;
+	border :0;
+}
+
+/* controls container */
+.lightboxControls
+{
+	border: 0;
+    background: #fff;
+    height :22px;
+}
+
+/* close button */
+.close_button
+{
+	float :right ;
+	width :75px;
+	height :22px;
+	background :#fff url("images/close.png") no-repeat center;
+	cursor :pointer ;
+}
+

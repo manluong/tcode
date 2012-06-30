@@ -1,0 +1,327 @@
+img {
+	border: 0px;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+* {
+	margin: 0px;
+	padding: 0px;
+	outline: 0 none;
+}
+
+ul {
+    list-style: none outside none;
+}
+ul li {
+	list-style:none;
+}
+
+.clearAll {
+	clear: both;
+	font-size: 0px;
+	width: 0px;
+	height: 0px;
+}
+
+html, body {
+	margin: 0px;
+	padding: 0px;
+	font-family: Arial;
+	font-size: 12px;
+}
+
+.ClearLeft{
+	clear:left;
+}
+
+#breadcrumb{
+	width:1000px;
+	height:64px;
+}
+#module_name{
+	width:800px;
+	float:left;
+}
+#module_name ul li{
+	float:left;
+	margin-right:13px;
+}
+.arrow{
+	background:url(../img/invoice/invoice-arrow.png);
+	width:4px;
+	height:19px;
+	margin-top:15px;
+}
+.curent_page{
+	margin-top:15px;
+	color:#808080;
+}
+.mainContent{
+	width:100%;
+	float:left;
+	margin-left:126px;
+	display:inline;
+}
+#favoriteIcon{
+	margin-top:15px !important;
+}
+#top_button{
+	float:left;
+	width:200px;
+	margin-top:11px;
+}
+#top_button ul li{
+	float:left;
+	margin-right:9px;
+}
+.btn_list{
+	width:42px;
+	height:27px;
+	background:url(../img/invoice/invoice-btn_list.jpg);
+	cursor:pointer;
+}
+.btn_new{
+	width:44px;
+	height:27px;
+	background:url(../img/invoice/invoice-btn_new.jpg);
+	cursor:pointer;
+}
+#content_top{
+	width:1000px;
+	height:95px;
+}
+#user_profile{
+	width:775px;
+	float:left;
+}
+#user_avatar{
+	width:52px;
+	height:52px;
+	float:left;
+	padding:0 16px 12px 0;
+}
+#user_info{
+	width:100%;
+	color:#485152;
+}
+#user_info ul li{
+	width:100%;
+	margin-bottom:8px;
+}
+.user_sex{
+	font-size:16px;
+}
+.user_name{
+	font-size:24px;
+	font-weight:bold;
+}
+.user_position{
+	font-size:18px;
+	font-weight:bold;
+}
+#customer_list{
+	width:121px;
+	height:27px;
+	float:left;
+}
+
+/*BEGIN INVOICE CSS */
+
+#boxes {
+	width: 896px;
+}
+
+#invoice-btn {
+	height: 27px;
+	width: 100%;
+}
+
+#invoice-btn div {
+	float: right;
+	margin-left: 10px;
+}
+
+.btn_pay {
+	width: 47px;
+	height: 27px;
+	background: url(../img/invoice/invoice-view-btn_pay.jpg);
+	cursor: pointer;
+}
+.btn_edit {
+	width: 47px;
+	height: 27px;
+	background: url(../img/invoice/invoice-view-btn_edit.jpg);
+	cursor: pointer;
+}
+.btn_email{
+	width: 52px;
+	height: 27px;
+	background: url(../img/invoice/invoice-view-btn_email.jpg);
+	cursor: pointer;
+}
+.btn_pdf{
+	width: 42px;
+	height: 27px;
+	background: url(../img/invoice/invoice-view-btn_pdf.jpg);
+	cursor: pointer;
+}
+.btn_print{
+	width: 49px;
+	height: 27px;
+	background: url(../img/invoice/invoice-view-btn_print.jpg);
+	cursor: pointer;
+}
+
+.bold {
+	font-weight: bold !important;
+}
+
+#invoice_container {
+	border: 1px solid #485152;
+	margin-top: 17px;
+	padding: 45px 25px 25px 25px;
+	color: #444444;
+}
+
+#invoice_header {
+	height: auto;
+	width: 100%;
+}
+
+#company_info {
+	float: left;
+	width: 340px;
+}
+
+#company_name {
+	font-size: 14px;
+	font-weight: bold;
+}
+
+#company_address {
+	font-size: 14px;
+}
+
+#invoice_title {
+	float: left;
+	font-size: 30px;
+	font-weight: bold;
+	margin-top: 6px;
+}
+
+#invoice_main {
+	margin-top: 40px;
+}
+
+#bill_to {
+	font-size: 12px;
+	padding-left: 15px;
+	width: 100%;
+}
+
+#customer_info {
+	float: left;
+	background-color: #eeeeee;
+	margin-top: 5px;
+	padding: 10px 15px;
+	width: 350px;
+}
+
+#customer_name {
+	font-size: 14px;
+	font-weight: bold;
+}
+
+#invoice_info {
+	float: right;
+	margin: 5px 30px 0 0;
+}
+
+#invoice_info th {
+	font-weight: normal;
+	text-align: right;
+}
+
+#invoice_info td {
+	font-size: 17px;
+	font-weight: bold;
+	padding: 5px 5px 5px 20px;
+}
+
+#invoice_item {
+	margin-top: 15px;
+	width: 100%;
+}
+
+#invoice_item thead {
+	background-color: #eeeeee;
+}
+
+#invoice_item th {
+	padding: 10px 8px;
+	text-align: left;
+}
+
+#invoice_item td {
+	padding: 25px 8px;
+	text-align: left;
+	border-bottom: 1px solid #f7f7f7;
+}
+
+#invoice_item .total {
+	font-weight: bold;
+}
+
+#invoice_item .sub_desc {
+	font-size: 10px;
+	padding-top: 15px;
+}
+
+#total {
+	float: right;
+	margin: 10px 15px 0 0;
+}
+
+#total th {
+	font-weight: normal;
+	text-align: right;
+}
+
+#total td {
+	padding: 8px 0 8px 20px;
+}
+
+#invoice_total {
+	font-size: 18px;
+}
+
+#balance {
+	font-size: 14px;
+}
+
+#other_info {
+	float: left;
+	margin-top: 25px;
+}
+
+#other_info div {
+	width: 100%;
+}
+
+.info_title {
+	font-weight: bold;
+	margin-top: 30px;
+}
+
+.info_content {
+	margin-top: 15px;
+}
+
+/*END INVOICE CSS */

@@ -1,0 +1,142 @@
+a {
+	color: #7C8182;
+    font-size: 12px;
+    position: relative;
+    text-decoration: none;
+    top: 0px;
+}
+
+span {
+
+}
+
+
+label {
+	display: block;
+	margin-bottom: 5px;
+	color: #333333;
+	font-weight: bold;
+}
+
+.rightPanel input.xlarge {
+	font-size: 25px!important;
+	padding: 10px 8px;
+	font-weight: 100!important;
+}
+
+.rightPanel form label {
+	float: left;
+	display: block;
+	width: 100px;
+	text-align: right;
+	color: #777;
+	padding: 7px 7px 0 0;
+}
+
+form .clearfix {
+	padding-bottom: 5px;
+}
+
+.rightPanel form .inputRadios label {
+	width: auto;
+	padding: 0;
+	float: left;
+}
+
+.rightPanel form .inputRadios input[type=radio] {
+	float: left;
+}
+
+form .inputRadios span {
+	display: inline-block;
+	padding: 5px 0 0 5px;
+	margin-right: 25px;
+}
+
+form .inputs-list {
+	margin: 0;
+	padding: 0 0 0 3px;
+}
+
+form select {
+	font-size: 13px;
+}
+
+.inputs-list input {
+	float: left;
+}
+
+.inputs-list span {
+	display: inline-block;
+	padding-left: 5px;
+	color: #999;
+	font-size: 12px;
+}
+
+
+form.form-stacked label {
+	display: block;
+	float: none;
+	text-align: left;
+	width: auto;
+}
+
+input.error {
+	
+}
+
+div.error {
+	padding-top: 5px;
+	margin-bottom: 5px;
+	border: 1px solid #e78d8d;
+	background: #faeeee;
+}
+
+div.error label {
+	color: #a62d2d;
+}
+
+.table {
+	font-size: 12px;
+	color: #333;
+	margin-top: 20px;
+	-webkit-box-shadow:  1px 1px 1px 0px #cccccc;
+	box-shadow:  1px 1px 1px 0px #cccccc;
+}
+.table th,
+.table td {
+  border-top: 1px solid #EBEBEB;
+}
+
+.table tbody + tbody {
+  border-top: 2px solid #EBEBEB;
+}
+
+.table-bordered th,
+.table-bordered td {
+  border-left: 1px solid #EBEBEB;
+}
+
+.table-striped tbody tr:nth-child(odd) td,
+.table-striped tbody tr:nth-child(odd) th {
+  background: #ffffff;
+	background: -moz-linear-gradient(top,  #ffffff 0%, #f6f6f6 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(100%,#f6f6f6));
+	background: -webkit-linear-gradient(top,  #ffffff 0%,#f6f6f6 100%);
+	background: -o-linear-gradient(top,  #ffffff 0%,#f6f6f6 100%);
+	background: -ms-linear-gradient(top,  #ffffff 0%,#f6f6f6 100%);
+	background: linear-gradient(top,  #ffffff 0%,#f6f6f6 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f6f6f6',GradientType=0 );;
+}
+
+.table tbody tr:hover td,
+.table tbody tr:hover th {
+  background: #fff8e0;
+}
+
+.form-horizontal .control-label {
+  float: left;
+  width: 140px;
+  padding-top: 5px;
+  text-align: right;
+}
