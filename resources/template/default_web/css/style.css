@@ -455,8 +455,8 @@ header .rightMenu .dropdownAvatar .arrow {
 .tabsNavigation {
 	//background: url(../img/sprite-1.png) no-repeat -263px -234px;
 	width: 78px;
-	//overflow-y: hidden;
-	//overflow-x: hidden;
+	overflow-y: hidden;
+	overflow-x: hidden;
 	//position: absolute;
 	//bottom: 0;
 	//top: 0;
