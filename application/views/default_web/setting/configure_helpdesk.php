@@ -26,29 +26,13 @@
 		</div>
 		<?php } ?>
 
-		<?php //if ($is_admin) { ?>
+		<?php if ($is_admin) { ?>
 		<div class="dtitle">
 			<span class="upper">Admin Level Settings</span>
 			<span>Changes made here will apply to all users.</span>
 		</div>
 		<div class="form">
 			<ul>
-				<!-- <li>
-					<span class="lb">Priority Options</span>
-					<span class="fillter_input">
-						<?php
-// 							$priority_options = (isset($settings['tenant']['priority']['value']))
-// 													? json_decode($settings['tenant']['priority']['value'])
-// 													: array();
-
-// 							foreach($priority_options AS $p) {
-// 								echo '<input type="text" name="tenant-priority[]" value="',$p,'" /><br />';
-// 							}
-						?>
-						<input type="text" name="tenant-priority[]" value="" />
-						<input type="hidden" name="tenant-priority-override" value="0" />
-					</span>
-				</li> -->
 				<li>
 					<span class="lb">Mail Delimiter</span>
 					<span class="fillter_input">
@@ -78,7 +62,7 @@
 				</li>
 			</ul>
 		</div>
-		<?php //} ?>
+		<?php } ?>
 
 		<div class="bot">
 			<button type="submit" class="btn btn-primary save">Save</button> or <a href="#" class="cancel">go back</a>
@@ -93,11 +77,12 @@
 			<input type="hidden" name="app_name" value="helpdesk" />
 			<input type="hidden" name="name" value="<?php echo $k ?>" />
 			<input type="text" name="value" />
+			<input type="hidden" name="sort_order" />
 			<button type="button" class="btn btn-primary add-option" data-name="<?php echo $k ?>">Add</button>
 		</form>
 		</div>
 		<table id="tbl-<?php echo $k ?>" cellspacing="0" cellpadding="0" class="tbList">
-			<tbody>
+			<tbody class="sort-options" data-order-url="/setting/ajax_save_options_orders/helpdesk/<?php echo $k ?>">
 				<?php foreach (${$k.'_opts'} as $opt): ?>
 				<tr class="tr-opt-<?php echo $opt['id'] ?>">
 					<td>
@@ -170,6 +155,22 @@ $(document).ready(function() {
 		$('input[name="'+$(this).data('name')+'"]').val(checked);
 	});
 
+	$('.sort-options').sortable({
+		axis: 'y',
+		handle: 'td',
+		opacity: 0.7,
+		update: function(e, ui) {
+			$(this).find('input[name^="sort_order"]').each(function(index, item) {
+				$(item).val(index);
+			});
+			$.ajax({
+				type: 'POST',
+				url: $(this).data('order-url'),
+				data: $(this).find('input[name^="sort_order"]').serialize()
+			});
+		}
+	});
+
 	$('.add-option').die('click');
 	$('.change-option').die('click');
 	$('.cancel-option').die('click');
@@ -181,6 +182,7 @@ $(document).ready(function() {
 		if (frm.find('input[name="value"]').val().trim() == '') {
 			return false;
 		}
+		frm.find('input[name="sort_order"]').val($('#tbl-' + btn.data('name') + ' tr').length);
 		btn.attr('disabled', 'disabled').addClass('disabled').html('Saving...');
 		$.ajax({
 			type: 'POST',

@@ -1,17 +1,17 @@
 <input class="search" />
-	<div class="optionsDropdownContainer">
-		<a href="#" class="optionsDropdownOpener">Options</a>
-		<div class="optionsDropdownPadder">
-			<div class="optionsDropdownList">
-				<div class="arrow"></div>
-				<ul>
-					<li><input type="checkbox" class="styled" id="contacts" /> <label for="contacts">Contacts</label></li>
-					<li><input type="checkbox" class="styled" id="vendors" /> <label for="vendors">Vendors</label></li>
-					<li><input type="checkbox" class="styled" id="documents" /> <label for="documents">Documents</label></li>
-				</ul>
-			</div>
+<div class="optionsDropdownContainer">
+	<a href="#" class="optionsDropdownOpener">Options</a>
+	<div class="optionsDropdownPadder">
+		<div class="optionsDropdownList">
+			<div class="arrow"></div>
+			<ul>
+				<li><input type="checkbox" class="styled" id="contacts" /> <label for="contacts">Contacts</label></li>
+				<li><input type="checkbox" class="styled" id="vendors" /> <label for="vendors">Vendors</label></li>
+				<li><input type="checkbox" class="styled" id="documents" /> <label for="documents">Documents</label></li>
+			</ul>
 		</div>
 	</div>
+</div>
 
 <input type="submit" class="searchInput" value="Go" />
 
@@ -26,9 +26,8 @@
 				<li><?=$current_user['first_name'].' '.$current_user['last_name']?></li>
 				<li><a class="settings" href="/setting">Settings</a></li>
 				<li><a class="support" href="#">Support</a></li>
-<!--				<li><a class="logout last" href="/access/logout">Logout</a></li>-->
-                                <!-- new change from Leo -->
-                                <li><a class="logout last" href="javascript:void(0);" onclick="telcoson.logoff(true);">Logout</a></li>
+				<!--<li><a class="logout last" href="/access/logout">Logout</a></li>-->
+				<li><a class="logout last" href="javascript:void(0);" onclick="telcoson.logoff(true);">Logout</a></li>
 			</ul>
 		</div>
 	</div>

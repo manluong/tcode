@@ -308,5 +308,19 @@ class SettingM extends MY_Model {
 		return TRUE;
 	}
 
-}
+	function save_options_orders() {
+		$sort_order = $this->input->get_post('sort_order');
 
+		$data = array();
+		foreach($sort_order AS $id=>$order) {
+			$data[] = array(
+				'id' => $id,
+				'sort_order' => $order,
+			);
+		}
+
+		$this->db->update_batch('core_select', $data, 'id');
+
+		return TRUE;
+	}
+}

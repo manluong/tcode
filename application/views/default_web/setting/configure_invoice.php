@@ -29,7 +29,7 @@
 		</div>
 		<?php } ?>
 
-		<?php //if ($is_admin) { ?>
+		<?php if ($is_admin) { ?>
 		<div class="dtitle">
 			<span class="upper">Admin Level Settings</span>
 			<span>Changes made here will apply to all users.</span>
@@ -73,7 +73,7 @@
 				</li>
 			</ul>
 		</div>
-		<?php //} ?>
+		<?php } ?>
 
 		<div class="bot">
 			<button type="submit" class="btn btn-primary save">Save</button> or <a href="#" class="cancel">go back</a>
@@ -86,6 +86,7 @@
 		<form action="/invoice/ajax_save_terms" method="post">
 			<input type="text" name="name" />
 			<textarea name="content"></textarea>
+			<input type="hidden" name="sort_order" />
 			<button type="button" class="btn btn-primary add-option" data-name="terms">Add</button>
 		</form>
 		</div>
@@ -125,11 +126,12 @@
 			<input type="hidden" name="app_name" value="invoice" />
 			<input type="hidden" name="name" value="<?php echo $k ?>" />
 			<input type="text" name="value" />
+			<input type="hidden" name="sort_order" />
 			<button type="button" class="btn btn-primary add-option" data-name="<?php echo $k ?>">Add</button>
 		</form>
 		</div>
 		<table id="tbl-<?php echo $k ?>" cellspacing="0" cellpadding="0" class="tbList">
-			<tbody>
+			<tbody class="sort-options" data-order-url="/setting/ajax_save_options_orders/invoice/<?php echo $k ?>">
 				<?php foreach (${$k.'_opts'} as $opt): ?>
 				<tr class="tr-opt-<?php echo $opt['id'] ?>">
 					<td>
@@ -226,6 +228,22 @@ $(document).ready(function() {
 		$(this).tab('show');
 	});
 
+	$('.sort-options').sortable({
+		axis: 'y',
+		handle: 'td',
+		opacity: 0.7,
+		update: function(e, ui) {
+			$(this).find('input[name^="sort_order"]').each(function(index, item) {
+				$(item).val(index);
+			});
+			$.ajax({
+				type: 'POST',
+				url: $(this).data('order-url'),
+				data: $(this).find('input[name^="sort_order"]').serialize()
+			});
+		}
+	});
+
 	$('.add-option').die('click');
 	$('.change-option').die('click');
 	$('.cancel-option').die('click');
@@ -237,6 +255,7 @@ $(document).ready(function() {
 		//if (frm.find('input[name="value"]').val().trim() == '') {
 			//return false;
 		//}
+		frm.find('input[name="sort_order"]').val($('#tbl-' + btn.data('name') + ' tr').length);
 		btn.attr('disabled', 'disabled').addClass('disabled').html('Saving...');
 		$.ajax({
 			type: 'POST',
@@ -306,40 +325,42 @@ $(document).ready(function() {
 		});
 	});
 
-	var uploader = new plupload.Uploader({
-		runtimes : 'gears,html5,flash,silverlight,browserplus',
-		browse_button : 'select-file',
-		container: 'setting-upload',
-		max_file_size : '10mb',
-		url : '/setting/ajax_upload',
-		filters : [{title : "Image files", extensions : "jpg,gif,png"}]
-	});
+	if ($('#setting-upload').length > 0) {
+		var uploader = new plupload.Uploader({
+			runtimes : 'gears,html5,flash,silverlight,browserplus',
+			browse_button : 'select-file',
+			container: 'setting-upload',
+			max_file_size : '10mb',
+			url : '/setting/ajax_upload',
+			filters : [{title : "Image files", extensions : "jpg,gif,png"}]
+		});
 
-	uploader.bind('FilesAdded', function(up, files) {
-		var html = '';
-		for (var i in files) {
-			html += '<div id="'+files[i].id+'">'+files[i].name+'('+plupload.formatSize(files[i].size)+') <b></b></div>';
-		}
-		$('#file-list').html(html);
-	});
+		uploader.bind('FilesAdded', function(up, files) {
+			var html = '';
+			for (var i in files) {
+				html += '<div id="'+files[i].id+'">'+files[i].name+'('+plupload.formatSize(files[i].size)+') <b></b></div>';
+			}
+			$('#file-list').html(html);
+		});
 
-	uploader.bind('UploadProgress', function(up, file) {
-		$('#'+file.id+' b').html('<span>'+file.percent+'%</span>');
-	});
+		uploader.bind('UploadProgress', function(up, file) {
+			$('#'+file.id+' b').html('<span>'+file.percent+'%</span>');
+		});
 
-	uploader.bind('FileUploaded', function(up, file, data) {
-		var resp = $.parseJSON(data.response);
-		if (resp.success) {
-			$('#'+file.id).html('');
-			$('#logo-input').val('/file/read/'+resp.details.id);
-			$('#logo').html('<img src="/file/read/'+resp.details.id+'" />');
-		}
-	});
+		uploader.bind('FileUploaded', function(up, file, data) {
+			var resp = $.parseJSON(data.response);
+			if (resp.success) {
+				$('#'+file.id).html('');
+				$('#logo-input').val('/file/read/'+resp.details.id);
+				$('#logo').html('<img src="/file/read/'+resp.details.id+'" />');
+			}
+		});
 
-	uploader.init();
+		uploader.init();
 
-	$('input[type="file"]').change(function() {
-		uploader.start();
-	});
+		$('input[type="file"]').change(function() {
+			uploader.start();
+		});
+	}
 });
 </script>

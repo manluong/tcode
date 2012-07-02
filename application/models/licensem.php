@@ -117,7 +117,7 @@ class LicenseM extends MY_Model {
 	}
 
 	function export_license_rules($tenant_id) {
-		if (APP_ROLE != 'TBOSS' || APP_ROLE != 'TPROC') return FALSE;
+		if (APP_ROLE != 'TBOSS' && APP_ROLE != 'TPROC') return FALSE;
 
 		$rs = $this->db->select()
 				->from('license_rules AS r')

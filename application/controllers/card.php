@@ -74,7 +74,6 @@ class Card extends MY_Controller {
 	}
 	function get_image($name){
 	    $this->load->library('filel');
-	    echo $temp_dir;
 	    $file = file_get_contents($this->filel->get_temp_dir().'/'.$name);
 	    echo $file;
 	}
@@ -519,11 +518,11 @@ class Card extends MY_Controller {
 		exit;
 	}
 	/*--Iphone--*/
-	
+
 	function iphone(){
 		$this->load->view(get_template().'/card/test_iphone');
 	}
-	
+
 	function iphone_save(){
 		$data = array() ;
 		if(isset($_POST)){
@@ -531,7 +530,7 @@ class Card extends MY_Controller {
 			if(isset($_POST['id'])){
 				$data['id'] = $_POST['id'];
 			}
-			
+
 			if(isset($_POST['addon_email'])){
 				$addon_email = $_POST['addon_email'];
 				$addon_email = explode(';',$addon_email);
@@ -558,7 +557,7 @@ class Card extends MY_Controller {
 						$data['addon_tel'][$i]['is_default'] = trim($tel[6]);
 				}
 			}
-			
+
 			/*--Save address--*/
 			if($_POST['addon_address']){
 				$addon_address = $_POST['addon_address'];

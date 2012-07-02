@@ -3,37 +3,9 @@
 <script type="text/javascript" src="/resources/addon/plupload/js/plupload.full.js"></script>
 <script type="text/javascript" src="/resources/addon/plupload/js/jquery.plupload.queue/jquery.plupload.queue.js"></script>
 <link href="/resources/addon/plupload/js/jquery.plupload.queue/css/jquery.plupload.queue.css" media="screen" rel="stylesheet" type="text/css" />
-<!--
-<div id="breadcrumb">
-	<div id="module_name" style="width:650px;">
-		<ul>
-			<li><a style="width:173px;" href="#" class="main">HELPDESK</a></li>
-			<li class="arrow"></li>
-			<li class="curent_page">New</li>
-			<li><a href="#" id="favoriteIcon" class="on" title="Remove from favorites"></a></li>
-		</ul>
-	</div>
-	<div id="top_button" style="width:210px;">
-		<ul>
-			<li><a href="<?=site_url('helpdesk')?>" class="btn btn-inverse" href="#">LIST</a></li>
-			<li><a href="<?=site_url('helpdesk/card/'.$card_id)?>" class="btn btn-inverse">MY CASE</a></li>
-			<li><a href="<?=site_url('helpdesk/add')?>" class="btn btn-inverse" href="#">NEW</a></li>
-		</ul>
-	</div> 
-</div>
--->
-<div id="content_top">
-	<div id="user_profile">
-		<div id="user_avatar"><image alt="avatar" src="<?=site_url('resources/template/default_web/img/invoice')?>/invoice-avatar.jpg"/></div>
-		<div id="user_info">
-			<ul>
-				<li class="user_sex">Mr.</li>
-				<li class="user_name">Albert Z</li>
-				<li class="user_position">Facebook Inc. <span style="font-weight:normal;">CEO</span></li>
-			</ul>
-		</div>
-	</div>
-	<div id="customer_list">
+
+<div id="quickjump">
+	<div class="quickjump_select">
 		<div class="btn-group">
 		  <a href="#" class="btn btn-inverse">CUSTOMER</a>
 		  <a href="#" data-toggle="dropdown" class="btn btn-inverse dropdown-toggle"><span class="caret"></span></a>
@@ -44,11 +16,27 @@
 		  </ul>
 		</div>
 	</div>
+	<div class="quickjump_card">
+		<div class="quickjump_avatar avatar rounded20 fl mr5">
+			<image class="rounded20" width="40" height="40" alt="avatar" src="<?=site_url('resources/template/default_web/img')?>/avatar.jpg"/>
+		</div>
+		<div class="quickjump_info">
+			<ul>
+				<li class="quickjump_title">Mr.</li>
+				<li class="quickjump_name">Albert Z</li>
+				<li class="quickjump_co">Facebook Inc. 
+					<span class="quickjump_position">CEO</span>
+				</li>
+			</ul>
+		</div>
+	</div>
 </div>
 
 <div id="boxes">
-	<div id="invoice_fillter" style="height:220px;float:left;">
-		<div class="invoice_title"><span class="arrow_title"></span><span>NEW CASE INFORMATION</span></div>
+	<div id="invoice_fillter" style="height:240px;float:left;">
+		<div class="subtitle">
+			<span class="subtitle-arrow"></span>NEW CASE INFORMATION
+		</div>
 		<div id="input_data_info">
 			<ul>
 				<li>
@@ -82,7 +70,9 @@
 	<input type="hidden" value="<?=(!empty($comment_id)? $comment_id : '0')?>" name="hiddenCommentID" id="hiddenCommentID" />
 	
 	<div id="invoice_fillter">
-		<div class="invoice_title"><span class="arrow_title"></span><span>DETAILS</span></div>
+		<div class="subtitle-noshadow">
+			<span class="subtitle-arrow"></span>DETAILS
+		</div>
 		<div id="helpdesk_fillter">
 			<ul>
 				<li>
@@ -150,7 +140,8 @@
 					<h1 style="display:none;">Custom example</h1>
 					<p style="display:none;">Shows you how to use the core plupload API.</p>
 					<div id="container" >
-						<div id="pickfiles" class="btn_attach"></div>
+						
+						<button id="pickfiles" class="btn btn-inverse btn-mini" href="#">Select File</button>
 						<div style="display:none;" id="uploadfiles"></div>
 						<div id="filelist" style="float:left ;margin:23px 0 0 -80px;"></div>
 					</div>

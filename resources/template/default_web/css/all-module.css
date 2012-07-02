@@ -124,6 +124,7 @@ html, body{
 #invoice_fillter{
 	width:860px;
 	min-height:127px;
+	float:left;
 }
 .invoice_title{
 	color:#a8682a;
@@ -140,13 +141,13 @@ html, body{
 .down_arrow{
 	width:19px;
 	height:19px;
-	background:url(../img/invoice/invoice-down_arrow.png) no-repeat;
+	background:url(../img/invoice-down_arrow.png) no-repeat;
 	cursor:pointer;
 }
 .up_arrow{
 	width:19px;
 	height:19px;
-	background:url(../img/invoice/invoice-up_arrow.jpg) no-repeat;
+	background:url(../img/invoice-up_arrow.jpg) no-repeat;
 	cursor:pointer;
 }
 .invoice_title span{
