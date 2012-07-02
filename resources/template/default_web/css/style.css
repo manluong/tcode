@@ -662,6 +662,7 @@ a.appsIconTop {
 }
 
 .tabsNavigation li a {
+	text-transform: uppercase;
 	background-position: 10px -100px;
 }
 
