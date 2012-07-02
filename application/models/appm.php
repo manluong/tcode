@@ -35,9 +35,9 @@ class AppM extends MY_Model {
 			->from($this->table);
 
 		if (is_numeric($app_id_or_name)) {
-			$this->db->where('name', $app_id_or_name);
-		} else {
 			$this->db->where('id', $app_id_or_name);
+		} else {
+			$this->db->where('name', $app_id_or_name);
 		}
 
 		$rs = $this->db->limit(1)
