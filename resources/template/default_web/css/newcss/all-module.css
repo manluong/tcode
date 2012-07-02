@@ -212,7 +212,6 @@ html, body{
 	margin-right:14px;
 }
 #invoice_cases{
-	float:left;
 	height:252px;
 	width:860px;
 }
@@ -314,6 +313,193 @@ html, body{
 }
 /*END INVOICE CSS */
 
+/*START HELPDESK LIST CSS */
+#helpdesk_fillter{
+	width:100%;
+	height:68px;
+	background:url(../img/invoice/invoice-shadown_fillter.png) no-repeat;
+	float:left;
+	padding:20px 0 0 40px;
+	display:inline;
+	margin-top:5px;
+}
+#helpdesk_fillter ul li{
+	float:left;
+	margin-right:2px;
+	font-size:13px;
+	font-weight:bold;
+	width:170px;
+	height:50px;
+}
+#helpdesk_fillter  a{
+	font-size:11px;
+}
+#helpdesk_fillter  select{
+	width:150px;
+}
+#helpdesk_fillter  input{
+	width:110px;
+}
+#helpdesk_fillter .fillter_label{
+	font-weight:normal;
+}
+#helpdesk_show_info{
+	height:123px;
+	width:857px;
+	background: url("../img/invoice/invoice-shadown_fillter.png") no-repeat scroll 0 0 transparent;
+	float:left;
+	padding-top:25px;
+}
+#helpdesk_show_info ul li{
+	float:left;
+	width:100%;
+	margin-top:4px;
+}
+#helpdesk_show_info .input_data_label{
+	font-weight:normal;
+	color:#444444;
+	float:left;
+}
+#helpdesk_show_info .fillter_input{
+	font-size:16px;
+	margin-top:4px;
+	float:left;
+	font-weight:bold;
+}
+#helpdesk_change_info{
+	color:#1d57a0;
+	font-weight:bold;
+	text-decoration:underline;
+	cursor:pointer;
+	margin:0 0 0 750px !important;
+}
+#helpdesk_save_info{
+	color:#1d57a0;
+	font-weight:bold;
+	text-decoration:underline;
+	cursor:pointer;
+	margin:0 0 0 750px !important;
+}
+#helpdesk_edit{
+	display:none;
+}
+#helpdesk_comment textarea{
+	width:794px;
+	height:193px;
+	float:left;
+}
+#comment_submit{
+	width:100%;
+}
+#comment_submit{
+	float:left;
+	margin-top:2px;
+}
+#plupload{
+	float:left;
+	width:200px;
+	display:inline;
+	margin-left:40px;
+}
+#helpdesk_comment{
+	float:left;
+	width:100%;
+	margin-left:40px;
+	display:inline;
+}
+.btn_attach{
+	width:80px;
+	height:22px;
+	background: url("../img/helpdesk/helpdesk-btn_attach.jpg") no-repeat scroll 0 0 transparent;
+	cursor:pointer;
+	float:left;
+}
+.btn_plupload{
+	color:#1d57a0;
+	font-weight:bold;
+	cursor:pointer;
+	text-decoration:underline;
+	float:left;
+	margin-left:12px;
+	display:inline;
+}
+#comment_list{
+	float:left;
+	margin-top:30px;
+	width:100%;
+}
+.comment_info{
+	width:100%;
+	float:left;
+	border-bottom:1px solid #f4f4f4;
+	margin-bottom:15px;
+}
+.comment_info_user{
+	width:100%;
+	height:50px;
+	float:left;
+}
+.comment_user_avatar{
+	width:45px;
+	height:52px;
+	float:left;
+}
+.comment_content{
+	float:left;
+	width:760px;
+	margin:0 0 25px 53px;
+	display:inline;
+	color:#444444;
+	font-size:13px;
+}
+.comment_arrow {
+	float:left;
+	width:50px;
+	margin-top:-30px;
+	margin-left: -46px !important;
+}
+.comment_detail{
+	color:#444444;
+	font-size:13px;
+	float:left;
+	display:inline;
+	display:none;
+}
+.comment_detail p {
+	line-height:10px;
+}
+.wap_comment_content{
+	float:left;
+	margin-bottom:5px;
+	width:100%;
+}
+#new_helpdesk_subject input{
+	width:435px;
+}
+.btn-group a{
+	color:white;
+}
+#top_button a{
+	color:white;
+}
+.dropdown-menu a{
+	color:#000000;
+}
+#input_data_info {
+    background: url("../img/invoice/invoice-shadown_fillter.png") no-repeat scroll 0 0 transparent;
+    float: left;
+    height: 123px;
+    margin-top: 5px;
+    padding-top: 27px;
+    width: 857px;
+}
+.pull-right a{
+	color: #0084CF;
+    font-size: 12px;
+    font-weight: bold;
+    text-decoration: none !important;
+}
+/*END HELPDESK LIST CSS */
 
 
 

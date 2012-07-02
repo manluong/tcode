@@ -10,7 +10,7 @@
 					foreach($breadcrumb AS $bc) {
 						echo '<li';
 						//if ($x == $count_breadcrumb) echo ' class="curent_page"';
-						echo ' class="curent_page"';
+						echo ' class="simple"';
 						echo '>';
 						if (!empty($bc['url'])) echo '<a href="',$bc['url'],'">';
 						echo $bc['title'];
@@ -25,12 +25,10 @@
 		</ul>
 	</div>
 	<?php if (count($app_menu) > 0) { ?>
-	<div id="top_button">
-		<ul>
-			<?php foreach($app_menu AS $menu) { ?>
-			<li><a href="<?=$menu['url']?>" <?=$menu['extra']?> class="btn btn-inverse" href="#"><?=$menu['title']?></a></li>
-			<?php } ?>
-		</ul>
+	<div class="rightBar">
+		<?php foreach($app_menu AS $menu) { ?>
+		<a href="<?=$menu['url']?>" <?=$menu['extra']?> class="btn btn-inverse"><?=$menu['title']?></a>
+		<?php } ?>
 	</div>
 	<?php } ?>
 </div>

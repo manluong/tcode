@@ -415,10 +415,11 @@ class Helpdesk extends MY_Controller {
 		
 		$where = array();
 		$where[] = "helpdesk_id='$id_helpdesk'";
+		$where[] = "active=0";
 		$this->Helpdesk_CommentM->where = $where;
 		
 		$result = $this->Helpdesk_CommentM->get_list();
-		
+		$result['comment_id'] =  $comment_id;
 		//print_r($result);
 		//die;
 		echo json_encode($result);

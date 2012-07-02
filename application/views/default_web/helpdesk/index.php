@@ -1,4 +1,3 @@
-<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/helpdesk.css" />
 <script type="text/javascript" src="/resources/addon/helpdesk.js"></script>
 <script type="text/javascript">
 	$(document).ready(function(){
@@ -10,18 +9,8 @@
 	});
 </script>
 
-<div id="content_top">
-	<div id="user_profile">
-		<div id="user_avatar"><image alt="avatar" src="<?=site_url('resources/template/default_web/img/invoice')?>/invoice-avatar.jpg"/></div>
-		<div id="user_info">
-			<ul>
-				<li class="user_sex">Mr.</li>
-				<li class="user_name">Albert Z</li>
-				<li class="user_position">Facebook Inc. <span style="font-weight:normal;">CEO</span></li>
-			</ul>
-		</div>
-	</div>
-	<div id="customer_list">
+<div id="quickjump">
+	<div class="quickjump_select">
 		<div class="btn-group">
 		  <a href="#" class="btn btn-inverse">CUSTOMER</a>
 		  <a href="#" data-toggle="dropdown" class="btn btn-inverse dropdown-toggle"><span class="caret"></span></a>
@@ -32,12 +21,29 @@
 		  </ul>
 		</div>
 	</div>
+	<div class="quickjump_card">
+		<div class="quickjump_avatar avatar rounded20 fl mr5">
+			<image class="rounded20" width="40" height="40" alt="avatar" src="<?=site_url('resources/template/default_web/img')?>/avatar.jpg"/>
+		</div>
+		<div class="quickjump_info">
+			<ul>
+				<li class="quickjump_title">Mr.</li>
+				<li class="quickjump_name">Albert Z</li>
+				<li class="quickjump_co">Facebook Inc. 
+					<span class="quickjump_position">CEO</span>
+				</li>
+			</ul>
+		</div>
+	</div>
 </div>
 
 <div id="boxes">
 	
 	<div id="invoice_fillter">
-		<div class="invoice_title"><span class="arrow_title"></span><span>Fillter</span></div>
+		<div class="subtitle">
+			<span class="subtitle-arrow"></span>Fillter
+		</div>
+		
 		<div id="helpdesk_fillter">
 			<ul>
 				<li>
@@ -121,7 +127,7 @@
 					<span class="input_data_label">Comments</span>
 					<span class="fillter_input">
 						<input type="hidden" id="helpdesk_id" name="helpdesk_id" />
-						<input style="padding-bottom:0px;" type="text" id="comment_content" name="comment_content" class="inv-field" />
+						<input type="text" id="comment_content" name="comment_content" class="inv-field" />
 					</span>
 				</li>
 
@@ -134,14 +140,13 @@
 		</div>
 	</div>
 
-	<div id="invoice_cases">
+	<div id="invoice_cases" style="margin-top:20px;">
 		<div id="top_cases" style="position:relative;">
 			<div id="helpdesk_loadding"></div>
-			<div class="invoice_title" style="width:550px;"><span class="arrow_title"></span><span>Cases</span></div>
+			<div class="subtitle-noshadow">
+				<span class="subtitle-arrow"></span>Cases
+			</div>
 		</div>
-
-		<div id="main_cases">
-
-		</div>
+		<div id="main_cases"></div>
 	</div>
 </div>

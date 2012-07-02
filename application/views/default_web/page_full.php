@@ -9,8 +9,9 @@
 
 	<title><?=$title?></title>
 	<meta name="viewport" content="width=device-width">
-	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/style.css" />
-        <link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/chat.css" />
+	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/new_style.css" />
+	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/new_app.css" />
+    <link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/chat.css" />
 	<link href='http://fonts.googleapis.com/css?family=Lato:300' rel='stylesheet' type='text/css'>
 
 	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/bootstrap.min.css" />
@@ -182,7 +183,7 @@
 	<!-- new theme stuff -->
 	<script type="text/javascript" src="/resources/addon/custom-form-elements.js"></script>
 	<script type="text/javascript" src="/resources/addon/jquery.smooth-scroll.min.js"></script>
-	<script type="text/javascript" src="/resources/addon/js/plugins.js"></script>
+	<script type="text/javascript" src="/resources/addon/plugins.js"></script>
 	<script type="text/javascript" src="/resources/addon/script.js"></script>
 	<script type="text/javascript" src="/resources/addon/strophe.js"></script>
 	<script type="text/javascript" src="/resources/addon/strophe.xdomainrequest.js"></script>
