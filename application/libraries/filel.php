@@ -33,7 +33,7 @@ class FileL {
 	}
 
 	function get_temp_dir(){
-		return $this->temp_dir.$this->domain.'/';
+		return $this->temp_dir;
 	}
 
 	function read($hash_or_id) {
