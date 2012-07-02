@@ -209,6 +209,7 @@ $lang['core_apps-name-helpdesk'] = 'Helpdesk';
 $lang['core_apps-name-calendar'] = 'Calendar';
 $lang['core_apps-name-chat'] = 'Chat';
 $lang['core_apps-name-api'] = 'API';
+$lang['core_apps-name-phone'] = 'API';
 
 $lang['core_apps_menu-appmenu_rights'] = 'Rights';
 $lang['core_apps_menu-appmenu_listuser'] = 'Listuser';
