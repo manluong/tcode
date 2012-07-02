@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="/resources/template/<?php echo get_template() ?>/css/invoice.css" />
+<link rel="stylesheet" href="/resources/template/<?php echo get_template() ?>/css/app.css" />
 <link rel="stylesheet" href="/resources/addon/jqueryui/aristo/ui.css" />
 <script type="text/javascript" src="/resources/addon/invoice.js"></script>
 
@@ -9,8 +9,8 @@
 <div id="boxes">
 	<form id="frm_search" action="/invoice/search" method="post">
 	<div id="invoice_fillter">
-		<div class="invoice_title"><span class="arrow_title"></span><span>Fillter</span></div>
-		<div id="items_fillter">
+		<div class="subtitle"><span class="subtitle-arrow"></span>FILLTER</div>
+		<div id="items_fillter" class="clearfix">
 			<ul>
 				<li>
 					<span class="fillter_label">Date</span>
@@ -54,35 +54,32 @@
 				<li style="width: 25px; margin: 36px 0 0 28px;"><div id="arrow" class="down_arrow"></div></li>
 			</ul>
 		</div>
-		<div class="ClearLeft"></div>
-		<div id="input_data_fillter">
-			<ul>
-				<?php if (!$is_client): ?>
-				<li>
-					<span class="input_data_label">Customer</span>
-					<span class="fillter_input">
-						<input type="hidden" id="customer_id" name="customer_id" value="<?php echo isset($customer_card_id) ? $customer_card_id : '' ?>" />
-						<input type="text" id="customer_name" name="customer_name" value="<?php echo isset($customer_card_name) ? $customer_card_name : '' ?>" class="inv-field" />
-					</span>
-				</li>
-				<?php endif ?>
-				<li>
-					<span class="input_data_label">Invoice #</span>
-					<span class="fillter_input"><input type="text" name="invoice_id" class="inv-field" /></span>
-				</li>
-				<li>
-					<span class="input_data_label">Purchase Order</span>
-					<span class="fillter_input"><input type="text" name="po_number" class="inv-field" /></span>
-				</li>
-				<li>
-					<span class="input_data_label">Notes</span>
-					<span class="fillter_input"><input type="text" name="notes" class="inv-field" /></span>
-				</li>
-				<li>
-					<span class="input_data_label"></span>
-					<span class="fillter_input"><button type="button" id="search_btn" class="btn btn-primary">SUBMIT</button></span>
-				</li>
-			</ul>
+		<div id="input_data_fillter" class="subtitleContent dataF">
+			<?php if (!$is_client): ?>
+			<div class="dataFL">
+				<div class="dataFT">Customer</div>
+				<div class="dataVD">
+					<input type="hidden" id="customer_id" name="customer_id" value="<?php echo isset($customer_card_id) ? $customer_card_id : '' ?>" />
+					<input type="text" id="customer_name" name="customer_name" value="<?php echo isset($customer_card_name) ? $customer_card_name : '' ?>" class="inv-field" />
+				</div>
+			</div>
+			<?php endif ?>
+			<div class="dataFL">
+				<div class="dataFT">Invoice #</div>
+				<div class="dataVD"><input type="text" name="invoice_id" class="inv-field" /></div>
+			</div>
+			<div class="dataFL">
+				<div class="dataFT">Purchase Order</div>
+				<div class="dataVD"><input type="text" name="po_number" class="inv-field" /></div>
+			</div>
+			<div class="dataFL">
+				<div class="dataFT">Notes</div>
+				<div class="dataVD"><input type="text" name="notes" class="inv-field" /></div>
+			</div>
+			<div class="dataFL">
+				<div class="dataFT">&nbsp;</div>
+				<div class="dataVD"><button type="button" id="search_btn" class="btn btn-primary">SUBMIT</button></div>
+			</div>
 		</div>
 	</div>
 
@@ -91,7 +88,7 @@
 	</form>
 
 	<div id="invoice_cases">
-		<div class="invoice_title"><span class="arrow_title"></span><span>Cases</span></div>
+		<div class="subtitle-noshadow"><span class="subtitle-arrow"></span>CASES</div>
 		<div id="loader" style="display: none;"><img src="/resources/template/default_web/img/invoice/loading.gif" /></div>
 		<div id="invoice_list">
 			<table id="tbl_invoice" cellpadding="0" cellspacing="0" border="0" class="table table-striped">

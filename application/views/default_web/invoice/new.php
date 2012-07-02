@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="/resources/template/<?php echo get_template() ?>/css/invoice.css" />
+<link rel="stylesheet" href="/resources/template/<?php echo get_template() ?>/css/app.css" />
 <link rel="stylesheet" href="/resources/addon/jqueryui/aristo/ui.css" />
 <script type="text/javascript" src="/resources/addon/invoice.js"></script>
 
@@ -8,32 +8,31 @@
 
 <div id="boxes">
 	<form id="invoice_form" action="/invoice/save" method="post">
-	<div>
-		<div class="invoice_title"><span class="arrow_title"></span><span>INVOICE INFORMATION</span></div>
-		<div id="input_data_info">
-			<ul>
-				<li>
-					<span class="input_data_label">Customer</span>
-					<input type="hidden" id="customer_id" name="customer_card_id" />
-					<input type="text" id="customer_name" name="customer_card_name" class="inv-field" />
-				</li>
-				<li>
-					<span class="input_data_label">Invoice Date</span>
-					<span class="fillter_input"><input type="text" name="invoice_stamp" class="inv-field datepicker" /></span>
-				</li>
-				<li>
-					<span class="input_data_label">Due Date</span>
-					<span class="fillter_input"><input type="text" name="payment_due_stamp" class="inv-field datepicker" /></span>
-				</li>
-				<li>
-					<span class="input_data_label">Purchase Order</span>
-					<span class="fillter_input"><input type="text" name="purchase_order_number" class="inv-field" /></span>
-				</li>
-			</ul>
+	<div class="subtitle"><span class="subtitle-arrow"></span>INVOICE INFORMATION</div>
+	<div class="subtitleContent dataF">
+		<div class="dataFL">
+			<div class="dataFT">Customer</div>
+			<div class="dataVD">
+				<input type="hidden" id="customer_id" name="customer_card_id" />
+				<input type="text" id="customer_name" name="customer_card_name" class="inv-field" />
+			</div>
+		</div>
+		<div class="dataFL">
+			<div class="dataFT">Invoice Date</div>
+			<div class="dataVD"><input type="text" name="invoice_stamp" class="inv-field datepicker" /></div>
+		</div>
+		<div class="dataFL">
+			<div class="dataFT">Due Date</div>
+			<div class="dataVD"><input type="text" name="payment_due_stamp" class="inv-field datepicker" /></div>
+		</div>
+		<div class="dataFL">
+			<div class="dataFT">Purchase Order</div>
+			<div class="dataVD"><input type="text" name="purchase_order_number" class="inv-field" /></div>
 		</div>
 	</div>
+
 	<div id="invoice_detail">
-		<div class="invoice_title"><span class="arrow_title"></span><span>DETAILS</span></div>
+		<div class="subtitle-noshadow"><span class="subtitle-arrow"></span>DETAILS</div>
 		<div id="main_cases">
 			<div id="item_list_header">
 				<div style="width: 28px;"></div>
