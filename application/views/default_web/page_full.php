@@ -31,6 +31,7 @@
 
 	<script type="text/javascript" charset="utf-8">
 		$(document).ready(function() {
+			$(".nano").nanoScroller();
 
 			$.extend( $.fn.dataTableExt.oStdClasses, {
 			    "sWrapper": "dataTables_wrapper form-inline"
