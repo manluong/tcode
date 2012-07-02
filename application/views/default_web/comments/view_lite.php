@@ -8,7 +8,7 @@
 	<?php foreach ($comments AS $comment): ?>
 	<div class="post reply clearfix">
 		<div class="avatar">
-			<img class="avatar" src="/resources/template/<?=get_template()?>/img/avatar.png" />
+			<img class="avatar" src="/resources/template/<?=get_template()?>/img/avatar.jpg" />
 		</div>
 
 		<div class="content" data-comment_id="<?=$comment['id']?>">
