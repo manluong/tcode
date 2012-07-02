@@ -11,7 +11,7 @@
 			<?php foreach ($comments AS $comment): ?>
 			<div class="post">
 				<div class="avatar">
-					<img class="avatar" src="/resources/template/<?=get_template()?>/img/avatar.png" />
+					<img class="avatar" src="/resources/template/<?=get_template()?>/img/avatar.jpg" />
 				</div>
 
 				<div class="content">
@@ -35,7 +35,7 @@
 						<?php foreach ($comment['replies'] AS $reply): ?>
 							<div class="post reply">
 								<div class="avatar">
-									<img class="avatar" src="/resources/template/<?=get_template()?>/img/avatar.png" />
+									<img class="avatar" src="/resources/template/<?=get_template()?>/img/avatar.jpg" />
 								</div>
 								<div class="content">
 									<span class="name"><?=$reply['card_info']['card_fname'].' '.$reply['card_info']['card_lname']?></span>
