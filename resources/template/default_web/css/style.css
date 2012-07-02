@@ -479,8 +479,8 @@ header .rightMenu .dropdownAvatar .arrow {
 /* Custom scrollbar for the apps navigation*/
 .nano .content {
   position: absolute;
-  overflow: hidden;
-  //overflow-x: hidden;
+  overflow: scroll;
+  overflow-x: hidden;
   margin: 0 ;
   top: 0;
   right: 0;
