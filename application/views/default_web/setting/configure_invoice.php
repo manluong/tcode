@@ -325,40 +325,42 @@ $(document).ready(function() {
 		});
 	});
 
-	var uploader = new plupload.Uploader({
-		runtimes : 'gears,html5,flash,silverlight,browserplus',
-		browse_button : 'select-file',
-		container: 'setting-upload',
-		max_file_size : '10mb',
-		url : '/setting/ajax_upload',
-		filters : [{title : "Image files", extensions : "jpg,gif,png"}]
-	});
+	if ($('#setting-upload').length > 0) {
+		var uploader = new plupload.Uploader({
+			runtimes : 'gears,html5,flash,silverlight,browserplus',
+			browse_button : 'select-file',
+			container: 'setting-upload',
+			max_file_size : '10mb',
+			url : '/setting/ajax_upload',
+			filters : [{title : "Image files", extensions : "jpg,gif,png"}]
+		});
 
-	uploader.bind('FilesAdded', function(up, files) {
-		var html = '';
-		for (var i in files) {
-			html += '<div id="'+files[i].id+'">'+files[i].name+'('+plupload.formatSize(files[i].size)+') <b></b></div>';
-		}
-		$('#file-list').html(html);
-	});
+		uploader.bind('FilesAdded', function(up, files) {
+			var html = '';
+			for (var i in files) {
+				html += '<div id="'+files[i].id+'">'+files[i].name+'('+plupload.formatSize(files[i].size)+') <b></b></div>';
+			}
+			$('#file-list').html(html);
+		});
 
-	uploader.bind('UploadProgress', function(up, file) {
-		$('#'+file.id+' b').html('<span>'+file.percent+'%</span>');
-	});
+		uploader.bind('UploadProgress', function(up, file) {
+			$('#'+file.id+' b').html('<span>'+file.percent+'%</span>');
+		});
 
-	uploader.bind('FileUploaded', function(up, file, data) {
-		var resp = $.parseJSON(data.response);
-		if (resp.success) {
-			$('#'+file.id).html('');
-			$('#logo-input').val('/file/read/'+resp.details.id);
-			$('#logo').html('<img src="/file/read/'+resp.details.id+'" />');
-		}
-	});
+		uploader.bind('FileUploaded', function(up, file, data) {
+			var resp = $.parseJSON(data.response);
+			if (resp.success) {
+				$('#'+file.id).html('');
+				$('#logo-input').val('/file/read/'+resp.details.id);
+				$('#logo').html('<img src="/file/read/'+resp.details.id+'" />');
+			}
+		});
 
-	uploader.init();
+		uploader.init();
 
-	$('input[type="file"]').change(function() {
-		uploader.start();
-	});
+		$('input[type="file"]').change(function() {
+			uploader.start();
+		});
+	}
 });
 </script>
