@@ -39,10 +39,17 @@
 	</header>
 	<!-- End Header -->
 
+	<!-- Round Corner -->
+	<div id="main-rightbar"></div>
+	<div id="main-ctr"></div>
+	<div id="main-cbr"></div>
+	<div id="main-ctl"></div>
+	<!-- End Round Corner -->
+
 	<?=$sidebar?>
 
-	<div role="main" id="main" class="clearfix">
-		<div class="mainContent">
+	<div id="main" style="background: #fff;">
+		<div id="mainFixed">
 			<?=$app_title?>
 
 			<?=$content?>
