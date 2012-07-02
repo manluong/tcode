@@ -21,7 +21,7 @@ class Email_send extends MY_Controller {
 			->set_subject('test')
 			->set_content('some text');
 
-		$result = $this->emaill->send_email();
+		$result = $this->emaill->send();
 		//$result = $this->emaill->debug();die();
 
 		$this->output->set_content_type('application/json')
@@ -43,6 +43,6 @@ class Email_send extends MY_Controller {
 			->set_template('email', 'test')
 			->set_single_replace_value($replace);
 
-		echo ($this->emaill->send_email()) ? 'sent' : 'not sent';
+		echo ($this->emaill->send()) ? 'sent' : 'not sent';
 	}
 }

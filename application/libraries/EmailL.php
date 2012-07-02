@@ -149,6 +149,16 @@ class EmailL {
 		return $this;
 	}
 
+	//These fields are reset when the send() function is called.
+	function reset() {
+		$this->_cards = array();
+		$this->_to = array();
+		$this->_toname = array();
+		$this->_bcc = array();
+		$this->_attachment_id = array();
+		$this->_files = array();
+	}
+
 	private function _load_to() {
 		if (count($this->_cards) == 0) return NULL;
 
@@ -346,7 +356,7 @@ class EmailL {
 		$this->_query_post = $data;
 	}
 
-	function send_email () {
+	function send() {
 		$api_url = 'http://sendgrid.com/api/mail.send.json';
 
 		$this->_load_to();
@@ -368,6 +378,8 @@ class EmailL {
 		$i = json_decode($i, true);
 
 		$this->_update_log($i['message']);
+
+		$this->reset();
 
 		return ($i['message'] === 'success');
 	}
