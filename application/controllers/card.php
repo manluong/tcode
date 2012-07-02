@@ -74,8 +74,6 @@ class Card extends MY_Controller {
 	}
 	function get_image($name){
 	    $this->load->library('filel');
-	    echo $this->filel->get_temp_dir();
-	    die;
 	    $file = file_get_contents($this->filel->get_temp_dir().'/'.$name);
 	    echo $file;
 	}

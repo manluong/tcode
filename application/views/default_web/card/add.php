@@ -769,8 +769,9 @@ $(window).load(function () {
 			<div id="filelist" style="float:left ;margin:-57px 0 0 -66px;"></div>
 
 		</div>
-		<div id="avatar">hehe</div>
+
 	</div>
+	<div id="avatar"></div>
 	<div id="breadcrumb">
 		<div id="module_name" style="width:650px;">
 			<ul>
