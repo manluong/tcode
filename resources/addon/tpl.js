@@ -43,7 +43,7 @@ var custom_editcard = "My {{#content}}{{#card_fname}}{{label}} is {{{control}}}{
 
 var tpl_comments = [];
 tpl_comments.post = '<div class="post {{reply}} clearfix">{{#card_info}}'+
-							'<div class="avatar"><img class="avatar" src="/resources/template/default_web/img/avatar.png" /></div>'+
+							'<div class="avatar"><img class="avatar" src="/resources/template/default_web/img/avatar.jpg" /></div>'+
 							'<div class="content" data-comment_id="{{id}}">'+
 								'<span class="name">{{card_fname}} {{card_lname}}</span> {{/card_info}}'+
 								'{{#in_reply_to}}<span class="in_reply_to"> in reply to {{name}}</span> {{/in_reply_to}}'+
@@ -65,7 +65,7 @@ tpl_comments.input = '<div class="new_comment">'+
 
 var tpl_dashboard = [];
 tpl_dashboard.post = '<div class="post">'+
-						'<div class="avatar"><img class="avatar" src="/resources/template/default_web/img/avatar.png" /></div>'+
+						'<div class="avatar"><img class="avatar" src="/resources/template/default_web/img/avatar.jpg" /></div>'+
 						'<div class="content" data-comment_id="{{id}}">'+
 							'<span class="name">{{card_name}}</span><br />{{msg}}'+
 							'<div class="post_controls">'+

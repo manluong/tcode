@@ -16,7 +16,7 @@
 <input type="submit" class="searchInput" value="Go" />
 
 <div class="dropdownAvatar">
-	<img src="/resources/template/<?=get_template()?>/img/avatar.png" alt="" width="37" class="dropdownAvatarOpener" />
+	<img src="/resources/template/<?=get_template()?>/img/avatar.jpg" alt="" width="37" class="dropdownAvatarOpener" />
 	<div class="arrow dropdownAvatarOpener"></div>
 
 	<div class="userDropdownPadding">

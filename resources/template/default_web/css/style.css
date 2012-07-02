@@ -455,8 +455,8 @@ header .rightMenu .dropdownAvatar .arrow {
 .tabsNavigation {
 	//background: url(../img/sprite-1.png) no-repeat -263px -234px;
 	width: 78px;
-	//overflow-y: hidden;
-	//overflow-x: hidden;
+	overflow-y: hidden;
+	overflow-x: hidden;
 	//position: absolute;
 	//bottom: 0;
 	//top: 0;
@@ -659,6 +659,11 @@ a.appsIconTop {
 	background-position-x: -45px;
 	color: #485152;
 	margin-left: 15px;
+}
+
+.tabsNavigation li a {
+	text-transform: uppercase;
+	background-position: 10px -100px;
 }
 
 .tabsNavigation li a.home {
@@ -1258,43 +1263,4 @@ footer .links a {
 
 footer .links a:hover {
 	color: #555;
-}
-
-.alert-center {font-size:12px; color:#6da557; text-align:center; line-height:24px}
-.alert-center a{color:#6da557; text-decoration:underline}
-.err {color:#F00; font-size:14px; padding-top:20px}
-.btn-green {background:#7ab860; border:1px solid #689f51; border-radius:3px; color:#Fff; padding:5px 10px; font-size:12px;}
-.list {padding-top:30px}
-.list ul li{overflow:hidden; border-bottom:1px solid #eee; padding:5px 0}
-.list ul li h2{font-size:24px; text-align:right; font-style:italic; color:#6da557; font-weight:normal;}
-
-.list ul li .cont-list img {width:48px; float:left; margin-right:8px}
-.list ul li .cont-list .right-list {font-size:13px; float:right; color:#6da557;}
-.list ul li .large-label {font-family: "Lato"; font-weight: lighter; font-size:23px; color: #485152; font-weight:lighter; display:block; padding-top:7px}
-.list ul li .cont-list  {font-size:23px; color:#666; font-weight:normal; display:block; padding-top:7px}
-
-
-
-
-.list ul li .cont-list .bottom-list , .bottom-list a{ font-size:11px; color:#94bdc2}
-.bottom-list a {text-decoration:underline}
-
-
-.tit {
-	color: #a8682a;
-	font-size: 12px;
-	font-weight: bold;
-	//padding-left: 10px;
-	line-height: 12px;
-	height: 34px;
-	background: url(../img/boxTitleBackground860.png) no-repeat center 0px;
-}
-.tit a{
-	color: #a8682a;
-	font-size: 12px;
-	font-weight: bold;
-	//padding-left: 10px;
-	line-height: 12px;
-	height: 34px;
-	background: url(../img/boxTitleBackground860.png) no-repeat center 0px;
 }

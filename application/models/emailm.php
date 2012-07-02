@@ -48,14 +48,13 @@ class EmailM extends MY_Model {
 	function get_template_content($app_name, $template) {
 		$app_id = $this->AppM->get_id($app_name);
 
-		$query = $this->db->select('content')
-			->from('email_template')
-			->where('app_id', $app_id)
-			->where('name', $template)
-			->get();
-		$i = $query->row_array();
-
-		return ( ! empty($i)) ? $i['content'] : '';
+		return $this->db->select('subject, content')
+				->from('email_template')
+				->where('app_id', $app_id)
+				->where('name', $template)
+				->limit(1)
+				->get()
+				->row_array();
 	}
 
 	function update_status($email_sent_log_id, $email, $event, $timestamp) {

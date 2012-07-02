@@ -64,7 +64,7 @@ class Signup extends MY_Controller {
 					->set_subject('Welcome to 8force')
 					->set_content($welcome_message)
 					->set_from('support@8force.com', '8Force')
-					->send_email();
+					->send();
 
 			$this->session->unset_userdata('signup_info');
 		}

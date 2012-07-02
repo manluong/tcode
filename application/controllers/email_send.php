@@ -21,7 +21,7 @@ class Email_send extends MY_Controller {
 			->set_subject('test')
 			->set_content('some text');
 
-		$result = $this->emaill->send_email();
+		$result = $this->emaill->send();
 		//$result = $this->emaill->debug();die();
 
 		$this->output->set_content_type('application/json')
@@ -30,18 +30,17 @@ class Email_send extends MY_Controller {
 
 	function test() {
 		$replace = array(
-			'keys' => array('%name%', '%result%'),
-			'values' => array(array('Boo1', 'Boo2'), array('Success1', 'Success2'))
+			'keys' => array('%name%', '%result%', '%subject%'),
+			'values' => array('Boo1', 'Success1', 'SubOne')
 		);
 
 		$this->emaill
-			->set_card(211)
-			->set_subject('test')
+			->set_card(123456)
+			->set_from('docs', 'Docs')
 			//->set_attachment_id('ac57b26f30fcb8a3134416f6744fce07')
 			->set_template('email', 'test')
-			->set_replace_value($replace)
-			->set_from('docs@telcoson.com', 'Docs');
+			->set_single_replace_value($replace);
 
-		echo ($this->emaill->send_email()) ? 'sent' : 'not sent';
+		echo ($this->emaill->send()) ? 'sent' : 'not sent';
 	}
 }

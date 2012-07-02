@@ -6,10 +6,13 @@ class EmailL {
 	private $_cards = array();
 	private $_to = array();
 	private $_toname = array();
-	private $_from = 'hello@8force.net';
-	private $_fromname = '8Force';
 	private $_bcc = array();
 
+	private $_domain = '8force.net';
+	private $_from = 'hello@8force.net';
+	private $_fromname = '8Force';
+
+	private $_single_replace_value = array();
 	private $_replace_value = array();
 	private $_app_name = 'email';
 	private $_template = '';
@@ -29,7 +32,7 @@ class EmailL {
 	private $_query_str = '';
 	private $_query_post = array();
 
-	function __construct($url = '') {
+	function __construct() {
 		$this->_ci = & get_instance();
 
 		$this->_api_user = $this->_ci->eightforce_config['sendgrid_api_user'];
@@ -37,6 +40,8 @@ class EmailL {
 
 		$this->_ci->load->model('EmailM');
 		$this->_ci->load->library(array('SmtpApiHeaderL', 'FileL'));
+
+		$this->_domain = $this->_ci->domain;
 
 		$this->_temp_dir = $this->_ci->eightforce_config['temp_folder'].$this->_ci->domain.'/';
 		if ( ! file_exists($this->_temp_dir)) mkdir($this->_temp_dir, 0777, true);
@@ -64,8 +69,8 @@ class EmailL {
 		return $this;
 	}
 
-	function set_from($email, $name) {
-		$this->_from = trim($email);
+	function set_from($email_name, $name) {
+		$this->_from = trim($email_name).'@'.$this->_domain.'.8force.net';
 		$this->_fromname = trim($name);
 
 		return $this;
@@ -133,6 +138,27 @@ class EmailL {
 		return $this;
 	}
 
+	function set_single_replace_value($replace_value) {
+		if ( ! isset($replace_value['keys']) OR ! isset($replace_value['values'])) {
+			log_message('error', 'Replace value must have a key with values to replace');
+			exit();
+		}
+
+		$this->_single_replace_value = $replace_value;
+
+		return $this;
+	}
+
+	//These fields are reset when the send() function is called.
+	function reset() {
+		$this->_cards = array();
+		$this->_to = array();
+		$this->_toname = array();
+		$this->_bcc = array();
+		$this->_attachment_id = array();
+		$this->_files = array();
+	}
+
 	private function _load_to() {
 		if (count($this->_cards) == 0) return NULL;
 
@@ -176,16 +202,28 @@ class EmailL {
 			exit();
 		}
 
-		if ($this->_content === '') {
-			$this->_content = $this->_ci->EmailM->get_template_content($this->_app_name, $this->_template);
+		if ($this->_template !== '') {
+			 $template = $this->_ci->EmailM->get_template_content($this->_app_name, $this->_template);
+
+			 $this->_content = $template['content'];
+			 $this->_subject = $template['subject'];
 		}
 	}
 
 	private function _load_replace_value() {
-		if (count($this->_replace_value) == 0) return NULL;
+		if (count($this->_single_replace_value) > 0) {
+			$num_recipients = count($this->_to) + count($this->_bcc);
+			for($x=0; $x<$num_recipients; $x++) {
+				foreach($this->_single_replace_value['keys'] AS $k=>$v) {
+					$this->_ci->smtpapiheaderl->addSubVal($this->_single_replace_value['keys'][$k], $this->_single_replace_value['values'][$k]);
+				}
+			}
+		}
 
-		for($i=0; $i<count($this->_replace_value['keys']); $i++) {
-			$this->_ci->smtpapiheaderl->addSubVal($this->_replace_value['keys'][$i], $this->_replace_value['values'][$i]);
+		if (count($this->_replace_value) > 0) {
+			for($i=0; $i<count($this->_replace_value['keys']); $i++) {
+				$this->_ci->smtpapiheaderl->addSubVal($this->_replace_value['keys'][$i], $this->_replace_value['values'][$i]);
+			}
 		}
 	}
 
@@ -318,7 +356,7 @@ class EmailL {
 		$this->_query_post = $data;
 	}
 
-	function send_email () {
+	function send() {
 		$api_url = 'http://sendgrid.com/api/mail.send.json';
 
 		$this->_load_to();
@@ -340,6 +378,8 @@ class EmailL {
 		$i = json_decode($i, true);
 
 		$this->_update_log($i['message']);
+
+		$this->reset();
 
 		return ($i['message'] === 'success');
 	}

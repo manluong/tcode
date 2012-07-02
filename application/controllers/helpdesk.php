@@ -53,7 +53,7 @@ class Helpdesk extends MY_Controller {
 			'priority' => $this->Helpdesk_PriorityM->get_list(),
 			'type' => $this->Helpdesk_TypeM->get_list(),
 		);
-		
+
 		$this->data['app_menu'] = array(
 			array(
 				'url' => '/helpdesk',
@@ -71,7 +71,7 @@ class Helpdesk extends MY_Controller {
 				'title' => 'New',
 			),
 		);
-		
+
 		$this->data['content'] = $this->load->view(get_template().'/helpdesk/index',$content, TRUE);
 		$this->_do_output();
 	}
@@ -123,7 +123,7 @@ class Helpdesk extends MY_Controller {
 
 	function helpdesk_fillter_all(){
 		$where = array();
-		
+
 		$status = $this->input->post('status');
 		if(!empty($status)){
 			$where[] = "status='$status'";
@@ -274,7 +274,7 @@ class Helpdesk extends MY_Controller {
 			'type' => $this->Helpdesk_TypeM->get_list(),
 			'assign' => $this->Helpdesk_CommentM->get_assign(),
 		);
-		
+
 		$this->data['app_menu'] = array(
 			array(
 				'url' => '/helpdesk',
@@ -292,7 +292,7 @@ class Helpdesk extends MY_Controller {
 				'title' => 'New',
 			),
 		);
-		
+
 		$this->data['content'] = $this->load->view(get_template().'/helpdesk/add',$content, TRUE);
 		$this->_do_output();
 	}
@@ -359,7 +359,7 @@ class Helpdesk extends MY_Controller {
 				'title' => 'New',
 			),
 		);
-		
+
 		$this->data['content'] = $this->load->view(get_template().'/helpdesk/edit',$content, TRUE);
 		$this->_do_output();
 	}
@@ -412,18 +412,18 @@ class Helpdesk extends MY_Controller {
             'active' => 1,
 		);
 		$comment_id = $this->Helpdesk_CommentM->save($comment_data);
-		
+
 		$where = array();
 		$where[] = "helpdesk_id='$id_helpdesk'";
 		$where[] = "active=0";
 		$this->Helpdesk_CommentM->where = $where;
-		
+
 		$result = $this->Helpdesk_CommentM->get_list();
 		$result['comment_id'] =  $comment_id;
 		//print_r($result);
 		//die;
 		echo json_encode($result);
-		
+
 	}
 
 	function save_insert_helpdesk(){
@@ -519,7 +519,7 @@ class Helpdesk extends MY_Controller {
             ->set_replace_value(array('keys'=>array('%name%', '%result%'), 'values'=>array(array('Roy'), array('Success!!'))))
             ->set_from('docs@telcoson.com', 'Docs');
 			//$this->emaill->debug(); // prints the parameters to send
-			$i = $this->emaill->send_email(); var_dump($i);// actual email sending returns TRUE or FALSE
+			$i = $this->emaill->send(); var_dump($i);// actual email sending returns TRUE or FALSE
 	}
 
 }

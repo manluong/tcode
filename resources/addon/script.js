@@ -36,6 +36,13 @@ $(".userDropdownPadding").mouseleave(function(){
 	}
 });
 
+$(".userDropdownPadding .settings").click(function(){
+	$("#settings, #overlay").fadeIn("fast");
+	$(".userDropdownPadding").hide();
+
+	return false;
+});
+
 // Breadcrumb favorite star effect
 $("#breadcrumb #favoriteIcon").click(function(){
 	if ($(this).hasClass("on")){
@@ -89,25 +96,41 @@ $("div#main #bottomMenus a").click(function(){
 });
 
 // Scroll
-$(".appsIconBottom").click(function(){
+
+
+$('.appsIconBottom, .appsIconTop').click(function(){
+	return false;
+});
+
+$('.appsIconBottom').hover(function() {
+    moveABitBottom();
+    interval = setInterval(moveABitBottom, 1000);
+},
+function() {
+    clearInterval(interval);
+});
+
+$('.appsIconTop').hover(function() {
+    moveABitTop();
+    interval = setInterval(moveABitTop, 1000);
+},
+function() {
+    clearInterval(interval);
+});
+
+function moveABitBottom(){
 	var scrolltop = $(".tabsNavigation").scrollTop();
 	var newTop = scrolltop + 65;
 
-	$(".tabsNavigation").animate({scrollTop:newTop}, 500);
+	$(".tabsNavigation").animate({scrollTop:newTop}, 800);
+}
 
-
-	return false;
-});
-
-$(".appsIconTop").click(function(){
+function moveABitTop(){
 	var scrolltop = $(".tabsNavigation").scrollTop();
 	var newTop = scrolltop - 65;
 
-	$(".tabsNavigation").animate({scrollTop:newTop}, 500);
-
-
-	return false;
-});
+	$(".tabsNavigation").animate({scrollTop:newTop}, 800);
+}
 
 // Activity app
 $(".timeline .entry").hover(function(){
@@ -122,7 +145,7 @@ $(".openNotes").click(function(){
 	$("#commentsBar").parents(".entry").find(".notes a.new").removeClass("new").addClass("regular");
 	// Change the link's label for no new notes and add quantity of notes
 
-	$(this).parents(".notes").find("a").addClass("alwaysVisible");
+	$(this).parents(".notes").find("a.openNotes").addClass("alwaysVisible");
 
 	$("#commentsBar").appendTo($(this).parents(".entry"));
 	$("#commentsBar").show();
@@ -132,10 +155,20 @@ $(".openNotes").click(function(){
 	return false;
 });
 
+$(".notes .remove").click(function(){
+	$(this).parents(".entry").slideToggle();
+
+	// Ajax call to remember the hidden item
+});
+
 $("a.previousMessages").click(function(){
 	// Ajax call to load previous comments
 
 	return false;
+});
+
+$("#commentsBar .writeANote").focus(function(){
+	$(this).animate({height:'+50'}, 500);
 });
 
 $("#breadcrumb select").change(function () {
@@ -154,34 +187,106 @@ $("#breadcrumb select").change(function () {
 
 $(".ShareYourThoughts select").change(function () {
 	$('#markstatus').attr('checked', true);
-
-	});
+});
 
 $(".ShareYourThoughts textarea").focus(function(){
 	$(this).parent().addClass("active");
 	$(".ShareYourThoughts .options").show();
 });
 
+var observe;
+if (window.attachEvent) {
+    observe = function (element, event, handler) {
+        element.attachEvent('on'+event, handler);
+    };
+}
+else {
+    observe = function (element, event, handler) {
+        element.addEventListener(event, handler, false);
+    };
+}
+function initResize () {
+    var text = document.getElementById('shareTextarea');
+    function resize () {
+        text.style.height = 'auto';
+        text.style.height = text.scrollHeight+'px';
+        $(".ShareYourThoughts .options").animate({top: text.scrollHeight + 24}, 0);
+        $(".ShareYourThoughts.active").animate({height: text.scrollHeight + 51}, 0);
+    }
+    /* 0-timeout to get the already changed text */
+    function delayedResize () {
+        window.setTimeout(resize, 0);
+    }
+    observe(text, 'change',  resize);
+    observe(text, 'cut',     delayedResize);
+    observe(text, 'paste',   delayedResize);
+    observe(text, 'drop',    delayedResize);
+    observe(text, 'keydown', delayedResize);
+
+
+    resize();
+}
+
 $(".ShareYourThoughts input[type=text]").click(function(){
 	$(this).select();
-	$(this).addClase("focus");
-	$(this).animate({width:'+=53'}, 500 );
+	$(this).addClass("focus");
 });
 
 $(".ShareYourThoughts input[type=text]").focus(function(){
 	if (!$(this).hasClass("focus")) {
 		$(this).animate({width:'+=53'}, 500 );
-		$(this).addClase("focus");
+		$(this).addClass("focus");
 	}
 }).blur(function(){
 	$(this).animate({width:'-=53'}, 500 );
-	$(this).removeClase("focus");
+	$(this).removeClass("focus");
 });
 
 $(".ShareYourThoughts input[type=text]").keydown(function(){
 	$('#markstatus').attr('checked', true);
 });
 
+// Contacts app
 
+$("#menuTabCard a").click(function(){
+	$("#menuTabCard li").removeClass("active");
+	$(this).parent().addClass("active");
 
+	if ($(this).parent().hasClass("details")) {
+		$("#contactsPanel .fix").show();
+	} else {
+		$("#contactsPanel .fix").hide();
+	}
 
+	// Change label of the breadcrumb
+	var label = $(this).html();
+	$("#breadcrumb .tabsContent").html(label);
+
+	// Create function to load the new content for the tab
+
+	return false;
+});
+
+// Settings
+
+$("#settings .icons a").click(function(){
+	$("#settings .step1").hide();
+	$("#settings .step2").fadeIn("fast");
+
+	return false;
+});
+
+$("#settings .cancel").click(function(){
+	$("#settings .step2").hide();
+	$("#settings .step1").fadeIn("fast");
+
+	return false;
+});
+
+$("#overlay, .closeModal").click(function(){
+	$("#settings, #overlay").fadeOut("fast");
+
+	return false;
+});
+
+$('.nano').nanoScroller();
