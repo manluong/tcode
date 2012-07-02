@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="/resources/template/<?php echo get_template() ?>/css/invoice.css" />
+<link rel="stylesheet" href="/resources/template/<?php echo get_template() ?>/css/app.css" />
 <link rel="stylesheet" href="/resources/addon/jqueryui/aristo/ui.css" />
 <script type="text/javascript" src="/resources/addon/invoice.js"></script>
 
@@ -152,7 +152,7 @@
 	</div>
 
 	<div style="margin-top: 40px;">
-		<div class="invoice_title"><span class="arrow_title"></span><span>PAYMENT INFORMATION</span></div>
+		<div class="subtitle-noshadow"><span class="subtitle-arrow"></span>PAYMENT INFORMATION</div>
 		<table cellpadding="0" cellspacing="0" border="0" class="table table-striped">
 			<thead>
 				<tr>

@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="/resources/template/<?php echo get_template() ?>/css/invoice.css" />
+<link rel="stylesheet" href="/resources/template/<?php echo get_template() ?>/css/app.css" />
 <link rel="stylesheet" href="/resources/addon/jqueryui/aristo/ui.css" />
 <script type="text/javascript" src="/resources/addon/invoice.js"></script>
 
@@ -11,8 +11,8 @@
 <div id="boxes">
 	<form action="/invoice/pay_save" method="post">
 	<div>
-		<div class="invoice_title"><span class="arrow_title"></span><span>PAYMENT INFORMATION</span></div>
-		<div id="input_data_info">
+		<div class="subtitle"><span class="subtitle-arrow"></span>PAYMENT INFORMATION</div>
+		<div class="subtitleContent">
 			<table id="tbl_pay">
 				<tr class="tr_pay">
 					<td>
