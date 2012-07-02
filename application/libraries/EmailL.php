@@ -180,8 +180,10 @@ class EmailL {
 			exit();
 		}
 
-		if ($this->_content === '') {
-			$this->_content = $this->_ci->EmailM->get_template_content($this->_app_name, $this->_template);
+		if ($this->_template !== '') {
+			 $template = $this->_ci->EmailM->get_template_content($this->_app_name, $this->_template);
+			 $this->_content = $template['content'];
+			 $this->_subject = $template['subject'];
 		}
 	}
 

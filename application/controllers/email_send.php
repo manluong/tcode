@@ -31,7 +31,7 @@ class Email_send extends MY_Controller {
 	function test() {
 		$replace = array(
 			'keys' => array('%name%', '%result%', '%subject%'),
-			'values' => array(array('Boo1', 'Boo2'), array('Success1', 'Success2'), array('SubOne', 'SubTwo'))
+			'values' => array(array('Boo1', 'Boo2', 'Boo3'), array('Success1', 'Success2', 'Success3'), array('SubOne', 'SubTwo', 'SubThree'))
 		);
 
 		$this->emaill
