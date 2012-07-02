@@ -119,11 +119,22 @@ class Setting extends MY_Controller {
 				->output_json();
 	}
 
+	//Save only the sort_order
+	//FORM POST: sort_order[id]
+	function ajax_save_options_orders($app_name, $name) {
+		$this->verify_app($app_name);
+
+		$this->SettingM->save_options_orders($app_name, $name);
+
+		$this->RespM->set_success(TRUE)
+				->output_json();
+	}
+
 	//FORM POST: app_name, name, value, sort_order
 	function ajax_add_option() {
 		$success = FALSE;
 
-// 		if ($this->UserM->is_admin()) {
+		if ($this->UserM->is_admin()) {
 			$app_id = $this->AppM->get_id($this->input->post('app_name'));
 
 			$data = array(
@@ -140,7 +151,7 @@ class Setting extends MY_Controller {
 					->where('id', $new_id)
 					->get()
 					->result_array();
-// 		}
+		}
 
 		$success = ($new_id !== FALSE);
 
