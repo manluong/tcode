@@ -6,9 +6,11 @@ class EmailL {
 	private $_cards = array();
 	private $_to = array();
 	private $_toname = array();
+	private $_bcc = array();
+
+	private $_domain = '8force.net';
 	private $_from = 'hello@8force.net';
 	private $_fromname = '8Force';
-	private $_bcc = array();
 
 	private $_replace_value = array();
 	private $_app_name = 'email';
@@ -29,7 +31,7 @@ class EmailL {
 	private $_query_str = '';
 	private $_query_post = array();
 
-	function __construct($url = '') {
+	function __construct() {
 		$this->_ci = & get_instance();
 
 		$this->_api_user = $this->_ci->eightforce_config['sendgrid_api_user'];
@@ -37,6 +39,8 @@ class EmailL {
 
 		$this->_ci->load->model('EmailM');
 		$this->_ci->load->library(array('SmtpApiHeaderL', 'FileL'));
+
+		$this->_domain = $this->_ci->domain;
 
 		$this->_temp_dir = $this->_ci->eightforce_config['temp_folder'].$this->_ci->domain.'/';
 		if ( ! file_exists($this->_temp_dir)) mkdir($this->_temp_dir, 0777, true);
@@ -64,8 +68,8 @@ class EmailL {
 		return $this;
 	}
 
-	function set_from($email, $name) {
-		$this->_from = trim($email);
+	function set_from($email_name, $name) {
+		$this->_from = trim($email_name).'@'.$this->_domain;
 		$this->_fromname = trim($name);
 
 		return $this;

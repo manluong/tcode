@@ -30,17 +30,18 @@ class Email_send extends MY_Controller {
 
 	function test() {
 		$replace = array(
-			'keys' => array('%name%', '%result%'),
-			'values' => array(array('Boo1', 'Boo2'), array('Success1', 'Success2'))
+			'keys' => array('%name%', '%result%', '%subject%'),
+			'values' => array(array('Boo1', 'Boo2'), array('Success1', 'Success2'), array('SubOne', 'SubTwo'))
 		);
 
 		$this->emaill
 			->set_card(211)
+			->set_to('erikyang@gmail.com', 'Erik Yeoh')
 			->set_subject('test')
+			->set_from('docs', 'Docs')
 			//->set_attachment_id('ac57b26f30fcb8a3134416f6744fce07')
 			->set_template('email', 'test')
-			->set_replace_value($replace)
-			->set_from('docs@telcoson.com', 'Docs');
+			->set_replace_value($replace);
 
 		echo ($this->emaill->send_email()) ? 'sent' : 'not sent';
 	}
