@@ -12,14 +12,16 @@
 <div id="quickjump">
 	<div class="quickjump_select">
 		<div class="btn-group">
-		  <a href="#" class="btn btn-inverse">CUSTOMER</a>
-		  <a href="#" data-toggle="dropdown" class="btn btn-inverse dropdown-toggle"><span class="caret"></span></a>
+		  <button class="btn btn-inverse">CUSTOMER</button>
+		  <button data-toggle="dropdown" class="btn btn-inverse dropdown-toggle">
+			<span class="caret"></span>
+		  </button>
 		  <ul class="dropdown-menu">
 			<li><a href="#"><i class="icon-pencil"></i> Edit</a></li>
 			<li><a href="#"><i class="icon-trash"></i> Delete</a></li>
 			<li><a href="#"><i class="icon-ban-circle"></i> Ban</a></li>
 		  </ul>
-		</div>
+		</div>	
 	</div>
 	<div class="quickjump_card">
 		<div class="quickjump_avatar avatar rounded20 fl mr5">
@@ -103,40 +105,40 @@
 		</div>
 		<div class="ClearLeft"></div>
 		<div style="height:193px;" id="input_data_fillter">
-			<ul>
-				<li>
-					<span class="input_data_label">Requester</span>
-					<span class="fillter_input">
+				<div class="dataFL">
+					<div class="dataFT">Requester</div>
+					<div class="dataVD">
 						<input type="hidden" id="customer_id" name="customer_id" />
 						<input type="text" id="customer_name" name="customer_name" class="inv-field" />
-					</span>
-				</li>
-				<li>
-					<span class="input_data_label">Assigned</span>
-					<span class="fillter_input">
+					</div>
+				</div>
+				<div class="dataFL">
+					<div class="dataFT">Assigned</div>
+					<div class="dataVD">
 						<input type="hidden" id="assign_id" name="assign_id" />
 						<input type="text" id="assign_name" name="assign_name" class="inv-field" />
-					</span>
-				</li>
-				<li>
-					<span class="input_data_label">Subject</span>
-					<span class="fillter_input"><input id="subject" class="inv-field" type="text"/></span>
-				</li>
+					</div>
+				</div>
+				<div class="dataFL">
+					<div class="dataFT">Subject</div>
+					<div class="dataVD">
+						<input id="subject" class="inv-field" type="text"/>
+					</div>
+				</div>
 
-				<li>
-					<span class="input_data_label">Comments</span>
-					<span class="fillter_input">
+				<div class="dataFL">
+					<div class="dataFT">Comments</div>
+					<div class="dataVD">
 						<input type="hidden" id="helpdesk_id" name="helpdesk_id" />
 						<input type="text" id="comment_content" name="comment_content" class="inv-field" />
-					</span>
-				</li>
+					</div>
+				</div>
 
-				<li style="padding-left:119px;">
+				<div class="dataFL" style="padding-left:182px;">
 					<span class="">
 						<button onclick="helpdesk_fillter_all();" href="javascript:void(0)" class="btn btn-primary">SUBMIT</button>
 					</span>
-				</li>
-			</ul>
+				</div>
 		</div>
 	</div>
 
