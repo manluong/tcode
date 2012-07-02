@@ -188,6 +188,7 @@
 
 	<!-- new theme stuff -->
 	<script type="text/javascript" src="/resources/addon/custom-form-elements.js"></script>
+	<script type="text/javascript" src="/resources/addon/jquery.nanoscroller.min.js"></script>
 	<script type="text/javascript" src="/resources/addon/jquery.smooth-scroll.min.js"></script>
 	<script type="text/javascript" src="/resources/addon/plugins.js"></script>
 	<script type="text/javascript" src="/resources/addon/script.js"></script>
