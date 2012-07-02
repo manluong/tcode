@@ -12,6 +12,7 @@ class EmailL {
 	private $_from = 'hello@8force.net';
 	private $_fromname = '8Force';
 
+	private $_single_replace_value = array();
 	private $_replace_value = array();
 	private $_app_name = 'email';
 	private $_template = '';
@@ -69,7 +70,7 @@ class EmailL {
 	}
 
 	function set_from($email_name, $name) {
-		$this->_from = trim($email_name).'@'.$this->_domain;
+		$this->_from = trim($email_name).'@'.$this->_domain.'.8force.net';
 		$this->_fromname = trim($name);
 
 		return $this;
@@ -137,6 +138,17 @@ class EmailL {
 		return $this;
 	}
 
+	function set_single_replace_value($replace_value) {
+		if ( ! isset($replace_value['keys']) OR ! isset($replace_value['values'])) {
+			log_message('error', 'Replace value must have a key with values to replace');
+			exit();
+		}
+
+		$this->_single_replace_value = $replace_value;
+
+		return $this;
+	}
+
 	private function _load_to() {
 		if (count($this->_cards) == 0) return NULL;
 
@@ -182,16 +194,26 @@ class EmailL {
 
 		if ($this->_template !== '') {
 			 $template = $this->_ci->EmailM->get_template_content($this->_app_name, $this->_template);
+
 			 $this->_content = $template['content'];
 			 $this->_subject = $template['subject'];
 		}
 	}
 
 	private function _load_replace_value() {
-		if (count($this->_replace_value) == 0) return NULL;
+		if (count($this->_single_replace_value) > 0) {
+			$num_recipients = count($this->_to) + count($this->_bcc);
+			for($x=0; $x<$num_recipients; $x++) {
+				foreach($this->_single_replace_value['keys'] AS $k=>$v) {
+					$this->_ci->smtpapiheaderl->addSubVal($this->_single_replace_value['keys'][$k], $this->_single_replace_value['values'][$k]);
+				}
+			}
+		}
 
-		for($i=0; $i<count($this->_replace_value['keys']); $i++) {
-			$this->_ci->smtpapiheaderl->addSubVal($this->_replace_value['keys'][$i], $this->_replace_value['values'][$i]);
+		if (count($this->_replace_value) > 0) {
+			for($i=0; $i<count($this->_replace_value['keys']); $i++) {
+				$this->_ci->smtpapiheaderl->addSubVal($this->_replace_value['keys'][$i], $this->_replace_value['values'][$i]);
+			}
 		}
 	}
 

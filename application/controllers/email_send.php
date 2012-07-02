@@ -31,7 +31,7 @@ class Email_send extends MY_Controller {
 	function test() {
 		$replace = array(
 			'keys' => array('%name%', '%result%', '%subject%'),
-			'values' => array(array('Boo1', 'Boo2', 'Boo3'), array('Success1', 'Success2', 'Success3'), array('SubOne', 'SubTwo', 'SubThree'))
+			'values' => array('Boo1', 'Success1', 'SubOne')
 		);
 
 		$this->emaill
@@ -41,7 +41,7 @@ class Email_send extends MY_Controller {
 			->set_from('docs', 'Docs')
 			//->set_attachment_id('ac57b26f30fcb8a3134416f6744fce07')
 			->set_template('email', 'test')
-			->set_replace_value($replace);
+			->set_single_replace_value($replace);
 
 		echo ($this->emaill->send_email()) ? 'sent' : 'not sent';
 	}
