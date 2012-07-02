@@ -782,7 +782,7 @@ $(window).load(function () {
 			</ul>
 		</div>
 	</div>
-	<div id="avatar"></div>
+	<div id="avatar" style="width:500px;height:500px;"></div>
 	<div id="upload_crop">
 		<?php
 		//Display error message if there are any
