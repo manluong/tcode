@@ -9,7 +9,7 @@ $(".optionsDropdownOpener").click(function(){
 	}else{
 		$(".optionsDropdownPadder").fadeIn(500);
 	}
-	
+
 	return false;
 });
 
@@ -26,7 +26,7 @@ $(".dropdownAvatarOpener").click(function(){
 	}else{
 		$(".userDropdownPadding").fadeIn(500);
 	}
-	
+
 	return false;
 });
 
@@ -39,7 +39,7 @@ $(".userDropdownPadding").mouseleave(function(){
 $(".userDropdownPadding .settings").click(function(){
 	$("#settings, #overlay").fadeIn("fast");
 	$(".userDropdownPadding").hide();
-	
+
 	return false;
 });
 
@@ -52,7 +52,7 @@ $("#breadcrumb #favoriteIcon").click(function(){
 		$(this).removeClass("off").addClass("on");
 		$(this).attr('title','Remove from favorites');
 	}
-	
+
 	return false;
 });
 
@@ -60,9 +60,16 @@ $("#breadcrumb #favoriteIcon").click(function(){
 $(".tabsNavigation li a").click(function(){
 	$(".tabsNavigation li").removeClass("active");
 	$(this).parents("li").addClass("active");
-	
+
 	// Ajax call to load new sections goes here
-	
+	var url = $(this).attr('href');
+	console.log('loading: '+url);
+	$.pjax({
+		url: url,
+		container: '#main',
+		timeout: 5000
+	});
+
 	return false;
 });
 
@@ -82,9 +89,9 @@ $("body.fixedwidth, #main").mouseenter(
 $("div#main #bottomMenus a").click(function(){
 	$("div#main #bottomMenus a").removeClass("active");
 	$(this).addClass("active");
-	
+
 	// Ajax call to load new sections goes here
-	
+
 	return false;
 });
 
@@ -94,7 +101,7 @@ $("div#main #bottomMenus a").click(function(){
 $('.appsIconBottom, .appsIconTop').click(function(){
 	return false;
 });
-	
+
 $('.appsIconBottom').hover(function() {
     moveABitBottom();
     interval = setInterval(moveABitBottom, 1000);
@@ -114,14 +121,14 @@ function() {
 function moveABitBottom(){
 	var scrolltop = $(".tabsNavigation").scrollTop();
 	var newTop = scrolltop + 65;
-	
+
 	$(".tabsNavigation").animate({scrollTop:newTop}, 800);
 }
 
 function moveABitTop(){
 	var scrolltop = $(".tabsNavigation").scrollTop();
 	var newTop = scrolltop - 65;
-	
+
 	$(".tabsNavigation").animate({scrollTop:newTop}, 800);
 }
 
@@ -133,30 +140,30 @@ $(".timeline .entry").hover(function(){
 });
 
 $(".openNotes").click(function(){
-	
+
 	$("#commentsBar").parents(".entry").find(".notes a").removeClass("alwaysVisible");
 	$("#commentsBar").parents(".entry").find(".notes a.new").removeClass("new").addClass("regular");
 	// Change the link's label for no new notes and add quantity of notes
-	
+
 	$(this).parents(".notes").find("a.openNotes").addClass("alwaysVisible");
-	
+
 	$("#commentsBar").appendTo($(this).parents(".entry"));
 	$("#commentsBar").show();
-	
+
 	// Ajax call to load comments
-	
+
 	return false;
 });
 
 $(".notes .remove").click(function(){
 	$(this).parents(".entry").slideToggle();
-	
+
 	// Ajax call to remember the hidden item
 });
 
 $("a.previousMessages").click(function(){
 	// Ajax call to load previous comments
-	
+
 	return false;
 });
 
@@ -166,7 +173,7 @@ $("#commentsBar .writeANote").focus(function(){
 
 $("#breadcrumb select").change(function () {
 	value = $("#breadcrumb select option:selected").val();
-	
+
 	if (value == "staffstatusupdates") {
 		$(".allUpdates").hide();
 		$(".staffStatusUpdates").show();
@@ -174,7 +181,7 @@ $("#breadcrumb select").change(function () {
 		$(".staffStatusUpdates").hide();
 		$(".allUpdates").show();
 	}
-	
+
 	})
 .change();
 
@@ -216,7 +223,7 @@ function initResize () {
     observe(text, 'drop',    delayedResize);
     observe(text, 'keydown', delayedResize);
 
-    
+
     resize();
 }
 
@@ -244,19 +251,19 @@ $(".ShareYourThoughts input[type=text]").keydown(function(){
 $("#menuTabCard a").click(function(){
 	$("#menuTabCard li").removeClass("active");
 	$(this).parent().addClass("active");
-	
+
 	if ($(this).parent().hasClass("details")) {
 		$("#contactsPanel .fix").show();
 	} else {
 		$("#contactsPanel .fix").hide();
 	}
-	
+
 	// Change label of the breadcrumb
 	var label = $(this).html();
 	$("#breadcrumb .tabsContent").html(label);
-	
+
 	// Create function to load the new content for the tab
-	
+
 	return false;
 });
 
@@ -265,20 +272,20 @@ $("#menuTabCard a").click(function(){
 $("#settings .icons a").click(function(){
 	$("#settings .step1").hide();
 	$("#settings .step2").fadeIn("fast");
-	
+
 	return false;
 });
 
 $("#settings .cancel").click(function(){
 	$("#settings .step2").hide();
 	$("#settings .step1").fadeIn("fast");
-	
+
 	return false;
 });
 
 $("#overlay, .closeModal").click(function(){
 	$("#settings, #overlay").fadeOut("fast");
-	
+
 	return false;
 });
 
