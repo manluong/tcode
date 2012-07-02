@@ -1,5 +1,4 @@
 <link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/nanoscroller.css" />
-<script type="text/javascript" src="/resources/addon/jquery.nanoscroller.min.js"></script>
 <script type="text/javascript" src="/resources/addon/overthrow.min"></script>
 <script type="text/javascript" src="/resources/addon/contacts.js"></script>
 <script>
