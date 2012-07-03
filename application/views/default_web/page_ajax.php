@@ -1,5 +1,8 @@
-<div class="mainContent">
-	<?=$app_title?>
+<?php
+	if ($width == '860') echo '<div id="mainFixed">';
 
-	<?=$content?>
-</div>
+	echo $app_title;
+	echo $content;
+
+	if ($width == '860') echo '</div>';
+?>
