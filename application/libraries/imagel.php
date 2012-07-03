@@ -1,5 +1,19 @@
 <?php
 class Imagel {
+    private $max_width = "500";							// Max width allowed for the large image
+    private $thumb_width = "100";						// Width of thumbnail image
+    private $thumb_height = "100";						// Height of thumbnail image
+    private $allowed_image_types = array('image/pjpeg'=>"jpg",'image/jpeg'=>"jpg",'image/jpg'=>"jpg",'image/png'=>"png",'image/x-png'=>"png",'image/gif'=>"gif");
+    private $allowed_image_ext = array();
+    private $image_ext = "";
+
+
+    function __construct(){
+	$this->allowed_image_ext = array_unique($allowed_image_types); // do not change this
+	foreach($this->allowed_image_ext as $mime_type => $ext) {
+	$this->image_ext.= strtoupper($ext)." ";
+	}
+    }
 
     function resizeImage($image,$width,$height,$scale) {
 	list($imagewidth, $imageheight, $imageType) = getimagesize($image);
