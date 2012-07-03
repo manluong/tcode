@@ -1,7 +1,7 @@
 <script type="text/javascript" src="/resources/addon/helpdesk.js"></script>
 <script type="text/javascript">
 	$(document).ready(function(){
-		$('#main_cases').html( '<table class="table table-striped" id="example"></table>' );
+		$('#helpdesk_main_cases').html( '<table class="table table-striped" id="example"></table>' );
 		$.extend( $.fn.dataTableExt.oStdClasses, {
 				    "sWrapper": "dataTables_wrapper form-inline"
 				} );
@@ -46,7 +46,7 @@
 			<div id="helpdesk_fillter">
 				<ul>
 					<li>
-						<span class="fillter_label">Status</span>
+						<span class="helpdesk_fillter_label">Status</span>
 						<span class="fillter_input">
 							<select name="status" id="status" onchange="helpdesk_fillter();">
 								<option value="">- - - Something - - -</option>
@@ -59,7 +59,7 @@
 						</span>
 					</li>
 					<li>
-						<span class="fillter_label">Group \ Department</span>
+						<span class="helpdesk_fillter_label">Group \ Department</span>
 						<span class="fillter_input">
 							<select name="group" id="group" onchange="helpdesk_fillter();">
 								<option value="">- - - Something - - -</option>
@@ -72,7 +72,7 @@
 						</span>
 					</li>
 					<li>
-						<span class="fillter_label">Type</span>
+						<span class="helpdesk_fillter_label">Type</span>
 						<span class="fillter_input">
 							<select name="type" id="type" onchange="helpdesk_fillter();">
 								<option value="">- - - Something - - -</option>
@@ -85,7 +85,7 @@
 						</span>
 					</li>
 					<li>
-						<span class="fillter_label">Priority</span>
+						<span class="helpdesk_fillter_label">Priority</span>
 						<span class="fillter_input">
 							<select name="priority" id="priority" onchange="helpdesk_fillter();">
 								<option value="">- - - Something - - -</option>
@@ -97,13 +97,13 @@
 							</select>
 						</span>
 					</li>
-					<li style="width:27px; margin:26px 0 0 72px;"><div id="arrow" class="down_arrow"></div></li>
+					<li style="width:27px; margin:26px 0 0 72px;"><div id="arrow" class="helpdesk_down_arrow"></div></li>
 				</ul>
 			</div>
 			
 			<div class="ClearLeft"></div>
 			
-			<div class="dataF" style="height:162px;margin-top:20px;" id="input_data_fillter">
+			<div class="dataF" style="height:162px;margin-top:20px;" id="helpdesk_input_data_fillter">
 				<div class="dataFL">
 					<div class="dataFT">Requester</div>
 					<div class="dataVD">
@@ -140,13 +140,13 @@
 		</div>
 	</div>
 
-	<div id="invoice_cases" style="margin:20px 30px 0 0;">
-		<div id="top_cases" style="position:relative;">
+	<div id="helpdesk_cases" style="margin:20px 30px 0 0;">
+		<div id="helpdesk_top_cases" style="position:relative;">
 			<div id="helpdesk_loadding"></div>
 			<div class="subtitle-noshadow">
 				<span class="subtitle-arrow"></span>Cases
 			</div>
 		</div>
-		<div id="main_cases"></div>
+		<div id="helpdesk_main_cases"></div>
 	</div>
 </div>

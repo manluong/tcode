@@ -185,28 +185,7 @@
 #helpdesk_fillter .fillter_label{
 	font-weight:normal;
 }
-#helpdesk_show_info{
-	height:123px;
-	width:857px;
-	background: url("../img/invoice/invoice-shadown_fillter.png") no-repeat scroll 0 0 transparent;
-	float:left;
-}
-#helpdesk_show_info ul li{
-	float:left;
-	width:100%;
-	margin-top:4px;
-}
-#helpdesk_show_info .input_data_label{
-	font-weight:normal;
-	color:#444444;
-	float:left;
-}
-#helpdesk_show_info .fillter_input{
-	font-size:16px;
-	margin-top:4px;
-	float:left;
-	font-weight:bold;
-}
+
 #helpdesk_change_info{
 	color:#1d57a0;
 	font-weight:bold;
@@ -229,10 +208,8 @@
 	height:193px;
 	float:left;
 }
-#comment_submit{
+#helpdesk_comment_submit{
 	width:100%;
-}
-#comment_submit{
 	float:left;
 	margin-top:2px;
 }
@@ -248,44 +225,28 @@
 	margin-left:40px;
 	display:inline;
 }
-.btn_attach{
-	width:80px;
-	height:22px;
-	background: url("../img/helpdesk/helpdesk-btn_attach.jpg") no-repeat scroll 0 0 transparent;
-	cursor:pointer;
-	float:left;
-}
-.btn_plupload{
-	color:#1d57a0;
-	font-weight:bold;
-	cursor:pointer;
-	text-decoration:underline;
-	float:left;
-	margin-left:12px;
-	display:inline;
-}
-#comment_list{
+#helpdesk_comment_list{
 	float:left;
 	margin-top:30px;
 	width:100%;
 }
-.comment_info{
+.helpdesk_comment_info{
 	width:100%;
 	float:left;
 	border-bottom:1px solid #f4f4f4;
 	margin-bottom:15px;
 }
-.comment_info_user{
+.helpdesk_comment_info_user{
 	width:100%;
 	height:50px;
 	float:left;
 }
-.comment_user_avatar{
+.helpdesk_comment_user_avatar{
 	width:45px;
 	height:52px;
 	float:left;
 }
-.comment_content{
+.helpdesk_comment_content{
 	float:left;
 	width:760px;
 	margin:0 0 25px 53px;
@@ -293,29 +254,26 @@
 	color:#444444;
 	font-size:13px;
 }
-.comment_arrow {
+.helpdesk_comment_arrow {
 	float:left;
 	width:50px;
 	margin-top:-30px;
 	margin-left: -46px !important;
 }
-.comment_detail{
+.helpdesk_comment_detail{
 	color:#444444;
 	font-size:13px;
 	float:left;
 	display:inline;
 	display:none;
 }
-.comment_detail p {
+.helpdesk_comment_detail p {
 	line-height:10px;
 }
-.wap_comment_content{
+.helpdesk_wap_comment_content{
 	float:left;
 	margin-bottom:5px;
 	width:100%;
-}
-#new_helpdesk_subject input{
-	width:435px;
 }
 .btn-group a{
 	color:white;
@@ -326,168 +284,9 @@
 .dropdown-menu a{
 	color:#000000 !important;
 }
-#input_data_info {
-    background: url("../img/invoice/invoice-shadown_fillter.png") no-repeat scroll 0 0 transparent;
-    float: left;
-    height: 123px;
-    padding-top: 20px;
-    width: 857px;
-}
-
-.pull-right a{
-	color: #0084CF;
-    font-size: 12px;
-    font-weight: bold;
-    text-decoration: none !important;
-}
-
-.top_menu{
-	float:right;
-	color:#424242;
-	font-family:'Cuprum',Arial;
-	font-size:16px;
-	padding:9px 35px 0 0 ;
-}
-.top_menu ul li {
-	float:left;
-	margin-left:20px;
-	display:inline;
-}
-.head_helpdesk{
-	width:100%;
-	height:60px;
-	padding-top:20px;
-	font-weight:bold;
-}
-.head_helpdesk #content_left{
-	float:left;
-	margin-left:35px;
-	display:inline;
-}
-#content_right{
-	float:right;
-	padding-right:35px;
-}
-#time_curent{
-	float:right;
-}
-#time_update{
-	font-style:italic;
-	font-weight:normal;
-}
-#helpdesk_info{
-	margin-left:35px;
-	height:250px;
-	background-color: #EEEEEE;
-    background-image: -moz-linear-gradient(center top , #F5F5F5 0%, #EEEEEE 100%);
-    background-repeat: repeat-x;
-    border: 1px solid #E5E5E5;
-    border-radius: 4px 4px 4px 4px;
-	width:900px;
-}
-#helpdesk_info #form_show li{
-	margin-top:20px;
-	float:left;
-	width:100%;
-}
-#helpdesk_info #form_change  li{
-	margin-top:16px;
-	float:left;
-	width:100%;
-}
-.input_change{
-	float: left;
-    margin-top: -8px;
-}
-
-#helpdesk_select{
-	padding:20px 0 0 10px;
-	height:280px;
-}
-#helpdesk_select ul li{
-	float:left;
-	margin-right:20px;
-}
-.helpdesk_info_span{
-	width:70px !important;
-	margin-left:0px !important;
-}
-/* CSS HelpDesk */
-#comment_info{
-	padding-left:35px;
-}
-#comment_h1{
-	font-size:20px;
-	width:130px;
-	float:left;
-	height:50px;
-}
-#comment_title{
-	height:50px;
-}
-#comment_content_left_1{
-	float:left;
-}
-#wap_icon_mail{
-	float:left;
-}
-#comment_name{
-	padding:6px 0 0 10px;
-	float:left;
-	width:125px;
-}
-#comment_content_left{
-	width:650px;
-	padding-top:20px;
-	float:left;
-}
-#comment_time{
-	float:left;
-	padding-top:10px;
-	margin-left:-49px;
-}
-	
-#wap_comment_left{
-	width:185px;
-	float:left;
-	height:60px;
-}
-#comment_content_right{
-	width:525px;
-	float:left;
-	margin-left:185px;
-}
 #pickfiles{
 	width:70px;
 	height:20px;
-}
-#info_comment p{
-	line-height:10px;
-}
-#info_comment{
-	height:150px;
-}
-.input-xlarge{
-	width:650px !important;
-	height:100px !important;
-}
-#form_show li span{
-	width:70px;
-}
-.fillter{
-	width:200px;
-	float:left;
-	margin-right:16px;
-}
-.ul_pagination li{
-	cursor:pointer;
-}
-.hide_page{
-	display:none !important;
-}
-#content_top {
-    width: 860px;
-	float:left !important;
 }
 #helpdesk_loadding{
 	width:32px;
@@ -499,9 +298,74 @@
 	display:none;
 	z-index: 9999;
 }
-/*END HELPDESK LIST CSS */
+.helpdesk_down_arrow{
+	width:19px;
+	height:19px;
+	background:url(../img/invoice-down_arrow.png) no-repeat;
+	cursor:pointer;
+}
+.helpdesk_up_arrow{
+	width:19px;
+	height:19px;
+	background:url(../img/invoice-up_arrow.jpg) no-repeat;
+	cursor:pointer;
+}
+.helpdesk_fillter_label{
+	width:125px;
+	margin-bottom:5px;
+	float:left;
+}
+#helpdesk_input_data_fillter{
+	width:100%;
+	display:none;
+	float:left;
+}
+#helpdesk_top_cases{
+	width:100%;
+	float:left;
+	height:25px;
+}
 
-/* Invoice */
+#helpdesk_main_cases{
+	width:100%;
+	float:left;
+}
+#helpdesk_main_cases thead{
+	height:41px;
+	background:url(../img/invoice/invoice-bg_thead.jpg) repeat-x;
+	font-size:13px;
+	color:#444444;
+	padding:0 38px 0 10px;
+	line-height:37px;
+}
+#helpdesk_main_cases tbody{
+	min-height:41px;
+}
+
+#helpdesk_main_cases th{
+	text-align:left;
+}
+#helpdesk_main_cases tbody tr{
+	height:40px;
+	line-height:40px;
+	font-size:13px;
+	border-bottom:1px solid #eeeeee;
+	width:861px;
+}
+#helpdesk_main_cases tbody a{
+	color:#1d57a0;
+	font-weight:bold;
+	text-decoration:underline;
+}
+#boxes{
+	width:860px;
+}
+#helpdesk_cases{
+	float:left;
+	min-height:252px;
+	width:860px;
+}
+/*END HELPDESK LIST CSS */
 
 /* phone */
 #phone_fillter {
@@ -529,278 +393,5 @@
 }
 
 /*BEGIN INVOICE NEW CSS */
-#module_name{
-	float:left;
-}
-#module_name ul li{
-	float:left;
-	margin-right:13px;
-}
-.arrow{
-	background:url(../img/invoice/invoice-arrow.png);
-	width:4px;
-	height:19px;
-	margin-top:15px;
-}
-.curent_page{
-	margin-top:15px;
-	color:#808080;
-}
-.mainContent{
-	width:100%;
-	float:left;
-	margin-left:126px;
-	display:inline;
-}
-#favoriteIcon{
-	margin-top:15px !important;
-}
-#top_button{
-	float:right;
-	margin-top:11px;
-}
-#top_button ul li{
-	float:left;
-	margin-left:9px;
-}
-.btn_list{
-	width:42px;
-	height:27px;
-	background:url(../img/invoice/invoice-btn_list.jpg);
-	cursor:pointer;
-}
-.btn_new{
-	width:44px;
-	height:27px;
-	background:url(../img/invoice/invoice-btn_new.jpg);
-	cursor:pointer;
-}
-#content_top{
-	width:860px;
-	float:left;
-	height:100px;
-}
-#user_profile{
-	float:left;
-}
-#user_avatar{
-	width:52px;
-	height:52px;
-	float:left;
-	padding:0 16px 12px 0;
-}
-#user_info{
-	color:#485152;
-	float: left;
-}
-#user_info ul li{
-	margin-bottom:8px;
-}
-.user_sex{
-	font-size:16px;
-}
-.user_name{
-	font-size:24px;
-	font-weight:bold;
-}
-.user_position{
-	font-size:18px;
-	font-weight:bold;
-}
-#customer_list{
-	float:right;
-}
-#invoice_fillter{
-	width:860px;
-	min-height:127px;
-	float:left;
-}
-.invoice_title{
-	color:#a8682a;
-	font-size:12px;
-	font-weight:bold;
-	height:24px;
-}
-.arrow_title{
-	width:10px;
-	height:10px;
-	background:url(../img/invoice/invoice-arrow_title.png) no-repeat;
-	margin-top:3px;
-}
-.down_arrow{
-	width:19px;
-	height:19px;
-	background:url(../img/invoice-down_arrow.png) no-repeat;
-	cursor:pointer;
-}
-.up_arrow{
-	width:19px;
-	height:19px;
-	background:url(../img/invoice-up_arrow.jpg) no-repeat;
-	cursor:pointer;
-}
-.invoice_title span{
-	float:left;
-}
-#items_fillter{
-	width:100%;
-	height:87px;
-	background:url(../img/invoice/invoice-shadown_fillter.png) no-repeat;
-	float:left;
-	padding-top:20px;
-}
-#items_fillter ul li{
-	float:left;
-	margin-right:2px;
-	font-size:13px;
-	font-weight:bold;
-	width:123px;
-	height:50px;
-}
-#items_fillter  a{
-	font-size:11px;
-}
-#items_fillter  select{
-	width:121px;
-}
-#items_fillter  input{
-	width:110px;
-}
-.fillter_label{
-	width:123px;
-	margin-bottom:5px;
-	float:left;
-}
-#invoice_amount input{
-	border:0 !important;
-	font-weight:bold;
-	color:#A8682A;
-	box-shadow:none !important;
-	margin:-11px 0 0px 0;
-}
-#slider-range{
-	margin-top:-3px;
-}
-.btn_submit{
-	width:57px;
-	height:27px;
-	background:url(../img/invoice/invoice-btn_submit.jpg);
-	cursor:pointer;
-	margin-top: 24px;
-}
-#input_data_fillter{
-	width:100%;
-	display:none;
-	float:left;
-}
-.input_data_label{
-	font-size:13px;
-	font-weight:bold;
-	width:106px;
-	float:left;
-	line-height:28px;
-	text-align:right;
-	margin-right:14px;
-}
-#invoice_cases{
-	float:left;
-	min-height:252px;
-	width:860px;
-}
-.page{
-	float:left;
-}
-.page a{
-	color:#0084cf !important;
-}
-.page a:hover{
-	color:#0084cf !important;
-}
-.page li{
-	float:left;
-	width:20px;
-	height:21px;
-	padding:5px 0 0 13px;
-	margin-right:2px;
-}
-.page li:hover{
-	background-color:#f5f5f5;
-	color:#0084cf !important;
-}
-.page .active{
-	background-color:#f5f5f5;
-	color:#999999 !important;
-}
-.page .active a{
-	color:#999999 !important;
-}
-.page a{
-	color:#0084cf;
-	font-weight:bold;
-	font-size:12px;
-	text-decoration:none !important;
-}
-.page .prev{
-	width:65px !important;
-}
-.page .prev:hover{
-	background:none;
-}
-.page .prev a:hover{
-	color:#ccd0d5 !important;
-}
-.page .next:hover{
-	background:none;
-}
-.page .next a:hover{
-	color:#ccd0d5 !important;
-}
-.page .disabled a{
-	color:#d0cccc !important;
-}
-.page .disable{
-	cursor:none;
-}
-#top_cases{
-	width:100%;
-	float:left;
-	height:25px;
-}
-#main_cases{
-	width:100%;
-	float:left;
-}
-#main_cases thead{
-	height:41px;
-	background:url(../img/invoice/invoice-bg_thead.jpg) repeat-x;
-	font-size:13px;
-	color:#444444;
-	padding:0 38px 0 10px;
-	line-height:37px;
-}
-#main_cases tbody{
-	min-height:41px;
-}
 
-#main_cases th{
-	text-align:left;
-}
-#main_cases tbody tr{
-	height:40px;
-	line-height:40px;
-	font-size:13px;
-	border-bottom:1px solid #eeeeee;
-	width:861px;
-}
-#main_cases tbody a{
-	color:#1d57a0;
-	font-weight:bold;
-	text-decoration:underline;
-}
-#invoice_detail{
-	width:860px;
-}
-#boxes{
-	width:860px;
-}
 /*END INVOICE CSS */

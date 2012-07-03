@@ -33,7 +33,7 @@
 </div>
 
 <div id="boxes">
-	<div id="invoice_fillter" style="height:210px;">
+	<div id="invoice_fillter" style="height:180px;">
 		<div class="subtitle">
 			<span class="subtitle-arrow"></span>NEW CASE INFORMATION
 		</div>
@@ -140,7 +140,7 @@
 			</div>
 			<div id="helpdesk_comment">
 				<textarea rows="3" id="comment" ></textarea>
-				<div id="comment_submit">
+				<div id="helpdesk_comment_submit">
 					<div id="plupload" style="width:744px;margin-left:0px;">
 						<!-- PLUpload-->
 						<h1 style="display:none;">Custom example</h1>

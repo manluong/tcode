@@ -5,9 +5,7 @@
 <script type="text/javascript" src="/resources/addon/plupload/js/jquery.plupload.queue/jquery.plupload.queue.js"></script>
 <link href="/resources/addon/plupload/js/jquery.plupload.queue/css/jquery.plupload.queue.css" media="screen" rel="stylesheet" type="text/css" />
 
-<div id="content_top">
-	<?//=$quickjump?>
-</div>
+<div id="quickjump"></div>
 
 <div id="boxes">
 	<div id="invoice_fillter">
@@ -70,7 +68,7 @@
 			<div id="helpdesk_fillter">
 				<ul>
 					<li>
-						<span class="fillter_label">Status</span>
+						<span class="helpdesk_fillter_label">Status</span>
 						<span class="fillter_input">
 							<select name="status" id="status">
 								<option value="">- - - Something - - -</option>
@@ -88,7 +86,7 @@
 						</span>
 					</li>
 					<li>
-						<span class="fillter_label">Group \ Department</span>
+						<span class="helpdesk_fillter_label">Group \ Department</span>
 						<span class="fillter_input">
 							<select disabled="disabled" name="group" id="group">
 								<option value="">- - - Something - - -</option>
@@ -106,7 +104,7 @@
 						</span>
 					</li>
 					<li>
-						<span class="fillter_label">Type</span>
+						<span class="helpdesk_fillter_label">Type</span>
 						<span class="fillter_input">
 							<select disabled="disabled" name="type" id="type">
 								<option value="">- - - Something - - -</option>
@@ -124,7 +122,7 @@
 						</span>
 					</li>
 					<li>
-						<span class="fillter_label">Priority</span>
+						<span class="helpdesk_fillter_label">Priority</span>
 						<span class="fillter_input">
 							<select name="priority" id="priority">
 								<option value="">- - - Something - - -</option>
@@ -145,7 +143,7 @@
 			</div>
 			<div id="helpdesk_comment">
 				<textarea rows="3" id="comment" ></textarea>
-				<div id="comment_submit">
+				<div id="helpdesk_comment_submit">
 					<div style="width:735px;float:left;">
 						<span><input type="checkbox" id="private"/> Private Comments (Only Staff see this comment)</span>
 						<span></span>
@@ -158,7 +156,7 @@
 				<h1 style="display:none;">Custom example</h1>
 				<p style="display:none;">Shows you how to use the core plupload API.</p>
 				<div id="container" >
-					<div id="pickfiles" class="btn_attach"></div>
+					<button id="pickfiles" class="btn btn-inverse btn-mini" href="#">Select File</button>
 					<div style="display:none;" id="uploadfiles"></div>
 					<div id="filelist" style="float:left ;margin:23px 0 0 0;"></div>
 				</div>
@@ -166,7 +164,7 @@
 		</div>
 	</div>
 
-	<div id="comment_list">
+	<div id="helpdesk_comment_list">
 		<div class="box boxHalf">
 			<div class="subtitle-half">
 				<span class="subtitle-arrow"></span>COMMENTS / EVENTS
@@ -195,16 +193,16 @@
 							$hour = ($hour%24);
 						}
 				?>
-				<div class="comment_info">
-					<div class="comment_info_user">
-						<div class="comment_user_avatar"><image src="<?=site_url('resources/template/default_web/img')?>/comment_avatar.png"/></div>
-						<div class="comment_user_name">
+				<div class="helpdesk_comment_info">
+					<div class="helpdesk_comment_info_user">
+						<div class="helpdesk_comment_user_avatar"><image src="<?=site_url('resources/template/default_web/img')?>/comment_avatar.png"/></div>
+						<div class="helpdesk_comment_user_name">
 							<div style="color:#444444;font-size:13px;width:100%;height:14px;"><strong><?=$comment[$i]['display_name']?></strong> <?=$comment[$i]['organization_name']?></div>
 							<div style="font-size:11px;color:#b0b0b0;"><?=($day>0 ? $day.' day ' : '')?><?=($hour>0 ? $hour.' hour ' : '')?><?=$minute.' minute'?> ago</div>
 						</div>
 					</div>
-					<div class="comment_content">
-						<div class="wap_comment_content"><?=$comment[$i]['comment']?></div>
+					<div class=helpdesk_"comment_content">
+						<div class="helpdesk_wap_comment_content"><?=$comment[$i]['comment']?></div>
 						<div style="float:left;width:50px;margin:-22px 0 0 -48px" id="arrow_comment_<?=$comment[$i]['id']?>" onclick="show_detail_comment(<?=$comment[$i]['id']?>);" class="up_arrow"></div>
 						<div id="comment_detail_<?=$comment[$i]['id']?>" class="comment_detail">
 							<?php if(!empty($pri)){?>
