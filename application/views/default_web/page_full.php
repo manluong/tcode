@@ -34,9 +34,9 @@
 	<?//=$head?>
 
 </head>
-<div id="popup_message" class="alert"></div>
+<!--<div id="popup_message" class="alert"></div>-->
 
-<body class="fullwidth">
+<body>
 	<!-- Start Header -->
 	<header>
 		<div class="rightMenu">
