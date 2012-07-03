@@ -413,10 +413,6 @@
 	margin-left:0px !important;
 }
 /* CSS HelpDesk */
-#main{
-	width: 960px;
-	margin: 0 auto;
-}
 #comment_info{
 	padding-left:35px;
 }
@@ -475,9 +471,6 @@
 	width:650px !important;
 	height:100px !important;
 }
-select{
-	width:150px !important;
-}
 #form_show li span{
 	width:70px;
 }
@@ -508,12 +501,6 @@ select{
 }
 /*END HELPDESK LIST CSS */
 
-
-
-
-
-
-
 /* Invoice */
 
 /* phone */
@@ -542,11 +529,6 @@ select{
 }
 
 /*BEGIN INVOICE NEW CSS */
-#breadcrumb{
-	width:860px;
-	height:64px;
-	float:left;
-}
 #module_name{
 	float:left;
 }
