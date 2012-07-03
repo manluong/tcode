@@ -11,7 +11,7 @@
 	<meta name="viewport" content="width=device-width">
 	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/new_style.css" />
 	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/new_app.css" />
-	
+
     <link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/chat.css" />
 	<link href='http://fonts.googleapis.com/css?family=Lato:300' rel='stylesheet' type='text/css'>
 
@@ -95,11 +95,14 @@
 	<?=$sidebar?>
 
 	<div id="main" style="background: #fff;">
-		<div id="mainFixed">
-			<?=$app_title?>
+	<?php
+		if ($width == '860') echo '<div id="mainFixed">';
 
-			<?=$content?>
-		</div>
+		echo $app_title;
+		echo $content;
+
+		if ($width == '860') echo '</div>';
+	?>
 	</div>
 
 	<!-- Start Footer -->
