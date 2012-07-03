@@ -9,9 +9,6 @@
 
 	<title><?=$title?></title>
 	<meta name="viewport" content="width=device-width">
-	
-	
-   
 	<link href='http://fonts.googleapis.com/css?family=Lato:300' rel='stylesheet' type='text/css'>
 
 	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/bootstrap.min.css" />
@@ -20,7 +17,7 @@
 	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/style.css" />
 	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/app.css" />
 	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/chat.css" />
-	 
+
 	<script type="text/javascript" src="/resources/addon/modernizr-2.5.3.min.js"></script>
 	<script type="text/javascript" src="/resources/addon/jquery.min.js"></script>
 
@@ -95,11 +92,14 @@
 	<?=$sidebar?>
 
 	<div id="main" style="background: #fff;">
-		<div id="mainFixed">
-			<?=$app_title?>
+	<?php
+		if ($width == '860') echo '<div id="mainFixed">';
 
-			<?=$content?>
-		</div>
+		echo $app_title;
+		echo $content;
+
+		if ($width == '860') echo '</div>';
+	?>
 	</div>
 
 	<!-- Start Footer -->
