@@ -313,9 +313,14 @@ class Console extends MY_Controller {
 		echo "Done\n";
 	}
 
-	function run_model_function($model, $function, $params='') {
+	function run_model_function($model, $function, $params='', $p2='') {
 		$this->load->model($model);
-		$result = $this->$model->$function($params);
-		echo print_r($result, TRUE);
+		$result = $this->$model->$function($params, $p2);
+		$rtype = gettype($result);
+		if ($rtype == 'boolean') {
+			echo ($result) ? 'TRUE' : 'FALSE';
+		} else {
+			echo print_r($result, TRUE);
+		}
 	}
 }
