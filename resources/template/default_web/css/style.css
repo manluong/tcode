@@ -1033,7 +1033,7 @@ a.appsIconTop {
 	display: block;
 }
 
-#breadcrumb a.simple, #settings .top-setting span.simple {
+#breadcrumb .simple, #settings .top-setting span.simple {
 	color: #808080;
 	font-size: 13px;
 	text-decoration: none;
