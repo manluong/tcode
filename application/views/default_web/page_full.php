@@ -10,17 +10,17 @@
 	<title><?=$title?></title>
 	<meta name="viewport" content="width=device-width">
 	
-	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/new_app.css" />
 	
-    <link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/chat.css" />
+   
 	<link href='http://fonts.googleapis.com/css?family=Lato:300' rel='stylesheet' type='text/css'>
 
 	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/bootstrap.min.css" />
 	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/bootstrap-responsive.min.css" />
 	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/bootstrap-8f.css" />
-	<link href='http://fonts.googleapis.com/css?family=Lato:300' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/style.css" />
-
+	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/app.css" />
+	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/chat.css" />
+	 
 	<script type="text/javascript" src="/resources/addon/modernizr-2.5.3.min.js"></script>
 	<script type="text/javascript" src="/resources/addon/jquery.min.js"></script>
 
