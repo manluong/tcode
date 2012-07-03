@@ -32,9 +32,9 @@
 			foreach($breadcrumb AS $bc) {
 				echo '<span class="arrow"></span>';
 				if (!empty($bc['url'])) {
-					echo '<a class="simple tabsContent" href="',$bc['url'],'">',$bc['title'],'</a>';
+					echo '<a class="simple" href="',$bc['url'],'">',$bc['title'],'</a>';
 				} else {
-					echo '<span>',$bc['title'],'</span>';
+					echo '<span class="simple">',$bc['title'],'</span>';
 				}
 				$x++;
 			}
