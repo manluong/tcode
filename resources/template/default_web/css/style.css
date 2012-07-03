@@ -1104,6 +1104,7 @@ a.appsIconTop {
 }
 #quickjump .quickjump_card .quickjump_info{
 	color:#485152;
+	min-height: 40px;
 }
 #quickjump .quickjump_card .quickjump_info ul li{
 	margin-bottom:4px;

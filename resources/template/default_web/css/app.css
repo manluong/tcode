@@ -156,6 +156,321 @@
 	background-position: 10px -100px;
 }
 
+
+
+/* My8Force */
+.my8f_action {font-size:12px; color:#6da557; text-align:center; line-height:24px}
+.my8f_action a{color:#6da557; text-decoration:underline}
+.my8f_action .upgrade {color:#F00; font-size:14px; padding-top:20px}
+.my8f_lic {padding-top:30px}
+.my8f_lic ul li{border-bottom:1px solid #eee; padding:5px 0}
+.my8f_lic ul li h2{font-size:24px; text-align:right; font-style:italic; color:#6da557; font-weight:normal;}
+.my8f_lic ul li .cont-list img {width:40px; height:40px; float:left; margin-right:8px;}
+.my8f_lic ul li .cont-list .right-list {font-size:13px; float:right; color:#6da557;}
+.my8f_lic ul li .cont-list .right-list-red {font-size:13px; float:right; color:#a96829;font-weight: bold;text-transform:}
+.my8f_lic ul li .cont-list .right-paymentmode {font-size:14px; float:right; color:#a96829; font-weight: bold;text-transform: uppercase;}
+.my8f_lic ul li .cont-list .right-priceus {font-size:11px; float:right; color:#a96829;}
+.my8f_lic ul li .large-label {font-family: "Lato"; font-weight: lighter; font-size:23px; color: #485152; font-weight:lighter; display:block; padding-top:7px}
+.my8f_lic ul li .cont-list  {font-size:23px; color:#666; font-weight:normal; display:block; padding-top:7px}
+.my8f_lic ul li .cont-list .bottom-list , .bottom-list a{ font-size:11px; color:#94bdc2}
+.my8f_lic .bottom-list a {text-decoration:underline}
+.bottom-tb{text-align:right; line-height:25px; color:#a96829; margin-top: 50px;}
+.bottom-tb button{margin:20px 0}
+.my8f_priceus{float:right; margin-right:100px; height:100%; text-align:center; margin-top:-15px;}
+.my8f_topup {float:right; margin-right:100px; height:100%; text-align:center; margin-top:-15px;}
+.my8f_texttopup {font-family: "Lato"; font-weight: lighter; font-size:30px; color: #485152; font-weight:lighter; display:block; color:#a96829; margin-bottom: 30px;}
+.my8f_credit {float:left; height:100%; text-align:center; margin-top:-15px;}
+.my8f_textcredit {font-family: "Lato"; font-weight: lighter; font-size:30px; color: #485152; font-weight:lighter; display:block; color:#a96829; margin-bottom: 30px;}
+
+.my8f_creditpage ul li{ margin-top:40px;}
+.my8f_creditpage ul li .large-label {font-family: "Lato"; font-weight: lighter; font-size:23px; color: #485152; font-weight:lighter; display:block; padding-top:7px}
+.my8f_creditpage ul li .cont-list  {font-size:23px; color:#666; font-weight:normal; display:block; padding-top:7px}
+.my8f_creditpage ul li .cont-list .bottom-list , .bottom-list a{ font-size:11px; color:#94bdc2}
+.my8f_creditpage .bottom-list a {text-decoration:underline}
+
+
+/* Contacts app */
+
+#contactsPanel {
+	width: 860px;
+	margin: 0;
+	padding: 0;
+}
+
+#contactsPanel .leftPanel {
+	width: 350px;
+	overflow-y: auto;
+	overflow-x: hidden;
+	position: fixed;
+	bottom: 60px;
+	top: 190px;
+	//height: 90%;
+	//bottom: 60px;
+	//left: -484px;
+	//right: 0;
+	//margin-top: 150px;
+	//margin-bottom: 25px;
+	//margin-right: auto;
+	//margin-left: auto;
+	border: 10px solid #eaeaea;
+	float: left;
+	-moz-border-radius: 5px;
+	border-radius: 5px;		
+}
+
+#contactsPanel .rightPanel {
+	width: 450px;
+	background: #f1f1f1;
+	overflow-y: hidden;
+	overflow-x: hidden;
+	position: fixed;
+	//bottom: 90px;
+	top: 210px;
+	margin-left: 370px;
+	//min-height: 300px;
+	padding: 0 15px 15px 15px;
+	//height: 200px;
+	//bottom: 0;
+	//top: 0;
+	//left: 345px;
+	//right: 0;
+	//margin-top: 90px;
+	//margin-bottom: 25px;
+	//margin-right: auto;
+	//margin-left: auto;
+
+	border-top: 10px solid #eaeaea;	
+	border-right: 10px solid #eaeaea;
+	border-bottom: 10px solid #eaeaea;
+	-moz-border-top-right-radius: 5px;
+	border-top-right-radius: 5px;	
+	-moz-border-bottom-right-radius: 5px;
+	border-bottom-right-radius: 5px;	
+	
+}
+
+#contactsPanel .contactsFilter {
+	width: 860px;
+}
+
+#contentTabCard {
+	width: 500px;
+}
+
+#contentTabCard .staff {
+	padding: 10px 0 20px 0;
+}
+
+#contentTabCard .staff ul {
+	margin: 0;
+	padding: 0;
+}
+
+#contentTabCard .staff ul li {
+	width: 50%;
+	float: left;
+	display: inline;
+}
+
+#menuTabCard {
+	width: 55px;
+	overflow-y: hidden;
+	overflow-x: hidden;
+	position: absolute;
+	height: auto;
+	bottom: 0;
+	top: -5px;
+	left: 454px;
+	right: 0;
+	margin-top: 75px;
+	margin-right: auto;
+	margin-left: auto;
+	z-index: 92;
+}
+
+#menuTabCard ul {
+	list-style: none;
+	margin: 0;	
+	padding: 0;
+}
+
+#menuTabCard ul li {
+	padding: 3px 0;
+}
+
+#menuTabCard ul a {
+	display: block;
+	padding-top: 34px;
+	width: 55px;
+	height: 15px;
+	background: url(../img/sprite-1.png);
+	margin: 0 0 2px 0;
+	font-size: 9px;
+	line-height: 11px;
+	text-align: center;
+	color: #808080;
+	text-transform: uppercase;
+	text-decoration: none;
+}
+
+#menuTabCard ul .active {
+	background: url(../img/menuTabCardBackgroundActive.png) no-repeat right top;
+	position: relative;
+}
+
+#contactsPanel .fix {
+	background: url(../img/menuTabCardBackgroundFix.png) no-repeat;
+	width: 15px;
+	height: 14px;
+	position: absolute;
+	right: 97px;
+	top: 159px;
+	z-index: 99;
+}
+
+#contactsPanel #searchContacts {
+	border: 2px solid #b5b5b5;
+	font-size: 13px;
+	color: #8c8c8c;
+	width: 211px;
+	outline: none;
+	height: 20px;
+	padding: 7px 0 7px 37px;
+	margin: 0 20px 10px 0;
+	background: url(../img/searchIcon.png) no-repeat 2px -4px;
+	-moz-border-radius: 20px;
+	border-radius: 20px;
+	-webkit-box-shadow: inset 2px 2px 5px 0px #e1e1e1;
+	box-shadow: inset 2px 2px 5px 0px #e1e1e1;
+	float: left;
+}
+
+
+#contactsPanel nav {
+	text-align: left;
+	padding-top: 8px;
+}
+
+#contactsPanel nav a {
+	margin-right: 10px;
+	font-size: 10px;
+	text-decoration: none;
+	color: #b6b6b6;
+	text-transform: uppercase;
+}
+
+#contactsPanel nav a.active {
+	color: #8c8c8c;
+}
+
+#contactsPanel nav a:hover {
+	text-decoration: underline;
+}
+
+
+#contactsPanel nav a:last-of-type {
+	margin-right: 0;
+}
+
+
+.leftPanel ul.addressBook {
+	margin: 0;
+	padding: 0 0 0 0;
+}
+
+ul.addressBook li .contactType {
+	font-size: 9px;
+	line-height: 11px;
+	color: #999;
+	text-transform: uppercase;
+	margin: 18px 15px 0 0;
+	float: right;
+}
+
+ul.addressBook li.active .contactType {
+	color: #d0bc7d;
+}
+
+ul.addressBook li img {
+	margin: 8px 10px 0 10px;
+	float: left;
+	-moz-border-radius: 16px;
+	border-radius: 16px;
+}
+
+ul.addressBook li.active {
+	background: rgb(255,239,191);
+	background: -moz-linear-gradient(top,  rgba(255,239,191,1) 0%, rgba(235,216,159,1) 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,239,191,1)), color-stop(100%,rgba(235,216,159,1)));
+	background: -webkit-linear-gradient(top,  rgba(255,239,191,1) 0%,rgba(235,216,159,1) 100%);
+	background: -o-linear-gradient(top,  rgba(255,239,191,1) 0%,rgba(235,216,159,1) 100%);
+	background: -ms-linear-gradient(top,  rgba(255,239,191,1) 0%,rgba(235,216,159,1) 100%);
+	background: linear-gradient(top,  rgba(255,239,191,1) 0%,rgba(235,216,159,1) 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffefbf', endColorstr='#ebd89f',GradientType=0 );
+}
+
+ul.addressBook li {
+	border-bottom: 1px solid #eaeaea;
+	height: 45px;
+	cursor: pointer;
+}
+
+.leftPanel ul.addressBook li.letter {
+	background: #eaeaea;
+	border: none;
+	cursor: normal!important;
+	text-transform: uppercase;
+	color: #485152;
+	font-weight: bold;
+	font-size: 12px;
+	text-align: center;
+	padding: 3px 0 5px 0;
+	height: 15px;
+	-webkit-box-shadow: inset 0px 0px 5px 0px #cccccc;
+	box-shadow: inset 0px 0px 5px 0px #cccccc;
+}
+
+ul.addressBook li.noBottom {
+	border-bottom: 0;
+}
+
+ul.addressBook li .info {
+	//float: left;
+	font-weight: bold;
+	font-size: 13px;
+	line-height: 13px;
+	color: #485152;
+	padding: 16px 0 0 5px;
+}
+
+ul.addressBook li .info a {
+	color: #555;
+}
+
+ul.addressBook li.active .info {
+	color: #6e5519;
+}
+
+ul.addressBook li .info.hasCompany {
+	padding-top: 9px;
+}
+
+ul.addressBook li .company {
+	color: #9f9f9f;
+	font-size: 11px;
+	line-height: 11px;
+	//float: left;
+	margin: 0 0 0 5px;
+	padding-top: 3px;
+	width: 163px;
+}
+
+ul.addressBook li.active .company {
+	color: #ab8c2e;
+}
+
+
+
 /*START HELPDESK LIST CSS */
 #helpdesk_fillter{
 	width:100%;
