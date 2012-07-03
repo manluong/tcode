@@ -54,6 +54,7 @@ class Card extends MY_Controller {
 
 	function upload(){
 	   $this->load->library('filel');
+	   $this->load->library('imagel');
 //	   $file = $this->filel->save('file', 'Contact');
 //	   echo $file['hash'];
 	    if ((($_FILES["file"]["type"] == "image/gif")
@@ -65,6 +66,22 @@ class Card extends MY_Controller {
 		$file = pathinfo($_FILES["file"]["name"]);
 		$file = $name.'.'.$file['extension'];
 		$path = $this->filel->write_to_temp(file_get_contents($_FILES["file"]["tmp_name"]),$file);
+		$large_image_location = $this->filel->get_temp_dir().$file;
+		$width = $this->imagel->getWidth($large_image_location);
+		$height = $this->imagel->getHeight($large_image_location);
+		//Scale the image if it is greater than the width set above
+		if ($width > $this->imagel->max_width){
+			$scale = $this->imagel->max_width/$width;
+			$uploaded = $this->imagel->resizeImage($large_image_location,$width,$height,$scale);
+		}else{
+			$scale = 1;
+			$uploaded = $this->imagel->resizeImage($large_image_location,$width,$height,$scale);
+		}
+		//Delete the thumbnail file so the user can create a new one
+		if (file_exists($thumb_image_location)) {
+			unlink($thumb_image_location);
+		}
+		$path = $this->filel->write_to_temp(file_get_contents($uploaded),$file);
 		echo $file;
 	    }
 	    else

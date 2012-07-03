@@ -1,6 +1,6 @@
 <?php
 class Imagel {
-    private $max_width = "500";							// Max width allowed for the large image
+    public $max_width = "500";							// Max width allowed for the large image
     private $thumb_width = "100";						// Width of thumbnail image
     private $thumb_height = "100";						// Height of thumbnail image
     private $allowed_image_types = array('image/pjpeg'=>"jpg",'image/jpeg'=>"jpg",'image/jpg'=>"jpg",'image/png'=>"png",'image/x-png'=>"png",'image/gif'=>"gif");
