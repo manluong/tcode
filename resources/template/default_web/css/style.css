@@ -1073,7 +1073,23 @@ a.appsIconTop {
 	font-weight: lighter;
 }
 
-		
+#breadcrumb a#favoriteIcon {
+	width: 20px;
+	height: 20px;
+	background: url(../img/sprite-1.png) no-repeat;
+	display: inline-block;
+	margin: 0 0 0 4px;
+	position: relative;
+	top: -2px;
+}
+
+#breadcrumb a#favoriteIcon.on {
+	background-position: -115px -76px;
+}
+
+#breadcrumb a#favoriteIcon.off {
+	background-position: -115px -126px;
+}		
  	
 		
 #quickjump{
