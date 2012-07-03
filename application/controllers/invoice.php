@@ -287,7 +287,7 @@ class Invoice extends MY_Controller {
 
 	private function get_quickjump() {
 		$quickjump_card_id = $this->session->userdata('quickjump_card_id');
-		if ($quickjump_card_id !== FALSE) {
+		if (is_numeric($quickjump_card_id)) {
 			$card = $this->CardM->get_quickjump($quickjump_card_id);
 			return $this->load->view(get_template().'/card/quickjump', $card, TRUE);
 		} else {

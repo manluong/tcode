@@ -3,6 +3,7 @@
 .DS_Store*
 ehthumbs.db
 Thumbs.db
+.gitignore
 .Spotlight*
 *.project
 
@@ -20,3 +21,4 @@ application/logs/*
 nbproject
 #hehe
 upload_pic/*
+upload_crop/*
