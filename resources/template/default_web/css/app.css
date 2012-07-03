@@ -334,12 +334,6 @@
     width: 857px;
 }
 
-#input_data_info .dataFL{
-	float:left;
-	width:100%;
-	margin-bottom:5px;
-}
-
 .pull-right a{
 	color: #0084CF;
     font-size: 12px;
@@ -715,6 +709,7 @@ select{
 #input_data_fillter{
 	width:100%;
 	display:none;
+	float:left;
 }
 .input_data_label{
 	font-size:13px;
@@ -727,7 +722,7 @@ select{
 }
 #invoice_cases{
 	float:left;
-	height:252px;
+	min-height:252px;
 	width:860px;
 }
 .page{

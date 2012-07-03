@@ -14,152 +14,154 @@
 		<div class="subtitle">
 			<span class="subtitle-arrow"></span>DETAILS
 		</div>
-		<div id="helpdesk_show_info" class="dataV">
-			<div class="dataVL">
-				<div class="dataVT">Subject</div>
-				<div class="dataVD"><?=$result['subject']?></div>
+		<div class="subtitleContent">
+			<div id="helpdesk_show_info" class="dataV">
+				<div class="dataVL">
+					<div class="dataVT">Subject</div>
+					<div class="dataVD"><?=$result['subject']?></div>
+				</div>
+				<div class="dataVL">
+					<div class="dataVT">Assigned</div>
+					<div class="dataVD"><?=$this->Helpdesk_CommentM->get_assigname($result['assign_id'])?></div>
+				</div>
+				<div class="dataVL">
+					<div class="dataVT">CC (Email)</div>
+					<div class="dataVD"><?=$result['cc_email']?></div>
+				</div>
+				<div id="helpdesk_change_info">Change Info</div>
 			</div>
-			<div class="dataVL">
-				<div class="dataVT">Assigned</div>
-				<div class="dataVD"><?=$this->Helpdesk_CommentM->get_assigname($result['assign_id'])?></div>
-			</div>
-			<div class="dataVL">
-				<div class="dataVT">CC (Email)</div>
-				<div class="dataVD"><?=$result['cc_email']?></div>
-			</div>
-			<div id="helpdesk_change_info">Change Info</div>
-		</div>
 		
-		<!-- Hidden Helpdesk Id-->
-		<input type="hidden" value="<?=$id?>" name="hiddenIdAdmincp" id="hiddenIdAdmincp" />
-		<!-- End Hidden Helpdesk Id-->
+			<!-- Hidden Helpdesk Id-->
+			<input type="hidden" value="<?=$id?>" name="hiddenIdAdmincp" id="hiddenIdAdmincp" />
+			<!-- End Hidden Helpdesk Id-->
 		
-		<div id="input_data_info" style="display:none;">
-			<div class="dataFL">
-				<div class="dataFT">Subject</div>
-				<div class="dataVD">
-					<input type="text" id="subject" class="inv-field" value="<?=(isset($result['subject']) ? $result['subject'] : '')?>"/>
+			<div id="input_data_info" style="display:none;">
+				<div class="dataFL">
+					<div class="dataFT">Subject</div>
+					<div class="dataVD">
+						<input type="text" id="subject" class="inv-field" value="<?=(isset($result['subject']) ? $result['subject'] : '')?>"/>
+					</div>
 				</div>
-			</div>
-			
-			<div class="dataFL">
-				<div class="dataFT">Assigned</div>
-				<div class="dataVD">
-					<input type="hidden" id="assign_id" value="<?=$result['assign_id']?>" name="assign_id" />
-					<input type="text" id="assign_name" value="<?=$this->Helpdesk_CommentM->get_assigname($result['assign_id'])?>" name="assign_name" class="inv-field" />
+				
+				<div class="dataFL">
+					<div class="dataFT">Assigned</div>
+					<div class="dataVD">
+						<input type="hidden" id="assign_id" value="<?=$result['assign_id']?>" name="assign_id" />
+						<input type="text" id="assign_name" value="<?=$this->Helpdesk_CommentM->get_assigname($result['assign_id'])?>" name="assign_name" class="inv-field" />
+					</div>
 				</div>
-			</div>
-			
-			<div class="dataFL">
-				<div class="dataFT">CC (Email)</div>
-				<div class="dataVD">
-					<input type="text" id="cc_email" class="inv-field" value="<?=(isset($result['cc_email'])? print $result['cc_email'] : print '')?>"/>
+				
+				<div class="dataFL">
+					<div class="dataFT">CC (Email)</div>
+					<div class="dataVD">
+						<input type="text" id="cc_email" class="inv-field" value="<?=(isset($result['cc_email'])? print $result['cc_email'] : print '')?>"/>
+					</div>
 				</div>
+				<div id="helpdesk_save_info" style="margin-top:-5px;">Save</div>
 			</div>
-			<div id="helpdesk_save_info" style="margin-top:-5px;">Save</div>
 		</div>
 	</div>
 
 	<div id="invoice_fillter">
-		<div class="invoice_title">
-			<div class="subtitle-noshadow">
-				<span class="subtitle-arrow"></span>DETAILS
+		<div class="subtitle-noshadow">
+			<span class="subtitle-arrow"></span>DETAILS
+		</div>
+		<div class="subtitleContent">
+			<div id="helpdesk_fillter">
+				<ul>
+					<li>
+						<span class="fillter_label">Status</span>
+						<span class="fillter_input">
+							<select name="status" id="status">
+								<option value="">- - - Something - - -</option>
+								<?php if(!empty($status)) {
+										if(!empty($result['status'])) {
+											$value_status = $result['status'];
+										} else {
+											$value_status = 0;
+										}
+										for($i = 0; $i < count($status); $i++){
+								?>
+								<option <?=($value_status == $status[$i]['id']?'selected=selected':'' )?> value="<?=$status[$i]['id']?>"><?=$status[$i]['name']?></option>
+								<?php }}?>
+							</select>
+						</span>
+					</li>
+					<li>
+						<span class="fillter_label">Group \ Department</span>
+						<span class="fillter_input">
+							<select disabled="disabled" name="group" id="group">
+								<option value="">- - - Something - - -</option>
+								<?php if(!empty($group)) {
+										if(!empty($result['group'])) {
+											$value_group = $result['group'];
+										} else {
+											$value_group = 0;
+										}
+										for($i = 0; $i < count($group); $i++){
+								?>
+								<option <?=($value_group == $group[$i]['id']?'selected=selected':'' )?> value="<?=$group[$i]['id']?>"><?=$group[$i]['name']?></option>
+								<?php }}?>
+							</select>
+						</span>
+					</li>
+					<li>
+						<span class="fillter_label">Type</span>
+						<span class="fillter_input">
+							<select disabled="disabled" name="type" id="type">
+								<option value="">- - - Something - - -</option>
+								<?php if(!empty($type)) {
+										if(!empty($result['type'])) {
+												$value_type = $result['type'];
+										} else {
+												$value_type= 0;
+										}
+										for($i = 0; $i < count($type); $i++){
+								?>
+								<option <?=($value_type == $type[$i]['id']?'selected=selected':'' )?> value="<?=$type[$i]['id']?>"><?=$type[$i]['name']?></option>
+								<?php }}?>
+							</select>
+						</span>
+					</li>
+					<li>
+						<span class="fillter_label">Priority</span>
+						<span class="fillter_input">
+							<select name="priority" id="priority">
+								<option value="">- - - Something - - -</option>
+								 <?php if(!empty($priority)) {
+										if(!empty($result['priority'])) {
+												$value_pri = $result['priority'];
+										} else {
+												$value_pri= 0;
+										}
+										for($i = 0; $i < count($priority); $i++){
+								?>
+								<option <?=($value_pri == $priority[$i]['id']?'selected=selected':'' )?> value="<?=$priority[$i]['id']?>"><?=$priority[$i]['name']?></option>
+								<?php }}?>
+							</select>
+						</span>
+					</li>
+				</ul>
 			</div>
-		</div>
-		<div id="helpdesk_fillter">
-			<ul>
-				<li>
-					<span class="fillter_label">Status</span>
-					<span class="fillter_input">
-						<select name="status" id="status">
-							<option value="">- - - Something - - -</option>
-							<?php if(!empty($status)) {
-									if(!empty($result['status'])) {
-										$value_status = $result['status'];
-									} else {
-										$value_status = 0;
-									}
-									for($i = 0; $i < count($status); $i++){
-							?>
-							<option <?=($value_status == $status[$i]['id']?'selected=selected':'' )?> value="<?=$status[$i]['id']?>"><?=$status[$i]['name']?></option>
-							<?php }}?>
-						</select>
-					</span>
-				</li>
-				<li>
-					<span class="fillter_label">Group \ Department</span>
-					<span class="fillter_input">
-						<select disabled="disabled" name="group" id="group">
-							<option value="">- - - Something - - -</option>
-							<?php if(!empty($group)) {
-									if(!empty($result['group'])) {
-										$value_group = $result['group'];
-									} else {
-										$value_group = 0;
-									}
-									for($i = 0; $i < count($group); $i++){
-							?>
-							<option <?=($value_group == $group[$i]['id']?'selected=selected':'' )?> value="<?=$group[$i]['id']?>"><?=$group[$i]['name']?></option>
-							<?php }}?>
-						</select>
-					</span>
-				</li>
-				<li>
-					<span class="fillter_label">Type</span>
-					<span class="fillter_input">
-						<select disabled="disabled" name="type" id="type">
-							<option value="">- - - Something - - -</option>
-							<?php if(!empty($type)) {
-									if(!empty($result['type'])) {
-											$value_type = $result['type'];
-									} else {
-											$value_type= 0;
-									}
-									for($i = 0; $i < count($type); $i++){
-							?>
-							<option <?=($value_type == $type[$i]['id']?'selected=selected':'' )?> value="<?=$type[$i]['id']?>"><?=$type[$i]['name']?></option>
-							<?php }}?>
-						</select>
-					</span>
-				</li>
-				<li>
-					<span class="fillter_label">Priority</span>
-					<span class="fillter_input">
-						<select name="priority" id="priority">
-							<option value="">- - - Something - - -</option>
-							 <?php if(!empty($priority)) {
-									if(!empty($result['priority'])) {
-											$value_pri = $result['priority'];
-									} else {
-											$value_pri= 0;
-									}
-									for($i = 0; $i < count($priority); $i++){
-							?>
-							<option <?=($value_pri == $priority[$i]['id']?'selected=selected':'' )?> value="<?=$priority[$i]['id']?>"><?=$priority[$i]['name']?></option>
-							<?php }}?>
-						</select>
-					</span>
-				</li>
-			</ul>
-		</div>
-		<div id="helpdesk_comment">
-			<textarea rows="3" id="comment" ></textarea>
-			<div id="comment_submit">
-				<div style="width:735px;float:left;">
-					<span><input type="checkbox" id="private"/> Private Comments (Only Staff see this comment)</span>
-					<span></span>
+			<div id="helpdesk_comment">
+				<textarea rows="3" id="comment" ></textarea>
+				<div id="comment_submit">
+					<div style="width:735px;float:left;">
+						<span><input type="checkbox" id="private"/> Private Comments (Only Staff see this comment)</span>
+						<span></span>
+					</div>
+					<div style="float:left;margin-top:2px;"><button onclick="submit_comment();" href="#" class="btn btn-primary">SUBMIT</button></div>
 				</div>
-				<div style="float:left;margin-top:2px;"><button onclick="submit_comment();" href="#" class="btn btn-primary">SUBMIT</button></div>
 			</div>
-		</div>
-		<div id="plupload">
-			<!-- PLUpload-->
-			<h1 style="display:none;">Custom example</h1>
-			<p style="display:none;">Shows you how to use the core plupload API.</p>
-			<div id="container" >
-				<div id="pickfiles" class="btn_attach"></div>
-				<div style="display:none;" id="uploadfiles"></div>
-				<div id="filelist" style="float:left ;margin:23px 0 0 0;"></div>
+			<div id="plupload">
+				<!-- PLUpload-->
+				<h1 style="display:none;">Custom example</h1>
+				<p style="display:none;">Shows you how to use the core plupload API.</p>
+				<div id="container" >
+					<div id="pickfiles" class="btn_attach"></div>
+					<div style="display:none;" id="uploadfiles"></div>
+					<div id="filelist" style="float:left ;margin:23px 0 0 0;"></div>
+				</div>
 			</div>
 		</div>
 	</div>
