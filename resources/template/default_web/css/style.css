@@ -1017,6 +1017,10 @@ a.appsIconTop {
 	padding: 8px 0px 0 0;
 }
 
+#breadcrumb .rightBar a{
+	color: #FFFFFF;
+}
+
 #breadcrumb .rightBar a.mainLink {
 	background: #485152;
 	color: #dee6e8;
@@ -1107,9 +1111,6 @@ a.appsIconTop {
 	margin:3px;
 }
 
-
-
-
 /* View */
 
 .dataV {
@@ -1159,11 +1160,6 @@ a.appsIconTop {
 	font-size: 13px;
 	font-weight: bold;	
 }
-
-
-
-
-
 
 input[type=text], textarea {
 	background: white;
@@ -1217,11 +1213,6 @@ form.form-stacked label {
 	text-align: left;
 	width: auto;
 }
-
-
-
-
-
 
 /* Footer */
 footer {

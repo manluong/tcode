@@ -1,22 +1,22 @@
-<ul>
 <?php if (!empty($info)) {
 		foreach ($info as $k) {
 ?>
-	<li>
-		<span class="input_data_label">Subject</span>
-		<span class="fillter_input"><?=$k->subject?></span>
-	</li>
-	<li>
-		<span class="input_data_label">Assigned</span>
-		<span class="fillter_input"><?=$this->Helpdesk_CommentM->get_assigname($k->assign_id)?></span>
-	</li>
-	<li>
-		<span class="input_data_label">CC (Email)</span>
-		<span class="fillter_input"><?=$k->cc_email?></span>
-	</li>
-	<li id="helpdesk_change_info">Change Info</li>
+	<div class="dataVL">
+		<div class="dataVT">Subject</div>
+		<div class="dataVD"><?=$k->subject?></div>
+	</div>
+	<div class="dataVL">
+		<div class="dataVT">Assigned</div>
+		<div class="dataVD"><?=$this->Helpdesk_CommentM->get_assigname($k->assign_id)?></div>
+	</div>
+	<div class="dataVL">
+		<div class="dataVT">CC (Email)</div>
+		<div class="dataVD"><?=$k->cc_email?></div>
+	</div>
+	<div id="helpdesk_change_info">Change Info</div>
+			
 <?php }}?>
-</ul>
+
 <script type="text/javascript">
 $(document).ready(function(){
 	$("#helpdesk_change_info").click(function(){

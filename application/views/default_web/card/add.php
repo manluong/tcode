@@ -497,44 +497,9 @@ foreach ($allowed_image_ext as $mime_type => $ext) {
 			</ul>
 		</div>
 	</div>
-	<div id="avatar" style="width:500px;height:500px;"></div>
+	<div id="avatar"></div>
 	<div id="upload_crop">
-		<?php
-		//Display error message if there are any
-		if(strlen($error)>0){
-			echo "<ul><li><strong>Error!</strong></li><li>".$error."</li></ul>";
-		}
-		if(strlen($large_photo_exists)>0 && strlen($thumb_photo_exists)>0){
-			echo $large_photo_exists."&nbsp;".$thumb_photo_exists;
-			echo "<p><a href=\"".$_SERVER["PHP_SELF"]."?a=delete&t=".$_SESSION['random_key'].$_SESSION['user_file_ext']."\">Delete images</a></p>";
-			echo "<p><a href=\"".$_SERVER["PHP_SELF"]."\">Upload another</a></p>";
-			//Clear the time stamp session and user file extension
-			$_SESSION['random_key']= "";
-			$_SESSION['user_file_ext']= "";
-		}else{
-				if(strlen($large_photo_exists)>0){?>
-				<div align="center">
-					<img height="400" src="<?=site_url($upload_path.$large_image_name.$_SESSION['user_file_ext'])?>" style="float: left; margin-right: 10px;" id="thumbnail" alt="Create Thumbnail" />
-					<div style="border:1px #e5e5e5 solid; float:left; position:relative; overflow:hidden; width:<?php echo $thumb_width;?>px; height:<?php echo $thumb_height;?>px;">
-						<img src="<?=site_url($upload_path.$large_image_name.$_SESSION['user_file_ext'])?>" style="position: relative;" alt="Thumbnail Preview" />
-					</div>
-					<br style="clear:both;"/>
-					<form name="thumbnail" action="<?=site_url('card/add')?>" method="post">
-						<input type="hidden" name="x1" value="" id="x1" />
-						<input type="hidden" name="y1" value="" id="y1" />
-						<input type="hidden" name="x2" value="" id="x2" />
-						<input type="hidden" name="y2" value="" id="y2" />
-						<input type="hidden" name="w" value="" id="w" />
-						<input type="hidden" name="h" value="" id="h" />
-						<input type="submit" name="upload_thumbnail" value="Save Thumbnail" id="save_thumb" />
-					</form>
-				</div>
-			<hr />
-			<?php 	} ?>
-			<form name="photo" enctype="multipart/form-data" action="<?=site_url('card/add')?>" method="post" style="display:none;">
-			Photo <input type="file" name="image" size="30"  /> <input type="submit" name="upload" value="Upload" />
-			</form>
-		<?php } ?>
+		
 	</div>
 
 </div>

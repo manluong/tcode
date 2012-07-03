@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 /* chat icon */
 .chatSection { bottom:0; right: 2.5%; font-size: 13px; z-index:13;}
 .chatItem:hover , .chatItem.active{ background:#c6c6c6; }
@@ -157,35 +156,516 @@
 	background-position: 10px -100px;
 }
 
-/* My8Force */
-.my8f_action {font-size:12px; color:#6da557; text-align:center; line-height:24px}
-.my8f_action a{color:#6da557; text-decoration:underline}
-.my8f_action .upgrade {color:#F00; font-size:14px; padding-top:20px}
-.my8f_lic {padding-top:30px}
-.my8f_lic ul li{border-bottom:1px solid #eee; padding:5px 0}
-.my8f_lic ul li h2{font-size:24px; text-align:right; font-style:italic; color:#6da557; font-weight:normal;}
-.my8f_lic ul li .cont-list img {width:40px; height:40px; float:left; margin-right:8px}
-.my8f_lic ul li .cont-list .right-list {font-size:13px; float:right; color:#6da557;}
-.my8f_lic ul li .large-label {font-family: "Lato"; font-weight: lighter; font-size:23px; color: #485152; font-weight:lighter; display:block; padding-top:7px}
-.my8f_lic ul li .cont-list  {font-size:23px; color:#666; font-weight:normal; display:block; padding-top:7px}
-.my8f_lic ul li .cont-list .bottom-list , .bottom-list a{ font-size:11px; color:#94bdc2}
-.my8f_lic .bottom-list a {text-decoration:underline}
+/*START HELPDESK LIST CSS */
+#helpdesk_fillter{
+	width:100%;
+	height:68px;
+	float:left;
+	padding:0px 0 0 1px;
+	display:inline;
+	margin-top:5px;
+}
+#helpdesk_fillter ul li{
+	float:left;
+	margin-right:2px;
+	font-size:13px;
+	font-weight:bold;
+	width:170px;
+	height:50px;
+}
+#helpdesk_fillter  a{
+	font-size:11px;
+}
+#helpdesk_fillter  select{
+	width:150px;
+}
+#helpdesk_fillter  input{
+	width:110px;
+}
+#helpdesk_fillter .fillter_label{
+	font-weight:normal;
+}
+#helpdesk_show_info{
+	height:123px;
+	width:857px;
+	background: url("../img/invoice/invoice-shadown_fillter.png") no-repeat scroll 0 0 transparent;
+	float:left;
+}
+#helpdesk_show_info ul li{
+	float:left;
+	width:100%;
+	margin-top:4px;
+}
+#helpdesk_show_info .input_data_label{
+	font-weight:normal;
+	color:#444444;
+	float:left;
+}
+#helpdesk_show_info .fillter_input{
+	font-size:16px;
+	margin-top:4px;
+	float:left;
+	font-weight:bold;
+}
+#helpdesk_change_info{
+	color:#1d57a0;
+	font-weight:bold;
+	text-decoration:underline;
+	cursor:pointer;
+	margin:0 0 0 750px !important;
+}
+#helpdesk_save_info{
+	color:#1d57a0;
+	font-weight:bold;
+	text-decoration:underline;
+	cursor:pointer;
+	margin:0 0 0 750px !important;
+}
+#helpdesk_edit{
+	display:none;
+}
+#helpdesk_comment textarea{
+	width:794px;
+	height:193px;
+	float:left;
+}
+#comment_submit{
+	width:100%;
+}
+#comment_submit{
+	float:left;
+	margin-top:2px;
+}
+#plupload{
+	float:left;
+	width:200px;
+	display:inline;
+	margin-left:40px;
+}
+#helpdesk_comment{
+	float:left;
+	width:100%;
+	margin-left:40px;
+	display:inline;
+}
+.btn_attach{
+	width:80px;
+	height:22px;
+	background: url("../img/helpdesk/helpdesk-btn_attach.jpg") no-repeat scroll 0 0 transparent;
+	cursor:pointer;
+	float:left;
+}
+.btn_plupload{
+	color:#1d57a0;
+	font-weight:bold;
+	cursor:pointer;
+	text-decoration:underline;
+	float:left;
+	margin-left:12px;
+	display:inline;
+}
+#comment_list{
+	float:left;
+	margin-top:30px;
+	width:100%;
+}
+.comment_info{
+	width:100%;
+	float:left;
+	border-bottom:1px solid #f4f4f4;
+	margin-bottom:15px;
+}
+.comment_info_user{
+	width:100%;
+	height:50px;
+	float:left;
+}
+.comment_user_avatar{
+	width:45px;
+	height:52px;
+	float:left;
+}
+.comment_content{
+	float:left;
+	width:760px;
+	margin:0 0 25px 53px;
+	display:inline;
+	color:#444444;
+	font-size:13px;
+}
+.comment_arrow {
+	float:left;
+	width:50px;
+	margin-top:-30px;
+	margin-left: -46px !important;
+}
+.comment_detail{
+	color:#444444;
+	font-size:13px;
+	float:left;
+	display:inline;
+	display:none;
+}
+.comment_detail p {
+	line-height:10px;
+}
+.wap_comment_content{
+	float:left;
+	margin-bottom:5px;
+	width:100%;
+}
+#new_helpdesk_subject input{
+	width:435px;
+}
+.btn-group a{
+	color:white;
+}
+#top_button a{
+	color:white;
+}
+.dropdown-menu a{
+	color:#000000 !important;
+}
+#input_data_info {
+    background: url("../img/invoice/invoice-shadown_fillter.png") no-repeat scroll 0 0 transparent;
+    float: left;
+    height: 123px;
+    padding-top: 20px;
+    width: 857px;
+}
+
+.pull-right a{
+	color: #0084CF;
+    font-size: 12px;
+    font-weight: bold;
+    text-decoration: none !important;
+}
+
+.top_menu{
+	float:right;
+	color:#424242;
+	font-family:'Cuprum',Arial;
+	font-size:16px;
+	padding:9px 35px 0 0 ;
+}
+.top_menu ul li {
+	float:left;
+	margin-left:20px;
+	display:inline;
+}
+.head_helpdesk{
+	width:100%;
+	height:60px;
+	padding-top:20px;
+	font-weight:bold;
+}
+.head_helpdesk #content_left{
+	float:left;
+	margin-left:35px;
+	display:inline;
+}
+#content_right{
+	float:right;
+	padding-right:35px;
+}
+#time_curent{
+	float:right;
+}
+#time_update{
+	font-style:italic;
+	font-weight:normal;
+}
+#helpdesk_info{
+	margin-left:35px;
+	height:250px;
+	background-color: #EEEEEE;
+    background-image: -moz-linear-gradient(center top , #F5F5F5 0%, #EEEEEE 100%);
+    background-repeat: repeat-x;
+    border: 1px solid #E5E5E5;
+    border-radius: 4px 4px 4px 4px;
+	width:900px;
+}
+#helpdesk_info #form_show li{
+	margin-top:20px;
+	float:left;
+	width:100%;
+}
+#helpdesk_info #form_change  li{
+	margin-top:16px;
+	float:left;
+	width:100%;
+}
+.input_change{
+	float: left;
+    margin-top: -8px;
+}
+
+#helpdesk_select{
+	padding:20px 0 0 10px;
+	height:280px;
+}
+#helpdesk_select ul li{
+	float:left;
+	margin-right:20px;
+}
+.helpdesk_info_span{
+	width:70px !important;
+	margin-left:0px !important;
+}
+/* CSS HelpDesk */
+#main{
+	width: 960px;
+	margin: 0 auto;
+}
+#comment_info{
+	padding-left:35px;
+}
+#comment_h1{
+	font-size:20px;
+	width:130px;
+	float:left;
+	height:50px;
+}
+#comment_title{
+	height:50px;
+}
+#comment_content_left_1{
+	float:left;
+}
+#wap_icon_mail{
+	float:left;
+}
+#comment_name{
+	padding:6px 0 0 10px;
+	float:left;
+	width:125px;
+}
+#comment_content_left{
+	width:650px;
+	padding-top:20px;
+	float:left;
+}
+#comment_time{
+	float:left;
+	padding-top:10px;
+	margin-left:-49px;
+}
+	
+#wap_comment_left{
+	width:185px;
+	float:left;
+	height:60px;
+}
+#comment_content_right{
+	width:525px;
+	float:left;
+	margin-left:185px;
+}
+#pickfiles{
+	width:70px;
+	height:20px;
+}
+#info_comment p{
+	line-height:10px;
+}
+#info_comment{
+	height:150px;
+}
+.input-xlarge{
+	width:650px !important;
+	height:100px !important;
+}
+select{
+	width:150px !important;
+}
+#form_show li span{
+	width:70px;
+}
+.fillter{
+	width:200px;
+	float:left;
+	margin-right:16px;
+}
+.ul_pagination li{
+	cursor:pointer;
+}
+.hide_page{
+	display:none !important;
+}
+#content_top {
+    width: 860px;
+	float:left !important;
+}
+#helpdesk_loadding{
+	width:32px;
+	height:32px;
+	background:url(../img/hd_loading.gif);
+	position:absolute;
+	top:53px;
+	left:365px;
+	display:none;
+	z-index: 9999;
+}
+/*END HELPDESK LIST CSS */
+
+
+
+
+
+
 
 /* Invoice */
+
+/* phone */
+#phone_fillter {
+    width: 860px;
+}
+#items_fillter {
+    float: left;
+    height: 87px;
+    padding-top: 20px;
+    width: 100%;
+}
+#items_fillter ul li {
+    float: left;
+    font-size: 13px;
+    font-weight: bold;
+    height: 50px;
+    margin-right: 2px;
+    width: 123px;
+}
+#items_fillter input {
+    width: 110px;
+}
+#items_fillter select {
+    width: 121px;
+}
+
+/*BEGIN INVOICE NEW CSS */
+#breadcrumb{
+	width:860px;
+	height:64px;
+	float:left;
+}
+#module_name{
+	float:left;
+}
+#module_name ul li{
+	float:left;
+	margin-right:13px;
+}
+.arrow{
+	background:url(../img/invoice/invoice-arrow.png);
+	width:4px;
+	height:19px;
+	margin-top:15px;
+}
+.curent_page{
+	margin-top:15px;
+	color:#808080;
+}
+.mainContent{
+	width:100%;
+	float:left;
+	margin-left:126px;
+	display:inline;
+}
+#favoriteIcon{
+	margin-top:15px !important;
+}
+#top_button{
+	float:right;
+	margin-top:11px;
+}
+#top_button ul li{
+	float:left;
+	margin-left:9px;
+}
+.btn_list{
+	width:42px;
+	height:27px;
+	background:url(../img/invoice/invoice-btn_list.jpg);
+	cursor:pointer;
+}
+.btn_new{
+	width:44px;
+	height:27px;
+	background:url(../img/invoice/invoice-btn_new.jpg);
+	cursor:pointer;
+}
+#content_top{
+	width:860px;
+	float:left;
+	height:100px;
+}
+#user_profile{
+	float:left;
+}
+#user_avatar{
+	width:52px;
+	height:52px;
+	float:left;
+	padding:0 16px 12px 0;
+}
+#user_info{
+	color:#485152;
+	float: left;
+}
+#user_info ul li{
+	margin-bottom:8px;
+}
+.user_sex{
+	font-size:16px;
+}
+.user_name{
+	font-size:24px;
+	font-weight:bold;
+}
+.user_position{
+	font-size:18px;
+	font-weight:bold;
+}
+#customer_list{
+	float:right;
+}
+#invoice_fillter{
+	width:860px;
+	min-height:127px;
+	float:left;
+}
+.invoice_title{
+	color:#a8682a;
+	font-size:12px;
+	font-weight:bold;
+	height:24px;
+}
+.arrow_title{
+	width:10px;
+	height:10px;
+	background:url(../img/invoice/invoice-arrow_title.png) no-repeat;
+	margin-top:3px;
+}
 .down_arrow{
 	width:19px;
 	height:19px;
-	background:url(../img/app/invoice/invoice-down_arrow.png) no-repeat;
+	background:url(../img/invoice-down_arrow.png) no-repeat;
 	cursor:pointer;
 }
 .up_arrow{
 	width:19px;
 	height:19px;
-	background:url(../img/app/invoice/invoice-up_arrow.jpg) no-repeat;
+	background:url(../img/invoice-up_arrow.jpg) no-repeat;
 	cursor:pointer;
 }
 .invoice_title span{
 	float:left;
+}
+#items_fillter{
+	width:100%;
+	height:87px;
+	background:url(../img/invoice/invoice-shadown_fillter.png) no-repeat;
+	float:left;
+	padding-top:20px;
 }
 #items_fillter ul li{
 	float:left;
@@ -205,20 +685,104 @@
 	width:110px;
 }
 .fillter_label{
-	display: block;
-	margin-bottom: 5px;
-	width: 100%;
+	width:123px;
+	margin-bottom:5px;
+	float:left;
 }
-#invoice_amount label {
-	color: #A8682A;
-	font-weight: bold;
+#invoice_amount input{
+	border:0 !important;
+	font-weight:bold;
+	color:#A8682A;
+	box-shadow:none !important;
+	margin:-11px 0 0px 0;
 }
 #slider-range{
 	margin-top:-3px;
 }
+.btn_submit{
+	width:57px;
+	height:27px;
+	background:url(../img/invoice/invoice-btn_submit.jpg);
+	cursor:pointer;
+	margin-top: 24px;
+}
+#input_data_fillter{
+	width:100%;
+	display:none;
+	float:left;
+}
+.input_data_label{
+	font-size:13px;
+	font-weight:bold;
+	width:106px;
+	float:left;
+	line-height:28px;
+	text-align:right;
+	margin-right:14px;
+}
 #invoice_cases{
-	height:252px;
+	float:left;
+	min-height:252px;
 	width:860px;
+}
+.page{
+	float:left;
+}
+.page a{
+	color:#0084cf !important;
+}
+.page a:hover{
+	color:#0084cf !important;
+}
+.page li{
+	float:left;
+	width:20px;
+	height:21px;
+	padding:5px 0 0 13px;
+	margin-right:2px;
+}
+.page li:hover{
+	background-color:#f5f5f5;
+	color:#0084cf !important;
+}
+.page .active{
+	background-color:#f5f5f5;
+	color:#999999 !important;
+}
+.page .active a{
+	color:#999999 !important;
+}
+.page a{
+	color:#0084cf;
+	font-weight:bold;
+	font-size:12px;
+	text-decoration:none !important;
+}
+.page .prev{
+	width:65px !important;
+}
+.page .prev:hover{
+	background:none;
+}
+.page .prev a:hover{
+	color:#ccd0d5 !important;
+}
+.page .next:hover{
+	background:none;
+}
+.page .next a:hover{
+	color:#ccd0d5 !important;
+}
+.page .disabled a{
+	color:#d0cccc !important;
+}
+.page .disable{
+	cursor:none;
+}
+#top_cases{
+	width:100%;
+	float:left;
+	height:25px;
 }
 #main_cases{
 	width:100%;
@@ -226,7 +790,7 @@
 }
 #main_cases thead{
 	height:41px;
-	background:url(../img/app/invoice/invoice-bg_thead.jpg) repeat-x;
+	background:url(../img/invoice/invoice-bg_thead.jpg) repeat-x;
 	font-size:13px;
 	color:#444444;
 	padding:0 38px 0 10px;
@@ -252,618 +816,9 @@
 	text-decoration:underline;
 }
 #invoice_detail{
-	margin-top: 20px;
-	width: 100%;
+	width:860px;
 }
 #boxes{
-	width: 860px;
-}
-
-#item_list_header div {
-	float: left;
-	background: url(../img/app/invoice/invoice-bg_thead.jpg) repeat-x;
-	color: #444444;
-	font-size: 13px;
-	font-weight: bold;
-	line-height: 37px;
-	height: 41px;
-}
-
-.invoice_item {
-	border-bottom: 1px solid #f7f7f7;
-}
-
-.invoice_item ul {
-	padding: 0;
-}
-
-.invoice_item div {
-	float: left;
-	margin-right: 1px;
-}
-
-.invoice_item_main div {
-	float: left;
-	margin-top: 15px;
-}
-
-.invoice_item .col-1 {
-	padding: 6px;
-	width: 16px;
-}
-
-.invoice_item .col-2 {
-	width: 208px;
-}
-
-.invoice_item .col-3 {
-	width: 347px;
-}
-
-.invoice_item .col-4 {
-	width: 76px;
-}
-
-.invoice_item .col-5 {
-	width: 69px;
-}
-
-.invoice_item .col-6 {
-	cursor: auto;
-	padding: 5px 0 0 5px;
-	max-width: 80px;
-}
-
-.invoice_item .col-7 {
-	width: 90px;
-}
-
-.invoice_item .col-8 {
-	width: 90px;
-}
-
-.invoice_item .col-9 {
-	width: 100px;
-}
-
-.invoice_item .col-10 {
-	width: 100px;
-}
-
-.invoice_item .col-11 {
-	width: 90px;
-}
-
-.invoice_item .col-12 {
-	width: 158px;
-}
-
-.invoice_item input {
-	margin-bottom: 1px;
-}
-
-.invoice_item input[type="checkbox"] {
-	width: auto;
-}
-
-#title_item_edit{
-	height:53px;
 	width:860px;
-	text-align:right;
-	font-size:30px;
-	color:#485152;
 }
-.detail_product input{
-	width:215px;
-	margin-right:2px;
-}
-.detail_des input{
-	width:343px;
-	margin-right:2px;
-}
-.detail_unitprice input{
-	width:72px;
-	margin-right:2px;
-}
-.detail_qty input{
-	width:65px;
-}
-.tr_detail{
-	height:67px !important;
-	line-height:67px !important;
-}
-#row_control ul {
-	width:22px;
-	padding-top:6px;
-}
-.row_delete{
-	width:15px;
-	height:15px;
-	background: url("../img/app/invoice/invoice-delete_row.jpg") no-repeat scroll 0 0 transparent;
-	cursor:pointer;
-}
-.row_move{
-	width:13px;
-	height:13px;
-	background: url("../img/app/invoice/invoice-move.jpg") no-repeat scroll 1px 2px transparent;
-	cursor:pointer;
-}
-.row_up{
-	width:19px;
-	height:19px;
-	background: url("../img/app/invoice/invoice-up_arrow.jpg") no-repeat scroll -4px 0 transparent;
-	cursor:pointer;
-}
-.row_down{
-	width:19px;
-	height:19px;
-	background: url("../img/app/invoice/invoice-down_arrow.png") no-repeat scroll -4px 0 transparent;
-	cursor:pointer;
-}
-#input_date input{
-	width:101px;
-	float:left;
-}
-#input_date select{
-	width:119px;
-	float:left;
-	margin-right:2px;
-}
-#input_checkbox{
-	float:left;
-	margin-top:-20px;
-}
-#add_row{
-	float:left;
-	width: 130px;
-	margin-left:29px;
-}
-#all_discount{
-	float:left;
-	padding-top: 5px;
-	width: 460px;
-}
-#all_discount ul {
-	margin: 0;
-	padding: 0;
-}
-#all_discount ul li{
-	float:left;
-	margin-right:15px;
-}
-#all_discount input, #all_discount select {
-	width:100px;
-	margin-top:-3px;
-}
-input {
-	color:#4d4d4d;
-}
-#total_price{
-	width:240px;
-	background-color:#f7f7f7;
-	float:right;
-	font-size:13px;
-	color:#444444;
-	padding: 6px 0 15px;
-}
-#total_price ul {
-	margin: 0;
-	padding: 0;
-}
-#total_price ul li{
-	width:100%;
-	padding: 13px 0;
-}
-.total_label{
-	width:125px;
-	float:left;
-	text-align:right;
-}
-.total_price{
-	float:left;
-	margin-left:23px ;
-	display:inline;
-	max-width: 90px;
-}
-#invoice_footer {
-	float: left;
-	padding-top: 15px;
-}
-#submit_all_page{
-	text-align:right;
-	padding-top:20px;
-	float: right;
-	width: 100%;
-}
-#invoice_note{
-	float:left;
-	width:100%;
-	padding-top:20px;
-}
-#term_condition{
-	float:left;
-	width:420px;
-}
-#note_customer{
-	float:left;
-	width:420px;
-	margin-left:17px;
-	display:inline;
-}
-#term_condition_title{
-	float:left;
-	width: 270px;
-}
-#term_condition select{
-	width:150px;
-}
-#invoice_note textarea{
-	width:410px;
-	height:195px;
-}
-#invoice_total input{
-	font-style:italic;
-	color:#8e9191;
-}
-#input_date input{
-	font-style:italic;
-	color:#8e9191;
-}
-
-#invoice-btn {
-	height: 27px;
-	width: 100%;
-}
-
-#invoice-btn button {
-	float: right;
-	margin-left: 10px;
-}
-
-.bold {
-	font-weight: bold !important;
-}
-
-#invoice_container {
-	border: 1px solid #485152;
-	margin-top: 17px;
-	padding: 45px 25px 25px 25px;
-	color: #444444;
-}
-
-#invoice_header {
-	height: auto;
-	width: 100%;
-}
-
-#company_info {
-	float: left;
-	width: 340px;
-}
-
-#company_name {
-	font-size: 14px;
-	font-weight: bold;
-}
-
-#company_address {
-	font-size: 14px;
-}
-
-#invoice_title {
-	float: left;
-	font-size: 30px;
-	font-weight: bold;
-	margin-top: 6px;
-}
-
-#invoice_main {
-	margin-top: 40px;
-}
-
-#bill_to {
-	font-size: 12px;
-	padding-left: 15px;
-	width: 100%;
-}
-
-#customer_info {
-	float: left;
-	background-color: #eeeeee;
-	margin-top: 5px;
-	padding: 10px 15px;
-	width: 350px;
-}
-
-#customer_name {
-	font-size: 14px;
-	font-weight: bold;
-}
-
-#invoice_info {
-	float: right;
-	margin: 5px 30px 0 0;
-}
-
-#invoice_info th {
-	font-weight: normal;
-	text-align: right;
-}
-
-#invoice_info td {
-	font-size: 17px;
-	font-weight: bold;
-	padding: 5px 5px 5px 20px;
-}
-
-#invoice_item {
-	margin-top: 15px;
-	width: 100%;
-}
-
-#invoice_item thead {
-	background-color: #eeeeee;
-}
-
-#invoice_item th {
-	padding: 10px 8px;
-	text-align: left;
-}
-
-#invoice_item td {
-	padding: 25px 8px;
-	text-align: left;
-	border-bottom: 1px solid #f7f7f7;
-}
-
-#invoice_item .total {
-	font-weight: bold;
-}
-
-#invoice_item .sub_desc {
-	font-size: 10px;
-	padding-top: 15px;
-}
-
-#total {
-	float: right;
-	margin: 10px 15px 0 0;
-}
-
-#total th {
-	font-weight: normal;
-	text-align: right;
-}
-
-#total td {
-	padding: 8px 0 8px 20px;
-}
-
-#invoice_total {
-	font-size: 18px;
-}
-
-#balance {
-	font-size: 14px;
-}
-
-#other_info {
-	float: left;
-	margin-top: 25px;
-	width: 100%;
-}
-
-#other_info div {
-	width: 100%;
-}
-
-.info_title {
-	font-weight: bold;
-	margin-top: 30px;
-}
-
-.info_content {
-	margin-top: 15px;
-}
-
-.pull-right a {
-	color: #aaa;
-	font-weight: normal;
-}
-
-.pull-right a:hover {
-	text-decoration: underline !important;
-=======
-/* chat icon */
-.chatSection { bottom:0; right: 2.5%; font-size: 13px; z-index:13;}
-.chatItem:hover , .chatItem.active{ background:#c6c6c6; }
-.chatItem .count { width: 15px; height: 15px; top: -8px; right: 4px; z-index:10 }
-.chatBox {  bottom: 50px; left: -210px; z-index: 9; } 
-.chatList .chatBox {  bottom: 50px; left: -210px; z-index: 9; } 
-.chatBoxItem { width: 240px }
-.chatBoxItem:hover { background: #f7edc3; }
-.chatBoxItem.bgN:hover { background: none; }
-.chatBoxItem .avatar, .chatItem .avatar { padding: 1px; border: solid 1px #e6e1ca; background:#fff; width: 28px; height: 28px;}
-.chatItem .avatar { border: solid 1px #c7c7c7;}
-.chatBoxItem .noAvatar { width: 28px; height: 28px; line-height: 28px; }
-.chatBoxItem .inv-field { margin-bottom:0; width: 96%;}
-.chatBoxItem.setStatus .status:hover { background: #f9f0ce; text-decoration: none;}
-.chatBoxIner { width: 260px;	position: relative;	background: #fff9e0;	border: 1px solid #ede5c5;    -moz-box-shadow: 0 0 7px #b4b3b3; -webkit-box-shadow: 0 0 7px #b4b3b3; box-shadow: 0 0 7px #b4b3b3; }
-.chatBoxIner:after, .chatBoxIner:before {	top: 100%;	border: solid transparent;	content: " ";	height: 0;	width: 0;	position: absolute;	pointer-events: none;}
-.chatBoxIner:after {	border-top-color: #fff9e0;	border-width: 6px;	right: 20px;	margin-left: -6px;}
-.chatBoxIner:before {	border-top-color: #ede5c5;	border-width: 6px;	right: 20px;	margin-left: -6px;}
-.chatBoxIner .chatScroll { max-height: 300px; overflow-y: auto; overflow-x: hidden; padding-right: 10px; }
-.chatBoxIner.bigChat { width: 460px; }
-.chatBoxIner.bigChat .chatBoxItem { width: 440px }
-.chatBoxIner.bigChat .w80p { width: 90% }
-.chatBoxIner.bigChat .chatBoxItem .inv-field { width: 98%;}
-
-.iChat { background: url(../img/app/chat/chatIcon.png) no-repeat; display: inline-block; }
-.iChat1 {  background-position: -1px -1px; width: 29px; height: 32px }
-.iChat2 {  background-position: -1px -35px; width: 27px; height: 27px }
-.iChat3 {  background-position: -1px -65px; width: 27px; height: 27px }
-.iChat4 {  background-position: -36px -3px; width: 10px; height: 11px }
-.iChat5 {  background-position: -50px -7px; width: 10px; height: 4px }
-.iChat6 {  background-position: -62px -1px; width: 16px; height: 15px }
-.iChat7 {  background-position: -34px -18px; width: 30px; height: 32px }
-.iChat8 {  background-position: -33px -53px; width: 30px; height: 32px }
-.iChat9 {  background-position: -1px -95px; width: 27px; height: 27px }	
-	
-/* login */
-
-.login {
-	background: #e1e1e1;
-}
-
-.loginBox {
-	position: relative;
-	top: 20%;
-	margin-right: auto;
-	margin-left: auto;	
-	text-align: center;
-}
-
-.login .loginBox .loginBoxText {
-	color: #666;		
-}
-
-.ico-user-grey{background:url(../img/app/login/ico-user.png) no-repeat right; padding-right:20px}
-.ico-plus-grey{background:url(../img/app/login/ico-plus.png) no-repeat right;  padding-right:20px}
-.ico-learn-grey{background:url(../img/app/login/ico-learn.png) no-repeat right;  padding-right:20px}
-.ico-cloud-grey{background:url(../img/app/login/ico-cloud.png) no-repeat right; padding-right:20px}
-
-.bottom-login { position:fixed; bottom:20px; right:20px; }
-.bottom-login ul li{ list-style:none; text-align:right; padding:5px 10px}
-.bottom-login ul { line-height:22px }
-.bottom-login ul li a {color:#666; font-weight:bold; text-decoration:none; font-family:Helvetica,Arial,  sans-serif; margin-right:5px}
-.bottom-login ul li a:hover{color:#2a3d75;}
-
-.login .poweredby {
-	display: block;
-}
-
-/* Setting */
-
-/* Settings box */
-#overlay {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	z-index: 999;
-	background: url(../img/overlay.png) repeat;
-	display: none;
-}
-
-#settings{
-	background: none repeat scroll 0 0 white;
-    border-radius: 5px 5px 5px 5px;
-    bottom: 0;
-    box-shadow: 0 0 30px 0 rgba(119, 119, 119, 0.7);
-    display: none;
-    height: auto;
-    left: 0;
-    margin: 150px auto;
-    overflow-x: hidden;
-    overflow-y: hidden;
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 600px;
-    z-index: 1000;
-	height: 480px;
-}
-	
-.setting-top {height:65px; background:#475152; width: 600px; overflow:hidden; padding-top:10px; position:fixed;z-index:5; border-radius: 5px 5px 0 0;}
-.setting-top div{width:80%;float:left; overflow:hidden; padding-top:10px}
-.setting-top h2{font-family: "Lato", Helvetica,Arial, sans-serif; font-size:30px; color:#fff; font-weight:normal; padding:0 0px; float:left; border-bottom:3px double #666}
-.setting-top span{ 
-	display: inline-block;
-	width: 4px;
-	height: 18px;
-	margin: 0 10px;
-	position: relative;
-	top: -3px;
-	background: url(../img/breadcrumbArrowSetting.png) no-repeat;
-	color:#FFFFFF;
-	padding-left:10px;
-	top:12px;
-	font-family: "Lato"; font-size:14px; color:#fff; font-weight:normal; 
-}
-.setting-top input[type=button]{float:right; border:0; margin:10px 0px; background:url(../img/close.png) no-repeat; width:48px; height:48px}
-
-.setting-content {position:absolute;top:75px;overflow-x: hidden; overflow-y: scroll; width:600px; height:400px;}
-.cont-icon ul{padding-left:0px;}
-.cont-icon ul li{float:left; padding:5px 10px 0 5px; list-style:none; width:80px; min-height:80px; text-align:center;}
-
-.cont-icon li a {
-	display: block;
-	width: 58px;
-	padding: 43px 0 0 5px;
-	background: url(../img/appicons.png) no-repeat;
-	font-family: "Lato", sans-serif;
-	font-weight:normal;
-	font-size: 12px;
-	line-height: 24px;
-	color: white;
-	text-align: center;
-	text-decoration: none;
-	color: #666;
-}
-
-.cont-icon li a:hover {
-	color: #888;
-}
-
-.cont-icon li a.home {
-	background-position: 10px -100px;
-}
-
-.cont-icon li a.activity {
-	background-position: 10px -100px;
-}
-
-.cont-icon li a.calendar {
-	background-position: 10px -100px;
-}
-
-.cont-icon li a.addressbook {
-	background-position: 10px -100px;
-}
-
-/* My8Force */
-.my8f_action {font-size:12px; color:#6da557; text-align:center; line-height:24px}
-.my8f_action a{color:#6da557; text-decoration:underline}
-.my8f_action .upgrade {color:#F00; font-size:14px; padding-top:20px}
-.my8f_lic {padding-top:30px}
-.my8f_lic ul li{border-bottom:1px solid #eee; padding:5px 0}
-.my8f_lic ul li h2{font-size:24px; text-align:right; font-style:italic; color:#6da557; font-weight:normal;}
-.my8f_lic ul li .cont-list img {width:40px; height:40px; float:left; margin-right:8px}
-.my8f_lic ul li .cont-list .right-list {font-size:13px; float:right; color:#6da557;}
-.my8f_lic ul li .large-label {font-family: "Lato"; font-weight: lighter; font-size:23px; color: #485152; font-weight:lighter; display:block; padding-top:7px}
-.my8f_lic ul li .cont-list  {font-size:23px; color:#666; font-weight:normal; display:block; padding-top:7px}
-.my8f_lic ul li .cont-list .bottom-list , .bottom-list a{ font-size:11px; color:#94bdc2}
-.my8f_lic .bottom-list a {text-decoration:underline}
-
-/* Invoice */
-
-/* phone */
-#phone_fillter {
-    width: 860px;
-}
-#items_fillter {
-    float: left;
-    height: 87px;
-    padding-top: 20px;
-    width: 100%;
-}
-#items_fillter ul li {
-    float: left;
-    font-size: 13px;
-    font-weight: bold;
-    height: 50px;
-    margin-right: 2px;
-    width: 123px;
->>>>>>> edit phone layout
-}
+/*END INVOICE CSS */

@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/helpdesk.css" />
+
 <script type="text/javascript" src="/resources/addon/helpdesk.js"></script>
 <script type="text/javascript" src="/resources/addon/plupload/js/plupload.full.js"></script>
 <script type="text/javascript" src="/resources/addon/plupload/js/jquery.plupload.queue/jquery.plupload.queue.js"></script>
@@ -7,7 +7,7 @@
 <div id="quickjump">
 	<div class="quickjump_select">
 		<div class="btn-group">
-		  <a href="#" class="btn btn-inverse">CUSTOMER</a>
+		  <button href="#" class="btn btn-inverse">CUSTOMER</button>
 		  <a href="#" data-toggle="dropdown" class="btn btn-inverse dropdown-toggle"><span class="caret"></span></a>
 		  <ul class="dropdown-menu">
 			<li><a href="#"><i class="icon-pencil"></i> Edit</a></li>
@@ -33,35 +33,40 @@
 </div>
 
 <div id="boxes">
-	<div id="invoice_fillter" style="height:240px;float:left;">
+	<div id="invoice_fillter" style="height:210px;">
 		<div class="subtitle">
 			<span class="subtitle-arrow"></span>NEW CASE INFORMATION
 		</div>
-		<div id="input_data_info">
-			<ul>
-				<li>
-					<span class="input_data_label">Requester</span>
-					<span class="fillter_input">
-						<input type="hidden" id="customer_id" name="customer_id" />
-						<input type="text" id="customer_name" name="customer_name" class="inv-field" />
-					</span>
-				</li>
-				<li>
-					<span class="input_data_label">Subject</span>
-					<span class="fillter_input" id="new_helpdesk_subject"><input id="subject" type="text" class="inv-field"/></span>
-				</li>
-				<li>
-					<span class="input_data_label">Assigned</span>
-					<span class="fillter_input">
-						<input type="hidden" id="assign_id" name="assign_id" />
-						<input type="text" id="assign_name" name="assign_name" class="inv-field" />
-					</span>
-				</li>
-				<li style="height:22px;">
-					<span class="input_data_label">CC (Email)</span>
-					<span class="fillter_input"><input id="cc_email" type="text" class="inv-field"/></span>
-				</li>
-			</ul>
+		<div class="subtitleContent" id="input_data_info" >
+			<div class="dataFL">
+				<div class="dataFT">Requester</div>
+				<div class="dataVD">
+					<input type="hidden" id="customer_id" name="customer_id" />
+					<input type="text" id="customer_name" name="customer_name" class="inv-field" />
+				</div>
+			</div>
+			
+			<div class="dataFL">
+				<div class="dataFT">Subject</div>
+				<div class="dataVD" id="new_helpdesk_subject">
+					<input id="subject" type="text" class="inv-field"/>
+				</div>
+			</div>
+			
+			<div class="dataFL">
+				<div class="dataFT">Assigned</div>
+				<div class="dataVD">
+					<input type="hidden" id="assign_id" name="assign_id" />
+					<input type="text" id="assign_name" name="assign_name" class="inv-field" />
+				</div>
+			</div>
+			
+			<div class="dataFL">
+				<div class="dataFT">CC (Email)</div>
+				<div class="dataVD">
+					<input id="cc_email" type="text" class="inv-field"/>
+				</div>
+			</div>
 		</div>
 	</div>
 	
@@ -69,84 +74,86 @@
 	<input type="hidden" value="<?=(!empty($helpdesk_id)? $helpdesk_id : '0')?>" name="hiddenIdAdmincp" id="hiddenIdAdmincp" />
 	<input type="hidden" value="<?=(!empty($comment_id)? $comment_id : '0')?>" name="hiddenCommentID" id="hiddenCommentID" />
 	
-	<div id="invoice_fillter">
+	<div id="invoice_fillter" style="margin-bottom:30px;">
 		<div class="subtitle-noshadow">
 			<span class="subtitle-arrow"></span>DETAILS
 		</div>
-		<div id="helpdesk_fillter">
-			<ul>
-				<li>
-					<span class="fillter_label"><strong>Status</strong></span>
-					<span class="fillter_input">
-						<select name="status" id="status">
-							<option value="">- - - Something - - -</option>
-							<?php if(!empty($status)) {
-									for($i = 0; $i < count($status); $i++){
-							?>
-							<option value="<?=$status[$i]['id']?>"><?=$status[$i]['name']?></option>
-							<?php }}?>
-						</select>
-					</span>
-				</li>
-				
-				<li>
-					<span style="width:130px;" class="fillter_label"><strong>Group \ Department</strong></span>
-					<span class="fillter_input">
-						<select name="group" id="group">
-							<option value="">- - - Something - - -</option>
-							<?php if(!empty($group)) {
-									for($i = 0; $i < count($group); $i++){
-							?>
-							<option value="<?=$group[$i]['id']?>"><?=$group[$i]['name']?></option>
-							<?php }}?>
-						</select>
-					</span>
-				</li>
-				
-				<li>
-					<span class="fillter_label"><strong>Type</strong></span>
-					<span class="fillter_input">
-						<select name="type" id="type">
-							<option value="">- - - Something - - -</option>
-							<?php if(!empty($type)) {
-									for($i = 0; $i < count($type); $i++){
-							?>
-							<option value="<?=$type[$i]['id']?>"><?=$type[$i]['name']?></option>
-							<?php }}?>
-						</select>
-					</span>
-				</li>
-				
-				<li>
-					<span class="fillter_label"><strong>Priority</strong></span>
-					<span class="fillter_input">
-						<select name="priority" id="priority">
-							<option value="">- - - Something - - -</option>
-							 <?php if(!empty($priority)) {	
-									for($i = 0; $i < count($priority); $i++){
-							?>
-							<option value="<?=$priority[$i]['id']?>"><?=$priority[$i]['name']?></option>
-							<?php }}?>
-						</select>
-					</span>
-				</li>
-			</ul>						
-		</div>
-		<div id="helpdesk_comment">
-			<textarea rows="3" id="comment" ></textarea>
-			<div id="comment_submit">
-				<div id="plupload" style="width:733px;margin-left:0px;">
-					<!-- PLUpload-->
-					<h1 style="display:none;">Custom example</h1>
-					<p style="display:none;">Shows you how to use the core plupload API.</p>
-					<div id="container" >
-						
-						<button id="pickfiles" class="btn btn-inverse btn-mini" href="#">Select File</button>
-						<div style="display:none;" id="uploadfiles"></div>
-						<div id="filelist" style="float:left ;margin:23px 0 0 -80px;"></div>
+		<div class="subtitleContent">
+			<div id="helpdesk_fillter">
+				<ul>
+					<li>
+						<span class="fillter_label"><strong>Status</strong></span>
+						<span class="fillter_input">
+							<select name="status" id="status">
+								<option value="">- - - Something - - -</option>
+								<?php if(!empty($status)) {
+										for($i = 0; $i < count($status); $i++){
+								?>
+								<option value="<?=$status[$i]['id']?>"><?=$status[$i]['name']?></option>
+								<?php }}?>
+							</select>
+						</span>
+					</li>
+					
+					<li>
+						<span style="width:130px;" class="fillter_label"><strong>Group \ Department</strong></span>
+						<span class="fillter_input">
+							<select name="group" id="group">
+								<option value="">- - - Something - - -</option>
+								<?php if(!empty($group)) {
+										for($i = 0; $i < count($group); $i++){
+								?>
+								<option value="<?=$group[$i]['id']?>"><?=$group[$i]['name']?></option>
+								<?php }}?>
+							</select>
+						</span>
+					</li>
+					
+					<li>
+						<span class="fillter_label"><strong>Type</strong></span>
+						<span class="fillter_input">
+							<select name="type" id="type">
+								<option value="">- - - Something - - -</option>
+								<?php if(!empty($type)) {
+										for($i = 0; $i < count($type); $i++){
+								?>
+								<option value="<?=$type[$i]['id']?>"><?=$type[$i]['name']?></option>
+								<?php }}?>
+							</select>
+						</span>
+					</li>
+					
+					<li>
+						<span class="fillter_label"><strong>Priority</strong></span>
+						<span class="fillter_input">
+							<select name="priority" id="priority">
+								<option value="">- - - Something - - -</option>
+								 <?php if(!empty($priority)) {	
+										for($i = 0; $i < count($priority); $i++){
+								?>
+								<option value="<?=$priority[$i]['id']?>"><?=$priority[$i]['name']?></option>
+								<?php }}?>
+							</select>
+						</span>
+					</li>
+				</ul>						
+			</div>
+			<div id="helpdesk_comment">
+				<textarea rows="3" id="comment" ></textarea>
+				<div id="comment_submit">
+					<div id="plupload" style="width:744px;margin-left:0px;">
+						<!-- PLUpload-->
+						<h1 style="display:none;">Custom example</h1>
+						<p style="display:none;">Shows you how to use the core plupload API.</p>
+						<div id="container" >
+							
+							<button id="pickfiles" class="btn btn-inverse btn-mini" href="#">Select File</button>
+							<div style="display:none;" id="uploadfiles"></div>
+							<div id="filelist" style="float:left ;margin:23px 0 0 -80px;"></div>
+						</div>
 					</div>
+					<div style="float:left;margin-top:2px;"><button href="#" onclick="submit_insert_helpdesk()" class="btn btn-primary">SUBMIT</button></div>
 				</div>
-				<div style="float:left;margin-top:2px;"><button href="#" onclick="submit_insert_helpdesk()" class="btn btn-primary">SUBMIT</button></div>
 			</div>
 		</div>
 	</div>
