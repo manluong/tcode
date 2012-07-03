@@ -1,12 +1,10 @@
-<link rel="stylesheet" href="/resources/template/<?php echo get_template() ?>/css/product.css" />
-<link rel="stylesheet" href="/resources/template/<?php echo get_template() ?>/css/invoice.css" />
 <link rel="stylesheet" href="/resources/addon/jqueryui/aristo/ui.css" />
 <script type="text/javascript" src="/resources/addon/phone.js"></script>
 
 <div id="boxes">
 
     <form id="frm_search" action="/phone/search" method="post">
-        <div id="invoice_fillter">
+        <div id="phone_fillter">
             <div id="items_fillter">
                 <ul>
                     <li style="width:110px;">

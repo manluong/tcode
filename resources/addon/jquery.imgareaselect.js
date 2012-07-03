@@ -49,7 +49,7 @@ $.imgAreaSelect = function (img, options) {
 
         zIndex = 0,
 
-        position = 'absolute',
+        position = 'fixed',
 
         startX, startY,
 
