@@ -31,39 +31,6 @@
 	-->
 	<!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>-->
 
-	<script type="text/javascript" charset="utf-8">
-		$(document).ready(function() {
-
-			$.extend( $.fn.dataTableExt.oStdClasses, {
-			    "sWrapper": "dataTables_wrapper form-inline"
-			} );
-
-			$('#example').dataTable( {
-			"sDom": "<<'pull-right'p>>t<<'pull-right'p>lfi>",
-			"sPaginationType": "bootstrap",
-			"iDisplayLength": 5,
-			"oLanguage": {
-				"sSearch" : "<div class=\"input-prepend\"><span class=\"add-on\"><i class=\"icon-filter\"></i></span></i>_INPUT_</div>",
-				"sInfo": "_START_ to _END_ of _TOTAL_",
-				"sLengthMenu": "_MENU_ Rows per Page",
-				"sInfoFiltered": " - filtering from _MAX_ records",
-				"oPaginate": {
-	        		"sPrevious": "Previous",
-	        		"sNext": "Next"
-	      	},
-      	    "sLengthMenu": '<select>'+
-	        '<option value="10">10</option>'+
-	        '<option value="20">20</option>'+
-	        '<option value="30">30</option>'+
-	        '<option value="40">40</option>'+
-	        '<option value="50">50 Rows</option>'+
-	        '<option value="-1">All</option>'+
-	        '</select>'
-			}})
-
-		} );
-	</script>
-
 	<?//=$head?>
 
 </head>
