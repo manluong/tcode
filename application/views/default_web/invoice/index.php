@@ -1,4 +1,3 @@
-<link rel="stylesheet" href="/resources/template/<?php echo get_template() ?>/css/app.css" />
 <link rel="stylesheet" href="/resources/addon/jqueryui/aristo/ui.css" />
 <script type="text/javascript" src="/resources/addon/invoice.js"></script>
 
@@ -7,10 +6,10 @@
 </div>
 
 <div id="boxes">
-	<form id="frm_search" action="/invoice/search" method="post">
-	<div id="invoice_fillter">
-		<div class="subtitle"><span class="subtitle-arrow"></span>FILLTER</div>
-		<div id="items_fillter" class="clearfix">
+	<div class="subtitle"><span class="subtitle-arrow"></span>FILLTER</div>
+	<div class="subtitleContent">
+		<form id="frm_search" action="/invoice/search" method="post">
+		<div id="invoice_main_fillter" class="clearfix">
 			<ul>
 				<li>
 					<span class="fillter_label">Date</span>
@@ -54,7 +53,7 @@
 				<li style="width: 25px; margin: 36px 0 0 28px;"><div id="arrow" class="down_arrow"></div></li>
 			</ul>
 		</div>
-		<div id="input_data_fillter" class="subtitleContent dataF">
+		<div id="invoice_sub_fillter" class="dataF" style="display: none;">
 			<?php if (!$is_client): ?>
 			<div class="dataFL">
 				<div class="dataFT">Customer</div>
@@ -81,14 +80,13 @@
 				<div class="dataVD"><button type="button" id="search_btn" class="btn btn-primary">SUBMIT</button></div>
 			</div>
 		</div>
+		<input type="hidden" id="page" name="page" />
+		<input type="hidden" id="row_per_page" name="row_per_page" />
+		</form>
 	</div>
 
-	<input type="hidden" id="page" name="page" />
-	<input type="hidden" id="row_per_page" name="row_per_page" />
-	</form>
-
-	<div id="invoice_cases">
-		<div class="subtitle-noshadow"><span class="subtitle-arrow"></span>CASES</div>
+	<div class="subtitle-noshadow"><span class="subtitle-arrow"></span>CASES</div>
+	<div class="subtitleContent">
 		<div id="loader" style="display: none;"><img src="/resources/template/default_web/img/invoice/loading.gif" /></div>
 		<div id="invoice_list">
 			<table id="tbl_invoice" cellpadding="0" cellspacing="0" border="0" class="table table-striped">

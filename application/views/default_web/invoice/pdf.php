@@ -1,8 +1,9 @@
-<link rel="stylesheet" href="resources/template/<?php echo get_template() ?>/css/style.css" />
-<link rel="stylesheet" href="resources/template/<?php echo get_template() ?>/css/bootstrap.min.css" />
-<link rel="stylesheet" href="resources/template/<?php echo get_template() ?>/css/bootstrap-responsive.min.css" />
-<link rel="stylesheet" href="resources/template/<?php echo get_template() ?>/css/all-module.css" />
-<link rel="stylesheet" href="resources/template/<?php echo get_template() ?>/css/invoice.css" />
+<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Lato:300" type="text/css" />
+<link rel="stylesheet" href="/resources/template/<?php echo get_template() ?>/css/bootstrap.min.css" />
+<link rel="stylesheet" href="/resources/template/<?php echo get_template() ?>/css/bootstrap-responsive.min.css" />
+<link rel="stylesheet" href="/resources/template/<?php echo get_template() ?>/css/bootstrap-8f.css" />
+<link rel="stylesheet" href="/resources/template/<?php echo get_template() ?>/css/style.css" />
+<link rel="stylesheet" href="/resources/template/<?php echo get_template() ?>/css/app.css" />
 
 <style type="text/css">
 <!--
@@ -20,9 +21,9 @@ html body {
 	<div id="invoice_container" class="clearfix">
 		<div id="invoice_detail">
 			<div id="invoice_header" class="clearfix">
-				<div id="company_info">
-					<div id="company_name">YOUR COMPANY NAME</div>
-					<div id="company_address">
+				<div id="invoice_company_info">
+					<div id="invoice_company_name">YOUR COMPANY NAME</div>
+					<div id="invoice_company_address">
 						123 Ways, Sun City<br />
 						State, US
 					</div>
@@ -30,9 +31,9 @@ html body {
 				<div id="invoice_title">INVOICE</div>
 			</div>
 			<div id="invoice_main" class="clearfix">
-				<div id="bill_to">BILL TO</div>
-				<div id="customer_info">
-					<div id="customer_name">
+				<div id="invoice_bill_to">BILL TO</div>
+				<div id="invoice_customer_info">
+					<div id="invoice_customer_name">
 						Facebook Inc<br />
 						<?php echo trim($invoice['customer_card_info']['first_name'].' '.$invoice['customer_card_info']['last_name']) ?>
 					</div>
@@ -106,7 +107,7 @@ html body {
 			</tbody>
 		</table>
 
-		<table id="total" class="clearfix">
+		<table id="invoice_summary" class="clearfix">
 			<tr>
 				<th>Sub Total</th>
 				<td><?php echo '$'.number_format($sub_total, 2) ?></td>
@@ -131,20 +132,20 @@ html body {
 				<th>Paid</th>
 				<td>$0.00</td>
 			</tr>
-			<tr id="balance">
+			<tr id="invoice_balance">
 				<th class="bold">Balance</th>
 				<td class="bold"><?php echo '$'.number_format($invoice['total'], 2) ?></td>
 			</tr>
 		</table>
 
-		<div id="other_info">
-			<div class="info_title">Notes:</div>
-			<div class="info_content">
+		<div id="invoice_other_info">
+			<div class="title">Notes:</div>
+			<div class="content">
 				<?php echo $invoice['memo'] ?>
 			</div>
 
-			<div class="info_title">Terms &amp; Conditions:</div>
-			<div class="info_content">
+			<div class="title">Terms &amp; Conditions:</div>
+			<div class="content">
 				<?php echo $terms_content ?>
 			</div>
 		</div>

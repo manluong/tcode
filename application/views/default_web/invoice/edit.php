@@ -1,4 +1,3 @@
-<link rel="stylesheet" href="/resources/template/<?php echo get_template() ?>/css/app.css" />
 <link rel="stylesheet" href="/resources/addon/jqueryui/aristo/ui.css" />
 <script type="text/javascript" src="/resources/addon/invoice.js"></script>
 
@@ -6,7 +5,7 @@
 	<?php echo $quickjump ?>
 </div>
 
-<div id="title_item_edit"><span style="color:#2a9611;">Draft</span> Invoice #<?php echo $invoice['id'] ?></div>
+<div id="invoice_title_item_edit"><span style="color:#2a9611;">Draft</span> Invoice #<?php echo $invoice['id'] ?></div>
 
 <div id="boxes">
 	<form id="invoice_form" action="/invoice/save" method="post">
@@ -36,8 +35,8 @@
 
 	<div id="invoice_detail">
 		<div class="subtitle-noshadow"><span class="subtitle-arrow"></span>DETAILS</div>
-		<div id="main_cases">
-			<div id="item_list_header">
+		<div id="invoice_main_cases">
+			<div id="invoice_item_list_header">
 				<div style="width: 28px;"></div>
 				<div style="width: 216px;">Product</div>
 				<div style="width: 360px;">Description</div>
@@ -71,7 +70,7 @@
 						<div><input type="text" name="addon_item[<?php echo $c ?>][quantity]" value="<?php echo $invoice_item['quantity'] ?>" class="col-5 qty cal" /></div>
 						<div>
 							<input type="hidden" name="addon_item[<?php echo $c ?>][total]" value="<?php echo (float)$invoice_item['total'] ?>" class="item_total" />
-							<label class="col-6 item_total_label"><?php echo '$'.number_format($invoice_item['total'], 2) ?></label>
+							<label class="col-6"><?php echo '$'.number_format($invoice_item['total'], 2) ?></label>
 						</div>
 					</div>
 					<div class="invoice_item_sub clear"<?php echo ($invoice_item['tax_use_id']) ? '' : ' style="display: none;"' ?>>
@@ -97,10 +96,10 @@
 
 		<div>
 			<div id="invoice_footer">
-				<div id="add_row">
+				<div id="invoice_add_row">
 					<input type="button" class="btn btn-inverse" value="ADD ROW" />
 				</div>
-				<div id="all_discount">
+				<div id="invoice_all_discount">
 					<ul>
 						<li>Apply to all items</li>
 						<li><input type="text" id="apply_all_discount" class="inv-field" /></li>
@@ -116,16 +115,16 @@
 					</ul>
 				</div>
 			</div>
-			<div id="total_price">
+			<div id="invoice_total_price">
 				<ul>
 					<li>
-						<div class="total_label">Sub Total</div>
-						<div class="total_price"><span id="lbl_sub_total"><?php echo '$'.number_format($sub_total, 2) ?></span></div>
+						<div class="invoice_total_label">Sub Total</div>
+						<div class="invoice_total_price"><span id="lbl_sub_total"><?php echo '$'.number_format($sub_total, 2) ?></span></div>
 					</li>
 					<?php foreach ($tax as $r): ?>
 					<li class="total_hide">
-						<div class="total_label">Tax - <?php echo $r['name'] ?></div>
-						<div class="total_price">
+						<div class="invoice_total_label">Tax - <?php echo $r['name'] ?></div>
+						<div class="invoice_total_price">
 							<?php $has_tax = false ?>
 							<?php if (isset($invoice['addon_tax'])): ?>
 							<?php foreach ($invoice['addon_tax'] as $invoice_tax): ?>
@@ -148,28 +147,28 @@
 					</li>
 					<?php endforeach ?>
 					<li style="font-size:18px;">
-						<div class="total_label">Invoice Total</div>
-						<div class="total_price">
+						<div class="invoice_total_label">Invoice Total</div>
+						<div class="invoice_total_price">
 							<span id="lbl_invoice_total"><?php echo '$'.number_format($invoice['total'], 2) ?></span>
 							<input type="hidden" id="invoice_total" name="total" value="<?php echo $invoice['total'] ?>" />
 						</div>
 					</li>
 					<li>
-						<div class="total_label">Paid</div>
-						<div class="total_price">$0.00</div>
+						<div class="invoice_total_label">Paid</div>
+						<div class="invoice_total_price">$0.00</div>
 					</li>
 					<li style="font-weight:bold;">
-						<div class="total_label">Balance</div>
-						<div class="total_price"><span id="lbl_balance"><?php echo '$'.number_format($invoice['total'], 2) ?></span></div>
+						<div class="invoice_total_label">Balance</div>
+						<div class="invoice_total_price"><span id="lbl_balance"><?php echo '$'.number_format($invoice['total'], 2) ?></span></div>
 					</li>
 				</ul>
 			</div>
 		</div>
-		<div id="submit_all_page"><button id="btn_submit" class="btn btn-primary">SUBMIT</button></div>
+		<div id="invoice_submit_all_page"><button id="btn_submit" class="btn btn-primary">SUBMIT</button></div>
 
 		<div id="invoice_note">
-			<div id="term_condition">
-				<div id="term_condition_title">Terms &amp; Conditions</div>
+			<div id="invoice_term_condition">
+				<div id="invoice_term_condition_title">Terms &amp; Conditions</div>
 				<div style="float:left;width:150px;">
 					<select id="terms_id" name="terms_id" class="right">
 						<option value="">Pre Define Terms</option>
@@ -180,7 +179,7 @@
 				</div>
 				<div style="width:100%;"><textarea rows="3" id="terms_content" name="terms_content" class="input-xlarge"><?php echo $terms_content ?></textarea></div>
 			</div>
-			<div id="note_customer">
+			<div id="invoice_note_customer">
 				<div style="width:100%;float:left;height:37px;">Notes for Customers</div>
 				<div style="width:100%;"><textarea rows="3" name="memo" class="input-xlarge"><?php echo $invoice['memo'] ?></textarea></div>
 			</div>
@@ -211,7 +210,7 @@
 			<div><input type="text" name="addon_item[{xxxxx}][quantity]" class="col-5 qty cal" /></div>
 			<div>
 				<input type="hidden" name="addon_item[{xxxxx}][total]" class="item_total" />
-				<label class="col-6 item_total_label"></label>
+				<label class="col-6"></label>
 			</div>
 		</div>
 		<div class="invoice_item_sub clear" style="display: none;">

@@ -1,4 +1,3 @@
-<link rel="stylesheet" href="/resources/template/<?php echo get_template() ?>/css/app.css" />
 <link rel="stylesheet" href="/resources/addon/jqueryui/aristo/ui.css" />
 <script type="text/javascript" src="/resources/addon/invoice.js"></script>
 
@@ -6,7 +5,7 @@
 	<?php echo $quickjump ?>
 </div>
 
-<div id="title_item_edit">Invoice #<?php echo $invoice['id'] ?></div>
+<div id="invoice_title_item_edit">Invoice #<?php echo $invoice['id'] ?></div>
 
 <div id="boxes">
 	<form action="/invoice/pay_save" method="post">

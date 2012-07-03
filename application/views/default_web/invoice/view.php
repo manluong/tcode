@@ -1,4 +1,3 @@
-<link rel="stylesheet" href="/resources/template/<?php echo get_template() ?>/css/app.css" />
 <link rel="stylesheet" href="/resources/addon/jqueryui/aristo/ui.css" />
 <script type="text/javascript" src="/resources/addon/invoice.js"></script>
 
@@ -7,7 +6,7 @@
 </div>
 
 <div id="boxes" class="clearfix">
-	<div id="invoice-btn">
+	<div id="invoice_btn">
 		<button id="btn_print" class="btn btn-primary" data-url="/invoice/print_invoice/<?php echo $invoice['id'] ?>">PRINT</button>
 		<a href="/invoice/pdf/<?php echo $invoice['id'] ?>" target="_blank"><button class="btn btn-primary">PDF</button></a>
 		<button class="btn btn-primary">EMAIL</button>
@@ -21,9 +20,9 @@
 	<div id="invoice_container" class="clearfix">
 		<div id="invoice_detail">
 			<div id="invoice_header" class="clearfix">
-				<div id="company_info">
-					<div id="company_name">YOUR COMPANY NAME</div>
-					<div id="company_address">
+				<div id="invoice_company_info">
+					<div id="invoice_company_name">YOUR COMPANY NAME</div>
+					<div id="invoice_company_address">
 						123 Ways, Sun City<br />
 						State, US
 					</div>
@@ -31,9 +30,9 @@
 				<div id="invoice_title">INVOICE</div>
 			</div>
 			<div id="invoice_main" class="clearfix">
-				<div id="bill_to">BILL TO</div>
-				<div id="customer_info">
-					<div id="customer_name">
+				<div id="invoice_bill_to">BILL TO</div>
+				<div id="invoice_customer_info">
+					<div id="invoice_customer_name">
 						Facebook Inc<br />
 						<?php echo trim($invoice['customer_card_info']['first_name'].' '.$invoice['customer_card_info']['last_name']) ?>
 					</div>
@@ -107,7 +106,7 @@
 			</tbody>
 		</table>
 
-		<table id="total" class="clearfix">
+		<table id="invoice_summary" class="clearfix">
 			<tr>
 				<th>Sub Total</th>
 				<td><?php echo '$'.number_format($sub_total, 2) ?></td>
@@ -132,20 +131,20 @@
 				<th>Paid</th>
 				<td>$0.00</td>
 			</tr>
-			<tr id="balance">
+			<tr id="invoice_balance">
 				<th class="bold">Balance</th>
 				<td class="bold"><?php echo '$'.number_format($invoice['total'], 2) ?></td>
 			</tr>
 		</table>
 
-		<div id="other_info">
-			<div class="info_title">Notes:</div>
-			<div class="info_content">
+		<div id="invoice_other_info">
+			<div class="title">Notes:</div>
+			<div class="content">
 				<?php echo $invoice['memo'] ?>
 			</div>
 
-			<div class="info_title">Terms &amp; Conditions:</div>
-			<div class="info_content">
+			<div class="title">Terms &amp; Conditions:</div>
+			<div class="content">
 				<?php echo $terms_content ?>
 			</div>
 		</div>
@@ -153,29 +152,31 @@
 
 	<div style="margin-top: 40px;">
 		<div class="subtitle-noshadow"><span class="subtitle-arrow"></span>PAYMENT INFORMATION</div>
-		<table cellpadding="0" cellspacing="0" border="0" class="table table-striped">
-			<thead>
-				<tr>
-					<th style="width: 370px;">Date</th>
-					<th style="width: 320px;">Payment Type</th>
-					<th style="width: 200px;">Amount</th>
-				</tr>
-			</thead>
-			<tbody>
-				<?php if (isset($invoice['addon_pay_item'])): ?>
-				<?php foreach ($invoice['addon_pay_item'] as $pay_item): ?>
-				<tr>
-					<td><?php echo date('Y-m-d', strtotime($pay_item['transaction_stamp'])) ?></td>
-					<td><?php echo $pay_item['note'] ?></td>
-					<td><?php echo '$'.number_format($pay_item['amount'], 2) ?></td>
-				</tr>
-				<?php endforeach ?>
-				<?php else: ?>
-				<tr>
-					<td colspan="3">No Payment for this invoice yet</td>
-				</tr>
-				<?php endif ?>
-			</tbody>
-		</table>
+		<div class="subtitleContent">
+			<table cellpadding="0" cellspacing="0" border="0" class="table table-striped">
+				<thead>
+					<tr>
+						<th style="width: 370px;">Date</th>
+						<th style="width: 320px;">Payment Type</th>
+						<th style="width: 200px;">Amount</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php if (isset($invoice['addon_pay_item'])): ?>
+					<?php foreach ($invoice['addon_pay_item'] as $pay_item): ?>
+					<tr>
+						<td><?php echo date('Y-m-d', strtotime($pay_item['transaction_stamp'])) ?></td>
+						<td><?php echo $pay_item['note'] ?></td>
+						<td><?php echo '$'.number_format($pay_item['amount'], 2) ?></td>
+					</tr>
+					<?php endforeach ?>
+					<?php else: ?>
+					<tr>
+						<td colspan="3">No Payment for this invoice yet</td>
+					</tr>
+					<?php endif ?>
+				</tbody>
+			</table>
+		</div>
 	</div>
 </div>

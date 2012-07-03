@@ -330,7 +330,7 @@ $(document).ready(function() {
 	$('#total_max').val($('#slider-range').slider('values', 1));
 
 	$('#arrow').click(function() {
-		$('#input_data_fillter').slideToggle();
+		$('#invoice_sub_fillter').slideToggle();
 
 		if ($('#arrow').attr('class') == 'down_arrow') {
 			$('#arrow').removeClass('down_arrow');
@@ -338,7 +338,7 @@ $(document).ready(function() {
 		} else {
 			$('#arrow').removeClass('up_arrow');
 			$('#arrow').addClass('down_arrow');
-			$('#input_data_fillter input').val('');
+			$('#invoice_sub_fillter input').val('');
 		}
 	});
 
@@ -380,7 +380,7 @@ $(document).ready(function() {
 			$(this).addClass('row_down');
 		}
 	});
-	$('#add_row input').on('click', function(e) {
+	$('#invoice_add_row input').on('click', function(e) {
 		add_last_row();
 	});
 
@@ -413,6 +413,7 @@ $(document).ready(function() {
 			$.ajax({
 				type: 'GET',
 				url: '/invoice/get_terms/'+id,
+				dataType: 'json',
 				success: function(resp) {
 					if (resp.success) {
 						$('#terms_content').val(resp.details);
