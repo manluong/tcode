@@ -43,10 +43,11 @@ function load_upload_form(){
 		return false;
 	};
 	 uploader.bind('FileUploaded', function(up, file,response) {
-	    jQuery('#' + file.id ).html("");
+	   // jQuery('#' + file.id + "b ").html("");
+
 	     var filename = response.response;
 	     jQuery("#avatar").html("<br /><img id='crop_avatar' src='/card/get_image/"+filename+"' />");
-	     
+
 	});
 	uploader.init();
 	jQuery('input[type="file"]').change(function(){
