@@ -46,7 +46,7 @@ function load_upload_form(){
 	   // jQuery('#' + file.id + "b ").html("");
 
 	     var filename = response.response;
-	     jQuery("#avatar").html("<br /><img id='crop_avatar' src='/card/get_image/"+filename+"' />");
+	     jQuery("#avatar").html("<img id='crop_avatar' src='/card/get_image/"+filename+"' />");
 
 	});
 	uploader.init();
