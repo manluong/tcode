@@ -1017,6 +1017,10 @@ a.appsIconTop {
 	padding: 8px 0px 0 0;
 }
 
+#breadcrumb .rightBar a{
+	color: #FFFFFF;
+}
+
 #breadcrumb .rightBar a.mainLink {
 	background: #485152;
 	color: #dee6e8;

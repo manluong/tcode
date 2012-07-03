@@ -11,52 +11,52 @@
 
 <div id="boxes">
 	<div id="invoice_fillter">
-		<div class="invoice_title">
-			<div class="subtitle">
-				<span class="subtitle-arrow"></span>DETAILS
+		<div class="subtitle">
+			<span class="subtitle-arrow"></span>DETAILS
+		</div>
+		<div id="helpdesk_show_info" class="dataV">
+			<div class="dataVL">
+				<div class="dataVT">Subject</div>
+				<div class="dataVD"><?=$result['subject']?></div>
 			</div>
+			<div class="dataVL">
+				<div class="dataVT">Assigned</div>
+				<div class="dataVD"><?=$this->Helpdesk_CommentM->get_assigname($result['assign_id'])?></div>
+			</div>
+			<div class="dataVL">
+				<div class="dataVT">CC (Email)</div>
+				<div class="dataVD"><?=$result['cc_email']?></div>
+			</div>
+			<div id="helpdesk_change_info">Change Info</div>
 		</div>
-		<div id="helpdesk_show_info">
-			<ul>
-				<li>
-					<span class="input_data_label">Subject</span>
-					<span class="fillter_input"><?=$result['subject']?></span>
-				</li>
-				<li>
-					<span class="input_data_label">Assigned</span>
-					<span class="fillter_input"><?=$this->Helpdesk_CommentM->get_assigname($result['assign_id'])?></span>
-				</li>
-				<li>
-					<span class="input_data_label">CC (Email)</span>
-					<span class="fillter_input"><?=$result['cc_email']?></span>
-				</li>
-				<li id="helpdesk_change_info">Change Info</li>
-			</ul>
-		</div>
+		
 		<!-- Hidden Helpdesk Id-->
 		<input type="hidden" value="<?=$id?>" name="hiddenIdAdmincp" id="hiddenIdAdmincp" />
 		<!-- End Hidden Helpdesk Id-->
+		
 		<div id="input_data_info" style="display:none;">
-			<ul>
-				<li>
-					<span style="font-weight:normal;" class="input_data_label">Subject</span>
-					<span class="fillter_input">
-						<input type="text" id="subject" class="inv-field" value="<?=(isset($result['subject']) ? $result['subject'] : '')?>"/>
-					</span>
-				</li>
-				<li>
-					<span style="font-weight:normal;" class="input_data_label">Assigned</span>
-					<span class="fillter_input">
-						<input type="hidden" id="assign_id" value="<?=$result['assign_id']?>" name="assign_id" />
-						<input type="text" id="assign_name" value="<?=$this->Helpdesk_CommentM->get_assigname($result['assign_id'])?>" name="assign_name" class="inv-field" />
-					</span>
-				</li>
-				<li style="height:22px;">
-					<span style="font-weight:normal;" class="input_data_label">CC (Email)</span>
-					<span class="fillter_input"><input type="text" id="cc_email" class="inv-field" value="<?=(isset($result['cc_email'])? print $result['cc_email'] : print '')?>"/></span>
-				</li>
-				<li id="helpdesk_save_info" style="margin-top:-5px;">Save</li>
-			</ul>
+			<div class="dataFL">
+				<div class="dataFT">Subject</div>
+				<div class="dataVD">
+					<input type="text" id="subject" class="inv-field" value="<?=(isset($result['subject']) ? $result['subject'] : '')?>"/>
+				</div>
+			</div>
+			
+			<div class="dataFL">
+				<div class="dataFT">Assigned</div>
+				<div class="dataVD">
+					<input type="hidden" id="assign_id" value="<?=$result['assign_id']?>" name="assign_id" />
+					<input type="text" id="assign_name" value="<?=$this->Helpdesk_CommentM->get_assigname($result['assign_id'])?>" name="assign_name" class="inv-field" />
+				</div>
+			</div>
+			
+			<div class="dataFL">
+				<div class="dataFT">CC (Email)</div>
+				<div class="dataVD">
+					<input type="text" id="cc_email" class="inv-field" value="<?=(isset($result['cc_email'])? print $result['cc_email'] : print '')?>"/>
+				</div>
+			</div>
+			<div id="helpdesk_save_info" style="margin-top:-5px;">Save</div>
 		</div>
 	</div>
 
@@ -165,7 +165,11 @@
 	</div>
 
 	<div id="comment_list">
-		<div class="invoice_title" style="height:20px;"><span class="arrow_title"></span><span>COMMENTS / EVENTS</span></div>
+		<div class="box boxHalf">
+			<div class="subtitle-half">
+				<span class="subtitle-arrow"></span>COMMENTS / EVENTS
+			</div>
+		</div>
 		<div id="helpdesk_fillter">
 			<div id="wap_comment_list">
 				<!-- Hidden Comment Id-->

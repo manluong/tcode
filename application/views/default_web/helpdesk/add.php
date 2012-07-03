@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/helpdesk.css" />
+
 <script type="text/javascript" src="/resources/addon/helpdesk.js"></script>
 <script type="text/javascript" src="/resources/addon/plupload/js/plupload.full.js"></script>
 <script type="text/javascript" src="/resources/addon/plupload/js/jquery.plupload.queue/jquery.plupload.queue.js"></script>
@@ -7,7 +7,7 @@
 <div id="quickjump">
 	<div class="quickjump_select">
 		<div class="btn-group">
-		  <a href="#" class="btn btn-inverse">CUSTOMER</a>
+		  <button href="#" class="btn btn-inverse">CUSTOMER</button>
 		  <a href="#" data-toggle="dropdown" class="btn btn-inverse dropdown-toggle"><span class="caret"></span></a>
 		  <ul class="dropdown-menu">
 			<li><a href="#"><i class="icon-pencil"></i> Edit</a></li>
@@ -33,35 +33,40 @@
 </div>
 
 <div id="boxes">
-	<div id="invoice_fillter" style="height:240px;float:left;">
+	<div id="invoice_fillter" style="height:220px;float:left;">
 		<div class="subtitle">
 			<span class="subtitle-arrow"></span>NEW CASE INFORMATION
 		</div>
 		<div id="input_data_info">
-			<ul>
-				<li>
-					<span class="input_data_label">Requester</span>
-					<span class="fillter_input">
-						<input type="hidden" id="customer_id" name="customer_id" />
-						<input type="text" id="customer_name" name="customer_name" class="inv-field" />
-					</span>
-				</li>
-				<li>
-					<span class="input_data_label">Subject</span>
-					<span class="fillter_input" id="new_helpdesk_subject"><input id="subject" type="text" class="inv-field"/></span>
-				</li>
-				<li>
-					<span class="input_data_label">Assigned</span>
-					<span class="fillter_input">
-						<input type="hidden" id="assign_id" name="assign_id" />
-						<input type="text" id="assign_name" name="assign_name" class="inv-field" />
-					</span>
-				</li>
-				<li style="height:22px;">
-					<span class="input_data_label">CC (Email)</span>
-					<span class="fillter_input"><input id="cc_email" type="text" class="inv-field"/></span>
-				</li>
-			</ul>
+			<div class="dataFL">
+				<div class="dataFT">Requester</div>
+				<div class="dataVD">
+					<input type="hidden" id="customer_id" name="customer_id" />
+					<input type="text" id="customer_name" name="customer_name" class="inv-field" />
+				</div>
+			</div>
+			
+			<div class="dataFL">
+				<div class="dataFT">Subject</div>
+				<div class="dataVD" id="new_helpdesk_subject">
+					<input id="subject" type="text" class="inv-field"/>
+				</div>
+			</div>
+			
+			<div class="dataFL">
+				<div class="dataFT">Assigned</div>
+				<div class="dataVD">
+					<input type="hidden" id="assign_id" name="assign_id" />
+					<input type="text" id="assign_name" name="assign_name" class="inv-field" />
+				</div>
+			</div>
+			
+			<div class="dataFL">
+				<div class="dataFT">CC (Email)</div>
+				<div class="dataVD">
+					<input id="cc_email" type="text" class="inv-field"/>
+				</div>
+			</div>
 		</div>
 	</div>
 	

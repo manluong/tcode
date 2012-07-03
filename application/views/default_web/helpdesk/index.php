@@ -105,40 +105,40 @@
 		</div>
 		<div class="ClearLeft"></div>
 		<div style="height:193px;" id="input_data_fillter">
-				<div class="dataFL">
-					<div class="dataFT">Requester</div>
-					<div class="dataVD">
-						<input type="hidden" id="customer_id" name="customer_id" />
-						<input type="text" id="customer_name" name="customer_name" class="inv-field" />
-					</div>
+			<div class="dataFL">
+				<div class="dataFT">Requester</div>
+				<div class="dataVD">
+					<input type="hidden" id="customer_id" name="customer_id" />
+					<input type="text" id="customer_name" name="customer_name" class="inv-field" />
 				</div>
-				<div class="dataFL">
-					<div class="dataFT">Assigned</div>
-					<div class="dataVD">
-						<input type="hidden" id="assign_id" name="assign_id" />
-						<input type="text" id="assign_name" name="assign_name" class="inv-field" />
-					</div>
+			</div>
+			<div class="dataFL">
+				<div class="dataFT">Assigned</div>
+				<div class="dataVD">
+					<input type="hidden" id="assign_id" name="assign_id" />
+					<input type="text" id="assign_name" name="assign_name" class="inv-field" />
 				</div>
-				<div class="dataFL">
-					<div class="dataFT">Subject</div>
-					<div class="dataVD">
-						<input id="subject" class="inv-field" type="text"/>
-					</div>
+			</div>
+			<div class="dataFL">
+				<div class="dataFT">Subject</div>
+				<div class="dataVD">
+					<input id="subject" class="inv-field" type="text"/>
 				</div>
+			</div>
 
-				<div class="dataFL">
-					<div class="dataFT">Comments</div>
-					<div class="dataVD">
-						<input type="hidden" id="helpdesk_id" name="helpdesk_id" />
-						<input type="text" id="comment_content" name="comment_content" class="inv-field" />
-					</div>
+			<div class="dataFL">
+				<div class="dataFT">Comments</div>
+				<div class="dataVD">
+					<input type="hidden" id="helpdesk_id" name="helpdesk_id" />
+					<input type="text" id="comment_content" name="comment_content" class="inv-field" />
 				</div>
+			</div>
 
-				<div class="dataFL" style="padding-left:182px;">
-					<span class="">
-						<button onclick="helpdesk_fillter_all();" href="javascript:void(0)" class="btn btn-primary">SUBMIT</button>
-					</span>
-				</div>
+			<div class="dataFL" style="padding-left:182px;">
+				<span class="">
+					<button onclick="helpdesk_fillter_all();" href="javascript:void(0)" class="btn btn-primary">SUBMIT</button>
+				</span>
+			</div>
 		</div>
 	</div>
 
