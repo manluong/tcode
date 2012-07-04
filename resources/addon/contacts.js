@@ -73,11 +73,17 @@ function load_contact_info(id){
 //PARSE JSON CONTACT LIST INFO
 function parse_contact_list(data){
 	var json = jQuery.parseJSON(data);
-	//console.log(json);
-	var html = '';
+	console.log(json);
+	 var html = '';
 	 var title = '';
+	 var company = '';
+	 var display_name = '';
+	 var organization_name = '';
+	 var tel = '';
+	 var address = '';
+	 var email = '';
 	 if(json.title != null){
-		switch(title){
+		switch(parseInt(json.title)){
 			case 1:
 				title = 'Mr.';
 				break;
@@ -92,16 +98,12 @@ function parse_contact_list(data){
 				break;
 		}
 	 }
-
-	 var display_name = '';
 	 if(json.final_display_name != null){
 		display_name = json.final_display_name;
 	 }
-	 var organization_name = '';
 	 if(json.organization_name != null){
 		organization_name = json.organization_name;
 	 }
-	 var tel = '';
 	 if(json.addon_tel != ''){
 		var extension = '';
 		if(json.addon_tel[0].extension != null){
@@ -121,45 +123,18 @@ function parse_contact_list(data){
 		}
 		tel = extension+are+country+number;
 	 }
-
-	 var off = '';
 	 if(json.addon_address != ''){
-		off = json.addon_address[0].line_1;
+		address = json.addon_address[0].line_1;
 	 }
-	 var email = '';
 	 if(json.addon_email != ''){
 		email = json.addon_email[0].email;
 	 }
-	 html += '<div id="user_profile">'+
-				'<div id="user_avatar"><img alt="avatar" src="/resources/template/default_web/img/invoice/invoice-avatar.jpg"/></div>'+
-				'<div id="user_info">'+
-					'<ul>'+
-						'<li class="user_sex">'+title+'</li>'+
-						'<li class="user_name">'+display_name+'</li>'+
-						'<li class="user_position">'+organization_name+'</li>'+
-					'</ul>'+
-				'</div>'+
-			'</div>'+
-			'<div id="contact_info">'+
-				'<ul>'+
-					'<li>'+
-						'<span class="input_data_label">Phone</span>'+
-						'<span class="fillter_input">'+tel+'</span>'+
-					'</li>'+
-					'<li>'+
-						'<span class="input_data_label">Office</span>'+
-						'<span class="fillter_input">'+off+'</span>'+
-					'</li>'+
-					'<li>'+
-						'<span class="input_data_label">Email</span>'+
-						'<span class="fillter_input">'+email+'</span>'+
-					'</li>'+
-					'<li style="margin:10px 0 0 121px;">'+
-						'<a href="/card/view/'+json.id+'" style="width:30px; height:10px;line-height:10px;" class="btn btn-inverse pjax">View</a>'+
-					'</li>'+
-				'</ul>'+
-			'</div>';
-	$('#rightPanel').html(html);
+	 if(json.organization_name != ''){
+	     company = json.organization_name;
+	 }
+	 jQuery(".quickjump_title").html(title);
+	 jQuery(".quickjump_name").html(display_name);
+
 }
 
 //CONTACT LIST FILLTER

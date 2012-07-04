@@ -6,7 +6,7 @@ $(document).ready(function(){
 	//LOAD CONTACT INFO FIRST
 	hide_empty_contact();
 	load_contact_info(1);
-	jQuery("#breadcrump").prepend('<div class="rightBar"><button class="btn btn-inverse">NEW</button></div>');
+	jQuery("#breadcrumb").prepend('<div class="rightBar"><button class="btn btn-inverse">NEW</button></div>');
 });
 </script>
 <!-- Start Contacts' list -->
