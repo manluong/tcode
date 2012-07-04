@@ -1,85 +1,85 @@
-<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/nanoscroller.css" />
-<script type="text/javascript" src="/resources/addon/overthrow.min.js"></script>
-<script type="text/javascript" src="/resources/addon/contacts.js"></script>
-<script>
-$(document).ready(function(){
-	//LOAD CONTACT INFO FIRST
-	hide_empty_contact();
-	load_contact_info(1);
-});
-</script>
-<?php
-//echo '<pre>';
-//print_r($list);
-//echo '</pre>';
-?>
-<div id="boxes" style="margin-bottom:60px;">
-	<!-- Start Contacts Panels -->
-	<div id="contactsPanel">
-		<div class="fix"></div>
-		<!-- Start Contacts' list -->
-		<div class="leftPanel">
-			<input type="text" id="searchContacts" onclick="value =''" onblur="(value =='' ? value='Search contacts':value=value)" value="Search contacts" />
+<!-- Start Contacts' list -->
+		<div id="contactsPanel">
+			<input style="color: rgb(192, 192, 192);" id="searchContacts" onclick="value =''" onblur="(value =='' ? value='Search contacts':value=value)" value="Search contacts" type="text">
 			<nav>
 				<a onclick="contact_fillter(0)" href="javascript:void(0)" class="active">all</a>
-				<a onclick="contact_fillter(1)" href="javascript:void(0)">staff</a>
-				<a onclick="contact_fillter([2,3])" href="javascript:void(0)">customers</a>
-				<a onclick="contact_fillter(4)" href="javascript:void(0)">vendors</a>
-				<a onclick="contact_fillter(-1)" href="javascript:void(0)">rest</a>
+				<a class="" onclick="contact_fillter(1)" href="javascript:void(0)">staff</a>
+				<a class="" onclick="contact_fillter([2,3])" href="javascript:void(0)">customers</a>
+				<a class="" onclick="contact_fillter(4)" href="javascript:void(0)">vendors</a>
+				<a class="" onclick="contact_fillter(-1)" href="javascript:void(0)">rest</a>
 			</nav>
-			<div class="test" style="display: none;">
+
+			<div class="leftPanel">
+					<ul style="right: -15px;" id="contact_list" class="addressBook content">
+						<li class="letter staff customers vendors a-title">a</li>
+						<li onclick="load_contact_info(228)" class="contact client a-contact">
+
+	                    <div class="contactType">Client</div>
+	                    <img src="resources/template/default_web/img/avatar.jpg" alt="" width="32" width="32">
+	                    <div class="info hasCompany"><a href="http://apple.8force.net/card/view/228">aaa cccc</a></div>
+	                    <div class="company"></div></li><li onclick="load_contact_info(237)" class="contact client (additional) a-contact">
+
+	                    <div class="contactType">Client (additional)</div>
+	                    <img src="resources/template/default_web/img/avatar.jpg" alt="" width="32" width="32">
+	                    <div class="info hasCompany"><a href="http://apple.8force.net/card/view/237">aaa </a></div>
+	                    <div class="company"></div></li><li onclick="load_contact_info(243)" class="contact client a-contact">
+
+	                    <div class="contactType">Client</div>
+	                    <img src="resources/template/default_web/img/avatar.jpg" alt="" width="32" width="32">
+	                    <div class="info hasCompany"><a href="http://apple.8force.net/card/view/243">aaa aaa</a></div>
+	                    <div class="company">aaa</div></li><li onclick="load_contact_info(244)" class="contact client (additional) a-contact">
+
+	                    <div class="contactType">Client (additional)</div>
+	                    <img src="resources/template/default_web/img/avatar.jpg" alt="" width="32" width="32">
+	                    <div class="info hasCompany"><a href="http://apple.8force.net/card/view/244">aaa aaa</a></div>
+	                    <div class="company">aaa</div></li><li onclick="load_contact_info(256)" class="contact client a-contact">
+
+	                    <div class="contactType">Client</div><img src="resources/template/default_web/img/avatar.jpg" alt="" width="32">
+	                    <div class="info hasCompany"><a href="http://apple.8force.net/card/view/256">Andy Lau</a></div>
+	                    <div class="company">Andy Co.</div></li><li onclick="load_contact_info(254)" class="contact  a-contact active">
+	                    <div class="contactType"></div>
+
+	                    <img src="resources/template/default_web/img/avatar.jpg" alt="" width="32"><div class="info hasCompany"><a href="http://apple.8force.net/card/view/254">Andy Lau</a></div><div class="company">Andy Co.</div></li><li onclick="load_contact_info(255)" class="contact  a-contact"><div class="contactType"></div><img src="resources/template/default_web/img/avatar.jpg" alt="" width="32"><div class="info hasCompany"><a href="http://apple.8force.net/card/view/255">Andy Lau</a></div><div class="company">Andy Co.</div></li><li onclick="load_contact_info(149)" class="contact  a-contact"><div class="contactType"></div><img src="resources/template/default_web/img/avatar.jpg" alt="" width="32"><div class="info hasCompany"><a href="http://apple.8force.net/card/view/149">Andyyyy Anthonyyyyy</a></div><div class="company">ABC Co.</div></li><li style="display: none;" class="letter staff customers vendors b-title">b</li><li class="letter staff customers vendors c-title">c</li><li onclick="load_contact_info(222)" class="contact client c-contact"><div class="contactType">Client</div><img src="resources/template/default_web/img/avatar.jpg" alt="" width="32"><div class="info hasCompany"><a href="http://apple.8force.net/card/view/222">Customer One</a></div><div class="company"></div></li><li onclick="load_contact_info(224)" class="contact client c-contact"><div class="contactType">Client</div></li>				</ul>
+
+				<div class="pane"><div style="height: 50px;" class="slider"></div></div>
+
 
 			</div>
+			<div class="rightPanel" id="rightPanel">
 
-			<div class="test">
+				<div id="quickjump">
+					<div class="quickjump_select">
+						<div class="btn-group">
+						  <button class="btn btn-inverse">CUSOTMER</button>
+						  <button class="btn btn-inverse dropdown-toggle" data-toggle="dropdown">
+						    <span class="caret"></span>
+						  </button>
+						  <ul class="dropdown-menu">
+							<li><a href="#"><i class="icon-pencil"></i> New Invoice</a></li>
+							<li><a href="#"><i class="icon-trash"></i> New Quotation</a></li>
+							<li><a href="#"><i class="icon-ban-circle"></i> View Invoices</a></li>
+						  </ul>
+						</div>
+					</div>
+					<div class="quickjump_card">
+					<div class="quickjump_avatar avatar rounded20 fl mr5"><img width="40" height="40" class="rounded20" alt="" src="resources/template/default_web/img/avatar.jpg"></div>
+						<div class="quickjump_info">
+							<ul>
+								<li class="quickjump_title">Mr.</li>
+								<li class="quickjump_name">Albert Z</li>
+								<li class="quickjump_co">Facebook Inc. <span class="quickjump_position">CEO</span></li>
+							</ul>
+						</div>
+					</div>
+				</div>
 
-			</div>
-			<div style="height:437px;" class="nano">
-				<ul id="contact_list" class="addressBook content">
-					<li class="letter staff customers vendors a-title">a</li>
-					<?php
-						//TODO: This list should be implemented in the browser side. e.g. use $.get to pull list data from server.
-						$current_alphabet = 0;
-						$alphabets = array('a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z');
+	        	<div class="dataV">
+	        		<div class="dataVL"><div class="dataVT">Phone</div><div class="dataVD">987654</div></div>
+	       			<div class="dataVL"><div class="dataVT">Office</div><div class="dataVD">987654321</div></div>
+	       			<div class="dataVL"><div class="dataVT">Email</div><div class="dataVD">info@albert.com</div></div>
+	       			<div class="dataVL"><div class="dataVT">&nbsp;</div><div class="dataVD"><button class="btn btn-inverse" href="#">View</button></div></div>
+	        	</div>
 
-						$list_count = count($list);
-						for($start=0; $start<$list_count; $start++) {
-							$l = $list[$start];
-
-							//if the name does not match the current alphabet, it means it's time to move on to the next alphabet
-							if (strtolower(substr($l['first_name'], 0, 1)) != $alphabets[$current_alphabet]) {
-								$current_alphabet++;
-								if ($current_alphabet == 26) break;
-								echo '<li class="letter staff customers vendors ',$alphabets[$current_alphabet],'-title">',$alphabets[$current_alphabet],'</li>';
-								$start--;
-								continue;
-							}
-
-							if (!isset($l['role']['name'])) {
-								$role = '';
-							} else {
-								$role = strtolower($l['role']['name']);
-							}
-
-							echo '<li onclick="load_contact_info('.$l['id'].')" class="contact ',$role,' ',$alphabets[$current_alphabet],'-contact">';
-								echo '<div class="contactType">',ucfirst($role),'</div>';
-								echo '<img src="/resources/template/default_web/img/avatar.jpg" alt="" width="32" />';
-								echo '<div class="info hasCompany"><a href="/card/view/',$l['id'],'">',$l['first_name'],' ',$l['last_name'],'</a></div>';
-								echo '<div class="company">',$l['organization_name'],'</div>';
-							echo '</li>';
-						}
-					?>
-				</ul>
-			</div>
+    		</div>
 		</div>
 		<!-- End Contacts' list -->
-
-		<div class="rightPanel" id="rightPanel"></div>
-
-		<div id="add_new_contact">
-			<a href="<?=site_url('card/add/')?>" style="width:106px; height:10px;line-height:10px;" class="btn btn-inverse">ADD NEW CONTACT</a>
-		</div>
-
-	</div>
-	<!-- End Contacts Panels -->
-</div>
