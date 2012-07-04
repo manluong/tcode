@@ -12,10 +12,28 @@ class Access extends MY_Controller {
 
 		$html = array();
 		$html['status'] = $this->UserM->status;
+		$html['data'] = $this->data;
+		$html['cookie_login'] = FALSE;
 
-		$this->data['content'] = $this->load->view(get_template().'/access/login', $html, TRUE);
+		//Checks if there's a cookie_hash set, used to remember username(email) for login
+		$login_cookie_hash = $this->input->cookie('oreo', TRUE);
+		if (!empty($login_cookie_hash)) {
+			$user = $this->UserM->get_by_cookie_hash($login_cookie_hash);
+			$html['cookie_login'] = TRUE;
+			$html['user_avatar'] = $user['avatar'];
+		}
 
-		$this->_do_output();
+		$this->load->view(get_template().'/access/login', $html);
+	}
+
+	public function change_user() {
+		$domain = (ENVIRONMENT == 'production')
+					? $this->domain.'.8force.net'
+					: $this->domain.'.8force.local';
+
+		$this->input->set_cookie('oreo', NULL, NULL, $domain);
+
+		redirect('/access');
 	}
 
 	public function about() {
@@ -26,8 +44,30 @@ class Access extends MY_Controller {
 		$email = $this->input->post('login_email');
 		$password = $this->input->post('login_password');
 
+		$domain = (ENVIRONMENT == 'production')
+					? $this->domain.'.8force.net'
+					: $this->domain.'.8force.local';
+
+		if ($email == FALSE) {
+			$login_cookie_hash = $this->input->cookie('oreo', TRUE);
+			if ($login_cookie_hash !== FALSE) {
+				$card_id = $this->UserM->get_by_cookie_hash($login_cookie_hash);
+				if (empty($card_id)) {
+					$this->input->set_cookie('oreo', NULL, NULL, $domain);
+				} else {
+					$email = $this->UserM->get_email($card_id);
+				}
+			}
+		}
+
 		if ($this->UserM->is_valid_password($email, $password)) {
 			$this->UserM->login($email);
+
+			//Set a cookie(cookie_hash) for remembering username(email) used to login
+			//Store cookie for 30 days.
+			$hash = $this->UserM->assign_cookie_hash();
+			$this->input->set_cookie('oreo', $hash, 2592000, $domain);
+
 			execute_return_url();
 			redirect('/dashboard');
 		}

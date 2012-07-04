@@ -33,6 +33,7 @@ class UserM extends MY_Model {
 		parent::__construct();
 
 		if (!$this->is_cli && !$this->is_callback) $this->setup_loguid();
+		$this->load->library('bcrypt');
 	}
 
 	public function debug() {
@@ -135,6 +136,8 @@ class UserM extends MY_Model {
 	}
 
 	public function is_valid_password($email, $password) {
+		if (empty($email)) return FALSE;
+
 		$rs = $this->db->select()
 				->from('access_user AS u')
 				->join('card_email AS e', 'e.card_id=u.card_id')
@@ -186,7 +189,6 @@ class UserM extends MY_Model {
 		$access_user = $rs->row_array();
 
 		$this->id = $access_user['card_id'];
-
 		$this->status = 2;
 		$this->info = $this->get_info($access_user['card_id']);
 		$this->logged_in = TRUE;
@@ -260,4 +262,48 @@ class UserM extends MY_Model {
 
 		return $results;
 	}
+
+	public function assign_cookie_hash() {
+		//10% chance of forcing a new cookie_hash to be generated
+		$generate_new_cookie_hash = (mt_rand(0, 9) == 6);
+
+		if (!$generate_new_cookie_hash) {
+			//re-use the cookie_hash already stored in the DB
+			$row = $this->db->select('cookie_hash')
+					->from('access_user')
+					->where('card_id', $this->id)
+					->limit(1)
+					->get()
+					->row_array();
+
+			if ($row['cookie_hash'] == '' || $row['cookie_hash'] == NULL) {
+				//if there's no cookie_hash stored in the DB, generate a new one.
+				$generate_new_cookie_hash = TRUE;
+			} else {
+				$hash = $row['cookie_hash'];
+			}
+		}
+
+		if ($generate_new_cookie_hash) {
+			$hash = $this->bcrypt->hash($this->get_email());
+
+			$this->db->set('cookie_hash', $hash)
+					->where('card_id', $this->id)
+					->update('access_user');
+		}
+
+		return $hash;
+	}
+
+	public function get_by_cookie_hash($hash) {
+		$rs = $this->db->select('card_id')
+				->from('access_user')
+				->where('cookie_hash', $hash)
+				->limit(1)
+				->get()
+				->row_array();
+
+		return $rs['card_id'];
+	}
+
 }
