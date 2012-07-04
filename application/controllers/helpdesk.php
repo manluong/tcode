@@ -427,6 +427,7 @@ class Helpdesk extends MY_Controller {
 	}
 
 	function save_insert_helpdesk(){
+		$this->send_mail();
 		$data = array(
 			'id' => $this->input->post('id'),
 			'subject' => $this->input->post('subject'),
@@ -508,18 +509,36 @@ class Helpdesk extends MY_Controller {
 	}
 
 	function send_mail(){
-		$this->allow_unauthed_access = TRUE;
-		$this->load->library('EmailL');
-		$this->emaill->set_type('card')
-            ->set_type_id(array(2))
-            ->set_to('luongtheman87@yahoo.com', 'luong')
-            ->set_template('testplate')
-            ->set_subject('test')
-            ->set_attachment_id(array(2=>'')) // docs_id => ver_id or just docs_id => ''
-            ->set_replace_value(array('keys'=>array('%name%', '%result%'), 'values'=>array(array('Roy'), array('Success!!'))))
-            ->set_from('docs@telcoson.com', 'Docs');
-			//$this->emaill->debug(); // prints the parameters to send
-			$i = $this->emaill->send(); var_dump($i);// actual email sending returns TRUE or FALSE
+		$this->load->library('EmailL'); 
+		$requester = $this->input->post('requester');
+		if(!empty($requester)){
+			$id_requester = $requester;
+		}else{
+			$id_requester = '';
+		}
+		$logging_card_id = $this->UserM->get_card_id();
+		
+		if($logging_card_id == $id_requester){
+			$this->emaill->set_to(trim($this->input->post('assign')));
+		}else{
+			$this->emaill->set_to(trim($requester));
+			$cc_email = split(';' ,$this->input->post('cc_email'));
+			for($i = 0 ; $i < count($cc_email) ; $i++){
+				$this->emaill->set_to(trim($cc_email[$i]));
+			}
+		}
+		
+		$this->emaill			
+			->set_bcc('luongtheman87@yahoo.com')    
+			->set_from('docs', 'Docs')       //send as docs@<domain>.8force.net, using the display name: Docs
+			->set_content('aaa')
+			->set_subject('test')
+			->set_attachment_id('ac57b26f30fcb8a3134416f6744fce07') // hash or ID of file
+			->set_template('email', 'test');
+			//->set_single_replace_value(array('keys'=>array('%name%', '%result%'), 'values'=>array('Test', 'Success!!')));
+
+		echo ($this->emaill->send()) ? 'sent' : 'not sent';
+		
 	}
 
 }

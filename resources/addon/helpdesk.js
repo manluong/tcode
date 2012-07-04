@@ -122,12 +122,12 @@ $(document).ready(function(){
 	$("#arrow").click(function(){
 		$("#helpdesk_input_data_fillter").slideToggle();
 
-		if($('#arrow').attr('class') == 'down_arrow'){
-			$('#arrow').removeClass('down_arrow');
-			$('#arrow').addClass('up_arrow');
+		if($('#arrow').attr('class') == 'helpdesk_down_arrow'){
+			$('#arrow').removeClass('helpdesk_down_arrow');
+			$('#arrow').addClass('helpdesk_up_arrow');
 		}else{
-			$('#arrow').removeClass('up_arrow');
-			$('#arrow').addClass('down_arrow');
+			$('#arrow').removeClass('helpdesk_up_arrow');
+			$('#arrow').addClass('helpdesk_down_arrow');
 		}
 	});
 });
@@ -419,7 +419,7 @@ function parse_comment_list(data){
 						'</div>'+
 						'<div class="comment_content">'+
 							'<div class="wap_comment_content">'+item.comment+'</div>'+
-							'<div style="float:left;width:50px;margin:-22px 0 0 -48px" id="arrow_comment_'+item.id+'" onclick="show_detail_comment('+item.id+');" class="up_arrow"></div>'+
+							'<div style="float:left;width:50px;margin:-22px 0 0 -48px" id="arrow_comment_'+item.id+'" onclick="show_detail_comment('+item.id+');" class="helpdesk_up_arrow"></div>'+
 							'<div id="comment_detail_'+item.id+'" class="comment_detail">'+
 								'<p>Priority set to '+priority+'</p>'+
 								'<p>Subject set to "'+subject+'"</p>'+

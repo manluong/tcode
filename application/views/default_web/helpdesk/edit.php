@@ -144,7 +144,7 @@
 			<div id="helpdesk_comment">
 				<textarea rows="3" id="comment" ></textarea>
 				<div id="helpdesk_comment_submit">
-					<div style="width:735px;float:left;">
+					<div style="width:745px;float:left;">
 						<span><input type="checkbox" id="private"/> Private Comments (Only Staff see this comment)</span>
 						<span></span>
 					</div>
@@ -203,8 +203,8 @@
 					</div>
 					<div class=helpdesk_"comment_content">
 						<div class="helpdesk_wap_comment_content"><?=$comment[$i]['comment']?></div>
-						<div style="float:left;width:50px;margin:-22px 0 0 -48px" id="arrow_comment_<?=$comment[$i]['id']?>" onclick="show_detail_comment(<?=$comment[$i]['id']?>);" class="up_arrow"></div>
-						<div id="comment_detail_<?=$comment[$i]['id']?>" class="comment_detail">
+						<div style="float:left;width:50px;margin:-22px 0 0 -32px" id="arrow_comment_<?=$comment[$i]['id']?>" onclick="show_detail_comment(<?=$comment[$i]['id']?>);" class="helpdesk_up_arrow"></div>
+						<div id="comment_detail_<?=$comment[$i]['id']?>" class="helpdesk_comment_detail">
 							<?php if(!empty($pri)){?>
 							<p>Priority set to <?=$this->Helpdesk_CommentM->get_priority_type($pri)?></p>
 							<?php }?>

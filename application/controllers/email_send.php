@@ -35,8 +35,9 @@ class Email_send extends MY_Controller {
 		);
 
 		$this->emaill
-			->set_card(123456)
+			//->set_card(123456)
 			->set_from('docs', 'Docs')
+			->set_to('luongtheman87@yahoo.com', 'Test') 
 			//->set_attachment_id('ac57b26f30fcb8a3134416f6744fce07')
 			->set_template('email', 'test')
 			->set_single_replace_value($replace);
