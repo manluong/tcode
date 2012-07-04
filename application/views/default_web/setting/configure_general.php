@@ -1,9 +1,9 @@
-<div class="top-setting">
-	<div><h2>SETTINGS</h2><span> General</span></div>
+<div class="setting-top">
+	<div class="pl10"><h2>SETTINGS</h2><span> General</span></div>
 	<input type="button" class="btnX" />
 </div>
 
-<div class="content">
+<div class="setting-content">
 <?php
 	echo form_open('/setting/ajax_save/'.$app_name , array('class'=>'form-horizontal'));
 ?>

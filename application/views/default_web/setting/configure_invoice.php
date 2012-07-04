@@ -1,11 +1,11 @@
 <script type="text/javascript" src="/resources/addon/plupload/js/plupload.full.js"></script>
 
-<div class="top-setting">
-	<div><h2>SETTINGS</h2><span> Invoice</span></div>
+<div class="setting-top">
+	<div class="pl10"><h2>SETTINGS</h2><span> Invoice</span></div>
 	<input type="button" class="btnX" />
 </div>
 
-<div class="content">
+<div class="setting-content">
 <ul id="tab-setting" class="nav nav-tabs">
 	<li class="active"><a href="#tab-general">General</a></li>
 	<li><a href="#tab-terms">T &amp; C</a></li>

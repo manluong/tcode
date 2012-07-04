@@ -1,9 +1,9 @@
-<div class="top-setting">
-	<div><h2>SETTINGS</h2><span> Helpdesk</span></div>
+<div class="setting-top">
+	<div class="pl10"><h2>SETTINGS</h2><span> Helpdesk</span></div>
 	<input type="button" class="btnX" />
 </div>
 
-<div class="content">
+<div class="setting-content">
 <ul id="tab-setting" class="nav nav-tabs">
 	<li class="active"><a href="#tab-general">General</a></li>
 	<?php foreach ($opts as $k => $v): ?>
