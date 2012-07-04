@@ -519,9 +519,9 @@ class Helpdesk extends MY_Controller {
 		$logging_card_id = $this->UserM->get_card_id();
 		
 		if($logging_card_id == $id_requester){
-			$this->emaill->set_to(trim($this->input->post('assign')));
+			$this->emaill->set_card(trim($this->input->post('assign')));
 		}else{
-			$this->emaill->set_to(trim($requester));
+			$this->emaill->set_card($requester);
 			$cc_email = split(';' ,$this->input->post('cc_email'));
 			for($i = 0 ; $i < count($cc_email) ; $i++){
 				$this->emaill->set_to(trim($cc_email[$i]));
