@@ -170,9 +170,27 @@ class Docs extends MY_Controller {
 		$vars = $this->icons;
 		$vars['url'] = $this->url;
 
+		$this->data['app_menu'] = array(
+			array(
+				'url' => '#',
+				'extra' => '',
+				'title' => 'Create Folder',
+			),
+			array(
+				'url' => '#',
+				'extra' => '',
+				'title' => 'Upload File',
+			),
+			array(
+				'url' => '#',
+				'extra' => '',
+				'title' => 'Permissions',
+			),
+		);
+
 		$this->data['content'] = '<div>';
-		$this->data['content'] .= $this->load->view(get_template().'/docs/docs_view_html', $vars, TRUE);
-		$this->data['content'] .= $this->load->view(get_template().'/docs/docs_js', $vars, TRUE);
+		$this->data['content'] .= $this->load->view(get_template().'/docs/view', $vars, TRUE);
+		$this->data['content'] .= $this->load->view(get_template().'/docs/js', $vars, TRUE);
 		$this->data['content'] .= '</div>';
 
 		$this->_do_output();
@@ -183,8 +201,8 @@ class Docs extends MY_Controller {
 		$vars['url'] = $this->url;
 
 		$this->data['content'] = '<div>';
-		$this->data['content'] .= $this->load->view(get_template().'/docs/docs_view_html', $vars, TRUE);
-		$this->data['content'] .= $this->load->view(get_template().'/docs/docs_js', $vars, TRUE);
+		$this->data['content'] .= $this->load->view(get_template().'/docs/view', $vars, TRUE);
+		$this->data['content'] .= $this->load->view(get_template().'/docs/js', $vars, TRUE);
 		$this->data['content'] .= '</div>';
 
 		$this->_do_output();
@@ -196,8 +214,8 @@ class Docs extends MY_Controller {
 		$vars['url'] = $this->url;
 
 		$this->data['content'] = '<div>';
-		$this->data['content'] .= $this->load->view(get_template().'/docs/docs_file_html', $vars, TRUE);
-		$this->data['content'] .= $this->load->view(get_template().'/docs/docs_js', $vars, TRUE);
+		$this->data['content'] .= $this->load->view(get_template().'/docs/file', $vars, TRUE);
+		$this->data['content'] .= $this->load->view(get_template().'/docs/js', $vars, TRUE);
 		$this->data['content'] .= '</div>';
 
 		$this->_do_output();
@@ -331,19 +349,19 @@ class Docs extends MY_Controller {
 
 		if ($this->url['id_plain'] !== '0') {
 			$parent_id = $this->DocsM->get_dir_parent_id($this->url['id_plain']);
-			$parent = anchor('/docs/view/'.encode_id($parent_id).'/list-view', '<i class="icon-arrow-left"></i> Previous Folder', 'class="ajax"');
+			$parent = anchor('/docs/view/'.encode_id($parent_id), '<i class="icon-arrow-left"></i> Previous Folder', 'class="ajax"');
 			array_push($rows, array($parent, '--', '--'));
 		}
 
 		$sub_folders = $this->DocsM->get_subdir($this->url['id_plain']);
 		foreach ($sub_folders as $subfolder) {
-			$name = anchor('/docs/view/'.encode_id($subfolder['id']).'/list-view', '<i class="icon-folder-open"></i> '.$subfolder['name'], 'class="ajax"');
+			$name = anchor('/docs/view/'.encode_id($subfolder['id']), '<i class="icon-folder-open"></i> '.$subfolder['name'], 'class="ajax"');
 			array_push($rows, array($name, '--', '--'));
 		}
 
 		$docs = $this->DocsM->get_dir_contents($this->url['id_plain']);
 		foreach ($docs as $doc) {
-			$link = anchor('/docs/file/'.encode_id($doc['id']).'/v', '<i class="icon-file"></i> '.$doc['display_name'], 'class="ajax"');
+			$link = anchor('/docs/file/'.encode_id($doc['id']), '<i class="icon-file"></i> '.$doc['display_name'], 'class="ajax"');
 			array_push($rows, array($link, byte_size($doc['file_size']), $doc['created_stamp']));
 		}
 
