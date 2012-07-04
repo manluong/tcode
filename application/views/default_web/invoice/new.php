@@ -147,7 +147,7 @@
 			<div><input type="text" name="addon_item[{xxxxx}][quantity]" class="col-5 qty cal" /></div>
 			<div>
 				<input type="hidden" name="addon_item[{xxxxx}][total]" class="item_total" />
-				<label class="col-6"></label>
+				<label class="col-6 item_total_label"></label>
 			</div>
 		</div>
 		<div class="invoice_item_sub clear" style="display: none;">
