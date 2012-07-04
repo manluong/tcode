@@ -70,7 +70,7 @@
 						<div><input type="text" name="addon_item[<?php echo $c ?>][quantity]" value="<?php echo $invoice_item['quantity'] ?>" class="col-5 qty cal" /></div>
 						<div>
 							<input type="hidden" name="addon_item[<?php echo $c ?>][total]" value="<?php echo (float)$invoice_item['total'] ?>" class="item_total" />
-							<label class="col-6"><?php echo '$'.number_format($invoice_item['total'], 2) ?></label>
+							<label class="col-6 item_total_label"><?php echo '$'.number_format($invoice_item['total'], 2) ?></label>
 						</div>
 					</div>
 					<div class="invoice_item_sub clear"<?php echo ($invoice_item['tax_use_id']) ? '' : ' style="display: none;"' ?>>
@@ -210,7 +210,7 @@
 			<div><input type="text" name="addon_item[{xxxxx}][quantity]" class="col-5 qty cal" /></div>
 			<div>
 				<input type="hidden" name="addon_item[{xxxxx}][total]" class="item_total" />
-				<label class="col-6"></label>
+				<label class="col-6 item_total_label"></label>
 			</div>
 		</div>
 		<div class="invoice_item_sub clear" style="display: none;">

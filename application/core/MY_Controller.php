@@ -38,6 +38,7 @@ class MY_Controller extends CI_Controller {
 		'content' => '',
 		'content_left' => '',
 		'content_right' => '',
+		'width' => '860',	// 860|full
 	);
 
 	var $layout = array(
@@ -129,8 +130,7 @@ class MY_Controller extends CI_Controller {
 		$this->data['active_app_name'] = $this->lang->line('core_apps-name-'.$this->url['app']);
 	}
 
-	// $width = 860|full
-	function _do_output($width='860') {
+	function _do_output() {
 		$this->data['layout'] = $this->layout;
 
 		$html = array();
@@ -139,7 +139,7 @@ class MY_Controller extends CI_Controller {
 		$html['user_controls'] = '';
 		$html['sidebar'] = '';
 		$html['app_title'] = '';
-		$html['width'] = $width;
+		$html['width'] = $this->data['width'];
 
 		if ($this->UserM->is_logged_in()) {
 			$html['app_title'] = $this->load->view(get_template().'/app_title', $this->data, TRUE);
