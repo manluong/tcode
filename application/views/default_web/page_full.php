@@ -16,20 +16,9 @@
 	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/bootstrap-8f.css" />
 	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/style.css" />
 	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/app.css" />
-	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/chat.css" />
 
 	<script type="text/javascript" src="/resources/addon/modernizr-2.5.3.min.js"></script>
 	<script type="text/javascript" src="/resources/addon/jquery.min.js"></script>
-
-	<script type="text/javascript" language="javascript" src="/resources/addon/jquery.dataTables.min.js"></script>
-	<script type="text/javascript" language="javascript" src="/resources/addon/jquery.dataTables-bootstrap-paging.js"></script>
-
-
-	<!--
-	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/all-module.css" />
-	<link rel="stylesheet" href="/resources/template/<?=get_template()?>/css/chat.css" />
-	-->
-	<!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>-->
 
 	<?//=$head?>
 
@@ -78,7 +67,8 @@
 		</div>
 	</footer>
 	<!-- End Footer -->
-<?php if($this->UserM->is_logged_in()):?>
+
+<?php if($this->UserM->is_logged_in()): ?>
 	<!-- chat area -->
 	<div class="chatSection pof" id="chat" style="display:none;">
 		<div class="chatSlider h50">
@@ -148,39 +138,11 @@
 			<div class="step2"></div>
 		</div>
 	</div>
-
-	<!--
- 				<div class="title">Settings</div> <span class="arrow"></span> <span class="simple">Activity app</span>
-
-				<form>
-					<div class="clearfix">
-					    <label>Mobile Phone</label>
-					    <div class="input">
-					        <input type="text" id="mobile" value="" />
-					    </div>
-					</div>
-					<div class="clearfix">
-					    <label>Office</label>
-					    <div class="input">
-					        <input type="text" id="office" value="" />
-					    </div>
-					</div>
-					<div class="clearfix">
-					    <label>Website</label>
-					    <div class="input">
-					        <input type="text" id="website" value="" />
-					    </div>
-					</div>
-
-					<div class="actionButtons">
-						<button class="btn primary">Save</button> or <button class="cancel">go back</button>
-					</div>
-
-				</form>
-	-->
 	<!-- End Settings Box -->
 
-    <?php endif;?>
+<?php endif;?>
+
+
 	<script type="text/javascript" src="/resources/addon/tpl.js"></script>
 	<script type="text/javascript" src="/resources/addon/jquery.ui.min.js"></script>
 	<script type="text/javascript" src="/resources/addon/jquery.tools.min.js"></script>
