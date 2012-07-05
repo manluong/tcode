@@ -538,7 +538,6 @@ class Helpdesk extends MY_Controller {
 			//->set_single_replace_value(array('keys'=>array('%name%', '%result%'), 'values'=>array('Test', 'Success!!')));
 
 		echo ($this->emaill->send()) ? 'sent' : 'not sent';
-		
 	}
 
 }
